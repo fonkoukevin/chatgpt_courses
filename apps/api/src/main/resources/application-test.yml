@@ -1,0 +1,8 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+server:
+  address: 127.0.0.1
+  # Smoke HTTP : port explicite ; @SpringBootTest RANDOM_PORT garde sa priorité.
+  port: ${API_PORT:0}

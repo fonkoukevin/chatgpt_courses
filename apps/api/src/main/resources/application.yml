@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: chatgpt-courses-api
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?connectTimeout=2&socketTimeout=3
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    hikari:
+      connection-timeout: 2500
+      validation-timeout: 1000
+      maximum-pool-size: 5
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  flyway:
+    enabled: true
+    clean-disabled: true
+    locations: classpath:db/migration
+  session:
+    jdbc:
+      initialize-schema: never
+  mvc:
+    log-resolved-exception: false
+    log-request-details: false
+  web:
+    error:
+      include-message: never
+      include-binding-errors: never
+      include-stacktrace: never
+      include-exception: false
+server:
+  address: 127.0.0.1
+  port: ${API_PORT:8080}
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        secure: ${SESSION_COOKIE_SECURE}
+        same-site: lax
+        path: /
+courses:
+  runtime:
+    environment: ${APP_ENV}
+    public-origin: ${APP_PUBLIC_ORIGIN}
+    session-cookie-secure: ${SESSION_COOKIE_SECURE}
+logging:
+  level:
+    org.springframework.web: WARN
+    org.springframework.security: WARN

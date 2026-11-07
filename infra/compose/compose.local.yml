@@ -1,0 +1,90 @@
+name: chatgpt-courses-local
+
+services:
+  postgres:
+    image: postgres:18.6@sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?Generate the local environment before starting PostgreSQL}
+      POSTGRES_USER: ${POSTGRES_USER:?Generate the local environment before starting PostgreSQL}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Generate a local PostgreSQL password}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      # PostgreSQL 18 stores PGDATA below /var/lib/postgresql/18/docker.
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      start_period: 10s
+      retries: 12
+    restart: unless-stopped
+    networks: [local]
+
+  mailpit:
+    image: axllent/mailpit:v1.33.0@sha256:9b3a463be15354c0f0eba91697d80e3e0d8a5623ef0e627cacc836bc17fd5231
+    environment:
+      MP_DATABASE: /data/mailpit.db
+      MP_MAX_MESSAGES: "500"
+    ports:
+      - "127.0.0.1:${MAIL_HTTP_PORT:-8025}:8025"
+      - "127.0.0.1:${MAIL_SMTP_PORT:-1025}:1025"
+    volumes:
+      - mailpit_data:/data
+    healthcheck:
+      test: ["CMD", "/mailpit", "readyz"]
+      interval: 5s
+      timeout: 5s
+      start_period: 10s
+      retries: 12
+    restart: unless-stopped
+    networks: [local]
+
+  s3:
+    profiles: [s3]
+    image: chrislusf/seaweedfs:4.52@sha256:57877e32bb90073b37dc109b438ba66e84fd5ed9ced5f5c04f56444ef243ce59
+    command:
+      - server
+      - -dir=/data
+      - -ip=s3
+      - -ip.bind=0.0.0.0
+      - -master.volumeSizeLimitMB=64
+      - -master.telemetry=false
+      - -volume.max=8
+      - -filer
+      - -s3
+      - -s3.port=8333
+      - -s3.port.iceberg=0
+      - -s3.port.lance=0
+      - -s3.config=/run/secrets/s3.local.json
+    ports:
+      - "127.0.0.1:${S3_PORT:-8333}:8333"
+    volumes:
+      - s3_data:/data
+      - type: bind
+        source: ../secrets/s3.local.json
+        target: /run/secrets/s3.local.json
+        read_only: true
+        bind:
+          create_host_path: false
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://127.0.0.1:8333/healthz"]
+      interval: 5s
+      timeout: 5s
+      start_period: 15s
+      retries: 12
+    restart: unless-stopped
+    networks: [local]
+
+networks:
+  local:
+    # Native Windows applications reach these services through published ports.
+    # A dedicated bridge isolates this project; host bindings remain loopback-only.
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.host_binding_ipv4: "127.0.0.1"
+
+volumes:
+  postgres_data:
+  mailpit_data:
+  s3_data:

@@ -1,0 +1,7 @@
+# HTTP sur la boucle locale uniquement. Les secrets viennent de l'environnement.
+spring:
+  config:
+    activate:
+      on-profile: local
+server:
+  address: 127.0.0.1

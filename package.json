@@ -1,0 +1,31 @@
+{
+  "name": "chatgpt-courses",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": ["apps/web"],
+  "engines": { "node": "24.22.2", "npm": "11.19.1" },
+  "packageManager": "npm@11.19.1",
+  "scripts": {
+    "setup:local": "node scripts/setup-local.mjs",
+    "services:up": "node scripts/local.mjs up",
+    "services:stop": "node scripts/local.mjs stop",
+    "services:s3": "node scripts/local.mjs s3",
+    "services:status": "node scripts/local.mjs status",
+    "dev": "node scripts/dev.mjs",
+    "dev:web": "node scripts/web.mjs dev",
+    "dev:api": "node scripts/api.mjs run",
+    "start:web": "node scripts/web.mjs start",
+    "start:api": "node scripts/api.mjs start",
+    "stop": "node scripts/stop.mjs",
+    "lint": "npm --workspace @chatgpt-courses/web run lint",
+    "typecheck": "npm --workspace @chatgpt-courses/web run typecheck",
+    "build": "npm run build:web",
+    "build:web": "node scripts/web.mjs build",
+    "build:api": "node scripts/api.mjs verify",
+    "verify:api": "node scripts/api.mjs verify",
+    "smoke": "node scripts/smoke.mjs",
+    "verify:http": "node scripts/verify-http.mjs",
+    "verify:persistence": "node scripts/verify-persistence.mjs"
+  },
+  "overrides": { "minimatch@^10.2.2": "11.0.1" }
+}

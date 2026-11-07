@@ -1,0 +1,86 @@
+name: Local foundations
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: foundations-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      CI: true
+      NEXT_TELEMETRY_DISABLED: 1
+      APP_ENV: test
+      APP_PUBLIC_ORIGIN: http://localhost:3000
+      APP_DEFAULT_LOCALE: fr
+      API_INTERNAL_URL: http://127.0.0.1:8080
+      API_PORT: 8080
+      SPRING_PROFILES_ACTIVE: test
+      SESSION_COOKIE_SECURE: "false"
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: courses_ci
+      POSTGRES_USER: courses_ci
+      COMMERCE_ENABLED: false
+      STRIPE_ENABLED: false
+      STORAGE_ENABLED: false
+      VIDEO_ENABLED: false
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.22.2
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - name: Set up Java
+        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
+        with:
+          distribution: temurin
+          java-version: 21.0.13+9
+          cache: maven
+          cache-dependency-path: apps/api/pom.xml
+      - name: Verify npm and install locked dependencies
+        shell: bash
+        run: |
+          test "$(npm --version)" = "11.19.1"
+          npm ci
+      - name: Lint, typecheck and build the web application
+        run: |
+          npm run lint
+          npm run typecheck
+          npm run build
+      - name: Verify the API with PostgreSQL Testcontainers
+        working-directory: apps/api
+        run: sh ./mvnw --batch-mode --no-transfer-progress verify
+      - name: Start isolated PostgreSQL for the HTTP smoke
+        shell: bash
+        run: |
+          umask 077
+          mkdir -p .runtime
+          P01_DB_PASSWORD=$(openssl rand -hex 32)
+          echo "::add-mask::$P01_DB_PASSWORD"
+          printf 'POSTGRES_PASSWORD=%s\n' "$P01_DB_PASSWORD" >> "$GITHUB_ENV"
+          printf 'POSTGRES_PASSWORD=%s\n' "$P01_DB_PASSWORD" > .runtime/ci-db.env
+          docker compose --project-name chatgpt-courses-ci --env-file .runtime/ci-db.env -f infra/compose/compose.local.yml up -d --wait postgres
+      - name: Smoke test the real API through the web proxy
+        run: npm run verify:http
+      - name: Stop the smoke database without removing volumes
+        if: always()
+        shell: bash
+        run: |
+          if test -f .runtime/ci-db.env; then
+            docker compose --project-name chatgpt-courses-ci --env-file .runtime/ci-db.env -f infra/compose/compose.local.yml stop postgres
+          fi

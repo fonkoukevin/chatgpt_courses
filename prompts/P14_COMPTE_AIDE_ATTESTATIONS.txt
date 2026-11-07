@@ -1,0 +1,29 @@
+P14 — COMPTE, AIDE, COMMANDES ET ATTESTATIONS
+
+OBJECTIF
+Réalise E13 avec des informations fiables et des actions réellement disponibles : gérer son compte, comprendre ses achats et accès, demander de l’aide et obtenir une attestation conforme aux preuves pédagogiques. Une attestation de participation ou d’achèvement ne doit pas devenir une certification officielle ou une évaluation humaine fictive.
+
+CONTEXTE À LIRE
+Lis AGENTS.md, docs/STATUS.md, docs/PRODUCT.md, E13 dans docs/SCREENS.md, les contrats identité/commandes/projets de docs/API_CONTRACTS.md et les règles d’architecture/design. Vérifie P04, P08–P13 et les scénarios T04/T11/T12/T16/T20 dans docs/ACCEPTANCE.md. Utilise les services d’identité, fichiers, emails et droits déjà réalisés ; aucune logique parallèle de paiement ou d’authentification.
+
+TRAVAIL À RÉALISER
+1. Construis les sections profil, préférences, langue, sécurité, achats, accès, attestations et aide. Les préférences privées suivent les conventions de révision. Les modifications sensibles passent par les endpoints d’identité et règles de vérification existants. Le changement de langue de l’interface conserve les notes, méthodes et productions dans leur langue d’origine.
+
+2. Liste uniquement les commandes du compte. Dans le détail, restitue l’instantané acheté : offre, inclusions, langues, montants/devise, conditions conservées et ressources couvertes. Distingue paiement, activation, demande de remboursement et remboursement confirmé. Explique les différentes origines d’accès et leur période. Un remboursement du pack A+B n’efface pas l’achat individuel de A. Utilise les endpoints de P11–P13 ; ne déduis pas un paiement depuis une URL.
+
+3. Propose reçu, facture ou justificatif seulement si le document existe réellement et si sa nature est établie. Un reçu de paiement ne doit pas être renommé « facture » par commodité. Chaque téléchargement vérifie propriétaire et permission. L’absence de fournisseur ou de configuration commerciale produit un état explicite, sans fausse pièce.
+
+4. Implémente les attestations à partir de critères serveur définis et visibles : identité concernée, parcours/version, date d’émission, langue, nature de l’accomplissement et mode d’évaluation. Une lecture, un quiz et une autoévaluation restent distingués. Si la seule preuve est déclarative, l’attestation l’indique ; aucune mention de correcteur humain sans revue réelle. L’émission est idempotente pour la même preuve et conserve un instantané. Une nouvelle édition du cours ne réécrit pas une attestation ancienne. Produis réellement le format proposé et protège son téléchargement. N’ajoute pas d’annuaire public de personnes par défaut.
+
+5. Ajoute une aide contextuelle et des demandes d’assistance persistées : catégorie, message, ressource/activité/version ou commande pertinente, statut et historique. L’utilisateur choisit les pièces et informations envoyées ; les notes privées ne sont jamais jointes automatiquement. Distingue demande enregistrée, réponse en préparation et email effectivement pris en charge. Une panne d’email conserve la demande et ne retire aucun droit. Réutilise l’outbox P10 ; teste en SMTP local sans contacter un destinataire réel.
+
+6. Les horaires d’aide, délais de réponse, modalités de remboursement et informations légales restent des données validées, pas des promesses improvisées. Si une politique manque, présente les informations disponibles et remonte le blocage de mise en vente.
+
+7. Prévois les demandes liées au compte et aux données avec états réels. Si un export est proposé, il contient uniquement les données autorisées du propriétaire et un lien protégé. Une suppression de compte ne détruit pas aveuglément les traces commerciales ; applique la politique de conservation documentée. Une politique encore indécise exige un circuit de demande traçable et une décision avant activation du traitement irréversible.
+
+VALIDATION
+Teste l’accès direct aux commandes, demandes, attestations et fichiers d’autrui. Vérifie éligibilité serveur, idempotence d’émission et conservation d’une attestation après modification de cours. Vérifie qu’une autoévaluation n’affiche jamais une revue humaine. Teste incident email avec demande toujours retrouvable, états remboursement et origines d’accès, préférences FR/EN et parcours clavier/mobile.
+
+FIN DU LOT
+Complète OpenAPI/types, puis docs/evidence/P14.md avec résultats et limites T04, T09, T11, T12, T14, T16 et T20. Marque les décisions de conservation, documents commerciaux ou conditions absentes comme bloquantes pour leur activation, sans bloquer les fonctions déjà vérifiables. Mets STATUS à jour avec commandes, faits observés et prochaine étape.
+

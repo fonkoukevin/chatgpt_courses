@@ -1,0 +1,71 @@
+# Traçabilité des 54 fonctions
+
+Les identifiants F01–F54 reprennent les numéros 01–54 de l’Analyse fonctionnelle du 7 novembre 2026. Le préfixe F sert uniquement à distinguer fonctions, écrans E et scénarios T. Le Cahier fonctionnel V1, postérieur dans la conception, précise la réalisation du socle.
+
+« V1 » indique une capacité du produit à réaliser, pas une fonction déjà développée. « Option » n’est pas un blocage de lancement. « Différé » et « Conditionnel » ne doivent pas générer des services actifs, des faux écrans ou des promesses commerciales. La décomposition d’une fonction est explicite lorsqu’une partie relève du socle.
+
+| ID | Fonction initiale | Priorité de l’analyse | Traitement retenu pour ce kit | Écrans | Phases principales et preuve |
+| --- | --- | --- | --- | --- | --- |
+| F01 | Accueil par tâche | Socle | V1 : résultats concrets, exemple et démarrage gratuit. | E01 | P06/P18 ; compréhension de la promesse et lien réel vers l’activité. |
+| F02 | Catalogue filtrable | Socle | V1 : filtres combinables et réinitialisables ; métadonnées réelles. | E02 | P06/P16 ; T01/T03. |
+| F03 | Diagnostic court | Enrichissement | Option V1 facultative du cahier : règles déterministes, résultat expliqué et choix libre. Pas de blocage commercial si désactivé. | E09/E02 | P08 si activé ; tests de règles et sortie vers catalogue. |
+| F04 | Fiche de formation | Socle | V1 : bénéficiaire, livrable, outils, programme, langues, accès et support. | E03 | P06/P11/P18 ; cohérence de l’offre et CTA adapté. |
+| F05 | Recherche transversale | Socle | V1 : parcours, guides, exercices, méthodes ; synonymes simples utiles sans moteur IA imposé. | E02 | P06 ; T01/T03 et exclusion des brouillons. |
+| F06 | Guides et liens utiles | Socle | V1 : question résolue, méthode, exemple, contrôles et prolongement pertinent. | E04 | P06/P18 ; qualité éditoriale et liens. |
+| F07 | Parcours et prérequis | Socle | V1 : cours/modules/activités stables et prérequis explicites. | E03/E09/E10 | P05/P08 ; navigation et identifiants après réorganisation. |
+| F08 | Vidéo et contenu accessible | Socle | V1 : capacité vidéo, texte, transcription, sous-titres et fallback ; médias annoncés réellement présents. | E10/E15 | P08/P10/P18 ; usage sans audio et revue mobile/clavier. |
+| F09 | Reprise et progression | Socle | V1 : persistance serveur, reprise autre session, statuts précis et langues équivalentes. | E09/E10/E11 | P08/P09/P16 ; T14/T16. |
+| F10 | Notes et favoris | Enrichissement | Notes privées retenues par le cahier en V1. Favoris d’activités différés sauf décision explicite ultérieure ; ne pas confondre avec méthodes sauvegardées. | E10/E12 | P07/P08 ; T04/T14/T17. |
+| F11 | Quiz explicatifs | Socle | V1 : situations, explications et tentatives versionnées ; score autoritaire calculé côté serveur. | E10 | P08/P18 ; réponse incorrecte utile et conservation des tentatives. |
+| F12 | Exercices et projet final | Socle | V1 : dossier, livrable, critères, corrigé et cas de transfert. | E10/E11 | P09/P18 ; T17/T20 et cohérence BR01/BR02. |
+| F13 | Fiches de prompts | Socle | V1 : variables, entrées, sortie, limites et contrôle ; URL publique ou accès explicite. | E05 | P07/P18 ; copie et validation. |
+| F14 | Dossiers et corrigés | Socle | V1 : fichiers fictifs éditables, cohérents et disponibles dans la langue annoncée. | E10/E11/E15 | P09/P10/P18 ; fichiers ouvrables et droits. |
+| F15 | Générateur guidé | Socle, avancé depuis V2 | V1 sans API IA : assemblage modifiable et copiable. | E05/E12 | P07 ; champs manquants et aucune fausse réponse IA. |
+| F16 | Méthodes en plusieurs étapes | Socle | V1 : actions, points de contrôle et reprise après résultat insuffisant. | E05/E10/E11 | P07/P08/P18 ; méthode reliée au livrable. |
+| F17 | Bibliothèque personnelle | Socle | V1 : copie adaptée, paramètres, notes, recherche et version source. | E12 | P07 ; T18. |
+| F18 | Attestation précise | Socle | V1 : parcours, version, date et preuves réelles. Partage public optionnel différé par défaut. | E13 | P14 ; T16/T20 et autorisation du téléchargement. |
+| F19 | Frontière gratuit/payante | Socle | V1 : accès et contenus compris annoncés ; ressources d’accessibilité dans l’accès de la leçon. | E02/E03/E05/E07/E10 | P06/P11/P12 ; états d’accès et contrôle API. |
+| F20 | Première activité gratuite | Socle | V1 : activité complète sans achat ni inscription initiale ; compte à la sauvegarde. | E01/E10/E11/E06 | P04/P08/P09/P18 ; T02. |
+| F21 | Commande et confirmation | Socle | V1 : Stripe Checkout, espace client et notification, avec confirmation serveur. | E07/E08/E13 | P11/P12/P14 ; T05–T10. |
+| F22 | Droits et remboursements | Socle | V1 : origines indépendantes, états réels et conservation du travail personnel. | E08/E13/E16 | P11–P13 ; T11–T13/T19. |
+| F23 | Compte et préférences | Socle | V1 : connexion, récupération, langue, achats, aide et demandes relatives aux données. | E06/E13 | P04/P14 ; propriété et parcours de récupération. |
+| F24 | Retours et avis contextualisés | Enrichissement | Avis publics/modération différés. Le signalement et le support V1 ne sont pas présentés comme avis commerciaux. | Extension E03/E13/E16 | Après observation ; avis réels liés à usage/achat, aucune donnée promotionnelle fictive. |
+| F25 | Tableau de bord utile | Socle | V1 : dernière activité, projets, méthodes, prochaine action. | E09 | P08 ; reprise utile et état vide. |
+| F26 | Aide dans la leçon | Socle | V1 : FAQ, erreurs fréquentes, signalement et contexte/version. | E10/E13/E16 | P08/P14/P15/P18 ; ticket lié au bon contenu. |
+| F27 | Support asynchrone | Socle | V1 : demande, statut, contexte, motifs et temps passé ; délais configurables. | E13/E16 | P14/P15 ; propriété, réponse et notification suivies. |
+| F28 | Rappels facultatifs | V2 | Différé : opt-in, fréquence, arrêt et distinction transactionnel/marketing à concevoir avant activation. | Extension E13/E16 | Après lancement ; aucune campagne automatisée dans P00–P22. |
+| F29 | Journal des changements | Socle | V1 : changements réels, impact sur cours/méthodes et dates de revue fiables. | E03/E04/E10/E12/E15 | P05/P07/P08/P16 ; T16/T18. |
+| F30 | Suite de parcours | V2 | Recommandation personnalisée avancée différée. Les liens éditoriaux simples restent possibles en V1. | Extension E09 | Après observation des usages ; justification et prérequis. |
+| F31 | Éditeur et prévisualisation | Socle | V1 : création/édition de contenus et aperçu autorisé avant publication. | E14/E15 | P05 ; contenu non publié exclu du public. |
+| F32 | Versions et dépendances | Socle | V1 : versions, impacts sur ressources, historique et retour éditorial tracé. | E15/E16 | P05/P16 ; T16/T18. |
+| F33 | Validité pédagogique | Socle | V1 : outil/capacité/plan, date de test réelle, limites et revue nécessaire. | E03/E04/E15 | P05/P18 ; aucune date rafraîchie sans vérification. |
+| F34 | Français et anglais liés | Dès le socle | V1 structurelle ; publication de chaque langue conditionnée à sa complétude. | Tous les contenus | P01/P03/P05/P16/P18 ; T14/T15. |
+| F35 | Médiathèque organisée | Socle | V1 : langues, médias, droits, usages et versions ; accès serveur aux fichiers premium. | E10/E11/E15 | P10 ; T19 et dépendances avant retrait. |
+| F36 | Revue avant publication | Socle | V1 : contrôles éditoriaux et conditions de vente distincts ; blocage des éléments annoncés absents. | E15/E16/E07 | P05/P11/P18 ; checklist réelle avant offre vendable. |
+| F37 | SEO et pages localisées | Socle | V1 : URL stables, métadonnées, redirections, sitemap et équivalents FR/EN. | E01–E05 | P06/P16 ; indexation utile et privé exclu. |
+| F38 | Mesure du parcours | Socle | V1 : événements définis, déduplication, cohortes/langues et limites documentées ; aucun texte privé. | E09/E11/E16 | P15/P23 ; sources et dénominateurs explicites. |
+| F39 | Autorisations et données | Socle | V1 : permissions et propriété backend, collecte limitée et politique de conservation configurée. | Tous espaces privés | P04/P10/P14/P17 ; T04/T19. |
+| F40 | Paiements avec reprise | Socle | V1 : notifications vérifiées, idempotence, état différé et réconciliation. | E08/E16 | P12/P13/P15 ; T05–T13. |
+| F41 | Sauvegardes et alertes | Socle | V1 opérationnelle : sauvegarde extérieure, restauration réellement exécutée, alertes actionnables. | Exploitation | P20–P23 ; preuve de restauration et incident contrôlé. |
+| F42 | Vue commerciale | Socle | V1 : rapprochement recettes/remboursements/frais/coûts/support ; définitions claires. | E16 | P15/P23 ; pas de confusion recette, trésorerie et bénéfice. |
+| F43 | Assistant IA de cours | Conditionnel | Différé : besoin récurrent, corpus stable, évaluation, citations, budget et quotas avant activation. | Extension E10/E13 | Hors socle ; aucune API IA nécessaire pour P00–P22. |
+| F44 | Outils métier interactifs | Conditionnel | Différé selon tâche observée ; le générateur déterministe F15 est déjà dans le socle. | Extensions selon outil | Définir entrées, résultats, export, erreurs et coûts avant construction. |
+| F45 | Communauté modérée | V3 | Différé : animation, règles, signalement et modération opérationnels requis. | Nouvelle extension à définir | Aucune communauté fictivement active. |
+| F46 | Ateliers et corrections | Conditionnel | Désactivé par défaut ; modèle de preuve compatible, service humain non promis. | Extension E11/E13/E16 | T20 complet avant activation ; capacité, prix, délai et nombre de retours définis. |
+| F47 | Offre pour équipes | Conditionnel | Différé : besoin organisationnel confirmé, licences, invitations, rôles et visibilité apprenants à définir. | Extension compte/admin | Pas de multi-tenant commercial imposé à la V1 individuelle. |
+| F48 | Formateurs externes | Conditionnel | Différé : droits des contenus, rémunération, revue, maintenance et support à définir. | Extension E14–E16 | L’éditeur limité peut servir aux permissions sans ouvrir une marketplace. |
+| F49 | Sélection et comparatifs IA | Sélection puis extension | V1 : mentionner outils/plans nécessaires aux tâches, dans les guides ; annuaire/comparateur élargi différé. | E03/E04/E15 | P06/P18 ; coûts externes et limites vérifiés, aucun catalogue massif vide. |
+| F50 | Abonnement récurrent | V2 | Différé : besoin récurrent et coût de service à valider ; V1 sur achats de parcours/packs. | Extension E07/E13/E16 | Résiliation, échéances et droits après arrêt à spécifier avant activation. |
+| F51 | Packs et promotions | Packs au socle puis V2 | Packs en V1. Coupons, promotions, partenariats/commissions différés. | E07/E13/E16 | P11–P13 ; T06/T11/T12 ; pas de fausse remise permanente. |
+| F52 | Révision et motivation | Enrichissement | Cas de transfert BR02 en V1 pédagogique. Points, séries, classements et motivation supplémentaire différés. | E10/E11 | P18 pour transfert ; enrichissements après preuve d’utilité. |
+| F53 | Usage mobile avancé | Conditionnel | Responsive accessible en V1. Hors ligne/PWA/app dédiée différés, avec synchronisation et droits à concevoir. | Tous écrans | P02/P17 ; pas de service hors ligne promis par une simple mise en cache. |
+| F54 | Deuxième site Claude | Après stabilisation | Différé, indépendant ; réutilisation technique possible sans mélanger comptes/offres/contenus. | Application distincte | Hors lancement ; adaptation pédagogique spécifique avant ouverture. |
+
+## Règles de lecture
+
+Les engagements commerciaux réels restent décrits par les offres et DECISIONS.md. Une fonctionnalité développée ne doit pas être affichée comme service inclus si l’offre ne la couvre pas. Les options ne sont pas des prétextes pour retarder indéfiniment le socle.
+
+Si l’utilisateur décide d’avancer une extension, consigner précisément la décision, son coût/entretien, les écrans et contrats concernés et les scénarios supplémentaires. Ne pas renuméroter silencieusement F/E/T ni effacer les conditions initiales.
+
+Les données de démonstration ne prouvent aucune demande, satisfaction ou rentabilité. Les fonctions différées ne doivent pas apparaître dans la navigation de production sous forme de boutons inactifs sans valeur.
+

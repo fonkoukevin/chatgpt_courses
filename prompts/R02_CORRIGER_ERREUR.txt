@@ -1,0 +1,34 @@
+R02 — DIAGNOSTIQUER ET CORRIGER UNE ERREUR
+
+Problème à traiter :
+[Décrire le comportement observé, la page ou la commande, et le résultat attendu. Ajouter si possible le message exact sans clé secrète ni donnée privée.]
+
+Corrige ce problème dans ChatGPT Courses.
+
+Lis AGENTS.md, docs/STATUS.md et les fichiers directement concernés. Consulte le contrat produit, l'API ou la charte uniquement si cela aide à comprendre le résultat attendu. Préserve les autres changements.
+
+Commence par reproduire le problème avec la commande ou le parcours approprié. Si la reproduction est impossible, relève précisément ce qui manque, inspecte le code et les traces disponibles, puis distingue hypothèse et cause confirmée. Ne transforme pas une supposition en diagnostic certain.
+
+Recherche la cause à la source : frontière frontend/API, autorisation, contrat, validation, concurrence, cache, migration, configuration ou fournisseur. Corrige la plus petite unité cohérente. Mets à jour les deux côtés d'un contrat si nécessaire ; ne masque pas une erreur serveur avec un faux succès dans l'interface.
+
+Préserve les invariants :
+- aucune désactivation globale de CSRF, de la sécurité ou de la validation ;
+- aucun secret dans le code, les logs ou la réponse ;
+- aucun remplacement automatique du backend par des données de démo ;
+- aucun effacement de base, réécriture de migration partagée ou reset Git pour simplifier ;
+- aucun test important supprimé ou rendu artificiellement vert ;
+- aucun remboursement, nouvel achat ou envoi à un tiers pour diagnostiquer sans autorisation applicable.
+
+Pour un bug métier ou une régression, ajoute ou adapte un test qui reproduit réellement la défaillance lorsque c'est pertinent. Pour une retouche de style, vérifie le rendu concerné sans construire une suite de tests qui recopie le CSS. Exécute les contrôles ciblés puis élargis seulement s'il subsiste un risque concret.
+
+Vérifie aussi que la correction ne crée pas un doublon, une fuite entre comptes, une perte de saisie ou une incohérence FR/EN lorsque ces dimensions sont touchées.
+
+Explique en français :
+1. la cause confirmée ou l'incertitude restante ;
+2. le changement et son effet ;
+3. les commandes/parcours réellement exécutés et leur résultat ;
+4. les limites ou accès manquants ;
+5. le prochain travail nécessaire.
+
+Mets à jour la preuve de la phase concernée et STATUS.md. Réalise la correction maintenant ; ne te limite pas à me donner une liste d'actions à effectuer moi-même.
+

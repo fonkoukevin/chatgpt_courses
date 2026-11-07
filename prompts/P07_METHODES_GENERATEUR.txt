@@ -1,0 +1,27 @@
+P07 — MÉTHODES RÉUTILISABLES ET GÉNÉRATEUR GUIDÉ
+
+OBJECTIF
+Implémente les écrans E05 et E12 et leurs services réels : partir d’une méthode publiée, préparer une instruction, la copier, puis conserver une version personnelle retrouvable. Le résultat doit fonctionner avec PostgreSQL et les sessions Spring, sans clé ni appel à une IA. Ne livre pas une galerie de cartes dont les actions sont fictives.
+
+CONTEXTE À LIRE
+Lis AGENTS.md, docs/STATUS.md, les sections utiles de docs/PRODUCT.md, docs/SCREENS.md, docs/API_CONTRACTS.md et docs/ARCHITECTURE.md. Utilise docs/DESIGN_SYSTEM.md pour les composants et docs/CONTENT_REFERENCE.md pour la première méthode. Vérifie P03–P06 dans le code : modèles/versionnement, identité, publication et résolution des contenus. Si un prérequis manque, distingue le complément local possible du blocage réel dans STATUS ; n’invente pas une API déjà disponible.
+
+TRAVAIL À RÉALISER
+1. Affiche une méthode avec objectif, cas d’usage, prérequis, données nécessaires, étapes, instruction de départ, exemple, vérifications, limites, langue et version source. Les contenus premium passent par l’autorisation serveur existante. La méthode publique ne doit pas divulguer des ressources réservées.
+
+2. Crée un formulaire guidé : objectif, contexte, données disponibles, destinataire, format, contraintes et informations à clarifier. Assemble une instruction déterministe et lisible ; l’utilisateur peut ensuite la modifier. Sépare champs structurés et texte final pour éviter qu’une modification de champ efface silencieusement ses retouches. Prévois validation utile, réinitialisation explicite et copie réelle avec retour accessible ; propose une sélection manuelle si le presse-papiers est indisponible. Le bouton ne prétend jamais avoir exécuté l’instruction dans ChatGPT.
+
+3. Un visiteur peut pratiquer et copier. Le brouillon temporaire indique ses limites. Au clic « Enregistrer dans mes méthodes », conserve la saisie non sensible lors du parcours de connexion si possible, puis propose sa sauvegarde sous le compte effectivement connecté. Respecte le retour interne validé. Aucun brouillon d’un ancien compte ne devient automatiquement la méthode d’un autre utilisateur ; demande une action explicite d’import et nettoie les données privées à la déconnexion.
+
+4. Implémente liste, recherche simple, détail, création, modification, duplication et suppression des méthodes personnelles. Utilise les endpoints /me/methods et les conventions OpenAPI existantes. Conserve propriétaire, titre, langue du texte, contenu indépendant, paramètres utiles, notes, catégorie et référence/version source. La duplication crée un nouvel identifiant. La suppression requiert confirmation UI et autorisation serveur.
+
+5. Une copie personnelle est un instantané. Modifier ou archiver sa source ne remplace jamais son texte ni ses notes. Présente la nouvelle version disponible et une action pour créer une nouvelle copie ; affiche honnêtement une source devenue indisponible. Changer la langue de navigation conserve le texte personnel original.
+
+6. Applique ETag/If-Match, précondition 428 et conflit de révision 412 suivant le contrat central. « Enregistré » apparaît uniquement après la réponse correspondant à la dernière version envoyée. En cas de panne, expiration ou conflit, conserve la saisie, propose copier/comparer/recharger et laisse l’utilisateur choisir. N’écrase pas automatiquement une version distante. Les mutations utilisent la session et le mécanisme CSRF existants ; aucune identité concurrente.
+
+VALIDATION
+Teste réellement les invariants : A ne peut lire, modifier, dupliquer ni supprimer la méthode de B ; une mise à jour puis un archivage de source préserve la copie ; deux modifications de même révision produisent un conflit explicite ; une sauvegarde retrouve son contenu dans une seconde session du même compte. Vérifie le générateur sur champs incomplets et exemple BR01, puis le parcours visiteur → connexion → sauvegarde. Contrôle clavier, affichage mobile, états vide/chargement/erreur, langue et copie. Les essais avec deux sessions ne nécessitent pas deux appareils physiques.
+
+FIN DU LOT
+Mets à jour le contrat machine, les types et la documentation si nécessaire. Dans docs/evidence/P07.md, indique commandes exécutées, résultats, environnement, limites et preuves ciblées T02, T04, T14, T17 et T18. Relie les fonctions F13/F15/F16/F17 dans la matrice sans annoncer les extensions IA terminées. Mets STATUS à jour avec le prochain lot et les seuls blocages restants. Termine par ce qui fonctionne, les vérifications réellement effectuées et les limites observées.
+

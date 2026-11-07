@@ -1,0 +1,24 @@
+P05 — CONTENUS, VERSIONS, TRADUCTIONS ET PUBLICATION
+
+OBJECTIF
+Réalise le CMS interne et les écrans E14/E15 pour produire des contenus réellement consultables par le futur catalogue. Les brouillons, révisions, traductions et publications doivent être persistés dans PostgreSQL et gouvernés par des permissions. Réutilise la charte et les composants existants.
+
+LECTURES ET PRÉCONDITIONS
+Lis AGENTS.md, docs/STATUS.md, les parties éditoriales de docs/ARCHITECTURE.md et docs/API_CONTRACTS.md, E14/E15 dans docs/SCREENS.md et les sections concernées de docs/DESIGN_SYSTEM.md. Utilise docs/CONTENT_REFERENCE.md pour les données du premier parcours. P03/P04 doivent fournir persistance, contrats et autorisations. Respecte les versions et décisions déjà consignées.
+
+TRAVAIL À RÉALISER
+1. Implémente catalogue administratif, recherche/pagination et filtres par type, statut, langue, parcours, date de vérification et besoin d’actualisation. Donne les actions création, édition, duplication, aperçu, révision et archivage avec permissions et états vides/erreur/chargement.
+2. Implémente l’éditeur des parcours, modules, activités, guides et méthodes : titre, objectif, résultat attendu, prérequis, blocs de contenu, ordre, durée estimée si renseignée, ressource liée, quiz avec corrections, grille et politique d’accès. Pour l’ordre des modules, fournis des boutons clavier en plus d’un éventuel glisser-déposer. Les références vers médias utilisent des identifiants et leur état ; le stockage sera complété en P10.
+3. Sépare identité stable, version pédagogique et révision éditoriale. Une correction mineure conserve la version pédagogique ; des objectifs ou évaluations nouveaux demandent une version distincte. Conserve l’auteur, date, motif et relations de remplacement. La publication ne réécrit aucune tentative, méthode personnelle ou attestation existante.
+4. Relie FR/EN à la même identité/version lorsque les objectifs sont équivalents. Stocke état de traduction et révision source examinée. Une source modifiée peut rendre sa traduction « à revoir ». Ne publie pas un menu traduit comme un cours entièrement traduit. Une traduction manquante reste explicite et n’emprunte pas silencieusement le contenu d’une autre activité.
+5. Implémente les transitions brouillon, à vérifier, prêt, publié, à actualiser et archivé. La date de revue provient d’une action de vérification enregistrée, pas de l’heure de chaque déploiement. Fournis un résultat de readiness avec les bloqueurs et les liens pour les corriger : objectif, exercice, corrigé, fichiers, médias promis, langue et accès.
+6. Publie transactionnellement une révision déterminée. Le serveur vérifie à nouveau la readiness et la permission au moment de l’action. Une offre achetable restera une décision séparée de P11 ; publier une leçon ne crée ni prix ni droits payants. Conserve les informations utiles aux clients existants lorsqu’un contenu est remplacé ou retiré de la vente.
+7. Ajoute prévisualisation authentifiée et non indexable, sans cache public. Un paramètre preview=true ne suffit pas à lire un brouillon. La projection publique ne renvoie que les champs et révisions publiés autorisés. Le texte premium ne doit pas être livré puis simplement masqué dans l’interface.
+8. Sauvegarde avec révision/If-Match. En cas de conflit, montre version serveur et saisie locale, avec copie/rechargement/choix explicite ; aucune perte silencieuse. Une réponse ancienne ne remplace pas une révision plus récente et ne marque pas enregistrées des modifications encore locales. Avant archivage ou suppression, présente dépendances et conséquences. Bloque les suppressions destructrices d’historique utilisé.
+9. Utilise des blocs structurés ou Markdown assaini. Évite l’exécution de HTML/MDX libre provenant d’un champ éditorial. Valide liens et références, contrôle les payloads et les permissions côté serveur.
+
+VÉRIFICATIONS
+Teste un cycle complet créer → vérifier → publier → lire la projection publique → corriger → archiver. Vérifie qu’un visiteur n’obtient aucun brouillon, qu’un éditeur de contenu n’accède pas au commerce et que deux modifications concurrentes ne s’écrasent pas. Vérifie une traduction publiée puis dépassée, un média manquant bloquant et une activité gratuite distincte d’une activité protégée. Prépare les preuves T15/T16/T17/T18 à compléter lors des lots consommateurs. Parcours E14/E15 au clavier et à 390 px, sans inventer de nouveaux styles.
+
+FIN DE LOT
+Actualise contrats, client typé, migrations et documentation des transitions. Indique les contenus réellement créés, les fixtures et les contenus encore à produire. Mets à jour docs/STATUS.md et docs/evidence/P05.md avec les résultats observés. Un contenu non prêt reste en brouillon ; ne remplis pas les champs manquants avec de fausses preuves ou promesses.

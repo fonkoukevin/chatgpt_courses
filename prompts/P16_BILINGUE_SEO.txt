@@ -1,0 +1,34 @@
+P16 — TERMINER LE FRANÇAIS/ANGLAIS ET LE SEO
+
+MISSION
+Rendre le produit cohérent en français et en anglais, pour les visiteurs, les apprenants et l'administration, puis vérifier le référencement technique des contenus publics. Les langues de publication restent une décision commerciale explicite. Le code bilingue doit fonctionner même si un seul ensemble de contenus est prêt au lancement.
+
+LIS ET VÉRIFIE
+AGENTS.md, docs/STATUS.md, docs/PRODUCT.md (langues/versions), docs/SCREENS.md, docs/ARCHITECTURE.md, docs/DECISIONS.md, docs/ACCEPTANCE.md (T14–T16) et la configuration de routes/traductions réelle. Consulte les documentations officielles de Next.js et de l'outil d'i18n retenu pour leurs versions installées. Lis la documentation Google des versions localisées :
+https://developers.google.com/search/docs/specialty/international/localized-versions
+
+ROUTES ET CHOIX DE LANGUE
+1. Utilise des URL distinctes avec /fr et /en, des slugs publics localisés et des identifiants métier stables. Centralise la génération des liens et des URL absolues. Le changement d'un slug publié prévoit une redirection explicite vers son remplaçant pertinent.
+2. Le sélecteur indique « Français » et « English », sans dépendre de drapeaux. Il conserve la page, le parcours et l'activité équivalents. Dans un formulaire non sauvegardé, préserver le brouillon ou demander comment traiter cette saisie avant de la perdre.
+3. La préférence explicite prévaut. Ne force pas une langue à partir de l'adresse IP. Pour la racine /, documente une politique simple et compatible avec la décision de lancement : page de choix ou destination par défaut configurée. Ne publie pas une redirection définitive vers une langue encore expérimentale.
+4. Si une traduction manque, explique l'état et propose volontairement la version disponible. Ne remplis pas silencieusement une URL anglaise de français en la présentant comme traduite. Une page d'information « traduction indisponible » est non indexable ; elle ne figure pas parmi les équivalents publiés.
+
+CONTENUS ET APPRENTISSAGE
+5. Inventorie tous les textes : navigation, validation, messages API présentés à l'utilisateur, états d'accès, sauvegarde, paiement, emails, assistance, métadonnées et dates. Les erreurs possèdent des codes stables, pas seulement une phrase à traduire à la volée.
+6. Sépare traduction d'interface, traduction éditoriale et données personnelles. Ne traduis pas les noms, notes, réponses et productions de l'apprenant automatiquement. Le dossier fictif de référence conserve ses faits : l'anglais du support ne change pas le fait que le client demande des pages françaises.
+7. Les achats donnent accès aux langues annoncées. Les acquis d'activités équivalentes sont communs, pas deux achats et deux progressions séparés. Une position de lecture vidéo reste attachée au média précis. Vérifie les tentatives de quiz et les attestations historiques avec leur version et langue.
+8. Le CMS suit brouillon/revue/publication par langue. Une modification de la source signale les dépendances à revoir. N'affiche jamais « vérifié en anglais » sur une traduction simplement générée.
+
+SEO TECHNIQUE
+9. Sur les pages publiques réellement publiées : title et description localisés, H1 pertinent, lang correct, canonical de la version linguistique concernée et URL absolue HTTPS de production. Ne canonicalise pas toutes les pages anglaises vers le français.
+10. Déclare hreflang réciproque uniquement entre équivalents publiés et indexables, avec chaque page elle-même. Utilise fr/en pour les langues générales ; n'invente pas un ciblage régional. Ajoute x-default seulement si la destination de repli est définie et cohérente.
+11. Génère un sitemap avec les URL canoniques publiques pertinentes ; aucune route privée, prévisualisation, commande, paramètre de session ni traduction absente. Pour les filtres/recherches, choisis une politique d'indexation documentée qui évite de créer une infinité de combinaisons sans valeur éditoriale.
+12. Protège la recette par un contrôle d'accès et une configuration non indexable ; la production doit recevoir les bons réglages. robots.txt n'est jamais un contrôle d'accès. Les pages privées demeurent protégées côté serveur et utilisent des directives adaptées.
+13. Ajoute des données structurées uniquement pour un type encore documenté et un contenu réellement présent. Vérifie les exigences actuelles avant implémentation ; aucun avis, note, certification ou résultat enrichi inventé. Prépare les métadonnées de partage sans secrets ni prix périmé.
+14. Contrôle la structure des titres, les liens internes, les erreurs 404 réelles, les images et dimensions, les transcriptions disponibles et la performance des pages clés. Aucun texte caché ou série de pages automatiques sans contenu utile.
+
+CRITÈRES ET PREUVES
+Exécute T14–T16 sur des données françaises et anglaises équivalentes et sur une traduction manquante. Vérifie le HTML rendu serveur, les en-têtes, les liens de changement de langue, le sitemap et la politique de cache privé. Teste des libellés longs et des formats de dates/nombres dans les deux langues. Documente chaque langue réellement prête et chaque contenu restant à revoir.
+
+Mets à jour docs/evidence/P16.md, STATUS.md et les décisions de routage. Ce lot garantit seulement les comportements vérifiés, pas un classement dans Google. Prochaine phase : P17_QUALITE_TRANSVERSALE.txt.
+

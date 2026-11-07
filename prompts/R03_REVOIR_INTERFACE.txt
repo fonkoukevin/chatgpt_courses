@@ -1,0 +1,26 @@
+R03 — AMÉLIORER UNE INTERFACE EN RESPECTANT LA CHARTE
+
+Écran ou zone à revoir :
+[Indiquer une route, un composant ou joindre une capture disponible.]
+
+Retour souhaité :
+[Exemple : améliorer la lisibilité, réduire la densité, corriger le mobile, renforcer la hiérarchie ou mieux montrer l'action principale.]
+
+Travaille sur l'interface réelle de ChatGPT Courses. Lis AGENTS.md, docs/DESIGN_SYSTEM.md, la famille d'écran dans docs/SCREENS.md et les composants concernés. Si mon retour modifie explicitement une décision de charte, intègre cette décision et documente-la ; sinon conserve la direction existante.
+
+Observe le rendu actuel avec le navigateur ou les captures disponibles. Vérifie contexte, largeur, état connecté et données utilisées. Une capture ne suffit pas pour inventer des comportements absents du code.
+
+Évalue cinq points : compréhension du résultat attendu, hiérarchie des informations, visibilité de l'action principale, facilité de lecture et utilisation mobile/clavier. Propose brièvement les modifications concrètes, puis implémente les ajustements autorisés dans le même travail.
+
+Utilise les tokens et composants communs. Si le problème concerne plusieurs écrans, corrige la règle partagée et vérifie au moins deux usages représentatifs. Évite les corrections locales contradictoires, les dimensions arbitraires répétées et les surcharges CSS qui masquent une structure défectueuse.
+
+Le style reste fond clair, texte sombre, bleu nuit discret, bordures légères, typographie sobre et espaces maîtrisés. N'ajoute ni grandes décorations inutiles, ni statistiques fictives, ni avis inventés, ni boutons qui ne fonctionnent pas pour donner une impression de finition.
+
+Préserve les contrats, autorisations et états métier. Un message d'erreur peut être clarifié, pas supprimé pour nettoyer la page. Une ressource verrouillée, une sauvegarde échouée et une traduction absente doivent rester compréhensibles.
+
+Vérifie les tailles pertinentes, notamment ordinateur et téléphone, ainsi que 320 px pour les débordements. Contrôle focus, labels, contraste, panneaux, textes longs FR/EN et contenu sous les barres fixes. Respecte la réduction d'animation. Examine réellement le résultat si les outils sont disponibles ; sinon indique les routes et les points qui restent à voir.
+
+Exécute les contrôles de compilation et les tests comportementaux affectés. Mets à jour DESIGN_SYSTEM.md uniquement si une règle commune a réellement changé, puis la preuve du lot et STATUS.md.
+
+Présente le résultat avec ce qui a changé, pourquoi, les écrans observés et les limites. Ne repars pas d'une nouvelle application et ne remplace pas silencieusement la charte.
+

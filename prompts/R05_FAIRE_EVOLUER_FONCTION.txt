@@ -1,0 +1,29 @@
+R05 — FAIRE ÉVOLUER UNE FONCTION SANS PERDRE LA COHÉRENCE
+
+Évolution demandée :
+[Décrire le besoin utilisateur, le résultat attendu et, s'ils sont connus, les utilisateurs concernés.]
+
+Intègre cette évolution à ChatGPT Courses. Lis AGENTS.md, STATUS.md et les documents qui définissent le comportement existant. Vérifie si la demande correspond à une fonction déjà prévue, différée ou conditionnelle dans FUNCTION_MATRIX.md.
+
+Commence par formuler le problème précis et le parcours qui changera. Identifie les impacts réels : écrans, données, API, droits, historique, offres, traductions, accessibilité, exploitation et coût fournisseur. Ne transforme pas une petite évolution en refonte générale.
+
+Si l'évolution dépend d'une décision commerciale absente — par exemple quota d'assistant IA, prix d'un service de correction ou engagement de délai — réalise les éléments réversibles utiles et présente la décision concrète qui manque. N'invente pas une promesse ou une dépense pour débloquer la vente.
+
+Pour une évolution suffisamment définie, mets à jour le contrat produit et les décisions, puis réalise le plus petit lot cohérent de bout en bout. Préserve les contrats achetés et l'historique. Les migrations restent incrémentales ; une nouvelle version pédagogique n'efface pas les anciennes attestations ou productions.
+
+Prévois :
+- état initial et droits requis ;
+- action utilisateur et validations ;
+- résultat réussi, état vide, erreur, reprise et conflit si nécessaire ;
+- comportement FR/EN et disponibilité des contenus ;
+- instrumentation utile sans contenu privé dans les événements ;
+- critères de fin observables.
+
+Utilise les composants et tokens existants. Respecte l'architecture Spring autorité métier et le contrat API. Une nouvelle bibliothèque ou un fournisseur doit répondre à un besoin concret, être compatible et être documenté ; ne change pas de stack par préférence personnelle.
+
+Exécute les tests et observations adaptés au risque. Vérifie un parcours complet affecté et les invariants sensibles. Mets à jour FUNCTION_MATRIX.md, SCREENS.md, API_CONTRACTS.md, ACCEPTANCE.md ou DEPLOYMENT.md uniquement lorsque leur contenu est réellement touché.
+
+Ajoute une preuve de l'évolution et une entrée claire dans STATUS.md, avec dépendances et prochain lot. Si elle dépasse une session, conserve des sous-lots explicites et un point de reprise.
+
+Présente le résultat, son effet pour l'utilisateur, les validations et les limites. Les demandes explicites récentes du propriétaire priment ; une décision nouvelle doit être visible dans les références utilisées lors des prochaines sessions.
+

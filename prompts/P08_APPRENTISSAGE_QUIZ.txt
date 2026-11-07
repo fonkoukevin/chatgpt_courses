@@ -1,0 +1,29 @@
+P08 — ESPACE D’APPRENTISSAGE, ACTIVITÉS, QUIZ ET NOTES
+
+OBJECTIF
+Construis E09 et E10 comme un parcours pédagogique réel : reprendre une activité, consulter son contenu, pratiquer, vérifier une compréhension et conserver sa progression. Une lecture, une activité terminée, un quiz réussi, un projet produit et une autoévaluation sont des faits distincts. Aucun bouton ou temps de lecture ne doit produire une fausse validation de compétence.
+
+CONTEXTE À LIRE
+Commence par AGENTS.md et docs/STATUS.md. Lis les sections apprentissage de docs/PRODUCT.md, E09/E10 dans docs/SCREENS.md, les contrats correspondants, docs/ARCHITECTURE.md et les composants de docs/DESIGN_SYSTEM.md. Utilise les objectifs et premiers quiz de docs/CONTENT_REFERENCE.md. Vérifie P04–P07 dans le code ; les projets complets arrivent en P09 et les médias sécurisés en P10. Les raccordements futurs doivent être nommés explicitement.
+
+TRAVAIL À RÉALISER
+1. Relie le tableau de bord aux données du compte : parcours commencés, dernière activité accessible, progression compréhensible et méthodes récentes. Présente « Reprendre » avec une destination réellement disponible. Un nouveau compte affiche un état vide utile ; aucune progression ou activité inventée. Distingue accès actif, expiré, révoqué et contenu indisponible.
+
+2. Crée la page d’activité avec programme du parcours, position dans le module, objectif, explication, exemple, pratique, ressources, vérifications et navigation précédente/suivante. Sur mobile, le programme reste accessible sans recouvrir l’éditeur. La première activité gratuite doit être complète et utile avant inscription. La demande de compte intervient pour la sauvegarde durable et explique cette valeur.
+
+3. Implémente progression et inscription au parcours sur le serveur, avec transitions et prérequis documentés. Une opération répétée ne duplique pas l’inscription. Définis séparément lecture déclarée, activité terminée, résultat du quiz et état du projet. Les pourcentages ont un dénominateur explicite par version ; une révision pédagogique ne réécrit pas les preuves anciennes. Ne bloque pas arbitrairement la navigation sur un temps de visionnage.
+
+4. Implémente des quiz accessibles : questions et choix, réponse, soumission, résultat, explication et nouvelle tentative selon la règle éditoriale. Le backend corrige à partir de la version publiée et conserve réponses, score, langue, version et date. Le client ne transmet pas un score faisant autorité. Le DTO initial ne contient pas les réponses correctes réservées au corrigé. Une modification de quiz ne change pas les résultats historiques. Refuse une version incohérente avec un message permettant de reprendre proprement.
+
+5. Ajoute les notes personnelles d’activité avec propriété, révision, sauvegarde confirmée et gestion des conflits. Elles gardent leur langue originale lors du changement d’interface. Leur contenu ne part pas dans les mesures d’usage ni dans les journaux. Les favoris d’activité restent différés ; ne les confonds pas avec les méthodes personnelles déjà enregistrées.
+
+6. Prépare le lecteur média derrière l’abstraction P10. La position concerne un mediaId et sa durée, pas une activité abstraite : les vidéos FR/EN différentes ne partagent pas un minutage. Tant qu’aucune vidéo n’est disponible, le texte pédagogique permet de travailler ; ne présente ni lecteur vide ni durée fabriquée. Les ressources privées ne deviennent pas publiques pour contourner un fournisseur manquant.
+
+7. Conserve la saisie pendant une sauvegarde en échec et les réponses réseau arrivant dans un ordre différent. Les requêtes privées utilisent no-store et l’identité Spring existante. Si le diagnostic facultatif est implémenté, il reste court, explicable, non bloquant et sans inférence automatique de compétence.
+
+VALIDATION
+Teste reprise dans deux sessions indépendantes du même compte, interdiction d’accès au compte d’autrui, distinction des états pédagogiques et correction serveur des réponses BR01. Vérifie qu’un quiz réussi ne valide pas automatiquement un projet. Teste changement FR/EN, notes inchangées, tentatives historisées et positions de médias séparées ; vérifie traduction absente, version modifiée et session expirée. Réalise un parcours clavier et mobile incluant erreur de sauvegarde.
+
+FIN DU LOT
+Actualise OpenAPI/types et les références réellement modifiées. Consigne les preuves dans docs/evidence/P08.md, notamment T04, T14, T15, T16 et les sauvegardes concernées par T17. Marque les intégrations médias non réalisées comme dépendances P10. Mets STATUS à jour avec résultats observés, commandes et limites ; ne transforme pas la réussite de tests locaux en déclaration de publication.
+

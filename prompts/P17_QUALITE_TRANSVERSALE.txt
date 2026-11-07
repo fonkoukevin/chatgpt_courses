@@ -1,0 +1,31 @@
+P17 — ACCESSIBILITÉ, PERFORMANCE, CONFIDENTIALITÉ ET ROBUSTESSE
+
+OBJECTIF
+Élimine les défauts transversaux qui empêchent d’utiliser le produit, exposent des données ou fragilisent les parcours. Travaille sur l’application déjà construite ; préserve les fonctions et la charte validées. Ce lot est une vérification ciblée avec corrections, pas une refonte visuelle ni une accumulation d’outils.
+
+CONTEXTE À LIRE
+Lis les AGENTS.md applicables et docs/STATUS.md. Consulte docs/DESIGN_SYSTEM.md, docs/ARCHITECTURE.md, docs/API_CONTRACTS.md, docs/ACCEPTANCE.md et les sections concernées de docs/DEPLOYMENT.md. Utilise les rapports des lots précédents pour éviter de répéter les contrôles déjà concluants sans changement.
+
+DÉPENDANCES ET MÉTHODE
+Les parcours publics, d’identité, d’apprentissage, de pratique, d’achat et d’administration doivent exister. Recense d’abord les défauts observables et classe-les par impact réel. Vérifie les changements avec un test pertinent ; ne règle pas un échec en supprimant une assertion, en contournant une autorisation ou en transformant une erreur en succès.
+
+TRAVAIL À RÉALISER
+1. Revois les parcours au clavier : navigation, recherche/filtres, inscription, leçon, quiz, atelier, dialogues et administration. Corrige ordre de focus, focus visible, fermeture au clavier, retour au déclencheur et annonces des erreurs. Aucun contenu essentiel ne doit dépendre seulement du survol.
+2. Vérifie structure des titres, labels persistants, association des messages aux champs, contrastes et information indépendante de la couleur. Prends WCAG 2.2 AA comme objectif de travail et documente les critères examinés ; une analyse automatique seule n’est pas une certification d’accessibilité.
+3. Examine les écrans représentatifs en 1440, 1024, 768, 390 et 320 px, puis avec texte agrandi. Corrige débordements, barres fixes masquant la saisie, menus inaccessibles et tableaux illisibles. Respecte les règles de DESIGN_SYSTEM.md et les différences de longueur FR/EN.
+4. Vérifie le contenu sans audio : transcription, sous-titres réellement disponibles, explication textuelle en cas d’indisponibilité vidéo. Ne marque pas une vidéo absente comme vérifiée.
+5. Mesure les pages publiques et l’atelier dans un environnement reproductible : chargement, images, polices, JavaScript client et interactions. Recherche les requêtes en cascade, hydratations inutiles et ressources trop lourdes. Fixe des budgets raisonnables à partir de ces mesures, avec machine/réseau/outil indiqués. Un score de laboratoire n’est pas une mesure de tous les visiteurs.
+6. Contrôle les requêtes PostgreSQL des listes et de la reprise : pagination, index nécessaires, N+1 et volumes de réponses. Ajoute un cache seulement pour un besoin mesuré. Ne mets pas des productions, commandes, notes ou droits personnels dans un cache partagé. Vérifie le comportement avec deux utilisateurs successifs.
+7. Revois les entrées sensibles : autorisations par propriétaire, CSRF, cookies, redirections de retour autorisées, récupération d’accès, en-têtes proxy fiables, HTML éditorial, noms de fichiers et URLs de médias. Vérifie que les liens et endpoints d’administration ne sont pas protégés uniquement par leur absence dans le menu.
+8. Mets en place des limites adaptées sur recherche, formulaires d’identité, demande d’email et uploads. Elles doivent être testables et ne doivent pas bloquer les reprises normales. Respecte le contrat de session et CSRF de P04.
+9. Vérifie la confidentialité des logs, erreurs, événements et suivi d’incidents : absence de mots de passe, cookies, clés, jetons, signatures, notes, prompts et productions. N’active pas de capture de session sensible par défaut.
+10. Contrôle hors-ligne, réseau lent, mutation concurrente, session expirée et traduction absente. La saisie est conservée quand possible et le message de sauvegarde reflète la confirmation réelle du serveur.
+
+VÉRIFICATIONS ET ARRÊT
+Exécute les tests ciblés qui prouvent les corrections et les contrôles de build/type/lint pertinents. Utilise le navigateur et les outils autorisés disponibles ; si un outil manque, consigne la limite au lieu de déclarer une revue effectuée. Les scénarios T04, T14, T15, T17 et T19 doivent rester corrects après optimisation.
+
+Arrête les essais supplémentaires quand les défauts identifiés sont résolus et les risques du lot suffisamment vérifiés. Les problèmes restants sont classés avec impact, reproduction et prochaine action, sans affirmation de sécurité ou de perfection absolue.
+
+SORTIE ET SUIVI
+Rends un rapport dans docs/evidence/P17.md : constats, corrections, mesures avant/après lorsqu’elles existent, parcours/largeurs/langues examinés, commandes et résultats. Mets à jour les règles de charte seulement si une correction utile le nécessite et explique pourquoi. Actualise docs/STATUS.md et les scénarios de réception concernés.
+

@@ -1,0 +1,29 @@
+P09 — ATELIER DE PROJETS ET ÉVALUATION HONNÊTE
+
+OBJECTIF
+Implémente E11 : une production personnelle enregistrée, révisable et évaluée selon une grille explicite. L’utilisateur doit pouvoir apporter un travail préparé dans ChatGPT ou ailleurs, contrôler ses propres choix et retrouver ses versions. Le produit ne doit pas prétendre qu’un document est correct parce que l’utilisateur a coché des cases.
+
+CONTEXTE À LIRE
+Lis AGENTS.md, docs/STATUS.md, les règles projets/évaluation de docs/PRODUCT.md, E11 dans docs/SCREENS.md, docs/API_CONTRACTS.md, l’architecture et la charte. Lis intégralement les cas BR01/TR01/BR02 et la grille de docs/CONTENT_REFERENCE.md. Vérifie P04, P05, P07 et P08. Les contrats médias de P10 seront consommés ensuite ; ne les remplace pas par une URL publique ou un téléversement fictif.
+
+TRAVAIL À RÉALISER
+1. Crée la liste privée des projets avec parcours, activité, version, titre, date pertinente et état explicite. Dans l’atelier, garde le brief, les tarifs et les consignes consultables à côté ou à proximité de la production. Prévois un éditeur structuré : objectif, périmètre, méthode, calendrier, budget, points à confirmer et prochaine étape. Autorise coller du texte travaillé dans un outil externe. Les exemples ne remplacent pas silencieusement la saisie.
+
+2. Enregistre réellement les projets dans PostgreSQL avec propriétaire, références pédagogiques et révisions. Documente les états du cahier : brouillon, prêt pour autoévaluation, autoévaluation renseignée et à réviser ; ils restent distincts de l’état technique de sauvegarde, de la lecture, du quiz et de la revue humaine. L’utilisateur peut continuer à modifier son projet. Une nouvelle révision ne modifie pas l’évaluation liée à une révision précédente.
+
+3. Implémente la sauvegarde avec ETag/If-Match et précondition atomique. En cas de 412, conserve le travail local et propose comparaison ou copie avant récupération de la version distante. Les réponses anciennes ne rétablissent pas « enregistré » après de nouvelles modifications. Une panne ou une session expirée ne détruit pas la saisie. La navigation signale un travail restant à enregistrer.
+
+4. Fournis une autoévaluation versionnée : vingt contrôles BR01, catégories, déclarations d’erreurs bloquantes et commentaires utiles. Le serveur calcule le total à partir des réponses déclarées et conserve version de grille, révision de projet, auteur et date. Le seuil proposé 16/20 reste configurable et explicite. Affiche « Autoévaluation renseignée » et « score déclaré ». Aucune détection automatique de véracité du texte ne doit être inventée. Les montants et délais BR02 demandent une grille adaptée, pas la réutilisation aveugle des réponses BR01.
+
+5. Propose la consultation volontaire d’un corrigé après tentative ou action explicite selon la règle éditoriale. Enregistre ce fait sans déclarer le projet validé. Explique les différences de raisonnement et accepte plusieurs formulations correctes ; aucune comparaison mot à mot avec un texte modèle.
+
+6. Préserve l’accès aux productions personnelles déjà enregistrées lorsqu’un droit premium est révoqué, tout en protégeant les médias et ressources pédagogiques associés. Le changement de langue ne traduit pas automatiquement la production. Prévois les champs de provenance pour une éventuelle revue humaine mais laisse cette option désactivée ; aucun évaluateur, délai ou service payant n’est inventé.
+
+7. Les fichiers de projet restent désactivés jusqu’à la sécurité de P10 : autorisation propriétaire, formats/tailles, validation, stockage privé et téléchargement temporaire. Affiche un atelier textuel pleinement utilisable. Si P10 existe déjà, raccorde ses services centralisés au lieu d’ajouter un deuxième circuit de fichiers.
+
+VALIDATION
+Teste deux propriétaires par appels API directs, deux éditeurs concurrents sur une même révision, panne de sauvegarde et rechargement après confirmation. Vérifie que l’ancien score reste attaché à l’ancienne production, que les doublons de soumission sont traités suivant le contrat et qu’aucun score fourni librement par le client fait autorité. Vérifie les calculs BR01 et BR02, erreurs bloquantes, révélation du corrigé et conservation du texte après perte de droit.
+
+FIN DU LOT
+Mets à jour contrats/types et docs/evidence/P09.md avec les preuves T02, T04, T14, T16, T17 et la partie obligatoire de T20. La revue humaine complète vaut NON_APPLICABLE_JUSTIFIÉ tant que le service reste désactivé ; elle devra être testée avant activation. Mets STATUS à jour et distingue clairement implémentation, tests locaux, raccordement P10 et choix commerciaux encore ouverts.
+

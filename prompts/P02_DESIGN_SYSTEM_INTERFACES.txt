@@ -1,0 +1,33 @@
+P02 — CONSTRUIRE LA CHARTE ET LES PREMIÈRES INTERFACES
+
+MISSION
+Implémente le système visuel de ChatGPT Courses directement dans l'application Next.js. Il doit permettre de juger l'apparence et l'ergonomie dans un navigateur sans dépendre d'une maquette Figma. Le résultat attendu est un ensemble de composants réutilisables et trois structures d'interface cohérentes.
+
+PRÉREQUIS ET LECTURES
+P01 doit permettre de démarrer le frontend. Lis AGENTS.md, docs/STATUS.md, docs/DESIGN_SYSTEM.md, docs/SCREENS.md, docs/PRODUCT.md et references/design-tokens.css. Vérifie la version réelle de Tailwind et la convention shadcn avant toute intégration. Ce lot pose les interfaces ; les données métier sont raccordées aux phases suivantes.
+
+DIRECTION VISUELLE
+Utilise les tokens proposés dans DESIGN_SYSTEM.md : fond blanc, surfaces gris très clair, texte #202123, accents bleu nuit #12345B, bordures fines, formes discrètement arrondies, une seule famille d'icônes, espaces généreux mais utiles. Les références sont la simplicité de ChatGPT et certains accents éditoriaux de chatgpt.fr. La composition et les composants sont propres à notre plateforme. La charte du dossier est la référence de réalisation ; ne réinterprète pas les couleurs à chaque page.
+
+Aucune dépendance à un logo ou une police propriétaire d'OpenAI. Utilise une identité textuelle simple « ChatGPT Courses » et des icônes disponibles. Les visuels utiles présentent une production ou une méthode. Un effet décoratif ne doit pas repousser l'activité gratuite sous plusieurs écrans.
+
+À IMPLÉMENTER
+1. Intègre les tokens sémantiques au système Tailwind réellement installé. Évite une collection de couleurs codées en dur dans chaque composant. Prévois les variantes de boutons, champs, badges, cartes et messages à partir de ces tokens.
+2. Construis les composants fondamentaux : Button, Link, FormField, SearchField, TextArea, Select, Checkbox, RadioGroup, Tabs, Accordion, Dialog/Sheet, Tooltip, Card, Table, Pagination, Toast/StatusMessage, Skeleton, EmptyState, ErrorState et ConfirmationDialog. N'ajoute que les variantes utiles au produit. Radix/shadcn constituent une base à adapter et vérifier, pas une garantie automatique d'accessibilité.
+3. Prépare les composants métier visuels : CourseCard, OfferSummary, ProgressSummary, AccessNotice, SaveStatus, VersionNotice, ResumeCard, MethodBuilder et RubricChecklist. Leurs props distinguent les vrais états : accès requis, sauvegarde en cours, échec, conflit, vide. Ne transforme pas un état inconnu en succès.
+4. Crée PublicLayout : en-tête, navigation catalogue/méthodes/guides, langue, compte et pied de page. Le contenu principal respecte une largeur maximale. Les liens vers des pages non encore implémentées restent clairement en développement dans la vitrine locale ; aucun faux bouton principal.
+5. Crée LearnerLayout : barre latérale, titre de page, espace de travail, reprise, compte et aide. Sur mobile, navigation dans un panneau accessible, sans colonne écrasée ni recouvrement du contenu. Prépare la disposition de leçon : programme, lecture, panneau contextuel optionnel.
+6. Crée AdminLayout : navigation claire, fil d'Ariane, zone de filtres, tableau et détail. Conserve le même système visuel avec une densité adaptée. Aucune simulation de permission ne constitue une sécurité serveur.
+7. Monte une galerie de composants et trois pages de démonstration locales : accueil, leçon/atelier et administration. Les données d'exemple sont explicitement séparées, sans chiffres de clients ni témoignages inventés. Ces routes sont exclues de la production et de l'indexation. Ne duplique pas la future application dans un second projet statique.
+8. Place tous les textes d'interface dans la structure de traduction choisie. Français initial, équivalents anglais pour les composants communs. Les routes et libellés ne doivent pas dépendre d'une chaîne française dispersée dans le code.
+
+VÉRIFICATION CONCRÈTE
+Démarre l'application. Si un navigateur ou des captures sont disponibles, examine réellement les pages à 1440, 768 et 390 px, puis contrôle l'absence de débordement à 320 px. Vérifie navigation clavier, focus visible, ouverture/fermeture des panneaux, erreurs de formulaire, état désactivé et textes longs. Documente les écrans vus ; si la vérification visuelle est impossible, dis-le et fournis les routes à examiner.
+
+Mesure les contrastes pertinents, corrige les éléments peu lisibles, vérifie les cibles tactiles et prefers-reduced-motion. Exécute les contrôles TypeScript/lint/build existants pertinents. N'ajoute pas des dizaines de tests qui recopient chaque classe CSS ; privilégie quelques comportements interactifs à risque.
+
+CRITÈRES DE FIN
+Les trois espaces partagent la même charte. Les tokens gouvernent les styles. Le mobile fonctionne, les états sont lisibles et les composants sont prêts à recevoir les données réelles. Aucun backend manquant n'est présenté comme intégré.
+
+Mets à jour docs/STATUS.md, docs/evidence/P02.md et, si nécessaire, DESIGN_SYSTEM.md avec les décisions justifiées. Donne les routes de revue visuelle, les commandes exécutées et les écarts restants. Prochaine phase : P03_MODELE_DONNEES_API.txt.
+

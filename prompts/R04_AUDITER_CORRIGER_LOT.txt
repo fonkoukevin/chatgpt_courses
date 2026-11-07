@@ -1,0 +1,31 @@
+R04 — AUDITER UN LOT ET CORRIGER LES ÉCARTS PROUVÉS
+
+Lot à auditer :
+[Indiquer Pxx ou laisser Codex identifier la dernière phase déclarée terminée dans STATUS.md.]
+
+Vérifie ce lot de ChatGPT Courses par rapport à son prompt, à AGENTS.md et aux documents de référence pertinents. Si ma demande précise « revue seule », produis les constats sans modifier le code. Sinon, corrige les défauts démontrés qui restent dans le périmètre autorisé.
+
+Commence par comprendre le résultat annoncé et les preuves disponibles. Examine le diff si Git le permet, les routes/API, les migrations, les configurations et les tests affectés. Ne refais pas tout le produit pour auditer une phase.
+
+Cherche en priorité les défauts qui empêchent l'usage ou trahissent le contrat :
+- fonction annoncée dont seul l'écran existe ;
+- contenu ou objet privé exposé à un autre compte ;
+- droit accordé depuis une URL de retour paiement ;
+- écritures non idempotentes, doublons ou événements Stripe mal ordonnés ;
+- perte de saisie, conflit masqué ou réponse réseau ancienne appliquée ;
+- cache partagé de données privées ;
+- copie personnelle écrasée par une mise à jour de modèle ;
+- progression ou attestation affirmant une preuve inexistante ;
+- affichage FR/EN qui change les droits ou falsifie une disponibilité ;
+- dépendance fournisseur testée uniquement par simulation alors que le rapport affirme une intégration réelle.
+
+N'applique cette liste qu'aux dimensions effectivement concernées. Contrôle aussi accessibilité, mobile et états d'erreur des écrans modifiés. Une amélioration esthétique facultative n'est pas une défaillance critique.
+
+Classe les constats par impact et donne pour chacun la preuve, le résultat attendu et la correction. Un problème hypothétique doit être présenté comme un risque à vérifier, pas comme un incident constaté.
+
+Corrige les défauts ciblés, ajoute le test de régression utile et relance les vérifications nécessaires. Ne baisse pas les exigences ni ne désactive les contrôles pour déclarer le lot conforme. Ne fais pas d'opération destructive ou de transaction réelle pour compléter l'audit sans autorisation.
+
+Mets à jour docs/evidence/Pxx.md et STATUS.md. Un test non exécuté reste non exécuté ; un scénario conditionnel peut être non applicable seulement avec une raison explicite.
+
+Réponds avec les défauts corrigés, les défauts restants et leur gravité, les preuves de validation, puis une décision factuelle : lot suffisamment vérifié pour la suite, ou blocage précis. Ne garantis pas l'absence de tout bug.
+

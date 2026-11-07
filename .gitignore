@@ -1,0 +1,27 @@
+# Dépendances et résultats de compilation
+node_modules/
+.next/
+out/
+dist/
+target/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+.tools/
+.runtime/
+
+# Configurations réelles et secrets ; conserver les exemples
+.env
+.env.*
+!.env.example
+!.env.*.example
+!*.env.example
+*.pem
+*.key
+infra/secrets/
+
+# Traces et fichiers locaux
+*.log
+.DS_Store
+Thumbs.db

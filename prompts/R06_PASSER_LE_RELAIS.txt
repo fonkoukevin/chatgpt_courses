@@ -1,0 +1,14 @@
+R06 — PRÉPARER UN CHECKPOINT AVANT UNE INTERRUPTION
+
+Prépare une reprise fiable de ChatGPT Courses sans entreprendre un nouveau grand lot.
+
+1. Identifie la phase et le sous-lot en cours. Relève branche, commit disponible, changements non validés et fichiers importants. Ne supprime ni ne remet à zéro le travail.
+2. Mets docs/STATUS.md à jour : réalisé, partiellement réalisé, non vérifié, bloqué et prochaine action. Ne transforme pas une interruption en validation.
+3. Complète docs/evidence/Pxx.md avec les commandes réellement exécutées et leur résultat. Si une commande tourne encore ou s'est arrêtée, indique son état connu ; ne prétends pas qu'elle a réussi.
+4. Écris un docs/HANDOFF.md court et concret : objectif courant, décisions récentes, fichiers à ouvrir, commandes de démarrage/test confirmées, problèmes observés, dépendances, prochaine modification précise.
+5. Si une migration, un import, un envoi ou une opération fournisseur a été lancé, note comment vérifier son état et éviter une exécution en double. N'enregistre aucun secret ni donnée personnelle inutile.
+6. Préserve les modifications de l'utilisateur. Si des commits locaux sont autorisés et utiles, crée uniquement un commit cohérent des fichiers du lot, sans inclure d'autres changements ni annoncer un push non effectué.
+7. Termine par un message de reprise à copier dans une nouvelle conversation, d'une dizaine de lignes maximum, qui demande de lire AGENTS.md, STATUS.md, HANDOFF.md et le prompt courant avant de continuer.
+
+N'essaie pas de compenser un manque de temps ou de quota par une génération précipitée de fichiers non vérifiés. Le prochain Codex doit pouvoir comprendre l'état à partir du dépôt, sans disposer de cette conversation.
+

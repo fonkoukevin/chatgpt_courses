@@ -1,0 +1,29 @@
+P21 — DÉPLOIEMENT EN RECETTE ET RÉPÉTITION DU LANCEMENT
+
+OBJECTIF
+Déploie la version candidate sur l’environnement de recette déjà autorisé, puis vérifie les parcours dans les conditions proches de la production. Le résultat attendu est une version observée sur sa cible, avec preuves et incidents documentés. La recette n’autorise pas un achat d’hébergement ou une transaction financière réelle.
+
+CONTEXTE À LIRE
+Lis les AGENTS.md applicables, docs/STATUS.md, le rapport P19 et les artefacts/runbooks de P20. Consulte docs/DEPLOYMENT.md, docs/API_CONTRACTS.md et docs/ACCEPTANCE.md seulement pour les opérations concernées.
+
+PRÉCONDITIONS
+Identifie le commit, les digests des images, la cible, le domaine de recette, la configuration et les secrets de test déjà disponibles. Vérifie que les identifiants appartiennent au bon environnement sans les afficher. Si la cible n’est pas définie ou accessible, termine les préparatifs autorisés et demande uniquement l’information réellement manquante, après avoir présenté les artefacts prêts.
+
+TRAVAIL À RÉALISER
+1. Inspecte l’état existant avant mutation. Utilise un projet Compose, une base, un rôle PostgreSQL, un bucket et des secrets séparés de la production. Préserve tout service déjà présent. Sur un hôte partagé, vérifie noms, ports, volumes et limites pour éviter les collisions.
+2. Contrôle DNS, connexion TLS, disponibilité des images et cohérence de configuration. Déploie les digests identifiés, puis les migrations selon le runbook. Observe sondes, logs nettoyés et version réellement servie.
+3. Rend la recette non indexable et protège son accès selon la configuration convenue. Noindex ne suffit pas à la rendre privée. Si une protection proxy empêche Stripe test, n’ouvre que la route exacte du webhook requis ; Spring doit toujours vérifier sa signature. Ne désactive ni CSRF globalement ni la vérification TLS.
+4. Configure exclusivement Stripe test et des données fictives. Pour les emails, utilise Mailpit ou une liste de destinataires de test explicitement autorisés, sans diffusion à de vrais apprenants. Les fichiers et médias de test restent séparés.
+5. Vérifie découverte, création/connexion, récupération d’accès, première activité, méthode sauvegardée, projet, reprise après nouvelle session, FR/EN et comptes à permissions différentes. Vérifie depuis le navigateur les routes profondes et le rechargement d’une page privée.
+6. Réalise les scénarios Stripe de test réalisables : paiement réussi, attente, interruption, notification répétée, activation reprise, remboursement et droits à plusieurs origines. Conserve les références de test nécessaires au rapprochement sans secret. Une simulation locale et un retour Stripe test observé doivent être distingués.
+7. Provoque une erreur d’email, une sauvegarde échouée, une traduction absente, un conflit de révision et un média indisponible. Confirme que les états visibles et données persistées sont cohérents. Vérifie T04/T05/T09/T11/T14/T17/T19 particulièrement sur cette configuration déployée.
+8. Exécute une sauvegarde puis une restauration dans une instance isolée de recette. Contrôle utilisateurs fictifs, projets, commandes, droits et fichiers nécessaires, puis démarre l’application restaurée. Mesure le point restauré et le temps de reprise ; ne restaure pas sur une base réelle pour gagner du temps.
+9. Vérifie le comportement d’un redémarrage et d’un déploiement répété de la même version. Les volumes restent intacts, les migrations ne s’appliquent pas deux fois et les événements ne créent pas de double attribution.
+10. Relie les alertes, erreurs et incidents au runbook. Les alertes externes ne sont envoyées que vers le canal déjà autorisé ; autrement, vérifie leur génération localement et signale la réception non vérifiée.
+
+VÉRIFICATION ET CORRECTION
+Utilise les outils navigateur et réseau autorisés. Si un contrôle de service, une authentification ou une restriction empêche une action, respecte-la et rapporte le blocage sans contournement. Corrige les défauts concrets puis redéploie une nouvelle version identifiable si le code change. Rejoue les contrôles affectés, pas toute la recette sans raison.
+
+SORTIE ET SUIVI
+Écris docs/evidence/P21.md : cible, URL vérifiée, commit/digests, migrations, tests réellement exécutés, preuves, résultats de restauration, coûts engagés uniquement s’il y en a et incidents restants. Mets à jour docs/STATUS.md avec un verdict de préparation à P22. Si aucun serveur n’a été atteint, n’utilise pas le mot « déployé ».
+

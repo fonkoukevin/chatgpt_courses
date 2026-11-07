@@ -1,0 +1,14 @@
+Nous allons développer ChatGPT Courses dans le dossier actuellement ouvert, avec le kit de références présent à sa racine.
+
+Commence par lire AGENTS.md, docs/STATUS.md et prompts/P00_AUDIT_CADRAGE.txt. Consulte ensuite les références nécessaires à P00. Vérifie le contenu réel du dossier et les éventuelles instructions existantes avant toute modification.
+
+Réalise P00 maintenant : audit de l'environnement, état du dépôt, décisions techniques, versions compatibles et préparation de P01. Préserve les fichiers et changements existants. Ne reconstruis pas un ancien prototype comme s'il avait été validé.
+
+Le but final est une application de formation pratique : site public, espace apprenant, méthodes personnelles, projets avec autoévaluation, paiement Stripe, administration, français/anglais et déploiement. Le périmètre exact est dans docs/PRODUCT.md et docs/FUNCTION_MATRIX.md. La charte est dans docs/DESIGN_SYSTEM.md.
+
+Travaille par phase. Pour chacune, réalise l'implémentation demandée, vérifie ce qui est pertinent, corrige les défauts observés et mets à jour docs/STATUS.md ainsi que docs/evidence/Pxx.md. Une simulation ou une commande non exécutée ne doit pas être présentée comme une validation.
+
+Décide les détails réversibles ordinaires avec les références disponibles. Ne demande que les informations qui changent réellement le produit, un accès indispensable, une dépense non autorisée ou une opération destructive. Respecte les permissions de ton environnement.
+
+N'invente ni prix, ni témoignages, ni médias déjà produits, ni accès à un service externe. Réponds en français avec le résultat concret, les fichiers importants, les vérifications, les éventuels blocages et le prochain prompt à utiliser.
+

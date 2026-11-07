@@ -1,0 +1,35 @@
+P01 — FONDATIONS LOCALES ET PREMIÈRE CHAÎNE DE VÉRIFICATION
+
+OBJECTIF
+Construis un dépôt exécutable localement avec Next.js, Spring Boot et PostgreSQL, puis vérifie que le navigateur parle réellement à l’API. Ce lot doit fournir une base reproductible pour la suite, sans prétendre que les fonctions métier sont déjà réalisées.
+
+CONTEXTE À LIRE
+Lis les AGENTS.md applicables et docs/STATUS.md. Consulte docs/ARCHITECTURE.md, la partie locale de docs/DEPLOYMENT.md et les décisions de versions de P00. Inspecte les fichiers existants avant de créer une structure parallèle. N’importe pas automatiquement l’ancien prototype rejeté.
+
+DÉPENDANCES ET CHOIX
+P00 doit avoir identifié l’environnement, les versions supportées et le gestionnaire de dépendances. Si un outil manque, prépare ce qui est possible et précise la commande/installation nécessaire sans annoncer un démarrage fictif. Conserve Java 21, Maven Wrapper, un seul gestionnaire frontend, les lockfiles et la stack convenue. Les versions retenues doivent être compatibles et enregistrées ; n’utilise pas une dépendance « latest » non résolue.
+
+TRAVAIL À RÉALISER
+1. Organise apps/web pour Next.js App Router + TypeScript + Tailwind, apps/api pour Spring Boot modulaire, infra et scripts pour les opérations locales. Réutilise une structure existante cohérente si elle remplit déjà ces rôles.
+2. Ajoute une configuration de développement, test et production clairement séparée. Fournis des exemples d’environnement sans secret et une validation lisible des paramètres nécessaires.
+3. Prépare Docker Compose local pour PostgreSQL avec volume nommé, Mailpit pour les emails de développement et un stockage S3 compatible dans un profil adapté. Choisis une image S3 stable et maintenue après vérification officielle ; SeaweedFS mono-nœud est un candidat. Ne fais pas du choix de cet émulateur une décision de fournisseur de production.
+4. Lie à la boucle locale les ports des outils accessibles depuis l’hôte. Le SMTP de Mailpit peut rester interne. Aucun relais d’email externe, paiement réel ou seed de production.
+5. Configure les migrations Flyway comme chemin d’évolution du schéma et Hibernate en validation lorsque le schéma est géré. P03 créera les tables métier ; ne crée pas un second mécanisme d’auto-migration.
+6. Rends disponibles une page Next.js minimale et une sonde d’API sans information sensible. Le navigateur utilise une seule origine, avec un proxy local /api/v1 vers Spring. Préserve le préfixe. Vérifie le traitement d’une erreur API et d’une API indisponible.
+7. Prépare le socle frontend de client API typé, gestion d’erreurs et dictionnaires FR/EN, sans remplir tout le catalogue. Les pages métier et le design final relèvent des lots suivants.
+8. Ajoute les commandes réellement utilisables pour installer, démarrer, arrêter, vérifier et construire. Sur Windows/WSL, documente le mode retenu, les chemins et les éventuelles différences ; ne mélange pas silencieusement les outils Windows et Linux.
+9. Prépare une CI de base GitHub Actions : installation verrouillée, contrôle TypeScript, lint effectivement configuré, compilation web, compilation/tests API disponibles et smoke HTTP minimal avec PostgreSQL de test. Permissions minimales et actions épinglées à un SHA vérifié. P19 l’étendra avec la recette complète.
+
+VÉRIFICATIONS ATTENDUES
+- Une installation depuis les fichiers verrouillés aboutit dans l’environnement disponible.
+- PostgreSQL atteint un état sain et son volume conserve une donnée de test après redémarrage non destructif.
+- Le navigateur ouvre Next.js et reçoit une réponse réelle de Spring au travers du proxy.
+- La panne d’API est distinguée d’un contenu vide, sans faux message de réussite.
+- Le build web et celui de l’API réussissent ; les sondes et le test d’intégration initial sont exécutés.
+- La CI est syntaxiquement valide. Si elle n’a pas été exécutée sur GitHub, l’indiquer séparément des vérifications locales.
+
+Ne supprime pas de volume existant pour faire réussir une vérification. Répare la cause d’un échec ou documente le blocage. Les tests se renforcent au fil des fonctions ; n’ajoute pas une batterie de tests miroir de chaque fichier de configuration.
+
+SORTIE ET SUIVI
+Mets à jour le README avec les commandes exactes. Consigne dans docs/evidence/P01.md les versions, commandes, URLs locales non sensibles, résultats et limites. Mets à jour docs/STATUS.md et propose le prochain lot. Rapporte ce qui fonctionne effectivement, les fichiers modifiés et tout prérequis restant.
+

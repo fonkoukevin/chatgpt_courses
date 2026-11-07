@@ -1,0 +1,31 @@
+P19 — RECETTE DE LA V1 ET INTÉGRATION CONTINUE
+
+OBJECTIF
+Établis si la version peut devenir candidate au déploiement. Consolide les tests ajoutés au fil des lots et complète les lacunes sur les comportements sensibles. Je veux des preuves reliées aux exigences E01–E16, aux fonctions retenues et aux scénarios T01–T20, pas un pourcentage de couverture obtenu en testant artificiellement l’implémentation.
+
+CONTEXTE À LIRE
+Lis les AGENTS.md applicables, docs/STATUS.md, docs/ACCEPTANCE.md et docs/FUNCTION_MATRIX.md. Consulte les sections nécessaires de docs/ARCHITECTURE.md, docs/API_CONTRACTS.md et docs/DEPLOYMENT.md. Utilise les preuves déjà disponibles et le périmètre commercial préparé en P18.
+
+DÉPENDANCES
+P01 à P18 doivent avoir un état explicite ; les fonctions hors V1 restent hors du passage obligatoire. Si une intégration ou un contenu requis manque, indique quel scénario est bloqué et poursuis les contrôles indépendants. Aucun paiement réel ni email à une personne non autorisée n’est nécessaire à cette recette.
+
+TRAVAIL À RÉALISER
+1. Construis une matrice de réception : scénario, préconditions, données fictives, action, résultat attendu, test/commande, résultat observé et preuve. Distingue test unitaire, intégration avec PostgreSQL, parcours navigateur, test fournisseur en sandbox et vérification encore manuelle.
+2. Fais tourner les tests métier sensibles contre PostgreSQL via l’environnement de test retenu, avec migrations Flyway réelles. Vérifie les contraintes de concurrence/idempotence, ownership, snapshots de commande, origines de droits, remboursements, versions et révisions. Ne remplace pas PostgreSQL par H2 pour prouver ces invariants.
+3. Vérifie les migrations depuis une base vide et une base représentant l’état antérieur pertinent. Les tests n’utilisent ni identifiants de production ni volumes réels. Les données sont isolées et nettoyées dans le seul environnement de test.
+4. Ajoute ou consolide les parcours Playwright utiles avec le vrai frontend et la vraie API : recherche, essai anonyme → compte, méthode sauvegardée, leçon/quiz, brouillon/restauration/conflit, achat de test → droit, compte et administration limitée. Les sélecteurs doivent suivre les rôles/libellés ou identifiants de test stables.
+5. Pour Stripe, couvre signatures invalides, notification répétée/concurrente, désordre d’événements, paiement retardé, activation reprise, remboursement total/partiel et échec. Les fixtures de tests ne remplacent pas une vérification en environnement Stripe test : consigne séparément les deux niveaux. Une URL de succès seule ne doit pas donner de droit.
+6. Vérifie T11–T13 avec deux origines d’accès : remboursement du pack, droit individuel conservé, aucun rétablissement par un ancien événement. Les réponses de l’API et les lignes persistées doivent confirmer le comportement.
+7. Vérifie T14–T20 : acquis FR/EN, traduction absente, nouvelle version sans réécriture d’attestation, perte réseau, copie personnelle intacte, révocation de nouveau lien et provenance de l’évaluation. Une extension de revue humaine non activée est documentée comme telle ; ses règles structurelles restent testées sans inventer un service vendu.
+8. Renforce la CI existante : install verrouillée, TypeScript, lint, tests API, tests frontend utiles, contrat OpenAPI/client typé, builds et parcours E2E nécessaires. Les tâches indépendantes peuvent être parallèles ; conserve des préconditions explicites et évite de masquer un échec avec une option permissive.
+9. Prévois rapports et traces sur échec, avec données fictives et rétention limitée. Une reprise automatique sert au diagnostic et ne doit pas transformer un test instable en preuve silencieuse. Signale les tests flaky et corrige leur cause.
+10. Prépare un résumé de release candidate identifiant commit, versions, migrations, intégrations, contenu publié, décisions ouvertes et blocages. Un résultat local ne devient pas un run CI GitHub réussi sans exécution effective.
+
+CRITÈRES DE RÉCEPTION
+Les scénarios sensibles réalisables passent ; toute dépendance externe non vérifiée apparaît clairement. Aucun défaut bloquant d’accès, de paiement, de sauvegarde ou de contenu vendu n’est masqué. Le build de production fonctionne avec une configuration sans données de démonstration.
+
+Ne multiplie pas des tests redondants après preuve suffisante. Corrige les défauts concrets puis relance la partie affectée et la régression pertinente.
+
+SORTIE ET SUIVI
+Crée docs/evidence/P19.md avec la matrice de preuves et le verdict motivé : candidate déployable en recette ou blocages exacts. Mets à jour docs/STATUS.md et conserve des liens vers les artefacts sans secret. Termine par la liste des étapes P20/P21 réellement nécessaires.
+

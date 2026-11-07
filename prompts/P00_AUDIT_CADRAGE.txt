@@ -1,0 +1,28 @@
+P00 — AUDITER LE DOSSIER ET PRÉPARER LE PROJET
+
+MISSION
+Tu es responsable de la réalisation de ChatGPT Courses dans ce dépôt. Commence par auditer l'environnement et transformer les références fournies en décisions de travail explicites. Ce lot doit produire un point de départ fiable pour P01, sans réinitialiser un projet existant et sans présenter le kit de prompts comme une application construite.
+
+LIS
+AGENTS.md, docs/STATUS.md, docs/PRODUCT.md, docs/DECISIONS.md, docs/FUNCTION_MATRIX.md, docs/ARCHITECTURE.md et docs/PROMPT_INDEX.md. Repère aussi les instructions déjà présentes dans le dépôt et les sous-dossiers concernés. Les documents détaillés d'interface et d'API peuvent être consultés uniquement sur les points qui affectent les décisions initiales.
+
+TRAVAIL À RÉALISER
+1. Identifie le dossier réellement ouvert, son contenu, l'état Git, les changements non validés, les applications existantes, les gestionnaires de paquets et les scripts. Ne lance ni reset, ni nettoyage destructeur, ni suppression de fichier utilisateur. Un prototype antérieur n'est pas automatiquement une base visuelle approuvée.
+2. Relève OS et environnement d'exécution, versions installées de Node, Java, gestionnaire de paquets, Docker/Compose et outils disponibles. Distingue une commande absente, un service non lancé et une permission refusée. Adapte les commandes à cet environnement ; évite de donner des commandes Bash à exécuter telles quelles dans un autre shell.
+3. Pour un nouveau dépôt, retiens apps/web, apps/api, infra et docs. Préserve une organisation existante viable ; documente une table de correspondance si elle diffère. Ne change pas la stack principale sans expliquer une incompatibilité réelle.
+4. Vérifie dans les documentations officielles les versions stables et maintenues compatibles entre Next.js, React, Node LTS, TypeScript, Tailwind, shadcn/Radix, Java 21, Spring Boot/Security, JPA, Flyway et PostgreSQL. Consigne dans docs/VERSIONS.md la date, les versions proposées, les compatibilités, les URLs vérifiées et les inconnues. P01 les installera et les verrouillera. N'invente pas une vérification réseau ; si elle est impossible, indique les informations manquantes et appuie-toi prudemment sur les contraintes déjà installées.
+5. Pour un dépôt neuf, utilise npm avec un seul lockfile et Maven Wrapper. Si un gestionnaire cohérent est déjà établi, conserve-le et mets à jour les références. Aucun paquet en latest non verrouillé pour une livraison reproductible.
+6. Confirme les décisions structurantes de docs/ARCHITECTURE.md : une origine publique ; /api/v1 vers Spring ; Spring autorité métier ; session JDBC et CSRF ; données privées non mises en cache ; aucun besoin d'API IA payante pour le générateur de prompts. Note les variantes techniques nécessaires dans docs/DECISIONS.md.
+7. Centralise la convention des routes de docs/SCREENS.md. Prévois le préfixe FR/EN dès le début et des identifiants métier indépendants du slug. Le choix de la langue commerciale de lancement reste paramétrable. Le français peut servir au développement initial sans décider que l'anglais attendra obligatoirement.
+8. Établis les fichiers de configuration d'exemple attendus, sans secret réel. Identifie ce qui peut fonctionner localement et ce qui demandera plus tard un domaine, des comptes fournisseurs, des contenus ou des conditions commerciales. Aucune souscription ni dépense dans ce lot.
+9. Crée un README de départ avec objectif, structure retenue et prochaine étape. N'y annonce pas encore des commandes de démarrage comme fonctionnelles avant P01. Crée docs/evidence/P00.md avec les constats et commandes réellement exécutées.
+
+GESTION DES INCERTITUDES
+Les décisions ordinaires et réversibles ne nécessitent pas de question. L'absence d'un prix, d'un prestataire vidéo ou de clés Stripe ne bloque pas les fondations locales. En revanche, conserve ces champs comme non décidés : n'invente pas une durée d'accès, une garantie, une taxe, un accompagnement ou un abonnement.
+
+CRITÈRES DE FIN
+Le dépôt est préservé ; la cible de travail est claire ; les versions et contraintes sont documentées ; les éventuels écarts du code existant sont nommés ; le README et le suivi permettent de lancer P01 sans retrouver une ancienne conversation. Si un outil ne fonctionne pas, son absence est prouvée et une prochaine action précise est indiquée.
+
+RÉPONSE ATTENDUE
+Résultat de l'audit, structure retenue, décisions prises, blocages réels et fichiers créés. Mets à jour docs/STATUS.md. Termine en indiquant P01_FONDATIONS_LOCALES.txt comme prochaine phase. Réalise cet audit maintenant ; ne te limite pas à annoncer un plan.
+

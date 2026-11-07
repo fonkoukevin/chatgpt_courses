@@ -1,0 +1,99 @@
+KIT CODEX — CHATGPT COURSES, DE A À Z
+Version préparée le 7 novembre 2026
+
+OBJECTIF DU DOSSIER
+Ce kit sert à développer une application réelle sans maquette Figma préalable. Il contient le contrat produit, la charte graphique, les règles techniques, les scénarios de validation et les prompts d'implémentation dans leur ordre de dépendance. Il ne contient pas une application déjà construite et ne constitue pas une preuve de déploiement.
+
+Le produit suit une boucle : choisir une tâche professionnelle, apprendre une méthode, produire un livrable, le vérifier et conserver sa méthode. Le premier parcours complet porte sur une proposition commerciale fondée sur un brief client. Les autres tâches pourront enrichir le catalogue après validation du premier parcours.
+
+COMMENCER EN PRATIQUE
+1. Décompresse le ZIP.
+2. Pour un nouveau projet, utilise le dossier codex-chatgpt-courses comme dossier racine de travail. AGENTS.md, docs, prompts et references doivent se trouver directement dans ce dossier. Les dossiers apps et infra seront créés ensuite.
+3. Pour un projet existant, intègre les références dans le dépôt sans écraser son code. Fusionne les consignes compatibles avec son AGENTS.md existant ; ne remplace pas ce fichier aveuglément. Si des documents du même nom existent déjà, conserve leur historique et fais résoudre les contradictions par P00.
+4. Ouvre ce dossier dans l'environnement Codex que tu utilises. Codex doit réellement pouvoir lire et modifier ces fichiers. Dans un environnement fondé sur un dépôt distant, ajoute le kit au dépôt de travail avant de lancer la tâche ; une pièce jointe dans une autre conversation n'est pas automatiquement disponible dans son système de fichiers.
+5. Copie le contenu de 01_PROMPT_DE_DEMARRAGE.txt dans Codex.
+6. Vérifie le résultat de P00, puis demande les phases dans l'ordre P01 à P23. Pour une phase, tu peux soit copier son fichier, soit demander à Codex de lire et réaliser le lot décrit dans ce fichier.
+
+MESSAGE COURT POUR LA PHASE SUIVANTE
+« Lis AGENTS.md et docs/STATUS.md. Réalise le lot décrit dans prompts/P01_FONDATIONS_LOCALES.txt. Consulte les références utiles, implémente, vérifie et corrige. Mets à jour les preuves et le suivi. Respecte l'état réel du dépôt et les permissions disponibles. »
+
+Remplace ensuite le nom du fichier par celui de la phase concernée, figurant dans docs/PROMPT_INDEX.md.
+
+UNE PHASE À LA FOIS
+Il est inutile de coller tout le dossier dans chaque conversation. AGENTS.md garde les règles permanentes ; les autres fichiers sont lus selon le travail en cours. Le prompt courant donne le résultat attendu, les dépendances et les vérifications. Cette organisation réduit les répétitions et les consignes contradictoires.
+
+Tu peux conserver une conversation tant qu'elle reste claire. Pour une nouvelle conversation, utilise R01_REPRENDRE_PROJET.txt. L'historique du dépôt, STATUS.md et les preuves doivent permettre la reprise sans raconter tout le projet.
+
+Si un lot est trop volumineux pour une session, Codex le divise en sous-lots cohérents dans STATUS.md. Il garde la même phase jusqu'à ce que ses critères soient satisfaits. Une phase n'est pas terminée parce que le modèle annonce « tout est prêt ».
+
+CE QUE TU DOIS EXAMINER
+Après un lot d'interface : ouvre les routes indiquées, regarde sur ordinateur et téléphone, essaie l'action principale et lis les messages d'erreur. Après un lot métier : regarde les scénarios réellement testés et leurs résultats. Après une intégration fournisseur : distingue simulation locale, mode test du fournisseur, recette déployée et production.
+
+Les preuves détaillées vont dans docs/evidence/Pxx.md. STATUS.md garde un résumé court. Les états permis distinguent « implémenté non vérifié », « validé localement », « validé en recette » et « publié et observé ». N'exige pas des tests artificiels pour chaque retouche de style ; exige une vérification adaptée au risque.
+
+ORGANISATION DU KIT
+- AGENTS.md : consignes permanentes à la racine du dépôt.
+- docs/PRODUCT.md : problème résolu, périmètre et règles fonctionnelles.
+- docs/FUNCTION_MATRIX.md : les 54 fonctions, leur priorité, leurs écrans et phases.
+- docs/SCREENS.md : les 16 familles d'écrans, leurs routes et comportements.
+- docs/DESIGN_SYSTEM.md : palette, typographie, espacements, composants, responsive et états.
+- references/design-tokens.css : valeurs CSS de référence à intégrer pendant P02.
+- docs/ARCHITECTURE.md : responsabilités frontend/backend, identité, données et intégrations.
+- docs/API_CONTRACTS.md : conventions et endpoints à formaliser pendant P03.
+- docs/CONTENT_REFERENCE.md : premier parcours, dossiers fictifs, exercices, grilles et corrigés.
+- docs/ACCEPTANCE.md : scénarios T01–T20 et règles de validation.
+- docs/DEPLOYMENT.md : configuration, sauvegardes, CI, recette, production et exploitation.
+- docs/DECISIONS.md : choix établis, propositions techniques et décisions commerciales encore ouvertes.
+- docs/STATUS.md : avancement réel, blocages, prochaine action.
+- docs/PROMPT_INDEX.md : ordre des 24 phases et points de revue.
+- docs/SOURCE_NOTES.md : provenance et références officielles.
+- prompts/P00 à P23 : demandes de réalisation par lot.
+- prompts/R01 à R06 : reprise, correction, revue visuelle, audit, évolution et passage de relais.
+
+LA CHARTE À DEMANDER
+L'interface proposée s'inspire de la simplicité de ChatGPT et d'accents bleu nuit observés sur chatgpt.fr : fonds clairs, texte sombre, navigation simple, cartes légères, espace de travail lisible. Les valeurs exactes et comportements sont documentés. Cette charte est une proposition précise à appliquer puis à ajuster sur des écrans réellement visibles ; elle ne suppose pas que tu as approuvé une ancienne maquette.
+
+P02 produit les composants et trois structures : public, apprenant, administration. Après cette phase, un ajustement de couleur, densité ou typographie doit d'abord modifier les tokens et règles communes, puis se répercuter partout. R03 sert à cette revue. Ne recrée pas une nouvelle direction artistique à chaque page.
+
+LE PÉRIMÈTRE COMMERCIAL
+Le socle vise un premier parcours utile, des méthodes réutilisables et un achat simple par Stripe Checkout. L'architecture prépare les packs et les droits par origine. Elle ne transforme pas automatiquement l'offre en abonnement.
+
+Les fonctions avancées ne sont pas toutes promises au lancement. L'assistant IA payant, la correction humaine, la communauté, les offres équipes, les recommandations avancées et autres extensions suivent les conditions de FUNCTION_MATRIX.md. Le générateur initial prépare un prompt sans consommer d'API IA.
+
+Les prix, durées d'accès, actualisations incluses, conditions d'accompagnement, politique de remboursement et langues vendues doivent être décidés. Les montants du dossier pédagogique fictif ne sont pas les prix de la formation. Aucune offre réelle ne devient achetable avec des conditions inventées.
+
+FRANÇAIS ET ANGLAIS
+Les langues sont prévues dès les fondations : routes distinctes, textes externalisés, contenus reliés par identifiants stables. P16 termine les vérifications bilingues et SEO. Tu peux développer le premier contenu en français et publier l'anglais lorsqu'il est relu, avant le lancement si tu le souhaites. Le kit n'impose pas d'attendre un ou deux mois.
+
+Le choix de la langue par défaut est configurable. L'anglais d'une interface ne vaut pas traduction des vidéos, transcriptions, exercices et emails. Une version manquante doit être annoncée, jamais simulée.
+
+CE QUI RESTE À FOURNIR
+Le code peut être développé localement avec des adaptateurs et des données d'exemple isolées. Avant la vente réelle, il faudra renseigner :
+- les contenus pédagogiques définitifs, les médias annoncés et leur revue ;
+- la langue ou les langues réellement prêtes ;
+- les conditions et prix des offres ;
+- l'identité de l'exploitant et les informations du site ;
+- les accès aux fournisseurs retenus, le domaine et l'hébergement ;
+- les adresses de contact, la délivrabilité des emails et les règles de support ;
+- le budget d'exploitation accepté et les limites d'usage.
+
+Ces valeurs ne doivent pas être inventées par Codex. Les clés secrètes vont dans l'environnement ou le gestionnaire de secrets prévu, jamais dans la conversation, le dépôt ou une capture. Les exemples de configuration restent non secrets.
+
+RÈGLES DE LIVRAISON
+Les phases de déploiement préparent les fichiers, commandes, sauvegardes et vérifications avant de demander une information manquante. Elles ne doivent pas réclamer une confirmation pour chaque tâche réversible déjà autorisée. En revanche, elles ne doivent pas acheter un service, effacer une base ou annoncer une publication sans autorisation et accès applicables.
+
+Le rollback applicatif ne restaure pas à lui seul la base de données. Les sauvegardes et une restauration d'essai sont des livrables prévus, pas une phrase à ajouter au README.
+
+COMMENT UTILISER LES PROMPTS DE SECOURS
+R01 : nouvelle conversation, interruption ou perte de contexte.
+R02 : bug précis, erreur de build, test ou comportement.
+R03 : rendu trop générique, espacement, hiérarchie ou mobile à améliorer.
+R04 : audit d'un lot avant la suite, avec correction des défauts prouvés.
+R05 : ajout ou évolution d'une fonctionnalité en conservant la cohérence.
+R06 : checkpoint lorsque la session doit s'arrêter ou être transférée.
+
+FICHIERS ET VÉRITÉ DU PROJET
+Le cahier fonctionnel et les décisions explicites récentes priment sur un ancien prototype. Les instructions ne prouvent jamais qu'une fonction existe : le code, les tests et l'observation donnent son état. En cas de contradiction, Codex doit l'expliciter et harmoniser les références concernées.
+
+Ce kit organise le travail et rend les omissions visibles. La qualité finale dépend aussi des contenus, des choix commerciaux et des retours d'utilisateurs. Aucun prompt ne garantit à lui seul les ventes, le classement SEO ou l'absence de tout défaut.
+

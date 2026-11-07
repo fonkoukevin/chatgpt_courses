@@ -1,0 +1,24 @@
+P11 — OFFRES, RÉCAPITULATIFS ET COMMANDES
+
+OBJECTIF
+Réalise les offres de parcours/packs, le récapitulatif avant paiement E07 et les premières vues de commande E13. Les prix et droits doivent être gouvernés par le serveur. Ce lot prépare le paiement ; P12 branchera Stripe. Un fournisseur non configuré ne produit pas de faux achat réussi.
+
+LECTURES ET PRÉCONDITIONS
+Lis AGENTS.md, docs/STATUS.md, les règles commerce de docs/PRODUCT.md, docs/ARCHITECTURE.md et docs/API_CONTRACTS.md, E07/E13 dans docs/SCREENS.md, ainsi que docs/DECISIONS.md pour les paramètres ouverts. P03–P05 fournissent les modèles, l’identité et les publications ; les contenus et médias disponibles des lots précédents permettent de vérifier les inclusions. Réutilise l’identité, les DTO et la charte existants.
+
+TRAVAIL À RÉALISER
+1. Implémente produit, offre versionnée, prix/devise et composition de pack. Sépare ressources pédagogiques couvertes et texte commercial. Prévois langues incluses, durée d’accès, période d’actualisation, support, éventuelle correction humaine désactivée par défaut, et conditions nécessaires à la commercialisation.
+2. Fournis la readiness d’offre : prix/conditions absents, contenus annoncés non publiés, traduction ou média promis indisponible, incohérence de devise ou intégration obligatoire non configurée. Le serveur bloque une offre incomplète. Les valeurs non décidées restent nulles/non configurées, jamais « illimité » ou un abonnement inventé.
+3. Crée uniquement en dev/test des offres fictives clairement identifiées pour tester le flux. Les 1 200 €, 1 400 € et 1 180 € des exercices ne sont pas des tarifs de formation. Aucune fixture commerciale ne s’active automatiquement en production.
+4. Implémente GET de l’offre et POST /me/orders avec offerId, offerRevision, locale et Idempotency-Key. Le serveur retrouve ses propres valeurs, contrôle l’identité et produit l’instantané de commande : lignes/ressources, titres, langues, montants, conditions, durée et politique de versions. Il ignore/refuse les tentatives de prix, userId ou droits fournis par le client.
+5. Préserve les instantanés achetés lorsque le pack, son prix ou ses contenus changent. Si la révision consultée a changé avant confirmation, retourne OFFER_CHANGED avec récapitulatif à revoir ; ne charge pas un montant différent en silence. Les paramètres fiscaux/commerciaux doivent être explicites avant activation réelle, sans texte juridique inventé.
+6. Traite les doubles clics par idempotence transactionnelle. La même clé/corps retrouve la même commande ; même clé/autre corps reçoit un conflit. Deux clés concurrentes pour la même intention ne créent pas deux paiements actifs. Recherche la commande existante et son état avant d’en préparer une nouvelle. Documente expiration et reprise sans supprimer l’historique.
+7. Affiche « Reprendre » lorsqu’un parcours est déjà accessible. Pour un pack recouvrant partiellement un achat individuel, montre les éléments déjà acquis et les nouvelles inclusions ; ne fabrique pas de réduction. Le modèle doit pouvoir conserver plusieurs origines de droit indépendantes après une future confirmation de paiement.
+8. Branche E07 et les listes/détails de commandes E13 sur l’API réelle : langue, total, inclusions, conditions, attente, offre modifiée, offre indisponible et achat déjà détenu. Prépare l’acceptation explicite des conditions versionnées, sans la déduire d’une visite. Conserve la destination lors d’une connexion préalable. Le bouton Checkout reste indisponible avec explication tant que le fournisseur réel n’est pas configuré en P12.
+9. Pose l’interface PaymentGateway et la machine de transitions, sans état PAID accessible depuis le navigateur. Sépare orderStatus, paymentStatus et fulfillmentStatus. L’API ne révèle que les commandes du propriétaire ou les vues opérationnelles autorisées.
+
+VÉRIFICATIONS
+Teste montant/devise falsifiés, prix changé, offre incomplète, contenu non prêt, achat déjà acquis, pack partiellement recouvrant, requêtes simultanées et idempotence avec corps différents. Modifie le catalogue après création et vérifie la conservation de l’instantané. Vérifie qu’un compte B ne lit ni la commande ni les futures ressources du compte A en changeant un identifiant. T04/T06 doivent reposer sur les services et transactions PostgreSQL, pas sur le seul bouton désactivé. Compile l’UI et vérifie le récapitulatif sur mobile.
+
+FIN DE LOT
+Complète OpenAPI, types, migrations et décisions de configuration. Mets à jour docs/STATUS.md ; conserve requêtes de test, commandes et résultats dans docs/evidence/P11.md. Indique explicitement que la confirmation financière et l’attribution réelle sont le périmètre de P12, sans déclarer le paiement terminé.

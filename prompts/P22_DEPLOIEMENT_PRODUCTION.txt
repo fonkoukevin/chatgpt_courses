@@ -1,0 +1,31 @@
+P22 — MISE EN PRODUCTION DE LA VERSION VALIDÉE
+
+OBJECTIF
+Mets en production la version validée, sur la cible et avec les accès déjà autorisés dans cette session. Prépare puis exécute les opérations nécessaires sans redemander les décisions déjà prises. Ce prompt ne donne pas l’autorisation d’acheter un service, de supprimer des données, d’accepter un nouvel engagement financier ou de contourner une protection.
+
+CONTEXTE À LIRE
+Lis les AGENTS.md applicables, docs/STATUS.md, le rapport de recette P21 et les runbooks de déploiement/reprise. Consulte docs/DECISIONS.md pour la configuration commerciale et docs/DEPLOYMENT.md pour les paramètres de production.
+
+AVANT L’EXÉCUTION
+Identifie précisément : domaine de production, hôte ou service cible, commit et digests validés, migrations, origine publique, sauvegarde disponible, secrets de cet environnement et état actuel de l’application. Si une donnée manque, termine d’abord les travaux préparatoires et présente un résultat concret avec la question minimale qui débloque le lancement.
+
+Vérifie le périmètre publiable de P18. Prix, durée d’accès, langues comprises, support, contenus et fichiers annoncés doivent être renseignés. Une offre incomplète reste non achetable ; les pages et activités gratuites peuvent être mises en ligne si leur périmètre est prêt. N’invente pas de condition commerciale ou de média pour franchir le contrôle.
+
+TRAVAIL À RÉALISER
+1. Établis un bref relevé de l’état avant déploiement et de la procédure de retour. Vérifie une sauvegarde récupérable et le plan des migrations. Préserve les données et services existants.
+2. Utilise les images et digests passés en recette. Applique la configuration de production sans reconstruire un code différent ni embarquer les secrets dans l’image. Désactive seeds, profils fictifs, panneaux de démonstration et outils de développement.
+3. Applique les migrations selon le runbook, en tenant compte de la compatibilité avec l’ancienne application. Ne réécris pas une migration exécutée et ne lance pas de nettoyage de base pour résoudre une divergence. Si une opération destructive devient réellement nécessaire, expose sa cible, son effet et la sauvegarde avant de demander l’autorisation.
+4. Déploie les services et observe readiness, processus, erreurs, connexions et réponse du proxy. Vérifie HTTP vers HTTPS, certificat, domaine, routes profondes, redirections localisées et absence d’exposition des services internes.
+5. Vérifie dans le navigateur les pages publiques et un compte de test autorisé : connexion, CSRF, langue, leçon ouverte, sauvegarde d’un travail et déconnexion. Les contrôles en production sont limités et identifiables ; aucune modification d’un dossier client n’est nécessaire.
+6. Vérifie stockage, lecture de média autorisée, refus d’accès privé et configuration de l’expéditeur. Un email réel de test ne part que vers une adresse explicitement autorisée. Vérifie que l’envoi ou son absence ne modifie pas les droits.
+7. Vérifie la configuration Stripe de production, le secret de webhook correspondant, les références d’offres/prix et les URL de retour. Ne réalise pas un achat ou un remboursement réel simplement pour tester. Si un test financier réel est souhaité, son montant, son compte et son autorisation doivent être explicites. Sinon, indique que la chaîne en mode test a été vérifiée et que la transaction live n’a pas été exécutée.
+8. Active uniquement les offres validées et les langues dont le contenu annoncé existe. Vérifie sitemap, canoniques, traductions publiées et absence de noindex accidentel sur les pages publiques de production. Les pages privées et administratives restent exclues de l’indexation.
+9. Vérifie disponibilité externe, collecte d’erreurs nettoyée, journalisation, sauvegardes programmées et canal d’alerte autorisé. Une commande de planification réussie ne prouve pas encore l’exécution future : conserve l’état observable et la prochaine vérification prévue.
+10. Si un défaut bloquant apparaît, applique le plan compatible : suspendre l’offre concernée, maintenance limitée, retour d’image si schéma compatible ou correction vers l’avant. Ne restaure pas automatiquement une sauvegarde sur des écritures récentes.
+
+CRITÈRE DE FIN
+Le site sert réellement la version attendue à l’URL vérifiée, les parcours autorisés aboutissent, les données sont préservées et les limites sont explicites. Un pipeline vert sans vérification de la cible ne suffit pas.
+
+SORTIE ET SUIVI
+Rédige docs/evidence/P22.md avec URL, version, digests, migrations, contrôles et résultats. Mets à jour docs/STATUS.md, le runbook et les paramètres sans secrets. Termine par ce qui est en ligne, ce qui est vendable, les vérifications non exécutées et les actions P23 nécessaires. Ne promets ni zéro défaut ni rentabilité garantie.
+

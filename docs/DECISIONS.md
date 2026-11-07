@@ -1,0 +1,67 @@
+# Décisions et paramètres
+
+## Décisions reprises du projet
+
+- Première application : ChatGPT Courses ; Claude Courses reste un autre produit.
+- Apprentissage orienté tâche et livrable, avec activité ouverte, projet, contrôle et méthode personnelle.
+- Trois espaces ; E01–E16 ; 54 fonctions classées, dont certaines sont différées ou conditionnelles.
+- Stack Next.js/TypeScript/Tailwind/shadcn/Radix, Spring Boot/Security, PostgreSQL/JPA/Flyway, Stripe Checkout, objet S3, fournisseur vidéo, Docker/GitHub Actions.
+- Architecture bilingue prévue dès le départ ; calendrier de publication et langue commerciale par défaut non figés.
+- Paiement, accès, progression et attestations indépendants.
+- Le budget initial de 100 à 500 € concerne les dépenses de démarrage envisagées, pas une promesse de coût total du développement ou une autorisation de dépenses automatiques.
+
+## Choix d’implémentation proposés dans ce kit
+
+Ces décisions rendent les prompts cohérents. Elles sont réversibles si une contrainte réelle du dépôt justifie une adaptation documentée.
+
+- Monorepo `apps/web`, `apps/api`, `infra`, `docs`.
+- Next App Router ; Java 21 et Maven Wrapper ; monolithe Spring modulaire.
+- Une origine et `/api/v1` ; sessions Spring JDBC/PostgreSQL avec CSRF selon `API_CONTRACTS.md` ; aucune seconde identité NextAuth.
+- npm par défaut si le dépôt est neuf et aucune préférence existante ; préserver un gestionnaire déjà cohérent. Un seul lockfile de référence.
+- Développement local, recette et production isolés ; services locaux pour mails et fichiers ; prix et comptes fictifs hors production.
+- Caddy et Docker Compose pour une première installation Linux dimensionnée ; pas de Kubernetes ni Redis sans besoin mesuré.
+- Charte claire neutre avec bleu nuit discret, détaillée dans `DESIGN_SYSTEM.md`. Il s’agit d’une proposition issue des références, pas d’une validation visuelle déjà donnée par l’utilisateur.
+- Français initial pour développer ; dictionnaires et modèles FR/EN dès les fondations. Activation d’une langue publique selon état réel du contenu.
+
+## Décisions de travail P00 — 7 novembre 2026
+
+L’inspection réelle constate un kit de 49 fichiers, sans application, manifeste, lockfile, script de démarrage ni dossier `.git`. Aucun prototype n’est présent ou adopté. `AGENTS.md` à la racine est la seule instruction locale trouvée ; aucune instruction supplémentaire n’a été trouvée dans les sous-dossiers ou les ancêtres inspectés.
+
+- **Structure confirmée** : `apps/web`, `apps/api`, `infra`, `docs`, avec `scripts` et les références existantes. Les applications et services seront créés par P01, sans réinitialisation de ce dossier.
+- **Mode local** : Node et Java natifs Windows, PowerShell 5.1, services Linux via Docker Desktop. `npm.cmd` contourne le seul problème de sélection du lanceur `npm.ps1`, sans modifier les politiques PowerShell. Maven Wrapper Windows à créer en P01 ; Maven global absent n’est pas un blocage. Les outils WSL ne sont pas mélangés à cette chaîne.
+- **Dépendances** : npm workspaces avec un seul `package-lock.json` racine ; Java 21 et Maven Wrapper. Cibles exactes et preuves officielles dans `VERSIONS.md` : Node 24.22.2/npm 11.19.1, Next 16.4.5/React 19.3.1, Boot 4.1.2 et PostgreSQL 18.6. P00 ne prétend pas les avoir installées. Conserver Node 24 évite un changement de majeure sans besoin ; sélectionner les correctifs en P01 sans écraser l’installation utilisateur.
+- **Lint** : TypeScript 6.0.3 avec ESLint 10.14.0, configuration plate explicite JS/TypeScript/Next/React Hooks dès P01. Les peers transitifs de `eslint-config-next` excluent ESLint 10 et le parseur exclut TS7 ; ESLint 9 est en fin de maintenance. Ne pas adopter la configuration groupée incompatible, ni forcer la résolution. Pins, sources et portée des contrôles dans `VERSIONS.md` ; aucune modification de technologie principale.
+- **Invariants confirmés sans variante** : une origine, proxy `/api/v1` conservant le préfixe, Spring seul responsable de l’identité et du métier, sessions JDBC et CSRF, réponses privées hors cache partagé. Aucun NextAuth, JWT dans localStorage, H2 substitué aux tests PostgreSQL, Redis ou API IA payante ajouté.
+- **Routes** : le registre de `SCREENS.md` fait autorité pour FR/EN. Identifiants métier indépendants des slugs ; langue par défaut et langues publiées configurables. Le français de développement ne tranche pas le calendrier commercial anglais.
+- **Configuration** : `.env.example` racine sans secret et plan de raccordement dans `CONFIGURATION.md`. Services externes et vente désactivés dans cet exemple ; aucune configuration n’est encore consommée. Pour l’API native Windows, SMTP Mailpit devra être publié sur la boucle locale, contrairement à un API entièrement conteneurisé.
+- **Historique** : aucun Git initialisé, commit créé, remote configuré ou contenu poussé pendant P00. L’inventaire SHA-256 initial est conservé dans `evidence/P00-initial-files.json` ; P01 pourra établir un historique local cohérent après inspection, sans publication automatique.
+
+Aucune incompatibilité prouvée ne justifie de remplacer la stack. Les compatibilités sont documentaires ; installation, dépendances résolues, rendu et intégration locale seront vérifiés dans leurs lots. Aucun besoin d’accès externe ne bloque P00 ou les fondations locales.
+
+## Décisions commerciales encore ouvertes
+
+| Paramètre | État initial | Effet avant décision |
+| --- | --- | --- |
+| Prix, devise, présentation fiscale | À définir par offre | Offre réelle non vendable |
+| Durée d’accès | À définir | Aucune promesse « à vie » implicite |
+| Période d’actualisation incluse | À définir | Engagement distinct de l’accès |
+| Support et délai annoncé | À dimensionner | Aucun service humain illimité promis |
+| Correction humaine | Désactivée au lancement par défaut | Revue seulement si capacité/offre validées |
+| Langues incluses et langue par défaut | À décider pour l’offre réelle | Publier seulement les traductions prêtes |
+| Formats, tailles, quotas et conservation | À définir selon usage | Dépôts optionnels désactivés tant que non configurés |
+| Fournisseur mails, vidéo et stockage | À choisir avec coût et accès disponibles | Adaptateurs/local fonctionnels, intégration externe déclarée en attente |
+| Hébergement, région, domaine de recette | À renseigner | Infrastructure préparée sans faux déploiement |
+| Identité légale et conditions de vente | À fournir et valider | Contenus non inventés ; blocage de commercialisation si incomplets |
+
+Les montants 1 200 €, 1 400 € et 1 180 € de `CONTENT_REFERENCE.md` ne sont jamais des prix de formation.
+
+## Registre à maintenir
+
+| Date | Sujet | Décision ou hypothèse | Motif et preuve | Impact | Auteur/validation |
+| --- | --- | --- | --- | --- | --- |
+| 2026-11-07 | Kit initial | Choix techniques proposés ci-dessus | Cahier et demande de développement Codex | P00–P23 | À confronter au dépôt en P00 |
+| 2026-11-07 | Audit du dossier | Kit sans code ni Git ; structure monorepo confirmée, aucune reprise de prototype | Inventaire SHA-256 et `evidence/P00.md` | P01 crée les fondations | Agent, dans le périmètre demandé |
+| 2026-11-07 | Outils et versions | Windows natif + Docker Linux, npm unique lockfile, cibles exactes proposées | Commandes locales et sources de `VERSIONS.md` | Installation et verrouillage P01 ; aucun changement de stack | Agent, choix réversibles |
+| 2026-11-07 | Routes et configuration | Registre FR/EN central et exemple sans secret ; lancement commercial indécis | `SCREENS.md`, `CONFIGURATION.md`, `.env.example` | P01/P03 puis lots métier | Agent, conventions réversibles |
+
+Une décision future doit nommer l’ancienne règle remplacée et les documents affectés. Ne pas masquer une hypothèse non validée sous un statut « décidé ».

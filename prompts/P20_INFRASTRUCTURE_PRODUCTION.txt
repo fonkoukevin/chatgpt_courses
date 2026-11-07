@@ -1,0 +1,29 @@
+P20 — IMAGES, INFRASTRUCTURE ET PROCÉDURES DE PRODUCTION
+
+OBJECTIF
+Prépare les artefacts et procédures permettant de déployer la version vérifiée sur un serveur Linux autorisé. Ce lot rend la mise en ligne concrète et révisable ; il ne crée pas automatiquement un compte payant ni une nouvelle infrastructure facturable.
+
+CONTEXTE À LIRE
+Lis les AGENTS.md applicables, docs/STATUS.md, docs/ARCHITECTURE.md et docs/DEPLOYMENT.md. Consulte API_CONTRACTS.md pour session, CSRF, routes et webhooks, puis le rapport P19. Vérifie les documents officiels des versions réellement utilisées pour Docker, Next.js, Caddy et PostgreSQL.
+
+DÉPENDANCES ET CIBLE
+P19 doit identifier une version cohérente. Inspecte la cible, le registre et les accès disponibles sans exposer leurs secrets. Si une valeur manque, prépare les fichiers paramétrables et une liste précise des seules informations nécessaires. Une recommandation de serveur ne constitue pas une autorisation d’achat.
+
+TRAVAIL À RÉALISER
+1. Construis des Dockerfiles multi-étapes : frontend Next.js avec serveur Node et sortie adaptée, backend Java 21 avec artefact Maven. N’utilise pas un export statique pour remplacer les fonctions serveur nécessaires. Retire outils de développement, fichiers .env et secrets des images ; utilise un utilisateur non privilégié quand compatible.
+2. Verrouille bases d’images et dépendances. Associe chaque image au commit et conserve son digest. Prépare la publication au registre autorisé et la promotion des mêmes images entre recette et production. Documente les paramètres publics intégrés au build et les paramètres serveur lus à l’exécution. Utilise /api/v1 en relatif et une configuration publique serveur à l’exécution si nécessaire, pour éviter qu’un domaine de recette reste figé dans l’image promue.
+3. Crée Compose production/recette : Caddy, Next.js, Spring, PostgreSQL si non managé, réseaux internes, volumes persistants, sondes, limites de ressources et redémarrage appropriés. Mesure les besoins au lieu d’annoncer une capacité de trafic arbitraire. Le serveur ne doit pas reconstruire le code à chaque redémarrage.
+4. Configure Caddy : domaine, HTTPS, routage /api/v1 préservé, limites de requêtes adaptées et en-têtes utiles. Les services internes et interfaces de gestion ne sont pas exposés. Configure les proxys de confiance uniquement s’ils existent. Si Cloudflare est choisi, vérifie le TLS jusqu’à l’origine et les exclusions de cache privé.
+5. Respecte les cookies de session Path=/, HttpOnly/Secure en production et le contrat CSRF. Vérifie que les données privées et erreurs d’authentification ne sont pas servies depuis un cache partagé. Une sonde publique ne doit pas révéler versions détaillées, comptes ou connexions internes.
+6. Prépare les secrets par environnement, accordés seulement aux services nécessaires. Fournis un exemple sans valeur sensible et une validation de configuration. Ne place aucune clé privée dans NEXT_PUBLIC, les Dockerfiles, les arguments de build, les logs ou les artefacts CI.
+7. Définis l’exécution des migrations Flyway, leur ordre et la responsabilité de reprise. Les migrations déjà appliquées restent immuables. Prépare une stratégie compatible extension/transition lorsque nécessaire, une sauvegarde avant changement risqué et une correction vers l’avant. Le retour d’image n’est pas un retour de schéma.
+8. Prépare sauvegarde hors hôte et restauration isolée de PostgreSQL et des objets nécessaires. Propose RPO, RTO, rétention et fréquence selon la charge et les besoins connus ; marque les choix non confirmés. Choisis export logique ou sauvegarde/PITR selon le besoin, avec commandes compatibles. Ne promets pas un RPO que la fréquence et la durée réelle de sauvegarde ne permettent pas.
+9. Prépare journaux structurés minimaux, rotation, métriques opérationnelles et alertes vers un canal autorisé. Uptime Kuma/Sentry ou équivalent restent configurables. Prévois un contrôle extérieur à l’hôte pour constater sa perte ; masque données personnelles, contenus, cookies et liens signés.
+10. Ajoute un workflow de déploiement avec permissions minimales, identité de version, exclusion des exécutions concurrentes et secrets réservés à l’environnement cible. Préserve les contrôles GitHub existants ; n’affaiblis pas une protection pour contourner un blocage.
+
+VÉRIFICATIONS ATTENDUES
+Exécute builds, validation silencieuse Compose, démarrage local des images de production et smoke du proxy. Vérifie une migration et une restauration sur des données fictives isolées. En l’absence de cible ou de fournisseur, distingue fichiers prêts et intégration non exécutée.
+
+SORTIE ET SUIVI
+Livre les fichiers infra, exemples, scripts et runbooks de déploiement, incident, sauvegarde, restauration et retour de version. Consigne les preuves dans docs/evidence/P20.md et docs/STATUS.md. Fournis les paramètres encore nécessaires et une estimation de coûts seulement si des tarifs ont été réellement vérifiés, avec hypothèses.
+

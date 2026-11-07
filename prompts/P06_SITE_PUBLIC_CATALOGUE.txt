@@ -1,0 +1,34 @@
+P06 — RÉALISER LE SITE PUBLIC, LE CATALOGUE ET LES FICHES
+
+MISSION
+Réalise E01 à E04 : accueil, recherche transversale, fiche de parcours et guide public. Le visiteur doit comprendre un problème précis que la plateforme l'aide à résoudre, trouver une ressource utile et commencer une activité gratuite. Le site utilise les contenus réellement publiés par le backend.
+
+PRÉREQUIS ET LECTURES
+Lis AGENTS.md, docs/STATUS.md, docs/PRODUCT.md, docs/SCREENS.md (E01–E04), docs/DESIGN_SYSTEM.md, docs/API_CONTRACTS.md et docs/CONTENT_REFERENCE.md. P02 fournit les composants, P03 les contrats, P05 les publications. Vérifie ces dépendances dans le code ; termine une interface contractuelle manquante dans le périmètre de ce lot plutôt que de brancher un faux catalogue de production.
+
+STRUCTURE ET CONTENU
+1. Accueil : une proposition claire, une tâche de départ, une recherche et une action principale « Essayer une activité ». Utilise le parcours de référence pour présenter un livrable concret : une proposition commerciale fondée sur un brief, avec périmètre et vérification. Le visiteur comprend ce qu'il produira et comment il saura que son résultat est acceptable.
+2. Présente des entrées par tâches réellement couvertes, un exemple de résultat, les ressources disponibles, le fonctionnement apprendre/produire/vérifier/conserver et les questions fréquentes. Pas de grille artificiellement remplie avec de faux cours. N'affiche pas de statistiques, témoignages, partenaires, promesses de revenus ou durées non sourcées.
+3. Catalogue : parcours, exercices, méthodes et guides. Recherche et filtres type/tâche/niveau/langue/accès avec paramètres d'URL stables, pagination serveur, ordre déterministe et retour conservant l'état. Le premier moteur peut reposer sur PostgreSQL ; aucune recherche vectorielle n'est requise.
+4. Fiche de parcours : résultat attendu, public, aperçu, programme, prérequis, outils, modalités d'évaluation, langues disponibles, conditions de l'offre et FAQ. Affiche les modules selon leur état réel. La même carte distingue activité ouverte, ressource accessible, prérequis et contenu verrouillé.
+5. Guide : problème, sommaire, explication structurée, exemple, points de contrôle, méthode associée et activité pertinente. Les dates de revue et sources viennent du CMS. L'action de copie confirme uniquement une copie réussie.
+6. Prépare le signalement contextualisé : identifiant et version du guide ou de l'activité. Si le traitement de support arrive en P14, garde la donnée et le contrat attendus ; n'annonce pas « message envoyé » sans persistance réelle.
+
+API, ACCÈS ET RENDU
+Le service public exclut brouillons, ressources retirées et contenu premium non autorisé. Filtrer côté client est insuffisant. Les métadonnées d'un parcours peuvent être publiques sans exposer ses supports payants. La prévisualisation CMS reste authentifiée et non mise en cache.
+
+Privilégie le rendu serveur pour les contenus publics et les métadonnées. Les lectures publiques mises en cache incluent langue et version, avec invalidation après publication. Sépare la personnalisation privée : reprise et droit d'accès sont lus sans cache partagé. Ne fais pas dépendre le HTML public d'une session mise en cache pour tous.
+
+La fiche choisit son action selon les informations disponibles : activité gratuite, offre publiée ou reprise. Avant P11/P12, n'invente ni prix ni paiement opérationnel. Une offre encore incomplète peut être décrite honnêtement ; son achat reste désactivé avec explication.
+
+LANGUES ET SEO INITIAL
+Respecte les routes centralisées : /fr, /en, catalogue/catalog, parcours/courses et guides. Aucun changement de langue ne doit envoyer systématiquement à l'accueil lorsque l'équivalent existe. Prépare title, description, titre H1, balisage sémantique, canonical et image de partage quand elle existe. Les ajustements complets FR/EN et SEO seront terminés en P16, mais les identifiants et publications ne doivent pas être monolingues aujourd'hui.
+
+ÉTATS ET VÉRIFICATIONS
+Implémente chargement, zéro résultat, panne avec nouvelle tentative, 404, traduction absente, publication retirée et offre suspendue. Le système n'affiche jamais des données de démo pour masquer une panne réelle.
+
+Vérifie T01 et T03, ainsi que l'absence de fuite de contenu dans les réponses publiques. Teste une recherche, deux filtres combinés, l'historique du navigateur et le mobile. Examine réellement l'accueil, une liste et une fiche avec le contenu de référence si l'environnement le permet. Le premier bouton utile doit conduire à une action disponible ou à un état exact, sans lien mort.
+
+LIVRABLE
+Implémentation complète du lot, contrats et tests affectés, preuve dans docs/evidence/P06.md et mise à jour de STATUS.md. Liste les routes accessibles et les raccords réellement reportés aux phases suivantes. Prochaine phase : P07_METHODES_GENERATEUR.txt.
+

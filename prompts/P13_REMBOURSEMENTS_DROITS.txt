@@ -1,0 +1,29 @@
+P13 — REMBOURSEMENTS, ORIGINES DE DROITS ET RAPPROCHEMENT
+
+OBJECTIF
+Implémente demandes de remboursement, décisions autorisées, traitement financier et effets d’accès, sans confondre ces dimensions. Réalise les vues E13 et la partie correspondante d’E16. Les essais restent en mode test ; aucune opération financière réelle n’est exécutée pour vérifier le code.
+
+LECTURES ET PRÉCONDITIONS
+Lis AGENTS.md, docs/STATUS.md, les règles de droits/remboursements de docs/PRODUCT.md, docs/ARCHITECTURE.md et docs/API_CONTRACTS.md, E13/E16 dans docs/SCREENS.md et T11–T13/T19 dans docs/ACCEPTANCE.md. P11/P12 fournissent commandes, paiement, inbox et droits ; P10 fournit médias privés et notifications. Consulte la documentation Stripe Refunds pour les états et événements de la version installée.
+
+TRAVAIL À RÉALISER
+1. Sépare RefundRequest, décision administrative et exécution fournisseur. Une demande utilisateur, une approbation, un remboursement en cours, confirmé ou échoué ont des faits distincts. Un refus de demande n’est pas une panne Stripe. Conserve propriétaire, commande, lignes, motif, dates et décision sans inventer une politique commerciale légale.
+2. Contrôle permission et propriété pour chaque endpoint. Un apprenant crée une demande sur sa commande ; il ne choisit pas un PaymentIntent arbitraire et n’exécute pas un remboursement. Les opérateurs autorisés prévisualisent montant, lignes et effet sur les droits avant l’action sensible. Journalise auteur, motif, objet et résultat.
+3. Calcule le montant encore remboursable côté serveur en unités mineures/devise de la commande. Prends en compte montants confirmés et réservations d’opérations en cours sous verrou/transaction, afin que deux demandes simultanées ne dépassent pas le paiement disponible. Refuse montant négatif, devise incohérente, allocation invalide et dépassement.
+4. Persiste une opération et une clé d’idempotence stable avant l’appel Stripe. Rapproche les réponses ambiguës, notifications répétées et opérations créées dans le Dashboard fournisseur. Ne relance pas avec une nouvelle clé uniquement parce que la réponse réseau a été perdue. Un remboursement partiel externe sans décision d’accès connue devient un dossier à examiner, pas une révocation arbitraire.
+5. Après confirmation réelle du remboursement, applique une fois la décision d’accès. Pour le pack A+B remboursé intégralement, retire uniquement les attributions provenant du pack. Un achat individuel antérieur de A continue à l’autoriser. Les langues ou versions incluses suivent la même origine, sans nouvel achat artificiel.
+6. Pour un remboursement partiel, conserve allocation de lignes et choix explicite : retirer les droits précisément concernés ou maintenir les droits dans le cadre d’un geste commercial. Une demande/en cours/échec ne s’affiche pas « remboursé ». Une éventuelle suspension décidée séparément garde son propre motif et son audit.
+7. Rends le calcul d’accès effectif fondé sur au moins une origine active, sa période et les conditions/version achetées. Une révocation n’efface pas projet, notes, méthodes personnelles, tentatives ou attestation historique. Les liens premium deviennent indisponibles selon le droit, tout en laissant l’utilisateur consulter son travail conservé.
+8. Protège contre les événements anciens et désordonnés : une nouvelle livraison d’une ancienne confirmation de paiement ne recrée pas une attribution déjà révoquée pour remboursement. Le rapprochement tient compte des états actuels fournisseur et locaux ; un timestamp reçu seul ne décide pas du droit.
+9. Branche les interfaces : demande, examen, confirmation, attente, échec et recours disponible ; origine des accès et raison d’indisponibilité compréhensibles. Les emails suivent l’outbox et un échec d’envoi ne change pas le résultat financier.
+
+VÉRIFICATIONS
+Exécute T11 avec achat A seul puis pack A+B ; vérifie qu’A reste accessible et B non. Exécute T12 pour remboursement partiel en attente puis échec ; vérifie les droits et libellés. Exécute T13 avec confirmation ancienne après remboursement confirmé. Ajoute doublons, demandes concurrentes, timeout ambigu, allocations invalides et remboursement fournisseur externe à rapprocher. Avec T19, teste la délivrance réelle d’un nouveau lien média après révocation, propriétaire et permissions ; le nouveau lien doit être refusé. Documente la durée des anciens liens sans promettre de révoquer un fichier déjà téléchargé. Vérifie que toutes les données pédagogiques privées subsistent selon leurs règles de conservation.
+
+FIN DE LOT
+Répare les écarts, actualise OpenAPI/client, migrations, règles de rapprochement et docs/STATUS.md. Rassemble scénarios, commandes, références de test et résultats dans docs/evidence/P13.md. Indique les décisions de politique commerciale encore attendues ; aucune case de configuration manquante ne doit être remplacée par une promesse au client.
+
+RÉFÉRENCES
+https://docs.stripe.com/refunds
+https://docs.stripe.com/webhooks
+https://docs.stripe.com/api/idempotent_requests

@@ -1,0 +1,251 @@
+{
+    "auditDate":  "2026-11-07",
+    "root":  "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses",
+    "files":  [
+                  {
+                      "path":  ".vscode/extensions.json",
+                      "bytes":  63,
+                      "sha256":  "d04a3dab2875c8835a0d4a3e426b52664a0ae639d95c6f6db1835f5f55b09514"
+                  },
+                  {
+                      "path":  "00_LIRE_EN_PREMIER.txt",
+                      "bytes":  10197,
+                      "sha256":  "df2a362cfa672582e8588ba1753a28069f806518703f6c317f389d96b5c366ad"
+                  },
+                  {
+                      "path":  "01_PROMPT_DE_DEMARRAGE.txt",
+                      "bytes":  1785,
+                      "sha256":  "fc0f825c3db92abb864c81145e390281b86b68613325051108dd29d9e7686f0d"
+                  },
+                  {
+                      "path":  "AGENTS.md",
+                      "bytes":  4456,
+                      "sha256":  "0ca442a80eb2607b557a0f62a4930c8a91eb6ead0530a066c900f4f9fce7b40b"
+                  },
+                  {
+                      "path":  "docs/ACCEPTANCE.md",
+                      "bytes":  11306,
+                      "sha256":  "a3c3c48f1f5cf4bb2ea02114aa86007fd784661176e8473fcea4f567b04711f0"
+                  },
+                  {
+                      "path":  "docs/API_CONTRACTS.md",
+                      "bytes":  15789,
+                      "sha256":  "1b92e6103e229adda8c1b581a2283bad8f25a67428e72b1d936500e60565623e"
+                  },
+                  {
+                      "path":  "docs/ARCHITECTURE.md",
+                      "bytes":  17584,
+                      "sha256":  "539f4b825de97c1d594c72875702f5be4555e4a9c77461996457bb789d2f3ecc"
+                  },
+                  {
+                      "path":  "docs/CONTENT_REFERENCE.md",
+                      "bytes":  24976,
+                      "sha256":  "a97d62cb169f6b5382af5cdcf3d23fa69c653d7e28017b2a56df86b17b0bf997"
+                  },
+                  {
+                      "path":  "docs/DECISIONS.md",
+                      "bytes":  3985,
+                      "sha256":  "2669eedb9ca2c55abb5700c95d90f28678f0efb68aab0b346e5991b746556006"
+                  },
+                  {
+                      "path":  "docs/DEPLOYMENT.md",
+                      "bytes":  17053,
+                      "sha256":  "81cea09f91ff09e4ac64bd061967a25cb0018e5066ce37038fcdee86a71bcb9e"
+                  },
+                  {
+                      "path":  "docs/DESIGN_SYSTEM.md",
+                      "bytes":  12278,
+                      "sha256":  "7e5f115db48313ac8729091a948705f3dcd13aa1ff196fc74be27ec99a367814"
+                  },
+                  {
+                      "path":  "docs/evidence/TEMPLATE.md",
+                      "bytes":  974,
+                      "sha256":  "5d63fb6590482a2d4e71e5e17adbff37a1863588d4e351fd4b044737567de582"
+                  },
+                  {
+                      "path":  "docs/FUNCTION_MATRIX.md",
+                      "bytes":  12554,
+                      "sha256":  "6d381e47f85971bfb3bcf7408457225fa266c64819a82af2c43681dfd03b3a42"
+                  },
+                  {
+                      "path":  "docs/PRODUCT.md",
+                      "bytes":  11456,
+                      "sha256":  "c497324dabaf79d96821c17c0e4ac260040853abf74659d7b055df04d2b894eb"
+                  },
+                  {
+                      "path":  "docs/PROMPT_INDEX.md",
+                      "bytes":  4697,
+                      "sha256":  "599fdccd1fe6598a8d810b13e5fbdb0479d1179e1ed37f48d576c6d10e07a744"
+                  },
+                  {
+                      "path":  "docs/SCREENS.md",
+                      "bytes":  15034,
+                      "sha256":  "0b04e7b8480d914192607d7ad77c00c226413bc17b121aeea4791f138060b0d6"
+                  },
+                  {
+                      "path":  "docs/SOURCE_NOTES.md",
+                      "bytes":  4182,
+                      "sha256":  "44c56928453fbe7a4f22c82810569a2a9bc19707b0e4709008f1726312a4eb1f"
+                  },
+                  {
+                      "path":  "docs/STATUS.md",
+                      "bytes":  2595,
+                      "sha256":  "d8e6bb3ec2b646d3e203b5dfa0a3816ecc0c43ae7187463f42c84b06327f5163"
+                  },
+                  {
+                      "path":  "prompts/P00_AUDIT_CADRAGE.txt",
+                      "bytes":  4760,
+                      "sha256":  "dadc30df066ab0233889f42faab219d5af034984e8370b6aaf04d232f3e4d51a"
+                  },
+                  {
+                      "path":  "prompts/P01_FONDATIONS_LOCALES.txt",
+                      "bytes":  4676,
+                      "sha256":  "b0d9aa78cab9d50c337d739dbdf2b8c4dd72d292b33ca2286d30de02c857cda6"
+                  },
+                  {
+                      "path":  "prompts/P02_DESIGN_SYSTEM_INTERFACES.txt",
+                      "bytes":  5308,
+                      "sha256":  "365fedea7cd97bd10b7a2d7ec93ace3d69d566ccec4e760aee04490a70f18bfb"
+                  },
+                  {
+                      "path":  "prompts/P03_MODELE_DONNEES_API.txt",
+                      "bytes":  4867,
+                      "sha256":  "982c6041dc78a2c4621083b89fbbc9d08a4cc32e915874959f5182ae3b45d01d"
+                  },
+                  {
+                      "path":  "prompts/P04_IDENTITE_SECURITE.txt",
+                      "bytes":  5151,
+                      "sha256":  "8a98259fafb8865aceaa406695d2049d84cd616ee47d4888a5ee1f2d01bbd472"
+                  },
+                  {
+                      "path":  "prompts/P05_CMS_PUBLICATION.txt",
+                      "bytes":  5010,
+                      "sha256":  "937b59695507492907942ff3b7bf3634662a9d17abdb0f51588c12c65ae2e557"
+                  },
+                  {
+                      "path":  "prompts/P06_SITE_PUBLIC_CATALOGUE.txt",
+                      "bytes":  4996,
+                      "sha256":  "380f33db31e32d8810c1fadd074d2b6f0a968292c23ab94db6758839ebfb451e"
+                  },
+                  {
+                      "path":  "prompts/P07_METHODES_GENERATEUR.txt",
+                      "bytes":  4766,
+                      "sha256":  "79bb91f6cd2b8007b9f8627ccd843dddc74c04d9c27b5a582813ef634ff667eb"
+                  },
+                  {
+                      "path":  "prompts/P08_APPRENTISSAGE_QUIZ.txt",
+                      "bytes":  4872,
+                      "sha256":  "4fa7dfcc55fadebb9737a98a67ea843d7419045bf241db49313cb48af44783ac"
+                  },
+                  {
+                      "path":  "prompts/P09_PROJETS_EVALUATION.txt",
+                      "bytes":  4836,
+                      "sha256":  "a8daec336a7bbef0ce8177ad3d570e7de1c9134e702d053293c65862bfec7203"
+                  },
+                  {
+                      "path":  "prompts/P10_MEDIAS_EMAILS_STOCKAGE.txt",
+                      "bytes":  5227,
+                      "sha256":  "39abd2a0fca8585bab469fd9d63045107965bfe304bd89f20a67391ce147cc7f"
+                  },
+                  {
+                      "path":  "prompts/P11_OFFRES_COMMANDES.txt",
+                      "bytes":  4913,
+                      "sha256":  "48bd52f2395c1c8cb330d305fd2e5e0422c79ad143768d278123b111921fde55"
+                  },
+                  {
+                      "path":  "prompts/P12_STRIPE_ATTRIBUTION.txt",
+                      "bytes":  4877,
+                      "sha256":  "c3045edba17ba518c14097893ea94095d712f86b81378b355b479cf61294e459"
+                  },
+                  {
+                      "path":  "prompts/P13_REMBOURSEMENTS_DROITS.txt",
+                      "bytes":  5227,
+                      "sha256":  "e2cb2f496d6c1a5dcb853990138a3df7adb1d4a91a58c3f65980d3804478ff1a"
+                  },
+                  {
+                      "path":  "prompts/P14_COMPTE_AIDE_ATTESTATIONS.txt",
+                      "bytes":  4888,
+                      "sha256":  "6e6f94421fc087fe3bdabf4cd3387ce99ace3e082f12a9dfc78cbe03da18a769"
+                  },
+                  {
+                      "path":  "prompts/P15_ADMIN_EXPLOITATION.txt",
+                      "bytes":  5037,
+                      "sha256":  "34c79f4953fe117733007fc93485f18ab00454c927482d5748b9221bff888e22"
+                  },
+                  {
+                      "path":  "prompts/P16_BILINGUE_SEO.txt",
+                      "bytes":  5549,
+                      "sha256":  "f04d2bee6149ecdbbce36270ca25ba197ae6d409bfd76e9f2da0edcd2147da68"
+                  },
+                  {
+                      "path":  "prompts/P17_QUALITE_TRANSVERSALE.txt",
+                      "bytes":  5019,
+                      "sha256":  "4352af900813cb7121316765f30ca2da7392b7bb5d01c3f566cb2a018aa56f2b"
+                  },
+                  {
+                      "path":  "prompts/P18_CONTENUS_OFFRES_PRETS.txt",
+                      "bytes":  5098,
+                      "sha256":  "a8410642243a9312716909deed4b2bad2233cda743d0f3a5282c1c4334cb59f2"
+                  },
+                  {
+                      "path":  "prompts/P19_RECETTE_CI.txt",
+                      "bytes":  4895,
+                      "sha256":  "76b0f54c89a90a2ea03d1ccda04a450bf3e5ad26b218f6d03aa7d16b06a519f3"
+                  },
+                  {
+                      "path":  "prompts/P20_INFRASTRUCTURE_PRODUCTION.txt",
+                      "bytes":  5141,
+                      "sha256":  "8a1cee5c27fa2cd04c7bdcb21972e1959873ac9714bf3a90a521accec983060f"
+                  },
+                  {
+                      "path":  "prompts/P21_DEPLOIEMENT_RECETTE.txt",
+                      "bytes":  4698,
+                      "sha256":  "387203caf161aff36ca0e3f8bb1f5b4279aa1ee25a47d683635288c10d72c198"
+                  },
+                  {
+                      "path":  "prompts/P22_DEPLOIEMENT_PRODUCTION.txt",
+                      "bytes":  5003,
+                      "sha256":  "5c9ce4eace6e9271bd52c49244160ef3d993cfda8796bd48e6b5d6fb2d8435d3"
+                  },
+                  {
+                      "path":  "prompts/P23_EXPLOITATION_APRES_LANCEMENT.txt",
+                      "bytes":  5142,
+                      "sha256":  "3aa588b5f9295a377d6e189eca4995bd40402d5f8599194441b5438484bc8df5"
+                  },
+                  {
+                      "path":  "prompts/R01_REPRENDRE_PROJET.txt",
+                      "bytes":  2325,
+                      "sha256":  "ea831b2180b2245cb9a436c21ec0038556ca4fa97db1678f7f8e7632793c7826"
+                  },
+                  {
+                      "path":  "prompts/R02_CORRIGER_ERREUR.txt",
+                      "bytes":  2546,
+                      "sha256":  "b21e6c71081e7191653cc536e85f35aa3cbb148f687fa4c1564977b760bce087"
+                  },
+                  {
+                      "path":  "prompts/R03_REVOIR_INTERFACE.txt",
+                      "bytes":  2746,
+                      "sha256":  "0eee3c56a4f2f4fcf4c3d6dd1a5871661ad05091734f35f9bf2e04c48a4ee8bb"
+                  },
+                  {
+                      "path":  "prompts/R04_AUDITER_CORRIGER_LOT.txt",
+                      "bytes":  2628,
+                      "sha256":  "969cc616577dff8c0db9fea1e87768529f4bf712058bbc9069665821e87e6eed"
+                  },
+                  {
+                      "path":  "prompts/R05_FAIRE_EVOLUER_FONCTION.txt",
+                      "bytes":  2708,
+                      "sha256":  "f07d2c0c2925f0f45faea98cfb2c547f00e412ae8f74fd011a8708cc877e23b7"
+                  },
+                  {
+                      "path":  "prompts/R06_PASSER_LE_RELAIS.txt",
+                      "bytes":  1787,
+                      "sha256":  "27331edd043f830b056c23faebb1b6a6e29452f775a9e3f02b57879277594eb0"
+                  },
+                  {
+                      "path":  "references/design-tokens.css",
+                      "bytes":  1169,
+                      "sha256":  "5d55c543955436406368ea50c181a6a6e28014c67a0c32b352476c2432c66b71"
+                  }
+              ]
+}

@@ -1,0 +1,28 @@
+P12 — STRIPE CHECKOUT, CONFIRMATION ET ATTRIBUTION DES DROITS
+
+OBJECTIF
+Branche Stripe Checkout en mode test et réalise le traitement durable qui attribue les accès. Implémente E08 avec ses états réels. La preuve attendue relie commande, paiement, événement et droits ; une page de retour réussie ne constitue pas cette preuve.
+
+LECTURES ET PRÉCONDITIONS
+Lis AGENTS.md, docs/STATUS.md, les parties paiement/accès de docs/ARCHITECTURE.md et docs/API_CONTRACTS.md, E07/E08 dans docs/SCREENS.md et T05–T10 dans docs/ACCEPTANCE.md. P10 fournit l’outbox/notifications et P11 les commandes/snapshots. Vérifie les docs Stripe officielles, la version du SDK et la version d’API retenue. Consigne les versions et événements réellement employés ; n’utilise pas une API preview par défaut.
+
+TRAVAIL À RÉALISER
+1. Implémente l’adaptateur Stripe côté Spring avec clés et secrets uniquement côté serveur. Sépare strictement test/live ; la production refuse les incohérences de mode. Prépare les variables d’exemple sans secrets. Utilise Checkout hébergé ; aucune collecte de carte dans l’application.
+2. POST /me/orders/{id}/checkout vérifie propriétaire, révision, état de l’offre/commande, montant/devise et acceptedTermsVersion ; enregistre l’acceptation explicite des conditions présentées. Crée la session depuis les données serveur. Persiste l’opération et sa clé d’idempotence avant l’appel externe ; retrouve la même session après double clic. Un timeout ambigu provoque un rapprochement, pas la création immédiate d’une seconde session payante.
+3. Ajoute POST /api/v1/webhooks/stripe avec vérification SDK de Stripe-Signature sur les octets bruts, taille bornée et secret d’endpoint approprié. L’exception CSRF vise seulement cette route/méthode. Les autres mutations gardent leur session et CSRF. Un corps invalide/signature invalide n’est pas traité comme une confirmation.
+4. Enregistre durablement l’événement valide dans une inbox avant de l’acquitter. Unicité par fournisseur/compte/mode/eventId ; journal minimal, état, tentatives, prochaine reprise et erreur exploitable. Le worker relance les traitements avec verrou/bail et limite documentée ; un incident final reste visible pour l’exploitation. Aucun travail critique confié uniquement à une Promise ou un thread non persistant.
+5. Rapproche Checkout/PaymentIntent et la commande : identifiants, références, mode, devise, lignes et montant final attendu. Gère paiement différé en traitement puis réussi/échoué. La présence de checkout.session.completed n’autorise pas à supposer tous les moyens immédiatement encaissés. Utilise l’état fournisseur pertinent et les règles documentées pour le mode choisi.
+6. Dans une transaction métier, crée chaque attribution par origine/ligne/ressource exactement une fois, puis enregistre les notifications à envoyer. Appuie l’invariant sur une contrainte unique et un traitement concurrent correct. La déduplication d’eventId seule ne suffit pas si deux événements distincts concernent le même achat.
+7. Préserve les états de remboursement/retrait déjà connus ; ne fais pas réactiver un achat par un événement ancien. Prépare le rapprochement des remboursements du lot P13. Les appels externes ne sont pas une transaction atomique PostgreSQL : traite les étapes incomplètes et leurs reprises.
+8. Branche E08 : vérification, confirmé/accès prêt, confirmé/activation retardée, non confirmé/interrompu. Interroge l’API propriétaire avec attente bornée et retour au compte. Le simple paramètre success/cancel ne modifie aucun droit. Un email échoué laisse le cours accessible et ouvre une reprise d’email indépendante.
+
+VÉRIFICATIONS
+Exécute des tests intégrés PostgreSQL avec le véritable traitement d’événement : signature invalide, mauvais montant/devise, URL de succès visitée directement, doublons simultanés, événements distincts du même achat, ordre inversé, délai de paiement, panne après réception durable avant attribution, panne d’email et redémarrage du worker. Vérifie une attribution et une intention de notification, sans duplication métier. Effectue ensuite un parcours Stripe en mode test avec les accès fournis et documente ses références. Si les clés ou le réseau manquent, garde les tests locaux réels, marque l’essai externe bloqué et donne sa procédure ; ne le déclare pas exécuté.
+
+FIN DE LOT
+Corrige les défauts puis mets à jour contrats, schéma, docs/STATUS.md et docs/evidence/P12.md. Donne les transitions vérifiées, les preuves T05–T10 et les incidents restants. N’active pas de mode live ni de débit réel dans ce lot.
+
+RÉFÉRENCES
+https://docs.stripe.com/checkout/fulfillment
+https://docs.stripe.com/webhooks
+https://docs.stripe.com/api/idempotent_requests

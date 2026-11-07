@@ -1,0 +1,28 @@
+P18 — PARCOURS COMPLET FR/EN ET PRÉPARATION ÉDITORIALE DES OFFRES
+
+OBJECTIF
+Livre un premier parcours réellement lisible et praticable dans les deux langues, ses ressources éditables et une préparation commerciale honnête. Le produit ne doit pas arriver en recette avec six titres de modules, des textes de remplissage ou des vidéos prétendument disponibles. Ce lot produit du contenu complet ; il ne prouve pas à lui seul qu’une formation est prête à être vendue.
+
+CONTEXTE À LIRE
+Lis AGENTS.md, docs/STATUS.md et intégralement docs/CONTENT_REFERENCE.md. Consulte PRODUCT, FUNCTION_MATRIX, les écrans concernés, API_CONTRACTS et les règles de publication P05. Vérifie P06–P11, P14 et P16 : rendu, méthodes, quiz, projets, ressources, préparation des offres et langues. Utilise le CMS et les contrats existants ; aucun catalogue codé en dur parallèle. Lis les paramètres indécis dans docs/DECISIONS.md avant toute activation.
+
+TRAVAIL À RÉALISER
+1. Rédige et intègre « Du brief client à la proposition commerciale avec ChatGPT » et sa version anglaise. Produis les six modules M01–M06 entièrement : objectif observable, prérequis, explication développée, exemple commenté, exercice, livrable, vérifications, correction et transition. M01 doit permettre une première tâche utile gratuitement. Les autres idées de cours restent brouillons tant qu’elles n’ont pas cette profondeur ; ne gonfle pas le catalogue avec des offres vides.
+
+2. Respecte strictement BR01/TR01 : quatre pages en français, même dans la version anglaise ; total 1 200 € HT ; plafond rédactionnel 1 400 € HT ; quinze jours ouvrés après réception des éléments ET validation du brief ; un cycle de retours regroupés. Logo et intégration sont non chiffrés. Ne crée aucun témoignage, chiffre d’affaires, référence client ou ancienneté.
+
+3. Termine le parcours par une proposition de deux pages maximum, email de présentation, relance, méthode sauvegardable et BR02. Pour BR02, conserve 1 400 € HT avant intégration face à un plafond global de 1 200 €, dix jours minimum face aux cinq demandés, et l’option conditionnelle à 1 180 € sans À propos. La copie des délais BR01 serait une erreur. Adapte les contrôles au second dossier. Les emails pédagogiques sont des modèles, jamais des messages à envoyer.
+
+4. Prépare les quiz avec questions, choix, corrections expliquées et versions FR/EN équivalentes. Intègre les vingt contrôles BR01 et les erreurs bloquantes ; la grille reste une autoévaluation déclarative. Vérifie le calcul sur des données contrôlées. Les solutions acceptent des formulations différentes respectant les faits.
+
+5. Génère réellement les ressources annoncées : brief/tarifs, tableau de cadrage, modèle de proposition, grille, corrigé, second cas et méthode. Choisis des formats éditables disponibles dans le projet ; Markdown est acceptable si annoncé clairement. N’affiche PDF, DOCX ou ZIP que si le fichier correspondant a été produit, ouvert et vérifié. Lie langue, version et niveau d’accès aux assets P10.
+
+6. L’import éditorial doit être relançable sans duplication, avec identités stables et contrôle de révision. Il ne remplace pas les modifications humaines existantes sans détection explicite. Distingue brouillon, revu, publié et commercialisable. Prépare les métadonnées, résumés, titres, textes alternatifs utiles et liens entre traductions.
+
+7. Les vidéos, voix, captures d’interface réelles et essais apprenants non fournis restent « à produire » ou absents. N’invente pas de transcription d’une vidéo inexistante, de durée mesurée ni de date de vérification. Pour des instructions dépendant de l’interface actuelle de ChatGPT, consulte la documentation officielle correspondant au produit et indique ce qui a été effectivement vérifié. Si le fournisseur ne permet pas la vérification, conserve une consigne générale et une limite explicite.
+
+8. Prépare la fiche d’offre fidèle au contenu existant, aux langues disponibles et au mode d’évaluation. Ne transforme pas les montants BR01 en prix de cours. Prix, devise, fiscalité, accès, mises à jour et assistance réels doivent être renseignés avant activation. Une offre promettant des vidéos reste bloquée si elles manquent ; un passage à une formation textuelle exige une décision commerciale explicite, pas une modification silencieuse de promesse.
+
+VALIDATION ET FIN
+Ouvre les six modules FR/EN, réalise le chemin gratuit → sauvegarde → atelier → grille → méthode → second cas, vérifie chaque téléchargement et recalcule les montants. Dans docs/evidence/P18.md, sépare rédaction terminée, calculs vérifiés, fichiers ouverts, intégration testée, revue humaine restante, médias absents et conditions commerciales manquantes. Mets à jour STATUS et les liens pertinents de FUNCTION_MATRIX. Un lot rédactionnel peut être vérifié localement tandis que la vente reste bloquée ; consigne ces deux états distincts sans inventer de publication.
+

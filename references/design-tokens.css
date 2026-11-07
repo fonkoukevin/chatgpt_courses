@@ -1,0 +1,42 @@
+/* Référence de design à intégrer et vérifier en P02, pas une application autonome. */
+:root {
+  --background: #ffffff;
+  --surface: #ffffff;
+  --surface-subtle: #f7f7f8;
+  --surface-hover: #efeff1;
+  --foreground: #202123;
+  --muted-foreground: #60656c;
+  --border: #e3e5e8;
+  --control-border: #8a8f98;
+  --brand: #12345b;
+  --brand-hover: #0b2545;
+  --brand-soft: #edf2f8;
+  --link: #244f85;
+  --focus: #275dad;
+  --success: #176b48;
+  --success-soft: #ecf6f0;
+  --warning: #855500;
+  --warning-soft: #fff6df;
+  --danger: #b42318;
+  --danger-soft: #fef0ee;
+  --font-ui: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-code: ui-monospace, SFMono-Regular, Consolas, monospace;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --radius-field: 0.5rem;
+  --radius-control: 0.75rem;
+  --radius-card: 1rem;
+  --content-max: 75rem;
+  --reading-max: 46rem;
+  --sidebar-width: 16rem;
+  --header-height: 4rem;
+  --shadow-overlay: 0 12px 36px rgb(20 25 35 / 12%);
+  --motion-fast: 150ms;
+}

@@ -1,0 +1,32 @@
+P10 — STOCKAGE PRIVÉ, MÉDIAS ET EMAILS TRANSACTIONNELS
+
+OBJECTIF
+Remplace les adaptations temporaires par des services de fichiers et d’emails fiables, utilisables par les leçons, projets et comptes. Prépare une intégration de streaming adaptée sans construire une plateforme de transcodage. Le résultat doit fonctionner localement et exposer clairement les paramètres nécessaires aux fournisseurs réels.
+
+CONTEXTE À LIRE
+Lis les AGENTS.md applicables, docs/STATUS.md, docs/ARCHITECTURE.md, docs/API_CONTRACTS.md et les sections médias/emails de docs/DEPLOYMENT.md. Consulte E10/E11/E13/E15/E16 dans docs/SCREENS.md et T09/T17/T19 dans docs/ACCEPTANCE.md.
+
+DÉPENDANCES
+Utilise les identités et permissions de P04, le CMS de P05, les activités de P08 et les projets de P09. Réemploie l’interface d’email et Mailpit déjà présents, ainsi que l’outbox éventuellement créée. N’installe pas une deuxième file ni un deuxième système de comptes. L’achat réel sera intégré dans P11–P13 ; les contrôles de droits doivent déjà passer par le service métier prévu.
+
+TRAVAIL À RÉALISER
+1. Crée un adaptateur ObjectStorage avec implémentation S3 compatible et configuration locale testable. Sépare fichiers publics éditoriaux et fichiers privés. Utilise des clés d’objets opaques, un identifiant de fichier métier, propriétaire, état, MIME, taille et version.
+2. Définis le cycle upload autorisé → transfert → confirmation et contrôle → prêt/refusé. Le serveur fixe propriétaire, clé, taille et formats admis ; la confirmation vérifie l’objet réellement reçu. Les contrôles du navigateur ne font pas autorité.
+3. Les formats et limites sont configurables et affichés avant dépôt. Commence par les formats nécessaires à l’activité. Empêche les contenus actifs d’être servis comme HTML exécuté ; vérifie type et signature quand applicable, impose un nom de téléchargement sûr et un Content-Disposition adapté. Documente le besoin de contrôle antivirus pour les formats retenus. Tant que le flux privé n’est pas validé, le dépôt reste désactivé ; le texte structuré reste utilisable.
+4. Avant tout accès privé, contrôle session, propriétaire ou permission, publication, droit applicable et état du fichier. Retourne un lien court ou un flux contrôlé selon le contrat. Ne révèle pas un objet d’autrui en changeant son identifiant. Une ressource de cours et un fichier personnel peuvent avoir des règles de conservation distinctes.
+5. Rends les liens utilisables depuis le navigateur local : un nom de conteneur interne ne doit pas être l’URL publique signée. Conserve la signature et configure explicitement les endpoints interne/externe. Pour les fournisseurs compatibles S3, vérifie les capacités réellement disponibles.
+6. Ajoute une abstraction VideoPlaybackProvider : média, langue, durée et autorisation de lecture. Intègre un fournisseur configuré si ses accès sont disponibles ; sinon fournis un adaptateur local de test et la procédure d’intégration, sans afficher un lecteur faussement opérationnel. Texte, transcription et sous-titres restent disponibles. Un token premium est délivré après contrôle du droit, et la progression de lecture reste propre au média.
+7. Renforce les emails transactionnels FR/EN : récupération d’accès, confirmation appropriée, activation retardée, notification de support. Les URLs sont générées depuis l’origine configurée, les jetons sont sensibles et les emails ne contiennent pas de données privées inutiles. Prépare la validation du domaine expéditeur et les enregistrements SPF/DKIM/DMARC demandés par le fournisseur ; applique-les seulement sur le domaine autorisé et constate leur validation réelle.
+8. Utilise une outbox durable : clé métier, type, destinataire, état, tentatives, prochain essai et dernière erreur nettoyée. Prévois reprises avec délai borné, état définitif et visibilité opérationnelle. Exploite l’idempotence du fournisseur lorsqu’elle existe ; ne promets pas une livraison SMTP exactement une fois après toutes les coupures. Un email échoué ne retire aucun accès.
+
+VÉRIFICATIONS ATTENDUES
+- Upload/download valide avec le stockage local réel ; taille/type refusés ; confirmation d’objet absent ou trop grand refusée.
+- Accès d’un autre utilisateur, accès sans droit et nouvelle demande après révocation refusés côté API.
+- Expiration d’un lien observée ; sa validité résiduelle avant expiration est documentée.
+- Vidéo absente ou fournisseur indisponible : alternative textuelle et message correct.
+- Email reçu dans Mailpit, erreur de transport, reprise et déduplication locale ; absence de secret dans les logs.
+- Réutilisation de l’outbox par plusieurs événements sans blocage d’une requête utilisateur longue.
+
+SORTIE ET SUIVI
+Documente paramètres, quotas, durées de liens, rétention et capacités des fournisseurs dans les fichiers pertinents. Distingue « vérifié localement », « vérifié avec fournisseur de test » et « à configurer ». Mets à jour docs/evidence/P10.md et docs/STATUS.md, sans inventer les accès ou les médias manquants.
+

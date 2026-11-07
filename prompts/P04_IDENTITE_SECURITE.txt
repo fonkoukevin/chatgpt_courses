@@ -1,0 +1,28 @@
+P04 — IDENTITÉ, SESSIONS ET AUTORISATIONS
+
+OBJECTIF
+Implémente la connexion, l’inscription, la récupération d’accès et les fondations d’autorisation, avec les écrans E06 reliés au vrai backend. Le résultat doit utiliser une seule identité Spring et une session persistée, sans authentification simulée ou compte administrateur caché.
+
+LECTURES ET PRÉCONDITIONS
+Lis AGENTS.md, docs/STATUS.md, docs/ARCHITECTURE.md, la partie identité de docs/API_CONTRACTS.md, E06 dans docs/SCREENS.md et les règles privées de docs/PRODUCT.md. P01 fournit l’environnement, P02 les composants et P03 le contrat/schéma. Consulte la documentation officielle Spring Security/Spring Session correspondant aux versions verrouillées ; conserve ses liens dans les preuves.
+
+TRAVAIL À RÉALISER
+1. Implémente inscription et validation email/mot de passe, unicité cohérente de l’email et PasswordEncoder Spring adapté. Garde le préfixe/version de l’algorithme et des paramètres documentés. Ne transforme pas arbitrairement les adresses en retirant points ou suffixes. Aucun rôle, permission ou propriétaire fourni par le formulaire ne doit créer un privilège.
+2. Installe Spring Session JDBC sur PostgreSQL. Versionne son schéma avec Flyway et désactive l’initialisation concurrente automatique. Configure expiration, nettoyage et cookie HttpOnly ; Secure en HTTPS, SameSite=Lax, Path=/, sans Domain partagé inutile. Le profil HTTP local reste distinct. Vérifie la reconnaissance des en-têtes du proxy de confiance sans accepter une URL publique construite à partir d’un Host arbitraire.
+3. Configure le login form-urlencoded email/password sur POST /api/v1/auth/login via les filtres Spring, avec réponses JSON et rotation de session. Après inscription, retourne à la connexion normale. Utilise POST /auth/logout ; invalide réellement session et cookie. Ne te contente pas de vider un état React.
+4. Expose GET /auth/csrf en no-store. Utilise le jeton Spring retourné, conservé en mémoire frontend, dans l’en-tête annoncé. Recharge-le après connexion, déconnexion et expiration. Garde le CSRF sur les mutations de session, login compris. Préserve ses protections framework ; aucune désactivation globale pour rendre un formulaire fonctionnel.
+5. Implémente GET /auth/me et préférences du propriétaire. Contrôle les permissions côté Spring et prépare les vérifications de propriété pour chaque service privé. Une session valide d’un compte désactivé ou dont les permissions ont été retirées ne conserve pas silencieusement un accès privilégié.
+6. Réalise mot de passe oublié et réinitialisation : réponse neutre, limitation d’abus, jeton opaque aléatoire, empreinte en base, échéance, usage unique atomique et invalidation des sessions selon la politique documentée. Envoie l’email dans Mailpit via le port de notification ; P10 renforcera la livraison durable. Ne journalise jamais mot de passe, URL de récupération complète ou jeton. Affiche lien invalide/expiré et reprise utile.
+7. Branche E06 : labels, focus, messages, état en cours, erreurs serveur et destination initiale. Valide returnTo comme route interne autorisée. Conserve un essai anonyme non sensible dans sessionStorage avec durée explicite, puis importe via les services propriétaires appropriés lorsqu’ils existent. Le brouillon ne choisit jamais le userId. Après logout, purge les caches personnels du navigateur sans supprimer les données du compte.
+8. Les lectures SSR Next.js utilisent l’API interne de confiance, le cookie nécessaire seulement et aucun cache partagé. Aucune clé/session dans NEXT_PUBLIC, localStorage, bundle ou logs. Conserve l’API same-origin ; ne remplace pas un défaut de proxy par CORS '*'.
+
+VÉRIFICATIONS
+Teste inscription valide/invalide, doublon d’email, mauvais mot de passe, expiration, logout réel, réinitialisation expirée/réutilisée et deux consommations concurrentes du même jeton. Vérifie CSRF manquant/invalide avant et après login/logout, rotation de session et persistance après redémarrage de l’API. Vérifie la récupération de l’état sur une nouvelle session navigateur après connexion. Contrôle 401/403 et permissions sur les routes réellement disponibles. T04 reste partiel jusqu’aux tests des vrais projets, commandes et médias dans les lots correspondants ; ne le déclare pas terminé avec un simple mock. Vérifie aussi absence de données privées dans caches et logs.
+
+FIN DE LOT
+Corrige les défauts, mets à jour OpenAPI/client typé, puis docs/STATUS.md. Enregistre commandes, résultats et preuves dans docs/evidence/P04.md. Signale précisément toute configuration de messagerie ou politique de compte restant à fournir. Documente la procédure d’administrateur initial hors du dépôt, sans l’exécuter avec des identifiants réels non fournis.
+
+RÉFÉRENCES
+https://docs.spring.io/spring-security/reference/servlet/exploits/csrf.html
+https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/form.html
+https://docs.spring.io/spring-session/reference/guides/boot-jdbc.html

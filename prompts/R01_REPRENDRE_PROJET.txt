@@ -1,0 +1,17 @@
+R01 — REPRENDRE LE PROJET SANS PERDRE SON ÉTAT
+
+Reprends ChatGPT Courses dans le dépôt actuellement ouvert.
+
+1. Lis AGENTS.md et docs/STATUS.md. Vérifie la branche, le dernier commit disponible, les modifications non validées et les éventuelles instructions du sous-dossier concerné. Préserve tout travail existant.
+2. Identifie la phase active et son dernier résultat prouvé. Lis son prompt dans prompts/, les références nécessaires et son fichier docs/evidence/Pxx.md s'il existe. Si docs/HANDOFF.md est présent, utilise-le comme indication de reprise, puis confronte-le au code.
+3. Ne traite pas un ancien compte rendu comme une preuve suffisante : vérifie que les fichiers, scripts et services annoncés existent. Distingue terminé, partiellement réalisé, non vérifié et bloqué.
+4. Rédige un bref état de reprise : résultat visé, travail restant, dépendances et prochaine action. Continue immédiatement les tâches autorisées et nécessaires ; ne t'arrête pas à ce résumé.
+5. Reprends le sous-lot incomplet sans recréer l'application ni changer de stack. Corrige les défauts concrets qui empêchent ce sous-lot. Un environnement externe indisponible ne justifie pas des données fictives présentées comme réelles.
+6. Avant de relancer un paiement, une migration, un import ou une opération d'administration, inspecte son état et son mécanisme d'idempotence. Ne répète pas aveuglément une action pouvant déjà avoir abouti.
+7. Exécute les vérifications pertinentes du changement. Les tests déjà démontrés peuvent rester acquis si le code concerné n'a pas changé ; relance ceux qui couvrent un risque réel introduit.
+8. Mets à jour STATUS.md et la preuve du lot avec les commandes exécutées, le résultat, les blocages et l'action suivante.
+
+Si la phase active ne peut pas être déterminée, compare le dépôt à docs/PROMPT_INDEX.md et aux preuves disponibles, puis propose et réalise le plus petit lot utile non ambigu. Ne pose une question que si une décision absente change réellement le travail ou si une permission/un accès indispensable manque.
+
+Réponds en français avec le résultat concret, les fichiers importants, les validations réelles et le prochain prompt. Ne déclare pas l'ensemble du projet terminé parce qu'une seule phase fonctionne.
+

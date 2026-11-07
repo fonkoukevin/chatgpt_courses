@@ -1,0 +1,25 @@
+P03 — MODÈLE DE DONNÉES ET CONTRAT API
+
+OBJECTIF
+Réalise le socle de données et de contrats qui permettra de développer les fonctionnalités sans confondre identité, contenu, achat, accès et progression. Implémente ce lot dans le dépôt existant, exécute les vérifications pertinentes et corrige les défauts constatés. Ce lot ne constitue pas l’implémentation anticipée de tous les modules métier.
+
+LECTURES ET PRÉCONDITIONS
+Lis AGENTS.md, docs/STATUS.md, docs/ARCHITECTURE.md et docs/API_CONTRACTS.md. Consulte docs/PRODUCT.md et docs/ACCEPTANCE.md pour les invariants concernés. Vérifie docs/VERSIONS.md et les commandes réellement disponibles. P00 et P01 doivent fournir les versions verrouillées, Spring/Next fonctionnels et PostgreSQL local. Si un prérequis manque, répare le minimum dans le périmètre autorisé et consigne la dépendance ; ne réinitialise ni dépôt ni base existante.
+
+TRAVAIL À RÉALISER
+1. Établis le schéma relationnel initial : utilisateurs/préférences/permissions, identités de parcours/modules/activités, versions pédagogiques, révisions éditoriales et traductions. Précise les relations et clés qui relieront productions, méthodes, commandes, paiements et droits. Les tables des lots ultérieurs peuvent être introduites par migrations additionnelles ; documente leurs invariants dès maintenant sans créer des CRUD factices.
+2. Utilise UUID pour les identifiants, UTC pour les instants, révisions optimistes pour les ressources modifiables, montants entiers en unités mineures et devise explicite. Un titre ou un slug traduit ne devient pas une identité pédagogique. Définis les uniques nécessaires, notamment slug/langue au bon niveau et traduction/version/langue, ainsi que les clés étrangères et comportements de suppression.
+3. Crée les migrations Flyway incrémentales PostgreSQL. Configure Hibernate pour valider le schéma dans les environnements intégrés. Les tables de session JDBC seront gérées par migration adaptée à la version Spring Session installée, au plus tard en P04. Ne duplique pas leur création avec une initialisation automatique concurrente.
+4. Sépare données de démonstration et migrations structurelles. Fournis un chargement explicite dev/test réexécutable, sans comptes administrateurs connus ou produits payants activés en production. Préserve les données déjà présentes.
+5. Crée le contrat machine lisible dans docs/api/openapi.yaml pour les routes réellement introduites et les schémas partagés utiles. Les routes futures restent annoncées comme planifiées dans API_CONTRACTS.md, sans endpoint répondant un faux succès. Chaque lot complétera le contrat au moment de son implémentation.
+6. Mets en place DTO explicites, Bean Validation, mapping et erreurs application/problem+json avec code stable, fieldErrors et traceId. N’expose ni entité JPA brute, ni relation paresseuse, ni champ secret. Fournis un client/types TypeScript générés de manière reproductible depuis le contrat, avec commande documentée et vérification de divergence.
+7. Pose la convention ETag/If-Match et son mapping d’erreur : 428 sans précondition obligatoire, 412 si révision dépassée. Prépare une abstraction de politique d’accès sans autoriser les contenus privés par défaut. Les montants, rôles et propriétaires envoyés par le navigateur ne sont jamais la source d’autorité.
+
+INVARIANTS À PRÉSERVER
+Une correction éditoriale et une nouvelle version pédagogique sont distinctes. Les tentatives et attestations garderont leurs références historiques. Une copie de méthode restera indépendante de sa source. Les origines de droits ne seront pas fusionnées par utilisateur/parcours. L’achat conserve les ressources et conditions promises ; un remboursement n’efface pas les productions. Inscris ces contraintes dans les modèles et la documentation des migrations futures.
+
+VÉRIFICATIONS
+Exécute Flyway sur une base PostgreSQL vide de test, puis vérifie le chemin de mise à niveau depuis la migration précédente disponible. Utilise PostgreSQL/Testcontainers pour les contraintes qui en dépendent ; H2 ne valide pas ces propriétés. Vérifie uniques, clés étrangères, dates, révisions et absence d’exposition de champs secrets. Valide OpenAPI, régénère les types et compile les deux applications. Une indisponibilité Docker est un test bloqué, pas un test réussi. N’écris pas de tests triviaux qui recopient les getters.
+
+FIN DE LOT
+Rapporte fichiers modifiés, migrations, commandes exécutées, résultats et limites. Mets à jour les contrats et docs/STATUS.md ; consigne les preuves détaillées et résultats observés dans docs/evidence/P03.md. Donne le prochain lot réalisable et les éventuels points commerciaux encore à renseigner, sans les décider à la place du porteur.

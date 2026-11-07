@@ -1,11 +1,12 @@
 import { closeSync, existsSync, mkdirSync, openSync, writeFileSync, unlinkSync } from 'node:fs';
 import { join } from 'node:path';
-import { composeArgs, localEnvironment, root, run, runtimeDir, start, terminateOwned, waitFor, windows } from './lib/runtime.mjs';
+import { composeArgs, localEnvironment, preflightServers, root, run, runtimeDir, start, terminateOwned, waitFor, windows } from './lib/runtime.mjs';
 
 const env = localEnvironment();
 const pidFile = join(runtimeDir, 'processes.json');
 const stopRequest = join(runtimeDir, 'stop.requested');
 if (existsSync(pidFile)) throw new Error('Session locale déjà enregistrée. Utiliser npm run stop avant de relancer.');
+await preflightServers(env);
 run('docker', [...composeArgs(env), 'up', '-d', '--wait'], { env });
 mkdirSync(runtimeDir, { recursive: true });
 const children = [];

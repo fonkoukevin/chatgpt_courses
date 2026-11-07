@@ -1,22 +1,13 @@
 import { closeSync, existsSync, mkdirSync, openSync } from 'node:fs';
-import { createServer } from 'node:net';
 import { join } from 'node:path';
-import { environment, root, runtimeDir, run, start, terminateOwned, waitFor, windows } from './lib/runtime.mjs';
+import { environment, preflightServers, root, runtimeDir, run, start, terminateOwned, waitFor, windows } from './lib/runtime.mjs';
 
 const env = environment();
 if (!['local', 'test'].includes(env.APP_ENV)) throw new Error('Vérification HTTP réservée à local/test.');
 for (const file of ['apps/api/target/chatgpt-courses-api.jar', 'apps/web/.next/BUILD_ID']) {
   if (!existsSync(join(root, file))) throw new Error(`Build requis : ${file}`);
 }
-for (const origin of [env.APP_PUBLIC_ORIGIN, env.API_INTERNAL_URL]) {
-  const url = new URL(origin);
-  if (!['localhost', '127.0.0.1'].includes(url.hostname)) throw new Error('Sondes réservées à la boucle locale.');
-  await new Promise((resolvePort, rejectPort) => {
-    const socket = createServer();
-    socket.once('error', () => rejectPort(new Error(`Port ${url.port} occupé : arrêter les serveurs avant verify:http.`)));
-    socket.listen(Number(url.port), '127.0.0.1', () => socket.close(resolvePort));
-  });
-}
+await preflightServers(env);
 
 mkdirSync(runtimeDir, { recursive: true });
 const children = [];
@@ -41,6 +32,7 @@ async function terminate(record) {
   await record.exit;
 }
 
+let verificationError;
 try {
   let api = launch('api');
   const web = launch('web');
@@ -55,6 +47,14 @@ try {
   await ready(api, `${env.API_INTERNAL_URL}/api/v1/system/health`);
   run(process.execPath, [join(root, 'scripts/smoke.mjs')], { env });
   console.log('OK chaîne HTTP réelle : état sain, arrêt API, erreur explicite et reprise.');
+} catch (error) {
+  verificationError = error;
+  throw error;
 } finally {
-  for (const record of children.toReversed()) await terminate(record);
+  const results = await Promise.allSettled(children.toReversed().map((record) => terminate(record)));
+  const errors = results.filter((result) => result.status === 'rejected').map((result) => result.reason);
+  if (errors.length) {
+    if (verificationError) errors.unshift(verificationError);
+    throw new AggregateError(errors, 'Vérification interrompue : tous les arrêts ont été tentés, certains restent non confirmés.');
+  }
 }

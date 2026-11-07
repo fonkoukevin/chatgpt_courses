@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, resolve, join, delimiter } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn, spawnSync } from 'node:child_process';
+import { createServer } from 'node:net';
 
 export const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 export const windows = process.platform === 'win32';
@@ -64,6 +65,39 @@ export function run(executable, args = [], options = {}) {
 export function composeArgs(env) {
   return ['compose', '--project-name', 'chatgpt-courses-local', '--env-file', join(root, '.env.local'),
     '-f', join(root, 'infra/compose/compose.local.yml')];
+}
+
+export function loopbackPort(value, name) {
+  let url;
+  try { url = new URL(value); } catch { throw new Error(`${name} doit être une origine HTTP locale valide.`); }
+  if (url.protocol !== 'http:' || !['localhost', '127.0.0.1'].includes(url.hostname)
+    || url.username || url.password || url.pathname !== '/' || url.search || url.hash) {
+    throw new Error(`${name} doit être une origine HTTP en boucle locale, sans chemin ni identifiants.`);
+  }
+  const port = Number(url.port || '80');
+  if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error(`Port invalide pour ${name}.`);
+  return port;
+}
+
+export async function preflightServers(env) {
+  const webPort = loopbackPort(env.APP_PUBLIC_ORIGIN, 'APP_PUBLIC_ORIGIN');
+  const apiPort = loopbackPort(env.API_INTERNAL_URL, 'API_INTERNAL_URL');
+  if (!/^\d+$/.test(env.API_PORT ?? '') || Number(env.API_PORT) !== apiPort) {
+    throw new Error('API_PORT doit correspondre au port de API_INTERNAL_URL.');
+  }
+  if (webPort === apiPort) throw new Error('Les serveurs web et API doivent utiliser des ports distincts.');
+  for (const port of [webPort, apiPort]) {
+    await new Promise((resolvePort, rejectPort) => {
+      const socket = createServer();
+      socket.once('error', (cause) => {
+        const detail = cause.code === 'EADDRINUSE' ? 'occupé' : 'indisponible';
+        rejectPort(new Error(`Port ${port} ${detail} : aucun serveur existant n'a été arrêté.`, { cause }));
+      });
+      socket.listen({ port, host: '127.0.0.1', exclusive: true }, () => {
+        socket.close((error) => error ? rejectPort(error) : resolvePort());
+      });
+    });
+  }
 }
 
 function processExists(pid) {

@@ -17,7 +17,7 @@
   h1, h2, h3, p { margin: 0; }
   h1, h2, h3 { font-weight: 600; line-height: 1.2; }
   :focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
-  button:disabled { cursor: wait; opacity: 0.65; }
+  button:disabled, button[aria-disabled="true"] { cursor: wait; opacity: 0.65; }
 }
 
 .page-shell { max-width: 68rem; margin-inline: auto; padding-inline: var(--space-6); }
@@ -42,9 +42,9 @@
 .connection-status[data-state="http"], .connection-status[data-state="unavailable"], .connection-status[data-state="invalid-response"] { color: var(--danger); background: var(--danger-soft); }
 .button { min-height: 46px; padding: 0.625rem var(--space-4); border: 1px solid transparent; border-radius: var(--radius-control); cursor: pointer; font-size: 0.9375rem; font-weight: 600; line-height: 1.45; text-align: center; transition: background var(--motion-fast); }
 .button-primary { color: var(--background); background: var(--brand); }
-.button-primary:hover:not(:disabled) { background: var(--brand-hover); }
+.button-primary:hover:not(:disabled):not([aria-disabled="true"]) { background: var(--brand-hover); }
 .button-secondary { color: var(--foreground); background: var(--surface); border-color: var(--control-border); }
-.button-secondary:hover:not(:disabled) { background: var(--surface-subtle); }
+.button-secondary:hover:not(:disabled):not([aria-disabled="true"]) { background: var(--surface-subtle); }
 .button-link { color: var(--link); background: transparent; text-decoration: underline; text-underline-offset: 0.2em; }
 .foundation-notes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-8); padding-block: var(--space-4) var(--space-8); }
 .foundation-notes h2 { font-size: 1.125rem; margin-bottom: var(--space-3); }

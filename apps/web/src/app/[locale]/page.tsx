@@ -27,7 +27,7 @@ export default async function FoundationPage({ params }: { params: Promise<{ loc
           ))}
         </nav>
       </header>
-      <main id="main-content">
+      <main id="main-content" tabIndex={-1}>
         <section className="introduction" aria-labelledby="page-title">
           <span className="environment-label">{dictionary.environment}</span>
           <p className="eyebrow">{dictionary.eyebrow}</p>

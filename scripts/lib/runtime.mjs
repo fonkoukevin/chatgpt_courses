@@ -17,6 +17,7 @@ export function environment() {
   // Spring interprets a host DEBUG variable as its verbose diagnostic switch.
   delete env.DEBUG;
   env.NEXT_TELEMETRY_DISABLED ??= '1';
+  env.PLAYWRIGHT_BROWSERS_PATH ??= join(root, '.tools/playwright');
   const jdk = join(root, '.tools/jdk/jdk-21.0.13+9');
   if (windows && existsSync(join(jdk, 'bin/java.exe'))) env.JAVA_HOME = jdk;
   env.PATH = [dirname(process.execPath), env.JAVA_HOME && join(env.JAVA_HOME, 'bin'), env.PATH]

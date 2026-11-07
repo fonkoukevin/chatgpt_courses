@@ -1,44 +1,50 @@
-# Configuration préparée par P00
+# Configuration des fondations P01
 
-Audit du 7 novembre 2026. Le fichier racine `.env.example` est un inventaire sans secret, pas une configuration exécutée. Ni Next.js, ni Spring, ni Compose ne le chargent actuellement. P01 doit raccorder, valider et tester ces valeurs avant d’en annoncer le fonctionnement.
+Mise à jour : 8 novembre 2026. Les applications et scripts consomment désormais la configuration ; les intégrations métier des lots suivants restent absentes.
 
-## Fichiers attendus
+## Fichiers et chargement
 
-| Fichier | Lot et responsabilité |
+| Fichier | Usage réel |
 | --- | --- |
-| `.env.example` | P00 : noms communs et valeurs locales non secrètes ; seul exemple créé pour l’instant |
-| `.env.local` | P01 : valeurs réelles locales exclues de Git, sans copie dans les preuves |
-| `apps/web/.env.example` | P01 : seulement les variables lues par Next, notamment l’adresse API interne serveur ; navigateur sur `/api/v1` en relatif |
-| `apps/api/src/main/resources/application.yml` et profils | P01 : mapping explicite vers Spring, validation, séparation local/test/production ; aucun secret versionné |
-| `infra/compose/.env.example` et Compose local | P01 : services locaux, ports en boucle locale, volume PostgreSQL nommé et images vérifiées |
-| `infra/compose/.env.staging.example`, `.env.production.example` | P20 : paramètres externes, secrets séparés et contrôles avant déploiement |
+| `.env.example` | Modèle commun sans secret |
+| `.env.local` | Créé par `setup:local`, ignoré ; source locale chargée par `scripts/lib/runtime.mjs` avec `process.loadEnvFile` |
+| `apps/web/.env.example` | Sous-ensemble utile à Next ; aucune copie automatique de secrets vers `apps/web` |
+| `apps/api/.env.example` | Variables requises par Spring ; profils YAML sans secret dans les ressources |
+| `infra/compose/.env.example` | Modèle Compose ; les scripts passent explicitement `.env.local` avec `--env-file` |
+| `infra/secrets/s3.local.json` | Identité S3 locale générée, fichier ignoré, montage en lecture seule ; aucun accès anonyme |
+| `.tools`, `.runtime` | Outils portables, journaux et suivi des processus ; ignorés par Git |
 
-P01 précisera les chemins et le chargement exacts dans le README : un fichier racine n’est pas automatiquement lu par toutes les applications. Éviter les secrets dupliqués ; une même valeur PostgreSQL doit être mappée vers Compose et Spring par la procédure locale. Les fichiers d’exemple restent synchronisés avec le code qui les consomme.
+Le fichier `.env.local` est chargé uniquement si `APP_ENV` est absent ou vaut `local`. Un processus explicitement `test`, `staging` ou `production` doit fournir sa propre configuration et ne récupère jamais les paramètres locaux manquants. En local, les variables déjà présentes dans le processus prennent priorité. Les valeurs réelles ne sont jamais affichées pour prouver leur présence. En CI, le workflow fournit seulement ses paramètres isolés.
 
-## Groupes et validation à implémenter
+## Paramètres consommés
 
-| Groupe | Convention P00 | Règle à vérifier dans le code |
-| --- | --- | --- |
-| Environnement | `APP_ENV`, `APP_PUBLIC_ORIGIN` | Origine HTTP locale autorisée ; HTTPS réel en recette/production ; pas d’URL arbitraire utilisée comme proxy |
-| Langues | `APP_DEFAULT_LOCALE=fr`, `APP_PUBLISHED_LOCALES` vide | FR sert au développement ; `fr` et `en` prévus structurellement. Publication selon contenus prêts et décision commerciale ; pas de lancement FR imposé |
-| API | `API_INTERNAL_URL`, `API_PORT` | Variable serveur uniquement ; requêtes navigateur relatives ; préfixe `/api/v1` conservé |
-| PostgreSQL | `POSTGRES_HOST/PORT/DB/USER/PASSWORD` | Mot de passe local à générer en P01, jamais dans un log ; construction de la connexion JDBC côté Spring ; utilisateur et base distincts par environnement |
-| Schéma | Réglages dans les profils Spring, pas dans le navigateur | Flyway seul chemin de migration ; Hibernate `validate` ; schéma Spring Session versionné via Flyway, initialisation JDBC automatique désactivée |
-| Session | `SESSION_COOKIE_SECURE=false` pour HTTP local | `HttpOnly`, `SameSite=Lax`, `Path=/` ; `Secure=true` en HTTPS externe ; session JDBC ; CSRF actif selon le contrat |
-| Emails | `MAIL_MODE=local`, hôte et port Mailpit | Aucun relais externe local ; API native Windows : publier SMTP sur `127.0.0.1:1025` et interface sur `127.0.0.1:8025`. Un API conteneurisé pourra utiliser le réseau interne |
-| Stockage | `STORAGE_ENABLED=false`, `S3_*` vides | Profil S3 compatible optionnel, image stable à vérifier en P01 ; stockage privé et autorisation côté serveur en P10. Aucun fournisseur de production choisi |
-| Stripe | `STRIPE_ENABLED=false`, `STRIPE_MODE=test`, secrets vides | Pas de Checkout tant que mode, clés et offre ne sont pas validés ; compte et webhook de chaque environnement séparés ; clé publique inutile pour le Checkout hébergé initial |
-| Vidéo | `VIDEO_ENABLED=false`, fournisseur et secret vides | Texte utilisable ; aucun média ni abonnement supposé. Intégration P10 avec ressources réellement fournies |
-| Vente | `COMMERCE_ENABLED=false` | Une activation globale ne suffit pas : offre complète, prix/devise/fiscalité, accès, langues, support et conditions acceptables sont aussi requis |
+| Groupe | Variables / comportement |
+| --- | --- |
+| Environnement | `APP_ENV=local\|test\|production`, `APP_PUBLIC_ORIGIN` sans chemin, identifiants, requête ou fragment. Next prévoit aussi `staging`, non recetté dans P01 ; la recette complète sera fixée en P20 |
+| Langue | `APP_DEFAULT_LOCALE=fr\|en` pilote la redirection de `/` ; les deux routes de fondation existent. `APP_PUBLISHED_LOCALES` reste réservé à la publication future, pas à une offre déjà disponible |
+| API | `API_INTERNAL_URL` exclusivement serveur ; navigateur sur `/api/v1` en relatif. En local/test, origines en boucle locale ; frontend et API ne peuvent pas être la même origine interne (boucle de proxy refusée) |
+| Timeout | `API_TIMEOUT_MS`, entier de 100 à 30000, défaut 5000. Erreurs proxy 502/504, sans URL interne ni exception dans le corps |
+| Base | `POSTGRES_HOST/PORT/DB/USER/PASSWORD`, connexion JDBC construite par Spring ; secret généré localement |
+| Spring | `SPRING_PROFILES_ACTIVE=local\|test\|production` cohérent avec `APP_ENV`. Le script de démarrage le dérive de `APP_ENV` si absent ; tests avec profil `test` et PostgreSQL isolé |
+| Sessions | `SESSION_COOKIE_SECURE=false` en HTTP local ; `true` requis en production. `HttpOnly`, `SameSite=Lax`, `Path=/`. Schéma JDBC migré par Flyway ; initialisation automatique désactivée |
+| Schéma | Flyway actif et nettoyage désactivé ; Hibernate `validate`. P01 crée uniquement l’infrastructure Spring Session ; aucune table métier ni seed |
+| Services | `POSTGRES_PORT`, `MAIL_HTTP_PORT`, `MAIL_SMTP_PORT`, `S3_PORT`, avec défauts 5432/8025/1025/8333 ; publication uniquement sur `127.0.0.1` |
+| S3 local | `S3_ACCESS_KEY`, `S3_SECRET_KEY` servent au fichier secret du profil ; endpoint et buckets métier seront raccordés en P10 |
 
-Les durées de session, quotas, durées de liens, rétention et règles commerciales ne sont pas déduits de ces exemples. Les paramètres métier d’offre appartiendront à la configuration métier versionnée, puis aux instantanés de commande ; ils ne doivent pas devenir des valeurs inventées dans un `.env`.
+Les paramètres `MAIL_*` de transport applicatif, `S3_ENDPOINT/REGION/*_BUCKET`, Stripe, vidéo et commerce restent des emplacements pour les lots métier. P01 ne prétend pas les valider ou les utiliser : aucun adaptateur d’envoi, Checkout, lecteur vidéo ou offre achetable n’existe encore. Les flags désactivés du modèle ne constituent pas à eux seuls un contrôle métier implémenté.
 
-## Ce qui peut être vérifié localement en P01
+## Profils et accès
 
-Next minimal FR/EN, Spring et sa sonde, proxy de même origine, PostgreSQL et persistance après redémarrage, migrations, builds et test d’intégration PostgreSQL. Mailpit capture les emails localement. S3 local est isolé dans un profil ; aucun service distant payant n’est nécessaire. P01 vérifiera les images et leurs digests, notamment Mailpit, S3 et la convention de volume PostgreSQL 18.
+- **Local** : outils Windows natifs et services Docker Linux sur réseau bridge dédié ; aucune base distante. Les secrets n’appartiennent qu’à ce profil. SMTP Mailpit est publié sur la boucle locale pour la future API email native Windows.
+- **Test** : Testcontainers crée un PostgreSQL éphémère distinct ; tests HTTP réels et migrations. La CI possède en plus une base de smoke jetable, distincte des tests et de tout environnement utilisateur.
+- **Production** : profil Spring séparé, origine HTTPS et cookies sécurisés obligatoires. Aucun compte connu, aucune donnée de démonstration ou identité Next parallèle. Les pages de fondation Next retournent 404 hors local/test. Ni ce profil ni le build ne valent publication.
 
-Les ports envisagés `3000`, `8080`, `5432`, `8025`, `1025`, `8333` n’avaient aucun écouteur lors de l’audit ; revérifier avant le démarrage. P00 n’a créé aucun conteneur et n’a testé aucun de ces services applicatifs.
+Spring conserve CSRF et refuse les routes privées. Seuls les GET du namespace technique `system` sont publics dans P01 ; les mutations d’identité et leur proxy seront intégrés en P04. Les données et erreurs de sonde sont `no-store` ; les cookies de session ne sont relayés que vers l’API configurée, jamais vers une URL client ou une redirection externe.
 
-## Ce qui demandera des éléments réels plus tard
+Les scripts ôtent le commutateur hôte `DEBUG` de l’environnement enfant de Spring et passent `--debug=false` ; ils n’en affichent pas la valeur. La télémétrie Next et celle de l’émulateur SeaweedFS local sont désactivées.
 
-Domaine et hébergement autorisés, comptes Stripe et fournisseurs retenus, expéditeur vérifié, stockage et vidéo, contenus et traductions relus, identité de l’exploitant, prix, conditions, langues vendues et capacité de support. Ces absences ne bloquent pas P01 ; elles bloqueront l’intégration externe ou la vente correspondante. Aucun accès fournisseur n’a été présumé, aucun achat ni déploiement n’a été effectué.
+## Éléments externes encore nécessaires
+
+Domaine, hébergement autorisé, fournisseurs et secrets de recette/production, expéditeur vérifié, contenus et traductions relus, médias annoncés, identité légale, prix et conditions de chaque offre, langues vendues et support. Ces éléments ne bloquent pas les fondations locales ; leur absence interdira de déclarer fonctionnels l’intégration externe ou le lancement correspondant.
+
+Rétention, quotas, durée d’accès, taxes, garanties, actualisations et support ne sont pas inventés dans les exemples. Les futurs instantanés de commande conserveront les paramètres effectivement achetés.

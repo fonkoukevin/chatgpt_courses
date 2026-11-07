@@ -39,11 +39,13 @@ Les fichiers d’environnement réels sont exclus du dépôt. Les exemples liste
 
 Le frontend peut fonctionner directement dans l’environnement de développement choisi en P00, notamment WSL2 si c’est le mode retenu sur Windows. Les dépendances locales tournent dans Compose. Préserver la cohérence entre chemins, exécutables, Docker et réseau ; ne pas mélanger involontairement installations Windows et WSL.
 
-P00 retient ici Node et Java natifs Windows, PowerShell 5.1 et Docker Desktop avec moteur Linux. Utiliser `npm.cmd` pour éviter le lanceur PowerShell bloqué par la politique actuelle, puis `mvnw.cmd` quand P01 l’aura créé. Aucun changement de politique système ni déplacement du dossier OneDrive n’a été effectué. Voir `CONFIGURATION.md` pour les fichiers d’exemple et les ports prévus ; ils ne sont pas encore raccordés à une application.
+P01 utilise ici Node et Java portables natifs Windows, PowerShell 5.1 et Docker Desktop avec moteur Linux. `scripts/courses.cmd` sélectionne les outils et le lanceur npm fonctionnel ; le Maven Wrapper est présent dans `apps/api`. Aucun changement de politique système ni déplacement du dossier OneDrive n’a été effectué. Voir le README pour les commandes exactes, `CONFIGURATION.md` pour le chargement des valeurs et `evidence/P01.md` pour les preuves et limites.
 
 Le navigateur utilise une seule origine. En développement, un proxy Next.js documenté relaie /api/v1 vers Spring. En production, Caddy relaie ce préfixe vers l’API et les autres routes vers Next.js. Le chemin de l’API doit être conservé : une réécriture de préfixe accidentelle casse les contrats et les webhooks.
 
 PostgreSQL possède un volume nommé. Les interfaces d’administration locales et Mailpit sont liées à la boucle locale lorsque leur accès depuis l’hôte est nécessaire. Le port SMTP de Mailpit peut rester interne aux conteneurs. Aucun relais externe n’est activé par défaut. [S1, S2]
+
+L’API étant native Windows dans ce mode, SMTP est publié sur `127.0.0.1:1025`. Le réseau Compose local est un bridge dédié : l’essai `internal:true` empêchait la publication effective des ports sur le moteur observé. La correction conserve les volumes et les bindings exclusivement en boucle locale ; elle ne décide pas du réseau de production.
 
 Pour un S3 local, SeaweedFS en mode mono-nœud constitue un candidat documenté par son projet officiel. Vérifier une version stable, sa commande et son format de configuration avant de retenir l’image ; consigner le choix. Cet usage local ne décide pas du fournisseur S3 de production. [S3]
 

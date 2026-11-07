@@ -15,6 +15,12 @@ Ce document est une proposition de contrat cohérente pour les lots de développ
 - Erreurs de validation `400`, conflit métier `409`, révision ancienne `412`, précondition requise `428`, limitation `429` avec indication utile de reprise. `503` exprime un fournisseur indisponible ; aucun remplacement automatique par des données de démo.
 - Création `201` avec `Location` lorsque pertinent ; suppression idempotente selon contrat ; mutation `200` avec nouvelle représentation/révision ou `204` lorsque convenu.
 
+## Sonde réellement implémentée en P01
+
+`GET /api/v1/system/health` est public et retourne uniquement `{ "status": "UP" }` après une vraie requête PostgreSQL. Une indisponibilité de la base retourne 503 `application/problem+json`, sans exception ou URL JDBC. La réponse n’est pas mise en cache et ne crée pas de session anonyme.
+
+Une route système absente retourne un vrai 404 Problem. Les erreurs contiennent notamment `status`, `code`, `traceId`, `detail` et `instance`. Le proxy préserve les erreurs de Spring ; sa propre erreur de connexion devient 502/504 `API_UNAVAILABLE`, sans données de remplacement. Aucun autre endpoint métier de ce document n’est annoncé implémenté par P01. Les routes privées sont refusées et CSRF reste actif.
+
 ## Révisions et idempotence
 
 Un objet modifiable expose `revision` et `ETag`. Exemple conceptuel : `ETag: "project-<uuid>-r7"`. La modification/suppression utilise `If-Match` avec le tag reçu. La précondition est vérifiée atomiquement avec l’écriture. Un 412 conserve la saisie dans le navigateur et permet de récupérer la version courante ; il n’entraîne pas une nouvelle tentative écrasante. Le frontend associe chaque réponse à sa requête et sa saisie : une réponse ancienne ne remplace pas une révision plus récente et ne marque pas enregistrées des modifications encore locales.

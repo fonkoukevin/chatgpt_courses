@@ -1,25 +1,23 @@
 # État réel du projet
 
-Dernière mise à jour : 7 novembre 2026. P00 réalisé : audit local et préparation documentaire. Aucune application construite, aucune intégration ni production validée. Aucun ancien prototype repris.
+Dernière mise à jour : **8 novembre 2026**. P01 implémenté ; builds et intégration HTTP/PostgreSQL vérifiés localement. **Recette navigateur bloquée par l’outil**, donc P01 non entièrement validé. Aucun ancien prototype repris, aucun déploiement externe.
 
 ## Situation courante
 
-- Phase achevée techniquement : P00, validé localement pour son périmètre d’audit ; acceptation utilisateur non présumée.
-- Dépôt, branche et commit : aucun `.git`, donc aucun historique disponible ; 49 fichiers initiaux inventoriés et préservés hors mises à jour documentaires explicites.
-- Environnement : Windows 11, PowerShell 5.1, Node 24.14.0/npm 11.9.0, Java 21.0.11, Docker Linux 29.8.0 et Compose 5.5.1 fonctionnels. Utiliser `npm.cmd` ; `npm.ps1` est bloqué par la politique PowerShell. Maven global et psql absents ; Wrapper prévu en P01.
-- Versions proposées : [VERSIONS.md](VERSIONS.md), vérifiées dans les sources officielles ; installation et verrouillage en P01.
-- Attention P01 : TS 6.0.3 et ESLint 10 avec configuration explicite JS/TS/Next/Hooks ; la configuration groupée `eslint-config-next` a des peers transitifs incompatibles, voir `VERSIONS.md`.
-- Commandes de démarrage/tests : aucune application ni script présent ; à créer et exécuter en P01.
-- Blocage P00 : aucun. Les accès fournisseurs, contenus et conditions commerciales restent nécessaires aux lots externes/à la vente, sans bloquer P01.
-- Preuves : [evidence/P00.md](evidence/P00.md) et inventaire initial SHA-256 associé.
-- Prochaine action : réaliser `prompts/P01_FONDATIONS_LOCALES.txt` avec la structure et la configuration préparées.
+- Phase active : P01 ; P00 validé localement et progression vers P01 demandée par l’utilisateur.
+- Git local : branche `main`, code P01 **`cada986`**, références P00 **`c31c609`** ; aucun remote/push. Les 49 fichiers initiaux restent présents.
+- Outils : Windows/PowerShell 5.1, Node portable 24.22.2/npm 11.19.1, Temurin 21.0.13+9, Wrapper Maven 3.10.0 ; Docker Linux 29.8.0/Compose 5.5.1.
+- Démarrage : `.\scripts\courses.cmd run dev` ; commandes exactes dans le [README](../README.md). Services/applications arrêtés en fin de vérification, volumes conservés.
+- Preuves : [evidence/P01.md](evidence/P01.md) ; `npm ci`, lint/typecheck/build, cinq tests API PostgreSQL, persistance après redémarrage, panne/reprise HTTP et profil CI isolé passent. Audit npm : zéro alerte.
+- Blocage : Computer Use interrompu, contrôle d’URL non pris en charge pour le navigateur Windows connecté. Aucune page produit ni interaction UI observée. CI syntaxiquement vérifiée, sans run GitHub.
+- Prochaine action : reprendre uniquement la vérification navigateur de P01, consigner la preuve puis lancer `prompts/P02_DESIGN_SYSTEM_INTERFACES.txt`.
 
 ## Phases
 
 | Phase | État | Preuve ou blocage |
 | --- | --- | --- |
 | P00 | Validé localement | Audit, versions documentaires et préparation P01 ; voir `evidence/P00.md` |
-| P01 | À faire | Fondations locales |
+| P01 | Implémenté non vérifié | Technique locale vérifiée ; recette navigateur bloquée, voir `evidence/P01.md` |
 | P02 | À faire | Charte et composants |
 | P03 | À faire | Schéma et contrats |
 | P04 | À faire | Identité et sécurité |
@@ -47,6 +45,6 @@ Dernière mise à jour : 7 novembre 2026. P00 réalisé : audit local et prépar
 
 ## Dernier lot
 
-README initial, `.env.example`, `.gitignore`, `VERSIONS.md`, `CONFIGURATION.md` et preuve P00 créés. `DECISIONS.md`, `SCREENS.md`, `ARCHITECTURE.md` et `DEPLOYMENT.md` harmonisés : structure, routes FR/EN, configuration et distinction proposition P00/verrouillage P01. Aucun logiciel installé, conteneur créé, compte externe utilisé ou coût engagé.
+Applications, migration d’infrastructure, Compose, lockfile/Wrapper, scripts et workflow CI créés. README, VERSIONS, CONFIGURATION, API_CONTRACTS, ARCHITECTURE, DEPLOYMENT et DECISIONS actualisés. Aucun compte fournisseur, coût, prix ou contenu commercial inventé. Aucun achat ni publication.
 
 Garder ce suivi court ; détailler les commandes et limites dans `docs/evidence/Pxx.md`. Une reprise part des fichiers et preuves présents, sans supposer l’historique de conversation.

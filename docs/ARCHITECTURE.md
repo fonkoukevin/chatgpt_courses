@@ -27,6 +27,8 @@ Le navigateur appelle une seule origine HTTPS. Le reverse proxy dirige `/api/v1/
 
 En développement, un proxy local reproduit ce découpage. Éviter de transformer une mauvaise configuration de proxy en autorisation CORS universelle. PostgreSQL, les endpoints de gestion internes et les consoles de développement restent hors de l’exposition publique.
 
+État P01 : le Route Handler Next relaie les lectures GET/HEAD de `/api/v1` vers l’origine interne validée, sans retirer le préfixe, sans suivre les redirections et en ne transmettant que le cookie `SESSION` nécessaire. Les mutations et leurs en-têtes CSRF seront raccordés en P04 ; aucun login simulé n’est livré. Le client typé de sonde est manuscrit et sera remplacé/complété par le contrat OpenAPI vérifié de P03.
+
 Next.js peut lire l’API sur une adresse interne configurée côté serveur. Il transmet seulement le cookie de session requis et les en-têtes explicitement nécessaires à cette API de confiance. Il ne relaie pas tous les cookies ou en-têtes vers une URL libre. Le navigateur utilise des URL relatives de même origine.
 
 ## Authentification et autorisation

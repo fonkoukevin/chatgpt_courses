@@ -1,6 +1,22 @@
-# Versions proposées — P00
+# Versions — propositions P00 et verrouillage P01
 
-Vérifications réalisées le **7 novembre 2026**, dans les documentations officielles et par requêtes HTTP réelles aux registres officiels. Les pins ci-dessous sont des cibles pour P01 : **aucune dépendance applicative n’est installée ni verrouillée dans ce dossier**. La compatibilité déclarée ne remplace pas l’installation, les builds et les tests.
+Vérifications réalisées le **7 novembre 2026**, dans les documentations officielles et les registres officiels. P00 a proposé les versions ci-dessous ; P01 les a installées et verrouillées pour les fondations effectivement présentes. Les preuves d’exécution sont dans `evidence/P01.md` ; shadcn/Radix restent des candidats pour P02, sans installation revendiquée.
+
+## Verrouillage réellement effectué en P01
+
+- Outils portables utilisés : Node **24.22.2**, npm **11.19.1**, Temurin **21.0.13+9** ; aucune installation globale remplacée. Bootstrap Windows x64 et SHA-256 dans `scripts/bootstrap.mjs`.
+- Un seul `package-lock.json` racine et des dépendances directes exactes ; réinstallation réelle `npm ci` réussie. Compléments web installés : `server-only` **0.0.1**, `@types/node` **24.19.2**, `postcss` **8.5.23**.
+- **minimatch 11.0.1** substitué seulement pour le range transitif `^10.2.2`, via `overrides` explicite. L’audit initial remontait dix alertes modérées provenant d’une même [faille documentée par le mainteneur](https://github.com/isaacs/minimatch/security/advisories/GHSA-g3hv-75wg-m249). `npm install` seul conservait un verrou ancien ; `npm update minimatch`, puis `npm ci`, ont résolu le correctif. Audit final : zéro alerte. Lint, couverture des fichiers et déclenchement des règles ont été vérifiés, sans masquer un contrôle ; ce changement de moteur de glob reste à réévaluer lors des mises à jour des outils.
+- API : parent Boot **4.1.2**, BOM transitif et Maven Wrapper **3.3.4** / Maven **3.10.0**, SHA-256 de distribution versionné. L’arbre réellement résolu confirme les versions Java du tableau ; les cinq tests PostgreSQL passent sous le JDK portable.
+- Images locales vérifiées par registre puis démarrées :
+
+| Image | Digest de manifeste |
+| --- | --- |
+| `postgres:18.6` | `sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42` |
+| `axllent/mailpit:v1.33.0` | `sha256:9b3a463be15354c0f0eba91697d80e3e0d8a5623ef0e627cacc836bc17fd5231` |
+| `chrislusf/seaweedfs:4.52` | `sha256:57877e32bb90073b37dc109b438ba66e84fd5ed9ced5f5c04f56444ef243ce59` |
+
+Sources : [image officielle PostgreSQL et volume PG18](https://hub.docker.com/_/postgres), [Mailpit Docker](https://mailpit.axllent.org/docs/install/docker/), [SeaweedFS 4.52](https://github.com/seaweedfs/seaweedfs/releases/tag/4.52). Ce dernier est seulement un émulateur S3 local, pas un fournisseur de production choisi.
 
 ## Outils et frontend
 
@@ -67,11 +83,11 @@ Sources consultées :
 - PostgreSQL : [maintenance](https://www.postgresql.org/support/versioning/), [notes 18.6](https://www.postgresql.org/docs/release/18.6/). Flyway : [support PostgreSQL et module](https://documentation.red-gate.com/flyway/reference/database-driver-reference/postgresql-database).
 - [Spring Session JDBC](https://docs.spring.io/spring-session/reference/guides/boot-jdbc.html), [Spring Security CSRF](https://docs.spring.io/spring-security/reference/servlet/exploits/csrf.html), [Testcontainers PostgreSQL](https://java.testcontainers.org/modules/databases/postgres/).
 
-## Environnement observé et limites du verrouillage
+## Environnement P00 et limites restantes
 
 Windows 11 Famille 64 bits, PowerShell 5.1.26100.9711 ; Docker Desktop 4.91.0, Engine 29.8.0 Linux x86_64, Compose 5.5.1. Le moteur répond ; aucun conteneur n’était lancé. Git 2.53.0.windows.1 et ripgrep 15.2.0 sont disponibles. Voir les commandes et distinctions d’erreur dans [evidence/P00.md](evidence/P00.md).
 
-P01 doit encore :
+La liste suivante décrit les travaux identifiés en P00. Les points 1–5 sont maintenant couverts pour le socle P01 par les fichiers verrouillés et `evidence/P01.md`. Les composants shadcn et les images de production restent à introduire dans leurs lots :
 
 1. Installer ou sélectionner les correctifs Node/npm et Java proposés sans écraser une installation utilisateur ; consigner les versions effectivement utilisées. Aucune mise à jour globale n’a été exécutée en P00.
 2. Épingler les dépendances directes exactes et résoudre un unique lockfile npm ; prouver une réinstallation par `npm.cmd ci`. Les commandes de livraison n’utiliseront pas de `latest` flottant.

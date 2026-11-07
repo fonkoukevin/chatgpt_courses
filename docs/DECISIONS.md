@@ -38,6 +38,16 @@ L’inspection réelle constate un kit de 49 fichiers, sans application, manifes
 
 Aucune incompatibilité prouvée ne justifie de remplacer la stack. Les compatibilités sont documentaires ; installation, dépendances résolues, rendu et intégration locale seront vérifiés dans leurs lots. Aucun besoin d’accès externe ne bloque P00 ou les fondations locales.
 
+## Décisions de réalisation P01 — 7 novembre 2026
+
+- Fondations créées dans la structure prévue, sans reconstruction d’un prototype. Git local initialisé sur `main`, références P00 conservées dans le commit initial `c31c609` ; aucun remote ou push.
+- Node 24.22.2/npm 11.19.1 et Temurin 21.0.13+9 sélectionnés dans `.tools`, sans changer les installations globales. Maven Wrapper 3.3.4/Maven 3.10.0 avec checksum de distribution.
+- Lockfile npm racine unique et BOM Boot 4.1.2 vérifiés en exécution. Correctif transitif ciblé minimatch 11.0.1 après alerte de sécurité réelle ; couverture du lint et règles TS/Hooks/Next contrôlées, aucun downgrade vers une branche abandonnée ni désactivation. Détails et source dans `VERSIONS.md`.
+- Compose : PostgreSQL 18.6, Mailpit 1.33.0, SeaweedFS 4.52 dans un profil optionnel, tags et digests contrôlés. Réseau bridge dédié et ports loopback après échec observé du réseau `internal`. Aucun choix de fournisseur S3 de production.
+- Schéma initial limité aux tables officielles Spring Session JDBC, via Flyway ; schéma métier en P03. CSRF actif, pas de compte généré, pas d’identité frontend parallèle.
+- Pages FR/EN de fondation non indexables, réservées à local/test. Proxy GET/HEAD réel, client de sonde manuscrit, aucun catalogue ou succès de paiement fictif. Tests HTTP et PostgreSQL locaux distincts de la recette navigateur et de GitHub Actions.
+- Recette navigateur bloquée par l’interruption de Computer Use : contrôle des URL non pris en charge pour le navigateur Windows connecté. Aucun contournement par un autre outil UI. P01 reste `implémenté non vérifié` pour ce critère, malgré les vérifications techniques locales réussies.
+
 ## Décisions commerciales encore ouvertes
 
 | Paramètre | État initial | Effet avant décision |
@@ -63,5 +73,6 @@ Les montants 1 200 €, 1 400 € et 1 180 € de `CONTENT_REFERENCE.md` ne sont
 | 2026-11-07 | Audit du dossier | Kit sans code ni Git ; structure monorepo confirmée, aucune reprise de prototype | Inventaire SHA-256 et `evidence/P00.md` | P01 crée les fondations | Agent, dans le périmètre demandé |
 | 2026-11-07 | Outils et versions | Windows natif + Docker Linux, npm unique lockfile, cibles exactes proposées | Commandes locales et sources de `VERSIONS.md` | Installation et verrouillage P01 ; aucun changement de stack | Agent, choix réversibles |
 | 2026-11-07 | Routes et configuration | Registre FR/EN central et exemple sans secret ; lancement commercial indécis | `SCREENS.md`, `CONFIGURATION.md`, `.env.example` | P01/P03 puis lots métier | Agent, conventions réversibles |
+| 2026-11-07 | Fondations locales | Outils portables, lockfile/BOM, infrastructure et proxy réels | `evidence/P01.md` | Base des lots suivants ; observation navigateur encore requise | Agent, réalisation P01 |
 
 Une décision future doit nommer l’ancienne règle remplacée et les documents affectés. Ne pas masquer une hypothèse non validée sous un statut « décidé ».

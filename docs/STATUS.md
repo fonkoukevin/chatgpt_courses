@@ -1,24 +1,24 @@
 # État réel du projet
 
-Dernière mise à jour : **8 novembre 2026**. P01 implémenté ; builds et intégration HTTP/PostgreSQL vérifiés localement. **Recette navigateur bloquée par l’outil**, donc P01 non entièrement validé. Aucun ancien prototype repris, aucun déploiement externe.
+Dernière mise à jour : **8 novembre 2026**. **P01 validé localement** : builds, PostgreSQL, HTTP, sept tests navigateur Playwright et revue des captures. Aucun ancien prototype repris, aucun déploiement externe.
 
 ## Situation courante
 
-- Phase active : P01 ; P00 validé localement et progression vers P01 demandée par l’utilisateur.
-- Git local : branche `main`, code P01 **`cada986`**, correctifs de reprise **`fa29a49`**, références P00 **`c31c609`** ; aucun remote/push. Les 49 fichiers initiaux restent présents.
+- Dernière phase réalisée : P01, validée localement ; prochaine phase P02 à commencer sur demande.
+- Git local : branche `main`, code final P01 **`e1616bd`**, références P00 **`c31c609`** ; aucun remote/push. Les 49 fichiers initiaux restent présents.
 - Outils : Windows/PowerShell 5.1, Node portable 24.22.2/npm 11.19.1, Temurin 21.0.13+9, Wrapper Maven 3.10.0 ; Docker Linux 29.8.0/Compose 5.5.1.
 - Démarrage : `.\scripts\courses.cmd run dev` ; commandes exactes dans le [README](../README.md). Services/applications arrêtés en fin de vérification, volumes conservés.
-- Preuves : [evidence/P01.md](evidence/P01.md) ; `npm ci`, lint/typecheck/build, cinq tests API PostgreSQL, persistance après redémarrage, panne/reprise HTTP et profil CI isolé passent. Audit npm : zéro alerte.
-- Reprise : port Next explicite, ports occupés refusés sans arrêter leur propriétaire et tous les cleanups tentés ; cycle HTTP après correction réussi.
-- Blocage : hôte navigateur toujours indisponible après réinitialisation ; Chrome natif également interrompu par le contrôle d’URL. Aucune page produit observée. Sept tests locaux préparés, outil Playwright non installé et tests non exécutés ; instruction explicite demandée pour cette autre méthode. CI distante toujours non exécutée.
-- Prochaine action : après instruction explicite Playwright, installer le candidat 1.65.0 et son Chromium de test, exécuter `verify:browser`, examiner les captures et corriger ; ensuite seulement P02.
+- Preuves : [evidence/P01.md](evidence/P01.md) et [recette navigateur](evidence/P01-browser/README.md) ; installation verrouillée, lint/typecheck/build, cinq tests API PostgreSQL, persistance et panne/reprise HTTP passent. Audit npm : zéro alerte.
+- Navigateur : méthode Playwright explicitement autorisée, version 1.65.0/Chromium 158 ; **7/7 réussis en 18,929 s**, 16 captures examinées en FR/EN à 1440/390/320 px. Perte du focus corrigée et reprise réelle de Spring vérifiée.
+- Blocage P01 : aucun. CI syntaxiquement vérifiée, run GitHub et production non observés ; intégrations et conditions commerciales restent aux lots prévus.
+- Prochaine action : réaliser `prompts/P02_DESIGN_SYSTEM_INTERFACES.txt` avec les fondations existantes.
 
 ## Phases
 
 | Phase | État | Preuve ou blocage |
 | --- | --- | --- |
 | P00 | Validé localement | Audit, versions documentaires et préparation P01 ; voir `evidence/P00.md` |
-| P01 | Implémenté non vérifié | Technique locale vérifiée ; recette navigateur bloquée, voir `evidence/P01.md` |
+| P01 | Validé localement | Technique et navigateur vérifiés, captures examinées ; voir `evidence/P01.md` |
 | P02 | À faire | Charte et composants |
 | P03 | À faire | Schéma et contrats |
 | P04 | À faire | Identité et sécurité |
@@ -46,6 +46,6 @@ Dernière mise à jour : **8 novembre 2026**. P01 implémenté ; builds et inté
 
 ## Dernier lot
 
-Applications, migration d’infrastructure, Compose, lockfile/Wrapper, scripts et workflow CI créés. README, VERSIONS, CONFIGURATION, API_CONTRACTS, ARCHITECTURE, DEPLOYMENT et DECISIONS actualisés. Aucun compte fournisseur, coût, prix ou contenu commercial inventé. Aucun achat ni publication.
+Fondations, scripts et CI créés ; recette Chromium exécutée, perte de focus corrigée et 16 captures examinées. Documentation et preuves actualisées. Aucun compte fournisseur, coût, prix ou contenu commercial inventé. Aucun achat ni publication.
 
 Garder ce suivi court ; détailler les commandes et limites dans `docs/evidence/Pxx.md`. Une reprise part des fichiers et preuves présents, sans supposer l’historique de conversation.

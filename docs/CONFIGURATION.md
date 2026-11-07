@@ -43,6 +43,8 @@ Spring conserve CSRF et refuse les routes privées. Seuls les GET du namespace t
 
 Les scripts ôtent le commutateur hôte `DEBUG` de l’environnement enfant de Spring et passent `--debug=false` ; ils n’en affichent pas la valeur. La télémétrie Next et celle de l’émulateur SeaweedFS local sont désactivées.
 
+La recette navigateur autorisée utilise Playwright 1.65.0. `browser:install` installe explicitement Chromium dans `.tools/playwright` (`PLAYWRIGHT_BROWSERS_PATH`), hors du navigateur personnel. `verify:browser` réserve par défaut 3101/8181 (`BROWSER_WEB_PORT`/`BROWSER_API_PORT`), valide les ports libres et supervise uniquement ses processus. Un IPC local authentifié commande l’arrêt/reprise du seul Spring de test ; aucun endpoint produit de simulation. Rapports et captures vont dans `docs/evidence/P01-browser/<session>`, journaux et manifests de travail dans `.runtime`.
+
 ## Éléments externes encore nécessaires
 
 Domaine, hébergement autorisé, fournisseurs et secrets de recette/production, expéditeur vérifié, contenus et traductions relus, médias annoncés, identité légale, prix et conditions de chaque offre, langues vendues et support. Ces éléments ne bloquent pas les fondations locales ; leur absence interdira de déclarer fonctionnels l’intégration externe ou le lancement correspondant.

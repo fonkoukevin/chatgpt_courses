@@ -6,9 +6,7 @@ Plateforme de formation pratique à l’IA : choisir une tâche, apprendre, prod
 
 P01 fournit les fondations locales : pages FR/EN, sonde Spring avec PostgreSQL réel, proxy de même origine, services Compose et première chaîne de vérification. Les parcours, comptes, paiements et écrans métier restent à développer. Aucun ancien prototype n’est repris et aucun déploiement externe n’est annoncé.
 
-La recette navigateur de P01 reste non vérifiée : Computer Use a été interrompu car le contrôle des URL n’est pas pris en charge pour le navigateur Windows connecté. Les vérifications HTTP réelles ne remplacent pas cette observation visuelle.
-
-La reprise a corrigé le contrôle des ports et le nettoyage de tous les processus. L’accès navigateur reste indisponible, y compris après réinitialisation et essai de Chrome. Une [recette Playwright locale](tests/browser/README.md) est préparée ; son installation/exécution attend l’instruction explicite requise pour cette méthode alternative. Aucun résultat navigateur n’est encore revendiqué.
+P01 est **validé localement**, y compris dans Chromium de test avec Playwright, selon la méthode autorisée par l’utilisateur. Sept tests et la revue des 16 captures couvrent FR/EN, clavier, formats étroits, erreur 404 et panne/reprise réelle de Spring. Cette validation concerne les fondations ; le design complet et les écrans métier restent à construire.
 
 Lire [AGENTS.md](AGENTS.md), puis [docs/STATUS.md](docs/STATUS.md). Les vérifications et limites sont dans [docs/evidence/P01.md](docs/evidence/P01.md) ; l’audit initial reste dans [docs/evidence/P00.md](docs/evidence/P00.md).
 
@@ -69,6 +67,16 @@ L’arrêt vise les processus enregistrés de ce projet et arrête ses services 
 
 `verify:http` exige PostgreSQL déjà démarré et les ports 3000/8080 libres. Il lance les serveurs issus des builds, vérifie le proxy, arrête réellement l’API en maintenant Next, vérifie l’erreur puis la reprise, et nettoie uniquement ses processus. Il s’agit de tests HTTP, pas d’un test navigateur. Arrêter `dev` avant de le lancer.
 
+La [recette navigateur](tests/browser/README.md) utilise les builds web/API et PostgreSQL déjà démarré :
+
+```powershell
+.\scripts\courses.cmd run browser:install
+.\scripts\courses.cmd run typecheck:browser
+.\scripts\courses.cmd run verify:browser
+```
+
+Playwright **1.65.0** est verrouillé ; son Chromium dédié reste dans `.tools/playwright`. Le test utilise par défaut les ports libres **3101/8181**, sans contrôler les onglets personnels. Rapports et captures se trouvent dans [docs/evidence/P01-browser](docs/evidence/P01-browser/README.md). Le focus des contrôles est conservé pendant les requêtes et restauré après une reprise.
+
 Pour tester les serveurs issus des builds, lancer dans deux terminaux, après `services:up` :
 
 ```powershell
@@ -102,4 +110,4 @@ La CI Linux utilise les mêmes versions, le lockfile npm et le Wrapper, avec des
 
 Les pages de fondation sont non indexables et limitées à `APP_ENV=local|test`. Le profil de production exige une origine publique HTTPS et des cookies sécurisés ; cela ne constitue pas un déploiement. Prix, conditions, médias et accès fournisseurs restent ouverts, sans bloquer P02.
 
-Prochaine action : terminer la vérification navigateur de P01 sur les pages FR/EN, les boutons, l’erreur et la reprise. Phase suivante prévue après cette vérification : [prompts/P02_DESIGN_SYSTEM_INTERFACES.txt](prompts/P02_DESIGN_SYSTEM_INTERFACES.txt).
+Prochain prompt : [prompts/P02_DESIGN_SYSTEM_INTERFACES.txt](prompts/P02_DESIGN_SYSTEM_INTERFACES.txt).

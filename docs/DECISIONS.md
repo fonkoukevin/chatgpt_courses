@@ -46,7 +46,7 @@ Aucune incompatibilité prouvée ne justifie de remplacer la stack. Les compatib
 - Compose : PostgreSQL 18.6, Mailpit 1.33.0, SeaweedFS 4.52 dans un profil optionnel, tags et digests contrôlés. Réseau bridge dédié et ports loopback après échec observé du réseau `internal`. Aucun choix de fournisseur S3 de production.
 - Schéma initial limité aux tables officielles Spring Session JDBC, via Flyway ; schéma métier en P03. CSRF actif, pas de compte généré, pas d’identité frontend parallèle.
 - Pages FR/EN de fondation non indexables, réservées à local/test. Proxy GET/HEAD réel, client de sonde manuscrit, aucun catalogue ou succès de paiement fictif. Tests HTTP et PostgreSQL locaux distincts de la recette navigateur et de GitHub Actions.
-- Recette navigateur bloquée par l’interruption de Computer Use : contrôle des URL non pris en charge pour le navigateur Windows connecté. Aucun contournement par un autre outil UI. P01 reste `implémenté non vérifié` pour ce critère, malgré les vérifications techniques locales réussies.
+- Recette navigateur initialement bloquée par l’interruption de Computer Use. **Décision utilisateur du 8 novembre** : Playwright local explicitement autorisé avec Chromium isolé. Cette instruction lève l’attente précédente ; sept tests et revue des 16 captures réussis, P01 devient `validé localement`. Aucun onglet personnel utilisé ni changement de stack. README, STATUS, VERSIONS et preuve P01 actualisés.
 
 ## Décisions commerciales encore ouvertes
 
@@ -74,5 +74,6 @@ Les montants 1 200 €, 1 400 € et 1 180 € de `CONTENT_REFERENCE.md` ne sont
 | 2026-11-07 | Outils et versions | Windows natif + Docker Linux, npm unique lockfile, cibles exactes proposées | Commandes locales et sources de `VERSIONS.md` | Installation et verrouillage P01 ; aucun changement de stack | Agent, choix réversibles |
 | 2026-11-07 | Routes et configuration | Registre FR/EN central et exemple sans secret ; lancement commercial indécis | `SCREENS.md`, `CONFIGURATION.md`, `.env.example` | P01/P03 puis lots métier | Agent, conventions réversibles |
 | 2026-11-07 | Fondations locales | Outils portables, lockfile/BOM, infrastructure et proxy réels | `evidence/P01.md` | Base des lots suivants ; observation navigateur encore requise | Agent, réalisation P01 |
+| 2026-11-08 | Recette navigateur | Playwright 1.65.0 et Chromium local isolé autorisés, installés et exécutés | Réponse explicite utilisateur ; `evidence/P01-browser/README.md` | Remplace l’attente d’accès navigateur P01 ; validation locale complète | Utilisateur pour la méthode, agent pour l’exécution et la revue |
 
 Une décision future doit nommer l’ancienne règle remplacée et les documents affectés. Ne pas masquer une hypothèse non validée sous un statut « décidé ».

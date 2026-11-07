@@ -25,6 +25,7 @@
     "verify:api": "node scripts/api.mjs verify",
     "smoke": "node scripts/smoke.mjs",
     "verify:http": "node scripts/verify-http.mjs",
+    "verify:browser": "node scripts/verify-browser.mjs",
     "verify:persistence": "node scripts/verify-persistence.mjs"
   },
   "overrides": { "minimatch@^10.2.2": "11.0.1" }

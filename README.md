@@ -8,6 +8,8 @@ P01 fournit les fondations locales : pages FR/EN, sonde Spring avec PostgreSQL r
 
 La recette navigateur de P01 reste non vérifiée : Computer Use a été interrompu car le contrôle des URL n’est pas pris en charge pour le navigateur Windows connecté. Les vérifications HTTP réelles ne remplacent pas cette observation visuelle.
 
+La reprise a corrigé le contrôle des ports et le nettoyage de tous les processus. L’accès navigateur reste indisponible, y compris après réinitialisation et essai de Chrome. Une [recette Playwright locale](tests/browser/README.md) est préparée ; son installation/exécution attend l’instruction explicite requise pour cette méthode alternative. Aucun résultat navigateur n’est encore revendiqué.
+
 Lire [AGENTS.md](AGENTS.md), puis [docs/STATUS.md](docs/STATUS.md). Les vérifications et limites sont dans [docs/evidence/P01.md](docs/evidence/P01.md) ; l’audit initial reste dans [docs/evidence/P00.md](docs/evidence/P00.md).
 
 ## Structure retenue

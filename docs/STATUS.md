@@ -5,12 +5,13 @@ Dernière mise à jour : **8 novembre 2026**. P01 implémenté ; builds et inté
 ## Situation courante
 
 - Phase active : P01 ; P00 validé localement et progression vers P01 demandée par l’utilisateur.
-- Git local : branche `main`, code P01 **`cada986`**, références P00 **`c31c609`** ; aucun remote/push. Les 49 fichiers initiaux restent présents.
+- Git local : branche `main`, code P01 **`cada986`**, correctifs de reprise **`fa29a49`**, références P00 **`c31c609`** ; aucun remote/push. Les 49 fichiers initiaux restent présents.
 - Outils : Windows/PowerShell 5.1, Node portable 24.22.2/npm 11.19.1, Temurin 21.0.13+9, Wrapper Maven 3.10.0 ; Docker Linux 29.8.0/Compose 5.5.1.
 - Démarrage : `.\scripts\courses.cmd run dev` ; commandes exactes dans le [README](../README.md). Services/applications arrêtés en fin de vérification, volumes conservés.
 - Preuves : [evidence/P01.md](evidence/P01.md) ; `npm ci`, lint/typecheck/build, cinq tests API PostgreSQL, persistance après redémarrage, panne/reprise HTTP et profil CI isolé passent. Audit npm : zéro alerte.
-- Blocage : Computer Use interrompu, contrôle d’URL non pris en charge pour le navigateur Windows connecté. Aucune page produit ni interaction UI observée. CI syntaxiquement vérifiée, sans run GitHub.
-- Prochaine action : reprendre uniquement la vérification navigateur de P01, consigner la preuve puis lancer `prompts/P02_DESIGN_SYSTEM_INTERFACES.txt`.
+- Reprise : port Next explicite, ports occupés refusés sans arrêter leur propriétaire et tous les cleanups tentés ; cycle HTTP après correction réussi.
+- Blocage : hôte navigateur toujours indisponible après réinitialisation ; Chrome natif également interrompu par le contrôle d’URL. Aucune page produit observée. Sept tests locaux préparés, outil Playwright non installé et tests non exécutés ; instruction explicite demandée pour cette autre méthode. CI distante toujours non exécutée.
+- Prochaine action : après instruction explicite Playwright, installer le candidat 1.65.0 et son Chromium de test, exécuter `verify:browser`, examiner les captures et corriger ; ensuite seulement P02.
 
 ## Phases
 

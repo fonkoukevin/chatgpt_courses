@@ -5,6 +5,7 @@ import { parseEnv } from 'node:util';
 import { spawn, spawnSync } from 'node:child_process';
 import { environment, loopbackPort, root } from './lib/runtime.mjs';
 import { installStripeCli, stripeBinary } from './install-stripe-cli.mjs';
+import { StripePrivateFileError, syncStripeWebhookSecret } from './lib/stripe-private-env.mjs';
 
 const action = process.argv[2];
 const pinned = JSON.parse(readFileSync(join(root, 'infra/tools/stripe-cli.windows.json'), 'utf8'));
@@ -16,14 +17,14 @@ class LocalFailure extends Error { constructor(code) { super(code); this.code = 
 function privateConfiguration() {
   const file = join(root, '.env.local');
   if (spawnSync('git', ['check-ignore', '-q', '--', file], { cwd: root, windowsHide: true }).status !== 0) throw new LocalFailure('ENV_NOT_IGNORED');
-  const fromFile = parseEnv(readFileSync(file, 'utf8')), env = environment();
+  const privateSource = readFileSync(file, 'utf8'), fromFile = parseEnv(privateSource), env = environment();
   for (const name of ['STRIPE_SECRET_KEY', 'STRIPE_ACCOUNT_ID', 'STRIPE_WEBHOOK_SECRET']) if ((env[name] ?? '') !== (fromFile[name] ?? '')) throw new LocalFailure('ENV_OVERRIDE_CONFLICT');
   if (env.APP_ENV !== 'local' || (env.STRIPE_MODE ?? 'TEST').toUpperCase() !== 'TEST' || !/^sk_test_[A-Za-z0-9_]+$/.test(env.STRIPE_SECRET_KEY ?? '')) throw new LocalFailure('PRIVATE_TEST_KEY_REQUIRED');
   if (!/^acct_[A-Za-z0-9]+$/.test(env.STRIPE_ACCOUNT_ID ?? '') || (env.STRIPE_API_BASE ?? 'https://api.stripe.com') !== 'https://api.stripe.com') throw new LocalFailure('MERCHANT_CONFIGURATION_INVALID');
   const source = readFileSync(join(root, 'apps/api/src/main/java/com/chatgptcourses/payments/config/StripeSettings.java'), 'utf8');
   if (!source.includes(`API_VERSION="${pinned.expectedApiVersion}"`)) throw new LocalFailure('API_VERSION_PIN_MISMATCH');
   loopbackPort(env.APP_PUBLIC_ORIGIN, 'APP_PUBLIC_ORIGIN');
-  return { env, forwardTo: new URL('/api/v1/webhooks/stripe', env.APP_PUBLIC_ORIGIN).href };
+  return { env, privateSource, forwardTo: new URL('/api/v1/webhooks/stripe', env.APP_PUBLIC_ORIGIN).href };
 }
 
 async function verifyMerchant(env) {
@@ -50,8 +51,8 @@ function saveSecret(value) {
   writeFileSync(privateSecret, value + '\n', { mode: 0o600 });
 }
 
-async function receiveSecret(env) {
-  const child = spawn(stripeBinary, ['listen', '--print-secret', '--events-from', '@self', '--skip-update'], { cwd: root, env: cliEnvironment(env), windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
+async function receiveSecret(env, { manualCopy = true } = {}) {
+  const child = spawn(stripeBinary, ['listen', '--print-secret', '--latest', '--events-from', '@self', '--events', events, '--skip-update'], { cwd: root, env: cliEnvironment(env), windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
   let output = '', oversized = false;
   const consume = chunk => { if (output.length + chunk.length <= 65_536) output += chunk.toString('utf8'); else { oversized = true; child.kill(); } };
   child.stdout.on('data', consume); child.stderr.on('data', consume);
@@ -62,7 +63,8 @@ async function receiveSecret(env) {
   saveSecret(values[0]);
   writeFileSync(join(root, 'docs/evidence/P12-stripe-cli-check.json'), JSON.stringify({ verifiedAt: new Date().toISOString(), cliVersion: pinned.version, archiveSha256Verified: true, officialChecksumManifestVerified: true, configuredAccountPreviouslyVerified: true, testMode: true, signingSecretRetrieved: true, secretStoredInIgnoredFile: true, secretValuesPrinted: false, forwardingListenerStarted: false, checkoutCreated: false }, null, 2) + '\n');
   console.log('Secret du listener enregistré dans .runtime/stripe-webhook-secret.txt, sans affichage.');
-  console.log('Copiez sa valeur dans STRIPE_WEBHOOK_SECRET du fichier .env.local ; la clé existante y reste intacte.');
+  if (manualCopy) console.log('Copiez sa valeur dans STRIPE_WEBHOOK_SECRET du fichier .env.local ; la clé existante y reste intacte.');
+  return values[0];
 }
 
 async function listen({ env, forwardTo }) {
@@ -98,11 +100,11 @@ async function listen({ env, forwardTo }) {
   clearTimeout(readyTimeout); process.removeListener('SIGINT', stop); process.removeListener('SIGTERM', stop); line = '';
   if (stoppedByUser && !failure) { console.log('Listener Stripe arrêté.'); return; }
   if (failure || !announced) throw new LocalFailure(failure ?? 'LISTENER_NOT_READY');
-  if (code !== 0 && code !== null) throw new LocalFailure('LISTENER_STOPPED');
+  if (code !== 0) throw new LocalFailure('LISTENER_STOPPED');
 }
 
 async function main() {
-  if (!['check', 'secret', 'listen', 'plan'].includes(action) || process.argv.length !== 3) throw new LocalFailure('EXPECTED_CHECK_SECRET_LISTEN_OR_PLAN');
+  if (!['check', 'secret', 'sync-secret', 'listen', 'plan'].includes(action) || process.argv.length !== 3) throw new LocalFailure('EXPECTED_CHECK_SECRET_SYNC_LISTEN_OR_PLAN');
   const configuration = privateConfiguration();
   if (action === 'plan') {
     console.log(JSON.stringify({ mode: 'TEST', cliVersion: pinned.version, expectedEventApiVersion: pinned.expectedApiVersion, forwardTo: configuration.forwardTo, events: events.split(','), webhookSecretConfigured: /^whsec_[A-Za-z0-9]{8,}$/.test(configuration.env.STRIPE_WEBHOOK_SECRET ?? ''), stripeEnabled: configuration.env.STRIPE_ENABLED === 'true', rawCommand: `stripe listen --latest --events-from "@self" --events ${events} --forward-to ${configuration.forwardTo} --skip-update`, apiKeyTransport: 'private child environment only', credentialsPrinted: false, listenerStarted: false }, null, 2)); return;
@@ -110,6 +112,14 @@ async function main() {
   if (action === 'listen' && !/^whsec_[A-Za-z0-9]{8,}$/.test(configuration.env.STRIPE_WEBHOOK_SECRET ?? '')) throw new LocalFailure('FILL_WEBHOOK_SECRET_FIRST');
   await installStripeCli(); await verifyMerchant(configuration.env);
   if (action === 'secret') await receiveSecret(configuration.env);
+  if (action === 'sync-secret') {
+    const secret = await receiveSecret(configuration.env, { manualCopy: false });
+    const receipt = syncStripeWebhookSecret(configuration.privateSource, secret);
+    writeFileSync(join(root, 'docs/evidence/P12-stripe-env-sync-check.json'), JSON.stringify({ verifiedAt: new Date().toISOString(), testMode: true, configuredAccountPreviouslyVerified: true, webhookSecretUpdated: receipt.updated, otherValuesPreserved: receipt.otherValuesPreserved, previousSecretBackedUp: receipt.previousSecretBackedUp, secretValuesPrinted: false }, null, 2) + '\n');
+    console.log('STRIPE_WEBHOOK_SECRET synchronisé ; clé, compte, mode et autres paramètres conservés.');
+    if (receipt.backupFile) console.log(`Ancienne valeur conservée dans le fichier privé ${receipt.backupFile}.`);
+    console.log('Redémarrez Spring pour charger ce secret, puis lancez stripe:listen.');
+  }
   if (action === 'listen') await listen(configuration);
 }
-main().catch(error => { console.error(`Stripe local : ${error instanceof LocalFailure ? error.code : 'OPERATION_NOT_CONFIRMED'}. Aucune valeur secrète affichée.`); process.exitCode = 1; });
+main().catch(error => { console.error(`Stripe local : ${error instanceof LocalFailure || error instanceof StripePrivateFileError ? error.code : 'OPERATION_NOT_CONFIRMED'}. Aucune valeur secrète affichée.`); process.exitCode = 1; });

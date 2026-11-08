@@ -20,7 +20,20 @@ export function environment() {
   env.PLAYWRIGHT_BROWSERS_PATH ??= join(root, '.tools/playwright');
   const jdk = join(root, '.tools/jdk/jdk-21.0.13+9');
   if (windows && existsSync(join(jdk, 'bin/java.exe'))) env.JAVA_HOME = jdk;
-  env.PATH = [dirname(process.execPath), env.JAVA_HOME && join(env.JAVA_HOME, 'bin'), env.PATH]
+  // Windows accepts Path/PATH interchangeably, but Node child env objects must
+  // contain one spelling: duplicate variants can discard the native search path.
+  const inheritedPaths = [];
+  for (const key of Object.keys(env)) {
+    if ((windows ? key.toUpperCase() : key) !== 'PATH') continue;
+    inheritedPaths.push(env[key]);
+    if (windows) delete env[key];
+  }
+  // Older terminals may miss Docker's standard directory; inherited commands keep priority.
+  const programFilesKey = windows && Object.keys(env).find(key => key.toUpperCase() === 'PROGRAMFILES');
+  const dockerDirectory = programFilesKey && env[programFilesKey]
+    ? join(env[programFilesKey], 'Docker', 'Docker', 'resources', 'bin') : null;
+  const dockerFallback = dockerDirectory && existsSync(join(dockerDirectory, 'docker.exe')) ? dockerDirectory : null;
+  env.PATH = [dirname(process.execPath), env.JAVA_HOME && join(env.JAVA_HOME, 'bin'), ...inheritedPaths, dockerFallback]
     .filter(Boolean).join(delimiter);
   return env;
 }

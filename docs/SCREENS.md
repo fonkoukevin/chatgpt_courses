@@ -1,6 +1,6 @@
 # Familles d’écrans et comportements
 
-Cette carte reprend E01–E16 du cahier fonctionnel V1 et précise les routes introduites au fil des lots. Le registre comprend aussi les familles futures : l’état vérifié reste celui de STATUS et des preuves. P06 implémente E01–E04 et une lecture textuelle publique d’activité/méthode ; sa recette navigateur est en cours, sans validation anticipée. Toute modification doit être répercutée dans les liens, traductions, tests et métadonnées. Les slugs publics sont localisés ; l’identité métier reste indépendante du titre et de l’URL. Les chemins privés n’autorisent jamais leur contenu.
+Cette carte reprend E01–E16 du cahier fonctionnel V1 et précise les routes introduites au fil des lots. Le registre comprend aussi les familles futures : l’état vérifié reste celui de STATUS et des preuves. P06 implémente E01–E04 et une lecture textuelle publique d’activité/méthode, validées localement avec six scénarios navigateur et 35 captures finales examinées. Toute modification doit être répercutée dans les liens, traductions, tests et métadonnées. Les slugs publics sont localisés ; l’identité métier reste indépendante du titre et de l’URL. Les chemins privés n’autorisent jamais leur contenu.
 
 ## Registre central des routes FR/EN
 

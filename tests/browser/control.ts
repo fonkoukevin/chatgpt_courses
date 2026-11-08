@@ -1,6 +1,11 @@
 import { connect } from 'node:net';
 
-type Result = { ok: boolean; webPid: number; apiPid?: number; error?: string; eventId?: string; status?: number; received?: boolean };
+type Result = { ok: boolean; webPid: number; apiPid?: number; error?: string; eventId?: string; status?: number; received?: boolean; externalReplayRequested?: boolean;
+  sessionId?: string; paymentIntentId?: string | null; eventType?: string; sourceEventApiVersion?: string | null; amountMinor?: number; currency?: string; metadataOrderMatches?: boolean; replayHttpAcknowledged?: boolean };
+
+export function replayExternalStripeEvent(eventId: string, orderId: string): Promise<Result> {
+  return sendControl('replay-external-stripe-event', { eventId, orderId });
+}
 
 export function controlApi(operation: 'stop-api' | 'start-api' | 'pause-mailpit' | 'resume-mailpit' | 'start-payment-worker' | 'stop-payment-worker'): Promise<Result> {
   return sendControl(operation);
@@ -20,7 +25,7 @@ function sendControl(operation: string, data: Record<string, string> = {}): Prom
     let input = '';
     let settled = false;
     const fail = (error: Error) => { settled = true; socket.destroy(); rejectCommand(error); };
-    socket.setTimeout(process.env.COURSES_BROWSER_PHASE === 'P12' ? 360_000 : 90_000, () => fail(new Error('Commande IPC expirée.')));
+    socket.setTimeout(process.env.COURSES_BROWSER_PHASE?.startsWith('P12') ? 360_000 : 90_000, () => fail(new Error('Commande IPC expirée.')));
     socket.once('error', () => fail(new Error('Connexion au superviseur interrompue.')));
     socket.once('connect', () => socket.write(`${JSON.stringify({ token, operation, ...data })}\n`));
     socket.on('data', (chunk) => {

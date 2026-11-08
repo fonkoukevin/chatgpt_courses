@@ -17,8 +17,14 @@ import com.chatgptcourses.shared.config.RuntimeProperties;
 import com.chatgptcourses.shared.http.EntityTags;
 import java.net.*;
 import java.net.http.*;
+import java.sql.Timestamp;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,6 +35,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.*;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.testcontainers.junit.jupiter.*;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
@@ -43,6 +51,7 @@ class EntitlementAccessIntegrationTest {
     @Autowired JdbcTemplate jdbc;@Autowired ObjectMapper mapper;@Autowired PasswordEncoder encoder;
     @Autowired EditorialService editorial;@Autowired EntitlementAccess rights;@Autowired MemberContentService members;
     @Autowired PublicCatalogueService catalogue;@Autowired LearningService learning;@Autowired ProjectService projects;@Autowired AssetAccessPolicy assets;
+    @Autowired PlatformTransactionManager transactions;
     @LocalServerPort int port;
 
     @Test void independentOriginsLanguagesAndPeriodsNeverBecomeOneUserCourseBoolean(){
@@ -92,6 +101,53 @@ class EntitlementAccessIntegrationTest {
         assertThat(publicResult.statusCode()).isEqualTo(200);assertThat(mapper.readTree(publicResult.body()).path("document").isNull()).isTrue();assertThat(publicResult.body().contains("ONLY_MEMBER_BODY")).isFalse();
         assets.editorialDownload(owner.id(),fixture.file(),"FILE","fr",new AssetAccessContext("fr",fixture.activity().resourceId(),fixture.activity().versionId(),null));
         assertThat(catchThrowable(()->assets.editorialDownload(other.id(),fixture.file(),"FILE","fr",new AssetAccessContext("fr",fixture.activity().resourceId(),fixture.activity().versionId(),null)))).isInstanceOf(AccessDeniedException.class);
+    }
+
+    @Test void freshlyCommittedPostgresTimestampIsReadableInParallelMemberAndLearningTransactions()throws Exception{
+        var owner=account(false);var fixture=fixture(account(true).id());
+        var firstSession=login(owner);var secondSession=login(owner);
+        String memberPath="/api/v1/me/resources/"+fixture.activity().resourceId()+"/versions/"+fixture.activity().versionId();
+        assertThat(get(firstSession,memberPath+"?locale=fr").statusCode()).isEqualTo(403);
+        assertThat(get(secondSession,memberPath+"?locale=en").statusCode()).isEqualTo(403);
+        UUID origin=UUID.randomUUID();
+        // Match activation's PG -> Instant -> Timestamp binding, without the other fixtures' one-minute margin.
+        Instant activated=new TransactionTemplate(transactions).execute(status->{
+            Instant now=jdbc.queryForObject("SELECT clock_timestamp()",Timestamp.class).toInstant();
+            jdbc.update("""
+                INSERT INTO access_grants(id,owner_id,resource_id,version_id,origin_type,manual_origin_id,locales,version_policy,starts_at)
+                VALUES(?,?,?,?,'MANUAL_TEST',?,'["fr","en"]'::jsonb,'PINNED',?)
+                """,origin,owner.id(),fixture.course().resourceId(),fixture.course().versionId(),UUID.randomUUID(),Timestamp.from(now));
+            return now;
+        });
+        assertThat(activated).isNotNull();
+        assertThat(jdbc.queryForObject("SELECT starts_at=? FROM access_grants WHERE id=?",Boolean.class,Timestamp.from(activated),origin)).isTrue();
+        assertThat(jdbc.queryForObject("SELECT starts_at<=clock_timestamp() FROM access_grants WHERE id=?",Boolean.class,origin))
+            .as("PostgreSQL must see the freshly committed origin as started").isTrue();
+        var enrollment=learning.enroll(owner.id(),owner.id(),new EnrollCourse(fixture.course().resourceId(),fixture.course().versionId(),"fr")).value();
+        var tasks=new ArrayList<Callable<Void>>();var start=new CyclicBarrier(8);
+        for(int index=0;index<8;index++){
+            String locale=index%4<2?"fr":"en";var session=index%2==0?firstSession:secondSession;
+            tasks.add(()->{
+                start.await(10,TimeUnit.SECONDS);
+                var member=get(session,memberPath+"?locale="+locale);
+                assertThat(member.statusCode()).as("Fresh-origin member HTTP status").isEqualTo(200);
+                var memberJson=mapper.readTree(member.body());
+                assertThat(memberJson.path("document").isObject()).isTrue();
+                assertThat(member.body().contains("ONLY_MEMBER_BODY")).isTrue();
+                var activity=get(session,"/api/v1/me/enrollments/"+enrollment.summary().id()+"/activities/"+fixture.activity().resourceId()
+                    +"?activityVersionId="+fixture.activity().versionId()+"&locale="+locale);
+                assertThat(activity.statusCode()).as("Fresh-origin learning HTTP status").isEqualTo(200);
+                var activityJson=mapper.readTree(activity.body());
+                assertThat(activityJson.path("accessStatus").asText()).isEqualTo("ACTIVE");
+                assertThat(activityJson.path("availability").asText()).isEqualTo("PUBLISHED");
+                assertThat(activityJson.path("resource").path("locale").asText()).isEqualTo(locale);
+                assertThat(activityJson.path("resource").path("document").isObject()).isTrue();
+                return null;
+            });
+        }
+        try(var executor=Executors.newVirtualThreadPerTaskExecutor()){
+            for(var result:executor.invokeAll(tasks,30,TimeUnit.SECONDS))result.get();
+        }
     }
 
     @Test void protectedLearningAndProjectsWorkAfterARealGrantAndPersonalWorkSurvivesRevocation(){

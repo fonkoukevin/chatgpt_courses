@@ -56,6 +56,7 @@
     "verify:media": "node scripts/verify-browser.mjs P10",
     "verify:commerce": "node scripts/verify-browser.mjs P11",
     "verify:payments": "node scripts/verify-browser.mjs P12",
+    "verify:stripe-test": "node scripts/verify-browser.mjs P12_EXTERNAL",
     "verify:design": "node scripts/verify-browser.mjs P02",
     "verify:contrast": "node scripts/verify-contrast.mjs",
     "browser:install": "node scripts/install-browser.mjs",

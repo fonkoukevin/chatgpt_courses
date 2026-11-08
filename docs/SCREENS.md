@@ -131,6 +131,8 @@ Composants : AuthLayout, FormField, PasswordField, FormError et ResumeContext.
 
 Routes : /fr/offres, /en/offers et étape de récapitulatif ; Stripe Checkout reste le service externe de paiement. Phases P11/P12.
 
+P11 est vérifié localement : listes/détails d’offres, conditions versionnées, préparation idempotente après consentement, récapitulatifs `/fr/commandes/{id}/recapitulatif` et `/en/orders/{id}/summary`, listes privées et refus d’un autre propriétaire. Offre changée et configuration incomplète demandent une revue explicite ; couverture existante et chevauchement de pack restent distincts du total. Checkout désactivé avec explication avant P12. Huit scénarios Chromium et vingt captures examinées ; [preuves et limites](evidence/P11.md).
+
 Présenter produit, parcours inclus, langues, durée d’accès, actualisations, accompagnement, total applicable et outils externes. Une offre non complète est visible mais non achetable si cette présentation est utile ; elle précise ce qui manque sans annoncer un faux prix.
 
 Avant création de session, identification puis récapitulatif préparé par le backend. Traiter achat existant, commande en cours, double clic et offre modifiée. Les lignes/conditions acceptées sont figées à l’achat. Aucun formulaire local ne collecte les données de carte.

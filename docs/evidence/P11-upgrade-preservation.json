@@ -1,0 +1,30 @@
+{
+  "verifiedAt": "2026-11-08T07:48:51.439Z",
+  "migrations": [
+    "001",
+    "002",
+    "003",
+    "004",
+    "005",
+    "006",
+    "007",
+    "008",
+    "009",
+    "010",
+    "011",
+    "012"
+  ],
+  "legacyTablesUnchanged": 36,
+  "allLegacyRowFingerprintsEqual": true,
+  "newTables": {
+    "products": 0,
+    "offers": 0,
+    "offer_revisions": 0,
+    "offer_revision_resources": 0,
+    "offer_events": 0,
+    "orders": 0,
+    "order_resources": 0,
+    "order_idempotency_keys": 0,
+    "access_grants": 0
+  }
+}

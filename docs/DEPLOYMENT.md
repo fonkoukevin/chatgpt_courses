@@ -77,6 +77,8 @@ Chaque secret n’est accessible qu’au service qui en a besoin. Les secrets Co
 
 Prévoir une validation de configuration : un serveur peut fonctionner avec des contenus gratuits alors que les paiements sont désactivés ; une offre incomplète ou sans intégration requise ne devient pas achetable. En production, le mode démo et les utilisateurs de démonstration doivent être désactivés.
 
+P11 conserve `COMMERCE_ENABLED=false` et `COMMERCE_ALLOWED_CURRENCIES=` par défaut. Pour une installation réellement destinée à la vente, configurer explicitement la liste autorisée parmi EUR/USD/GBP et les paramètres de chaque offre ; une liste vide bloque la préparation. Les trois devises supportées ont chacune une échelle de deux décimales, sans généralisation aux autres devises. `COMMERCE_ORDER_TTL=30m` borne une préparation sans paiement (1 minute à 24 heures) ; il n’expire pas une opération financière ambiguë. `summaryReady` contrôle les données d’offre et publications, `checkoutAvailable` contrôle aussi l’état actif et le fournisseur. En P11 aucun adaptateur de paiement n’est configuré. Les fixtures de `verify:commerce` sont créées uniquement dans PostgreSQL tmpfs étiqueté de recette, jamais par une migration de production.
+
 ## Médias et emails
 
 Un fichier premium reste dans un bucket privé. L’API vérifie publication, propriétaire, droit et état du fichier avant de délivrer un accès temporaire. Prévoir une clé d’objet opaque, un MIME contrôlé, une taille maximale, une règle de téléchargement et une vérification après upload. Une clé fournie par le navigateur n’est pas une autorisation.

@@ -56,6 +56,17 @@ Aucune incompatibilité prouvée ne justifie de remplacer la stack. Les compatib
 - OpenAPI limité aux opérations présentes ; client généré Hey API 0.99.0 compatible TypeScript 6, validation Redocly core 2.76.0. Contrat et fichiers générés contrôlés en CI ; décodeurs réseau conservés dans l’adaptateur manuscrit.
 - Révision explicite obligatoire pour les futures écritures : 428 si absente, 412 si dépassée ; `*` ne satisfait pas cette politique de révision. Comparaison puis écriture sous transaction et `@Version`, après autorisation. Politique d’accès interne avec refus par défaut, sans prétention d’authentification déjà intégrée.
 
+## Décisions de réalisation P11 — 8 novembre 2026
+
+- Produit, offre commerciale révisée, commande préparée, paiement et droit restent distincts. V012 est additive ; aucun prix, compte marchand ou droit fictif n’est installé par Flyway. COMMERCE_MANAGER est une référence de permission sans compte attribué ; EDITOR ne reçoit pas les opérations commerciales.
+- `COMMERCE_ENABLED=false` et devises activées vides par défaut. Le socle supporte explicitement EUR/USD/GBP, chacune à deux décimales ; seule EUR est activée dans les fixtures isolées. Cela ne choisit ni devise ni prix de l’offre réelle et n’impose pas deux décimales à toutes les devises ISO. Ajouter une devise nécessite une décision d’implémentation documentée.
+- Le prix de l’offre est le total applicable explicite ; une fiscalité EXCLUSIVE reste bloquée sans calcul réel. INCLUSIVE/EXEMPT exige un libellé configuré, sans inventer de régime fiscal. La readiness structurelle est distincte de la disponibilité du Checkout ; le gateway désactivé bloque ce dernier jusqu’à P12.
+- Préparation de commande : TTL de 30 minutes, configurable de 1 minute à 24 heures. Une nouvelle acceptation explicite d’une autre révision/langue/conditions peut remplacer seulement une préparation PREPARED dont paiement et activation sont NOT_STARTED ; l’ancienne passe CANCELLED sans effacement. Aucun paiement commencé ou ambigu n’est remplacé automatiquement.
+- Révisions d’offres et snapshots de commandes sont immuables. Acceptation explicite de la version des conditions enregistrée avec la préparation ; lecture seule et visite ne constituent pas un consentement. Même intention active réutilisée sous verrou même avec deux clés, sans double préparation involontaire.
+- Les origines `access_grants` ont des FK vérifiables et restent indépendantes par acquisition. P11 ne possède aucun service/API d’attribution ni de marquage PAID. MANUAL_TEST appartient uniquement aux fixtures SQL local/test et est ignoré hors de ces environnements ; ORDER_LINE attend la confirmation financière P12. Les ressources premium restent refusées avant ce raccordement.
+
+Ces choix techniques sont réversibles et validés localement : ciblé combiné 26/26, global Java 155/155, puis ciblé HTTP final 10/10 après raccordement natif et dernier recontrôle de permission. Chromium 8/8 sans filtre/retry, vingt captures examinées et chaîne HTTP réelle réussissent ; les processus de recette sont arrêtés. Ces résultats ne ferment aucun des paramètres commerciaux réels ci-dessous et ne valident aucun paiement Stripe, réservé à P12. [Preuves P11](evidence/P11.md).
+
 ## Décisions commerciales encore ouvertes
 
 | Paramètre | État initial | Effet avant décision |

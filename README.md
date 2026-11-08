@@ -357,3 +357,23 @@ Pour diagnostiquer un scénario, le superviseur accepte `--grep` et `--repeat-ea
 ```
 
 Un tel passage reste ciblé ; `session.json` enregistre la sélection. La validation du lot utilise aussi la commande complète sans filtre.
+
+## Offres et commandes P11 — validées localement
+
+Offres publiques : `/fr/offres`, `/en/offers`, puis `/{offerId}`. Commandes du propriétaire : `/fr/commandes` ou `/en/orders`, puis `/{orderId}/recapitulatif` ou `/{orderId}/summary`. Spring calcule les montants, ressources, langues et conditions ; une commande préparée ne confirme aucun paiement ni nouvel accès. Le Checkout reste indisponible jusqu’au raccordement P12.
+
+Le commerce reste désactivé par défaut : `COMMERCE_ENABLED=false`, `COMMERCE_ALLOWED_CURRENCIES=`. Les devises supportées par ce premier socle sont EUR/USD/GBP, chacune à deux décimales, avec une liste autorisée explicite côté serveur. Un prix, une durée ou des conditions absents restent non renseignés et bloquent la préparation. Aucun tarif ou texte juridique réel n’est livré. Les offres fictives sont créées explicitement par les tests sur une base temporaire ; ni Flyway ni `seed:local` n’en crée dans la base partagée.
+
+Les opérations administratives exigent les permissions `commerce.offers.read/write/activate`, distinctes de `EDITOR`. Aucun compte commercial n’est créé. L’API d’administration est décrite dans [OpenAPI](docs/api/openapi.yaml) ; la console commerciale complète sera étendue par les lots suivants.
+
+Le consentement porte explicitement sur la version des conditions affichée. `Idempotency-Key` est un UUID : même clé/corps retrouve la même commande, même clé/autre corps est refusé. La préparation expire après `COMMERCE_ORDER_TTL=30m` (borne1minute–24heures), sans supprimer l’historique. Une nouvelle révision explicitement acceptée remplace seulement une préparation dont le paiement n’a pas commencé. Un achat en état ambigu doit être rapproché avant toute autre tentative.
+
+```powershell
+.\scripts\courses.cmd run api:check
+.\scripts\courses.cmd run verify:client
+.\scripts\courses.cmd run verify:api
+.\scripts\courses.cmd run build:web
+.\scripts\courses.cmd run verify:commerce
+```
+
+`verify:commerce` utilise les builds et Chromium installés, avec PostgreSQL tmpfs isolé et commerce fictif explicitement activé dans ce seul processus de recette. Stripe reste désactivé, ses clés sont retirées de cet environnement. Huit scénarios passent et vingt captures FR/EN ont été examinées. Global Java155 puis ciblé final HTTP10, client77, builds et chaîne HTTP réussis ; chronologie exacte et limites dans [P11](docs/evidence/P11.md).

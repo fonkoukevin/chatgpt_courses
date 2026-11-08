@@ -4,7 +4,7 @@ Vérifications réalisées les **7 et 8 novembre 2026**, dans les documentations
 
 ## Complément verrouillé en P10
 
-AWS SDK Java **2.57.11** : BOM exact, modules `s3` et `url-connection-client`. Les transports Apache/Netty inutilisés sont exclus ; Java 21 et le BOM Spring Boot 4.1.2 restent inchangés. La [release officielle du 6 novembre](https://github.com/aws/aws-sdk-java-v2/releases/tag/2.57.11) a été vérifiée avant ajout. Dépendances résolues, compilation puis huit tests d’intégration S3/PostgreSQL exécutés sous le JDK verrouillé ; vérifications globales P10 encore en cours. SeaweedFS **4.52**, son digest et le lockfile npm sont conservés. Les preuves détaillées et limites figurent dans [P10](evidence/P10.md).
+AWS SDK Java **2.57.11** : BOM exact, modules `s3` et `url-connection-client`. Les transports Apache/Netty inutilisés sont exclus ; Java 21 et le BOM Spring Boot 4.1.2 restent inchangés. La [release officielle du 6 novembre](https://github.com/aws/aws-sdk-java-v2/releases/tag/2.57.11) a été vérifiée avant ajout. Dépendances résolues, global138tests Java, ciblé S3 huit tests et Chromium12/12 exécutés sous les outils verrouillés. SeaweedFS **4.52**, son digest et le lockfile npm sont conservés. Les preuves détaillées et limites figurent dans [P10](evidence/P10.md). P11 ne change aucune dépendance.
 
 ## Compléments verrouillés en P03
 

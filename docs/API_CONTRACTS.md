@@ -332,14 +332,46 @@ Le flux supporte une seule plage `bytes`, avec 200/206/416, `Accept-Ranges`, `Co
 Import uniquement par manifeste serveur local/test, chemin privé absolu et CLI explicite sans Spring, migration ou seed. Le registre est immuable ; un id existant incompatible est refusé avant copie, une restauration identique reste possible. Traversées, symlinks sortants et racines public/static/.next sont refusés. Aucun téléversement vidéo arbitraire ni transcodage maison n’est ajouté.
 
 
-## Offres, commandes, Stripe et remboursements — planifié P11–P13
+## Offres et préparation de commande — P11 validé localement
+
+Treize opérations Spring et leurs DTO explicites sont implémentés. Le ciblé combiné PostgreSQL/HTTP/schéma a réussi : **26/26**, dont **huit tests de service d’offres** et **neuf tests HTTP de commerce**. Le global Java a ensuite réussi : **155 tests**, zéro échec/erreur/ignoré, Maven **6 min 12**, terminé le 8 novembre 2026 à 08:46:32 +01:00. Après raccordement des variables natives puis ajout du recontrôle de permission attendu après verrou, le ciblé HTTP final a réussi **10/10**, Maven **1 min 23**, avec repackage du JAR final. Le global 155 précède ce dernier correctif ; le ciblé dix l’exécute. **Chromium 8/8**, sans filtre ni retry, **20 captures examinées**, chaîne HTTP réelle et nettoyage des processus réussis. [Chronologie des preuves](evidence/P11.md). P11 prépare une commande persistée, ni un paiement ni une attribution d’accès. Préfixe `/api/v1`.
+
+| Méthode et route | Résultat | Autorisation |
+| --- | --- | --- |
+| `GET /offers?locale&page&pageSize` | `OfferPage`, ACTIVE/INACTIVE seulement | Public, sans personnalisation |
+| `GET /offers/{id}?locale` | `PublicOffer` | Public ; DRAFT reste 404 |
+| `GET /admin/offers?q&state&kind&locale&page&pageSize` | `OfferPage` | `commerce.offers.read` |
+| `POST /admin/offers` | `CreateOffer` → `OfferView`, 201 | `commerce.offers.write` |
+| `GET /admin/offers/{id}` | `OfferView` + ETag | `commerce.offers.read` |
+| `PATCH /admin/offers/{id}` | `SaveOffer` → nouvelle révision, ETag | `commerce.offers.write`, If-Match |
+| `GET /admin/offers/{id}/readiness` | `OfferReadiness` | `commerce.offers.read` |
+| `POST /admin/offers/{id}/activate` | `{reason}` → `OfferView` + ETag | `commerce.offers.activate`, If-Match, readiness recalculée |
+| `POST /admin/offers/{id}/deactivate` | `{reason}` → `OfferView` + ETag | `commerce.offers.activate`, If-Match |
+| `GET /me/offers/{id}/purchase-context?locale` | `PurchaseContext` | `commerce.orders.read`, compte actif |
+| `POST /me/orders` | `CreateOrder` → `OrderView`, 201/200 | `commerce.orders.write`, compte actif |
+| `GET /me/orders?page&pageSize` | `OrderPage` | Propriétaire, `commerce.orders.read` |
+| `GET /me/orders/{id}` | `OrderView` + ETag | Propriétaire, `commerce.orders.read` ; autrui 404 |
+
+Toutes les mutations exigent CSRF et `X-Account-Context`. Les commandes exigent en plus `Idempotency-Key` UUID canonique ; absence 428 `IDEMPOTENCY_KEY_REQUIRED`, syntaxe invalide 400. Les réponses sont `private, no-store`, les routes admin non indexables. Pagination 0..1000000 / taille 1..100 ; offres code ASC puis id, commandes createdAt DESC puis id. Recherche admin q ≤240 caractères. Les permissions commerciales ne sont pas accordées à EDITOR : COMMERCE_MANAGER est une référence sans compte ; LEARNER possède seulement lecture/écriture de ses commandes.
+
+`CreateOffer={code,kind,fields,reason}` : code stable, kind COURSE ou PACK ; `SaveOffer={fields,reason}` crée un instantané append-only. `OfferFields` contient copies FR/EN, ressources `{resourceId,versionId}` exactes, langues incluses, prix `Money` nullable, fiscalité et conditions. Les conditions distinguent accès FIXED/UNLIMITED, actualisations NONE/PERIOD, politique PINNED/UPDATES_DURING_PERIOD, support NONE/ASYNC, correction humaine désactivée et textes versionnés par langue. Un champ absent/vide en brouillon reste non configuré. Total éditable ≤48 KiB UTF8 ; vingt inclusions maximum, une pour COURSE et au moins deux pour PACK. Aucun prix d’un exercice ne devient un prix de formation.
+
+La liste de devises activées est configurée serveur, vide par défaut ; le socle sait traiter explicitement EUR/USD/GBP à deux décimales, sans supposer cette échelle pour toute devise ISO. Le total est fourni par l’offre serveur, sans calcul fiscal implicite : EXCLUSIVE est bloqué faute de calcul de total applicable ; INCLUSIVE/EXEMPT exigent un libellé configuré. Cela ne remplace pas la validation des paramètres commerciaux et juridiques réels.
+
+`OfferView` contient identité produit/offre, révision agrégée, id/numéro de révision historique, code/type/état, champs et dates ; tag fort `"offer-{id}-r{revision}"`. La readiness dynamique reste séparée. Une sauvegarde d’offre ACTIVE la remet INACTIVE, puis nécessite réactivation explicite. `OfferReadiness={offerId,checkedRevision,summaryReady,checkoutAvailable,blockingIssues,warnings,checkoutUnavailableReason}` distingue les conditions structurelles de la disponibilité du paiement. `summaryReady` peut être vrai sur une offre INACTIVE ; la commande exige ACTIVE et revérifie révision, langues, descendants épinglés et médias obligatoires réellement disponibles. `checkoutAvailable` reste faux avec `PAYMENT_NOT_CONFIGURED` en P11.
+
+`PublicOffer.resources` contient une entrée par ressource dans la seule langue demandée, avec version/numéro, titre/slug, état de disponibilité et accès ; aucun corps premium/corrigé n’y figure. La readiness contrôle toutes les langues incluses. Une traduction absente reste explicite, sans repli silencieux. Prix et conditions incomplets restent nullable plutôt que fabriqués.
+
+`PurchaseContext={offer,coverage,activeOrder}` est privé et sans ETag : couverture NONE/PARTIAL/ALL, langues déjà couvertes/manquantes par ressource et commande préparée éventuelle. FREE signifie que le parcours et tous ses descendants sont effectivement ouverts ; un simple suivi d’apprentissage ne vaut pas achat. Les origines de droits sont lues sans être créées en P11 ; les fixtures MANUAL_TEST sont ignorées hors local/test. Une couverture partielle ne crée aucune réduction et une couverture complète refuse une nouvelle préparation par 409 `ALREADY_ACCESSIBLE`.
+
+`CreateOrder={offerId,offerRevision,locale,acceptedTermsVersion}` ne reçoit ni propriétaire, prix, montant, ressources, état financier ou droit. L’action explicite d’acceptation des conditions doit précéder ce POST ; version exacte et date serveur sont enregistrées après les verrous. Le serveur fige `OrderSnapshot` : révision d’offre, lignes de ressources, titres, versions/langues, total/devise, fiscalité et conditions. Offre modifiée : 409 `OFFER_CHANGED`, récapitulatif à revoir ; conditions différentes : 409 `TERMS_CHANGED` ; offre incomplète : 409 `OFFER_NOT_READY`.
+
+`OrderView` sépare orderStatus PREPARED/EXPIRED/CANCELLED, paymentStatus NOT_STARTED et fulfillmentStatus NOT_STARTED, snapshot, acceptation et dates. Tag `"order-{id}-r{revision}"`. TTL de préparation par défaut 30 min, borné de 1 min à 24 h. Même clé/corps retrouve la même commande, même clé/autre corps 409 CONFLICT ; deux clés pour une même intention active retrouvent aussi la même commande. Une nouvelle acceptation explicite d’une autre révision/langue/conditions ne remplace que PREPARED sans paiement ni activation commencés : l’ancienne devient CANCELLED et son snapshot reste intact. Un paiement ambigu/commencé ne doit jamais être annulé automatiquement ; 409 `ACTIVE_ORDER_EXISTS`. Le Checkout, la confirmation financière et l’attribution sont réservés à P12.
+
+## Stripe et remboursements — planifiés P12–P13
 
 | Méthode et route | Entrée ou résultat |
 | --- | --- |
-| `GET /offers/{offerId}?locale=fr` | Offre publique, révision, conditions, total applicable ou raisons d’indisponibilité |
-| `POST /me/orders` | `{ offerId, offerRevision, locale }`, clé d’idempotence ; récapitulatif calculé et instantané côté serveur |
-| `GET /me/orders` | Liste paginée des commandes du propriétaire |
-| `GET /me/orders/{orderId}` | Instantané, montants, paiement, remboursement, activation, droits et actions disponibles |
 | `POST /me/orders/{orderId}/checkout` | `{ acceptedTermsVersion }`, `If-Match` et clé d’idempotence ; Checkout créé depuis l’instantané serveur valide et les conditions explicitement acceptées |
 | `POST /webhooks/stripe` | Corps brut et `Stripe-Signature` ; aucune session utilisateur ni prix fourni par le navigateur |
 | `GET /me/entitlements` | Origines d’accès et périodes présentables au propriétaire |
@@ -352,14 +384,14 @@ Les champs exacts d’un instantané incluent `offerId`, `offerRevision`, lignes
 
 La page de retour interroge la commande propriétaire avec une attente bornée et propose ensuite un retour au compte. Elle n’interroge pas Stripe directement avec une clé secrète. Une commande à état ambigu ne déclenche pas automatiquement une deuxième tentative payante.
 
-## Administration commerciale et exploitation — planifiées P11–P15
+## Administration commerciale et exploitation — P11 présent, suites P12–P15 prévues
 
-Les routes `/admin/**` exigent des permissions précises. Les permissions affichées au client facilitent l’interface ; elles ne dispensent pas des contrôles Spring sur chaque opération.
+Les routes `/admin/**` exigent des permissions précises. Les permissions affichées au client facilitent l’interface ; elles ne dispensent pas des contrôles Spring sur chaque opération. Les offres/readiness/activation sont implémentées en P11 comme décrit ci-dessus ; les opérations financières et de support ci-dessous restent prévues pour leurs lots.
 
 | Groupe de routes | Opérations |
 | --- | --- |
-| `/admin/offers` et `/{id}/readiness` | Offres, prix, inclusions, conditions et bloqueurs commerciaux |
-| `/admin/offers/{id}/activate` / `deactivate` | Vente active distincte de publication ; audit et révision |
+| `/admin/offers` et `/{id}/readiness` | P11 implémenté : offres, prix, inclusions, conditions et bloqueurs commerciaux |
+| `/admin/offers/{id}/activate` / `deactivate` | P11 implémenté : offre active distincte de publication ; audit et révision |
 | `/admin/orders/{id}` | Consultation opérationnelle et origine des droits |
 | `/admin/orders/{id}/reconciliation-requests` | Reprise du rapprochement réel, pas bouton « marquer payé » |
 | `/admin/refund-requests/{id}/decision` | Décision explicite : montant, lignes, effet d’accès et motif |

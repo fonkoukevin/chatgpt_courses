@@ -1,18 +1,18 @@
 # État réel du projet
 
-Dernière mise à jour : **8 novembre 2026**. **P10 validé localement**. Autorisation utilisateur : enchaîner **P04 à P12**, dans l’ordre, en passant au lot suivant seulement après validation du précédent. Aucun ancien prototype repris ni déploiement externe.
+Dernière mise à jour : **8 novembre 2026**. **P11 validé localement**. Autorisation utilisateur : enchaîner **P04 à P12**, dans l’ordre, en passant au lot suivant seulement après validation du précédent. Aucun ancien prototype repris ni déploiement externe.
 
 ## Situation courante
 
-- Dernière phase validée : **P10**. **138 tests Java**, 71 tests client, builds et chaîne HTTP réussis ; migration conservatrice vérifiée. Défaut de capacité S3 après flush du journal corrigé : profils alignés à 24 slots, contre-épreuve et huit tests S3 réussis. Chromium complet **12/12 en 97,364 s**, 42 captures FR/EN examinées ; tous les processus et services isolés arrêtés. [Preuves et limites P10](evidence/P10.md).
-- Git local : branche `main`, code P10 **`6eb1093`**, P09 **`8101f2a`**, P08 **`fd0e038`**, P07 **`3494bd1`**, P06 **`458cf7c`**, P05 **`5dab875`**, P04 **`ba63356`**, P03 **`6a53c19`** ; aucun remote/push. Les 49 fichiers initiaux restent présents, contrôle P10 répété.
+- Dernière phase validée : **P11**. Global **155 tests Java**, puis ciblé final **10 HTTP** après recontrôle de permission, **77 tests client**, builds et chaîne HTTP réussis. Chromium complet **8/8 en 65,266 s**, vingt captures FR/EN examinées ; tous les processus et PostgreSQL isolé arrêtés. [Preuves et limites](evidence/P11.md). P10 : stockage/vidéo/outbox [validés localement](evidence/P10.md).
+- Git local : branche `main`, code P11 **`ca0d28d`**, P10 **`6eb1093`**, P09 **`8101f2a`**, P08 **`fd0e038`**, P07 **`3494bd1`**, P06 **`458cf7c`**, P05 **`5dab875`**, P04 **`ba63356`**, P03 **`6a53c19`** ; aucun remote/push. Les 49 fichiers initiaux restent présents, contrôle P11 répété.
 - Outils : Windows/PowerShell 5.1, Node portable 24.22.2/npm 11.19.1, Temurin 21.0.13+9, Wrapper Maven 3.10.0 ; Docker Linux 29.8.0/Compose 5.5.1.
-- Schéma local : **V001–V011** ; upgrade P10 depuis V008 exécuté sans Spring/seed. Empreintes des lignes des **30 tables existantes identiques**, six nouvelles tables vides ; 13 comptes, 3 ressources, 6 révisions conservés. Aucun compte EDITOR attribué. [DATA_MODEL.md](DATA_MODEL.md).
+- Schéma local : **V001–V012** ; upgrade P11 depuis V011 exécuté sans Spring/seed. Empreintes des **36 tables existantes identiques**, neuf nouvelles tables commerce vides ; aucun compte/offre/droit de démonstration ajouté dans la base partagée. [DATA_MODEL.md](DATA_MODEL.md).
 - Démarrage : `.\scripts\courses.cmd run dev` applique Flyway ; `run seed:local` charge explicitement un dossier fictif en brouillon. `run storage:setup` prépare le S3 local ; deux replays observés sans modifier l’environnement existant. [Commandes](../README.md). Applications de vérification arrêtées ; PostgreSQL/Mailpit/S3 sains, volumes et données conservés.
 - Preuves P09 : **112 tests Java**, **58 tests du client**, OpenAPI validé et 17 fichiers générés identiques ; lint/types, builds web/API et chaîne HTTP réelle réussis. CI conservée, aucun run GitHub.
 - Chromium P09 final sans traces temporaires : **8/8 en 59,944 s** ; T02 FR/EN en seconde session, grilles BR01/BR02, historique, corrigé, propriété, conflits/panne, frontières de compte et CMS. **39 captures examinées**, puis cinq finales ; viewports 1440/1024/768/390/320. Régression P08 **10/10**. Processus supervisés et PostgreSQL tmpfs arrêtés ; preuves précédentes conservées.
 - Observation : un refus de confirmation intermédiaire après PATCH 200, texte conservé, n’a pas été reproduit sur 16 répétitions FR puis la recette finale. Cause non établie, aucune correction de cause revendiquée ; cas conservé pour P17/P19. Aucun contrôle désactivé. [Détails](evidence/P09.md).
-- Suite : **`prompts/P11_OFFRES_COMMANDES.txt`**, puis P12 automatiquement si P11 passe. L’utilisateur prévoit de renseigner les clés Stripe de test dans `.env.local` ; présence à revérifier en P12 sans afficher les valeurs. Prix, fiscalité, durée, conditions, langues, support et médias commerciaux restent ouverts. Aucun run GitHub, SMTP externe ou fournisseur vidéo de production observé.
+- Suite : **`prompts/P12_STRIPE_ATTRIBUTION.txt`** automatiquement. L’utilisateur prévoit de renseigner les clés Stripe de test dans `.env.local` ; présence à revérifier sans afficher les valeurs. Prix, fiscalité, durée, conditions, langues, support et médias commerciaux restent ouverts ; commerce partagé désactivé. Aucun paiement, run GitHub, SMTP externe ou fournisseur vidéo de production observé.
 
 ## Phases
 
@@ -29,7 +29,7 @@ Dernière mise à jour : **8 novembre 2026**. **P10 validé localement**. Autori
 | P08 | Validé localement | Apprentissage, quiz, notes et historique ; 95 tests Java, 10 scénarios Chromium ; voir `evidence/P08.md` |
 | P09 | Validé localement | Projets et autoévaluation ; 112 tests Java, 8 scénarios Chromium ; [preuve et limites](evidence/P09.md) |
 | P10 | Validé localement | Stockage, vidéo locale de test et outbox ; 138 tests Java, 12 scénarios Chromium ; [preuves](evidence/P10.md) |
-| P11 | À faire | Offres et commandes |
+| P11 | Validé localement | Offres/snapshots/commandes ; global Java155 puis HTTP10 final, Chromium8/8 ; [preuves](evidence/P11.md) |
 | P12 | À faire | Stripe et attribution |
 | P13 | À faire | Remboursements et droits |
 | P14 | À faire | Compte, aide et attestations |
@@ -47,6 +47,6 @@ Dernière mise à jour : **8 novembre 2026**. **P10 validé localement**. Autori
 
 ## Dernier lot
 
-Fichiers privés et images CMS réellement transférés/validés ; clés READY immuables, quotas et accès courts côté serveur. MP4 technique local lu dans Chromium, positions indépendantes des acquis. Outbox FR/EN durable et chiffrée, SMTP hors transaction, incident ambigu et reprise opérateur vérifiés. PDF refusé sans validateur. Aucun média de cours prétendument produit, offre commerciale, appel IA ou compte opérateur connu créé.
+Offres versionnées et commandes privées calculées par Spring ; consentement explicite, montants/langues/conditions et ressources figés. Idempotence et remplacement contrôlé d’une préparation sans paiement, droits par origine en lecture, chevauchements sans remise inventée. Prix/conditions absents bloquent la préparation ; Checkout reste désactivé avant P12. Aucun tarif réel ou compte commercial connu créé.
 
 Garder ce suivi court ; détailler les commandes et limites dans `docs/evidence/Pxx.md`. Une reprise part des fichiers et preuves présents, sans supposer l’historique de conversation.

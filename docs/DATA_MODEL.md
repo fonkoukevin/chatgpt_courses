@@ -1,6 +1,6 @@
-# Modèle relationnel — socles P03 à P10
+# Modèle relationnel — socles P03 à P11
 
-Les migrations sont la définition exécutable du schéma. Ce document distingue les tables implémentées des extensions à créer dans les lots métier. V009/V010/V011 sont validées localement en P10 : **138 tests Java globaux**, ciblé identité **6/6 sous `MAIL_MODE=disabled`**, ciblé stockage final **8/8 à 24 slots** et **12/12 scénarios Chromium**. Les ciblés complètent le global sans s’ajouter à son décompte. Les preuves de chaque lot indiquent le niveau réellement exécuté.
+Les migrations sont la définition exécutable du schéma. Ce document distingue les tables implémentées des extensions à créer dans les lots métier. V009/V010/V011 sont validées localement en P10 : **138 tests Java globaux**, ciblé identité **6/6 sous `MAIL_MODE=disabled`**, ciblé stockage final **8/8 à 24 slots** et **12/12 scénarios Chromium**. V012 est validée localement en P11 : global **155**, ciblé HTTP final **10/10**, Chromium **8/8** et conservation des trente-six tables existantes. Les ciblés complètent le global sans s’ajouter à son décompte ; la chronologie des correctifs est détaillée dans les preuves.
 
 ## Identité et contenu présents
 
@@ -288,12 +288,38 @@ L’inscription et la récupération insèrent leur événement dans la même tr
 
 L’import local explicite vérifie le MP4, mesure sa durée/taille/hash puis copie vers une clé privée dérivée d’un UUID serveur. Même id et mêmes faits retrouvent le registre ; un candidat incompatible est rejeté avant copie, y compris lorsque l’ancien fichier manque. Une restauration identique est permise. Aucun chemin client ou URL distante ne fait autorité. Les huit tests ciblés PostgreSQL/HTTP vérifient import/readiness, fichier absent, plages/HEAD, échéance réelle, publication/retrait/chaîne, propriétaire et concurrence. Le global et les douze scénarios Chromium P10 ont ensuite réussi, dont lecture native et reprise réelle des positions. Le clip technique est documenté [hors répertoires publics](../tests/fixtures/media/README.md) ; ni cours vidéo produit ni fournisseur de production ne sont déduits de cette fixture.
 
+## Offres, commandes et origines — V012 / P11 validé localement
+
+[`V012__versioned_offers_orders_and_access_origins.sql`](../apps/api/src/main/resources/db/migration/V012__versioned_offers_orders_and_access_origins.sql) ajoute neuf tables, sans offre, prix, achat, compte ou attribution de démonstration. V001–V011 restent inchangées. Le ciblé combiné a exécuté **26 tests PostgreSQL/HTTP/schéma réussis**, dont huit services d’offres, neuf HTTP commerce et neuf de schéma ; le global Java a ensuite réussi avec **155 tests**, avant le dernier recontrôle de permission. Le ciblé HTTP final **10/10** couvre ce correctif et le raccordement natif. L’upgrade V011 et la conservation d’un compte/session sont testés ; l’upgrade Compose par Flyway seul conserve les empreintes des **36 tables existantes** et les neuf tables commerciales restent vides. La recette Chromium **8/8** et la chaîne HTTP réelle réussissent, sans données commerciales ajoutées dans la base partagée. [Preuves P11](evidence/P11.md).
+
+| Table | Relations et intégrité |
+| --- | --- |
+| `products` | Identité UUID, code unique et type COURSE/PACK ; identité immuable |
+| `offers` | FK produit, état DRAFT/ACTIVE/INACTIVE, révision agrégée et pointeur vers une révision du même offer par FK composite ; dates UTC et compteur JavaScript sûr |
+| `offer_revisions` | FK offre et auteur, numéro unique par offre, champs JSONB bornés et motif ; append-only |
+| `offer_revision_resources` | Inclusions ordonnées uniques par révision, FK composites vers version/ressource et type COURSE ; append-only |
+| `offer_events` | Acteur, opération CREATE/SAVE/ACTIVATE/DEACTIVATE, motif et révision de la même offre ; journal append-only |
+| `orders` | Propriétaire, offre/révision par FK composite, montant/devise, instantané JSONB, acceptation versionnée et échéance ; snapshot et identité immuables |
+| `order_resources` | UUID de ligne-ressource, FK commande et version/ressource exactes, langues promises ; append-only, une inclusion par ressource/commande |
+| `order_idempotency_keys` | PK propriétaire/UUID de clé, empreinte SHA256 de 32 octets, FK commande et date ; append-only |
+| `access_grants` | Propriétaire, ressource/version, langues/périodes/politique de version et origine exclusive ORDER_LINE ou MANUAL_TEST ; origine immuable, révocation conservée |
+
+Les copies commerciales, total/devise, libellés fiscaux et conditions d’accès/actualisation/support sont capturés dans les révisions d’offre. Le JSON et les lignes d’inclusion sont écrits ensemble par le service. Les instantanés ne réemploient pas le texte pédagogique comme engagement commercial. La liste de devises activées est vide par défaut ; EUR/USD/GBP sont les seules devises prises en charge dans ce socle, chacune avec deux décimales explicites.
+
+`orders` conserve PREPARED/EXPIRED/CANCELLED ; paiement et activation restent NOT_STARTED en P11. Les CHECK imposent des montants entiers exacts et cohérents avec le snapshot, une acceptation datée identique à la création et une expiration ultérieure. PREPARED exige une clé d’intention SHA256 non nulle ; un index unique partiel `(owner_id,active_intention_key)` et le verrou du propriétaire empêchent deux préparations de la même intention. Même clé/corps retrouve le même historique, même clé/autre corps est refusée. Une nouvelle intention explicitement acceptée peut annuler une préparation sans paiement commencé, sans changer son snapshot. Les triggers interdisent suppression, réécriture de l’acceptation ou transition financière arbitraire ; P12 devra étendre explicitement les transitions autorisées.
+
+Les FK d’`order_resources` fournissent dès maintenant une origine réelle aux droits futurs. Une origine ORDER_LINE doit viser cette ligne et sa version/ressource, correspondre au propriétaire de la commande et être liée à un paiement PAID vérifié ; cet état n’est pas accessible en P11. Les langues attribuées doivent rester incluses dans la ligne. L’unicité porte sur l’origine, pas seulement propriétaire/parcours : achat individuel et pack pourront conserver deux attributions indépendantes.
+
+MANUAL_TEST possède son identifiant d’origine distinct et n’est lu qu’en local/test ; aucune API/service P11 ne crée cette attribution. Les fixtures isolées peuvent ainsi vérifier une couverture totale/partielle sans fabriquer un achat payé. `CoverageReader` lit période active, révocation, langues et politique PINNED/UPDATES_DURING_PERIOD ; les versions d’actualisation doivent être gelées dans la période autorisée. La lecture de couverture prépare le récapitulatif, elle ne raccorde pas encore les ressources premium : cette autorité sera branchée en P12.
+
+Les mutations prennent le verrou utilisateur `FOR NO KEY UPDATE`, puis offre et ressources pédagogiques dans un ordre stable. Le graphe est relu après attente des verrous : changement de portée ⇒ CONFLICT. Les dates métier sont prises avec `clock_timestamp()` après les attentes. Les lectures privées de commandes et couvertures restent no-store, et l’état dynamique de couverture n’entre pas dans l’ETag fort d’un snapshot personnel.
+
 ## Types, concurrence et suppression
 
 - UUID pour les identifiants et FK métier. Les identifiants de session historiques gardent le format officiel Spring Session de V001.
 - Instants `Instant`/`timestamptz`, connexions JDBC et Hibernate en UTC. PostgreSQL conserve un instant ; le fuseau de préférence sert à l’affichage. Dates non finies et chronologies incohérentes refusées par contraintes.
 - Révision numérique optimiste `@Version` sur les entités modifiables ; les révisions éditoriales immuables ont leur numéro historique propre. Les préférences associent If-Match et contrôle Hibernate ; le CMS JDBC associe compteur et verrou de famille ; méthodes personnelles, notes, progrès et productions associent compteur et verrou de ligne, avec comparaison transactionnelle après attente.
-- Montants futurs en `BIGINT` unités mineures avec devise explicite ; transport JSON limité aux entiers exacts JavaScript. Pas de `float`, pas d’hypothèse universelle de deux décimales. `Money`/OpenAPI vérifient syntaxe et bornes ; la liste des devises réellement autorisées appartiendra à la configuration commerciale serveur.
+- Montants commerciaux en `BIGINT` unités mineures avec devise explicite ; transport JSON limité aux entiers exacts JavaScript. Pas de `float`, pas d’hypothèse universelle de deux décimales. `Money`/OpenAPI vérifient syntaxe et bornes ; la liste des devises activées appartient à la configuration commerciale serveur, distincte des seules devises prises en charge par le socle.
 - Les FK métier sont `ON DELETE RESTRICT`. Les instantanés éditoriaux et attributions historiques sont protégés. L’anonymisation du compte est distincte de la suppression physique ; rétention et procédure d’effacement seront précisées dans les lots concernés. Seule la suppression des attributs de session suit le CASCADE officiel V001.
 - Les liens JPA sont des UUID explicites, sans graphes sérialisés ni cascades implicites. Les DTO publics sont construits par mapping ; les entités ne sont pas des réponses HTTP.
 
@@ -303,13 +329,12 @@ Les noms suivants expriment les clés et règles attendues. Ils seront concréti
 
 | Lot | Relations/contraintes à introduire | Conservation obligatoire |
 | --- | --- | --- |
-| P11 commandes | Commande → propriétaire ; lignes → snapshot offre/révision ; ressources promises → UUID ressource, version/politique et langues ; montant/devise/conditions figés | Ni changement de pack ni nouvelle offre ne modifie les lignes achetées ; aucun total autoritaire reçu du navigateur |
 | P12 paiements | Opération fournisseur → commande, mode/compte fournisseur, montant/devise ; événements entrants uniques par fournisseur/compte/mode/identifiant ; clés d’idempotence liées à utilisateur/opération/empreinte | Réception durable et effet métier uniques séparément ; paiement réussi et activation en attente peuvent coexister |
-| P12 droits | Attribution UUID → utilisateur, ressource/version/politique, origine **FK vérifiable** (ligne-ressource achetée ou origine manuelle explicite), périodes/langues | Unicité par origine et ressource, jamais seulement `(user, course)` ; chaque achat individuel et pack conserve sa propre attribution |
+| P12 attribution de droits | Écriture de l’origine ORDER_LINE déjà structurée en V012 après confirmation financière, raccordement de l’autorisation pédagogique et notifications | Unicité par origine et ressource, jamais seulement `(user, course)` ; chaque achat individuel et pack conserve sa propre attribution |
 | P13 remboursements | Remboursement → paiement, allocations de lignes et décision d’accès explicite ; réservation des montants en cours et idempotence | Réussite financière distincte de demande ; retrait des seules origines concernées après confirmation, jamais des productions/progrès |
 | P14 attestations | Attestation → utilisateur, version pédagogique et références exactes de preuves/révisions émises | Une nouvelle version ne réécrit pas l’attestation ; aucune certification ou correction humaine déduite d’une autoévaluation |
 
-L’origine d’un droit ne sera pas un simple couple texte/UUID sans intégrité : les migrations concernées définiront des FK vers l’origine réelle et une contrainte d’exclusivité entre types d’origine. Une attribution révoquée garde son historique ; une ancienne notification de paiement ne pourra pas la réactiver. Si A a été acheté seul puis dans A+B, le remboursement du pack retire uniquement ses origines ; A reste couvert par l’achat individuel.
+V012 définit déjà les FK d’origine de droit et l’exclusivité ORDER_LINE/MANUAL_TEST ; P12/P13 devront utiliser cette intégrité et conserver la révocation. Une ancienne notification de paiement ne devra pas réactiver une attribution révoquée. Si A a été acheté seul puis dans A+B, le remboursement du pack devra retirer uniquement ses origines ; A restera couvert par l’achat individuel.
 
 Les suppressions physiques et opérations financières nécessiteront des cas d’utilisation explicites. Aucun remboursement ne déclenchera une cascade vers notes, projets, méthodes, tentatives ou attestations.
 

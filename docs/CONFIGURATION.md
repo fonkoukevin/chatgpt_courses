@@ -1,6 +1,6 @@
-# Configuration des fondations P01
+# Configuration locale — P01 à P11
 
-Mise à jour : 8 novembre 2026. Les applications et scripts consomment désormais la configuration ; les intégrations métier des lots suivants restent absentes.
+Mise à jour : 8 novembre 2026. Les paramètres consommés suivent les modules réellement présents. Le niveau de validation de chaque lot figure dans STATUS et ses preuves ; une configuration préparée ne prouve aucune intégration externe.
 
 ## Fichiers et chargement
 
@@ -27,11 +27,14 @@ Le fichier `.env.local` est chargé uniquement si `APP_ENV` est absent ou vaut `
 | Base | `POSTGRES_HOST/PORT/DB/USER/PASSWORD`, connexion JDBC construite par Spring ; secret généré localement |
 | Spring | `SPRING_PROFILES_ACTIVE=local\|test\|production` cohérent avec `APP_ENV`. Le script de démarrage le dérive de `APP_ENV` si absent ; tests avec profil `test` et PostgreSQL isolé |
 | Sessions | `SESSION_COOKIE_SECURE=false` en HTTP local ; `true` requis en production. `HttpOnly`, `SameSite=Lax`, `Path=/`. Schéma JDBC migré par Flyway ; initialisation automatique désactivée |
-| Schéma | Flyway actif et nettoyage désactivé ; Hibernate `validate`. P01 crée uniquement l’infrastructure Spring Session ; aucune table métier ni seed |
+| Schéma | Flyway actif et nettoyage désactivé ; Hibernate `validate`. V001–V012 : sessions, identité, contenu, travail personnel, médias/outbox et commerce ; aucun seed commercial structurel |
 | Services | `POSTGRES_PORT`, `MAIL_HTTP_PORT`, `MAIL_SMTP_PORT`, `S3_PORT`, avec défauts 5432/8025/1025/8333 ; publication uniquement sur `127.0.0.1` |
-| S3 local | `S3_ACCESS_KEY`, `S3_SECRET_KEY` servent au fichier secret du profil ; endpoint et buckets métier seront raccordés en P10 |
+| S3 local | `STORAGE_ENABLED`, endpoints interne/externe, région, identifiants et deux buckets privés ; `storage:setup` les prépare explicitement. Formats, quotas, TTL et cleanup P10 décrits dans DEPLOYMENT ; aucune identité anonyme |
+| Emails | `MAIL_MODE`, SMTP local, `NOTIFICATION_OUTBOX_KEY` AES256 et paramètres worker/reprises ; valeurs sensibles serveur uniquement. Mailpit vérifié, livraison Internet non présumée |
+| Vidéo | `VIDEO_ENABLED=false` par défaut ; `local-test` réservé à local/test, répertoire privé absolu et import explicite. Aucun fournisseur de production configuré |
+| Commerce | `COMMERCE_ENABLED=false`, `COMMERCE_ALLOWED_CURRENCIES=` par défaut ; EUR/USD/GBP supportées explicitement, aucune devise activée implicitement. `COMMERCE_ORDER_TTL=30m`, borne1minute–24heures, seulement préparation sans paiement |
 
-Les paramètres `MAIL_*` de transport applicatif, `S3_ENDPOINT/REGION/*_BUCKET`, Stripe, vidéo et commerce restent des emplacements pour les lots métier. P01 ne prétend pas les valider ou les utiliser : aucun adaptateur d’envoi, Checkout, lecteur vidéo ou offre achetable n’existe encore. Les flags désactivés du modèle ne constituent pas à eux seuls un contrôle métier implémenté.
+Stripe reste désactivé avant P12 : aucun Checkout ou paiement réussi n’est fourni en P11. Les contrôles de contenu, conditions, montants et droits viennent des services, au-delà des seuls flags. Prix et conditions réels absents bloquent l’offre ; les fixtures navigateur commerce restent dans une base tmpfs dédiée. Voir [DEPLOYMENT](DEPLOYMENT.md) pour les paramètres médias/emails et [API_CONTRACTS](API_CONTRACTS.md) pour les règles commerciales.
 
 ## Profils et accès
 
@@ -39,7 +42,7 @@ Les paramètres `MAIL_*` de transport applicatif, `S3_ENDPOINT/REGION/*_BUCKET`,
 - **Test** : Testcontainers crée un PostgreSQL éphémère distinct ; tests HTTP réels et migrations. La CI possède en plus une base de smoke jetable, distincte des tests et de tout environnement utilisateur.
 - **Production** : profil Spring séparé, origine HTTPS et cookies sécurisés obligatoires. Aucun compte connu, aucune donnée de démonstration ou identité Next parallèle. Les pages de fondation Next retournent 404 hors local/test. Ni ce profil ni le build ne valent publication.
 
-Spring conserve CSRF et refuse les routes privées. Seuls les GET du namespace technique `system` sont publics dans P01 ; les mutations d’identité et leur proxy seront intégrés en P04. Les données et erreurs de sonde sont `no-store` ; les cookies de session ne sont relayés que vers l’API configurée, jamais vers une URL client ou une redirection externe.
+Spring contrôle session, permissions et propriété des routes privées ; CSRF reste obligatoire sur les mutations jusqu’à P11. Les lectures publiques et opérations d’identité explicitement autorisées sont listées dans OpenAPI. Réponses privées et erreurs sont `no-store` ; les cookies de session ne sont relayés que vers l’API configurée, jamais vers une URL client ou une redirection externe.
 
 Les scripts ôtent le commutateur hôte `DEBUG` de l’environnement enfant de Spring et passent `--debug=false` ; ils n’en affichent pas la valeur. La télémétrie Next et celle de l’émulateur SeaweedFS local sont désactivées.
 
@@ -49,4 +52,4 @@ La recette navigateur autorisée utilise Playwright 1.65.0. `browser:install` in
 
 Domaine, hébergement autorisé, fournisseurs et secrets de recette/production, expéditeur vérifié, contenus et traductions relus, médias annoncés, identité légale, prix et conditions de chaque offre, langues vendues et support. Ces éléments ne bloquent pas les fondations locales ; leur absence interdira de déclarer fonctionnels l’intégration externe ou le lancement correspondant.
 
-Rétention, quotas, durée d’accès, taxes, garanties, actualisations et support ne sont pas inventés dans les exemples. Les futurs instantanés de commande conserveront les paramètres effectivement achetés.
+Les limites techniques locales de fichiers/notifications sont explicites dans DEPLOYMENT. Durée d’accès, fiscalité, garanties, actualisations et support commerciaux restent à renseigner par offre ; les instantanés de commande conservent les paramètres acceptés, sans constituer une preuve de paiement.

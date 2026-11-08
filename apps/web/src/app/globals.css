@@ -5,7 +5,28 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-brand: var(--brand);
+  --color-surface: var(--surface);
+  --color-surface-subtle: var(--surface-subtle);
+  --color-surface-hover: var(--surface-hover);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-control: var(--control-border);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-soft: var(--brand-soft);
+  --color-link: var(--link);
+  --color-focus: var(--focus);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
   --font-sans: var(--font-ui);
+  --font-mono: var(--font-code);
+  --radius-input: var(--radius-field);
+  --radius-button: var(--radius-control);
+  --radius-panel: var(--radius-card);
+  --shadow-floating: var(--shadow-overlay);
 }
 
 @layer base {
@@ -14,7 +35,7 @@
   button, a { -webkit-tap-highlight-color: transparent; }
   button { font: inherit; }
   a { color: var(--link); text-underline-offset: 0.2em; }
-  h1, h2, h3, p { margin: 0; }
+  h1, h2, h3, h4, p { margin: 0; }
   h1, h2, h3 { font-weight: 600; line-height: 1.2; }
   :focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
   button:disabled, button[aria-disabled="true"] { cursor: wait; opacity: 0.65; }
@@ -50,7 +71,7 @@
 .foundation-notes h2 { font-size: 1.125rem; margin-bottom: var(--space-3); }
 .foundation-notes p { color: var(--muted-foreground); }
 .site-footer { padding-block: var(--space-6) var(--space-8); margin-top: var(--space-4); border-top: 1px solid var(--border); font-size: 0.8125rem; color: var(--muted-foreground); }
-.skip-link { position: fixed; left: var(--space-4); top: var(--space-3); padding: var(--space-3) var(--space-4); z-index: 10; background: var(--background); border: 1px solid var(--brand); border-radius: var(--radius-field); transform: translateY(-200%); }
+.skip-link { position: fixed; left: var(--space-4); top: var(--space-3); padding: var(--space-3) var(--space-4); z-index: 100; background: var(--background); border: 1px solid var(--brand); border-radius: var(--radius-field); transform: translateY(-200%); }
 .skip-link:focus { transform: translateY(0); }
 
 @media (max-width: 640px) {
@@ -66,5 +87,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; }
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
+
+/* Shared safeguards for the P02 workspaces; P01 retains its own composition. */
+.showcase { overflow-wrap: anywhere; }
+.showcase :where(input, textarea, select) { font: inherit; }
+.showcase :where(h1, h2, h3) { letter-spacing: -0.025em; }
+.showcase :where(p, li) { text-wrap: pretty; }
+.showcase :where(svg) { flex-shrink: 0; }
+.showcase :where(button:disabled) { cursor: not-allowed; }
+.showcase :where(pre) { white-space: pre-wrap; overflow-wrap: anywhere; }
+.showcase :where([data-radix-popper-content-wrapper]) { max-width: 100vw; }

@@ -24,7 +24,7 @@
     "stop": "node scripts/stop.mjs",
     "lint": "npm --workspace @chatgpt-courses/web run lint",
     "typecheck": "npm --workspace @chatgpt-courses/web run typecheck",
-    "typecheck:browser": "tsc --noEmit --strict --target ES2022 --module ESNext --moduleResolution bundler --types node --lib ES2022,DOM playwright.config.ts tests/browser/control.ts tests/browser/foundations.spec.ts",
+    "typecheck:browser": "tsc --noEmit --strict --target ES2022 --module ESNext --moduleResolution bundler --types node --lib ES2022,DOM playwright.config.ts tests/browser/control.ts tests/browser/foundations.spec.ts tests/browser/design-system.spec.ts",
     "build": "npm run build:web",
     "build:web": "node scripts/web.mjs build",
     "build:api": "node scripts/api.mjs verify",
@@ -32,6 +32,8 @@
     "smoke": "node scripts/smoke.mjs",
     "verify:http": "node scripts/verify-http.mjs",
     "verify:browser": "node scripts/verify-browser.mjs",
+    "verify:design": "node scripts/verify-browser.mjs P02",
+    "verify:contrast": "node scripts/verify-contrast.mjs",
     "browser:install": "node scripts/install-browser.mjs",
     "verify:persistence": "node scripts/verify-persistence.mjs"
   },

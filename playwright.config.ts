@@ -4,6 +4,8 @@ import { resolve, relative, isAbsolute } from 'node:path';
 const origin = process.env.COURSES_BROWSER_ORIGIN;
 const evidence = process.env.COURSES_BROWSER_EVIDENCE;
 const results = process.env.COURSES_BROWSER_RESULTS;
+const phase = process.env.COURSES_BROWSER_PHASE ?? 'P01';
+if (!['P01', 'P02'].includes(phase)) throw new Error('Phase navigateur inconnue.');
 if (!origin || !evidence || !results || !process.env.COURSES_BROWSER_IPC || !process.env.COURSES_BROWSER_TOKEN) {
   throw new Error('Utiliser scripts/verify-browser.mjs pour réserver les ports et superviser les processus.');
 }
@@ -11,14 +13,14 @@ const url = new URL(origin);
 if (url.protocol !== 'http:' || url.hostname !== '127.0.0.1' || url.pathname !== '/' || url.search || url.hash || url.username || url.password) {
   throw new Error('La recette navigateur doit cibler une origine HTTP de boucle locale.');
 }
-for (const [base, path] of [[resolve('docs/evidence/P01-browser'), evidence], [resolve('.runtime'), results]]) {
+for (const [base, path] of [[resolve(`docs/evidence/${phase}-browser`), evidence], [resolve('.runtime'), results]]) {
   const child = relative(base, resolve(path));
   if (!child || child.startsWith('..') || isAbsolute(child)) throw new Error('Chemin de preuve hors du dossier réservé.');
 }
 
 export default defineConfig({
   testDir: './tests/browser',
-  testMatch: '**/*.spec.ts',
+  testMatch: phase === 'P01' ? '**/foundations.spec.ts' : '**/design-system.spec.ts',
   fullyParallel: false,
   workers: 1, // The outage scenario owns the dedicated API process.
   retries: 0,

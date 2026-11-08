@@ -6,6 +6,8 @@ import { join } from 'node:path';
 import { environment, preflightServers, root, runtimeDir, start, terminateOwned, waitFor, windows } from './lib/runtime.mjs';
 
 const env = environment();
+const phase = process.argv[2] ?? 'P01';
+if (!['P01', 'P02'].includes(phase)) throw new Error('Phase de recette inconnue : P01 ou P02 attendu.');
 if (!['local', 'test'].includes(env.APP_ENV)) throw new Error('Vérification navigateur réservée à local/test.');
 const port = (value, fallback) => {
   const text = value ?? String(fallback);
@@ -16,20 +18,20 @@ env.APP_PUBLIC_ORIGIN = `http://127.0.0.1:${port(env.BROWSER_WEB_PORT, 3101)}`;
 env.API_PORT = String(port(env.BROWSER_API_PORT, 8181));
 env.API_INTERNAL_URL = `http://127.0.0.1:${env.API_PORT}`;
 env.SPRING_PROFILES_ACTIVE = env.APP_ENV;
-for (const key of ['POSTGRES_DB', 'POSTGRES_USER', 'POSTGRES_PASSWORD']) {
+for (const key of phase === 'P01' ? ['POSTGRES_DB', 'POSTGRES_USER', 'POSTGRES_PASSWORD'] : []) {
   if (!env[key]) throw new Error(`Configuration locale requise : ${key}.`);
 }
 const jar = join(root, 'apps/api/target/chatgpt-courses-api.jar');
 const next = join(root, 'node_modules/next/dist/bin/next');
 const runner = join(root, 'node_modules/@playwright/test/cli.js');
-for (const file of [jar, next, runner, join(root, 'apps/web/.next/BUILD_ID')]) {
+for (const file of [next, runner, join(root, 'apps/web/.next/BUILD_ID'), ...(phase === 'P01' ? [jar] : [])]) {
   if (!existsSync(file)) throw new Error('Builds ou @playwright/test 1.65.0 absents. Voir la préparation documentée ; aucune installation automatique.');
 }
 await preflightServers(env); // Occupied ports fail without stopping any existing server.
 
 const runId = `${new Date().toISOString().replaceAll(/[:.]/g, '-')}-${randomUUID()}`;
 const runDirectory = join(runtimeDir, `browser-${runId}`);
-const evidence = join(root, 'docs/evidence/P01-browser', runId);
+const evidence = join(root, `docs/evidence/${phase}-browser`, runId);
 mkdirSync(runDirectory, { recursive: true, mode: 0o700 });
 mkdirSync(evidence, { recursive: true });
 const manifest = join(runDirectory, 'processes.json');
@@ -133,15 +135,48 @@ try {
   if (!windows) chmodSync(ipc, 0o600);
   web = launch('web', process.execPath, [next, 'start', '--hostname', '127.0.0.1', '--port', String(new URL(env.APP_PUBLIC_ORIGIN).port)],
     { cwd: join(root, 'apps/web') });
-  await Promise.race([Promise.all([startApi(), ready(web, `${env.APP_PUBLIC_ORIGIN}/fr`)]), interrupted]);
+  await Promise.race([Promise.all([
+    ...(phase === 'P01' ? [startApi()] : []),
+    ready(web, `${env.APP_PUBLIC_ORIGIN}/fr${phase === 'P02' ? '/dev/public' : ''}`),
+  ]), interrupted]);
   const playwright = launch('playwright', process.execPath, [runner, 'test', '--config', join(root, 'playwright.config.ts')], {
     stdio: 'inherit',
-    env: { ...env, COURSES_BROWSER_ORIGIN: env.APP_PUBLIC_ORIGIN, COURSES_BROWSER_IPC: ipc,
+    env: { ...env, COURSES_BROWSER_PHASE: phase, COURSES_BROWSER_ORIGIN: env.APP_PUBLIC_ORIGIN, COURSES_BROWSER_IPC: ipc,
       COURSES_BROWSER_TOKEN: token, COURSES_BROWSER_EVIDENCE: evidence, COURSES_BROWSER_RESULTS: join(runDirectory, 'results') },
   });
   const result = await Promise.race([playwright.exit, interrupted]);
   if (result.code !== 0) throw new Error(`Recette navigateur échouée (code ${result.code}, signal ${result.signal}).`);
-  console.log(`Recette navigateur terminée. Captures et rapport : docs/evidence/P01-browser/${runId}`);
+  if (phase === 'P02') {
+    // The exact same compiled app must reject every fixture route at runtime.
+    await terminate(web);
+    const checks = [];
+    for (const appEnvironment of ['staging', 'production']) {
+      web = launch(`web-${appEnvironment}`, process.execPath,
+        [next, 'start', '--hostname', '127.0.0.1', '--port', String(new URL(env.APP_PUBLIC_ORIGIN).port)],
+        { cwd: join(root, 'apps/web'), env: { ...env, APP_ENV: appEnvironment, APP_PUBLIC_ORIGIN: 'https://courses.example.invalid' } });
+      let started = false;
+      for (let attempt = 0; attempt < 100; attempt++) {
+        try { const response = await fetch(`${env.APP_PUBLIC_ORIGIN}/fr/dev/public`, { signal: AbortSignal.timeout(1000) });
+          if (response.status === 404) { started = true; break; }
+          throw new Error(`Route locale visible en ${appEnvironment} (HTTP ${response.status}).`);
+        } catch (error) { if (error.message.startsWith('Route locale')) throw error; }
+        await new Promise((resolveWait) => setTimeout(resolveWait, 200));
+      }
+      if (!started) throw new Error(`Instance ${appEnvironment} non disponible pour le contrôle d'exclusion.`);
+      for (const locale of ['fr', 'en']) for (const suffix of ['', '/components', '/public', '/learning', '/admin']) {
+        const path = `/${locale}/dev${suffix}`;
+        const response = await fetch(`${env.APP_PUBLIC_ORIGIN}${path}`, { redirect: 'manual' });
+        const body = await response.text();
+        const fixtureVisible = /Vitrine locale|Local showcase|data-showcase-fixture/.test(body);
+        checks.push({ environment: appEnvironment, path, status: response.status, fixtureVisible });
+        if (response.status !== 404 || fixtureVisible) throw new Error(`Exclusion de la vitrine échouée : ${appEnvironment} ${path}.`);
+      }
+      await terminate(web);
+    }
+    writeFileSync(join(evidence, 'production-guards.json'), JSON.stringify(checks, null, 2));
+    console.log(`${checks.length} routes de vitrine refusées en staging/production par le build local.`);
+  }
+  console.log(`Recette navigateur terminée. Captures et rapport : docs/evidence/${phase}-browser/${runId}`);
 } catch (error) {
   verificationError = error;
   throw error;

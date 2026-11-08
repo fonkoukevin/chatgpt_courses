@@ -1,10 +1,10 @@
-# Modèle relationnel — socles P03 à P06
+# Modèle relationnel — socles P03 à P07
 
-Les migrations sont la définition exécutable du schéma. Ce document distingue les tables livrées par P03 à P06 des extensions à créer dans les lots métier. Les preuves de chaque lot indiquent le niveau de validation réellement exécuté.
+Les migrations sont la définition exécutable du schéma. Ce document distingue les tables livrées par P03 à P07 des extensions à créer dans les lots métier. Les preuves de chaque lot indiquent le niveau de validation réellement exécuté.
 
 ## Identité et contenu présents
 
-V001 conserve les deux tables officielles de Spring Session JDBC 4.1.1. V002 ajoute douze tables, sans données de démonstration et sans mécanisme concurrent de création automatique. V003 ajoute deux tables de sécurité, la version d’authentification et des références de permission. V004 étend les instantanés éditoriaux et ajoute deux tables d’historique et de références. V005 ajoute les métadonnées publiques par révision et les instantanés de revue/source publiées. V001 à V004 restent inchangées.
+V001 conserve les deux tables officielles de Spring Session JDBC 4.1.1. V002 ajoute douze tables, sans données de démonstration et sans mécanisme concurrent de création automatique. V003 ajoute deux tables de sécurité, la version d’authentification et des références de permission. V004 étend les instantanés éditoriaux et ajoute deux tables d’historique et de références. V005 ajoute les métadonnées publiques par révision et les instantanés de revue/source publiées. V006 ajoute les copies personnelles de méthodes ; V001 à V005 restent inchangées.
 
 | Table | Identité et relations | Invariants |
 | --- | --- | --- |
@@ -21,8 +21,9 @@ V001 conserve les deux tables officielles de Spring Session JDBC 4.1.1. V002 ajo
 | `editorial_events` | UUID, traduction, révision concernée, acteur obligatoire, type, motif et date | Journal append-only des actions éditoriales ; FK de révision composite avec sa traduction |
 | `editorial_resource_references` | PK composite `(revision_id, resource_id)` et deux FK RESTRICT | Projection append-only des liens du document vers les identités réelles ; aucune réécriture d’un lien historique |
 | `editorial_public_metadata` | PK `revision_id`, FK RESTRICT vers une révision, description publique JSONB et date UTC | Une description par instantané éditorial ; UPDATE/DELETE refusés ; aucune donnée commerciale créée |
+| `personal_methods` | UUID, propriétaire FK, texte/paramètres/notes/langue propres, origine éditoriale facultative avec FK composites | Compteur de révision, propriétaire et origine immuables ; aucune cascade depuis une publication ou un droit |
 
-GUIDE et METHOD_TEMPLATE sont des feuilles éditoriales depuis V004. Les copies personnelles de méthodes restent distinctes et seront ajoutées en P07. Ces structures ne créent aucun prix, droit payant ou contenu pédagogique final.
+GUIDE et METHOD_TEMPLATE sont des feuilles éditoriales depuis V004. Depuis P07, une définition de méthode appartient au document JSONB de sa révision ; la copie personnelle reste distincte dans `personal_methods`. Ces structures ne créent aucun prix, droit payant ou contenu pédagogique final.
 
 ```mermaid
 erDiagram
@@ -32,6 +33,7 @@ erDiagram
   roles ||--o{ role_permissions : autorise
   permissions ||--o{ role_permissions : permission
   user_accounts ||--o{ password_reset_tokens : recuperation
+  user_accounts ||--o{ personal_methods : proprietaire
   learning_resources ||--o{ resource_slugs : langues
   learning_resources ||--o{ pedagogical_versions : versions
   pedagogical_versions ||--o{ version_compositions : parent
@@ -42,6 +44,7 @@ erDiagram
   editorial_revisions ||--o{ editorial_resource_references : liens
   learning_resources ||--o{ editorial_resource_references : cible
   editorial_revisions ||--o| editorial_public_metadata : description_publique
+  editorial_revisions |o--o{ personal_methods : revision_source_facultative
 ```
 
 ## Identité et récupération — V003 / P04
@@ -150,22 +153,44 @@ Les objectifs, résultats, prérequis et durées de description constituent des 
 
 Une ancienne version **FREE, publiée, non retirée et disponible dans la langue demandée** peut être lue par son UUID exact, notamment dans un ancien programme. Cette lecture publique explicite est différente du repli silencieux de la recherche courante, qui est interdit. Elle n’accorde aucun droit payant et ne remplace pas la future politique privée de version achetée. Les offres, prix, achats, accès personnels, tentatives et progrès restent dans leurs lots respectifs. Les tests locaux couvrent notamment l’upgrade V004, les instantanés publiés, filtres/tri/pagination, pinning et absence de solutions/premium ; résultats détaillés dans [evidence/P06.md](evidence/P06.md).
 
+## Méthodes personnelles — V006 / P07
+
+[`V006__personal_methods.sql`](../apps/api/src/main/resources/db/migration/V006__personal_methods.sql) est additive. Elle crée une seule table métier et la clé unique `(id, pedagogical_version_id, locale)` de `content_translations` nécessaire à sa FK d’origine. Aucun compte, prix, droit payant ou modèle de démonstration n’est inséré. Les permissions de référence `methods.read`/`methods.write` sont attribuées au rôle LEARNER, sans attribuer ce rôle à un utilisateur supplémentaire.
+
+| Champ ou contrainte | Réalisation et invariant |
+| --- | --- |
+| `id`, `owner_id` | UUID de copie, propriétaire FK `user_accounts(id)` RESTRICT ; sélection et mutations toujours limitées au propriétaire effectif de session |
+| `title`, `locale`, `body`, `notes`, `category` | Titre non blanc ≤240, langue FR/EN, texte non blanc ≤32000, notes ≤8000, catégorie nullable/non blanche ≤80 ; contenu personnel indépendant |
+| `parameters`, `generated_from` | JSONB objet ; second champ nullable et déclaratif. Chaque valeur SQL est bornée à 65536 octets de représentation JSONB ; service/HTTP limitent plus strictement les sept champs à 4000 caractères et `MethodFields` complet à **48 KiB JSON UTF-8**, marqueur inclus |
+| Origine facultative | `source_resource_id`, `source_version_id`, `source_translation_id`, `source_revision_id`, `source_locale`, `source_title`, `source_slug` tous absents ou tous présents ; langue FR/EN et slug syntaxiquement borné, titre capturé non blanc |
+| FK d’origine | `(version,resource)` → `pedagogical_versions(id,resource_id)` ; `(translation,version,locale)` → `content_translations(id,pedagogical_version_id,locale)` ; `(revision,translation)` → `editorial_revisions(id,translation_id)`, toutes RESTRICT |
+| `revision`, dates | Compteur BIGINT `0..9007199254740991` ; `created_at`/`updated_at` finis, `updated_at>=created_at`. Le service compare If-Match sous verrou puis augmente le compteur dans l’écriture |
+| Trigger d’origine | Refuse la modification de l’UUID, du propriétaire, de `created_at` ou de toute valeur de source. Texte, paramètres, notes, catégorie et langue personnelle peuvent évoluer sans changer cette origine |
+| Index | Recherche propriétaire et tri `owner_id, updated_at DESC, id` ; index d’identité source. Recherche ILIKE échappée sur titre/notes/catégorie, jamais sur les copies d’un autre compte |
+
+La duplication crée un nouvel UUID avec les mêmes champs et origine ; supprimer l’une ne supprime pas l’autre. La suppression physique, réservée au propriétaire avec CSRF, contexte de compte et If-Match, ne touche aucune source. Il n’existe pas encore de révisions historiques de projets liées à ces lignes ; aucune cascade vers un futur projet n’est introduite. Correction, changement d’accès, retrait ou nouvelle version de source ne supprime ni ne remplace le texte/les notes d’une copie.
+
+La définition éditoriale n’ajoute aucune table : `editorial_revisions.document_json.methodDefinition` est nullable, dans le snapshot append-only existant. Elle contient cas d’usage, entrées, étapes, instruction, exemple, vérifications, limites et paramètres par défaut. Service : 24 KiB UTF-8 au plus pour la définition, dans la limite de document 48 KiB ; listes/champs bornés. Définition incomplète admise en DRAFT ; nouvelle publication METHOD_TEMPLATE bloquée par `METHOD_DEFINITION_REQUIRED` tant qu’elle n’est pas complète. L’ancien JSON sans la propriété garde null, les anciens textes restent inchangés et le générateur annonce `MISSING_DEFINITION` plutôt que fabriquer une configuration.
+
+`MethodService` porte les transactions. Lectures composées REPEATABLE_READ, écritures sous verrou de copie et comparaison forte de révision après propriété/revérification de permission. La création depuis modèle verrouille l’identité source et recontrôle publication FREE, langue, type, version et révision exacts. `X-Account-Context` est comparé au compte authentifié dans la transaction ; ce n’est ni une colonne d’autorité ni le propriétaire reçu du client. Les notices dynamiques de source sont calculées séparément : aucune mise à jour de la copie ou de sa révision pour les afficher.
+
+Le test de mise à niveau **isolé PostgreSQL V005 → V006** conserve un article METHOD_TEMPLATE publié sans ce champ, son texte historique et une session JDBC ; zéro méthode personnelle et zéro compte inventés. Le global de **78 tests Java** passe, incluant six tests de service et sept HTTP P07. Les validations complémentaires client/web et la mise à niveau du volume local sont consignées dans [evidence/P07.md](evidence/P07.md) ; aucune mise à niveau de production n’est revendiquée.
+
 ## Types, concurrence et suppression
 
 - UUID pour les identifiants et FK métier. Les identifiants de session historiques gardent le format officiel Spring Session de V001.
 - Instants `Instant`/`timestamptz`, connexions JDBC et Hibernate en UTC. PostgreSQL conserve un instant ; le fuseau de préférence sert à l’affichage. Dates non finies et chronologies incohérentes refusées par contraintes.
-- Révision numérique optimiste `@Version` sur les entités modifiables ; les révisions éditoriales immuables ont leur numéro historique propre. Les préférences associent If-Match et contrôle Hibernate ; le CMS JDBC associe compteur, verrou de famille et comparaison transactionnelle après attente.
+- Révision numérique optimiste `@Version` sur les entités modifiables ; les révisions éditoriales immuables ont leur numéro historique propre. Les préférences associent If-Match et contrôle Hibernate ; le CMS JDBC associe compteur et verrou de famille ; les méthodes personnelles associent compteur et verrou de copie, avec comparaison transactionnelle après attente.
 - Montants futurs en `BIGINT` unités mineures avec devise explicite ; transport JSON limité aux entiers exacts JavaScript. Pas de `float`, pas d’hypothèse universelle de deux décimales. `Money`/OpenAPI vérifient syntaxe et bornes ; la liste des devises réellement autorisées appartiendra à la configuration commerciale serveur.
 - Les FK métier sont `ON DELETE RESTRICT`. Les instantanés éditoriaux et attributions historiques sont protégés. L’anonymisation du compte est distincte de la suppression physique ; rétention et procédure d’effacement seront précisées dans les lots concernés. Seule la suppression des attributs de session suit le CASCADE officiel V001.
 - Les liens JPA sont des UUID explicites, sans graphes sérialisés ni cascades implicites. Les DTO publics sont construits par mapping ; les entités ne sont pas des réponses HTTP.
 
-## Relations réservées aux lots suivants — non migrées en P03 à P06
+## Relations réservées aux lots suivants — non migrées en P03 à P07
 
 Les noms suivants expriment les clés et règles attendues. Ils seront concrétisés par migrations additionnelles avec leur fonctionnalité et ses tests, sans CRUD anticipé.
 
 | Lot | Relations/contraintes à introduire | Conservation obligatoire |
 | --- | --- | --- |
-| P07 méthodes | Copie personnelle UUID, propriétaire FK, texte/paramètres/langue propres, révision optimiste ; origine vers modèle/version/révision source | Nouvelle source ou archivage ne met jamais à jour le texte de la copie ; supprimer un droit n’efface pas la copie |
 | P08 apprentissage | Inscription unique `(user, course)` ; acquis référencés par identité/version équivalente ; tentative quiz → utilisateur, activité/version, version des questions, locale | Historique des tentatives et barème conservés ; position média unique par utilisateur/média, distincte des acquis FR/EN |
 | P09 productions | Projet → propriétaire, activité et version pédagogique ; révision de projet append-only ; autoévaluation → révision soumise, grille versionnée, provenance déclarative | Corrigé consulté, autoévaluation et revue humaine restent des preuves distinctes ; aucune cascade depuis achat/droit |
 | P10 fichiers | Métadonnées UUID, propriétaire, clé objet serveur, statut ; FK au projet/révision si nécessaire | Vérification d’accès à chaque nouvel accès temporaire, aucune URL libre choisie par le navigateur |
@@ -181,7 +206,7 @@ Les suppressions physiques et opérations financières nécessiteront des cas d�
 
 ## Données locales et preuves
 
-Les migrations structurelles ne contiennent aucune fixture ni prix. Les références de permission V003/V004 sont distinctes des comptes et données de démonstration. Le chargement explicite local et les fixtures Testcontainers sont séparés, identifiés comme fictifs, réexécutables et interdits en production. Le suivi des commandes et résultats réellement exécutés est dans [evidence/P03.md](evidence/P03.md), [evidence/P04.md](evidence/P04.md), [evidence/P05.md](evidence/P05.md) et [evidence/P06.md](evidence/P06.md).
+Les migrations structurelles ne contiennent aucune fixture ni prix. Les références de permission V003/V004/V006 sont distinctes des comptes et données de démonstration. Le chargement explicite local et les fixtures Testcontainers sont séparés, identifiés comme fictifs, réexécutables et interdits en production. Le suivi des commandes et résultats réellement exécutés est dans [evidence/P03.md](evidence/P03.md), [evidence/P04.md](evidence/P04.md), [evidence/P05.md](evidence/P05.md), [evidence/P06.md](evidence/P06.md) et [evidence/P07.md](evidence/P07.md).
 
 Références techniques consultées : [contraintes PostgreSQL 18](https://www.postgresql.org/docs/18/ddl-constraints.html), [instants PostgreSQL 18](https://www.postgresql.org/docs/18/datatype-datetime.html), [Spring Boot SQL](https://docs.spring.io/spring-boot/reference/data/sql.html), [Hibernate ORM 7.4](https://docs.hibernate.org/orm/7.4/userguide/html_single/). Les règles commerciales restent celles de [PRODUCT.md](PRODUCT.md) et [DECISIONS.md](DECISIONS.md).
 

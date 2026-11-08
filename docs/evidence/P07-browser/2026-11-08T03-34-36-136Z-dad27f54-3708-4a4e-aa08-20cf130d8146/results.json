@@ -1,0 +1,498 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\scripts\\..\\.tools\\node-v24.22.2-win-x64\\node.exe",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts"
+    ],
+    "configFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts",
+    "rootDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 600000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/.runtime/browser-2026-11-08T03-34-36-136Z-dad27f54-3708-4a4e-aa08-20cf130d8146/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/methods.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T03-34-36-136Z-dad27f54-3708-4a4e-aa08-20cf130d8146\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "snapshotDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/methods.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3101",
+          "browserName": "chromium",
+          "headless": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "actionTimeout": 10000,
+          "navigationTimeout": 20000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off",
+          "serviceWorkers": "block"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\docs\\evidence\\P07-browser\\2026-11-08T03-34-36-136Z-dad27f54-3708-4a4e-aa08-20cf130d8146\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "methods.spec.ts",
+      "file": "methods.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "P07 real methods",
+          "file": "methods.spec.ts",
+          "line": 26,
+          "column": 6,
+          "specs": [
+            {
+              "title": "fr : visiteur, connexion, import volontaire, sauvegarde et seconde session",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 1361,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\n\u001b[32m- Expected  - 26\u001b[39m\n\u001b[31m+ Received  + 26\u001b[39m\n\n\u001b[32m- Prépare une proposition à partir des seules données fournies. Distingue faits et hypothèses.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Prépare une proposition à partir des seules données fournies. Distingue faits et hypothèses.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Prépare le résultat correspondant à l’objectif suivant à partir des seules informations fournies.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Prépare le résultat correspondant à l’objectif suivant à partir des seules informations fournies.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Objectif\u001b[39m\n\u001b[31m+ Objectif\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Préparer une proposition commerciale factuelle.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Préparer une proposition commerciale factuelle.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Contexte\u001b[39m\n\u001b[31m+ Contexte\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Client R souhaite clarifier son offre.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Client R souhaite clarifier son offre.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Données disponibles\u001b[39m\n\u001b[31m+ Données disponibles\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- BR01 : quatre pages en français ; le logo et l’intégration restent à clarifier.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ BR01 : quatre pages en français ; le logo et l’intégration restent à clarifier.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Destinataire\u001b[39m\n\u001b[31m+ Destinataire\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Client R\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Client R\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Format attendu\u001b[39m\n\u001b[31m+ Format attendu\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Deux pages maximum et des questions ouvertes.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Deux pages maximum et des questions ouvertes.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Contraintes\u001b[39m\n\u001b[31m+ Contraintes\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Ne pas inventer de faits, de références ou de prix.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Ne pas inventer de faits, de références ou de prix.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Informations à clarifier\u001b[39m\n\u001b[31m+ Informations à clarifier\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Disponibilité des textes, logo et intégration.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Disponibilité des textes, logo et intégration.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Distingue les faits des hypothèses. Signale les informations manquantes et les points à clarifier. N’invente ni données, ni références, ni témoignages, ni résultats commerciaux. Vérifie la cohérence avec l’objectif, le format et les contraintes avant de proposer le résultat.\u001b[39m\n\u001b[31m+ Distingue les faits des hypothèses. Signale les informations manquantes et les points à clarifier. N’invente ni données, ni références, ni témoignages, ni résultats commerciaux. Vérifie la cohérence avec l’objectif, le format et les contraintes avant de proposer le résultat.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[2m  P07 local adaptation 24af2930-9749-4331-9980-56c7d62ef9e4\u001b[22m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\n\u001b[32m- Expected  - 26\u001b[39m\n\u001b[31m+ Received  + 26\u001b[39m\n\n\u001b[32m- Prépare une proposition à partir des seules données fournies. Distingue faits et hypothèses.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Prépare une proposition à partir des seules données fournies. Distingue faits et hypothèses.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Prépare le résultat correspondant à l’objectif suivant à partir des seules informations fournies.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Prépare le résultat correspondant à l’objectif suivant à partir des seules informations fournies.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Objectif\u001b[39m\n\u001b[31m+ Objectif\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Préparer une proposition commerciale factuelle.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Préparer une proposition commerciale factuelle.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Contexte\u001b[39m\n\u001b[31m+ Contexte\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Client R souhaite clarifier son offre.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Client R souhaite clarifier son offre.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Données disponibles\u001b[39m\n\u001b[31m+ Données disponibles\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- BR01 : quatre pages en français ; le logo et l’intégration restent à clarifier.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ BR01 : quatre pages en français ; le logo et l’intégration restent à clarifier.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Destinataire\u001b[39m\n\u001b[31m+ Destinataire\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Client R\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Client R\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Format attendu\u001b[39m\n\u001b[31m+ Format attendu\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Deux pages maximum et des questions ouvertes.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Deux pages maximum et des questions ouvertes.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Contraintes\u001b[39m\n\u001b[31m+ Contraintes\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Ne pas inventer de faits, de références ou de prix.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Ne pas inventer de faits, de références ou de prix.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Informations à clarifier\u001b[39m\n\u001b[31m+ Informations à clarifier\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Disponibilité des textes, logo et intégration.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Disponibilité des textes, logo et intégration.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Distingue les faits des hypothèses. Signale les informations manquantes et les points à clarifier. N’invente ni données, ni références, ni témoignages, ni résultats commerciaux. Vérifie la cohérence avec l’objectif, le format et les contraintes avant de proposer le résultat.\u001b[39m\n\u001b[31m+ Distingue les faits des hypothèses. Signale les informations manquantes et les points à clarifier. N’invente ni données, ni références, ni témoignages, ni résultats commerciaux. Vérifie la cohérence avec l’objectif, le format et les contraintes avant de proposer le résultat.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[2m  P07 local adaptation 24af2930-9749-4331-9980-56c7d62ef9e4\u001b[22m\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\methods.spec.ts:52:71",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\methods.spec.ts",
+                          "column": 71,
+                          "line": 52
+                        },
+                        "snippet": " \u001b[90m 50 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39mcopy\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 51 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(t\u001b[33m.\u001b[39mcopied\u001b[33m,\u001b[39m { exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 52 |\u001b[39m     expect(\u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mevaluate(() \u001b[33m=>\u001b[39m navigator\u001b[33m.\u001b[39mclipboard\u001b[33m.\u001b[39mreadText()))\u001b[33m.\u001b[39mtoBe(personalText)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 53 |\u001b[39m     \u001b[36mconst\u001b[39m title \u001b[33m=\u001b[39m \u001b[32m`P07 ${locale} proposal ${randomUUID()}`\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m 54 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'textbox'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m bridge\u001b[33m.\u001b[39mtitle\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mfill(title)\u001b[33m;\u001b[39m\n \u001b[90m 55 |\u001b[39m     \u001b[36mawait\u001b[39m capture(page\u001b[33m,\u001b[39m \u001b[32m`${locale}-390-source-generator`\u001b[39m)\u001b[33m;\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\methods.spec.ts",
+                            "column": 71,
+                            "line": 52
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\n\u001b[32m- Expected  - 26\u001b[39m\n\u001b[31m+ Received  + 26\u001b[39m\n\n\u001b[32m- Prépare une proposition à partir des seules données fournies. Distingue faits et hypothèses.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Prépare une proposition à partir des seules données fournies. Distingue faits et hypothèses.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Prépare le résultat correspondant à l’objectif suivant à partir des seules informations fournies.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Prépare le résultat correspondant à l’objectif suivant à partir des seules informations fournies.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Objectif\u001b[39m\n\u001b[31m+ Objectif\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Préparer une proposition commerciale factuelle.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Préparer une proposition commerciale factuelle.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Contexte\u001b[39m\n\u001b[31m+ Contexte\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Client R souhaite clarifier son offre.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Client R souhaite clarifier son offre.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Données disponibles\u001b[39m\n\u001b[31m+ Données disponibles\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- BR01 : quatre pages en français ; le logo et l’intégration restent à clarifier.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ BR01 : quatre pages en français ; le logo et l’intégration restent à clarifier.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Destinataire\u001b[39m\n\u001b[31m+ Destinataire\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Client R\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Client R\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Format attendu\u001b[39m\n\u001b[31m+ Format attendu\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Deux pages maximum et des questions ouvertes.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Deux pages maximum et des questions ouvertes.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Contraintes\u001b[39m\n\u001b[31m+ Contraintes\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Ne pas inventer de faits, de références ou de prix.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Ne pas inventer de faits, de références ou de prix.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Informations à clarifier\u001b[39m\n\u001b[31m+ Informations à clarifier\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Disponibilité des textes, logo et intégration.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Disponibilité des textes, logo et intégration.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Distingue les faits des hypothèses. Signale les informations manquantes et les points à clarifier. N’invente ni données, ni références, ni témoignages, ni résultats commerciaux. Vérifie la cohérence avec l’objectif, le format et les contraintes avant de proposer le résultat.\u001b[39m\n\u001b[31m+ Distingue les faits des hypothèses. Signale les informations manquantes et les points à clarifier. N’invente ni données, ni références, ni témoignages, ni résultats commerciaux. Vérifie la cohérence avec l’objectif, le format et les contraintes avant de proposer le résultat.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[2m  P07 local adaptation 24af2930-9749-4331-9980-56c7d62ef9e4\u001b[22m\n\n  50 |     await page.getByRole('button', { name: t.copy, exact: true }).click();\n  51 |     await expect(page.getByText(t.copied, { exact: true })).toBeVisible();\n> 52 |     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(personalText);\n     |                                                                       ^\n  53 |     const title = `P07 ${locale} proposal ${randomUUID()}`;\n  54 |     await page.getByRole('textbox', { name: bridge.title, exact: true }).fill(title);\n  55 |     await capture(page, `${locale}-390-source-generator`);\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\methods.spec.ts:52:71"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T03:34:55.678Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T03-34-36-136Z-dad27f54-3708-4a4e-aa08-20cf130d8146\\results\\methods-P07-real-methods-f-ba152-uvegarde-et-seconde-session\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T03-34-36-136Z-dad27f54-3708-4a4e-aa08-20cf130d8146\\results\\methods-P07-real-methods-f-ba152-uvegarde-et-seconde-session\\error-context.md"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T03-34-36-136Z-dad27f54-3708-4a4e-aa08-20cf130d8146\\results\\methods-P07-real-methods-f-ba152-uvegarde-et-seconde-session\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\methods.spec.ts",
+                        "column": 71,
+                        "line": 52
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "94e37f71a8df41bbd9d6-0d24da59da94fd09a9a7",
+              "file": "methods.spec.ts",
+              "line": 35,
+              "column": 47
+            },
+            {
+              "title": "en : visiteur, connexion, import volontaire, sauvegarde et seconde session",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 1038,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\n\u001b[32m- Expected  - 26\u001b[39m\n\u001b[31m+ Received  + 26\u001b[39m\n\n\u001b[32m- Prepare a proposal using only the supplied information. Distinguish facts and assumptions.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Prepare a proposal using only the supplied information. Distinguish facts and assumptions.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Prepare an output that meets the following objective using only the supplied information.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Prepare an output that meets the following objective using only the supplied information.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Objective\u001b[39m\n\u001b[31m+ Objective\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Prepare a factual client proposal.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Prepare a factual client proposal.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Context\u001b[39m\n\u001b[31m+ Context\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Client R wants to clarify the offer.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Client R wants to clarify the offer.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Available information\u001b[39m\n\u001b[31m+ Available information\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- BR01: four pages in French; logo work and integration need clarification.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ BR01: four pages in French; logo work and integration need clarification.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Recipient\u001b[39m\n\u001b[31m+ Recipient\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Client R\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Client R\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Expected format\u001b[39m\n\u001b[31m+ Expected format\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- No more than two pages and open questions.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ No more than two pages and open questions.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Constraints\u001b[39m\n\u001b[31m+ Constraints\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Do not invent facts, references or prices.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Do not invent facts, references or prices.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Information to clarify\u001b[39m\n\u001b[31m+ Information to clarify\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Availability of text, logo work and integration.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Availability of text, logo work and integration.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Separate facts from assumptions. Identify missing information and points to clarify. Do not invent data, references, testimonials or commercial results. Check the output against the objective, format and constraints before proposing it.\u001b[39m\n\u001b[31m+ Separate facts from assumptions. Identify missing information and points to clarify. Do not invent data, references, testimonials or commercial results. Check the output against the objective, format and constraints before proposing it.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[2m  P07 local adaptation 5beaa2a5-4cae-4d15-9720-bbd036010826\u001b[22m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\n\u001b[32m- Expected  - 26\u001b[39m\n\u001b[31m+ Received  + 26\u001b[39m\n\n\u001b[32m- Prepare a proposal using only the supplied information. Distinguish facts and assumptions.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Prepare a proposal using only the supplied information. Distinguish facts and assumptions.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Prepare an output that meets the following objective using only the supplied information.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Prepare an output that meets the following objective using only the supplied information.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Objective\u001b[39m\n\u001b[31m+ Objective\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Prepare a factual client proposal.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Prepare a factual client proposal.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Context\u001b[39m\n\u001b[31m+ Context\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Client R wants to clarify the offer.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Client R wants to clarify the offer.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Available information\u001b[39m\n\u001b[31m+ Available information\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- BR01: four pages in French; logo work and integration need clarification.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ BR01: four pages in French; logo work and integration need clarification.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Recipient\u001b[39m\n\u001b[31m+ Recipient\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Client R\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Client R\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Expected format\u001b[39m\n\u001b[31m+ Expected format\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- No more than two pages and open questions.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ No more than two pages and open questions.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Constraints\u001b[39m\n\u001b[31m+ Constraints\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Do not invent facts, references or prices.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Do not invent facts, references or prices.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Information to clarify\u001b[39m\n\u001b[31m+ Information to clarify\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Availability of text, logo work and integration.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Availability of text, logo work and integration.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Separate facts from assumptions. Identify missing information and points to clarify. Do not invent data, references, testimonials or commercial results. Check the output against the objective, format and constraints before proposing it.\u001b[39m\n\u001b[31m+ Separate facts from assumptions. Identify missing information and points to clarify. Do not invent data, references, testimonials or commercial results. Check the output against the objective, format and constraints before proposing it.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[2m  P07 local adaptation 5beaa2a5-4cae-4d15-9720-bbd036010826\u001b[22m\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\methods.spec.ts:52:71",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\methods.spec.ts",
+                          "column": 71,
+                          "line": 52
+                        },
+                        "snippet": " \u001b[90m 50 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39mcopy\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 51 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(t\u001b[33m.\u001b[39mcopied\u001b[33m,\u001b[39m { exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 52 |\u001b[39m     expect(\u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mevaluate(() \u001b[33m=>\u001b[39m navigator\u001b[33m.\u001b[39mclipboard\u001b[33m.\u001b[39mreadText()))\u001b[33m.\u001b[39mtoBe(personalText)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 53 |\u001b[39m     \u001b[36mconst\u001b[39m title \u001b[33m=\u001b[39m \u001b[32m`P07 ${locale} proposal ${randomUUID()}`\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m 54 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'textbox'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m bridge\u001b[33m.\u001b[39mtitle\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mfill(title)\u001b[33m;\u001b[39m\n \u001b[90m 55 |\u001b[39m     \u001b[36mawait\u001b[39m capture(page\u001b[33m,\u001b[39m \u001b[32m`${locale}-390-source-generator`\u001b[39m)\u001b[33m;\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\methods.spec.ts",
+                            "column": 71,
+                            "line": 52
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\n\u001b[32m- Expected  - 26\u001b[39m\n\u001b[31m+ Received  + 26\u001b[39m\n\n\u001b[32m- Prepare a proposal using only the supplied information. Distinguish facts and assumptions.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Prepare a proposal using only the supplied information. Distinguish facts and assumptions.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Prepare an output that meets the following objective using only the supplied information.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Prepare an output that meets the following objective using only the supplied information.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Objective\u001b[39m\n\u001b[31m+ Objective\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Prepare a factual client proposal.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Prepare a factual client proposal.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Context\u001b[39m\n\u001b[31m+ Context\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Client R wants to clarify the offer.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Client R wants to clarify the offer.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Available information\u001b[39m\n\u001b[31m+ Available information\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- BR01: four pages in French; logo work and integration need clarification.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ BR01: four pages in French; logo work and integration need clarification.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Recipient\u001b[39m\n\u001b[31m+ Recipient\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Client R\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Client R\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Expected format\u001b[39m\n\u001b[31m+ Expected format\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- No more than two pages and open questions.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ No more than two pages and open questions.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Constraints\u001b[39m\n\u001b[31m+ Constraints\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Do not invent facts, references or prices.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Do not invent facts, references or prices.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Information to clarify\u001b[39m\n\u001b[31m+ Information to clarify\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[32m- Availability of text, logo work and integration.\u001b[39m\n\u001b[32m-\u001b[39m\n\u001b[31m+ Availability of text, logo work and integration.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[31m+ \u001b[43m\r\u001b[49m\u001b[39m\n\u001b[32m- Separate facts from assumptions. Identify missing information and points to clarify. Do not invent data, references, testimonials or commercial results. Check the output against the objective, format and constraints before proposing it.\u001b[39m\n\u001b[31m+ Separate facts from assumptions. Identify missing information and points to clarify. Do not invent data, references, testimonials or commercial results. Check the output against the objective, format and constraints before proposing it.\u001b[7m\r\u001b[27m\u001b[39m\n\u001b[2m  P07 local adaptation 5beaa2a5-4cae-4d15-9720-bbd036010826\u001b[22m\n\n  50 |     await page.getByRole('button', { name: t.copy, exact: true }).click();\n  51 |     await expect(page.getByText(t.copied, { exact: true })).toBeVisible();\n> 52 |     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(personalText);\n     |                                                                       ^\n  53 |     const title = `P07 ${locale} proposal ${randomUUID()}`;\n  54 |     await page.getByRole('textbox', { name: bridge.title, exact: true }).fill(title);\n  55 |     await capture(page, `${locale}-390-source-generator`);\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\methods.spec.ts:52:71"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T03:35:02.467Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T03-34-36-136Z-dad27f54-3708-4a4e-aa08-20cf130d8146\\results\\methods-P07-real-methods-e-a639b-uvegarde-et-seconde-session\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T03-34-36-136Z-dad27f54-3708-4a4e-aa08-20cf130d8146\\results\\methods-P07-real-methods-e-a639b-uvegarde-et-seconde-session\\error-context.md"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T03-34-36-136Z-dad27f54-3708-4a4e-aa08-20cf130d8146\\results\\methods-P07-real-methods-e-a639b-uvegarde-et-seconde-session\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\methods.spec.ts",
+                        "column": 71,
+                        "line": 52
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "94e37f71a8df41bbd9d6-3fa57e00cb05175be940",
+              "file": "methods.spec.ts",
+              "line": 35,
+              "column": 47
+            },
+            {
+              "title": "générateur incomplet, reconstruction et réinitialisation exigent des actions explicites",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1199,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T03:35:07.230Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "94e37f71a8df41bbd9d6-39933325c05318e8fdbd",
+              "file": "methods.spec.ts",
+              "line": 95,
+              "column": 3
+            },
+            {
+              "title": "deux comptes : refus IDOR et ancien formulaire bloqué après changement de session",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2862,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T03:35:11.529Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "94e37f71a8df41bbd9d6-e668f0ba954a10cbe9db",
+              "file": "methods.spec.ts",
+              "line": 116,
+              "column": 3
+            },
+            {
+              "title": "source révisée puis archivée : texte conservé, duplication et suppression réelles",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3317,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T03:35:14.407Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "94e37f71a8df41bbd9d6-52dc1d250fe55be604fa",
+              "file": "methods.spec.ts",
+              "line": 146,
+              "column": 3
+            },
+            {
+              "title": "réponse retardée, conflit réel et panne conservent la dernière saisie privée",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 18876,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T03:35:17.741Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "94e37f71a8df41bbd9d6-705bc26c1a06875646ce",
+              "file": "methods.spec.ts",
+              "line": 167,
+              "column": 3
+            },
+            {
+              "title": "création committée puis compte changé : un ancien accusé 201 ne confirme rien sous le nouveau compte",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 13447,
+                      "error": {
+                        "message": "Error: route.fulfill: Route is already handled!",
+                        "stack": "Error: route.fulfill: Route is already handled!\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\methods.spec.ts:218:19",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\methods.spec.ts",
+                          "column": 19,
+                          "line": 218
+                        },
+                        "snippet": " \u001b[90m 216 |\u001b[39m       committed \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m response\u001b[33m.\u001b[39mjson() \u001b[36mas\u001b[39m \u001b[33mMethodView\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m 217 |\u001b[39m       \u001b[36mawait\u001b[39m held\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 218 |\u001b[39m       \u001b[36mawait\u001b[39m route\u001b[33m.\u001b[39mfulfill({ response })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 219 |\u001b[39m     })\u001b[33m;\u001b[39m\n \u001b[90m 220 |\u001b[39m     \u001b[36mconst\u001b[39m otherTab \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m context\u001b[33m.\u001b[39mnewPage()\u001b[33m;\u001b[39m\n \u001b[90m 221 |\u001b[39m     \u001b[36mtry\u001b[39m {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\methods.spec.ts",
+                            "column": 19,
+                            "line": 218
+                          },
+                          "message": "Error: route.fulfill: Route is already handled!\n\n  216 |       committed = await response.json() as MethodView;\n  217 |       await held;\n> 218 |       await route.fulfill({ response });\n      |                   ^\n  219 |     });\n  220 |     const otherTab = await context.newPage();\n  221 |     try {\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\methods.spec.ts:218:19"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\methods.spec.ts",
+                            "column": 71,
+                            "line": 233
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('The active account has changed. This input remains in this form; it has not been saved under the new account. Copy it if needed, then open the library for the intended account.', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('The active account has changed. This input remains in this form; it has not been saved under the new account. Copy it if needed, then open the library for the intended account.', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('The active account has changed. This input remains in this form; it has not been saved under the new account. Copy it if needed, then open the library for the intended account.', { exact: true })\u001b[22m\n\n\n  231 |       await fillMethodLogin(otherTab, 'en', b);\n  232 |       await expect(otherTab).toHaveURL(new RegExp(methodsPath('en') + '$'));\n> 233 |       await expect(page.getByText(t.accountChanged, { exact: true })).toBeVisible();\n      |                                                                       ^\n  234 |       await expect(page.getByText(t.accountTransitionUnconfirmed, { exact: true })).toBeVisible();\n  235 |\n  236 |       const acknowledged = page.waitForResponse((response) => response.request().method() === 'POST' && response.url().endsWith('/api/v1/me/methods'));\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\methods.spec.ts:233:71"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T03:35:36.652Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T03-34-36-136Z-dad27f54-3708-4a4e-aa08-20cf130d8146\\results\\methods-P07-real-methods-c-db702-rien-sous-le-nouveau-compte\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T03-34-36-136Z-dad27f54-3708-4a4e-aa08-20cf130d8146\\results\\methods-P07-real-methods-c-db702-rien-sous-le-nouveau-compte\\error-context.md"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T03-34-36-136Z-dad27f54-3708-4a4e-aa08-20cf130d8146\\results\\methods-P07-real-methods-c-db702-rien-sous-le-nouveau-compte\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\methods.spec.ts",
+                        "column": 19,
+                        "line": 218
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "94e37f71a8df41bbd9d6-20db68bc777e1c1f3be5",
+              "file": "methods.spec.ts",
+              "line": 198,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-08T03:34:54.270Z",
+    "duration": 56011.651999999995,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}

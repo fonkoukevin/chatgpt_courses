@@ -21,7 +21,7 @@ Le contrat machine des opérations disponibles est [api/openapi.yaml](api/openap
 
 Une route système absente retourne un vrai 404 Problem. Les erreurs contiennent notamment `status`, `code`, `traceId`, `detail` et `instance`. Le proxy préserve les erreurs de Spring ; sa propre erreur de connexion devient 502/504 `API_UNAVAILABLE`, sans données de remplacement. Aucun autre endpoint métier de ce document n’est annoncé implémenté par P01. Les routes privées sont refusées et CSRF reste actif.
 
-P03 conserve le payload de la sonde et le produit avec un DTO explicite. La sonde reste dans l’OpenAPI, complétée par les opérations d’identité P04, d’édition P05 et de catalogue P06 ci-dessous, sous le serveur de même origine `/api/v1`. `system/unknown` est volontairement absent : c’est une requête de diagnostic vers une route manquante, pas une nouvelle opération. Aucun contrôleur de test n’est livré en production. Son interface technique P01 se trouve désormais dans `/{locale}/dev/foundations`, limitée aux profils local/test ; `/fr` et `/en` servent l’accueil public.
+P03 conserve le payload de la sonde et le produit avec un DTO explicite. La sonde reste dans l’OpenAPI, complétée par les opérations d’identité P04, d’édition P05, de catalogue P06 et de méthodes P07 ci-dessous, sous le serveur de même origine `/api/v1`. `system/unknown` est volontairement absent : c’est une requête de diagnostic vers une route manquante, pas une nouvelle opération. Aucun contrôleur de test n’est livré en production. Son interface technique P01 se trouve désormais dans `/{locale}/dev/foundations`, limitée aux profils local/test ; `/fr` et `/en` servent l’accueil public.
 
 Les composants partagés `Problem`, `FieldError`, UUID, Locale, UtcInstant, Revision, Money et la convention ETag sont définis sans inventer de routes pour les utiliser. Les erreurs utilisent `type: about:blank`, un `traceId` UUID et `Cache-Control: private, no-store`. `fieldErrors`, présent pour une erreur de validation, est une liste `{ field, code, message }`, sans valeur rejetée ni message dynamique contenant une donnée saisie. `code` reste stable pour la traduction ; les détails SQL, exceptions, secrets et graphes JPA restent hors réponse.
 
@@ -80,7 +80,7 @@ La demande de récupération a un quota atomique de trois demandes par email nor
 
 La notification est émise après commit et livrée de façon asynchrone au port SMTP local Mailpit. Son URL est `/fr/reinitialisation#token=…` ou `/en/reset-password#token=…`. Le frontend retire le fragment de l’historique et garde le jeton en mémoire, sans URL de requête, log ou stockage navigateur. La livraison P04 est en mémoire : l’outbox durable et la reprise opérationnelle relèvent de P10 ; aucune livraison SMTP externe n’est revendiquée.
 
-Après inscription, la connexion normale réutilise les filtres Spring et la destination locale validée. `returnTo` est une route interne en liste autorisée, sinon le compte courant ; ce n’est pas une URL libre. Un essai anonyme non sensible peut être conservé deux heures dans `sessionStorage`, sans `userId`, puis restauré volontairement. Aucun import serveur vers les futurs projets/méthodes n’est simulé avant leurs services propriétaires. Logout purge les caches personnels de cette application sans supprimer les données du compte ni effacer les autres applications.
+Après inscription, la connexion normale réutilise les filtres Spring et la destination locale validée. `returnTo` est une route interne en liste autorisée, sinon le compte courant ; ce n’est pas une URL libre. Un essai anonyme non sensible peut être conservé deux heures dans `sessionStorage`, sans `userId`, puis restauré volontairement. P07 ajoute l’import explicite vers les méthodes personnelles décrit ci-dessous ; aucun service de projets P09 n’est simulé. Logout purge les caches personnels de cette application sans supprimer les données du compte ni effacer les autres applications.
 
 Codes P04 : 400 `VALIDATION_FAILED`/`INVALID_REQUEST`/`INVALID_RESET_TOKEN`, 409 `EMAIL_ALREADY_REGISTERED`, 401 `BAD_CREDENTIALS`/`AUTHENTICATION_REQUIRED`/`ACCOUNT_UNAVAILABLE`, 403 `CSRF_INVALID`/`ACCESS_DENIED`, et les codes de révision ci-dessus. Une indisponibilité de vérification de session reste un échec fermé, avec réponse contrôlée 503. Le quota neutre de récupération n’utilise pas le code 429 préparé pour d’autres limitations.
 
@@ -127,9 +127,9 @@ Les anciens instantanés P03 restent lisibles : `ContentView.document`/`Revision
 
 Autres codes P05 : 409 `CONTENT_NOT_READY`/`INVALID_CONTENT_TRANSITION`, 400 `VALIDATION_FAILED`/`INVALID_REQUEST`, ainsi que les erreurs communes de permission, conflit et révision. Le rôle de référence EDITOR reçoit les cinq permissions de contenu, sans compte livré ni permission commerciale. Le refus d’une route commerciale future par `denyAll` reste une preuve partielle, pas un test d’un service financier déjà intégré.
 
-## Catalogue public et lecture — implémenté P06, recette navigateur en cours
+## Catalogue public et lecture — validé localement P06
 
-Le contrat P06 décrit uniquement les cinq lectures réelles suivantes et l’extension éditoriale de métadonnées. Les six tests HTTP PostgreSQL et les six tests de service P06 ont réussi ; le global final et la recette navigateur sont suivis séparément dans [evidence/P06.md](evidence/P06.md). Aucune validation navigateur n’est déduite de la génération ou d’un test de service.
+Le contrat P06 décrit les cinq lectures réelles suivantes et l’extension éditoriale de métadonnées. Six tests HTTP PostgreSQL, six tests de service, le global de 65 tests Java et six scénarios navigateur ont réussi ; 35 captures finales ont été examinées. Résultats et limites dans [evidence/P06.md](evidence/P06.md).
 
 | Méthode et route | Fonction |
 | --- | --- |
@@ -140,7 +140,7 @@ Le contrat P06 décrit uniquement les cinq lectures réelles suivantes et l’ex
 | `GET /catalog/resources/{resourceId}/versions/{versionId}?locale=fr` | Détail de la version exacte appartenant à cette ressource ; notamment activité épinglée d’un programme |
 | `PUT /admin/contents/{id}/metadata` | `{ metadata: PublicMetadata, reason }` → nouvelle révision `ContentView` et ETag ; CSRF, If-Match et `content.write` |
 
-Le préfixe de toutes ces routes est `/api/v1`. `locale=fr|en` est obligatoire ; les lectures publiques n’utilisent ni cookie, ni rôle, ni préférence personnelle. Aucun endpoint séparé `/courses/...`, `/guides/...`, `/activities/...` ou `/method-templates/...` n’est inventé pour doubler ces lectures : le type du détail réel distingue ces ressources. L’activité textuelle fonctionne avec la route de version exacte ; progression, tentatives, droits privés et projets restent à leurs lots.
+Le préfixe de toutes ces routes est `/api/v1`. `locale=fr|en` est obligatoire ; les lectures publiques n’utilisent ni cookie, ni rôle, ni préférence personnelle. P06 ne crée pas d’alias `/courses/...`, `/guides/...` ou `/activities/...` : le type du détail réel distingue ces ressources. P07 ajoute une lecture réelle de définition de méthode, distincte du détail d’article, ci-dessous. L’activité textuelle fonctionne avec la route de version exacte ; progression, tentatives, droits privés et projets restent à leurs lots.
 
 `q` (240 caractères au plus) cherche titre, résumé, slug et objectif dans la révision publiée, jamais dans un nouveau brouillon. Filtres combinables : `type=COURSE|ACTIVITY|GUIDE|METHOD_TEMPLATE`, `goal`, `level=BEGINNER|INTERMEDIATE|ADVANCED`, `access=FREE|PROTECTED`, langue ; MODULE demeure un nœud de programme. Tâches stables : `understand-brief`, `define-scope`, `prepare-prompt`, `build-proposal`, `check-output`, `reuse-method`. Elles sont issues du dossier de référence ; une facette n’apparaît qu’avec un nombre réel de publications disponibles. Page 0-based `0..1000000`, `pageSize=1..100` (défaut 20). Tri `TITLE` par titre normalisé puis resourceId, ou `RECENT` par date réelle d’événement de publication décroissante puis resourceId ; date historique inconnue placée à la fin, sans date inventée.
 
@@ -158,7 +158,41 @@ P06 utilise **`Cache-Control: no-store`**, lectures SSR de l’origine interne c
 
 Avant P11/P12, aucune offre, aucun prix, achat, état « déjà acquis » ou paiement ne sont fournis par ce contrat. La décision privée d’accès futur est distincte de ces projections ; ses motifs préparés (`AUTH_REQUIRED`, `OFFER_REQUIRED`, `ACCESS_EXPIRED`, etc.) ne sont pas des droits P06 déjà intégrés. Le signalement UI conserve resourceId/versionId/revisionId/langue et permet une copie ; aucun faux endpoint ni message « envoyé » avant le service de support.
 
-## Apprentissage, projets et méthodes — planifié P07–P09
+## Méthodes et générateur — validé localement P07
+
+Les neuf opérations suivantes existent dans Spring et OpenAPI. Le global Java exécuté le 8 novembre 2026 a réussi : **78 tests, zéro échec/erreur/ignoré**, dont six tests de service et sept tests HTTP P07 sur PostgreSQL. `verify:client` réussit avec **42 tests**, dont six nouveaux tests de transport/stockage P07 avec doubles unitaires et six tests du générateur. Build web, cycle HTTP réel et recette Chromium ont également réussi ; résultats et limites dans [evidence/P07.md](evidence/P07.md).
+
+| Méthode et route, préfixe `/api/v1` | Entrée ou résultat | Contrôle |
+| --- | --- | --- |
+| `GET /me/methods` | `q?`, `category?`, `page=0`, `pageSize=20` → `MethodPage` | `methods.read`, liste du seul propriétaire |
+| `POST /me/methods` | `{ fields: MethodFields }` → 201 `MethodView`, `Location`, ETag | `methods.write`, CSRF et contexte de compte ; origine absente |
+| `GET /me/methods/{id}` | `MethodView`, ETag | `methods.read`, objet du propriétaire ou 404 |
+| `PATCH /me/methods/{id}` | `{ fields: MethodFields }` → `MethodView`, nouvel ETag | Remplacement explicite des champs personnels ; propriété, CSRF, contexte et If-Match |
+| `DELETE /me/methods/{id}` | 204 vide | Même contrôle d’écriture ; copie supprimée physiquement, seconde suppression 404 |
+| `POST /me/methods/{id}/duplicates` | Aucun corps → 201 `MethodView`, `Location`, ETag | If-Match de la copie personnelle ; nouvel UUID, texte/notes/origine indépendants |
+| `GET /me/methods/{id}/source-update` | `MethodSourceUpdate` | Propriétaire, lecture dynamique séparée sans ETag personnel |
+| `POST /me/methods/from-template` | `{ sourceResourceId, sourceVersionId, sourceRevisionId, sourceLocale, fields }` → 201 `MethodView` | Snapshot METHOD_TEMPLATE exact, publié, FREE et défini, vérifié côté serveur |
+| `GET /method-templates/{resourceId}/versions/{versionId}?locale=fr` | `MethodTemplate` | Public, version exacte ; aucune définition premium, aucun repli de langue/version |
+
+Les lectures/écritures personnelles sont `private, no-store`. Les permissions `methods.read` et `methods.write` sont attribuées au rôle LEARNER de référence ; aucun compte n’est créé par cette attribution. Le service recontrôle compte actif, permission et propriétaire, y compris après attente du verrou. Lire, modifier, dupliquer, supprimer ou inspecter la source de la méthode d’autrui retourne 404. Un rôle éditorial ne donne aucun accès aux copies privées ni à une définition premium.
+
+`MethodFields` contient exactement `title`, `locale`, `text`, `parameters`, `generatedFrom`, `notes`, `category`. Titre 1..240, texte 1..32000, notes 0..8000 caractères ; catégorie nullable ou 1..80 non blancs, langue du texte FR/EN. Les sept `MethodParameters` sont `objective`, `context`, `availableData`, `recipient`, `format`, `constraints`, `clarifications`, chacun 0..4000 caractères. `generatedFrom` est nullable ou un dernier jeu de paramètres assemblé, distinct du texte final. L’ensemble des champs est limité à **48 KiB JSON UTF-8**, y compris ce marqueur ; Unicode invalide et NUL sont refusés. Le proxy conserve sa borne globale de 64 KiB. Propriétaire, origine, rôles et révision autoritaire sont refusés en entrée, notamment par le rejet des champs inconnus.
+
+La recherche, limitée à 240 caractères, porte uniquement sur titre/notes/catégorie du propriétaire ; catégorie exacte facultative. `page` 0..1000000, `pageSize` 1..100 ; ordre `updatedAt DESC, id`. Les résumés de liste ne livrent ni texte ni notes. Une seconde session du même compte retrouve le détail persisté, sans traduction automatique de ses champs.
+
+Toutes les mutations `/me/methods` exigent **`X-Account-Context`**, UUID du compte attendu lors de l’action explicite. Le serveur le compare à l’acteur de session dans la transaction ; ce header ne choisit jamais le propriétaire. Absent ⇒ **428 `ACCOUNT_CONTEXT_REQUIRED`** ; autre compte ⇒ **409 `ACCOUNT_CONTEXT_CHANGED`** ; syntaxe invalide ⇒ **400 `VALIDATION_FAILED`**. Cette précondition ferme le cas ancien onglet A → connexion B → enregistrement du texte A. L’import sous B nécessite une nouvelle décision explicite, pas un retry automatique.
+
+L’ETag fort du détail est `"personal-method-{id}-r{revision}"`. PATCH, DELETE et duplication exigent If-Match, après propriété et verrouillage de la ligne : absent 428, révision dépassée 412, comparaison forte du socle. La révision et la mise à jour sont atomiques. La notice de source est séparée : modifier une publication ne change pas les octets ni l’ETag de la copie. Elle retourne `NONE`, `CURRENT`, `UPDATE_AVAILABLE` ou `UNAVAILABLE`, avec origine capturée et éventuel candidat autorisé de la même identité/langue. Aucune ancienne publication de langue différente ne remplace la publication courante dans cette notice.
+
+`MethodOrigin` conserve resourceId/versionId/translationId/revisionId, langue, titre et slug capturés par le serveur. Une correction, nouvelle version, mise en accès PROTECTED ou un retrait de source ne réécrit ni texte ni notes de la copie ; duplication personnelle reste possible sans nouvel accès à la source. Une nouvelle copie depuis la source exige au contraire une publication encore autorisée : non publiée/type incorrect ou retirée ⇒ 404 ; PROTECTED ⇒ 403 tant qu’aucun droit pédagogique réel n’est disponible ; révision publiée différente de celle choisie ⇒ 412 ; définition absente/incomplète ⇒ 409 `CONTENT_NOT_READY`.
+
+`MethodDefinition`, nullable dans le JSONB éditorial `ContentDocument`, contient `useCases`, `requiredInputs`, `steps`, `starterInstruction`, `example`, `checks`, `limitations`, `defaults`. Listes 0..20, éléments 1..1000 ; instruction 0..4000, exemple 0..8000 ; total **24 KiB UTF-8**, inclus dans la borne existante de document 48 KiB. Une définition peut rester incomplète en DRAFT, mais toute nouvelle publication METHOD_TEMPLATE exige les éléments complets (`METHOD_DEFINITION_REQUIRED`). L’ancien JSON sans ce champ signifie null ; les articles déjà publiés P06 restent lisibles et le générateur annonce `MISSING_DEFINITION`. Aucun parsing de paragraphes ne produit une définition supposée validée. SaveRevision P05 porte l’édition, sans endpoint CMS supplémentaire. `PublicDocument.methodDefinition` n’est servi que dans le corps FREE/PUBLISHED ; le template exact distingue aussi PROTECTED, STALE, WITHDRAWN et MISSING_TRANSLATION avec `definition=null`.
+
+Le générateur local exige objectif, données disponibles et format pour assembler, sans appel IA. Son texte éditable ne change pas silencieusement après modification des paramètres. Le visiteur peut copier ; seule une action explicite conserve un essai non sensible en `sessionStorage` pendant deux heures, sous UUID de brouillon et sans propriétaire. Après connexion, l’import reste volontaire sous le compte affiché ; expiration/stockage indisponible ne sont pas annoncés comme une sauvegarde. Logout purge ces clés et les caches personnels ciblés. Les retours autorisés couvrent les routes E12 FR/EN, le seul query `draft=<uuid>` sur la création et les filtres bornés de liste ; domaines externes, traversées de chemin, paramètres d’identité et doublons sont refusés. Changer la langue de navigation conserve le texte personnel original.
+
+Le client valide réponse, code HTTP et ETag avant confirmation ; conserve les modifications postérieures à une requête lente et la saisie sur 412, erreur ou expiration. Comparaison, copie, rechargement et rebase sont explicites. CSRF reste en mémoire ; 401/403 déclenche une nouvelle acquisition pour une prochaine action, sans répéter la mutation. Un 409 de compte ou 412 ne déclenche aucun retry POST.
+
+## Apprentissage et projets — planifié P08–P09
 
 | Méthode et route | Fonction et contrôle |
 | --- | --- |
@@ -172,10 +206,6 @@ Avant P11/P12, aucune offre, aucun prix, achat, état « déjà acquis » ou pai
 | `GET /me/projects/{projectId}/revisions` | Historique privé, pagination et contenu accessible au propriétaire |
 | `POST /me/projects/{projectId}/self-assessments` | Révision de production, grille/version et vérifications déclarées ; score calculé mais identifié comme déclaré |
 | `POST /activities/{activityId}/solution-reveals` | Action volontaire/tentative préalable selon activité ; consultation tracée sans validation du projet |
-| `GET/POST /me/methods` | Bibliothèque et création d’une copie avec texte indépendant et origine |
-| `GET/PATCH/DELETE /me/methods/{methodId}` | Propriété, révision, confirmation UI de suppression ; aucune mutation du modèle source |
-| `POST /me/methods/{methodId}/duplicates` | Nouvelle copie privée avec identifiant différent |
-| `GET /me/methods/{methodId}/source-update` | Différence/version source et possibilité explicite de créer une nouvelle copie |
 
 Les notes d’activité peuvent avoir des endpoints dédiés `/me/activity-notes/{activityId}` avec les mêmes conventions de propriétaire et révision. Documenter le format exact avant de connecter leur éditeur. Le générateur de prompts assemble localement ou côté serveur des données structurées ; il n’appelle pas un modèle IA par défaut.
 
@@ -232,7 +262,7 @@ Une réponse de `readiness` contient `{ ready, blockingIssues, warnings, checked
 
 ## Contrat et tests
 
-P03 livre le contrat machine et les commandes de validation/génération avec des outils compatibles avec TypeScript 6 ; P04/P05/P06 les étendent aux routes réelles d’identité, CMS et catalogue public. La CI est configurée pour ces commandes ; une exécution GitHub n’est pas présumée. Les DTO exposés ne sont jamais des entités JPA brutes. Les modèles et FK actuels/futurs sont précisés dans [DATA_MODEL.md](DATA_MODEL.md), les résultats réellement observés dans [evidence/P03.md](evidence/P03.md), [evidence/P04.md](evidence/P04.md), [evidence/P05.md](evidence/P05.md) et [evidence/P06.md](evidence/P06.md).
+P03 livre le contrat machine et les commandes de validation/génération avec des outils compatibles avec TypeScript 6 ; P04/P05/P06/P07 les étendent aux routes réelles d’identité, CMS, catalogue public et méthodes personnelles. La CI est configurée pour ces commandes ; une exécution GitHub n’est pas présumée. Les DTO exposés ne sont jamais des entités JPA brutes. Les modèles et FK actuels/futurs sont précisés dans [DATA_MODEL.md](DATA_MODEL.md), les résultats réellement observés dans [evidence/P03.md](evidence/P03.md), [evidence/P04.md](evidence/P04.md), [evidence/P05.md](evidence/P05.md), [evidence/P06.md](evidence/P06.md) et [evidence/P07.md](evidence/P07.md).
 
 Chaque lot qui ajoute une route fournit des tests sur le backend réel pour ses invariants, puis met à jour le client et les écrans. Les états de facture, remboursement ou autorisation ne sont jamais inventés uniquement pour faire passer un test d’interface.
 

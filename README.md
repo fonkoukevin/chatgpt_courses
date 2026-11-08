@@ -4,11 +4,11 @@ Plateforme de formation pratique à l’IA : choisir une tâche, apprendre, prod
 
 ## État réel
 
-P01 fournit les fondations locales ; P02 ajoute le système visuel et trois structures d’interface. P03 pose le schéma identité/contenu et le contrat généré. P04 raccorde l’identité aux sessions Spring/PostgreSQL. P05 ajoute le CMS et la publication ; P06 raccorde le site public et les fiches aux publications réelles. Les autres parcours métier et les paiements seront raccordés dans leurs lots. Aucun ancien prototype repris ni déploiement externe annoncé.
+P01 fournit les fondations locales ; P02 ajoute le système visuel et trois structures d’interface. P03 pose le schéma identité/contenu et le contrat généré. P04 raccorde l’identité aux sessions Spring/PostgreSQL. P05 ajoute le CMS et la publication ; P06 raccorde le site public aux publications réelles. P07 ajoute le générateur sans IA et la bibliothèque personnelle. Apprentissage, projets et paiements seront raccordés dans leurs lots. Aucun ancien prototype repris ni déploiement externe annoncé.
 
 La validation P01 couvre FR/EN, clavier, formats étroits, erreur 404 et panne/reprise réelle de Spring. P02 ajoute 14 tests et 54 captures examinées pour les interfaces ; les sept scénarios P01 passent à nouveau après ces changements. La validation reste locale, avec le Chromium de test autorisé.
 
-Lire [AGENTS.md](AGENTS.md), puis [docs/STATUS.md](docs/STATUS.md). Vérifications et limites : [P06](docs/evidence/P06.md), [P05](docs/evidence/P05.md), [P04](docs/evidence/P04.md), [P03](docs/evidence/P03.md), [P02](docs/evidence/P02.md), [P01](docs/evidence/P01.md) ; audit initial : [P00](docs/evidence/P00.md).
+Lire [AGENTS.md](AGENTS.md), puis [docs/STATUS.md](docs/STATUS.md). Vérifications et limites : [P07](docs/evidence/P07.md), [P06](docs/evidence/P06.md), [P05](docs/evidence/P05.md), [P04](docs/evidence/P04.md), [P03](docs/evidence/P03.md), [P02](docs/evidence/P02.md), [P01](docs/evidence/P01.md) ; audit initial : [P00](docs/evidence/P00.md).
 
 ## Structure retenue
 
@@ -147,7 +147,7 @@ Si Chromium n’est pas installé, `run browser:install` installe la version ver
 
 [DATA_MODEL.md](docs/DATA_MODEL.md) explique les douze tables ajoutées par **V002**, les identités UUID, les versions gelées, les traductions et les relations futures. **V001 est inchangée**. Hibernate valide le schéma ; Flyway est le seul mécanisme d’évolution. Aucune commande de reset ou suppression de volume n’est nécessaire.
 
-Le contrat machine [openapi.yaml](docs/api/openapi.yaml) décrit la sonde, l’identité P04, les opérations éditoriales P05 et les lectures publiques P06 réellement implémentées. Les autres routes métier restent planifiées dans [API_CONTRACTS.md](docs/API_CONTRACTS.md). Après modification du contrat :
+Le contrat machine [openapi.yaml](docs/api/openapi.yaml) décrit la sonde, l’identité P04, les opérations éditoriales P05, les lectures publiques P06 et les méthodes P07 réellement implémentées. Les autres routes métier restent planifiées dans [API_CONTRACTS.md](docs/API_CONTRACTS.md). Après modification du contrat :
 
 ```powershell
 .\scripts\courses.cmd run api:validate
@@ -247,3 +247,28 @@ Recette dédiée, après builds, avec Docker et les ports 3101/8181 libres :
 ```
 
 Le superviseur crée un PostgreSQL isolé en tmpfs pour les publications fictives de recette. Il conserve le volume Compose et nettoie ses seuls processus. Résultats observés et limites : [P06](docs/evidence/P06.md).
+
+## Méthodes et générateur P07
+
+Une méthode publiée possède une définition éditoriale FR/EN : entrées, étapes, instruction, exemple, contrôles et limites. Le générateur assemble sept champs localement ; aucun appel IA ni instruction exécutée automatiquement. Le texte final reste modifiable indépendamment des paramètres ; reconstruction et réinitialisation demandent confirmation.
+
+| Fonction | Français | Anglais |
+| --- | --- | --- |
+| Source et générateur | `/fr/methodes/{slug}` | `/en/methods/{slug}` |
+| Bibliothèque privée | `/fr/espace/methodes` | `/en/my/methods` |
+| Nouvelle méthode | `/fr/espace/methodes/nouvelle` | `/en/my/methods/new` |
+| Méthode personnelle | `/fr/espace/methodes/{id}` | `/en/my/methods/{id}` |
+
+La sauvegarde exige une vraie session et une confirmation Spring. Texte, paramètres, notes, langue et origine sont conservés ; une modification ou un retrait de source ne réécrit jamais la copie. Recherche, duplication, suppression confirmée et conflits de révision utilisent la même API propriétaire. Le changement d’interface ne traduit pas les notes. Le contexte de compte attendu empêche une ancienne page de sauvegarder sous un compte différent.
+
+Avant connexion, seul un brouillon explicitement déclaré non sensible peut rester deux heures dans l’onglet. Après connexion, un écran présente le compte courant et demande son import volontaire ; rien n’est enregistré automatiquement. Les saisies privées ne sont pas placées dans le stockage navigateur.
+
+Recette dédiée, après builds, avec Docker et les ports 3101/8181 libres :
+
+```powershell
+.\scripts\courses.cmd run api:check
+.\scripts\courses.cmd run verify:client
+.\scripts\courses.cmd run verify:methods
+```
+
+Résultats : **78 tests Java**, **42 tests client**, builds réussis et **7/7 scénarios Chromium en 46,1 s** ; **24 captures finales examinées**. La régression publique passe également, **6/6 en 54,9 s**. PostgreSQL de recette isolé en tmpfs, nettoyage confirmé ; aucune publication GitHub ou production. Détails et limites : [P07](docs/evidence/P07.md). Le prochain lot est [P08_APPRENTISSAGE_QUIZ.txt](prompts/P08_APPRENTISSAGE_QUIZ.txt).

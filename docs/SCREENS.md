@@ -1,6 +1,6 @@
 # Familles d’écrans et comportements
 
-Cette carte reprend E01–E16 du cahier fonctionnel V1 et précise les routes introduites au fil des lots. Le registre comprend aussi les familles futures : l’état vérifié reste celui de STATUS et des preuves. P06 implémente E01–E04 et une lecture textuelle publique d’activité/méthode, validées localement avec six scénarios navigateur et 35 captures finales examinées. Toute modification doit être répercutée dans les liens, traductions, tests et métadonnées. Les slugs publics sont localisés ; l’identité métier reste indépendante du titre et de l’URL. Les chemins privés n’autorisent jamais leur contenu.
+Cette carte reprend E01–E16 du cahier fonctionnel V1 et précise les routes introduites au fil des lots. Le registre comprend aussi les familles futures : l’état vérifié reste celui de STATUS et des preuves. P06 implémente E01–E04 et une lecture textuelle publique d’activité/méthode, validées localement avec six scénarios navigateur et 35 captures finales examinées. Le générateur E05 et la bibliothèque E12 de P07 sont également validés localement ; résultats et limites dans [evidence/P07.md](evidence/P07.md). Toute modification doit être répercutée dans les liens, traductions, tests et métadonnées. Les slugs publics sont localisés ; l’identité métier reste indépendante du titre et de l’URL. Les chemins privés n’autorisent jamais leur contenu.
 
 ## Registre central des routes FR/EN
 
@@ -19,7 +19,9 @@ Cette carte reprend E01–E16 du cahier fonctionnel V1 et précise les routes in
 | E09 Apprentissage | `/fr/espace/apprentissage` | `/en/my/learning` |
 | E10 Activité | `/fr/apprendre/{courseSlug}/{activitySlug}` | `/en/learn/{courseSlug}/{activitySlug}` |
 | E11 Projets et atelier | `/fr/espace/projets`, puis `/{projectId}` | `/en/my/projects`, puis `/{projectId}` |
-| E12 Méthodes personnelles | `/fr/espace/methodes`, puis `/{methodId}` | `/en/my/methods`, puis `/{methodId}` |
+| E12 Bibliothèque personnelle | `/fr/espace/methodes` | `/en/my/methods` |
+| E12 Nouvelle méthode/import explicite | `/fr/espace/methodes/nouvelle`, `?draft={uuid}` facultatif | `/en/my/methods/new`, `?draft={uuid}` facultatif |
+| E12 Détail personnel | `/fr/espace/methodes/{methodId}` | `/en/my/methods/{methodId}` |
 | E13 Compte | `/fr/compte` | `/en/account` |
 | E14 Contenus | `/fr/admin/content` | `/en/admin/content` |
 | E15 Éditeur | `/fr/admin/content/{id}/edit` | `/en/admin/content/{id}/edit` |
@@ -34,6 +36,7 @@ Cette carte reprend E01–E16 du cahier fonctionnel V1 et précise les routes in
 - En P06, `/fr` et `/en` sont les accueils publics ; l’ancienne sonde d’interface P01 est déplacée dans `/{locale}/dev/foundations`, gardée en local/test avec les autres démonstrations.
 - Les détails publics acceptent `?version={versionId}` pour conserver une version publiée déterminée. Les liens d’activité E10 du programme ajoutent `resource={activityId}`, `version={activityVersionId}` et `courseVersion={courseVersionId}` ; les slugs seuls ne remplacent pas cette identité/version.
 - P06 garde les lectures publiques `no-store`, sans cookie et sans personnalisation privée. Canonical et équivalents sont préparés ; **noindex/nofollow reste actif jusqu’à P16**. Aucun prix, achat ou paiement opérationnel avant P11/P12.
+- P07 valide les retours d’identification E12 par famille de route, UUID et paramètres autorisés, puis traduit `/fr/espace/methodes/nouvelle` en `/en/my/methods/new`. Le query `draft` ne contient qu’un UUID temporaire, jamais le texte ou un propriétaire. Filtres de liste `q/category/page/pageSize` bornés ; pas de paramètres d’identité, doublons, traversées ou domaines externes.
 
 ## Conventions communes
 
@@ -51,7 +54,7 @@ Cette carte reprend E01–E16 du cahier fonctionnel V1 et précise les routes in
 
 Routes : /fr et /en. Public, variante connecté. Phase principale P06.
 
-État introduit P06 : accueil SSR alimenté par les publications/facettes réelles, activité gratuite choisie dans l’API, exemples originaux signalés comme fictifs. Sans activité ouverte, le message et le lien catalogue restent honnêtes. La reprise privée attend le service d’apprentissage ; aucune fausse reprise n’est déduite d’une session. Les FAQ affichées proviennent d’une fiche COURSE/GUIDE publiée avec attribution de leur source. Recette navigateur P06 encore en cours.
+État introduit P06 : accueil SSR alimenté par les publications/facettes réelles, activité gratuite choisie dans l’API, exemples originaux signalés comme fictifs. Sans activité ouverte, le message et le lien catalogue restent honnêtes. La reprise privée attend le service d’apprentissage ; aucune fausse reprise n’est déduite d’une session. Les FAQ affichées proviennent d’une fiche COURSE/GUIDE publiée avec attribution de leur source. Recette P06 validée localement et régression publique réussie en P07 ; voir [preuve P07](evidence/P07.md).
 
 Présenter le résultat utile de la plateforme, une recherche et des entrées par tâche. Montrer un exemple original de réalisation, les ressources réellement disponibles, quelques parcours et la première activité ouverte. Action principale : « Essayer une activité » ; secondaire : explorer le catalogue. Pour un utilisateur connecté, proposer une reprise réelle.
 
@@ -89,7 +92,7 @@ Composants : CourseHero, Curriculum, AccessNotice, OfferSummary, VersionNotice e
 
 Routes : /{locale}/guides/{slug}. Phase P06, contenu P18.
 
-P06 rend la publication réelle, ses sources CMS et sa date de revue publiée. La consultation textuelle des modèles de méthode utilise aussi `/fr/methodes/{slug}` et `/en/methods/{slug}` ; le générateur et la conservation personnelle restent P07. Les contenus et médias définitifs P18 ne sont pas déduits de la présence d’un écran ou d’une fixture.
+P06 rend la publication réelle, ses sources CMS et sa date de revue publiée. La consultation textuelle des modèles de méthode utilise aussi `/fr/methodes/{slug}` et `/en/methods/{slug}` ; générateur et conservation personnelle sont complétés en P07 ci-dessous. Les contenus et médias définitifs P18 ne sont pas déduits de la présence d’un écran ou d’une fixture.
 
 Question précise, sommaire, explication, exemple, contrôles et exercice associé. Les références présentes sont réelles et utiles. La date de revue est une preuve éditoriale enregistrée. Les blocs copiables conservent leur source ; le succès de copie dépend de l’action réelle.
 
@@ -101,13 +104,15 @@ Composants : ArticleLayout, TableOfContents, CopyBlock, ReferenceList, VersionNo
 
 ## E05 Fiche de méthode et générateur
 
-Routes : /fr/methodes/{slug}, /en/methods/{slug}. Phase P07.
+Routes : `/fr/methodes/{slug}`, `/en/methods/{slug}`, avec `?version={versionId}` pour le snapshot publié exact. Interface P07 validée localement ; voir [evidence/P07.md](evidence/P07.md).
 
-Présenter besoin, variables, entrées, résultat attendu, limites, contrôles et exemple. Formulaire avec objectif, contexte, données, destinataire, format et contraintes. Préparer une instruction modifiable, la copier, la réinitialiser et la sauvegarder.
+La publication réelle fournit objectif, prérequis et version, puis sa `MethodDefinition` localisée : cas d’usage, entrées nécessaires, étapes, instruction de départ, exemple, vérifications et limites. Cette définition appartient au document éditorial, sans extraction de paragraphes. Un article historique sans définition reste lisible avec un générateur explicitement non configuré ; une nouvelle publication de modèle exige sa complétude. Une source PROTECTED ou indisponible ne livre pas la définition réservée et ne propose pas un faux achat avant P11.
 
-Le générateur assemble du texte ; il ne fait pas croire qu’une IA a exécuté la tâche. La sauvegarde durable requiert un compte ; l’essai temporaire peut être conservé durant l’identification si le navigateur le permet. Le modèle premium est autorisé côté serveur avant exposition de son contenu.
+Le formulaire présente objectif, contexte, données disponibles, destinataire, format, contraintes et points à clarifier. Objectif/données/format sont requis à l’assemblage ; contexte facultatif. Le texte final reste éditable et indépendant du dernier jeu de paramètres assemblé. Changer un champ signale l’écart sans effacer une retouche ; reconstruction et réinitialisation sont explicites. La copie attend le succès du presse-papiers et propose une sélection manuelle en cas de refus. Aucun bouton ne prétend exécuter l’instruction dans ChatGPT.
 
-États : champs invalides, copie refusée, sauvegarde en cours/échouée, conflit et accès requis. Composants : MethodBuilder, VariableFields, PromptEditor, SaveStatus et AccessNotice.
+Un visiteur peut pratiquer et copier. L’action de sauvegarde peut conserver un essai non sensible pendant deux heures dans `sessionStorage`, puis revenir à E12 après identification ; stockage indisponible et expiration sont expliqués. L’import sous le compte effectivement affiché demande une action volontaire. Une saisie déjà associée à un compte n’est pas transformée en brouillon anonyme après changement de session. L’enregistrement durable appelle le serveur sous CSRF et contexte de compte attendu ; après une création confirmée, les sauvegardes suivantes mettent à jour la même copie avec son ETag.
+
+États implémentés : chargement d’identité, visiteur, compte connu/changé, définition absente, accès réservé, champs invalides, copie refusée, modification, sauvegarde/échec, conflit personnel ou source actualisée. Le travail est conservé en cas de refus pour copie/comparaison ; aucune réponse 201 ancienne ne doit confirmer une autre version ou un autre compte. Composants : `PublicMethodSource`, `MethodGenerator`, contrôles de copie et confirmation, états d’accès et de source. La recette Chromium et l’examen des captures sont consignés séparément des tests client simulés dans la preuve P07.
 
 ## E06 Identification
 
@@ -175,13 +180,15 @@ Composants : ProjectEditor, BriefPanel, RubricChecklist, EvaluationSummary, Revi
 
 ## E12 Mes méthodes
 
-Routes : /fr/espace/methodes et /en/my/methods. Phase P07.
+Routes : bibliothèque `/fr/espace/methodes` et `/en/my/methods`, création `nouvelle`/`new`, détail par UUID selon le registre. Interface et services P07 validés localement.
 
-Copies personnelles avec nom, tâche, catégories, langue, note, source et version. Ouvrir, renommer, adapter, dupliquer, copier, supprimer après confirmation. Recherche et état vide utile.
+Liste/recherche paginée sur titre, notes ou catégorie du seul propriétaire, filtre de catégorie exact et ordre stable ; les cartes ne livrent ni texte ni notes. Le détail permet renommer, adapter les sept paramètres et le texte indépendant, modifier notes/catégorie/langue du texte, copier, dupliquer vers un nouvel UUID et supprimer après confirmation. Vide, chargement, panne, accès refusé et objet absent restent distincts ; les routes directes n’accordent aucun droit.
 
-Une source actualisée propose une évolution sans écraser le texte ; une source archivée laisse la copie intacte. Les notes ne suivent pas automatiquement la langue de l’interface. Les écritures sont versionnées et propriétaires.
+La copie conserve son origine versionnée, son texte et ses notes si la source est corrigée, réservée ou archivée. La notice séparée signale source actuelle, nouvelle copie possible ou indisponibilité, sans modifier l’ETag personnel. Le changement de langue d’interface ouvre le même UUID et ne traduit pas les données personnelles. Les écritures restent propriétaires, sous CSRF, `X-Account-Context` et If-Match ; un changement de compte bloque la mutation et n’importe pas automatiquement l’ancienne saisie.
 
-Composants : SavedMethodCard, MethodEditor, SourceVersionNotice, SaveStatus et ConfirmationDialog.
+« Enregistré » suit uniquement la confirmation du dernier contenu envoyé. Une saisie modifiée pendant une réponse lente reste modifiée ; un 412 permet comparer, copier, recharger ou conserver volontairement la version locale face à la nouvelle révision. L’éditeur privé ne promet aucune synchronisation par stockage local ; il garde le texte en mémoire et propose sa copie sur panne/expiration. L’import de brouillon montre d’abord un chargement réel, puis disponibilité/expiration, le compte courant et une action d’import ou d’abandon ; aucune création serveur automatique. Logout purge les clés personnelles ciblées.
+
+Composants : `PersonalMethodsList`, `PersonalMethodEditor`, `MethodDraftImport`, `MethodGenerator`, notice source, confirmations et état de sauvegarde. Le global **78 tests Java** couvre notamment propriété, seconde session et concurrence ; les **42 tests client** comprennent des doubles réseau/stockage. La recette navigateur finale réussit **7/7 en 46,1 s**, avec **24 captures examinées** ; périmètre observé et limites dans [evidence/P07.md](evidence/P07.md).
 
 ## E13 Compte, achats et aide
 

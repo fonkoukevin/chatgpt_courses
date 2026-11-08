@@ -4,6 +4,7 @@ import type { CreateContent, PublicMetadata } from '../../apps/web/src/lib/api/g
 import { csrfHeaders, loginEditor } from './editorial-fixture';
 import { contentAction, createContent, currentContent, type RecordedContent } from './editorial-api';
 import { editorialContent } from './editorial-content';
+import { br01MethodDefinition } from './method-definition-fixture';
 
 type Locale = 'fr' | 'en';
 export type PublicPair = Record<Locale, RecordedContent>;
@@ -41,10 +42,12 @@ export async function createPublicFixture(request: APIRequestContext, _baseURL?:
     const command = editorialContent('fr', access);
     command.kind = kind; command.slug = `${marker}-${kind.toLowerCase().replace('_', '-')}-fr`; command.title = names.fr;
     command.childVersionIds = children; command.reason = 'P06 disposable browser publication, not production learning content';
+    if (kind === 'METHOD_TEMPLATE') command.document.methodDefinition = br01MethodDefinition('fr');
     let fr = await createContent(request, command);
     fr = await savePublicMetadata(request, fr, publicFixtureMetadata('fr'));
     fr = await publishPublicContent(request, fr);
     const translated = editorialContent('en', access);
+    if (kind === 'METHOD_TEMPLATE') translated.document.methodDefinition = br01MethodDefinition('en');
     let en = await contentAction(request, fr, 'translations', { locale: 'en', slug: `${marker}-${kind.toLowerCase().replace('_', '-')}-en`, title: names.en,
       summary: 'Fictional BR01 resource for P06 public verification.', document: translated.document, reason: 'Explicit English fixture, same learning version' }, 201);
     en = await savePublicMetadata(request, en, publicFixtureMetadata('en'));

@@ -11,6 +11,8 @@ public enum ApiError {
     EMAIL_ALREADY_REGISTERED(HttpStatus.CONFLICT, "Cette adresse ne peut pas être utilisée pour cette inscription."),
     AUTHENTICATION_REQUIRED(HttpStatus.UNAUTHORIZED, "Une authentification est nécessaire."),
     ACCOUNT_UNAVAILABLE(HttpStatus.UNAUTHORIZED, "La session n’est plus disponible. Reconnectez-vous."),
+    ACCOUNT_CONTEXT_REQUIRED(HttpStatus.PRECONDITION_REQUIRED, "Confirmez le compte attendu avant d’enregistrer cette méthode."),
+    ACCOUNT_CONTEXT_CHANGED(HttpStatus.CONFLICT, "Le compte connecté a changé. Vérifiez la saisie et confirmez son import sous le compte actuel."),
     BAD_CREDENTIALS(HttpStatus.UNAUTHORIZED, "L’adresse ou le mot de passe est incorrect."),
     CSRF_INVALID(HttpStatus.FORBIDDEN, "Le contrôle de session a expiré ou est invalide. Rechargez-le avant de réessayer."),
     ACCESS_DENIED(HttpStatus.FORBIDDEN, "Cette action n’est pas autorisée."),

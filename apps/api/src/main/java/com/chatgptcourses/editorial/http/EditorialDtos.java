@@ -4,6 +4,7 @@ import com.chatgptcourses.catalog.model.ResourceKind;
 import com.chatgptcourses.catalog.http.CatalogDtos;
 import com.chatgptcourses.editorial.model.EditorialState;
 import com.chatgptcourses.editorial.service.ContentTypes;
+import com.chatgptcourses.methods.http.MethodDtos;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -53,16 +54,18 @@ public final class EditorialDtos {
                            @NotNull @Size(max = 30) List<@NotNull @Valid Rubric> rubric,
                            @NotNull @Pattern(regexp = "FREE|PROTECTED") String access,
                            @NotNull @Size(max = 20) List<@NotNull @Valid Media> media,
-                           @NotNull @Size(max = 30) List<@NotNull UUID> relatedResourceIds) {
+                           @NotNull @Size(max = 30) List<@NotNull UUID> relatedResourceIds,
+                           @Valid MethodDtos.Definition methodDefinition) {
         ContentTypes.ContentDocument command() {
             return new ContentTypes.ContentDocument(objective, expectedResult, prerequisites, blocks.stream().map(Block::command).toList(),
                     estimatedMinutes, exercise == null ? null : exercise.command(), quiz.stream().map(Quiz::command).toList(),
-                    rubric.stream().map(Rubric::command).toList(), access, media.stream().map(Media::command).toList(), relatedResourceIds);
+                    rubric.stream().map(Rubric::command).toList(), access, media.stream().map(Media::command).toList(), relatedResourceIds,
+                    methodDefinition == null ? null : methodDefinition.command());
         }
         static Document from(ContentTypes.ContentDocument value) {
             return value == null ? null : new Document(value.objective(), value.expectedResult(), value.prerequisites(), value.blocks().stream().map(Block::from).toList(),
                     value.estimatedMinutes(), Exercise.from(value.exercise()), value.quiz().stream().map(Quiz::from).toList(),
-                    value.rubric().stream().map(Rubric::from).toList(), value.access(), value.media().stream().map(Media::from).toList(), value.relatedResourceIds());
+                    value.rubric().stream().map(Rubric::from).toList(), value.access(), value.media().stream().map(Media::from).toList(), value.relatedResourceIds(), MethodDtos.Definition.from(value.methodDefinition()));
         }
         @Override public String toString() { return "Document[redacted]"; }
     }
@@ -156,9 +159,9 @@ public final class EditorialDtos {
     }
     public record PublicDocument(String objective, String expectedResult, List<String> prerequisites, List<Block> blocks,
                                  Integer estimatedMinutes, String exerciseInstructions, List<PublicQuiz> quiz, List<Rubric> rubric,
-                                 String access, List<Media> media, List<UUID> relatedResourceIds) {
+                                 String access, List<Media> media, List<UUID> relatedResourceIds, MethodDtos.Definition methodDefinition) {
         public static PublicDocument from(ContentTypes.PublicDocument value) {
-            return value == null ? null : new PublicDocument(value.objective(), value.expectedResult(), value.prerequisites(), value.blocks().stream().map(Block::from).toList(), value.estimatedMinutes(), value.exerciseInstructions(), value.quiz().stream().map(PublicQuiz::from).toList(), value.rubric().stream().map(Rubric::from).toList(), value.access(), value.media().stream().map(Media::from).toList(), value.relatedResourceIds());
+            return value == null ? null : new PublicDocument(value.objective(), value.expectedResult(), value.prerequisites(), value.blocks().stream().map(Block::from).toList(), value.estimatedMinutes(), value.exerciseInstructions(), value.quiz().stream().map(PublicQuiz::from).toList(), value.rubric().stream().map(Rubric::from).toList(), value.access(), value.media().stream().map(Media::from).toList(), value.relatedResourceIds(), MethodDtos.Definition.from(value.methodDefinition()));
         }
     }
     public record PublicContent(UUID resourceId, ResourceKind kind, UUID versionId, int versionNumber, String locale, String slug,

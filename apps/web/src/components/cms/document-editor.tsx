@@ -11,7 +11,10 @@ export function emptyDocument(): ContentDocument {
   return { objective: "", expectedResult: "", prerequisites: [], blocks: [], estimatedMinutes: null, exercise: null, quiz: [], rubric: [], access: "PROTECTED", media: [], relatedResourceIds: [] };
 }
 export function normalizeDocument(value: ContentDocument): ContentDocument {
-  return { ...value, prerequisites: value.prerequisites.filter((line) => line.trim()), relatedResourceIds: value.relatedResourceIds.filter((line) => line.trim()) };
+  const methodDefinition = value.methodDefinition ? { ...value.methodDefinition,
+    useCases: value.methodDefinition.useCases.filter((line) => line.trim()), requiredInputs: value.methodDefinition.requiredInputs.filter((line) => line.trim()),
+    steps: value.methodDefinition.steps.filter((line) => line.trim()), checks: value.methodDefinition.checks.filter((line) => line.trim()), limitations: value.methodDefinition.limitations.filter((line) => line.trim()) } : null;
+  return { ...value, methodDefinition, prerequisites: value.prerequisites.filter((line) => line.trim()), relatedResourceIds: value.relatedResourceIds.filter((line) => line.trim()) };
 }
 const lines = (value: string): string[] => value ? value.split("\n") : [];
 const choices = (values: Record<string, string>) => Object.entries(values).map(([value, label]) => ({ value, label }));

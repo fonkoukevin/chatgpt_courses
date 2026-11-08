@@ -2,7 +2,7 @@
 
 import { type Client, type ClientMeta, type Options as Options2, type RequestResult, type TDataShape, urlSearchParamsBodySerializer } from './client';
 import { client } from './client.gen';
-import type { ArchiveContentData, ArchiveContentErrors, ArchiveContentResponses, CreateContentData, CreateContentErrors, CreateContentResponses, CreateContentTranslationData, CreateContentTranslationErrors, CreateContentTranslationResponses, CreateContentVersionData, CreateContentVersionErrors, CreateContentVersionResponses, DuplicateContentData, DuplicateContentErrors, DuplicateContentResponses, GetCatalogueFacetsData, GetCatalogueFacetsErrors, GetCatalogueFacetsResponses, GetCatalogueResourceBySlugData, GetCatalogueResourceBySlugErrors, GetCatalogueResourceBySlugResponses, GetCatalogueResourceData, GetCatalogueResourceErrors, GetCatalogueResourceResponses, GetCatalogueResourceVersionData, GetCatalogueResourceVersionErrors, GetCatalogueResourceVersionResponses, GetContentData, GetContentDependenciesData, GetContentDependenciesErrors, GetContentDependenciesResponses, GetContentErrors, GetContentReadinessData, GetContentReadinessErrors, GetContentReadinessResponses, GetContentResponses, GetCsrfTokenData, GetCsrfTokenErrors, GetCsrfTokenResponses, GetCurrentUserData, GetCurrentUserErrors, GetCurrentUserResponses, GetPreferencesData, GetPreferencesErrors, GetPreferencesResponses, GetPublicContentData, GetPublicContentErrors, GetPublicContentResponses, GetSystemHealthData, GetSystemHealthErrors, GetSystemHealthResponses, ListContentRevisionsData, ListContentRevisionsErrors, ListContentRevisionsResponses, ListContentsData, ListContentsErrors, ListContentsResponses, LoginData, LoginErrors, LoginResponses, LogoutData, LogoutErrors, LogoutResponses, PreviewContentData, PreviewContentErrors, PreviewContentResponses, PublishContentData, PublishContentErrors, PublishContentResponses, RegisterData, RegisterErrors, RegisterResponses, ReplaceContentCompositionData, ReplaceContentCompositionErrors, ReplaceContentCompositionResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, SaveContentMetadataData, SaveContentMetadataErrors, SaveContentMetadataResponses, SaveContentRevisionData, SaveContentRevisionErrors, SaveContentRevisionResponses, SearchCatalogueData, SearchCatalogueErrors, SearchCatalogueResponses, TransitionContentData, TransitionContentErrors, TransitionContentResponses, UpdatePreferencesData, UpdatePreferencesErrors, UpdatePreferencesResponses } from './types.gen';
+import type { ArchiveContentData, ArchiveContentErrors, ArchiveContentResponses, CreateContentData, CreateContentErrors, CreateContentResponses, CreateContentTranslationData, CreateContentTranslationErrors, CreateContentTranslationResponses, CreateContentVersionData, CreateContentVersionErrors, CreateContentVersionResponses, CreateMethodData, CreateMethodErrors, CreateMethodFromTemplateData, CreateMethodFromTemplateErrors, CreateMethodFromTemplateResponses, CreateMethodResponses, DeleteMethodData, DeleteMethodErrors, DeleteMethodResponses, DuplicateContentData, DuplicateContentErrors, DuplicateContentResponses, DuplicateMethodData, DuplicateMethodErrors, DuplicateMethodResponses, GetCatalogueFacetsData, GetCatalogueFacetsErrors, GetCatalogueFacetsResponses, GetCatalogueResourceBySlugData, GetCatalogueResourceBySlugErrors, GetCatalogueResourceBySlugResponses, GetCatalogueResourceData, GetCatalogueResourceErrors, GetCatalogueResourceResponses, GetCatalogueResourceVersionData, GetCatalogueResourceVersionErrors, GetCatalogueResourceVersionResponses, GetContentData, GetContentDependenciesData, GetContentDependenciesErrors, GetContentDependenciesResponses, GetContentErrors, GetContentReadinessData, GetContentReadinessErrors, GetContentReadinessResponses, GetContentResponses, GetCsrfTokenData, GetCsrfTokenErrors, GetCsrfTokenResponses, GetCurrentUserData, GetCurrentUserErrors, GetCurrentUserResponses, GetMethodData, GetMethodErrors, GetMethodResponses, GetMethodSourceUpdateData, GetMethodSourceUpdateErrors, GetMethodSourceUpdateResponses, GetMethodTemplateData, GetMethodTemplateErrors, GetMethodTemplateResponses, GetPreferencesData, GetPreferencesErrors, GetPreferencesResponses, GetPublicContentData, GetPublicContentErrors, GetPublicContentResponses, GetSystemHealthData, GetSystemHealthErrors, GetSystemHealthResponses, ListContentRevisionsData, ListContentRevisionsErrors, ListContentRevisionsResponses, ListContentsData, ListContentsErrors, ListContentsResponses, ListMethodsData, ListMethodsErrors, ListMethodsResponses, LoginData, LoginErrors, LoginResponses, LogoutData, LogoutErrors, LogoutResponses, PreviewContentData, PreviewContentErrors, PreviewContentResponses, PublishContentData, PublishContentErrors, PublishContentResponses, RegisterData, RegisterErrors, RegisterResponses, ReplaceContentCompositionData, ReplaceContentCompositionErrors, ReplaceContentCompositionResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, SaveContentMetadataData, SaveContentMetadataErrors, SaveContentMetadataResponses, SaveContentRevisionData, SaveContentRevisionErrors, SaveContentRevisionResponses, SearchCatalogueData, SearchCatalogueErrors, SearchCatalogueResponses, TransitionContentData, TransitionContentErrors, TransitionContentResponses, UpdateMethodData, UpdateMethodErrors, UpdateMethodResponses, UpdatePreferencesData, UpdatePreferencesErrors, UpdatePreferencesResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -444,3 +444,142 @@ export const saveContentMetadata = <ThrowOnError extends boolean = false>(option
         ...options.headers
     }
 });
+
+/**
+ * Rechercher uniquement dans la bibliothèque du propriétaire.
+ *
+ * Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après propriété. Aucun texte privé dans les erreurs. Recherche simple titre/notes/catégorie ; catégorie exacte. Tri updatedAt DESC puis id, pagination stable.
+ */
+export const listMethods = <ThrowOnError extends boolean = false>(options?: Options<ListMethodsData, ThrowOnError>): RequestResult<ListMethodsResponses, ListMethodsErrors, ThrowOnError> => (options?.client ?? client).get<ListMethodsResponses, ListMethodsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/methods',
+    ...options
+});
+
+/**
+ * Créer une méthode personnelle sans origine forgée.
+ *
+ * Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après propriété. Aucun texte privé dans les erreurs.
+ */
+export const createMethod = <ThrowOnError extends boolean = false>(options: Options<CreateMethodData, ThrowOnError>): RequestResult<CreateMethodResponses, CreateMethodErrors, ThrowOnError> => (options.client ?? client).post<CreateMethodResponses, CreateMethodErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/methods',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Conserver une copie adaptée du modèle publié exact.
+ *
+ * Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après propriété. Aucun texte privé dans les erreurs. FREE uniquement tant qu’aucun droit pédagogique réel n’autorise une source PROTECTED ; un rôle éditorial ne remplace pas cet accès.
+ */
+export const createMethodFromTemplate = <ThrowOnError extends boolean = false>(options: Options<CreateMethodFromTemplateData, ThrowOnError>): RequestResult<CreateMethodFromTemplateResponses, CreateMethodFromTemplateErrors, ThrowOnError> => (options.client ?? client).post<CreateMethodFromTemplateResponses, CreateMethodFromTemplateErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/methods/from-template',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Supprimer cette copie personnelle après confirmation.
+ *
+ * Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après propriété. Aucun texte privé dans les erreurs. Suppression physique de la copie uniquement, aucune mutation de sa source ou de ses duplications. Une seconde suppression retourne404.
+ */
+export const deleteMethod = <ThrowOnError extends boolean = false>(options: Options<DeleteMethodData, ThrowOnError>): RequestResult<DeleteMethodResponses, DeleteMethodErrors, ThrowOnError> => (options.client ?? client).delete<DeleteMethodResponses, DeleteMethodErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/methods/{id}',
+    ...options
+});
+
+/**
+ * Ouvrir le texte personnel et son origine immuable.
+ *
+ * Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après propriété. Aucun texte privé dans les erreurs.
+ */
+export const getMethod = <ThrowOnError extends boolean = false>(options: Options<GetMethodData, ThrowOnError>): RequestResult<GetMethodResponses, GetMethodErrors, ThrowOnError> => (options.client ?? client).get<GetMethodResponses, GetMethodErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/methods/{id}',
+    ...options
+});
+
+/**
+ * Remplacer explicitement les champs personnels à la révision lue.
+ *
+ * Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après propriété. Aucun texte privé dans les erreurs. Aucun retry écrasant. Une412 préserve le brouillon client ; comparaison/rechargement et nouvelle action sont explicites.
+ */
+export const updateMethod = <ThrowOnError extends boolean = false>(options: Options<UpdateMethodData, ThrowOnError>): RequestResult<UpdateMethodResponses, UpdateMethodErrors, ThrowOnError> => (options.client ?? client).patch<UpdateMethodResponses, UpdateMethodErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/methods/{id}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Dupliquer les champs et l’origine de sa propre méthode.
+ *
+ * Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après propriété. Aucun texte privé dans les erreurs. Nouveau UUID, texte/notes indépendants ; la source personnelle conserve sa révision. Aucun corps requis.
+ */
+export const duplicateMethod = <ThrowOnError extends boolean = false>(options: Options<DuplicateMethodData, ThrowOnError>): RequestResult<DuplicateMethodResponses, DuplicateMethodErrors, ThrowOnError> => (options.client ?? client).post<DuplicateMethodResponses, DuplicateMethodErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/methods/{id}/duplicates',
+    ...options
+});
+
+/**
+ * Vérifier une publication source sans modifier la copie.
+ *
+ * Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après propriété. Aucun texte privé dans les erreurs.
+ */
+export const getMethodSourceUpdate = <ThrowOnError extends boolean = false>(options: Options<GetMethodSourceUpdateData, ThrowOnError>): RequestResult<GetMethodSourceUpdateResponses, GetMethodSourceUpdateErrors, ThrowOnError> => (options.client ?? client).get<GetMethodSourceUpdateResponses, GetMethodSourceUpdateErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/methods/{id}/source-update',
+    ...options
+});
+
+/**
+ * Lire la définition publique de la version exacte d’une méthode.
+ *
+ * Lecture no-store sans création de session anonyme ; source premium privée par défaut, même avec session EDITOR. Une identité jamais publiée/type incorrect est404. Les états connus n’inventent aucune traduction ni définition.
+ */
+export const getMethodTemplate = <ThrowOnError extends boolean = false>(options: Options<GetMethodTemplateData, ThrowOnError>): RequestResult<GetMethodTemplateResponses, GetMethodTemplateErrors, ThrowOnError> => (options.client ?? client).get<GetMethodTemplateResponses, GetMethodTemplateErrors, ThrowOnError>({ url: '/method-templates/{resourceId}/versions/{versionId}', ...options });

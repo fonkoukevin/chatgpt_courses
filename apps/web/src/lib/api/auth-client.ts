@@ -2,6 +2,7 @@ import { isProblem, type ApiError } from "./client";
 import { isAuthUser, isCsrfToken, isPreferences, preferencesEtagMatches } from "./auth-validation";
 import type { AuthUser, CsrfToken, Preferences, GetCsrfTokenData, RegisterData, LoginData, LogoutData, GetCurrentUserData, RequestPasswordResetData, ResetPasswordData, GetPreferencesData, UpdatePreferencesData } from "./generated/types.gen";
 import { purgePersonalBrowserCaches } from "../auth/anonymous-draft";
+import { publishAccountEvent } from "../auth/account-events";
 
 export type { AuthUser, Preferences } from "./generated/types.gen";
 export type AuthResult<T> = { ok: true; data: T; status: number; etag?: string } | { ok: false; error: ApiError };
@@ -74,12 +75,12 @@ export function registerAccount(body: RegisterData["body"]): Promise<AuthResult<
 }
 export async function signIn(email: string, password: string): Promise<AuthResult<AuthUser>> {
   const result = await mutate("/auth/login", "POST", new URLSearchParams({ email, password }).toString(), "application/x-www-form-urlencoded", 200, isAuthUser);
-  if (result.ok) await renewCsrf();
+  if (result.ok) { await renewCsrf(); publishAccountEvent("signed-in"); }
   return result;
 }
 export async function signOut(): Promise<AuthResult<void>> {
   const result = await mutate<void>("/auth/logout", "POST", undefined, undefined, 204, null);
-  if (result.ok) { await purgePersonalBrowserCaches(); await renewCsrf(); }
+  if (result.ok) { await purgePersonalBrowserCaches(); await renewCsrf(); publishAccountEvent("signed-out"); }
   return result;
 }
 export function requestPasswordReset(body: RequestPasswordResetData["body"]): Promise<AuthResult<void>> {
@@ -87,7 +88,7 @@ export function requestPasswordReset(body: RequestPasswordResetData["body"]): Pr
 }
 export async function resetPassword(body: ResetPasswordData["body"]): Promise<AuthResult<void>> {
   const result = await mutate<void>("/auth/password-resets", "POST", JSON.stringify(body), "application/json", 204, null);
-  if (result.ok) { await purgePersonalBrowserCaches(); await renewCsrf(); }
+  if (result.ok) { await purgePersonalBrowserCaches(); await renewCsrf(); publishAccountEvent("session-reset"); }
   return result;
 }
 export async function getCurrentUser(): Promise<AuthResult<AuthUser>> {

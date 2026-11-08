@@ -175,7 +175,7 @@ export type MediaReference = {
 };
 
 /**
- * Document structuré privé ; taille sérialisée totale maximale 48 KiB UTF-8. La requête entière reste limitée à 64 KiB par le relais. Listes bornées et références contrôlées dans le service.
+ * Document structuré privé ; taille sérialisée totale maximale 48 KiB UTF-8. La requête entière reste limitée à 64 KiB par le relais. Listes bornées et références contrôlées dans le service. methodDefinition est optionnel en entrée pour préserver les documents P05/P06 ; absent signifie null, sans reconstruction depuis les blocs.
  */
 export type ContentDocument = {
     objective: string;
@@ -189,6 +189,7 @@ export type ContentDocument = {
     access: ContentAccess;
     media: Array<MediaReference>;
     relatedResourceIds: Array<Uuid>;
+    methodDefinition?: MethodDefinition | null;
 };
 
 export type CreateContent = {
@@ -412,6 +413,7 @@ export type PublicDocument = {
     media: Array<MediaReference>;
     relatedResourceIds: Array<Uuid>;
     exerciseInstructions: string | null;
+    methodDefinition: MethodDefinition | null;
 };
 
 /**
@@ -573,6 +575,136 @@ export type ResourceDetail = {
     estimatedMinutes: number | null;
 };
 
+/**
+ * Champs structurés indépendants du texte final. Objectif, données disponibles et format sont requis pour assembler localement une instruction ; aucun appel IA.
+ */
+export type MethodParameters = {
+    objective: string;
+    context: string;
+    availableData: string;
+    recipient: string;
+    format: string;
+    constraints: string;
+    clarifications: string;
+};
+
+/**
+ * Définition localisée dans la révision éditoriale immuable, limitée à24KiB UTF8. Les listes/chaînes peuvent rester vides en brouillon ; une nouvelle publication METHOD_TEMPLATE exige leur complétude. Aucun contenu premium n’est révélé par cette définition.
+ */
+export type MethodDefinition = {
+    useCases: Array<string>;
+    requiredInputs: Array<string>;
+    steps: Array<string>;
+    starterInstruction: string;
+    example: string;
+    checks: Array<string>;
+    limitations: Array<string>;
+    defaults: MethodParameters;
+};
+
+/**
+ * Instantané utilisateur complet, au plus48KiB de JSON UTF8 (generatedFrom inclus). PATCH remplace explicitement ces champs. Texte, notes et langue restent indépendants de la source et de la langue d’interface. Chaînes Unicode valides, sans NUL ; titre/texte/catégorie non blancs. Aucun ownerId, rôle, origine ou révision autoritaire en entrée.
+ */
+export type MethodFields = {
+    title: string;
+    locale: Locale;
+    text: string;
+    parameters: MethodParameters;
+    generatedFrom: MethodParameters | null;
+    notes: string;
+    category: string | null;
+};
+
+export type CreateMethod = {
+    fields: MethodFields;
+};
+
+export type UpdateMethod = {
+    fields: MethodFields;
+};
+
+/**
+ * Le serveur vérifie le snapshot METHOD_TEMPLATE exact, publié, FREE et défini. Une autre révision publiée depuis la consultation retourne412, sans substitution silencieuse. Le client ne choisit ni propriétaire ni traduction d’origine.
+ */
+export type MethodFromTemplate = {
+    sourceResourceId: Uuid;
+    sourceVersionId: Uuid;
+    sourceRevisionId: Uuid;
+    sourceLocale: Locale;
+    fields: MethodFields;
+};
+
+/**
+ * Origine capturée côté serveur et immuable ; aucun remplacement du texte personnel par une source ultérieure.
+ */
+export type MethodOrigin = {
+    resourceId: Uuid;
+    versionId: Uuid;
+    translationId: Uuid;
+    revisionId: Uuid;
+    locale: Locale;
+    title: string;
+    slug: string;
+};
+
+/**
+ * Détail privé du propriétaire, sans état dynamique de source afin que son ETag fort couvre exactement cette représentation.
+ */
+export type MethodView = {
+    id: Uuid;
+    revision: Revision;
+    title: string;
+    locale: Locale;
+    text: string;
+    parameters: MethodParameters;
+    generatedFrom: MethodParameters | null;
+    notes: string;
+    category: string | null;
+    origin: MethodOrigin | null;
+    createdAt: UtcInstant;
+    updatedAt: UtcInstant;
+};
+
+export type MethodSummary = {
+    id: Uuid;
+    revision: Revision;
+    title: string;
+    locale: Locale;
+    category: string | null;
+    updatedAt: UtcInstant;
+    hasSource: boolean;
+};
+
+export type MethodPage = {
+    items: Array<MethodSummary>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+/**
+ * Lecture séparée sans ETag de méthode personnelle. Candidate seulement si publication actuelle autorisée dans la langue source ; une source retirée, protégée, absente ou non définie reste indisponible. Aucune synchronisation automatique.
+ */
+export type MethodSourceUpdate = {
+    status: 'NONE' | 'CURRENT' | 'UPDATE_AVAILABLE' | 'UNAVAILABLE';
+    source: MethodOrigin | null;
+    candidate: MethodOrigin | null;
+};
+
+/**
+ * Version exacte, jamais latest implicite. Définition présente uniquement pour une publication FREE complète. Les articles historiques sans définition conservent MISSING_DEFINITION, sans générateur inventé.
+ */
+export type MethodTemplate = {
+    resourceId: Uuid;
+    versionId: Uuid;
+    revisionId: Uuid | null;
+    locale: Locale;
+    title: string | null;
+    slug: string | null;
+    availability: 'PUBLISHED' | 'MISSING_DEFINITION' | 'PROTECTED' | 'STALE' | 'WITHDRAWN' | 'MISSING_TRANSLATION';
+    definition: MethodDefinition | null;
+};
+
 export type RegisterRequestWritable = {
     email: string;
     /**
@@ -597,6 +729,11 @@ export type IfMatch = string;
  * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
  */
 export type CsrfHeader = string;
+
+/**
+ * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+ */
+export type AccountContext = Uuid;
 
 export type GetSystemHealthData = {
     body?: never;
@@ -2212,3 +2349,542 @@ export type SaveContentMetadataResponses = {
 };
 
 export type SaveContentMetadataResponse = SaveContentMetadataResponses[keyof SaveContentMetadataResponses];
+
+export type ListMethodsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        q?: string;
+        category?: string;
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/me/methods';
+};
+
+export type ListMethodsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListMethodsError = ListMethodsErrors[keyof ListMethodsErrors];
+
+export type ListMethodsResponses = {
+    /**
+     * Représentation réelle sans cache.
+     */
+    200: MethodPage;
+};
+
+export type ListMethodsResponse = ListMethodsResponses[keyof ListMethodsResponses];
+
+export type CreateMethodData = {
+    body: CreateMethod;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+    };
+    path?: never;
+    query?: never;
+    url: '/me/methods';
+};
+
+export type CreateMethodErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type CreateMethodError = CreateMethodErrors[keyof CreateMethodErrors];
+
+export type CreateMethodResponses = {
+    /**
+     * Copie personnelle créée ; nouveau UUID.
+     */
+    201: MethodView;
+};
+
+export type CreateMethodResponse = CreateMethodResponses[keyof CreateMethodResponses];
+
+export type CreateMethodFromTemplateData = {
+    body: MethodFromTemplate;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+    };
+    path?: never;
+    query?: never;
+    url: '/me/methods/from-template';
+};
+
+export type CreateMethodFromTemplateErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type CreateMethodFromTemplateError = CreateMethodFromTemplateErrors[keyof CreateMethodFromTemplateErrors];
+
+export type CreateMethodFromTemplateResponses = {
+    /**
+     * Copie personnelle créée ; nouveau UUID.
+     */
+    201: MethodView;
+};
+
+export type CreateMethodFromTemplateResponse = CreateMethodFromTemplateResponses[keyof CreateMethodFromTemplateResponses];
+
+export type DeleteMethodData = {
+    body?: never;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/me/methods/{id}';
+};
+
+export type DeleteMethodErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type DeleteMethodError = DeleteMethodErrors[keyof DeleteMethodErrors];
+
+export type DeleteMethodResponses = {
+    /**
+     * Copie supprimée.
+     */
+    204: void;
+};
+
+export type DeleteMethodResponse = DeleteMethodResponses[keyof DeleteMethodResponses];
+
+export type GetMethodData = {
+    body?: never;
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/me/methods/{id}';
+};
+
+export type GetMethodErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetMethodError = GetMethodErrors[keyof GetMethodErrors];
+
+export type GetMethodResponses = {
+    /**
+     * Représentation réelle sans cache.
+     */
+    200: MethodView;
+};
+
+export type GetMethodResponse = GetMethodResponses[keyof GetMethodResponses];
+
+export type UpdateMethodData = {
+    body: UpdateMethod;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/me/methods/{id}';
+};
+
+export type UpdateMethodErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type UpdateMethodError = UpdateMethodErrors[keyof UpdateMethodErrors];
+
+export type UpdateMethodResponses = {
+    /**
+     * Représentation réelle sans cache.
+     */
+    200: MethodView;
+};
+
+export type UpdateMethodResponse = UpdateMethodResponses[keyof UpdateMethodResponses];
+
+export type DuplicateMethodData = {
+    body?: never;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/me/methods/{id}/duplicates';
+};
+
+export type DuplicateMethodErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type DuplicateMethodError = DuplicateMethodErrors[keyof DuplicateMethodErrors];
+
+export type DuplicateMethodResponses = {
+    /**
+     * Copie personnelle créée ; nouveau UUID.
+     */
+    201: MethodView;
+};
+
+export type DuplicateMethodResponse = DuplicateMethodResponses[keyof DuplicateMethodResponses];
+
+export type GetMethodSourceUpdateData = {
+    body?: never;
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/me/methods/{id}/source-update';
+};
+
+export type GetMethodSourceUpdateErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetMethodSourceUpdateError = GetMethodSourceUpdateErrors[keyof GetMethodSourceUpdateErrors];
+
+export type GetMethodSourceUpdateResponses = {
+    /**
+     * Représentation réelle sans cache.
+     */
+    200: MethodSourceUpdate;
+};
+
+export type GetMethodSourceUpdateResponse = GetMethodSourceUpdateResponses[keyof GetMethodSourceUpdateResponses];
+
+export type GetMethodTemplateData = {
+    body?: never;
+    path: {
+        resourceId: Uuid;
+        versionId: Uuid;
+    };
+    query: {
+        locale: Locale;
+    };
+    url: '/method-templates/{resourceId}/versions/{versionId}';
+};
+
+export type GetMethodTemplateErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetMethodTemplateError = GetMethodTemplateErrors[keyof GetMethodTemplateErrors];
+
+export type GetMethodTemplateResponses = {
+    /**
+     * Représentation réelle sans cache.
+     */
+    200: MethodTemplate;
+};
+
+export type GetMethodTemplateResponse = GetMethodTemplateResponses[keyof GetMethodTemplateResponses];

@@ -216,7 +216,7 @@ public class PublicCatalogueService {
     private static ApiException notFound(){return new ApiException(ApiError.RESOURCE_NOT_FOUND);}
     private ContentDocument document(String json){return json==null?null:mapper.readValue(json,ContentDocument.class);}
     private PublicMetadata metadata(String json){return json==null?PublicMetadataStore.empty():mapper.readValue(json,PublicMetadata.class);}
-    private static PublicDocument publicDocument(ContentDocument d){return new PublicDocument(d.objective(),d.expectedResult(),d.prerequisites(),d.blocks(),d.estimatedMinutes(),d.exercise()==null?null:d.exercise().instructions(),d.quiz().stream().map(q->new PublicQuizQuestion(q.key(),q.prompt(),q.options(),q.points())).toList(),d.rubric(),d.access(),d.media(),d.relatedResourceIds());}
+    private static PublicDocument publicDocument(ContentDocument d){return new PublicDocument(d.objective(),d.expectedResult(),d.prerequisites(),d.blocks(),d.estimatedMinutes(),d.exercise()==null?null:d.exercise().instructions(),d.quiz().stream().map(q->new PublicQuizQuestion(q.key(),q.prompt(),q.options(),q.points())).toList(),d.rubric(),d.access(),d.media(),d.relatedResourceIds(),d.methodDefinition());}
     private static VersionInfo versionInfo(ResultSet rs)throws SQLException{return new VersionInfo(uuid(rs,"id"),uuid(rs,"resource_id"),rs.getInt("version_number"),ResourceKind.valueOf(rs.getString("kind")),instant(rs,"archived_at"));}
     private static UUID uuid(ResultSet rs,String key)throws SQLException{return rs.getObject(key,UUID.class);}
     private static Instant instant(ResultSet rs,String key)throws SQLException{Timestamp value=rs.getTimestamp(key);return value==null?null:value.toInstant();}

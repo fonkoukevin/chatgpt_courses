@@ -1,4 +1,5 @@
 import type { Locale } from "../i18n/locales";
+import { safeMethodsDestination, translateMethodsDestination } from "../methods/routes";
 
 export type AuthScreen = "sign-in" | "sign-up" | "recover" | "reset" | "account";
 const paths = {
@@ -11,6 +12,8 @@ export function authPath(locale: Locale, screen: AuthScreen): string {
 }
 
 export function safeReturnTo(value: unknown, locale: Locale): string {
+  const method = safeMethodsDestination(value, locale);
+  if (method) return method;
   const fallback = authPath(locale, "account");
   if (typeof value !== "string" || value.length > 200 || /[%\\?#\s]/.test(value)) return fallback;
   const allowed = new Set([
@@ -22,6 +25,8 @@ export function safeReturnTo(value: unknown, locale: Locale): string {
 }
 
 export function translateReturnTo(value: unknown, locale: Locale): string {
+  const method = translateMethodsDestination(value, locale);
+  if (method) return method;
   if (typeof value !== "string") return authPath(locale, "account");
   const source: Locale = value.startsWith("/fr/") || value === "/fr" ? "fr" : "en";
   const validated = safeReturnTo(value, source);

@@ -16,6 +16,7 @@ import { PublicCourse } from "./course";
 import { PublicGuide } from "./guide";
 import { PublicActivity } from "./activity";
 import { PublicUnavailable } from "./unavailable";
+import { PublicMethodSource } from "@/components/methods/source";
 
 export type PublicPageProps = { params: Promise<{ locale: string; slug?: string; courseSlug?: string; activitySlug?: string }>; searchParams: Promise<PublicParameters> };
 export function forLocale<T>(page: (props: PublicPageProps) => Promise<T>, expected: Locale) {
@@ -123,7 +124,7 @@ export async function PublicCoursePage(props: PublicPageProps) {
   return <PublicCourse {...data} activityHrefs={data.result.ok ? programmeLinks(data.locale, data.result.data, data.returnTo) : {}} />;
 }
 export async function PublicGuidePage(props: PublicPageProps) { return <PublicGuide {...await resourcePageData(props, "GUIDE")} />; }
-export async function PublicMethodPage(props: PublicPageProps) { return <PublicGuide {...await resourcePageData(props, "METHOD_TEMPLATE")} />; }
+export async function PublicMethodPage(props: PublicPageProps) { return <PublicMethodSource {...await resourcePageData(props, "METHOD_TEMPLATE")} />; }
 export function detailMetadata(kind: Exclude<ResourceCard["kind"], "ACTIVITY">) {
   return async function generateMetadata(props: PublicPageProps): Promise<Metadata> {
     const data = await resourcePageData(props, kind), copy = getPublicPageDictionary(data.locale);

@@ -6,13 +6,19 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import com.chatgptcourses.catalog.service.CatalogTypes.PublicMetadata;
+import com.chatgptcourses.methods.service.MethodTypes.MethodDefinition;
 
 /** Explicit editorial contracts; no persistence entity is exposed through HTTP. */
 public final class ContentTypes {
     private ContentTypes() { }
     public record ContentDocument(String objective, String expectedResult, List<String> prerequisites,
         List<ContentBlock> blocks, Integer estimatedMinutes, Exercise exercise, List<QuizQuestion> quiz,
-        List<RubricCriterion> rubric, String access, List<MediaReference> media, List<UUID> relatedResourceIds) { }
+        List<RubricCriterion> rubric, String access, List<MediaReference> media, List<UUID> relatedResourceIds, MethodDefinition methodDefinition) {
+        public ContentDocument(String objective,String expectedResult,List<String> prerequisites,List<ContentBlock> blocks,Integer estimatedMinutes,
+            Exercise exercise,List<QuizQuestion> quiz,List<RubricCriterion> rubric,String access,List<MediaReference> media,List<UUID> relatedResourceIds) {
+            this(objective,expectedResult,prerequisites,blocks,estimatedMinutes,exercise,quiz,rubric,access,media,relatedResourceIds,null);
+        }
+    }
     public record ContentBlock(String type, String text, String url) { }
     public record Exercise(String instructions, String correction) { }
     public record QuizQuestion(String key, String prompt, List<String> options, int correctOption, String explanation, int points) { }
@@ -50,7 +56,12 @@ public final class ContentTypes {
     public record PublicQuizQuestion(String key, String prompt, List<String> options, int points) { }
     public record PublicDocument(String objective, String expectedResult, List<String> prerequisites,
         List<ContentBlock> blocks, Integer estimatedMinutes, String exerciseInstructions, List<PublicQuizQuestion> quiz,
-        List<RubricCriterion> rubric, String access, List<MediaReference> media, List<UUID> relatedResourceIds) { }
+        List<RubricCriterion> rubric, String access, List<MediaReference> media, List<UUID> relatedResourceIds, MethodDefinition methodDefinition) {
+        public PublicDocument(String objective,String expectedResult,List<String> prerequisites,List<ContentBlock> blocks,Integer estimatedMinutes,
+            String exerciseInstructions,List<PublicQuizQuestion> quiz,List<RubricCriterion> rubric,String access,List<MediaReference> media,List<UUID> relatedResourceIds) {
+            this(objective,expectedResult,prerequisites,blocks,estimatedMinutes,exerciseInstructions,quiz,rubric,access,media,relatedResourceIds,null);
+        }
+    }
     public record PublicContent(UUID resourceId, ResourceKind kind, UUID versionId, int versionNumber,
         String locale, String slug, String availability, UUID revisionId, String title, String summary,
         String access, PublicDocument document, List<UUID> childResourceIds) { }

@@ -51,6 +51,13 @@ class SecurityConfiguration {
                                 "/api/v1/auth/logout", "/api/v1/auth/password-reset-requests", "/api/v1/auth/password-resets").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/auth/me", "/api/v1/me/preferences").authenticated()
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/me/preferences").hasAuthority("identity.preferences.write")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/me/methods", "/api/v1/me/methods/*",
+                                "/api/v1/me/methods/*/source-update").hasAuthority("methods.read")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/me/methods", "/api/v1/me/methods/from-template",
+                                "/api/v1/me/methods/*/duplicates").hasAuthority("methods.write")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/me/methods/*").hasAuthority("methods.write")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/me/methods/*").hasAuthority("methods.write")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/method-templates/*/versions/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/contents/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/catalog", "/api/v1/catalog/facets", "/api/v1/catalog/resources/*",
                                 "/api/v1/catalog/by-slug/*/*", "/api/v1/catalog/resources/*/versions/*").permitAll()

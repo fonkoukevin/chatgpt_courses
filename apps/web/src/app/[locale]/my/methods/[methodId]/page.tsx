@@ -1,0 +1,5 @@
+import { methodDetailPage, methodsMetadata } from "@/components/methods/server-pages";
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
+export const metadata = methodsMetadata("en");
+export default methodDetailPage("en");

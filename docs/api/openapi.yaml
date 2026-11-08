@@ -3,8 +3,9 @@ info:
   title: ChatGPT Courses API
   version: 0.1.0
   description: >-
-    Opérations réellement introduites jusqu’à P06 : identité, CMS éditorial et catalogue public. Les offres,
-    droits privés et paiements des lots suivants ne sont pas simulés.
+    Opérations réellement introduites jusqu’à P07 : identité, CMS éditorial, catalogue public et méthodes
+    personnelles. Le générateur prépare du texte sans appel IA. Offres, droits commerciaux et paiements des
+    lots suivants non simulés.
 servers:
   - url: /api/v1
     description: API de même origine, préfixe conservé jusqu'à Spring.
@@ -18,6 +19,8 @@ tags:
     description: Contenus, versions, traductions et publication ; permissions distinctes du commerce.
   - name: Catalogue
     description: Publications publiques, métadonnées éditoriales et programmes aux versions épinglées.
+  - name: Methods
+    description: Générateur déterministe et instantanés personnels propriétaires, sans API IA.
 paths:
   /system/health:
     get:
@@ -1518,6 +1521,459 @@ paths:
           $ref: '#/components/responses/ProblemResponse'
         default:
           $ref: '#/components/responses/ProblemResponse'
+  /me/methods:
+    get:
+      operationId: listMethods
+      tags:
+        - Methods
+      summary: Rechercher uniquement dans la bibliothèque du propriétaire.
+      security:
+        - SessionCookie: []
+      description: >-
+        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans
+        divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après
+        propriété. Aucun texte privé dans les erreurs. Recherche simple titre/notes/catégorie ; catégorie
+        exacte. Tri updatedAt DESC puis id, pagination stable.
+      parameters:
+        - name: q
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 240
+        - name: category
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 80
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Représentation réelle sans cache.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MethodPage'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    post:
+      operationId: createMethod
+      tags:
+        - Methods
+      summary: Créer une méthode personnelle sans origine forgée.
+      security:
+        - SessionCookie: []
+      description: >-
+        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans
+        divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après
+        propriété. Aucun texte privé dans les erreurs.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMethod'
+      responses:
+        '201':
+          description: Copie personnelle créée ; nouveau UUID.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              description: Détail de la copie créée sous /api/v1/me/methods/{id}.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MethodView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/methods/from-template:
+    post:
+      operationId: createMethodFromTemplate
+      tags:
+        - Methods
+      summary: Conserver une copie adaptée du modèle publié exact.
+      security:
+        - SessionCookie: []
+      description: >-
+        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans
+        divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après
+        propriété. Aucun texte privé dans les erreurs. FREE uniquement tant qu’aucun droit pédagogique réel
+        n’autorise une source PROTECTED ; un rôle éditorial ne remplace pas cet accès.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MethodFromTemplate'
+      responses:
+        '201':
+          description: Copie personnelle créée ; nouveau UUID.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              description: Détail de la copie créée sous /api/v1/me/methods/{id}.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MethodView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/methods/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: getMethod
+      tags:
+        - Methods
+      summary: Ouvrir le texte personnel et son origine immuable.
+      security:
+        - SessionCookie: []
+      description: >-
+        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans
+        divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après
+        propriété. Aucun texte privé dans les erreurs.
+      responses:
+        '200':
+          description: Représentation réelle sans cache.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MethodView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    patch:
+      operationId: updateMethod
+      tags:
+        - Methods
+      summary: Remplacer explicitement les champs personnels à la révision lue.
+      security:
+        - SessionCookie: []
+      description: >-
+        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans
+        divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après
+        propriété. Aucun texte privé dans les erreurs. Aucun retry écrasant. Une412 préserve le brouillon
+        client ; comparaison/rechargement et nouvelle action sont explicites.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMethod'
+      responses:
+        '200':
+          description: Représentation réelle sans cache.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MethodView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    delete:
+      operationId: deleteMethod
+      tags:
+        - Methods
+      summary: Supprimer cette copie personnelle après confirmation.
+      security:
+        - SessionCookie: []
+      description: >-
+        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans
+        divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après
+        propriété. Aucun texte privé dans les erreurs. Suppression physique de la copie uniquement, aucune
+        mutation de sa source ou de ses duplications. Une seconde suppression retourne404.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+      responses:
+        '204':
+          description: Copie supprimée.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/methods/{id}/duplicates:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    post:
+      operationId: duplicateMethod
+      tags:
+        - Methods
+      summary: Dupliquer les champs et l’origine de sa propre méthode.
+      security:
+        - SessionCookie: []
+      description: >-
+        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans
+        divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après
+        propriété. Aucun texte privé dans les erreurs. Nouveau UUID, texte/notes indépendants ; la source
+        personnelle conserve sa révision. Aucun corps requis.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+      responses:
+        '201':
+          description: Copie personnelle créée ; nouveau UUID.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              description: Détail de la copie créée sous /api/v1/me/methods/{id}.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MethodView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/methods/{id}/source-update:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: getMethodSourceUpdate
+      tags:
+        - Methods
+      summary: Vérifier une publication source sans modifier la copie.
+      security:
+        - SessionCookie: []
+      description: >-
+        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans
+        divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après
+        propriété. Aucun texte privé dans les erreurs.
+      responses:
+        '200':
+          description: Représentation réelle sans cache.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MethodSourceUpdate'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /method-templates/{resourceId}/versions/{versionId}:
+    parameters:
+      - name: resourceId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: versionId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: getMethodTemplate
+      tags:
+        - Methods
+      summary: Lire la définition publique de la version exacte d’une méthode.
+      security: []
+      description: >-
+        Lecture no-store sans création de session anonyme ; source premium privée par défaut, même avec
+        session EDITOR. Une identité jamais publiée/type incorrect est404. Les états connus n’inventent aucune
+        traduction ni définition.
+      parameters:
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+      responses:
+        '200':
+          description: Représentation réelle sans cache.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MethodTemplate'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
 components:
   schemas:
     SystemHealth:
@@ -2017,9 +2473,15 @@ components:
           minItems: 0
           maxItems: 30
           uniqueItems: true
+        methodDefinition:
+          anyOf:
+            - $ref: '#/components/schemas/MethodDefinition'
+            - type: 'null'
       description: >-
         Document structuré privé ; taille sérialisée totale maximale 48 KiB UTF-8. La requête entière reste
         limitée à 64 KiB par le relais. Listes bornées et références contrôlées dans le service.
+        methodDefinition est optionnel en entrée pour préserver les documents P05/P06 ; absent signifie null,
+        sans reconstruction depuis les blocs.
     CreateContent:
       type: object
       additionalProperties: false
@@ -2730,6 +3192,7 @@ components:
         - media
         - relatedResourceIds
         - exerciseInstructions
+        - methodDefinition
       properties:
         objective:
           type: string
@@ -2791,6 +3254,10 @@ components:
             - type: string
               minLength: 0
               maxLength: 8000
+            - type: 'null'
+        methodDefinition:
+          anyOf:
+            - $ref: '#/components/schemas/MethodDefinition'
             - type: 'null'
       description: >-
         Projection gratuite publiée, sans corrigé d’exercice ni réponse/explication de quiz. Les contrôles
@@ -3398,6 +3865,423 @@ components:
         MISSING_TRANSLATION/STALE/WITHDRAWN conservent le contexte d’identité/version et les équivalents, sans
         document ni métadonnées empruntés. reviewedAt est la revue de la publication, pas d’un prochain
         brouillon. Aucun auteur privé, droit personnel, prix ni fausse offre.
+    MethodParameters:
+      type: object
+      additionalProperties: false
+      required:
+        - objective
+        - context
+        - availableData
+        - recipient
+        - format
+        - constraints
+        - clarifications
+      properties:
+        objective:
+          type: string
+          minLength: 0
+          maxLength: 4000
+        context:
+          type: string
+          minLength: 0
+          maxLength: 4000
+        availableData:
+          type: string
+          minLength: 0
+          maxLength: 4000
+        recipient:
+          type: string
+          minLength: 0
+          maxLength: 4000
+        format:
+          type: string
+          minLength: 0
+          maxLength: 4000
+        constraints:
+          type: string
+          minLength: 0
+          maxLength: 4000
+        clarifications:
+          type: string
+          minLength: 0
+          maxLength: 4000
+      description: >-
+        Champs structurés indépendants du texte final. Objectif, données disponibles et format sont requis
+        pour assembler localement une instruction ; aucun appel IA.
+    MethodDefinition:
+      type: object
+      additionalProperties: false
+      required:
+        - useCases
+        - requiredInputs
+        - steps
+        - starterInstruction
+        - example
+        - checks
+        - limitations
+        - defaults
+      properties:
+        useCases:
+          type: array
+          maxItems: 20
+          items:
+            type: string
+            minLength: 1
+            maxLength: 1000
+        requiredInputs:
+          type: array
+          maxItems: 20
+          items:
+            type: string
+            minLength: 1
+            maxLength: 1000
+        steps:
+          type: array
+          maxItems: 20
+          items:
+            type: string
+            minLength: 1
+            maxLength: 1000
+        starterInstruction:
+          type: string
+          minLength: 0
+          maxLength: 4000
+        example:
+          type: string
+          minLength: 0
+          maxLength: 8000
+        checks:
+          type: array
+          maxItems: 20
+          items:
+            type: string
+            minLength: 1
+            maxLength: 1000
+        limitations:
+          type: array
+          maxItems: 20
+          items:
+            type: string
+            minLength: 1
+            maxLength: 1000
+        defaults:
+          $ref: '#/components/schemas/MethodParameters'
+      description: >-
+        Définition localisée dans la révision éditoriale immuable, limitée à24KiB UTF8. Les listes/chaînes
+        peuvent rester vides en brouillon ; une nouvelle publication METHOD_TEMPLATE exige leur complétude.
+        Aucun contenu premium n’est révélé par cette définition.
+    MethodFields:
+      type: object
+      additionalProperties: false
+      required:
+        - title
+        - locale
+        - text
+        - parameters
+        - generatedFrom
+        - notes
+        - category
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        locale:
+          $ref: '#/components/schemas/Locale'
+        text:
+          type: string
+          minLength: 1
+          maxLength: 32000
+        parameters:
+          $ref: '#/components/schemas/MethodParameters'
+        generatedFrom:
+          anyOf:
+            - $ref: '#/components/schemas/MethodParameters'
+            - type: 'null'
+        notes:
+          type: string
+          minLength: 0
+          maxLength: 8000
+        category:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 80
+            - type: 'null'
+      description: >-
+        Instantané utilisateur complet, au plus48KiB de JSON UTF8 (generatedFrom inclus). PATCH remplace
+        explicitement ces champs. Texte, notes et langue restent indépendants de la source et de la langue
+        d’interface. Chaînes Unicode valides, sans NUL ; titre/texte/catégorie non blancs. Aucun ownerId,
+        rôle, origine ou révision autoritaire en entrée.
+    CreateMethod:
+      type: object
+      additionalProperties: false
+      required:
+        - fields
+      properties:
+        fields:
+          $ref: '#/components/schemas/MethodFields'
+    UpdateMethod:
+      type: object
+      additionalProperties: false
+      required:
+        - fields
+      properties:
+        fields:
+          $ref: '#/components/schemas/MethodFields'
+    MethodFromTemplate:
+      type: object
+      additionalProperties: false
+      required:
+        - sourceResourceId
+        - sourceVersionId
+        - sourceRevisionId
+        - sourceLocale
+        - fields
+      properties:
+        sourceResourceId:
+          $ref: '#/components/schemas/UUID'
+        sourceVersionId:
+          $ref: '#/components/schemas/UUID'
+        sourceRevisionId:
+          $ref: '#/components/schemas/UUID'
+        sourceLocale:
+          $ref: '#/components/schemas/Locale'
+        fields:
+          $ref: '#/components/schemas/MethodFields'
+      description: >-
+        Le serveur vérifie le snapshot METHOD_TEMPLATE exact, publié, FREE et défini. Une autre révision
+        publiée depuis la consultation retourne412, sans substitution silencieuse. Le client ne choisit ni
+        propriétaire ni traduction d’origine.
+    MethodOrigin:
+      type: object
+      additionalProperties: false
+      required:
+        - resourceId
+        - versionId
+        - translationId
+        - revisionId
+        - locale
+        - title
+        - slug
+      properties:
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        versionId:
+          $ref: '#/components/schemas/UUID'
+        translationId:
+          $ref: '#/components/schemas/UUID'
+        revisionId:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        slug:
+          type: string
+          minLength: 1
+          maxLength: 180
+          pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+      description: >-
+        Origine capturée côté serveur et immuable ; aucun remplacement du texte personnel par une source
+        ultérieure.
+    MethodView:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - revision
+        - title
+        - locale
+        - text
+        - parameters
+        - generatedFrom
+        - notes
+        - category
+        - origin
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        revision:
+          $ref: '#/components/schemas/Revision'
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        locale:
+          $ref: '#/components/schemas/Locale'
+        text:
+          type: string
+          minLength: 1
+          maxLength: 32000
+        parameters:
+          $ref: '#/components/schemas/MethodParameters'
+        generatedFrom:
+          anyOf:
+            - $ref: '#/components/schemas/MethodParameters'
+            - type: 'null'
+        notes:
+          type: string
+          minLength: 0
+          maxLength: 8000
+        category:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 80
+            - type: 'null'
+        origin:
+          anyOf:
+            - $ref: '#/components/schemas/MethodOrigin'
+            - type: 'null'
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+        updatedAt:
+          $ref: '#/components/schemas/UtcInstant'
+      description: >-
+        Détail privé du propriétaire, sans état dynamique de source afin que son ETag fort couvre exactement
+        cette représentation.
+    MethodSummary:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - revision
+        - title
+        - locale
+        - category
+        - updatedAt
+        - hasSource
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        revision:
+          $ref: '#/components/schemas/Revision'
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        locale:
+          $ref: '#/components/schemas/Locale'
+        category:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 80
+            - type: 'null'
+        updatedAt:
+          $ref: '#/components/schemas/UtcInstant'
+        hasSource:
+          type: boolean
+    MethodPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/MethodSummary'
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    MethodSourceUpdate:
+      type: object
+      additionalProperties: false
+      required:
+        - status
+        - source
+        - candidate
+      properties:
+        status:
+          type: string
+          enum:
+            - NONE
+            - CURRENT
+            - UPDATE_AVAILABLE
+            - UNAVAILABLE
+        source:
+          anyOf:
+            - $ref: '#/components/schemas/MethodOrigin'
+            - type: 'null'
+        candidate:
+          anyOf:
+            - $ref: '#/components/schemas/MethodOrigin'
+            - type: 'null'
+      description: >-
+        Lecture séparée sans ETag de méthode personnelle. Candidate seulement si publication actuelle
+        autorisée dans la langue source ; une source retirée, protégée, absente ou non définie reste
+        indisponible. Aucune synchronisation automatique.
+    MethodTemplate:
+      type: object
+      additionalProperties: false
+      required:
+        - resourceId
+        - versionId
+        - revisionId
+        - locale
+        - title
+        - slug
+        - availability
+        - definition
+      properties:
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        versionId:
+          $ref: '#/components/schemas/UUID'
+        revisionId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        title:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 240
+            - type: 'null'
+        slug:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 180
+            - type: 'null'
+        availability:
+          type: string
+          enum:
+            - PUBLISHED
+            - MISSING_DEFINITION
+            - PROTECTED
+            - STALE
+            - WITHDRAWN
+            - MISSING_TRANSLATION
+        definition:
+          anyOf:
+            - $ref: '#/components/schemas/MethodDefinition'
+            - type: 'null'
+      description: >-
+        Version exacte, jamais latest implicite. Définition présente uniquement pour une publication FREE
+        complète. Les articles historiques sans définition conservent MISSING_DEFINITION, sans générateur
+        inventé.
   headers:
     NoStore:
       description: Réponse non stockable ; les erreurs sont également privées.
@@ -3436,6 +4320,17 @@ components:
       schema:
         type: string
         minLength: 1
+    AccountContext:
+      name: X-Account-Context
+      in: header
+      required: true
+      description: >-
+        UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté
+        serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409
+        ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après
+        changement de compte ; aucun import automatique du brouillon précédent.
+      schema:
+        $ref: '#/components/schemas/UUID'
   responses:
     ProblemResponse:
       description: Erreur explicite ; aucune donnée de remplacement.

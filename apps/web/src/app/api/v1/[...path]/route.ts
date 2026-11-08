@@ -84,7 +84,7 @@ async function proxy(request: Request, context: RouteContext): Promise<Response>
       || request.headers.get("sec-fetch-site") === "cross-site")) {
     return problem(403, "INVALID_REQUEST_ORIGIN", instance);
   }
-  for (const name of ["content-type", "x-csrf-token", "if-match", "idempotency-key"]) {
+  for (const name of ["content-type", "x-csrf-token", "if-match", "idempotency-key", "x-account-context"]) {
     const value = request.headers.get(name);
     if (value) headers.set(name, value);
   }

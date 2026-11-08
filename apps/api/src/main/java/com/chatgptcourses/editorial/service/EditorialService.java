@@ -6,6 +6,7 @@ import com.chatgptcourses.catalog.model.ResourceKind;
 import com.chatgptcourses.catalog.service.CatalogTypes.PublicMetadata;
 import com.chatgptcourses.catalog.service.CatalogTypes.SaveMetadata;
 import com.chatgptcourses.catalog.service.PublicMetadataStore;
+import com.chatgptcourses.methods.service.MethodValidation;
 import com.chatgptcourses.editorial.model.EditorialState;
 import com.chatgptcourses.shared.http.ApiError;
 import com.chatgptcourses.shared.http.ApiException;
@@ -322,6 +323,7 @@ public class EditorialService {
         if(d.objective().isBlank())issue(issues,"OBJECTIVE_REQUIRED","document.objective",v.resourceId());
         if(d.expectedResult().isBlank())issue(issues,"EXPECTED_RESULT_REQUIRED","document.expectedResult",v.resourceId());
         if(d.blocks().isEmpty())issue(issues,"CONTENT_REQUIRED","document.blocks",v.resourceId());
+        if(v.kind()==ResourceKind.METHOD_TEMPLATE&&!MethodValidation.complete(d.methodDefinition()))issue(issues,"METHOD_DEFINITION_REQUIRED","document.methodDefinition",v.resourceId());
         if(v.kind()==ResourceKind.ACTIVITY) {
             if(d.exercise()==null || d.exercise().instructions().isBlank())issue(issues,"EXERCISE_REQUIRED","document.exercise.instructions",v.resourceId());
             if(d.exercise()==null || d.exercise().correction().isBlank())issue(issues,"CORRECTION_REQUIRED","document.exercise.correction",v.resourceId());
@@ -381,7 +383,7 @@ public class EditorialService {
     }
     private static void issue(List<Issue> list,String code,String field,UUID id) {list.add(new Issue(code,field,id,"FIX_"+code));}
     private ContentDocument decode(String json) {return json==null?null:mapper.readValue(json,ContentDocument.class);}
-    private static PublicDocument publicDocument(ContentDocument d) {return new PublicDocument(d.objective(),d.expectedResult(),d.prerequisites(),d.blocks(),d.estimatedMinutes(),d.exercise()==null?null:d.exercise().instructions(),d.quiz().stream().map(q->new PublicQuizQuestion(q.key(),q.prompt(),q.options(),q.points())).toList(),d.rubric(),d.access(),d.media(),d.relatedResourceIds());}
+    private static PublicDocument publicDocument(ContentDocument d) {return new PublicDocument(d.objective(),d.expectedResult(),d.prerequisites(),d.blocks(),d.estimatedMinutes(),d.exercise()==null?null:d.exercise().instructions(),d.quiz().stream().map(q->new PublicQuizQuestion(q.key(),q.prompt(),q.options(),q.points())).toList(),d.rubric(),d.access(),d.media(),d.relatedResourceIds(),d.methodDefinition());}
     private static UUID uuid(ResultSet rs,String field)throws SQLException {return rs.getObject(field,UUID.class);}
     private static Instant instant(ResultSet rs,String field)throws SQLException {Timestamp t=rs.getTimestamp(field);return t==null?null:t.toInstant();}
     private record Child(UUID resource,Instant frozen,String state,UUID published) { }

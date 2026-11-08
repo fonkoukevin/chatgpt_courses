@@ -1,0 +1,16 @@
+{
+  "verifiedAt": "2026-11-08T00:57:47.228Z",
+  "explicitLocalRuns": 2,
+  "counts": {
+    "learningResources": 3,
+    "pedagogicalVersions": 3,
+    "compositions": 2,
+    "slugs": 6,
+    "translations": 6,
+    "editorialRevisions": 6,
+    "publishedTranslations": 0,
+    "users": 0,
+    "assignedRoles": 0,
+    "migrationSuccess": 2
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "verifiedAt": "2026-11-08T00:58:07.639Z",
+  "command": ".\\scripts\\courses.cmd run verify:api",
+  "result": "BUILD SUCCESS",
+  "suites": [
+    {
+      "name": "com.chatgptcourses.AccessPolicyTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.394
+    },
+    {
+      "name": "com.chatgptcourses.FoundationIntegrationTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 21.256
+    },
+    {
+      "name": "com.chatgptcourses.SchemaIntegrationTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 8.27
+    },
+    {
+      "name": "com.chatgptcourses.shared.http.HttpContractTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.445
+    },
+    {
+      "name": "com.chatgptcourses.shared.money.MoneyValidationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.051
+    }
+  ],
+  "totalTests": 24,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0
+}

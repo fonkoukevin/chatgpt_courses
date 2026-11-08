@@ -1,0 +1,30 @@
+{
+  "measuredAt": "2026-11-08T00:52:48.692Z",
+  "sourceAndSdkRestoredByteForByte": true,
+  "checks": [
+    {
+      "name": "Invalid OpenAPI schema rejected",
+      "action": "validate",
+      "expectedExit": 1,
+      "actualExit": 1
+    },
+    {
+      "name": "Modified generated SDK rejected",
+      "action": "check",
+      "expectedExit": 1,
+      "actualExit": 1
+    },
+    {
+      "name": "CRLF checkout produces identical generated files",
+      "action": "check",
+      "expectedExit": 0,
+      "actualExit": 0
+    },
+    {
+      "name": "Restored source and SDK verified",
+      "action": "check",
+      "expectedExit": 0,
+      "actualExit": 0
+    }
+  ]
+}

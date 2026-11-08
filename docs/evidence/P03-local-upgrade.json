@@ -1,0 +1,12 @@
+{
+  "verifiedAt": "2026-11-08T00:56:53.081Z",
+  "before": [
+    "001"
+  ],
+  "after": [
+    "001",
+    "002"
+  ],
+  "preserved": true,
+  "ownedProbeRemoved": true
+}

@@ -48,6 +48,14 @@ Aucune incompatibilité prouvée ne justifie de remplacer la stack. Les compatib
 - Pages FR/EN de fondation non indexables, réservées à local/test. Proxy GET/HEAD réel, client de sonde manuscrit, aucun catalogue ou succès de paiement fictif. Tests HTTP et PostgreSQL locaux distincts de la recette navigateur et de GitHub Actions.
 - Recette navigateur initialement bloquée par l’interruption de Computer Use. **Décision utilisateur du 8 novembre** : Playwright local explicitement autorisé avec Chromium isolé. Cette instruction lève l’attente précédente ; sept tests et revue des 16 captures réussis, P01 devient `validé localement`. Aucun onglet personnel utilisé ni changement de stack. README, STATUS, VERSIONS et preuve P01 actualisés.
 
+## Décisions de travail P03 — 8 novembre 2026
+
+- Schéma V002 : douze tables identité/contenu. Parcours, modules et activités utilisent une identité UUID commune typée, distincte des versions, traductions et slugs. Les autres modules gardent leurs migrations dans leurs lots.
+- Versions pédagogiques et compositions gelées irréversiblement ; corrections éditoriales append-only sous une même version. FK RESTRICT et références composites empêchent les croisements de traductions et les cascades historiques. Modèle détaillé dans `DATA_MODEL.md`.
+- V001 Spring Session inchangée et comparée à l’artefact 4.1.1 ; Flyway seul, Hibernate validate et UTC explicites. Fixture séparée, chargement local manuel et tests Testcontainers, aucun compte ou prix livré.
+- OpenAPI limité aux opérations présentes ; client généré Hey API 0.99.0 compatible TypeScript 6, validation Redocly core 2.76.0. Contrat et fichiers générés contrôlés en CI ; décodeurs réseau conservés dans l’adaptateur manuscrit.
+- Révision explicite obligatoire pour les futures écritures : 428 si absente, 412 si dépassée ; `*` ne satisfait pas cette politique de révision. Comparaison puis écriture sous transaction et `@Version`, après autorisation. Politique d’accès interne avec refus par défaut, sans prétention d’authentification déjà intégrée.
+
 ## Décisions commerciales encore ouvertes
 
 | Paramètre | État initial | Effet avant décision |

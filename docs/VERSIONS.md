@@ -1,6 +1,22 @@
-# Versions — propositions P00 et verrouillage P01
+# Versions — socle verrouillé et compléments P02/P03
 
 Vérifications réalisées les **7 et 8 novembre 2026**, dans les documentations officielles et les registres officiels. P00 a proposé les versions ci-dessous ; P01 les a installées et verrouillées pour les fondations effectivement présentes. P02 ajoute les primitives et utilitaires du système visuel. Preuves : `evidence/P01.md` et `evidence/P02.md`.
+
+## Compléments verrouillés en P03
+
+| Dépendance de développement | Version exacte | Compatibilité et usage |
+| --- | --- | --- |
+| `@hey-api/openapi-ts` | 0.99.0 | Node ≥22.18 ; peer TypeScript accepte explicitement 6.0 ; génère types, SDK et transport fetch depuis OpenAPI 3.1 |
+| `@redocly/openapi-core` | 2.76.0 | Node ≥22.12 ; validation de structure OpenAPI 3.1, références et identifiants d’opérations |
+| `js-yaml` sous le parseur Hey API | 4.3.2 | Override ciblé d’un pin transitif 4.2.0 vulnérable, sans modifier le YAML 5.5.0 utilisé par Redocly |
+
+Node 24.22.2/npm 11.19.1 et TypeScript 6.0.3 restent inchangés. `openapi-typescript` 7.13.0 a été écarté après consultation de son peer TypeScript `^5.x` ; la stack n’est pas rétrogradée pour un générateur. Aucun nouveau runtime npm distant requis par l’application : le transport fetch est généré dans le dépôt.
+
+Installation verrouillée P03 effectivement exécutée : **343 paquets ajoutés, 351 audités, zéro alerte**. L’installation initiale remontait quatre alertes élevées reliées au même parseur YAML 4.2.0. Le [correctif officiel du mainteneur](https://github.com/nodeca/js-yaml/security/advisories) inclut la [faille corrigée en 4.3.2](https://github.com/advisories/GHSA-2883-xcg3-v3hh). Un override limité à `@hey-api/json-schema-ref-parser` a été appliqué ; aucun `audit fix --force`, masquage ou downgrade automatique. Génération, validation, compilation et tests sont exécutés avec ce correctif.
+
+Le script de génération vérifie les pins et normalise l’empreinte du contrat en UTF-8/LF. Quatre annotations `any` du transport fourni sont adaptées de manière déterministe vers des frontières `unknown`/`BodyInit` et des assertions génériques bornées. Le script refuse un gabarit inattendu ; les fichiers générés restent compilés et lintés, sans nouvelle règle désactivée. Le wrapper manuscrit valide les données réseau à l’exécution.
+
+Sources consultées le 8 novembre : [Hey API exact et peers](https://registry.npmjs.org/@hey-api%2fopenapi-ts/0.99.0), [génération officielle](https://heyapi.dev/docs/openapi/typescript/get-started), [Redocly exact](https://registry.npmjs.org/@redocly%2fopenapi-core/2.76.0), [validation Redocly](https://redocly.com/docs/cli/rules/oas/struct), [js-yaml 4.3.2](https://registry.npmjs.org/js-yaml/4.3.2). Résultats : [preuve P03](evidence/P03.md).
 
 ## Compléments verrouillés en P02
 

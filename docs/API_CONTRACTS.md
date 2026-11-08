@@ -1,12 +1,12 @@
 # Contrats d’API de référence
 
-Ce document est une proposition de contrat cohérente pour les lots de développement. P03 produit le véritable schéma OpenAPI vérifiable, puis chaque lot le complète avec son implémentation. Une route citée ici n’est pas déclarée déjà disponible. Toute adaptation conserve les règles fonctionnelles et met à jour ensemble OpenAPI, client typé, tests et cette référence.
+Le contrat machine des opérations disponibles est [api/openapi.yaml](api/openapi.yaml), versionné en P03. Le reste de ce document distingue conventions préparées et routes planifiées : une route citée dans une section planifiée n’est pas disponible. Chaque lot complète ensemble OpenAPI, DTO, client, tests et cette référence au moment de son implémentation.
 
 ## Conventions communes
 
 - Préfixe `/api/v1`, noms de champs JSON en `camelCase`, enum stables en anglais ; traduction des libellés par le frontend.
 - JSON pour requêtes/réponses, sauf connexion `application/x-www-form-urlencoded`, webhook au corps brut et transferts de fichiers documentés.
-- UUID transmis comme chaînes ; dates ISO 8601 UTC ; montants `{ amountMinor: 4900, currency: "EUR" }`. Ce montant est un exemple fictif, jamais un prix décidé pour la formation.
+- UUID transmis comme chaînes ; dates ISO 8601 UTC avec suffixe `Z` ; montants entiers `{ amountMinor, currency }`. Aucune valeur de prix par défaut. Révisions et unités mineures JSON sont bornées à `0..9007199254740991` pour rester exactes en JavaScript ; devise explicite, syntaxe de trois lettres majuscules et liste autorisée vérifiée dans le futur service commercial.
 - Valeurs facultatives et `null` définis dans OpenAPI ; éviter les champs dont l’absence change silencieusement une permission.
 - Listes paginées `{ items, page, pageSize, total }` ; taille maximale, filtres et tris autorisés bornés côté serveur. Recherche et tris ne deviennent jamais du SQL concaténé.
 - Ressources privées obtenues depuis l’utilisateur authentifié ; un `userId` envoyé par le client ne détermine pas le propriétaire.
@@ -15,19 +15,42 @@ Ce document est une proposition de contrat cohérente pour les lots de développ
 - Erreurs de validation `400`, conflit métier `409`, révision ancienne `412`, précondition requise `428`, limitation `429` avec indication utile de reprise. `503` exprime un fournisseur indisponible ; aucun remplacement automatique par des données de démo.
 - Création `201` avec `Location` lorsque pertinent ; suppression idempotente selon contrat ; mutation `200` avec nouvelle représentation/révision ou `204` lorsque convenu.
 
-## Sonde réellement implémentée en P01
+## Opérations réellement implémentées — P01/P03
 
 `GET /api/v1/system/health` est public et retourne uniquement `{ "status": "UP" }` après une vraie requête PostgreSQL. Une indisponibilité de la base retourne 503 `application/problem+json`, sans exception ou URL JDBC. La réponse n’est pas mise en cache et ne crée pas de session anonyme.
 
 Une route système absente retourne un vrai 404 Problem. Les erreurs contiennent notamment `status`, `code`, `traceId`, `detail` et `instance`. Le proxy préserve les erreurs de Spring ; sa propre erreur de connexion devient 502/504 `API_UNAVAILABLE`, sans données de remplacement. Aucun autre endpoint métier de ce document n’est annoncé implémenté par P01. Les routes privées sont refusées et CSRF reste actif.
 
+P03 conserve le payload de la sonde et le produit avec un DTO explicite. L’OpenAPI ne décrit que `GET /system/health`, sous le serveur de même origine `/api/v1`. `system/unknown` est volontairement absent : c’est une requête de diagnostic vers une route manquante, pas une nouvelle opération. Aucun endpoint CRUD métier ni contrôleur de test n’est livré en production.
+
+Les composants partagés `Problem`, `FieldError`, UUID, Locale, UtcInstant, Revision, Money et la convention ETag sont définis sans inventer de routes pour les utiliser. Les erreurs utilisent `type: about:blank`, un `traceId` UUID et `Cache-Control: private, no-store`. `fieldErrors`, présent pour une erreur de validation, est une liste `{ field, code, message }`, sans valeur rejetée ni message dynamique contenant une donnée saisie. `code` reste stable pour la traduction ; les détails SQL, exceptions, secrets et graphes JPA restent hors réponse.
+
+| Situation préparée | HTTP | Code |
+| --- | --- | --- |
+| Validation de DTO/paramètre | 400 | `VALIDATION_FAILED` |
+| JSON/type de requête invalide | 400 | `INVALID_REQUEST` |
+| Syntaxe If-Match invalide ou limites dépassées | 400 | `INVALID_IF_MATCH` |
+| Contrainte/conflit métier | 409 | `CONFLICT` |
+| ETag dépassé ou conflit optimiste JPA | 412 | `REVISION_CONFLICT` |
+| Précondition de révision absente | 428 | `PRECONDITION_REQUIRED` |
+
+Ces mappings sont testés avec des contrôleurs **uniquement dans les sources de test** ; ils ne sont pas des écritures métier déjà disponibles.
+
+Génération reproductible : `npm run api:generate` reconstruit types, SDK et transport dans `apps/web/src/lib/api/generated`. `api:validate` vérifie OpenAPI 3.1 ; `api:check` régénère en temporaire et refuse toute différence, fichier supplémentaire ou empreinte de contrat divergente ; `verify:client` compile puis exécute les tests du wrapper et du SDK. Les commandes Windows exactes sont dans le README. La CI appelle `api:check` et `verify:client` avant la compilation web.
+
+Le wrapper manuscrit `lib/api/client.ts` utilise le SDK généré puis valide les réponses à l’exécution : les types TypeScript seuls ne prouvent pas la validité d’un JSON réseau. Réponse invalide, erreur HTTP structurée et API inaccessible restent distinctes. Le transport reste de même origine, sans cache et sans jeton d’authentification dans le stockage navigateur. L’adaptation stricte des annotations du transport généré est bornée et vérifiée par le script de génération ; les sources générées ne s’éditent pas à la main.
+
 ## Révisions et idempotence
 
 Un objet modifiable expose `revision` et `ETag`. Exemple conceptuel : `ETag: "project-<uuid>-r7"`. La modification/suppression utilise `If-Match` avec le tag reçu. La précondition est vérifiée atomiquement avec l’écriture. Un 412 conserve la saisie dans le navigateur et permet de récupérer la version courante ; il n’entraîne pas une nouvelle tentative écrasante. Le frontend associe chaque réponse à sa requête et sa saisie : une réponse ancienne ne remplace pas une révision plus récente et ne marque pas enregistrées des modifications encore locales.
 
+Socle P03 : `EntityTags` construit un tag fort `"{kind}-{uuid}-r{revision}"` ; `kind` doit distinguer les représentations si plusieurs langues/projections ont des octets différents pour la même révision. `RevisionPreconditions` s’utilise **après autorisation et lecture, dans la transaction d’écriture**, avec `@Version`/UPDATE conditionnel au moment de la persistance. Le helper seul n’est pas un verrou.
+
+Les listes If-Match utilisent une comparaison forte et un OU entre tags ; un tag faible ne correspond jamais. La syntaxe entière est vérifiée avant acceptation, même après un tag correspondant. Limites : 4096 caractères et 64 éléments. Header absent/vide ⇒ 428 ; tag valide dépassé/faible ⇒ 412 ; syntaxe invalide ⇒ 400. `*` seul est valide en HTTP pour l’existence, mais ne fournit pas la révision explicite exigée par notre politique d’édition : il reçoit 428. Un mélange `*`/tags est invalide. Les lots d’écriture devront tester le chemin complet transactionnel et la conservation de saisie, sans retry écrasant.
+
 Les créations risquant un doublon, notamment commandes, Checkout et demandes de remboursement, utilisent `Idempotency-Key`. Sa portée comprend utilisateur/opération et empreinte du corps. La même clé/corps retrouve le même résultat ; un autre corps reçoit 409. La base maintient les contraintes durables et la transaction correspondantes. La politique de rétention est documentée. La clé locale ne remplace ni celle du fournisseur ni l’unicité des attributions métier.
 
-## Identité et session
+## Identité et session — planifié P04
 
 | Méthode et route | Entrée ou résultat | Règle |
 | --- | --- | --- |
@@ -44,7 +67,7 @@ Après inscription, la connexion normale réutilise les filtres Spring et la des
 
 Le frontend charge le jeton CSRF au moment nécessaire puis le recharge après login/logout. Le client connaît `headerName` via la réponse ; il ne recopie pas une valeur de token fixe. Cookies avec credentials de même origine. Le cookie de session a `Path=/` pour les lectures SSR ; seul le backend établit l’identité.
 
-## Catalogue public et lecture
+## Catalogue public et lecture — planifié P05/P06
 
 | Méthode et route | Fonction |
 | --- | --- |
@@ -60,7 +83,7 @@ Le catalogue public ne varie pas secrètement selon le cookie et ne contient pas
 
 Motifs d’accès stables : `AUTH_REQUIRED`, `OFFER_REQUIRED`, `ACCESS_EXPIRED`, `ACCESS_SUSPENDED`, `ACCESS_REVOKED`, `CONTENT_UNPUBLISHED`, `CONTENT_UNAVAILABLE`, `TRANSLATION_UNAVAILABLE`. Ils sont distingués du code HTTP. Les traductions absentes indiquent les langues réellement disponibles et les liens équivalents, sans substitution silencieuse.
 
-## Apprentissage, projets et méthodes
+## Apprentissage, projets et méthodes — planifié P07–P09
 
 | Méthode et route | Fonction et contrôle |
 | --- | --- |
@@ -83,7 +106,7 @@ Les notes d’activité peuvent avoir des endpoints dédiés `/me/activity-notes
 
 Les résultats de quiz, autoévaluations et futures revues humaines ont des types distincts. Un DTO d’évaluation contient au minimum `method`, `projectRevisionId`, `rubricVersionId`, `score`, `blockingIssues`, `evaluatedAt`, `evaluatorId?`, `declaredByUser`. La revue humaine reste désactivée tant que le service commercial n’existe pas.
 
-## Fichiers et vidéo
+## Fichiers et vidéo — planifié P10
 
 | Méthode et route | Fonction |
 | --- | --- |
@@ -94,7 +117,7 @@ Les résultats de quiz, autoévaluations et futures revues humaines ont des type
 
 Le navigateur ne choisit pas une clé de bucket arbitraire ni une URL externe à récupérer. Aucune présignature n’autorise implicitement tous les fichiers du même compte. Les URLs temporaires et jetons de lecture sont exclus des logs et caches publics. En cas de révocation, un nouvel accès est refusé ; un lien précédemment délivré suit sa durée de validité.
 
-## Offres, commandes, Stripe et remboursements
+## Offres, commandes, Stripe et remboursements — planifié P11–P13
 
 | Méthode et route | Entrée ou résultat |
 | --- | --- |
@@ -114,7 +137,7 @@ Les champs exacts d’un instantané incluent `offerId`, `offerRevision`, lignes
 
 La page de retour interroge la commande propriétaire avec une attente bornée et propose ensuite un retour au compte. Elle n’interroge pas Stripe directement avec une clé secrète. Une commande à état ambigu ne déclenche pas automatiquement une deuxième tentative payante.
 
-## Administration
+## Administration — planifié P05/P15
 
 Les routes `/admin/**` exigent des permissions précises. Les permissions affichées au client facilitent l’interface ; elles ne dispensent pas des contrôles Spring sur chaque opération.
 
@@ -139,7 +162,7 @@ Une réponse de `readiness` contient `{ ready, blockingIssues, warnings, checked
 
 ## Contrat et tests
 
-P03 crée un fichier OpenAPI machine lisible, validé en CI, et choisit une génération de types compatible avec les versions installées. Les DTO exposés ne sont jamais des entités JPA brutes. Les permissions, formats, limites, erreurs et exemples de données fictives sont documentés.
+P03 livre le contrat machine et les commandes de validation/génération avec des outils compatibles avec TypeScript 6. La CI est configurée pour ces commandes ; une exécution GitHub n’est pas présumée. Les DTO exposés ne sont jamais des entités JPA brutes. Les modèles et FK actuels/futurs sont précisés dans [DATA_MODEL.md](DATA_MODEL.md), les résultats réellement observés dans [evidence/P03.md](evidence/P03.md).
 
 Chaque lot qui ajoute une route fournit des tests sur le backend réel pour ses invariants, puis met à jour le client et les écrans. Les états de facture, remboursement ou autorisation ne sont jamais inventés uniquement pour faire passer un test d’interface.
 

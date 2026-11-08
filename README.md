@@ -4,18 +4,18 @@ Plateforme de formation pratique à l’IA : choisir une tâche, apprendre, prod
 
 ## État réel
 
-P01 fournit les fondations locales : pages FR/EN, sonde Spring avec PostgreSQL réel, proxy de même origine, services Compose et première chaîne de vérification. P02 ajoute le système visuel, une galerie interactive et les structures public, apprenant et administration. Les données métier, comptes et paiements seront raccordés dans les prochains lots. Aucun ancien prototype n’est repris et aucun déploiement externe n’est annoncé.
+P01 fournit les fondations locales ; P02 ajoute le système visuel et trois structures d’interface. P03 pose le schéma identité/contenu, les conventions d’accès/concurrence et le contrat OpenAPI avec client TypeScript généré. Les parcours métier, l’authentification et les paiements seront raccordés dans leurs lots. Aucun ancien prototype repris ni déploiement externe annoncé.
 
 La validation P01 couvre FR/EN, clavier, formats étroits, erreur 404 et panne/reprise réelle de Spring. P02 ajoute 14 tests et 54 captures examinées pour les interfaces ; les sept scénarios P01 passent à nouveau après ces changements. La validation reste locale, avec le Chromium de test autorisé.
 
-Lire [AGENTS.md](AGENTS.md), puis [docs/STATUS.md](docs/STATUS.md). Vérifications et limites : [P02](docs/evidence/P02.md), [P01](docs/evidence/P01.md) ; audit initial : [P00](docs/evidence/P00.md).
+Lire [AGENTS.md](AGENTS.md), puis [docs/STATUS.md](docs/STATUS.md). Vérifications et limites : [P03](docs/evidence/P03.md), [P02](docs/evidence/P02.md), [P01](docs/evidence/P01.md) ; audit initial : [P00](docs/evidence/P00.md).
 
 ## Structure retenue
 
 | Chemin | Rôle | État P01 |
 | --- | --- | --- |
 | `apps/web` | Next App Router, TypeScript strict, Tailwind, dictionnaires FR/EN et client API | UI Radix adaptée, galerie et trois structures locales ; fondation API conservée |
-| `apps/api` | Java 21, Spring Boot, Security, sessions JDBC, JPA et Flyway | Sonde et migration d’infrastructure ; métier en P03 et suivants |
+| `apps/api` | Java 21, Spring Boot, Security, sessions JDBC, JPA et Flyway | Sonde, schéma identité/contenu et conventions ; aucune route métier simulée |
 | `infra/compose` | PostgreSQL, Mailpit, profil S3 local | Images exactes avec digests ; production ultérieure |
 | `scripts` | Outils, configuration, démarrage et vérification | Commandes ci-dessous |
 | `docs` | Contrat produit, décisions, suivi et preuves | Présent |
@@ -143,4 +143,31 @@ Recette du build avec le Chromium de test déjà autorisé et installé (fermer 
 
 Si Chromium n’est pas installé, `run browser:install` installe la version verrouillée dans `.tools/playwright`. `verify:design` ne télécharge rien : il réserve ses propres serveurs, teste les interfaces, enregistre captures/rapport dans `docs/evidence/P02-browser`, puis vérifie les refus HTTP 404 en modes staging/production et arrête tous ses processus. Cela reste une recette locale du build, sans déploiement. `run verify:browser` conserve les sept scénarios API P01 et nécessite PostgreSQL démarré ainsi que le build API.
 
-Prochain prompt : [prompts/P03_MODELE_DONNEES_API.txt](prompts/P03_MODELE_DONNEES_API.txt).
+## Schéma et contrat P03
+
+[DATA_MODEL.md](docs/DATA_MODEL.md) explique les douze tables ajoutées par **V002**, les identités UUID, les versions gelées, les traductions et les relations futures. **V001 est inchangée**. Hibernate valide le schéma ; Flyway est le seul mécanisme d’évolution. Aucune commande de reset ou suppression de volume n’est nécessaire.
+
+Le contrat machine [openapi.yaml](docs/api/openapi.yaml) ne décrit que la sonde réellement implémentée. Les routes métier restent planifiées dans [API_CONTRACTS.md](docs/API_CONTRACTS.md). Après modification du contrat :
+
+```powershell
+.\scripts\courses.cmd run api:validate
+.\scripts\courses.cmd run api:generate
+.\scripts\courses.cmd run api:check
+.\scripts\courses.cmd run verify:client
+.\scripts\courses.cmd run lint
+.\scripts\courses.cmd run typecheck
+.\scripts\courses.cmd run build
+.\scripts\courses.cmd run verify:api
+```
+
+`api:generate` reconstruit uniquement `apps/web/src/lib/api/generated` avec les versions verrouillées. `api:check` régénère en temporaire et échoue sur une divergence ; ne pas éditer ces fichiers à la main. Le wrapper voisin `client.ts` décode aussi les réponses à l’exécution. `verify:client` compile et teste le client avec un fetch simulé ; `verify:api` exécute les tests Spring/PostgreSQL Testcontainers et construit le JAR. La CI inclut ces contrôles ; aucune exécution GitHub n’est présumée.
+
+Pour charger un dossier pédagogique **fictif, en brouillon**, démarrer d’abord la stack locale avec `run dev` afin que Flyway migre la base existante. Dans un autre terminal :
+
+```powershell
+.\scripts\courses.cmd run seed:local
+```
+
+Commande réservée à `APP_ENV=local` et au service PostgreSQL Compose de ce dépôt. La même fixture est chargée explicitement par les tests Testcontainers ; elle n’est pas incluse dans le JAR de production. Chargement transactionnel, réexécutable sans écrasement ; collision d’identifiants réservés ⇒ refus. Aucun compte, rôle attribué, prix, offre active ou droit créé. Ces données ne constituent pas un catalogue publié et les pages P02 restent des démonstrations séparées.
+
+Prochain prompt : [prompts/P04_IDENTITE_SECURITE.txt](prompts/P04_IDENTITE_SECURITE.txt).

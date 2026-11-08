@@ -27,7 +27,7 @@ Le navigateur appelle une seule origine HTTPS. Le reverse proxy dirige `/api/v1/
 
 En développement, un proxy local reproduit ce découpage. Éviter de transformer une mauvaise configuration de proxy en autorisation CORS universelle. PostgreSQL, les endpoints de gestion internes et les consoles de développement restent hors de l’exposition publique.
 
-État P01 : le Route Handler Next relaie les lectures GET/HEAD de `/api/v1` vers l’origine interne validée, sans retirer le préfixe, sans suivre les redirections et en ne transmettant que le cookie `SESSION` nécessaire. Les mutations et leurs en-têtes CSRF seront raccordés en P04 ; aucun login simulé n’est livré. Le client typé de sonde est manuscrit et sera remplacé/complété par le contrat OpenAPI vérifié de P03.
+État P03 : le Route Handler Next relaie les lectures GET/HEAD de `/api/v1` vers l’origine interne validée, sans retirer le préfixe, sans suivre les redirections et en ne transmettant que le cookie `SESSION` nécessaire. Il préserve ETag et les erreurs structurées. Les mutations et leurs en-têtes CSRF seront raccordés en P04 ; aucun login simulé n’est livré. Le contrat OpenAPI et le SDK/types/transport TypeScript sont générés et vérifiables ; le wrapper de sonde conserve une validation des réponses réseau à l’exécution.
 
 Next.js peut lire l’API sur une adresse interne configurée côté serveur. Il transmet seulement le cookie de session requis et les en-têtes explicitement nécessaires à cette API de confiance. Il ne relaie pas tous les cookies ou en-têtes vers une URL libre. Le navigateur utilise des URL relatives de même origine.
 
@@ -76,6 +76,10 @@ Un quiz conserve la version des questions et la langue d’une tentative. Une é
 Une méthode personnelle contient son propre texte et garde l’identifiant/version de sa source. La publication d’un nouveau modèle ou l’archivage de sa source ne remplace pas cette copie.
 
 Les migrations sont incrémentales. Après utilisation dans un environnement partagé, ne pas réécrire une migration déjà exécutée. `ddl-auto=validate` dans les environnements intégrés ; pas de création/réinitialisation silencieuse de schéma. Les tables Spring Session sont également versionnées via Flyway pour la version installée. Les données de démonstration appartiennent à un profil/import séparé et désactivé en production.
+
+Réalisation P03 : V001 Spring Session est conservée, comparée au schéma de l’artefact JDBC 4.1.1 installé ; V002 ajoute les douze tables du socle identité/contenu. Les instants passent par `Instant`/`timestamptz`, JDBC et Hibernate en UTC ; `spring.sql.init.mode=never` et l’initialisation Spring Session désactivée laissent Flyway seul responsable. UUID, `@Version`, FK RESTRICT, pointeurs éditoriaux composites et versions gelées sont détaillés dans [DATA_MODEL.md](DATA_MODEL.md). Les tables des autres modules seront ajoutées par leurs migrations, sans CRUD factices en P03.
+
+`AccessPolicy` est une abstraction interne avec contextes typés issus du serveur. Un contexte absent/inconnu, un compte inactif, un droit pédagogique non confirmé, une propriété différente ou une permission manquante conduisent au refus. Le rôle ADMIN seul ne suffit pas. Les productions personnelles restent évaluées par propriétaire séparément du droit pédagogique. Cette politique ne remplace ni les filtres Spring existants, ni les futurs contrôles de cas d’utilisation ; ses snapshots ne doivent jamais être acceptés tels quels depuis un corps HTTP.
 
 ## Sauvegarde et concurrence
 

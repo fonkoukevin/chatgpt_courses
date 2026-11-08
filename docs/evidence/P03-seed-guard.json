@@ -1,0 +1,21 @@
+{
+  "verifiedAt": "2026-11-08T00:53:21.664Z",
+  "testFixtureLoading": "Testcontainers only; this CLI targets the named local Compose service.",
+  "checks": [
+    {
+      "environment": "production",
+      "exitCode": 1,
+      "rejectedBeforeDatabase": true
+    },
+    {
+      "environment": "staging",
+      "exitCode": 1,
+      "rejectedBeforeDatabase": true
+    },
+    {
+      "environment": "test",
+      "exitCode": 1,
+      "rejectedBeforeDatabase": true
+    }
+  ]
+}

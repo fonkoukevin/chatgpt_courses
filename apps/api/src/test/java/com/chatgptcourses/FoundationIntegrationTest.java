@@ -60,10 +60,11 @@ class FoundationIntegrationTest {
         var response = get("/api/v1/system/health");
         assertThat(response.statusCode()).isEqualTo(200);
         assertThat(mapper.readTree(response.body()).get("status").asText()).isEqualTo("UP");
+        assertThat(mapper.readTree(response.body()).size()).isEqualTo(1);
         assertThat(response.headers().firstValue("Cache-Control")).hasValueSatisfying(
                 value -> assertThat(value).contains("no-store"));
         assertThat(response.headers().firstValue("Set-Cookie")).isEmpty();
-        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success", Integer.class))
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success AND version = '001'", Integer.class))
                 .isEqualTo(1);
     }
 
@@ -127,7 +128,7 @@ class FoundationIntegrationTest {
             Thread.sleep(200);
         } while (System.nanoTime() < deadline);
         assertThat(response.statusCode()).isEqualTo(200);
-        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success", Integer.class))
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success AND version = '001'", Integer.class))
                 .isEqualTo(1);
     }
 

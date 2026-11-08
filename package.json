@@ -16,6 +16,11 @@
     "services:stop": "node scripts/local.mjs stop",
     "services:s3": "node scripts/local.mjs s3",
     "services:status": "node scripts/local.mjs status",
+    "seed:local": "node scripts/seed-local.mjs",
+    "api:validate": "node scripts/api-contract.mjs validate",
+    "api:generate": "node scripts/api-contract.mjs generate",
+    "api:check": "node scripts/api-contract.mjs check",
+    "verify:client": "node scripts/api-contract.mjs test",
     "dev": "node scripts/dev.mjs",
     "dev:web": "node scripts/web.mjs dev",
     "dev:api": "node scripts/api.mjs run",
@@ -38,9 +43,14 @@
     "verify:persistence": "node scripts/verify-persistence.mjs"
   },
   "overrides": {
+    "@hey-api/json-schema-ref-parser": {
+      "js-yaml": "4.3.2"
+    },
     "minimatch@^10.2.2": "11.0.1"
   },
   "devDependencies": {
-    "@playwright/test": "1.65.0"
+    "@hey-api/openapi-ts": "0.99.0",
+    "@playwright/test": "1.65.0",
+    "@redocly/openapi-core": "2.76.0"
   }
 }

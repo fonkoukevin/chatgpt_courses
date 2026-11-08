@@ -59,6 +59,8 @@ jobs:
           npm ci
       - name: Lint, typecheck and build the web application
         run: |
+          npm run api:check
+          npm run verify:client
           npm run lint
           npm run typecheck
           npm run build

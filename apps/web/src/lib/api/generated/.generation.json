@@ -1,0 +1,11 @@
+{
+  "source": "docs/api/openapi.yaml",
+  "sha256": "a3378775e2d4de0f70a6b153dcc2e3e2bb00ceceed9d6bd4f7b87a587ddecfbb",
+  "tools": {
+    "@hey-api/openapi-ts": "0.99.0",
+    "@redocly/openapi-core": "2.76.0",
+    "typescript": "6.0.3"
+  },
+  "sourceNormalization": "UTF-8/LF",
+  "transportAnnotations": "unknown-boundary-v1"
+}

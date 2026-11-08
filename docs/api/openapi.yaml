@@ -1,0 +1,194 @@
+openapi: 3.1.1
+info:
+  title: ChatGPT Courses API
+  version: 0.1.0
+  description: >-
+    Contrat des routes réellement disponibles. P03 expose uniquement une sonde
+    publique ; les schémas communs préparent les lots suivants sans créer de CRUD.
+    Une route absente, notamment /system/unknown, reste un véritable 404 Problem.
+servers:
+  - url: /api/v1
+    description: API de même origine, préfixe conservé jusqu'à Spring.
+security: []
+tags:
+  - name: System
+    description: Disponibilité technique, sans données privées ou configuration interne.
+paths:
+  /system/health:
+    get:
+      operationId: getSystemHealth
+      tags: [System]
+      summary: Vérifier la connexion réelle à PostgreSQL.
+      description: >-
+        Public, sans création de session anonyme. UP est renvoyé seulement après
+        une requête SELECT 1 réussie. Une panne de base produit 503 ; une panne ou
+        un délai dépassé du relais de même origine produit 502 ou 504.
+      responses:
+        '200':
+          description: PostgreSQL répond à la requête de disponibilité.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemHealth'
+        '502':
+          $ref: '#/components/responses/ServiceProblem'
+        '503':
+          $ref: '#/components/responses/ServiceProblem'
+        '504':
+          $ref: '#/components/responses/ServiceProblem'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+components:
+  schemas:
+    SystemHealth:
+      type: object
+      additionalProperties: false
+      required: [status]
+      properties:
+        status:
+          type: string
+          const: UP
+    UUID:
+      type: string
+      format: uuid
+      description: Identifiant technique ; ne constitue jamais une autorisation.
+    Locale:
+      type: string
+      enum: [fr, en]
+      description: Langue explicite, indépendante de l'identité pédagogique.
+    UtcInstant:
+      type: string
+      format: date-time
+      pattern: 'Z$'
+      description: Instant ISO 8601 en UTC, avec suffixe Z.
+    Revision:
+      type: integer
+      format: int64
+      minimum: 0
+      maximum: 9007199254740991
+      description: Révision optimiste exacte dans les entiers sûrs JavaScript.
+    Money:
+      type: object
+      additionalProperties: false
+      required: [amountMinor, currency]
+      description: >-
+        Montant exact en unités mineures et devise explicite. Ce schéma ne
+        définit aucun prix ni aucune devise commerciale autorisée.
+      properties:
+        amountMinor:
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 9007199254740991
+        currency:
+          type: string
+          pattern: '^[A-Z]{3}$'
+          description: Code de devise ISO 4217 ; configuration de vente requise.
+    FieldError:
+      type: object
+      additionalProperties: false
+      required: [field, code, message]
+      properties:
+        field:
+          type: string
+          minLength: 1
+          description: Chemin du champ concerné, sans valeur rejetée.
+        code:
+          type: string
+          pattern: '^[A-Z][A-Z0-9_]*$'
+          description: Code stable permettant la traduction du message.
+        message:
+          type: string
+          minLength: 1
+          description: Message sûr ; jamais une valeur privée ou une exception brute.
+    Problem:
+      type: object
+      description: >-
+        RFC 9457. Les codes stables pilotent les traductions. Ni trace technique,
+        secret, valeur de champ rejetée ou donnée privée dans les messages.
+        fieldErrors n'est présent que lorsqu'une validation le nécessite.
+      additionalProperties: false
+      required: [type, title, status, detail, instance, code, traceId]
+      properties:
+        type:
+          type: string
+          format: uri
+          const: about:blank
+        title:
+          type: string
+          minLength: 1
+        status:
+          type: integer
+          minimum: 400
+          maximum: 599
+        detail:
+          type: string
+          minLength: 1
+        instance:
+          type: string
+          format: uri-reference
+          description: Chemin de requête, sans paramètres privés.
+        code:
+          type: string
+          pattern: '^[A-Z][A-Z0-9_]*$'
+          description: >-
+            Notamment RESOURCE_NOT_FOUND, SERVICE_UNAVAILABLE, INTERNAL_ERROR,
+            API_UNAVAILABLE, API_CONFIGURATION_ERROR, API_INVALID_RESPONSE,
+            INVALID_API_PATH, INVALID_REQUEST, VALIDATION_FAILED,
+            INVALID_IF_MATCH, CONFLICT, REVISION_CONFLICT, PRECONDITION_REQUIRED.
+            Cette liste reste ouverte aux erreurs des lots suivants.
+        traceId:
+          $ref: '#/components/schemas/UUID'
+        fieldErrors:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/FieldError'
+  headers:
+    NoStore:
+      description: Réponse non stockable ; les erreurs sont également privées.
+      schema:
+        type: string
+        enum: [no-store, 'private, no-store']
+    ETag:
+      description: >-
+        Convention préparée : ETag fort reçu du serveur pour une ressource
+        modifiable. Aucune mutation correspondante n'est disponible en P03.
+      schema:
+        type: string
+        pattern: '^"[^"\\]*"$'
+  parameters:
+    IfMatch:
+      name: If-Match
+      in: header
+      required: true
+      description: >-
+        Convention préparée pour les futures mutations : reprendre l'ETag fort
+        reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée
+        ou tag faible : 412 ; syntaxe invalide : 400. La comparaison et l'écriture
+        doivent être atomiques. Aucun endpoint factice n'est ajouté en P03.
+      schema:
+        type: string
+        minLength: 1
+  responses:
+    ProblemResponse:
+      description: Erreur explicite ; aucune donnée de remplacement.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    ServiceProblem:
+      description: Service, base de données ou connexion au relais indisponible.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'

@@ -1,11 +1,9 @@
 package com.chatgptcourses.operations;
 
-import com.chatgptcourses.shared.http.ApiProblems;
-import jakarta.servlet.http.HttpServletRequest;
-import java.util.Map;
+import com.chatgptcourses.shared.http.ApiError;
+import com.chatgptcourses.shared.http.ApiException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.CacheControl;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,21 +18,16 @@ class SystemHealthController {
     }
 
     @GetMapping("/api/v1/system/health")
-    ResponseEntity<?> health(HttpServletRequest request) {
+    ResponseEntity<SystemHealthResponse> health() {
         try {
             if (!Integer.valueOf(1).equals(jdbc.queryForObject("SELECT 1", Integer.class))) {
-                return unavailable(request);
+                throw new ApiException(ApiError.SERVICE_UNAVAILABLE);
             }
-            return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(Map.of("status", "UP"));
+            return ResponseEntity.ok().cacheControl(CacheControl.noStore())
+                    .body(new SystemHealthResponse(SystemHealthResponse.Status.UP));
         } catch (DataAccessException exception) {
-            return unavailable(request);
+            throw new ApiException(ApiError.SERVICE_UNAVAILABLE);
         }
     }
 
-    private ResponseEntity<?> unavailable(HttpServletRequest request) {
-        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
-                .cacheControl(CacheControl.noStore())
-                .body(ApiProblems.create(HttpStatus.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE",
-                        "Le service est temporairement indisponible.", request.getRequestURI()));
-    }
 }

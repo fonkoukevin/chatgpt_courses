@@ -5,6 +5,7 @@ import com.chatgptcourses.commerce.service.CommerceTypes.OrderSnapshot;
 import com.chatgptcourses.notifications.TransactionalNotifications;
 import com.chatgptcourses.payments.config.StripeSettings;
 import com.chatgptcourses.payments.gateway.StripePaymentGateway;
+import com.chatgptcourses.payments.refunds.RefundService;
 import com.chatgptcourses.payments.service.PaymentTypes.CheckoutFacts;
 import com.chatgptcourses.payments.service.PaymentTypes.CheckoutParameters;
 import java.sql.ResultSet;
@@ -25,8 +26,8 @@ import tools.jackson.databind.ObjectMapper;
 @Service
 public class PaymentReconciler {
     public enum Outcome { READY, WAITING, DONE, IGNORED, LOST }
-    private final JdbcTemplate jdbc;private final ObjectMapper mapper;private final TransactionalNotifications notifications;private final StripeSettings settings;private final TransactionTemplate tx;
-    public PaymentReconciler(JdbcTemplate jdbc,ObjectMapper mapper,TransactionalNotifications notifications,StripeSettings settings,PlatformTransactionManager manager){this.jdbc=jdbc;this.mapper=mapper;this.notifications=notifications;this.settings=settings;tx=new TransactionTemplate(manager);tx.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);}
+    private final JdbcTemplate jdbc;private final ObjectMapper mapper;private final TransactionalNotifications notifications;private final StripeSettings settings;private final TransactionTemplate tx;private final RefundService refunds;
+    public PaymentReconciler(JdbcTemplate jdbc,ObjectMapper mapper,TransactionalNotifications notifications,StripeSettings settings,PlatformTransactionManager manager,RefundService refunds){this.jdbc=jdbc;this.mapper=mapper;this.notifications=notifications;this.settings=settings;this.refunds=refunds;tx=new TransactionTemplate(manager);tx.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);}
     Outcome missingSession(Claim claim){return tx.execute(status->{
         if(claim==null||!"RECONCILIATION_JOB".equals(claim.kind())||claim.operationId()==null||claim.orderId()==null)return Outcome.IGNORED;
         var op=lock(claim.operationId(),claim.orderId());if(op==null)return Outcome.IGNORED;if(!claimCurrent(claim))return Outcome.LOST;
@@ -57,12 +58,7 @@ public class PaymentReconciler {
         var order=order(op.orderId());
         if(!matches(f,op,order)) {issue(op,order,"PAYMENT_FACTS_MISMATCH");return new Recognition(Outcome.DONE,"PAYMENT_FACTS_MISMATCH");}
         bind(op,f);
-        if(f.refundedAmount()>0||order.refunded()){
-            boolean paid="PAID".equals(order.payment())||succeeded(f,order);
-            String state=terminal(order)?order.state():"NEEDS_REVIEW";
-            jdbc.update("UPDATE orders SET payment_refunded=true,order_status=?,payment_status=?,paid_at=CASE WHEN ? THEN coalesce(paid_at,greatest(created_at,clock_timestamp())) ELSE paid_at END,fulfillment_status='NEEDS_REVIEW',revision=revision+1 WHERE id=?",state,paid?"PAID":order.payment(),paid,order.id());
-            return new Recognition(Outcome.DONE,null);
-        }
+        if(f.refundedAmount()>0)refunds.observeCheckoutRefund(order.id(),f.refundedAmount());
         // Older concurrent reads cannot undo an already established financial success.
         if("PAID".equals(order.payment()))return new Recognition(Outcome.READY,null);
         if(succeeded(f,order)){
@@ -99,13 +95,14 @@ public class PaymentReconciler {
     private void bind(Operation op,CheckoutFacts f){
         String state="COMPLETE".equals(op.state())||"complete".equals(f.sessionStatus())?"COMPLETE":"expired".equals(f.sessionStatus())?"EXPIRED":"OPEN";
         String url=safeUrl(f.url());
-        jdbc.update("UPDATE checkout_operations SET session_id=?,session_url=coalesce(session_url,?),state=?,lease_token=NULL,lease_until=NULL,last_error_code=NULL,updated_at=greatest(created_at,clock_timestamp()),revision=revision+1 WHERE id=?",f.sessionId(),url,state,op.id());
+        jdbc.update("UPDATE checkout_operations SET session_id=?,session_url=coalesce(session_url,?),payment_intent_id=coalesce(payment_intent_id,?),state=?,lease_token=NULL,lease_until=NULL,last_error_code=NULL,updated_at=greatest(created_at,clock_timestamp()),revision=revision+1 WHERE id=?",f.sessionId(),url,f.paymentIntentId(),state,op.id());
     }
     private Outcome fulfill(UUID operation,Claim claim){
         var ids=jdbc.query("SELECT order_id FROM checkout_operations WHERE id=?",(rs,n)->rs.getObject(1,UUID.class),operation);if(ids.isEmpty())return Outcome.IGNORED;
         var op=lock(operation,ids.getFirst());if(op==null)return Outcome.IGNORED;if(!claimCurrent(claim))return Outcome.LOST;var order=order(op.orderId());
-        if(!"PAID".equals(order.payment())||order.refunded())return Outcome.DONE;
-        boolean revoked=Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM access_grants g JOIN order_resources r ON r.id=g.order_resource_id WHERE r.order_id=? AND g.revoked_at IS NOT NULL)",Boolean.class,order.id()));
+        if(!"PAID".equals(order.payment()))return Outcome.DONE;
+        if(refunds.activationBlocked(order.id())){if(!"READY".equals(order.fulfillment())&&!"NEEDS_REVIEW".equals(order.fulfillment()))jdbc.update("UPDATE orders SET fulfillment_status='NEEDS_REVIEW',revision=revision+1 WHERE id=?",order.id());return Outcome.DONE;}
+        boolean revoked=Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM access_grants g JOIN order_resources r ON r.id=g.order_resource_id WHERE r.order_id=? AND g.revoked_at IS NOT NULL AND NOT EXISTS(SELECT 1 FROM refund_access_blocks b WHERE b.order_resource_id=r.id))",Boolean.class,order.id()));
         if(revoked){if(!"NEEDS_REVIEW".equals(order.fulfillment()))jdbc.update("UPDATE orders SET fulfillment_status='NEEDS_REVIEW',revision=revision+1 WHERE id=?",order.id());return Outcome.DONE;}
         if("READY".equals(order.fulfillment()))return Outcome.READY;
         var resources=jdbc.queryForList("SELECT id,resource_id,version_id,locales::text AS languages FROM order_resources WHERE order_id=? ORDER BY id",order.id());var expected=order.snapshot().resources();
@@ -116,6 +113,7 @@ public class PaymentReconciler {
         Instant updates="PERIOD".equals(conditions.updates().mode())?activation.plus(conditions.updates().days(),ChronoUnit.DAYS):null;
         for(Map<String,Object> resource:resources){
             UUID id=(UUID)resource.get("id");var match=expected.stream().filter(r->r.id().equals(id)&&r.resourceId().equals(resource.get("resource_id"))&&r.versionId().equals(resource.get("version_id"))).findFirst().orElseThrow(()->new Failure("ORDER_RESOURCES_MISMATCH",false));
+            if(Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM refund_access_blocks WHERE order_resource_id=?)",Boolean.class,id)))continue;
             if(!mapper.readTree(resource.get("languages").toString()).equals(mapper.valueToTree(match.locales())))throw new Failure("ORDER_RESOURCES_MISMATCH",false);
             jdbc.update("""
                 INSERT INTO access_grants(id,owner_id,resource_id,version_id,origin_type,order_resource_id,locales,version_policy,starts_at,expires_at,updates_until)

@@ -8,9 +8,9 @@ export const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 export const windows = process.platform === 'win32';
 export const runtimeDir = join(root, '.runtime');
 
-export function environment() {
+export function environment({ loadLocal = true } = {}) {
   const localFile = join(root, '.env.local');
-  if (existsSync(localFile) && (!process.env.APP_ENV || process.env.APP_ENV === 'local')) {
+  if (loadLocal && existsSync(localFile) && (!process.env.APP_ENV || process.env.APP_ENV === 'local')) {
     process.loadEnvFile(localFile);
   }
   const env = { ...process.env };
@@ -63,14 +63,14 @@ export function command(executable, args = []) {
 
 export function start(executable, args = [], options = {}) {
   const [file, argv] = command(executable, args);
-  return spawn(file, argv, { cwd: root, env: environment(), stdio: 'inherit', windowsHide: true,
-    windowsVerbatimArguments: windows && file === 'cmd.exe', ...options });
+  return spawn(file, argv, { cwd: root, stdio: 'inherit', windowsHide: true,
+    windowsVerbatimArguments: windows && file === 'cmd.exe', ...options, env: options.env ?? environment() });
 }
 
 export function run(executable, args = [], options = {}) {
   const [file, argv] = command(executable, args);
-  const result = spawnSync(file, argv, { cwd: root, env: environment(), stdio: 'inherit', windowsHide: true,
-    windowsVerbatimArguments: windows && file === 'cmd.exe', ...options });
+  const result = spawnSync(file, argv, { cwd: root, stdio: 'inherit', windowsHide: true,
+    windowsVerbatimArguments: windows && file === 'cmd.exe', ...options, env: options.env ?? environment() });
   if (result.error) throw result.error;
   if (result.status !== 0) throw new Error(`Échec de ${executable} (code ${result.status ?? 'signal'}).`);
   return result;

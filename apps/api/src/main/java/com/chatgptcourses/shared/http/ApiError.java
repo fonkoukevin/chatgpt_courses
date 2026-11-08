@@ -46,6 +46,12 @@ public enum ApiError {
     ORDER_NOT_PAYABLE(HttpStatus.CONFLICT, "Cette commande ne permet pas une nouvelle session de paiement."),
     PAYMENT_AMOUNT_NOT_SUPPORTED(HttpStatus.CONFLICT, "Ce montant n’est pas disponible pour ce mode de paiement."),
     STRIPE_WEBHOOK_INVALID(HttpStatus.BAD_REQUEST, "La notification de paiement n’est pas valide."),
+    REFUND_NOT_AVAILABLE(HttpStatus.CONFLICT,"Cette commande ne permet pas cette action de remboursement dans son état actuel."),
+    REFUND_AMOUNT_UNAVAILABLE(HttpStatus.CONFLICT,"Ce montant n’est plus disponible. Vérifiez les remboursements et réservations en cours."),
+    REFUND_PREVIEW_CHANGED(HttpStatus.CONFLICT,"L’aperçu a changé. Vérifiez à nouveau le montant, les lignes et les effets avant de décider."),
+    REFUND_REQUEST_EXISTS(HttpStatus.CONFLICT,"Une demande est déjà ouverte pour cette commande."),
+    REFUND_OPERATION_NOT_EXECUTABLE(HttpStatus.CONFLICT,"Cette opération ne permet pas une nouvelle exécution financière."),
+    INVALID_REFUND_ALLOCATION(HttpStatus.BAD_REQUEST,"Les allocations et les effets sur les lignes sont invalides."),
     REQUEST_TOO_LARGE(HttpStatus.PAYLOAD_TOO_LARGE, "La requête dépasse la taille autorisée."),
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "La requête n’a pas pu être traitée.");
 

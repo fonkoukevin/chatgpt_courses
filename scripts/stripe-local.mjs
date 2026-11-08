@@ -9,7 +9,7 @@ import { StripePrivateFileError, syncStripeWebhookSecret } from './lib/stripe-pr
 
 const action = process.argv[2];
 const pinned = JSON.parse(readFileSync(join(root, 'infra/tools/stripe-cli.windows.json'), 'utf8'));
-const events = 'checkout.session.completed,checkout.session.async_payment_succeeded,checkout.session.async_payment_failed,checkout.session.expired';
+const events = 'checkout.session.completed,checkout.session.async_payment_succeeded,checkout.session.async_payment_failed,checkout.session.expired,refund.created,refund.updated,refund.failed,charge.refunded';
 const privateSecret = join(root, '.runtime/stripe-webhook-secret.txt');
 const equal = (left, right) => { const a = Buffer.from(left), b = Buffer.from(right); return a.length === b.length && timingSafeEqual(a, b); };
 class LocalFailure extends Error { constructor(code) { super(code); this.code = code; } }
@@ -88,7 +88,7 @@ async function listen({ env, forwardTo }) {
       const secret = current.match(/whsec_[A-Za-z0-9]{8,}/)?.[0];
       if (secret) { saveSecret(secret); secretConfirmed = equal(secret, env.STRIPE_WEBHOOK_SECRET); if (!secretConfirmed) return fail('LISTENER_SECRET_MISMATCH'); }
       if (versionConfirmed && secretConfirmed && !announced) { announced = true; clearTimeout(readyTimeout); console.log(`Listener TEST prêt, API ${pinned.expectedApiVersion}, transfert vers ${forwardTo}. Ctrl+C pour arrêter.`); }
-      const event = current.match(/checkout\.session\.(?:completed|async_payment_succeeded|async_payment_failed|expired)/)?.[0];
+      const event = current.match(/checkout\.session\.(?:completed|async_payment_succeeded|async_payment_failed|expired)|refund\.(?:created|updated|failed)|charge\.refunded/)?.[0];
       const status = current.match(/\[([1-5][0-9]{2})\]/)?.[1];
       if (announced && (event || status)) console.log(`Webhook TEST : ${event ?? 'transfert'}${status ? ` HTTP ${status}` : ''}.`);
       // All other CLI output is discarded, including raw errors and credentials.

@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public final class NotificationTypes {
     private NotificationTypes() { }
-    public enum Type { ACCOUNT_CREATED, PASSWORD_RESET, ACCESS_ACTIVATED, SUPPORT_REPLY }
+    public enum Type { ACCOUNT_CREATED, PASSWORD_RESET, ACCESS_ACTIVATED, SUPPORT_REPLY, REFUND_UPDATED }
     public enum Status { PENDING, PROCESSING, RETRY, SENT, DEAD, INDETERMINATE }
     public record Payload(String recipient, String locale, String token, Instant tokenExpiresAt, String resourceTitle, UUID ticketId) {
         @Override public String toString() { return "NotificationPayload[redacted]"; }

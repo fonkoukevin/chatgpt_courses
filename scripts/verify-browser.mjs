@@ -1,6 +1,6 @@
 // Prepared for an explicitly authorized Playwright run; never installs browsers.
 import { randomBytes, randomUUID } from 'node:crypto';
-import { closeSync, existsSync, mkdirSync, openSync, readFileSync, writeFileSync, chmodSync } from 'node:fs';
+import { closeSync, existsSync, mkdirSync, openSync, readFileSync, writeFileSync, chmodSync, copyFileSync } from 'node:fs';
 import { createServer } from 'node:net';
 import { join } from 'node:path';
 import { environment, preflightServers, root, runtimeDir, start, terminateOwned, waitFor, windows } from './lib/runtime.mjs';
@@ -12,7 +12,8 @@ import { assertExternalStripeListenerIsolation, createBrowserExternalStripe } fr
 const env = environment();
 const phase = process.argv[2] ?? 'P01';
 const externalStripe = phase === 'P12_EXTERNAL';
-const paymentPhase = phase === 'P12' || externalStripe;
+const refundPhase = phase === 'P13';
+const paymentPhase = phase === 'P12' || externalStripe || refundPhase;
 const externalStripeConfiguration = externalStripe ? { STRIPE_SECRET_KEY: env.STRIPE_SECRET_KEY, STRIPE_ACCOUNT_ID: env.STRIPE_ACCOUNT_ID,
   STRIPE_MODE: env.STRIPE_MODE ?? 'TEST', STRIPE_API_BASE: env.STRIPE_API_BASE ?? 'https://api.stripe.com' } : null;
 // Optional targeted diagnosis keeps the same isolation and zero automatic retries.
@@ -24,9 +25,9 @@ for (let index = 3; index < process.argv.length; index += 2) {
   else throw new Error('Diagnostic permis : --grep expression et --repeat-each 1..20.');
   diagnosticArgs.push(flag, value);
 }
-if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL'].includes(phase)) throw new Error('Phase de recette inconnue.');
+if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13'].includes(phase)) throw new Error('Phase de recette inconnue.');
 const needsApi = phase !== 'P02';
-const isolatedDatabase = ['P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL'].includes(phase);
+const isolatedDatabase = ['P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13'].includes(phase);
 if (!['local', 'test'].includes(env.APP_ENV)) throw new Error('Vérification navigateur réservée à local/test.');
 const port = (value, fallback) => {
   const text = value ?? String(fallback);
@@ -54,6 +55,10 @@ const runDirectory = join(runtimeDir, `browser-${runId}`);
 const evidence = join(root, `docs/evidence/${phase}-browser`, runId);
 mkdirSync(runDirectory, { recursive: true, mode: 0o700 });
 mkdirSync(evidence, { recursive: true });
+// Every restart uses the exact same build. This also avoids locking Maven's
+// output JAR while the independent PostgreSQL regression suite is running.
+const recipeJar = needsApi ? join(runDirectory, 'api.jar') : null;
+if (recipeJar) copyFileSync(jar, recipeJar);
 const manifest = join(runDirectory, 'processes.json');
 const ipc = windows ? `\\\\.\\pipe\\courses-browser-${randomUUID()}` : join(runDirectory, 'control.sock');
 const token = randomBytes(32).toString('hex');
@@ -110,7 +115,7 @@ async function startApi() {
   if (stopping) throw new Error('Arrêt de la vérification en cours.');
   if (!api || api.terminated) {
     const java = env.JAVA_HOME ? join(env.JAVA_HOME, 'bin', windows ? 'java.exe' : 'java') : 'java';
-    api = launch('api', java, ['-jar', jar, '--debug=false']);
+    api = launch('api', java, ['-jar', recipeJar, '--debug=false']);
   }
   await ready(api, `${env.API_INTERNAL_URL}/api/v1/system/health`);
   return { apiPid: api.child.pid, webPid: web?.child.pid };
@@ -132,7 +137,7 @@ const control = createServer((socket) => {
     handled = true;
     let message;
     try { message = JSON.parse(input.slice(0, input.indexOf('\n'))); } catch { return socket.destroy(); }
-    if (message.token !== token || !['stop-api', 'start-api', 'pause-mailpit', 'resume-mailpit', 'advance-payment', 'start-payment-worker', 'stop-payment-worker', 'replay-external-stripe-event'].includes(message.operation)) return socket.destroy();
+    if (message.token !== token || !['stop-api', 'start-api', 'pause-mailpit', 'resume-mailpit', 'advance-payment', 'start-payment-worker', 'stop-payment-worker', 'replay-external-stripe-event', 'configure-refund', 'advance-refund', 'external-refund', 'start-refund-worker', 'stop-refund-worker'].includes(message.operation)) return socket.destroy();
     controlQueue = controlQueue.then(async () => {
       if (stopping) throw new Error('Arrêt en cours.');
       if (message.operation === 'stop-api') {
@@ -140,8 +145,21 @@ const control = createServer((socket) => {
         return { webPid: web.child.pid };
       }
       if (message.operation === 'advance-payment') {
-        if (phase !== 'P12' || !payments) throw new Error('Transport contrôlé de paiement absent.');
+        if (!['P12','P13'].includes(phase) || !payments) throw new Error('Transport contrôlé de paiement absent.');
         return { webPid: web.child.pid, ...await payments.advance(message.orderId,message.state,message.type,message.replayId) };
+      }
+      if (['configure-refund', 'advance-refund', 'external-refund'].includes(message.operation)) {
+        if (!refundPhase || !payments) throw new Error('Transport contrôlé de remboursement absent.');
+        const result = message.operation === 'configure-refund' ? payments.configureRefund(message.orderId,message.state)
+          : message.operation === 'advance-refund' ? await payments.advanceRefund(message.orderId,message.operationId,message.state,message.type)
+            : await payments.externalRefund(message.orderId,message.amountMinor,message.state);
+        return { webPid: web.child.pid, ...result };
+      }
+      if (['start-refund-worker', 'stop-refund-worker'].includes(message.operation)) {
+        if (!refundPhase || !payments) throw new Error('Worker remboursement absent.');
+        const enabled = message.operation === 'start-refund-worker' ? 'true' : 'false';
+        if (env.REFUND_WORKER_ENABLED !== enabled) { await terminate(api); env.REFUND_WORKER_ENABLED = enabled; }
+        return startApi();
       }
       if (message.operation === 'replay-external-stripe-event') {
         if (!externalStripe || !payments) throw new Error('External TEST listener absent.');
@@ -154,7 +172,7 @@ const control = createServer((socket) => {
         return startApi();
       }
       if (['pause-mailpit', 'resume-mailpit'].includes(message.operation)) {
-        if (!['P10','P12','P12_EXTERNAL'].includes(phase)) throw new Error('Contrôle de service réservé à la recette médias/paiements.');
+        if (!['P10','P12','P12_EXTERNAL','P13'].includes(phase)) throw new Error('Contrôle de service réservé à la recette médias/paiements.');
         setBrowserServicePaused(services.find(({ kind }) => kind === 'mailpit'), message.operation === 'pause-mailpit'); save();
         return { webPid: web.child.pid, apiPid: api?.child.pid };
       }
@@ -177,7 +195,7 @@ try {
     env.COMMERCE_ENABLED = 'true'; env.COMMERCE_ALLOWED_CURRENCIES = 'EUR';
     env.STRIPE_ENABLED = 'false'; delete env.STRIPE_SECRET_KEY; delete env.STRIPE_WEBHOOK_SECRET;
   }
-  if (['P10','P12','P12_EXTERNAL'].includes(phase)) {
+  if (['P10','P12','P12_EXTERNAL','P13'].includes(phase)) {
     services = await createBrowserServices(env, runDirectory, runId, (records) => { services = records; save(); });
     if (phase === 'P10') {
       env.VIDEO_ENABLED = 'true'; env.VIDEO_PROVIDER = 'local-test'; env.VIDEO_LOCAL_ROOT = join(runDirectory, 'private-video');
@@ -187,6 +205,7 @@ try {
     save();
   }
   if (phase === 'P12') { env.API_TIMEOUT_MS = '30000'; payments = await createBrowserPayments(env); }
+  if (refundPhase) { env.API_TIMEOUT_MS = '30000'; payments = await createBrowserPayments(env,{refundsEnabled:true}); env.PAYMENT_INBOX_ENABLED='true'; env.REFUND_WORKER_ENABLED='true'; }
   if (externalStripe) { Object.assign(env, externalStripeConfiguration); payments = await createBrowserExternalStripe(env); }
   await new Promise((resolveListen, rejectListen) => {
     control.once('error', rejectListen);

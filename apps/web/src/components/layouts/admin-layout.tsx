@@ -6,6 +6,7 @@ import { BookOpen, CircleHelp, ClipboardList, Languages, Layers, Mail, Settings,
 import { getShowcaseDictionary } from "@/lib/i18n/showcase";
 import type { Locale } from "@/lib/i18n/locales";
 import { getNotificationsDictionary } from "@/lib/i18n/notifications";
+import { getRefundsDictionary } from "@/lib/i18n/refunds";
 import { Brand, Breadcrumb, FutureItem, LayoutLanguageSwitch, MobileNavigation } from "./layout-parts";
 
 export type ProductAdminNavigation = {
@@ -15,16 +16,19 @@ export type ProductAdminNavigation = {
   navigationDescription: string;
   current?: string;
   notificationsHref?: string;
-  active?: "content" | "notifications";
+  refundsHref?: string;
+  active?: "content" | "notifications" | "refunds";
 };
 
 export function AdminLayout({ locale, children, title, description, product }: { locale: Locale; children: ReactNode; title?: string; description?: string; product?: ProductAdminNavigation }) {
   const { common, admin } = getShowcaseDictionary(locale);
+  const contentActive = !product || !product.active || product.active === "content";
   const navigation = <div className="flex h-full flex-col gap-6 py-4">
     <div className="px-3">{product ? <NextLink href={product.contentHref} prefetch={false} className="inline-flex min-h-11 items-center rounded-input text-base font-semibold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus">ChatGPT Courses<span aria-hidden="true" className="text-brand">.</span></NextLink> : <Brand locale={locale} />}<p className="mt-2 text-[0.8125rem] text-muted-foreground">{common.administration}</p></div>
     <nav aria-label={common.adminNavigation} className="space-y-1">
-      <NextLink href={product?.contentHref ?? `/${locale}/dev/admin`} prefetch={product ? false : undefined} aria-current={product?.active === "notifications" ? undefined : "page"} className={`flex min-h-12 items-center gap-3 rounded-input px-3 py-3 text-sm font-medium no-underline ${product?.active === "notifications" ? "text-link" : "bg-brand-soft text-brand"}`}><BookOpen size={19} aria-hidden="true" />{common.content}</NextLink>
+      <NextLink href={product?.contentHref ?? `/${locale}/dev/admin`} prefetch={product ? false : undefined} aria-current={contentActive ? "page" : undefined} className={`flex min-h-12 items-center gap-3 rounded-input px-3 py-3 text-sm font-medium no-underline ${contentActive ? "bg-brand-soft text-brand" : "text-link"}`}><BookOpen size={19} aria-hidden="true" />{common.content}</NextLink>
       {product?.notificationsHref && <NextLink href={product.notificationsHref} prefetch={false} aria-current={product.active === "notifications" ? "page" : undefined} className={`flex min-h-12 items-center gap-3 rounded-input px-3 py-3 text-sm font-medium no-underline ${product.active === "notifications" ? "bg-brand-soft text-brand" : "text-link"}`}><Mail size={19} aria-hidden="true" />{getNotificationsDictionary(locale).title}</NextLink>}
+      {product?.refundsHref && <NextLink href={product.refundsHref} prefetch={false} aria-current={product.active === "refunds" ? "page" : undefined} className={`flex min-h-12 items-center gap-3 rounded-input px-3 py-3 text-sm font-medium no-underline ${product.active === "refunds" ? "bg-brand-soft text-brand" : "text-link"}`}><ClipboardList size={19} aria-hidden="true" />{getRefundsDictionary(locale).operatorTitle}</NextLink>}
       {!product && <>
       <FutureItem locale={locale} label={common.translations} icon={<Languages size={19} aria-hidden="true" />} />
       <FutureItem locale={locale} label={common.offers} icon={<Layers size={19} aria-hidden="true" />} />

@@ -1,0 +1,13 @@
+"use client";
+import { useId } from "react";
+import { Badge, Checkbox, FormField, Input, Select } from "@/components/ui";
+import type { RefundLine } from "@/lib/api/generated/types.gen";
+import { getRefundsDictionary, getRefundStateDictionary } from "@/lib/i18n/refunds";
+import type { Locale } from "@/lib/i18n/locales";
+import type { AllocationDraft } from "@/lib/refunds/allocations";
+
+export function RefundAllocationEditor({ locale, lines, currency, value, onChange, disabled = false }: { locale: Locale; lines: RefundLine[]; currency: string; value: AllocationDraft; onChange: (value: AllocationDraft) => void; disabled?: boolean }) {
+  const t = getRefundsDictionary(locale), s = getRefundStateDictionary(locale), id = useId();
+  function update(key: string, patch: Partial<AllocationDraft[string]>) { onChange({ ...value, [key]: { ...(value[key] ?? { selected: false, amount: "", accessAction: "" }), ...patch } }); }
+  return <fieldset className="min-w-0 space-y-4"><legend className="mb-3 text-lg font-semibold">{t.lines}</legend><p className="text-sm leading-relaxed text-muted-foreground">{s.allocationHelp}</p><div className="space-y-4">{lines.map((line, index) => { const item = value[line.orderResourceId]; return <div key={line.orderResourceId} className="min-w-0 space-y-4 rounded-panel border border-border p-4" data-refund-allocation={line.orderResourceId}><Checkbox id={`${id}-line-${index}`} label={line.title} checked={item?.selected ?? false} disabled={disabled} onCheckedChange={selected => update(line.orderResourceId, { selected })} /><p className="break-all text-xs leading-relaxed text-muted-foreground">{t.lineReference} : {line.orderResourceId}</p><p className="text-sm text-muted-foreground">{t.version} {line.versionNumber} · {line.locales.map(language => language.toUpperCase()).join(" / ")}</p>{line.originRevoked && <Badge tone="warning">{s.entitlements.REVOKED}</Badge>}{item?.selected && <div className="grid min-w-0 gap-4 sm:grid-cols-2"><FormField id={`${id}-amount-${index}`} label={`${s.allocation} (${currency})`} required><Input inputMode="decimal" value={item.amount} disabled={disabled} onChange={event => update(line.orderResourceId, { amount: event.target.value })} /></FormField><FormField id={`${id}-access-${index}`} label={t.accessEffect} required><Select value={item.accessAction} disabled={disabled} options={[{ value: "", label: t.accessEffect }, { value: "KEEP", label: t.keepAccess }, { value: "REVOKE", label: t.revokeAccess }]} onChange={event => update(line.orderResourceId, { accessAction: event.target.value as AllocationDraft[string]["accessAction"] })} /></FormField></div>}</div>; })}</div></fieldset>;
+}

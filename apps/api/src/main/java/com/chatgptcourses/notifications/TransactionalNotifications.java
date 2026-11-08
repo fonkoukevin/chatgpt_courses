@@ -38,6 +38,9 @@ public class TransactionalNotifications {
     public UUID supportReply(UUID eventId, UUID userId, String email, String locale, UUID ticketId) {
         return enqueue(required(userId),"support:reply:"+required(eventId),Type.SUPPORT_REPLY,new Payload(recipient(email),locale(locale),null,null,null,required(ticketId)));
     }
+    public UUID refundUpdated(UUID operationId,UUID userId,String email,String locale){
+        return enqueue(required(userId),"refund:confirmed:"+required(operationId),Type.REFUND_UPDATED,new Payload(recipient(email),locale(locale),null,null,null,operationId));
+    }
     private UUID enqueue(UUID owner, String key, Type type, Payload payload) {
         if(!Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM user_accounts WHERE id=? AND normalized_email=?)",Boolean.class,owner,payload.recipient())))throw invalid();
         UUID id=UUID.randomUUID();byte[] fingerprint=cipher.fingerprint(type,payload),encrypted=cipher.encrypt(id,type,key,payload);

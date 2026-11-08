@@ -42,7 +42,7 @@ public class PaymentInboxWorker {
     }
     private List<UUID> maintenance(){
         var lost=new java.util.ArrayList<UUID>();
-        for(String table:List.of("stripe_event_inbox","payment_reconciliation_jobs"))lost.addAll(jdbc.query("UPDATE "+table+" SET state=CASE WHEN attempts+1>=? THEN 'DEAD' ELSE 'RETRY' END,attempts=attempts+1,next_attempt_at=CASE WHEN attempts+1>=? THEN NULL ELSE clock_timestamp() END,lease_id=NULL,lease_until=NULL,last_error_code='LEASE_EXPIRED',updated_at=clock_timestamp() WHERE state='PROCESSING' AND lease_until<=clock_timestamp() RETURNING CASE WHEN state='DEAD' THEN operation_id ELSE NULL END",(rs,n)->rs.getObject(1,UUID.class),settings.maxAttempts(),settings.maxAttempts()));
+        for(String table:List.of("stripe_event_inbox","payment_reconciliation_jobs"))lost.addAll(jdbc.query("UPDATE "+table+" SET state=CASE WHEN attempts+1>=? THEN 'DEAD' ELSE 'RETRY' END,attempts=attempts+1,next_attempt_at=CASE WHEN attempts+1>=? THEN NULL ELSE clock_timestamp() END,lease_id=NULL,lease_until=NULL,last_error_code='LEASE_EXPIRED',updated_at=clock_timestamp() WHERE state='PROCESSING' AND lease_until<=clock_timestamp()"+("stripe_event_inbox".equals(table)?" AND event_type IN('checkout.session.completed','checkout.session.async_payment_succeeded','checkout.session.async_payment_failed','checkout.session.expired')":"")+" RETURNING CASE WHEN state='DEAD' THEN operation_id ELSE NULL END",(rs,n)->rs.getObject(1,UUID.class),settings.maxAttempts(),settings.maxAttempts()));
         jdbc.update("""
             INSERT INTO payment_reconciliation_jobs(id,operation_id,order_id,state,next_attempt_at,last_error_code)
             SELECT gen_random_uuid(),p.id,p.order_id,CASE WHEN p.state='NEEDS_REVIEW' THEN 'DEAD' ELSE 'PENDING' END,
@@ -54,7 +54,7 @@ public class PaymentInboxWorker {
             """);return lost;
     }
     private Claim claim(){
-        var events=jdbc.query("SELECT id,object_id,operation_id,order_id FROM stripe_event_inbox WHERE state IN('PENDING','RETRY') AND next_attempt_at<=clock_timestamp() ORDER BY next_attempt_at,created_at,id LIMIT 1 FOR UPDATE SKIP LOCKED",(rs,n)->new Claim(rs.getObject(1,UUID.class),"STRIPE_EVENT",UUID.randomUUID(),rs.getString(2),rs.getObject(3,UUID.class),rs.getObject(4,UUID.class)));
+        var events=jdbc.query("SELECT id,object_id,operation_id,order_id FROM stripe_event_inbox WHERE event_type IN('checkout.session.completed','checkout.session.async_payment_succeeded','checkout.session.async_payment_failed','checkout.session.expired') AND state IN('PENDING','RETRY') AND next_attempt_at<=clock_timestamp() ORDER BY next_attempt_at,created_at,id LIMIT 1 FOR UPDATE SKIP LOCKED",(rs,n)->new Claim(rs.getObject(1,UUID.class),"STRIPE_EVENT",UUID.randomUUID(),rs.getString(2),rs.getObject(3,UUID.class),rs.getObject(4,UUID.class)));
         if(!events.isEmpty()){var event=events.getFirst();claimed(event);return event;}
         var jobs=jdbc.query("""
             SELECT j.id,p.session_id,j.operation_id,j.order_id FROM payment_reconciliation_jobs j JOIN checkout_operations p ON p.id=j.operation_id

@@ -1,6 +1,7 @@
 package com.chatgptcourses.payments.gateway;
 
 import static com.chatgptcourses.payments.service.PaymentTypes.*;
+import static com.chatgptcourses.payments.refunds.RefundTypes.*;
 import com.chatgptcourses.commerce.service.PaymentGateway;
 import com.chatgptcourses.payments.config.StripeSettings;
 import com.chatgptcourses.payments.service.PaymentGatewayException;
@@ -14,6 +15,9 @@ import com.stripe.param.checkout.SessionCreateParams;
 import com.stripe.param.checkout.SessionLineItemListParams;
 import com.stripe.param.checkout.SessionListParams;
 import com.stripe.param.checkout.SessionRetrieveParams;
+import com.stripe.param.RefundCreateParams;
+import com.stripe.param.RefundListParams;
+import com.stripe.param.PaymentIntentRetrieveParams;
 import java.net.URI;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -82,6 +86,50 @@ public final class StripePaymentGateway implements PaymentGateway {
         }catch(StripeException failure){throw classify(failure);}catch(PaymentGatewayException failure){throw failure;}catch(RuntimeException failure){throw new PaymentGatewayException("PROVIDER_RESPONSE_INVALID",true);}
     }
     public static boolean validCheckoutUrl(String value){try{if(value==null||value.length()>4096)return false;var uri=URI.create(value);return "https".equals(uri.getScheme())&&"checkout.stripe.com".equals(uri.getHost())&&uri.getPort()==-1&&uri.getUserInfo()==null&&uri.getPath()!=null&&uri.getPath().startsWith("/c/pay/");}catch(RuntimeException invalid){return false;}}
+    @Override public RefundFacts createRefund(RefundParameters p,String key){
+        ready();if(p==null||p.operationId()==null||p.orderId()==null||p.paymentIntentId()==null||!p.paymentIntentId().matches("pi_[A-Za-z0-9_]{1,250}")||p.amountMinor()<1||p.amountMinor()>99_999_999||key==null||!key.equals("cc-refund-"+p.operationId()))throw new PaymentGatewayException("PROVIDER_REQUEST_INVALID",false);
+        try{
+            var intent=client.v1().paymentIntents().retrieve(p.paymentIntentId(),PaymentIntentRetrieveParams.builder().addExpand("latest_charge").build());
+            if(!Boolean.FALSE.equals(intent.getLivemode())||!"succeeded".equals(intent.getStatus())||intent.getAmountReceived()==null||p.amountMinor()>intent.getAmountReceived()||!p.currency().equals(upper(intent.getCurrency())))throw new PaymentGatewayException("REFUND_PAYMENT_INVALID",false);
+            var params=RefundCreateParams.builder().setPaymentIntent(p.paymentIntentId()).setAmount(p.amountMinor()).setReason(RefundCreateParams.Reason.REQUESTED_BY_CUSTOMER)
+                .putMetadata("refund_operation_id",p.operationId().toString()).putMetadata("order_id",p.orderId().toString()).build();
+            var refund=client.v1().refunds().create(params,RequestOptions.builder().setIdempotencyKey(key).build());
+            var facts=refund(refund,p.paymentIntentId(),false);
+            if(!p.operationId().equals(facts.operationId())||!p.orderId().equals(facts.orderId())||facts.amountMinor()!=p.amountMinor()||!p.currency().equals(facts.currency()))throw new PaymentGatewayException("REFUND_RESPONSE_INVALID",true);
+            return facts;
+        }catch(StripeException failure){throw classify(failure);}catch(PaymentGatewayException failure){throw failure;}catch(RuntimeException failure){throw new PaymentGatewayException("REFUND_RESPONSE_INVALID",true);}
+    }
+    @Override public RefundPaymentFacts retrieveRefunds(String paymentIntentId){
+        ready();if(paymentIntentId==null||!paymentIntentId.matches("pi_[A-Za-z0-9_]{1,250}"))throw new PaymentGatewayException("PROVIDER_REQUEST_INVALID",false);
+        try{
+            var intent=client.v1().paymentIntents().retrieve(paymentIntentId,PaymentIntentRetrieveParams.builder().addExpand("latest_charge").build());var charge=intent.getLatestChargeObject();
+            if(!Boolean.FALSE.equals(intent.getLivemode())||!"succeeded".equals(intent.getStatus())||intent.getAmountReceived()==null||charge==null||!Boolean.FALSE.equals(charge.getLivemode()))throw new PaymentGatewayException("REFUND_PAYMENT_INVALID",false);
+            String after=null;var refunds=new ArrayList<RefundFacts>();
+            for(int page=0;page<3;page++){
+                var builder=RefundListParams.builder().setPaymentIntent(paymentIntentId).setLimit(100L);if(after!=null)builder.setStartingAfter(after);
+                var collection=client.v1().refunds().list(builder.build());
+                for(var row:collection.getData()){var fact=refund(row,paymentIntentId,false);if(!charge.getId().equals(fact.chargeId()))throw new PaymentGatewayException("REFUND_PAYMENT_INVALID",false);refunds.add(fact);}
+                if(!Boolean.TRUE.equals(collection.getHasMore()))return new RefundPaymentFacts(paymentIntentId,charge.getId(),intent.getAmountReceived(),upper(intent.getCurrency()),false,settings.accountId(),refunds,true);
+                if(collection.getData().isEmpty())throw new PaymentGatewayException("REFUND_RESPONSE_INVALID",true);after=collection.getData().getLast().getId();
+            }
+            throw new PaymentGatewayException("REFUND_SEARCH_LIMIT",false);
+        }catch(StripeException failure){throw classify(failure);}catch(PaymentGatewayException failure){throw failure;}catch(RuntimeException failure){throw new PaymentGatewayException("REFUND_RESPONSE_INVALID",true);}
+    }
+    @Override public RefundPaymentFacts retrieveRefundPayment(String objectId,String eventType){
+        ready();try{
+            String payment;
+            if(objectId!=null&&objectId.matches("re_[A-Za-z0-9_]{1,250}")){var r=client.v1().refunds().retrieve(objectId);payment=r.getPaymentIntent();if(payment==null&&r.getCharge()!=null)payment=client.v1().charges().retrieve(r.getCharge()).getPaymentIntent();}
+            else if(objectId!=null&&objectId.matches("ch_[A-Za-z0-9_]{1,250}")){var charge=client.v1().charges().retrieve(objectId);if(!Boolean.FALSE.equals(charge.getLivemode()))throw new PaymentGatewayException("REFUND_PAYMENT_INVALID",false);payment=charge.getPaymentIntent();}
+            else throw new PaymentGatewayException("PROVIDER_REQUEST_INVALID",false);
+            return retrieveRefunds(payment);
+        }catch(StripeException failure){throw classify(failure);}catch(PaymentGatewayException failure){throw failure;}catch(RuntimeException failure){throw new PaymentGatewayException("REFUND_RESPONSE_INVALID",true);}
+    }
+    private RefundFacts refund(com.stripe.model.Refund r,String payment,boolean live){
+        if(r==null||r.getId()==null||!r.getId().matches("re_[A-Za-z0-9_]{1,250}")||r.getPaymentIntent()==null||!payment.equals(r.getPaymentIntent())||r.getAmount()==null||r.getAmount()<1||r.getAmount()>99_999_999||r.getCreated()==null||!java.util.Set.of("pending","requires_action","succeeded","failed","canceled").contains(r.getStatus()))throw new PaymentGatewayException("REFUND_RESPONSE_INVALID",true);
+        var metadata=r.getMetadata();String failure=r.getFailureReason();if(failure!=null&&!failure.matches("[a-z_]{1,64}"))failure="unknown";
+        return new RefundFacts(r.getId(),payment,r.getCharge(),optionalUuid(metadata==null?null:metadata.get("refund_operation_id")),optionalUuid(metadata==null?null:metadata.get("order_id")),r.getAmount(),upper(r.getCurrency()),r.getStatus(),live,settings.accountId(),Instant.ofEpochSecond(r.getCreated()),failure);
+    }
+    private static UUID optionalUuid(String value){if(value==null||!value.matches("[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"))return null;try{return UUID.fromString(value);}catch(IllegalArgumentException invalid){return null;}}
     private void ready(){
         if(!configured())throw new PaymentGatewayException("PAYMENT_NOT_CONFIGURED",false);
         if(accountVerified)return;

@@ -3,9 +3,9 @@ info:
   title: ChatGPT Courses API
   version: 0.1.0
   description: >-
-    Contrat jusqu’à P12 : données pédagogiques, identité et travail privé, offres/commandes,
-    Checkout Stripe test et traitement durable. Les preuves distinguent transport Stripe contrôlé,
-    essai fournisseur externe et production.
+    Contrat jusqu’à P13 : identité, apprentissage et travail privé, commandes/Checkout TEST,
+    demandes, décisions et opérations de remboursement, droits par origine. Recettes locales,
+    intégrations fournisseur TEST et production sont distinguées.
 servers:
   - url: /api/v1
     description: API de même origine, préfixe conservé jusqu'à Spring.
@@ -41,6 +41,8 @@ tags:
     description: >-
       Checkout Stripe hébergé, inbox durable et rapprochement ; retour navigateur sans autorité
       financière.
+  - name: Refunds
+    description: Demandes, décisions, opérations TEST et accès par origine, sans politique légale implicite.
 paths:
   /system/health:
     get:
@@ -5232,9 +5234,9 @@ paths:
         - Payments
       summary: Persister un événement signé avant l’acquittement.
       description: >-
-        Corps JSON UTF8 brut borné64KiB, signature SDK et mode/compte/API version contrôlés. Seul ce
-        POST exact est exempt de CSRF. Transaction inbox commitée avant200 ; déduplication distincte
-        de l’unicité des droits.
+        Octets JSON UTF8 bruts bornés64KiB, signature SDK et mode/compte/API contrôlés. Inbox durable
+        avant200. Checkout et refund.created/refund.updated/refund.failed/charge.refunded sont routés
+        vers leurs workers ; un ancien événement ne recrée pas une origine révoquée.
       security: []
       parameters:
         - name: Stripe-Signature
@@ -5276,9 +5278,7 @@ paths:
           $ref: '#/components/responses/ProblemResponse'
       requestBody:
         required: true
-        description: >-
-          Octets JSON intacts pour la vérification de signature, jamais re-sérialisés avant
-          contrôle.
+        description: Octets JSON intacts pour la vérification de signature, jamais re-sérialisés avant contrôle.
         content:
           application/json:
             schema:
@@ -5517,6 +5517,1006 @@ paths:
         '412':
           $ref: '#/components/responses/ProblemResponse'
         '413':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/orders/{orderId}/refund-context:
+    get:
+      operationId: getMyRefundContext
+      tags:
+        - Refunds
+      summary: Consulter les montants disponibles et les origines de cette commande.
+      description: refunds.read et propriétaire ; les productions restent conservées.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Résultat réel, privé et sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundContext'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/refund-requests:
+    get:
+      operationId: listMyRefundRequests
+      tags:
+        - Refunds
+      summary: Lister les demandes de remboursement autorisées.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: orderId
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Résultat réel, privé et sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundRequestPage'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/refund-requests/{id}:
+    get:
+      operationId: getMyRefundRequest
+      tags:
+        - Refunds
+      summary: Consulter une demande et sa décision distincte.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Résultat réel, privé et sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundRequestView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/refunds:
+    get:
+      operationId: listMyRefunds
+      tags:
+        - Refunds
+      summary: Lister les opérations financières et leurs effets d’accès.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: orderId
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Résultat réel, privé et sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundOperationPage'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/refunds/{id}:
+    get:
+      operationId: getMyRefund
+      tags:
+        - Refunds
+      summary: Consulter une exécution sans confondre attente, échec et réussite.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Résultat réel, privé et sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundOperationView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/orders/{orderId}/refund-context:
+    get:
+      operationId: getAdminRefundContext
+      tags:
+        - Refunds
+      summary: Consulter les montants disponibles et les origines de cette commande.
+      description: refunds.admin.read ; aucun montant externe choisi par le navigateur.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Résultat réel, privé et sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundContext'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/refund-requests:
+    get:
+      operationId: listAdminRefundRequests
+      tags:
+        - Refunds
+      summary: Lister les demandes de remboursement autorisées.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: state
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - REQUESTED
+              - APPROVED
+              - REJECTED
+        - name: orderId
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Résultat réel, privé et sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundRequestPage'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/refund-requests/{id}:
+    get:
+      operationId: getAdminRefundRequest
+      tags:
+        - Refunds
+      summary: Consulter une demande et sa décision distincte.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Résultat réel, privé et sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundRequestView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/refunds:
+    get:
+      operationId: listAdminRefunds
+      tags:
+        - Refunds
+      summary: Lister les opérations financières et leurs effets d’accès.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: state
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - PREPARED
+              - CALLING
+              - UNKNOWN
+              - PENDING
+              - REQUIRES_ACTION
+              - SUCCEEDED
+              - FAILED
+              - CANCELED
+              - NEEDS_REVIEW
+        - name: orderId
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Résultat réel, privé et sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundOperationPage'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/refunds/{id}:
+    get:
+      operationId: getAdminRefund
+      tags:
+        - Refunds
+      summary: Consulter une exécution sans confondre attente, échec et réussite.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Résultat réel, privé et sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundOperationView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/orders/{orderId}/refund-requests:
+    post:
+      operationId: createRefundRequest
+      tags:
+        - Refunds
+      summary: Déposer une demande sur sa commande sans exécuter de remboursement.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRefundRequest'
+      responses:
+        '200':
+          description: Résultat réel, privé et sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundRequestView'
+        '201':
+          description: Résultat réel, privé et sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundRequestView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/entitlements:
+    get:
+      operationId: listMyEntitlements
+      tags:
+        - Refunds
+      summary: Consulter les origines indépendantes de ses accès.
+      description: >-
+        entitlements.read ; langues/versions/périodes par origine. Aucun corps pédagogique ou lien
+        média dans cette projection.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Résultat réel, privé et sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntitlementPage'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/refund-requests/{id}/preview:
+    post:
+      operationId: previewRefund
+      tags:
+        - Refunds
+      summary: Prévisualiser montant, allocations et effet d’accès avant décision.
+      description: >-
+        refunds.decide. Aucun réseau ni réservation ; empreinte revérifiée sous verrou lors de la
+        décision. Pas de répartition implicite du prix du pack.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreviewRefund'
+      responses:
+        '200':
+          description: Résultat réel, privé et sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundPreview'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/refund-requests/{id}/decision:
+    post:
+      operationId: decideRefundRequest
+      tags:
+        - Refunds
+      summary: Décider explicitement, réserver un montant et conserver une décision immuable.
+      description: >-
+        refunds.decide. APPROVE crée PREPARED sans réseau ; REJECT ne crée aucun remboursement. Full
+        cumulatif impose le retrait des seules origines de cette commande.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DecideRefund'
+      responses:
+        '200':
+          description: Résultat réel, privé et sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundDecisionResult'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/refunds/{id}/execute:
+    post:
+      operationId: executeRefund
+      tags:
+        - Refunds
+      summary: Exécuter une opération préparée avec sa clé fournisseur persistée.
+      description: >-
+        Permission précise refunds.execute ou refunds.reconcile selon action ; motif et audit. Une
+        réponse ambiguë ne libère pas sa réservation et ne génère jamais une nouvelle clé fournisseur.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundAction'
+      responses:
+        '200':
+          description: Résultat réel, privé et sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundOperationView'
+        '202':
+          description: Résultat réel, privé et sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundOperationView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/refunds/{id}/cancel:
+    post:
+      operationId: cancelPreparedRefund
+      tags:
+        - Refunds
+      summary: Annuler une réservation encore jamais soumise au fournisseur.
+      description: >-
+        Permission précise refunds.execute ou refunds.reconcile selon action ; motif et audit. Une
+        réponse ambiguë ne libère pas sa réservation et ne génère jamais une nouvelle clé fournisseur.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundAction'
+      responses:
+        '200':
+          description: Résultat réel, privé et sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundOperationView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/refunds/{id}/reconciliation-requests:
+    post:
+      operationId: reconcileRefund
+      tags:
+        - Refunds
+      summary: Replanifier le rapprochement fournisseur sans nouvelle création.
+      description: >-
+        Permission précise refunds.execute ou refunds.reconcile selon action ; motif et audit. Une
+        réponse ambiguë ne libère pas sa réservation et ne génère jamais une nouvelle clé fournisseur.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundAction'
+      responses:
+        '202':
+          description: Résultat réel, privé et sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundOperationView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/refunds/{id}/access-decision:
+    post:
+      operationId: decideExternalRefundAccess
+      tags:
+        - Refunds
+      summary: Décider des droits d’un remboursement externe confirmé à examiner.
+      description: >-
+        refunds.decide ; aucun POST financier. Partiel externe inconnu conservé en NEEDS_REVIEW sans
+        révocation arbitraire.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResolveExternalRefund'
+      responses:
+        '200':
+          description: Résultat réel, privé et sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundOperationView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
           $ref: '#/components/responses/ProblemResponse'
         '428':
           $ref: '#/components/responses/ProblemResponse'
@@ -10206,6 +11206,7 @@ components:
             - ACCOUNT_CREATED
             - ACCESS_ACTIVATED
             - SUPPORT_REPLY
+            - REFUND_UPDATED
         status:
           type: string
           enum:
@@ -10259,8 +11260,8 @@ components:
         payloadAvailable:
           type: boolean
       description: >-
-        Métadonnées opérationnelles seulement : aucune adresse, clé métier, empreinte, charge utile
-        ou valeur chiffrée. L’état SENT suit un envoi déclaré par le transport, pas une promesse de
+        Métadonnées opérationnelles seulement : aucune adresse, clé métier, empreinte, charge utile ou
+        valeur chiffrée. L’état SENT suit un envoi déclaré par le transport, pas une promesse de
         livraison SMTP exactement une fois.
     NotificationPage:
       type: object
@@ -11827,6 +12828,658 @@ components:
       description: >-
         Préparation privée de projet ; permission projects.read et droit sur la source, sans
         corrigé.
+    RefundAllocation:
+      type: object
+      additionalProperties: false
+      required:
+        - orderResourceId
+        - amountMinor
+        - accessAction
+      properties:
+        orderResourceId:
+          $ref: '#/components/schemas/UUID'
+        amountMinor:
+          type: integer
+          minimum: 0
+          maximum: 99999999
+        accessAction:
+          type: string
+          enum:
+            - KEEP
+            - REVOKE
+    CreateRefundRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    RefundAction:
+      type: object
+      additionalProperties: false
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    PreviewRefund:
+      type: object
+      additionalProperties: false
+      required:
+        - amountMinor
+        - allocations
+      properties:
+        amountMinor:
+          type: integer
+          minimum: 1
+          maximum: 99999999
+        allocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefundAllocation'
+          minItems: 1
+          maxItems: 20
+    DecideRefund:
+      type: object
+      additionalProperties: false
+      required:
+        - outcome
+        - reason
+        - previewFingerprint
+        - amountMinor
+        - allocations
+      properties:
+        outcome:
+          type: string
+          enum:
+            - APPROVE
+            - REJECT
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        previewFingerprint:
+          anyOf:
+            - type: string
+              pattern: ^[a-f0-9]{64}$
+              minLength: 64
+              maxLength: 64
+            - type: 'null'
+        amountMinor:
+          anyOf:
+            - type: integer
+              minimum: 1
+              maximum: 99999999
+            - type: 'null'
+        allocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefundAllocation'
+          minItems: 0
+          maxItems: 20
+      description: >-
+        APPROVE exige aperçu courant, montant et allocations explicites. REJECT conserve ces champs à
+        null/null/[] et ne réserve aucun montant. Aucune règle légale automatique.
+    ResolveExternalRefund:
+      type: object
+      additionalProperties: false
+      required:
+        - reason
+        - allocations
+      properties:
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        allocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefundAllocation'
+          minItems: 1
+          maxItems: 20
+    RefundLine:
+      type: object
+      additionalProperties: false
+      required:
+        - orderResourceId
+        - resourceId
+        - versionId
+        - versionNumber
+        - title
+        - locales
+        - originRevoked
+      properties:
+        orderResourceId:
+          $ref: '#/components/schemas/UUID'
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        versionId:
+          $ref: '#/components/schemas/UUID'
+        versionNumber:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        locales:
+          type: array
+          items:
+            $ref: '#/components/schemas/Locale'
+          minItems: 1
+          maxItems: 2
+        originRevoked:
+          type: boolean
+    RefundContext:
+      type: object
+      additionalProperties: false
+      required:
+        - orderId
+        - orderRevision
+        - paymentStatus
+        - fulfillmentStatus
+        - currency
+        - paidAmountMinor
+        - confirmedRefundedMinor
+        - reservedMinor
+        - availableMinor
+        - reconciliationState
+        - canRequest
+        - requestUnavailableReason
+        - lines
+      properties:
+        orderId:
+          $ref: '#/components/schemas/UUID'
+        orderRevision:
+          $ref: '#/components/schemas/Revision'
+        paymentStatus:
+          type: string
+          enum:
+            - NOT_STARTED
+            - REQUIRES_PAYMENT
+            - PROCESSING
+            - PAID
+            - FAILED
+            - EXPIRED
+            - UNKNOWN
+        fulfillmentStatus:
+          type: string
+          enum:
+            - NOT_STARTED
+            - PENDING
+            - READY
+            - RETRYING
+            - NEEDS_REVIEW
+        currency:
+          type: string
+          enum:
+            - EUR
+            - USD
+            - GBP
+        paidAmountMinor:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+        confirmedRefundedMinor:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+        reservedMinor:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+        availableMinor:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+        reconciliationState:
+          type: string
+          enum:
+            - CURRENT
+            - NEEDS_REVIEW
+        canRequest:
+          type: boolean
+        requestUnavailableReason:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 100
+            - type: 'null'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefundLine'
+          minItems: 0
+          maxItems: 20
+      description: >-
+        Montants en unités mineures calculés côté serveur sous le verrou de commande. Les lignes
+        pédagogiques ne possèdent pas de prix unitaire inventé ; les allocations sont des décisions
+        explicites.
+    RefundDecisionView:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - outcome
+        - reason
+        - amountMinor
+        - allocations
+        - operationId
+        - decidedAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        outcome:
+          type: string
+          enum:
+            - APPROVE
+            - REJECT
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        amountMinor:
+          anyOf:
+            - type: integer
+              minimum: 1
+              maximum: 99999999
+            - type: 'null'
+        allocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefundAllocation'
+          minItems: 0
+          maxItems: 20
+        operationId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        decidedAt:
+          $ref: '#/components/schemas/UtcInstant'
+    RefundRequestView:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - revision
+        - orderId
+        - state
+        - reason
+        - decision
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        revision:
+          $ref: '#/components/schemas/Revision'
+        orderId:
+          $ref: '#/components/schemas/UUID'
+        state:
+          type: string
+          enum:
+            - REQUESTED
+            - APPROVED
+            - REJECTED
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        decision:
+          anyOf:
+            - $ref: '#/components/schemas/RefundDecisionView'
+            - type: 'null'
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+        updatedAt:
+          $ref: '#/components/schemas/UtcInstant'
+    RefundPreview:
+      type: object
+      additionalProperties: false
+      required:
+        - requestId
+        - requestRevision
+        - orderId
+        - orderRevision
+        - currency
+        - amountMinor
+        - availableMinor
+        - fullRefund
+        - allocations
+        - lines
+        - fingerprint
+      properties:
+        requestId:
+          $ref: '#/components/schemas/UUID'
+        requestRevision:
+          $ref: '#/components/schemas/Revision'
+        orderId:
+          $ref: '#/components/schemas/UUID'
+        orderRevision:
+          $ref: '#/components/schemas/Revision'
+        currency:
+          type: string
+          enum:
+            - EUR
+            - USD
+            - GBP
+        amountMinor:
+          type: integer
+          minimum: 1
+          maximum: 99999999
+        availableMinor:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+        fullRefund:
+          type: boolean
+        allocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefundAllocation'
+          minItems: 1
+          maxItems: 20
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefundLine'
+          minItems: 0
+          maxItems: 20
+        fingerprint:
+          type: string
+          pattern: ^[a-f0-9]{64}$
+          minLength: 64
+          maxLength: 64
+    RefundOperationView:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - revision
+        - orderId
+        - requestId
+        - origin
+        - state
+        - amountMinor
+        - currency
+        - allocations
+        - accessState
+        - lastErrorCode
+        - createdAt
+        - updatedAt
+        - confirmedAt
+        - notificationStatus
+        - canExecute
+        - canCancel
+        - canReconcile
+        - canDecideAccess
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        revision:
+          $ref: '#/components/schemas/Revision'
+        orderId:
+          $ref: '#/components/schemas/UUID'
+        requestId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        origin:
+          type: string
+          enum:
+            - LOCAL_DECISION
+            - STRIPE_DASHBOARD
+        state:
+          type: string
+          enum:
+            - PREPARED
+            - CALLING
+            - UNKNOWN
+            - PENDING
+            - REQUIRES_ACTION
+            - SUCCEEDED
+            - FAILED
+            - CANCELED
+            - NEEDS_REVIEW
+        amountMinor:
+          type: integer
+          minimum: 1
+          maximum: 99999999
+        currency:
+          type: string
+          enum:
+            - EUR
+            - USD
+            - GBP
+        allocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefundAllocation'
+          minItems: 0
+          maxItems: 20
+        accessState:
+          type: string
+          enum:
+            - NOT_APPLIED
+            - APPLIED
+            - KEPT
+            - NEEDS_REVIEW
+        lastErrorCode:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 100
+            - type: 'null'
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+        updatedAt:
+          $ref: '#/components/schemas/UtcInstant'
+        confirmedAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+        notificationStatus:
+          type: string
+          enum:
+            - NONE
+            - PENDING
+            - SENT
+            - ISSUE
+        canExecute:
+          type: boolean
+        canCancel:
+          type: boolean
+        canReconcile:
+          type: boolean
+        canDecideAccess:
+          type: boolean
+      description: >-
+        Demande/décision/finance/accès sont séparés. Les opérations UNKNOWN et pending gardent leur
+        réservation ; aucune nouvelle clé fournisseur implicite. Aucun PI, payload ou secret exposé.
+        ETag fort refund-operation-{id}-r{revision}-n{notificationStatus}-a{4bits des
+        permissions/actions courantes}, revérifié à chaque mutation.
+    RefundDecisionResult:
+      type: object
+      additionalProperties: false
+      required:
+        - request
+        - operation
+      properties:
+        request:
+          $ref: '#/components/schemas/RefundRequestView'
+        operation:
+          anyOf:
+            - $ref: '#/components/schemas/RefundOperationView'
+            - type: 'null'
+    EntitlementSummary:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - originType
+        - orderId
+        - orderResourceId
+        - resourceId
+        - versionId
+        - versionNumber
+        - title
+        - locales
+        - versionPolicy
+        - state
+        - revokedReason
+        - startsAt
+        - expiresAt
+        - revokedAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        originType:
+          type: string
+          enum:
+            - ORDER_LINE
+            - MANUAL_TEST
+        orderId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        orderResourceId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        versionId:
+          $ref: '#/components/schemas/UUID'
+        versionNumber:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        locales:
+          type: array
+          items:
+            $ref: '#/components/schemas/Locale'
+          minItems: 1
+          maxItems: 2
+        versionPolicy:
+          type: string
+          enum:
+            - PINNED
+            - UPDATES_DURING_PERIOD
+        state:
+          type: string
+          enum:
+            - ACTIVE
+            - NOT_STARTED
+            - EXPIRED
+            - REVOKED
+        revokedReason:
+          anyOf:
+            - type: string
+              enum:
+                - REFUND
+                - ACCESS_REVOKED
+            - type: 'null'
+        startsAt:
+          $ref: '#/components/schemas/UtcInstant'
+        expiresAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+        revokedAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+    RefundRequestPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefundRequestView'
+          minItems: 0
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    RefundOperationPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefundOperationView'
+          minItems: 0
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    EntitlementPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntitlementSummary'
+          minItems: 0
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
   headers:
     NoStore:
       description: Réponse non stockable ; les erreurs sont également privées.

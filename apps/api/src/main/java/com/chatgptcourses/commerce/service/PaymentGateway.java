@@ -5,6 +5,7 @@ import com.chatgptcourses.shared.http.ApiException;
 import java.util.UUID;
 import java.util.Optional;
 import static com.chatgptcourses.payments.service.PaymentTypes.*;
+import static com.chatgptcourses.payments.refunds.RefundTypes.*;
 
 /** P12 supplies a verified payment adapter. No browser-controlled transition to paid exists. */
 public interface PaymentGateway {
@@ -15,4 +16,7 @@ public interface PaymentGateway {
     default CreatedCheckout createCheckout(CheckoutParameters parameters,String providerIdempotencyKey){throw new com.chatgptcourses.payments.service.PaymentGatewayException("PAYMENT_NOT_CONFIGURED",false);}
     default CheckoutFacts retrieveCheckoutFacts(String sessionId){throw new com.chatgptcourses.payments.service.PaymentGatewayException("PAYMENT_NOT_CONFIGURED",false);}
     default Optional<CheckoutFacts> findCheckoutFacts(CheckoutParameters parameters){throw new com.chatgptcourses.payments.service.PaymentGatewayException("PAYMENT_NOT_CONFIGURED",false);}
+    default RefundFacts createRefund(RefundParameters parameters,String providerIdempotencyKey){throw new com.chatgptcourses.payments.service.PaymentGatewayException("PAYMENT_NOT_CONFIGURED",false);}
+    default RefundPaymentFacts retrieveRefunds(String paymentIntentId){throw new com.chatgptcourses.payments.service.PaymentGatewayException("PAYMENT_NOT_CONFIGURED",false);}
+    default RefundPaymentFacts retrieveRefundPayment(String objectId,String eventType){throw new com.chatgptcourses.payments.service.PaymentGatewayException("PAYMENT_NOT_CONFIGURED",false);}
 }

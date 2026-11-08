@@ -7,7 +7,11 @@ export function replayExternalStripeEvent(eventId: string, orderId: string): Pro
   return sendControl('replay-external-stripe-event', { eventId, orderId });
 }
 
-export function controlApi(operation: 'stop-api' | 'start-api' | 'pause-mailpit' | 'resume-mailpit' | 'start-payment-worker' | 'stop-payment-worker'): Promise<Result> {
+export function controlRefund(operation:'configure-refund'|'advance-refund'|'external-refund',data:{orderId:string;operationId?:string;state:string;type?:string;amountMinor?:number}):Promise<Result>{
+  return sendControl(operation,data);
+}
+
+export function controlApi(operation: 'stop-api' | 'start-api' | 'pause-mailpit' | 'resume-mailpit' | 'start-payment-worker' | 'stop-payment-worker'|'start-refund-worker'|'stop-refund-worker'): Promise<Result> {
   return sendControl(operation);
 }
 
@@ -16,7 +20,7 @@ export function controlPayment(orderId: string, state: 'OPEN'|'PROCESSING'|'PAID
   return sendControl('advance-payment', {orderId,state,type,...(replayId ? {replayId} : {})});
 }
 
-function sendControl(operation: string, data: Record<string, string> = {}): Promise<Result> {
+function sendControl(operation: string, data: Record<string, string|number> = {}): Promise<Result> {
   const ipc = process.env.COURSES_BROWSER_IPC;
   const token = process.env.COURSES_BROWSER_TOKEN;
   if (!ipc || !token) throw new Error('Superviseur navigateur absent.');
@@ -25,7 +29,7 @@ function sendControl(operation: string, data: Record<string, string> = {}): Prom
     let input = '';
     let settled = false;
     const fail = (error: Error) => { settled = true; socket.destroy(); rejectCommand(error); };
-    socket.setTimeout(process.env.COURSES_BROWSER_PHASE?.startsWith('P12') ? 360_000 : 90_000, () => fail(new Error('Commande IPC expirée.')));
+    socket.setTimeout(process.env.COURSES_BROWSER_PHASE?.startsWith('P12') || process.env.COURSES_BROWSER_PHASE === 'P13' ? 360_000 : 90_000, () => fail(new Error('Commande IPC expirée.')));
     socket.once('error', () => fail(new Error('Connexion au superviseur interrompue.')));
     socket.once('connect', () => socket.write(`${JSON.stringify({ token, operation, ...data })}\n`));
     socket.on('data', (chunk) => {

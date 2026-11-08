@@ -6,7 +6,7 @@ const integer = (value: unknown, min = 0, max = Number.MAX_SAFE_INTEGER): value 
 const instant = (value: unknown): value is string => typeof value === "string" && value.endsWith("Z") && Number.isFinite(Date.parse(value));
 export function isNotificationSummary(value: unknown): value is NotificationSummary {
   return record(value) && exact(value, ["id", "type", "status", "attempts", "cycleAttempts", "requeueCount", "nextAttemptAt", "leaseUntil", "lastErrorCode", "createdAt", "updatedAt", "expiresAt", "sentAt", "purgedAt", "payloadAvailable"])
-    && isUuid(value.id) && typeof value.type === "string" && ["PASSWORD_RESET", "ACCOUNT_CREATED", "ACCESS_ACTIVATED", "SUPPORT_REPLY"].includes(value.type)
+    && isUuid(value.id) && typeof value.type === "string" && ["PASSWORD_RESET", "ACCOUNT_CREATED", "ACCESS_ACTIVATED", "SUPPORT_REPLY", "REFUND_UPDATED"].includes(value.type)
     && typeof value.status === "string" && ["PENDING", "PROCESSING", "RETRY", "SENT", "DEAD", "INDETERMINATE"].includes(value.status)
     && integer(value.attempts) && integer(value.cycleAttempts) && value.cycleAttempts <= value.attempts && integer(value.requeueCount)
     && [value.nextAttemptAt, value.leaseUntil, value.sentAt, value.purgedAt].every((date) => date === null || instant(date))

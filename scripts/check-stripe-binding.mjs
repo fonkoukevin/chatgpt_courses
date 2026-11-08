@@ -5,6 +5,8 @@ import { parseEnv } from 'node:util';
 import { environment, root, windows } from './lib/runtime.mjs';
 
 async function main() {
+  const phase = process.argv[2] ?? 'P12';
+  if (!['P12', 'P13'].includes(phase) || process.argv.length > 3) throw new Error();
   const privateFile = join(root, '.env.local');
   if (!windows || spawnSync('git', ['check-ignore', '-q', '--', privateFile], { cwd: root, windowsHide: true }).status !== 0) throw new Error();
   const fromFile = parseEnv(readFileSync(privateFile, 'utf8')), env = environment();
@@ -26,7 +28,7 @@ async function main() {
   const flags = JSON.parse(found[1]);
   if (Object.values(flags).some(value => typeof value !== 'boolean')) throw new Error();
   const report = { verifiedAt: new Date().toISOString(), ...flags, privateFileMatchesProcessEnvironment: true, workersDisabledForProbe: true, temporaryServerStopped: true, externalStripeCalled: false };
-  writeFileSync(join(root, 'docs/evidence/P12-private-config-check.json'), JSON.stringify(report, null, 2) + '\n');
+  writeFileSync(join(root, `docs/evidence/${phase}-private-config-check.json`), JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify(report));
 }
 main().catch(() => { console.error('Binding Stripe non confirmé. Vérifier le JDK, le JAR construit, PostgreSQL et les paramètres privés TEST. Sorties brutes volontairement non affichées.'); process.exitCode = 1; });

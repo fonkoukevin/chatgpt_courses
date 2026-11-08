@@ -130,6 +130,12 @@ courses:
     read-timeout: ${STRIPE_READ_TIMEOUT:8s}
     recovery-window: ${STRIPE_RECOVERY_WINDOW:10m}
   payments:
+    refunds:
+      worker-enabled: ${REFUND_WORKER_ENABLED:false}
+      poll-delay: ${REFUND_POLL_DELAY:2s}
+      lease-duration: ${REFUND_LEASE_DURATION:120s}
+      retry-delay: ${REFUND_RETRY_DELAY:10s}
+      max-attempts: ${REFUND_MAX_ATTEMPTS:5}
     inbox:
       worker-enabled: ${PAYMENT_INBOX_ENABLED:true}
       poll-delay: ${PAYMENT_INBOX_POLL_DELAY:1s}

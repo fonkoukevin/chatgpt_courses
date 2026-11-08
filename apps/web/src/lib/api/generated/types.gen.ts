@@ -1669,7 +1669,7 @@ export type AssetDownloadAccess = {
  */
 export type NotificationSummary = {
     id: Uuid;
-    type: 'PASSWORD_RESET' | 'ACCOUNT_CREATED' | 'ACCESS_ACTIVATED' | 'SUPPORT_REPLY';
+    type: 'PASSWORD_RESET' | 'ACCOUNT_CREATED' | 'ACCESS_ACTIVATED' | 'SUPPORT_REPLY' | 'REFUND_UPDATED';
     status: 'PENDING' | 'PROCESSING' | 'RETRY' | 'SENT' | 'DEAD' | 'INDETERMINATE';
     attempts: number;
     cycleAttempts: number;
@@ -2097,6 +2097,174 @@ export type MemberProjectTemplate = {
     availability: 'PUBLISHED' | 'MISSING_TRANSLATION' | 'STALE' | 'WITHDRAWN' | 'PROTECTED' | 'NOT_CONFIGURED';
     resource: MemberResourceDetail | null;
     rubric: ProjectRubricDefinition | null;
+};
+
+export type RefundAllocation = {
+    orderResourceId: Uuid;
+    amountMinor: number;
+    accessAction: 'KEEP' | 'REVOKE';
+};
+
+export type CreateRefundRequest = {
+    reason: string;
+};
+
+export type RefundAction = {
+    reason: string;
+};
+
+export type PreviewRefund = {
+    amountMinor: number;
+    allocations: Array<RefundAllocation>;
+};
+
+/**
+ * APPROVE exige aperçu courant, montant et allocations explicites. REJECT conserve ces champs à null/null/[] et ne réserve aucun montant. Aucune règle légale automatique.
+ */
+export type DecideRefund = {
+    outcome: 'APPROVE' | 'REJECT';
+    reason: string;
+    previewFingerprint: string | null;
+    amountMinor: number | null;
+    allocations: Array<RefundAllocation>;
+};
+
+export type ResolveExternalRefund = {
+    reason: string;
+    allocations: Array<RefundAllocation>;
+};
+
+export type RefundLine = {
+    orderResourceId: Uuid;
+    resourceId: Uuid;
+    versionId: Uuid;
+    versionNumber: number;
+    title: string;
+    locales: Array<Locale>;
+    originRevoked: boolean;
+};
+
+/**
+ * Montants en unités mineures calculés côté serveur sous le verrou de commande. Les lignes pédagogiques ne possèdent pas de prix unitaire inventé ; les allocations sont des décisions explicites.
+ */
+export type RefundContext = {
+    orderId: Uuid;
+    orderRevision: Revision;
+    paymentStatus: 'NOT_STARTED' | 'REQUIRES_PAYMENT' | 'PROCESSING' | 'PAID' | 'FAILED' | 'EXPIRED' | 'UNKNOWN';
+    fulfillmentStatus: 'NOT_STARTED' | 'PENDING' | 'READY' | 'RETRYING' | 'NEEDS_REVIEW';
+    currency: 'EUR' | 'USD' | 'GBP';
+    paidAmountMinor: number;
+    confirmedRefundedMinor: number;
+    reservedMinor: number;
+    availableMinor: number;
+    reconciliationState: 'CURRENT' | 'NEEDS_REVIEW';
+    canRequest: boolean;
+    requestUnavailableReason: string | null;
+    lines: Array<RefundLine>;
+};
+
+export type RefundDecisionView = {
+    id: Uuid;
+    outcome: 'APPROVE' | 'REJECT';
+    reason: string;
+    amountMinor: number | null;
+    allocations: Array<RefundAllocation>;
+    operationId: Uuid | null;
+    decidedAt: UtcInstant;
+};
+
+export type RefundRequestView = {
+    id: Uuid;
+    revision: Revision;
+    orderId: Uuid;
+    state: 'REQUESTED' | 'APPROVED' | 'REJECTED';
+    reason: string;
+    decision: RefundDecisionView | null;
+    createdAt: UtcInstant;
+    updatedAt: UtcInstant;
+};
+
+export type RefundPreview = {
+    requestId: Uuid;
+    requestRevision: Revision;
+    orderId: Uuid;
+    orderRevision: Revision;
+    currency: 'EUR' | 'USD' | 'GBP';
+    amountMinor: number;
+    availableMinor: number;
+    fullRefund: boolean;
+    allocations: Array<RefundAllocation>;
+    lines: Array<RefundLine>;
+    fingerprint: string;
+};
+
+/**
+ * Demande/décision/finance/accès sont séparés. Les opérations UNKNOWN et pending gardent leur réservation ; aucune nouvelle clé fournisseur implicite. Aucun PI, payload ou secret exposé. ETag fort refund-operation-{id}-r{revision}-n{notificationStatus}-a{4bits des permissions/actions courantes}, revérifié à chaque mutation.
+ */
+export type RefundOperationView = {
+    id: Uuid;
+    revision: Revision;
+    orderId: Uuid;
+    requestId: Uuid | null;
+    origin: 'LOCAL_DECISION' | 'STRIPE_DASHBOARD';
+    state: 'PREPARED' | 'CALLING' | 'UNKNOWN' | 'PENDING' | 'REQUIRES_ACTION' | 'SUCCEEDED' | 'FAILED' | 'CANCELED' | 'NEEDS_REVIEW';
+    amountMinor: number;
+    currency: 'EUR' | 'USD' | 'GBP';
+    allocations: Array<RefundAllocation>;
+    accessState: 'NOT_APPLIED' | 'APPLIED' | 'KEPT' | 'NEEDS_REVIEW';
+    lastErrorCode: string | null;
+    createdAt: UtcInstant;
+    updatedAt: UtcInstant;
+    confirmedAt: UtcInstant | null;
+    notificationStatus: 'NONE' | 'PENDING' | 'SENT' | 'ISSUE';
+    canExecute: boolean;
+    canCancel: boolean;
+    canReconcile: boolean;
+    canDecideAccess: boolean;
+};
+
+export type RefundDecisionResult = {
+    request: RefundRequestView;
+    operation: RefundOperationView | null;
+};
+
+export type EntitlementSummary = {
+    id: Uuid;
+    originType: 'ORDER_LINE' | 'MANUAL_TEST';
+    orderId: Uuid | null;
+    orderResourceId: Uuid | null;
+    resourceId: Uuid;
+    versionId: Uuid;
+    versionNumber: number;
+    title: string;
+    locales: Array<Locale>;
+    versionPolicy: 'PINNED' | 'UPDATES_DURING_PERIOD';
+    state: 'ACTIVE' | 'NOT_STARTED' | 'EXPIRED' | 'REVOKED';
+    revokedReason: 'REFUND' | 'ACCESS_REVOKED' | null;
+    startsAt: UtcInstant;
+    expiresAt: UtcInstant | null;
+    revokedAt: UtcInstant | null;
+};
+
+export type RefundRequestPage = {
+    items: Array<RefundRequestView>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+export type RefundOperationPage = {
+    items: Array<RefundOperationView>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+export type EntitlementPage = {
+    items: Array<EntitlementSummary>;
+    page: number;
+    pageSize: number;
+    total: number;
 };
 
 export type RegisterRequestWritable = {
@@ -8310,3 +8478,1203 @@ export type GetMemberProjectTemplateResponses = {
 };
 
 export type GetMemberProjectTemplateResponse = GetMemberProjectTemplateResponses[keyof GetMemberProjectTemplateResponses];
+
+export type GetMyRefundContextData = {
+    body?: never;
+    path: {
+        orderId: Uuid;
+    };
+    query?: never;
+    url: '/me/orders/{orderId}/refund-context';
+};
+
+export type GetMyRefundContextErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetMyRefundContextError = GetMyRefundContextErrors[keyof GetMyRefundContextErrors];
+
+export type GetMyRefundContextResponses = {
+    /**
+     * Résultat réel, privé et sans cache partagé.
+     */
+    200: RefundContext;
+};
+
+export type GetMyRefundContextResponse = GetMyRefundContextResponses[keyof GetMyRefundContextResponses];
+
+export type ListMyRefundRequestsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        orderId?: Uuid;
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/me/refund-requests';
+};
+
+export type ListMyRefundRequestsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListMyRefundRequestsError = ListMyRefundRequestsErrors[keyof ListMyRefundRequestsErrors];
+
+export type ListMyRefundRequestsResponses = {
+    /**
+     * Résultat réel, privé et sans cache partagé.
+     */
+    200: RefundRequestPage;
+};
+
+export type ListMyRefundRequestsResponse = ListMyRefundRequestsResponses[keyof ListMyRefundRequestsResponses];
+
+export type GetMyRefundRequestData = {
+    body?: never;
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/me/refund-requests/{id}';
+};
+
+export type GetMyRefundRequestErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetMyRefundRequestError = GetMyRefundRequestErrors[keyof GetMyRefundRequestErrors];
+
+export type GetMyRefundRequestResponses = {
+    /**
+     * Résultat réel, privé et sans cache partagé.
+     */
+    200: RefundRequestView;
+};
+
+export type GetMyRefundRequestResponse = GetMyRefundRequestResponses[keyof GetMyRefundRequestResponses];
+
+export type ListMyRefundsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        orderId?: Uuid;
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/me/refunds';
+};
+
+export type ListMyRefundsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListMyRefundsError = ListMyRefundsErrors[keyof ListMyRefundsErrors];
+
+export type ListMyRefundsResponses = {
+    /**
+     * Résultat réel, privé et sans cache partagé.
+     */
+    200: RefundOperationPage;
+};
+
+export type ListMyRefundsResponse = ListMyRefundsResponses[keyof ListMyRefundsResponses];
+
+export type GetMyRefundData = {
+    body?: never;
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/me/refunds/{id}';
+};
+
+export type GetMyRefundErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetMyRefundError = GetMyRefundErrors[keyof GetMyRefundErrors];
+
+export type GetMyRefundResponses = {
+    /**
+     * Résultat réel, privé et sans cache partagé.
+     */
+    200: RefundOperationView;
+};
+
+export type GetMyRefundResponse = GetMyRefundResponses[keyof GetMyRefundResponses];
+
+export type GetAdminRefundContextData = {
+    body?: never;
+    path: {
+        orderId: Uuid;
+    };
+    query?: never;
+    url: '/admin/orders/{orderId}/refund-context';
+};
+
+export type GetAdminRefundContextErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetAdminRefundContextError = GetAdminRefundContextErrors[keyof GetAdminRefundContextErrors];
+
+export type GetAdminRefundContextResponses = {
+    /**
+     * Résultat réel, privé et sans cache partagé.
+     */
+    200: RefundContext;
+};
+
+export type GetAdminRefundContextResponse = GetAdminRefundContextResponses[keyof GetAdminRefundContextResponses];
+
+export type ListAdminRefundRequestsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        state?: 'REQUESTED' | 'APPROVED' | 'REJECTED';
+        orderId?: Uuid;
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/admin/refund-requests';
+};
+
+export type ListAdminRefundRequestsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListAdminRefundRequestsError = ListAdminRefundRequestsErrors[keyof ListAdminRefundRequestsErrors];
+
+export type ListAdminRefundRequestsResponses = {
+    /**
+     * Résultat réel, privé et sans cache partagé.
+     */
+    200: RefundRequestPage;
+};
+
+export type ListAdminRefundRequestsResponse = ListAdminRefundRequestsResponses[keyof ListAdminRefundRequestsResponses];
+
+export type GetAdminRefundRequestData = {
+    body?: never;
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/refund-requests/{id}';
+};
+
+export type GetAdminRefundRequestErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetAdminRefundRequestError = GetAdminRefundRequestErrors[keyof GetAdminRefundRequestErrors];
+
+export type GetAdminRefundRequestResponses = {
+    /**
+     * Résultat réel, privé et sans cache partagé.
+     */
+    200: RefundRequestView;
+};
+
+export type GetAdminRefundRequestResponse = GetAdminRefundRequestResponses[keyof GetAdminRefundRequestResponses];
+
+export type ListAdminRefundsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        state?: 'PREPARED' | 'CALLING' | 'UNKNOWN' | 'PENDING' | 'REQUIRES_ACTION' | 'SUCCEEDED' | 'FAILED' | 'CANCELED' | 'NEEDS_REVIEW';
+        orderId?: Uuid;
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/admin/refunds';
+};
+
+export type ListAdminRefundsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListAdminRefundsError = ListAdminRefundsErrors[keyof ListAdminRefundsErrors];
+
+export type ListAdminRefundsResponses = {
+    /**
+     * Résultat réel, privé et sans cache partagé.
+     */
+    200: RefundOperationPage;
+};
+
+export type ListAdminRefundsResponse = ListAdminRefundsResponses[keyof ListAdminRefundsResponses];
+
+export type GetAdminRefundData = {
+    body?: never;
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/refunds/{id}';
+};
+
+export type GetAdminRefundErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetAdminRefundError = GetAdminRefundErrors[keyof GetAdminRefundErrors];
+
+export type GetAdminRefundResponses = {
+    /**
+     * Résultat réel, privé et sans cache partagé.
+     */
+    200: RefundOperationView;
+};
+
+export type GetAdminRefundResponse = GetAdminRefundResponses[keyof GetAdminRefundResponses];
+
+export type CreateRefundRequestData = {
+    body: CreateRefundRequest;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path: {
+        orderId: Uuid;
+    };
+    query?: never;
+    url: '/me/orders/{orderId}/refund-requests';
+};
+
+export type CreateRefundRequestErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type CreateRefundRequestError = CreateRefundRequestErrors[keyof CreateRefundRequestErrors];
+
+export type CreateRefundRequestResponses = {
+    /**
+     * Résultat réel, privé et sans cache partagé.
+     */
+    200: RefundRequestView;
+    /**
+     * Résultat réel, privé et sans cache partagé.
+     */
+    201: RefundRequestView;
+};
+
+export type CreateRefundRequestResponse = CreateRefundRequestResponses[keyof CreateRefundRequestResponses];
+
+export type ListMyEntitlementsData = {
+    body?: never;
+    path?: never;
+    query: {
+        locale: Locale;
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/me/entitlements';
+};
+
+export type ListMyEntitlementsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListMyEntitlementsError = ListMyEntitlementsErrors[keyof ListMyEntitlementsErrors];
+
+export type ListMyEntitlementsResponses = {
+    /**
+     * Résultat réel, privé et sans cache partagé.
+     */
+    200: EntitlementPage;
+};
+
+export type ListMyEntitlementsResponse = ListMyEntitlementsResponses[keyof ListMyEntitlementsResponses];
+
+export type PreviewRefundData = {
+    body: PreviewRefund;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/refund-requests/{id}/preview';
+};
+
+export type PreviewRefundErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type PreviewRefundError = PreviewRefundErrors[keyof PreviewRefundErrors];
+
+export type PreviewRefundResponses = {
+    /**
+     * Résultat réel, privé et sans cache partagé.
+     */
+    200: RefundPreview;
+};
+
+export type PreviewRefundResponse = PreviewRefundResponses[keyof PreviewRefundResponses];
+
+export type DecideRefundRequestData = {
+    body: DecideRefund;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/refund-requests/{id}/decision';
+};
+
+export type DecideRefundRequestErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type DecideRefundRequestError = DecideRefundRequestErrors[keyof DecideRefundRequestErrors];
+
+export type DecideRefundRequestResponses = {
+    /**
+     * Résultat réel, privé et sans cache partagé.
+     */
+    200: RefundDecisionResult;
+};
+
+export type DecideRefundRequestResponse = DecideRefundRequestResponses[keyof DecideRefundRequestResponses];
+
+export type ExecuteRefundData = {
+    body: RefundAction;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/refunds/{id}/execute';
+};
+
+export type ExecuteRefundErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ExecuteRefundError = ExecuteRefundErrors[keyof ExecuteRefundErrors];
+
+export type ExecuteRefundResponses = {
+    /**
+     * Résultat réel, privé et sans cache partagé.
+     */
+    200: RefundOperationView;
+    /**
+     * Résultat réel, privé et sans cache partagé.
+     */
+    202: RefundOperationView;
+};
+
+export type ExecuteRefundResponse = ExecuteRefundResponses[keyof ExecuteRefundResponses];
+
+export type CancelPreparedRefundData = {
+    body: RefundAction;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/refunds/{id}/cancel';
+};
+
+export type CancelPreparedRefundErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type CancelPreparedRefundError = CancelPreparedRefundErrors[keyof CancelPreparedRefundErrors];
+
+export type CancelPreparedRefundResponses = {
+    /**
+     * Résultat réel, privé et sans cache partagé.
+     */
+    200: RefundOperationView;
+};
+
+export type CancelPreparedRefundResponse = CancelPreparedRefundResponses[keyof CancelPreparedRefundResponses];
+
+export type ReconcileRefundData = {
+    body: RefundAction;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/refunds/{id}/reconciliation-requests';
+};
+
+export type ReconcileRefundErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ReconcileRefundError = ReconcileRefundErrors[keyof ReconcileRefundErrors];
+
+export type ReconcileRefundResponses = {
+    /**
+     * Résultat réel, privé et sans cache partagé.
+     */
+    202: RefundOperationView;
+};
+
+export type ReconcileRefundResponse = ReconcileRefundResponses[keyof ReconcileRefundResponses];
+
+export type DecideExternalRefundAccessData = {
+    body: ResolveExternalRefund;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/refunds/{id}/access-decision';
+};
+
+export type DecideExternalRefundAccessErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type DecideExternalRefundAccessError = DecideExternalRefundAccessErrors[keyof DecideExternalRefundAccessErrors];
+
+export type DecideExternalRefundAccessResponses = {
+    /**
+     * Résultat réel, privé et sans cache partagé.
+     */
+    200: RefundOperationView;
+};
+
+export type DecideExternalRefundAccessResponse = DecideExternalRefundAccessResponses[keyof DecideExternalRefundAccessResponses];

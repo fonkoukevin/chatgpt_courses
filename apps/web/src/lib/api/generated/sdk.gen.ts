@@ -2,7 +2,7 @@
 
 import { type Client, type ClientMeta, type Options as Options2, type RequestResult, type TDataShape, urlSearchParamsBodySerializer } from './client';
 import { client } from './client.gen';
-import type { ActivateOfferData, ActivateOfferErrors, ActivateOfferResponses, ArchiveContentData, ArchiveContentErrors, ArchiveContentResponses, CheckQuizData, CheckQuizErrors, CheckQuizResponses, ConfirmEditorialUploadData, ConfirmEditorialUploadErrors, ConfirmEditorialUploadResponses, ConfirmProjectUploadData, ConfirmProjectUploadErrors, ConfirmProjectUploadResponses, CreateActivityNoteData, CreateActivityNoteErrors, CreateActivityNoteResponses, CreateCheckoutData, CreateCheckoutErrors, CreateCheckoutResponses, CreateContentData, CreateContentErrors, CreateContentResponses, CreateContentTranslationData, CreateContentTranslationErrors, CreateContentTranslationResponses, CreateContentVersionData, CreateContentVersionErrors, CreateContentVersionResponses, CreateEditorialUploadData, CreateEditorialUploadErrors, CreateEditorialUploadResponses, CreateMethodData, CreateMethodErrors, CreateMethodFromTemplateData, CreateMethodFromTemplateErrors, CreateMethodFromTemplateResponses, CreateMethodResponses, CreateOfferData, CreateOfferErrors, CreateOfferResponses, CreateOrderData, CreateOrderErrors, CreateOrderResponses, CreateProjectData, CreateProjectErrors, CreateProjectResponses, CreateProjectUploadData, CreateProjectUploadErrors, CreateProjectUploadResponses, DeactivateOfferData, DeactivateOfferErrors, DeactivateOfferResponses, DeleteMethodData, DeleteMethodErrors, DeleteMethodResponses, DuplicateContentData, DuplicateContentErrors, DuplicateContentResponses, DuplicateMethodData, DuplicateMethodErrors, DuplicateMethodResponses, EnrollCourseData, EnrollCourseErrors, EnrollCourseResponses, FindActivityNoteData, FindActivityNoteErrors, FindActivityNoteResponses, GetActivityNoteData, GetActivityNoteErrors, GetActivityNoteResponses, GetActivityProgressData, GetActivityProgressErrors, GetActivityProgressResponses, GetAdminOfferData, GetAdminOfferErrors, GetAdminOfferResponses, GetAssetDownloadData, GetAssetDownloadErrors, GetAssetDownloadResponses, GetCatalogueFacetsData, GetCatalogueFacetsErrors, GetCatalogueFacetsResponses, GetCatalogueResourceBySlugData, GetCatalogueResourceBySlugErrors, GetCatalogueResourceBySlugResponses, GetCatalogueResourceData, GetCatalogueResourceErrors, GetCatalogueResourceResponses, GetCatalogueResourceVersionData, GetCatalogueResourceVersionErrors, GetCatalogueResourceVersionResponses, GetContentData, GetContentDependenciesData, GetContentDependenciesErrors, GetContentDependenciesResponses, GetContentErrors, GetContentReadinessData, GetContentReadinessErrors, GetContentReadinessResponses, GetContentResponses, GetCsrfTokenData, GetCsrfTokenErrors, GetCsrfTokenResponses, GetCurrentUserData, GetCurrentUserErrors, GetCurrentUserResponses, GetEditorialAssetData, GetEditorialAssetErrors, GetEditorialAssetPreviewData, GetEditorialAssetPreviewErrors, GetEditorialAssetPreviewResponses, GetEditorialAssetResponses, GetEditorialUploadPolicyData, GetEditorialUploadPolicyErrors, GetEditorialUploadPolicyResponses, GetEnrollmentData, GetEnrollmentErrors, GetEnrollmentResponses, GetLearningActivityData, GetLearningActivityErrors, GetLearningActivityResponses, GetLearningDashboardData, GetLearningDashboardErrors, GetLearningDashboardResponses, GetMediaProgressData, GetMediaProgressErrors, GetMediaProgressResponses, GetMemberProjectTemplateData, GetMemberProjectTemplateErrors, GetMemberProjectTemplateResponses, GetMemberResourceData, GetMemberResourceErrors, GetMemberResourceResponses, GetMethodData, GetMethodErrors, GetMethodResponses, GetMethodSourceUpdateData, GetMethodSourceUpdateErrors, GetMethodSourceUpdateResponses, GetMethodTemplateData, GetMethodTemplateErrors, GetMethodTemplateResponses, GetOfferReadinessData, GetOfferReadinessErrors, GetOfferReadinessResponses, GetOrderData, GetOrderErrors, GetOrderPaymentStatusData, GetOrderPaymentStatusErrors, GetOrderPaymentStatusResponses, GetOrderResponses, GetPreferencesData, GetPreferencesErrors, GetPreferencesResponses, GetProjectContextData, GetProjectContextErrors, GetProjectContextResponses, GetProjectData, GetProjectErrors, GetProjectFilePolicyData, GetProjectFilePolicyErrors, GetProjectFilePolicyResponses, GetProjectPresetData, GetProjectPresetErrors, GetProjectPresetResponses, GetProjectResponses, GetProjectRevisionData, GetProjectRevisionErrors, GetProjectRevisionResponses, GetProjectStatusData, GetProjectStatusErrors, GetProjectStatusResponses, GetProjectTemplateData, GetProjectTemplateErrors, GetProjectTemplateResponses, GetPublicContentData, GetPublicContentErrors, GetPublicContentResponses, GetPublicOfferData, GetPublicOfferErrors, GetPublicOfferResponses, GetPurchaseContextData, GetPurchaseContextErrors, GetPurchaseContextResponses, GetQuizAttemptData, GetQuizAttemptErrors, GetQuizAttemptResponses, GetSelfAssessmentData, GetSelfAssessmentErrors, GetSelfAssessmentResponses, GetSystemHealthData, GetSystemHealthErrors, GetSystemHealthResponses, GetVideoMediaData, GetVideoMediaErrors, GetVideoMediaResponses, GetVideoPlaybackData, GetVideoPlaybackErrors, GetVideoPlaybackResponses, GetVideoStreamData, GetVideoStreamErrors, GetVideoStreamResponses, HeadVideoStreamData, HeadVideoStreamErrors, HeadVideoStreamResponses, ListAdminOffersData, ListAdminOffersErrors, ListAdminOffersResponses, ListContentRevisionsData, ListContentRevisionsErrors, ListContentRevisionsResponses, ListContentsData, ListContentsErrors, ListContentsResponses, ListMethodsData, ListMethodsErrors, ListMethodsResponses, ListNotificationsData, ListNotificationsErrors, ListNotificationsResponses, ListOrdersData, ListOrdersErrors, ListOrdersResponses, ListPaymentEventsData, ListPaymentEventsErrors, ListPaymentEventsResponses, ListProjectFilesData, ListProjectFilesErrors, ListProjectFilesResponses, ListProjectRevisionsData, ListProjectRevisionsErrors, ListProjectRevisionsResponses, ListProjectsData, ListProjectsErrors, ListProjectsResponses, ListPublicOffersData, ListPublicOffersErrors, ListPublicOffersResponses, ListQuizAttemptsData, ListQuizAttemptsErrors, ListQuizAttemptsResponses, ListSelfAssessmentsData, ListSelfAssessmentsErrors, ListSelfAssessmentsResponses, LoginData, LoginErrors, LoginResponses, LogoutData, LogoutErrors, LogoutResponses, PreviewContentData, PreviewContentErrors, PreviewContentResponses, PublishContentData, PublishContentErrors, PublishContentResponses, ReceiveStripeWebhookData, ReceiveStripeWebhookErrors, ReceiveStripeWebhookResponses, RegisterData, RegisterErrors, RegisterResponses, ReplaceContentCompositionData, ReplaceContentCompositionErrors, ReplaceContentCompositionResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, RetryNotificationData, RetryNotificationErrors, RetryNotificationResponses, RetryPaymentEventData, RetryPaymentEventErrors, RetryPaymentEventResponses, RevealSolutionData, RevealSolutionErrors, RevealSolutionResponses, SaveContentMetadataData, SaveContentMetadataErrors, SaveContentMetadataResponses, SaveContentRevisionData, SaveContentRevisionErrors, SaveContentRevisionResponses, SaveOfferData, SaveOfferErrors, SaveOfferResponses, SaveProjectData, SaveProjectErrors, SaveProjectResponses, SearchCatalogueData, SearchCatalogueErrors, SearchCatalogueResponses, SetActivityProgressData, SetActivityProgressErrors, SetActivityProgressResponses, SetMediaProgressData, SetMediaProgressErrors, SetMediaProgressResponses, SubmitQuizData, SubmitQuizErrors, SubmitQuizResponses, SubmitSelfAssessmentData, SubmitSelfAssessmentErrors, SubmitSelfAssessmentResponses, TransitionContentData, TransitionContentErrors, TransitionContentResponses, UpdateActivityNoteData, UpdateActivityNoteErrors, UpdateActivityNoteResponses, UpdateMethodData, UpdateMethodErrors, UpdateMethodResponses, UpdatePreferencesData, UpdatePreferencesErrors, UpdatePreferencesResponses, VisitActivityData, VisitActivityErrors, VisitActivityResponses } from './types.gen';
+import type { ActivateOfferData, ActivateOfferErrors, ActivateOfferResponses, ArchiveContentData, ArchiveContentErrors, ArchiveContentResponses, CancelPreparedRefundData, CancelPreparedRefundErrors, CancelPreparedRefundResponses, CheckQuizData, CheckQuizErrors, CheckQuizResponses, ConfirmEditorialUploadData, ConfirmEditorialUploadErrors, ConfirmEditorialUploadResponses, ConfirmProjectUploadData, ConfirmProjectUploadErrors, ConfirmProjectUploadResponses, CreateActivityNoteData, CreateActivityNoteErrors, CreateActivityNoteResponses, CreateCheckoutData, CreateCheckoutErrors, CreateCheckoutResponses, CreateContentData, CreateContentErrors, CreateContentResponses, CreateContentTranslationData, CreateContentTranslationErrors, CreateContentTranslationResponses, CreateContentVersionData, CreateContentVersionErrors, CreateContentVersionResponses, CreateEditorialUploadData, CreateEditorialUploadErrors, CreateEditorialUploadResponses, CreateMethodData, CreateMethodErrors, CreateMethodFromTemplateData, CreateMethodFromTemplateErrors, CreateMethodFromTemplateResponses, CreateMethodResponses, CreateOfferData, CreateOfferErrors, CreateOfferResponses, CreateOrderData, CreateOrderErrors, CreateOrderResponses, CreateProjectData, CreateProjectErrors, CreateProjectResponses, CreateProjectUploadData, CreateProjectUploadErrors, CreateProjectUploadResponses, CreateRefundRequestData, CreateRefundRequestErrors, CreateRefundRequestResponses, DeactivateOfferData, DeactivateOfferErrors, DeactivateOfferResponses, DecideExternalRefundAccessData, DecideExternalRefundAccessErrors, DecideExternalRefundAccessResponses, DecideRefundRequestData, DecideRefundRequestErrors, DecideRefundRequestResponses, DeleteMethodData, DeleteMethodErrors, DeleteMethodResponses, DuplicateContentData, DuplicateContentErrors, DuplicateContentResponses, DuplicateMethodData, DuplicateMethodErrors, DuplicateMethodResponses, EnrollCourseData, EnrollCourseErrors, EnrollCourseResponses, ExecuteRefundData, ExecuteRefundErrors, ExecuteRefundResponses, FindActivityNoteData, FindActivityNoteErrors, FindActivityNoteResponses, GetActivityNoteData, GetActivityNoteErrors, GetActivityNoteResponses, GetActivityProgressData, GetActivityProgressErrors, GetActivityProgressResponses, GetAdminOfferData, GetAdminOfferErrors, GetAdminOfferResponses, GetAdminRefundContextData, GetAdminRefundContextErrors, GetAdminRefundContextResponses, GetAdminRefundData, GetAdminRefundErrors, GetAdminRefundRequestData, GetAdminRefundRequestErrors, GetAdminRefundRequestResponses, GetAdminRefundResponses, GetAssetDownloadData, GetAssetDownloadErrors, GetAssetDownloadResponses, GetCatalogueFacetsData, GetCatalogueFacetsErrors, GetCatalogueFacetsResponses, GetCatalogueResourceBySlugData, GetCatalogueResourceBySlugErrors, GetCatalogueResourceBySlugResponses, GetCatalogueResourceData, GetCatalogueResourceErrors, GetCatalogueResourceResponses, GetCatalogueResourceVersionData, GetCatalogueResourceVersionErrors, GetCatalogueResourceVersionResponses, GetContentData, GetContentDependenciesData, GetContentDependenciesErrors, GetContentDependenciesResponses, GetContentErrors, GetContentReadinessData, GetContentReadinessErrors, GetContentReadinessResponses, GetContentResponses, GetCsrfTokenData, GetCsrfTokenErrors, GetCsrfTokenResponses, GetCurrentUserData, GetCurrentUserErrors, GetCurrentUserResponses, GetEditorialAssetData, GetEditorialAssetErrors, GetEditorialAssetPreviewData, GetEditorialAssetPreviewErrors, GetEditorialAssetPreviewResponses, GetEditorialAssetResponses, GetEditorialUploadPolicyData, GetEditorialUploadPolicyErrors, GetEditorialUploadPolicyResponses, GetEnrollmentData, GetEnrollmentErrors, GetEnrollmentResponses, GetLearningActivityData, GetLearningActivityErrors, GetLearningActivityResponses, GetLearningDashboardData, GetLearningDashboardErrors, GetLearningDashboardResponses, GetMediaProgressData, GetMediaProgressErrors, GetMediaProgressResponses, GetMemberProjectTemplateData, GetMemberProjectTemplateErrors, GetMemberProjectTemplateResponses, GetMemberResourceData, GetMemberResourceErrors, GetMemberResourceResponses, GetMethodData, GetMethodErrors, GetMethodResponses, GetMethodSourceUpdateData, GetMethodSourceUpdateErrors, GetMethodSourceUpdateResponses, GetMethodTemplateData, GetMethodTemplateErrors, GetMethodTemplateResponses, GetMyRefundContextData, GetMyRefundContextErrors, GetMyRefundContextResponses, GetMyRefundData, GetMyRefundErrors, GetMyRefundRequestData, GetMyRefundRequestErrors, GetMyRefundRequestResponses, GetMyRefundResponses, GetOfferReadinessData, GetOfferReadinessErrors, GetOfferReadinessResponses, GetOrderData, GetOrderErrors, GetOrderPaymentStatusData, GetOrderPaymentStatusErrors, GetOrderPaymentStatusResponses, GetOrderResponses, GetPreferencesData, GetPreferencesErrors, GetPreferencesResponses, GetProjectContextData, GetProjectContextErrors, GetProjectContextResponses, GetProjectData, GetProjectErrors, GetProjectFilePolicyData, GetProjectFilePolicyErrors, GetProjectFilePolicyResponses, GetProjectPresetData, GetProjectPresetErrors, GetProjectPresetResponses, GetProjectResponses, GetProjectRevisionData, GetProjectRevisionErrors, GetProjectRevisionResponses, GetProjectStatusData, GetProjectStatusErrors, GetProjectStatusResponses, GetProjectTemplateData, GetProjectTemplateErrors, GetProjectTemplateResponses, GetPublicContentData, GetPublicContentErrors, GetPublicContentResponses, GetPublicOfferData, GetPublicOfferErrors, GetPublicOfferResponses, GetPurchaseContextData, GetPurchaseContextErrors, GetPurchaseContextResponses, GetQuizAttemptData, GetQuizAttemptErrors, GetQuizAttemptResponses, GetSelfAssessmentData, GetSelfAssessmentErrors, GetSelfAssessmentResponses, GetSystemHealthData, GetSystemHealthErrors, GetSystemHealthResponses, GetVideoMediaData, GetVideoMediaErrors, GetVideoMediaResponses, GetVideoPlaybackData, GetVideoPlaybackErrors, GetVideoPlaybackResponses, GetVideoStreamData, GetVideoStreamErrors, GetVideoStreamResponses, HeadVideoStreamData, HeadVideoStreamErrors, HeadVideoStreamResponses, ListAdminOffersData, ListAdminOffersErrors, ListAdminOffersResponses, ListAdminRefundRequestsData, ListAdminRefundRequestsErrors, ListAdminRefundRequestsResponses, ListAdminRefundsData, ListAdminRefundsErrors, ListAdminRefundsResponses, ListContentRevisionsData, ListContentRevisionsErrors, ListContentRevisionsResponses, ListContentsData, ListContentsErrors, ListContentsResponses, ListMethodsData, ListMethodsErrors, ListMethodsResponses, ListMyEntitlementsData, ListMyEntitlementsErrors, ListMyEntitlementsResponses, ListMyRefundRequestsData, ListMyRefundRequestsErrors, ListMyRefundRequestsResponses, ListMyRefundsData, ListMyRefundsErrors, ListMyRefundsResponses, ListNotificationsData, ListNotificationsErrors, ListNotificationsResponses, ListOrdersData, ListOrdersErrors, ListOrdersResponses, ListPaymentEventsData, ListPaymentEventsErrors, ListPaymentEventsResponses, ListProjectFilesData, ListProjectFilesErrors, ListProjectFilesResponses, ListProjectRevisionsData, ListProjectRevisionsErrors, ListProjectRevisionsResponses, ListProjectsData, ListProjectsErrors, ListProjectsResponses, ListPublicOffersData, ListPublicOffersErrors, ListPublicOffersResponses, ListQuizAttemptsData, ListQuizAttemptsErrors, ListQuizAttemptsResponses, ListSelfAssessmentsData, ListSelfAssessmentsErrors, ListSelfAssessmentsResponses, LoginData, LoginErrors, LoginResponses, LogoutData, LogoutErrors, LogoutResponses, PreviewContentData, PreviewContentErrors, PreviewContentResponses, PreviewRefundData, PreviewRefundErrors, PreviewRefundResponses, PublishContentData, PublishContentErrors, PublishContentResponses, ReceiveStripeWebhookData, ReceiveStripeWebhookErrors, ReceiveStripeWebhookResponses, ReconcileRefundData, ReconcileRefundErrors, ReconcileRefundResponses, RegisterData, RegisterErrors, RegisterResponses, ReplaceContentCompositionData, ReplaceContentCompositionErrors, ReplaceContentCompositionResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, RetryNotificationData, RetryNotificationErrors, RetryNotificationResponses, RetryPaymentEventData, RetryPaymentEventErrors, RetryPaymentEventResponses, RevealSolutionData, RevealSolutionErrors, RevealSolutionResponses, SaveContentMetadataData, SaveContentMetadataErrors, SaveContentMetadataResponses, SaveContentRevisionData, SaveContentRevisionErrors, SaveContentRevisionResponses, SaveOfferData, SaveOfferErrors, SaveOfferResponses, SaveProjectData, SaveProjectErrors, SaveProjectResponses, SearchCatalogueData, SearchCatalogueErrors, SearchCatalogueResponses, SetActivityProgressData, SetActivityProgressErrors, SetActivityProgressResponses, SetMediaProgressData, SetMediaProgressErrors, SetMediaProgressResponses, SubmitQuizData, SubmitQuizErrors, SubmitQuizResponses, SubmitSelfAssessmentData, SubmitSelfAssessmentErrors, SubmitSelfAssessmentResponses, TransitionContentData, TransitionContentErrors, TransitionContentResponses, UpdateActivityNoteData, UpdateActivityNoteErrors, UpdateActivityNoteResponses, UpdateMethodData, UpdateMethodErrors, UpdateMethodResponses, UpdatePreferencesData, UpdatePreferencesErrors, UpdatePreferencesResponses, VisitActivityData, VisitActivityErrors, VisitActivityResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -1502,7 +1502,7 @@ export const getOrderPaymentStatus = <ThrowOnError extends boolean = false>(opti
 /**
  * Persister un événement signé avant l’acquittement.
  *
- * Corps JSON UTF8 brut borné64KiB, signature SDK et mode/compte/API version contrôlés. Seul ce POST exact est exempt de CSRF. Transaction inbox commitée avant200 ; déduplication distincte de l’unicité des droits.
+ * Octets JSON UTF8 bruts bornés64KiB, signature SDK et mode/compte/API contrôlés. Inbox durable avant200. Checkout et refund.created/refund.updated/refund.failed/charge.refunded sont routés vers leurs workers ; un ancien événement ne recrée pas une origine révoquée.
  */
 export const receiveStripeWebhook = <ThrowOnError extends boolean = false>(options: Options<ReceiveStripeWebhookData, ThrowOnError>): RequestResult<ReceiveStripeWebhookResponses, ReceiveStripeWebhookErrors, ThrowOnError> => (options.client ?? client).post<ReceiveStripeWebhookResponses, ReceiveStripeWebhookErrors, ThrowOnError>({
     url: '/webhooks/stripe',
@@ -1575,4 +1575,284 @@ export const getMemberProjectTemplate = <ThrowOnError extends boolean = false>(o
         }],
     url: '/me/project-templates/{activityId}/versions/{versionId}',
     ...options
+});
+
+/**
+ * Consulter les montants disponibles et les origines de cette commande.
+ *
+ * refunds.read et propriétaire ; les productions restent conservées.
+ */
+export const getMyRefundContext = <ThrowOnError extends boolean = false>(options: Options<GetMyRefundContextData, ThrowOnError>): RequestResult<GetMyRefundContextResponses, GetMyRefundContextErrors, ThrowOnError> => (options.client ?? client).get<GetMyRefundContextResponses, GetMyRefundContextErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/orders/{orderId}/refund-context',
+    ...options
+});
+
+/**
+ * Lister les demandes de remboursement autorisées.
+ */
+export const listMyRefundRequests = <ThrowOnError extends boolean = false>(options?: Options<ListMyRefundRequestsData, ThrowOnError>): RequestResult<ListMyRefundRequestsResponses, ListMyRefundRequestsErrors, ThrowOnError> => (options?.client ?? client).get<ListMyRefundRequestsResponses, ListMyRefundRequestsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/refund-requests',
+    ...options
+});
+
+/**
+ * Consulter une demande et sa décision distincte.
+ */
+export const getMyRefundRequest = <ThrowOnError extends boolean = false>(options: Options<GetMyRefundRequestData, ThrowOnError>): RequestResult<GetMyRefundRequestResponses, GetMyRefundRequestErrors, ThrowOnError> => (options.client ?? client).get<GetMyRefundRequestResponses, GetMyRefundRequestErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/refund-requests/{id}',
+    ...options
+});
+
+/**
+ * Lister les opérations financières et leurs effets d’accès.
+ */
+export const listMyRefunds = <ThrowOnError extends boolean = false>(options?: Options<ListMyRefundsData, ThrowOnError>): RequestResult<ListMyRefundsResponses, ListMyRefundsErrors, ThrowOnError> => (options?.client ?? client).get<ListMyRefundsResponses, ListMyRefundsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/refunds',
+    ...options
+});
+
+/**
+ * Consulter une exécution sans confondre attente, échec et réussite.
+ */
+export const getMyRefund = <ThrowOnError extends boolean = false>(options: Options<GetMyRefundData, ThrowOnError>): RequestResult<GetMyRefundResponses, GetMyRefundErrors, ThrowOnError> => (options.client ?? client).get<GetMyRefundResponses, GetMyRefundErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/refunds/{id}',
+    ...options
+});
+
+/**
+ * Consulter les montants disponibles et les origines de cette commande.
+ *
+ * refunds.admin.read ; aucun montant externe choisi par le navigateur.
+ */
+export const getAdminRefundContext = <ThrowOnError extends boolean = false>(options: Options<GetAdminRefundContextData, ThrowOnError>): RequestResult<GetAdminRefundContextResponses, GetAdminRefundContextErrors, ThrowOnError> => (options.client ?? client).get<GetAdminRefundContextResponses, GetAdminRefundContextErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/orders/{orderId}/refund-context',
+    ...options
+});
+
+/**
+ * Lister les demandes de remboursement autorisées.
+ */
+export const listAdminRefundRequests = <ThrowOnError extends boolean = false>(options?: Options<ListAdminRefundRequestsData, ThrowOnError>): RequestResult<ListAdminRefundRequestsResponses, ListAdminRefundRequestsErrors, ThrowOnError> => (options?.client ?? client).get<ListAdminRefundRequestsResponses, ListAdminRefundRequestsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/refund-requests',
+    ...options
+});
+
+/**
+ * Consulter une demande et sa décision distincte.
+ */
+export const getAdminRefundRequest = <ThrowOnError extends boolean = false>(options: Options<GetAdminRefundRequestData, ThrowOnError>): RequestResult<GetAdminRefundRequestResponses, GetAdminRefundRequestErrors, ThrowOnError> => (options.client ?? client).get<GetAdminRefundRequestResponses, GetAdminRefundRequestErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/refund-requests/{id}',
+    ...options
+});
+
+/**
+ * Lister les opérations financières et leurs effets d’accès.
+ */
+export const listAdminRefunds = <ThrowOnError extends boolean = false>(options?: Options<ListAdminRefundsData, ThrowOnError>): RequestResult<ListAdminRefundsResponses, ListAdminRefundsErrors, ThrowOnError> => (options?.client ?? client).get<ListAdminRefundsResponses, ListAdminRefundsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/refunds',
+    ...options
+});
+
+/**
+ * Consulter une exécution sans confondre attente, échec et réussite.
+ */
+export const getAdminRefund = <ThrowOnError extends boolean = false>(options: Options<GetAdminRefundData, ThrowOnError>): RequestResult<GetAdminRefundResponses, GetAdminRefundErrors, ThrowOnError> => (options.client ?? client).get<GetAdminRefundResponses, GetAdminRefundErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/refunds/{id}',
+    ...options
+});
+
+/**
+ * Déposer une demande sur sa commande sans exécuter de remboursement.
+ */
+export const createRefundRequest = <ThrowOnError extends boolean = false>(options: Options<CreateRefundRequestData, ThrowOnError>): RequestResult<CreateRefundRequestResponses, CreateRefundRequestErrors, ThrowOnError> => (options.client ?? client).post<CreateRefundRequestResponses, CreateRefundRequestErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/orders/{orderId}/refund-requests',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Consulter les origines indépendantes de ses accès.
+ *
+ * entitlements.read ; langues/versions/périodes par origine. Aucun corps pédagogique ou lien média dans cette projection.
+ */
+export const listMyEntitlements = <ThrowOnError extends boolean = false>(options: Options<ListMyEntitlementsData, ThrowOnError>): RequestResult<ListMyEntitlementsResponses, ListMyEntitlementsErrors, ThrowOnError> => (options.client ?? client).get<ListMyEntitlementsResponses, ListMyEntitlementsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/entitlements',
+    ...options
+});
+
+/**
+ * Prévisualiser montant, allocations et effet d’accès avant décision.
+ *
+ * refunds.decide. Aucun réseau ni réservation ; empreinte revérifiée sous verrou lors de la décision. Pas de répartition implicite du prix du pack.
+ */
+export const previewRefund = <ThrowOnError extends boolean = false>(options: Options<PreviewRefundData, ThrowOnError>): RequestResult<PreviewRefundResponses, PreviewRefundErrors, ThrowOnError> => (options.client ?? client).post<PreviewRefundResponses, PreviewRefundErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/refund-requests/{id}/preview',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Décider explicitement, réserver un montant et conserver une décision immuable.
+ *
+ * refunds.decide. APPROVE crée PREPARED sans réseau ; REJECT ne crée aucun remboursement. Full cumulatif impose le retrait des seules origines de cette commande.
+ */
+export const decideRefundRequest = <ThrowOnError extends boolean = false>(options: Options<DecideRefundRequestData, ThrowOnError>): RequestResult<DecideRefundRequestResponses, DecideRefundRequestErrors, ThrowOnError> => (options.client ?? client).post<DecideRefundRequestResponses, DecideRefundRequestErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/refund-requests/{id}/decision',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Exécuter une opération préparée avec sa clé fournisseur persistée.
+ *
+ * Permission précise refunds.execute ou refunds.reconcile selon action ; motif et audit. Une réponse ambiguë ne libère pas sa réservation et ne génère jamais une nouvelle clé fournisseur.
+ */
+export const executeRefund = <ThrowOnError extends boolean = false>(options: Options<ExecuteRefundData, ThrowOnError>): RequestResult<ExecuteRefundResponses, ExecuteRefundErrors, ThrowOnError> => (options.client ?? client).post<ExecuteRefundResponses, ExecuteRefundErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/refunds/{id}/execute',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Annuler une réservation encore jamais soumise au fournisseur.
+ *
+ * Permission précise refunds.execute ou refunds.reconcile selon action ; motif et audit. Une réponse ambiguë ne libère pas sa réservation et ne génère jamais une nouvelle clé fournisseur.
+ */
+export const cancelPreparedRefund = <ThrowOnError extends boolean = false>(options: Options<CancelPreparedRefundData, ThrowOnError>): RequestResult<CancelPreparedRefundResponses, CancelPreparedRefundErrors, ThrowOnError> => (options.client ?? client).post<CancelPreparedRefundResponses, CancelPreparedRefundErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/refunds/{id}/cancel',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Replanifier le rapprochement fournisseur sans nouvelle création.
+ *
+ * Permission précise refunds.execute ou refunds.reconcile selon action ; motif et audit. Une réponse ambiguë ne libère pas sa réservation et ne génère jamais une nouvelle clé fournisseur.
+ */
+export const reconcileRefund = <ThrowOnError extends boolean = false>(options: Options<ReconcileRefundData, ThrowOnError>): RequestResult<ReconcileRefundResponses, ReconcileRefundErrors, ThrowOnError> => (options.client ?? client).post<ReconcileRefundResponses, ReconcileRefundErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/refunds/{id}/reconciliation-requests',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Décider des droits d’un remboursement externe confirmé à examiner.
+ *
+ * refunds.decide ; aucun POST financier. Partiel externe inconnu conservé en NEEDS_REVIEW sans révocation arbitraire.
+ */
+export const decideExternalRefundAccess = <ThrowOnError extends boolean = false>(options: Options<DecideExternalRefundAccessData, ThrowOnError>): RequestResult<DecideExternalRefundAccessResponses, DecideExternalRefundAccessErrors, ThrowOnError> => (options.client ?? client).post<DecideExternalRefundAccessResponses, DecideExternalRefundAccessErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/refunds/{id}/access-decision',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
 });

@@ -66,9 +66,9 @@ class SchemaIntegrationTest {
 
     @Test @Order(1)
     void aFreshDatabaseMigratesAndHibernateValidatesWithoutSeedingAccountsOrCommerce() {
-        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014");
+        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_accounts", Integer.class)).isZero();
-        assertThat(jdbc.queryForList("SELECT code FROM roles ORDER BY code", String.class)).containsExactly("COMMERCE_MANAGER", "EDITOR", "LEARNER", "PAYMENTS_OPERATOR");
+        assertThat(jdbc.queryForList("SELECT code FROM roles ORDER BY code", String.class)).containsExactly("COMMERCE_MANAGER", "EDITOR", "LEARNER", "PAYMENTS_OPERATOR", "REFUND_OPERATOR");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_roles", Integer.class)).isZero();
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM learning_resources", Integer.class)).isZero();
         assertThat(jdbc.queryForObject("SELECT current_setting('TimeZone')", String.class)).isEqualTo("UTC");
@@ -110,7 +110,7 @@ class SchemaIntegrationTest {
             var database = new JdbcTemplate(new SingleConnectionDataSourceAdapter(connection));
             assertThat(database.queryForObject("SELECT session_id FROM spring_session WHERE primary_id = ?", String.class, primaryId)).isEqualTo(sessionId);
             assertThat(database.queryForObject("SELECT encode(attribute_bytes, 'hex') FROM spring_session_attributes WHERE session_primary_id = ?", String.class, primaryId)).isEqualTo("010203");
-            assertThat(database.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014");
+            assertThat(database.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015");
         }
     }
 
@@ -324,6 +324,30 @@ class SchemaIntegrationTest {
             assertThat(attempt.get(5, TimeUnit.SECONDS)).isEqualTo("23514");
         } finally { executor.shutdownNow(); }
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM version_compositions WHERE parent_version_id = ?", Integer.class, parent)).isZero();
+    }
+
+    @Test @Order(10)
+    void upgradingV014PreservesAccountsPermissionsAndSessionsWithoutFinancialOperations() throws Exception {
+        migrate("upgrade_v014", "14");
+        var user = UUID.randomUUID();
+        var session = UUID.randomUUID().toString();
+        try (var connection = connection("upgrade_v014")) {
+            var database = new JdbcTemplate(new SingleConnectionDataSourceAdapter(connection));
+            database.update("INSERT INTO user_accounts(id,normalized_email,password_hash,status) VALUES (?,'upgrade.p13@example.test','synthetic-test-hash','ACTIVE')", user);
+            database.update("INSERT INTO spring_session(primary_id,session_id,creation_time,last_access_time,max_inactive_interval,expiry_time) VALUES (?,?,1,2,1800,1800002)", session, session);
+        }
+        var migrated = migrate("upgrade_v014", null);
+        assertThat(migrated.validateWithResult().validationSuccessful).isTrue();
+        try (var connection = connection("upgrade_v014")) {
+            var database = new JdbcTemplate(new SingleConnectionDataSourceAdapter(connection));
+            assertThat(database.queryForObject("SELECT password_hash FROM user_accounts WHERE id=?", String.class, user)).isEqualTo("synthetic-test-hash");
+            assertThat(database.queryForObject("SELECT session_id FROM spring_session WHERE primary_id=?", String.class, session)).isEqualTo(session);
+            for (String table : new String[]{"refund_requests", "refund_decisions", "refund_operations", "refund_reservations", "refund_access_decisions", "refund_access_blocks", "refund_origin_revocations", "refund_audit", "refund_idempotency_keys", "refund_reconciliation_jobs"}) {
+                assertThat(database.queryForObject("SELECT count(*) FROM " + table, Integer.class)).isZero();
+            }
+            assertThat(database.queryForObject("SELECT count(*) FROM user_roles", Integer.class)).isZero();
+            assertThat(database.queryForObject("SELECT count(*) FROM roles WHERE code='REFUND_OPERATOR'", Integer.class)).isEqualTo(1);
+        }
     }
 
     private Flyway migrate(String schema, String target) {

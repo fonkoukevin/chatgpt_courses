@@ -17,6 +17,7 @@ public final class StripeConfigProbe {
                     "--server.port=0", "--server.address=127.0.0.1", "--spring.profiles.active=local",
                     "--spring.main.banner-mode=off", "--logging.level.root=OFF",
                     "--courses.notifications.outbox.worker-enabled=false", "--courses.payments.inbox.worker-enabled=false",
+                    "--courses.payments.refunds.worker-enabled=false",
                     "--courses.assets.staging-cleanup-worker-enabled=false", "--spring.session.jdbc.cleanup-cron=-"
                 });
             Class<?> type = Class.forName("com.chatgptcourses.payments.config.StripeSettings");
@@ -28,11 +29,14 @@ public final class StripeConfigProbe {
             boolean enabled = Boolean.TRUE.equals(type.getMethod("enabled").invoke(settings));
             boolean enabledMatches = enabled == "true".equalsIgnoreCase(System.getenv("STRIPE_ENABLED"));
             boolean webhookConfigured = !((String) type.getMethod("webhookSecret").invoke(settings)).isBlank();
+            Class<?> refundType = Class.forName("com.chatgptcourses.payments.refunds.RefundSettings");
+            Object refundSettings = lifecycle.getMethod("getBean", Class.class).invoke(context, refundType);
+            boolean refundWorkerDisabled = Boolean.FALSE.equals(refundType.getMethod("workerEnabled").invoke(refundSettings));
             System.out.println("COURSES_STRIPE_BINDING {\"springContextStarted\":true,\"secretMatchesEnvironment\":" + key
                 + ",\"webhookMatchesEnvironment\":" + webhook + ",\"accountMatchesEnvironment\":" + account
                 + ",\"testMode\":" + mode + ",\"enabledMatchesEnvironment\":" + enabledMatches
-                + ",\"stripeEnabled\":" + enabled + ",\"webhookSecretConfigured\":" + webhookConfigured + ",\"secretsPrinted\":false}");
-            if (!key || !webhook || !account || !mode || !enabledMatches) throw new IllegalStateException("Private binding not confirmed");
+                + ",\"stripeEnabled\":" + enabled + ",\"webhookSecretConfigured\":" + webhookConfigured + ",\"refundWorkerDisabled\":" + refundWorkerDisabled + ",\"secretsPrinted\":false}");
+            if (!key || !webhook || !account || !mode || !enabledMatches || !refundWorkerDisabled) throw new IllegalStateException("Private binding not confirmed");
         } finally {
             if (context != null) lifecycle.getMethod("close").invoke(context);
         }

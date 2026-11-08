@@ -21,12 +21,13 @@ import tools.jackson.databind.ObjectMapper;
 @Service
 public class StripeWebhookService {
     static final Set<String> CHECKOUT_EVENTS=Set.of("checkout.session.completed","checkout.session.async_payment_succeeded","checkout.session.async_payment_failed","checkout.session.expired");
+    static final Set<String> REFUND_EVENTS=Set.of("refund.created","refund.updated","refund.failed","charge.refunded");
     private final StripeSettings settings;private final JdbcTemplate jdbc;private final ObjectMapper mapper;
     public StripeWebhookService(StripeSettings settings,JdbcTemplate jdbc,ObjectMapper mapper){this.settings=settings;this.jdbc=jdbc;this.mapper=mapper;}
     @Transactional
     public WebhookReceipt receive(byte[] body,String signature){
         if(!settings.enabled()||!"TEST".equals(settings.mode())||!settings.webhookSecret().startsWith("whsec_")||!settings.accountId().matches("acct_[A-Za-z0-9]{1,123}"))throw new ApiException(ApiError.PAYMENT_NOT_CONFIGURED);
-        VerifiedEvent event=verify(body,signature);boolean supported=CHECKOUT_EVENTS.contains(event.type());
+        VerifiedEvent event=verify(body,signature);boolean supported=CHECKOUT_EVENTS.contains(event.type())||REFUND_EVENTS.contains(event.type());
         int inserted=jdbc.update("""
             INSERT INTO stripe_event_inbox(id,account_id,livemode,event_id,event_type,object_id,api_version,event_created_at,canonical_hash,state,next_attempt_at,processed_at)
             VALUES(?,?,?,?,?,?,?,?,?,CASE WHEN ? THEN 'PENDING' ELSE 'IGNORED' END,CASE WHEN ? THEN clock_timestamp() ELSE NULL END,CASE WHEN ? THEN NULL ELSE clock_timestamp() END)
@@ -43,6 +44,7 @@ public class StripeWebhookService {
             if(event.getId()==null||!event.getId().matches("evt_[A-Za-z0-9_]{1,251}")||event.getType()==null||!event.getType().matches("[a-z][a-z0-9_.]{0,99}")||event.getCreated()==null||!Boolean.FALSE.equals(event.getLivemode())||!StripeSettings.API_VERSION.equals(event.getApiVersion())||event.getAccount()!=null&&!settings.accountId().equals(event.getAccount()))throw invalid();
             var tree=mapper.readTree(raw);var object=tree.path("data").path("object").path("id");String id=object.isString()?object.asText():null;
             if(id==null||!id.matches("[A-Za-z][A-Za-z0-9_]{0,254}")||CHECKOUT_EVENTS.contains(event.getType())&&!id.startsWith("cs_"))throw invalid();
+            if(REFUND_EVENTS.contains(event.getType())&&!("charge.refunded".equals(event.getType())?id.startsWith("ch_"):id.startsWith("re_")))throw invalid();
             String canonical=event.getId()+"|"+event.getType()+"|"+id+"|false|"+settings.accountId()+"|"+event.getApiVersion()+"|"+event.getCreated();
             return new VerifiedEvent(event.getId(),event.getType(),id,false,settings.accountId(),event.getApiVersion(),Instant.ofEpochSecond(event.getCreated()),MessageDigest.getInstance("SHA-256").digest(canonical.getBytes(StandardCharsets.UTF_8)));
         }catch(ApiException invalid){throw invalid;}catch(Exception invalid){throw invalid();}

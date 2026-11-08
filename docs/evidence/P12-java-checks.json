@@ -1,0 +1,47 @@
+{
+  "verifiedAt": "2026-11-08T12:03:05.610Z",
+  "runs": [
+    {
+      "scope": "global-before-merchant-adjustment",
+      "tests": 182,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration": "06:55 min",
+      "finishedAt": "2026-11-08T09:36:29+01:00",
+      "build": "passed"
+    },
+    {
+      "scope": "merchant-checkout-inbox",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration": "19:08 min",
+      "finishedAt": "2026-11-08T11:53:49+01:00",
+      "build": "passed"
+    },
+    {
+      "scope": "production-mode-guard",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration": "05:51 min",
+      "finishedAt": "2026-11-08T12:33:39+01:00",
+      "build": "passed"
+    },
+    {
+      "scope": "final-reconciliation-and-configuration",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration": "01:14 min",
+      "finishedAt": "2026-11-08T13:02:09+01:00",
+      "build": "passed"
+    }
+  ],
+  "externalStripe": false,
+  "secretsPrinted": false
+}

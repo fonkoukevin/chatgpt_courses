@@ -1,0 +1,13 @@
+{
+  "verifiedAt": "2026-11-08T10:57:02.626Z",
+  "migrations": ["001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014"],
+  "legacyTablesUnchanged": 45,
+  "allLegacyRowFingerprintsEqual": true,
+  "newTables": {
+    "checkout_operations": 0,
+    "checkout_idempotency_keys": 0,
+    "stripe_event_inbox": 0,
+    "payment_reconciliation_jobs": 0,
+    "payment_work_retries": 0
+  }
+}

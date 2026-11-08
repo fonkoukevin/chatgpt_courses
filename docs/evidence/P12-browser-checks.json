@@ -1,0 +1,184 @@
+{
+  "exportedAt": "2026-11-08T12:42:50.696Z",
+  "runs": [
+    {
+      "runId": "2026-11-08T10-54-55-476Z-22027de7-00b6-46b2-b64e-38d4fbc11eb8",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "result": "failed",
+      "durationMs": 35862.524999999994,
+      "passed": 0,
+      "failed": 1,
+      "skipped": 6,
+      "flaky": 0,
+      "cleanupConfirmed": true,
+      "externalStripe": false,
+      "pngCount": 0
+    },
+    {
+      "runId": "2026-11-08T11-13-52-553Z-89bae1cc-8102-400f-80d0-b3abc99bedf8",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "result": "failed",
+      "durationMs": 147603.168,
+      "passed": 0,
+      "failed": 1,
+      "skipped": 7,
+      "flaky": 0,
+      "cleanupConfirmed": true,
+      "externalStripe": false,
+      "pngCount": 0
+    },
+    {
+      "runId": "2026-11-08T12-02-37-814Z-43424a68-51ac-4845-981b-e9b744d116ab",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "result": "failed",
+      "durationMs": 79468.58899999999,
+      "passed": 4,
+      "failed": 1,
+      "skipped": 3,
+      "flaky": 0,
+      "cleanupConfirmed": true,
+      "externalStripe": false,
+      "pngCount": 17
+    },
+    {
+      "runId": "2026-11-08T12-06-02-586Z-11de4239-35b8-4362-a42b-16b8112ef16e",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "result": "failed",
+      "durationMs": 128883.548,
+      "passed": 6,
+      "failed": 1,
+      "skipped": 1,
+      "flaky": 0,
+      "cleanupConfirmed": true,
+      "externalStripe": false,
+      "pngCount": 23
+    },
+    {
+      "runId": "2026-11-08T12-13-04-679Z-5b96a7ee-2c89-48c9-8454-4d7eb2167331",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "result": "passed",
+      "durationMs": 132112.437,
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "cleanupConfirmed": true,
+      "externalStripe": false,
+      "pngCount": 27
+    },
+    {
+      "runId": "2026-11-08T12-18-24-757Z-b73f5c0c-7506-48c3-a16d-5cefd35cbcdf",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "result": "failed",
+      "durationMs": 45990.356,
+      "passed": 0,
+      "failed": 1,
+      "skipped": 7,
+      "flaky": 0,
+      "cleanupConfirmed": true,
+      "externalStripe": false,
+      "pngCount": 2
+    },
+    {
+      "runId": "2026-11-08T12-21-51-158Z-9a72661b-0825-4a2f-a4e0-2ecd746de9e6",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "result": "failed",
+      "durationMs": 66295.44,
+      "passed": 1,
+      "failed": 1,
+      "skipped": 6,
+      "flaky": 0,
+      "cleanupConfirmed": true,
+      "externalStripe": false,
+      "pngCount": 13
+    },
+    {
+      "runId": "2026-11-08T12-24-31-593Z-3ea2a64f-2e8f-4b70-b0a3-4dd7d8abca3b",
+      "selection": {
+        "grep": "01 · fr",
+        "repeatEach": 3
+      },
+      "result": "failed",
+      "durationMs": 78242.46399999999,
+      "passed": 1,
+      "failed": 2,
+      "skipped": 0,
+      "flaky": 0,
+      "cleanupConfirmed": true,
+      "externalStripe": false,
+      "pngCount": 8
+    },
+    {
+      "runId": "2026-11-08T12-30-28-563Z-0dd5a868-dc97-4253-ab9a-56f588463ad6",
+      "selection": {
+        "grep": "01 · fr",
+        "repeatEach": 3
+      },
+      "result": "passed",
+      "durationMs": 179886.585,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "cleanupConfirmed": true,
+      "externalStripe": false,
+      "pngCount": 8
+    },
+    {
+      "runId": "2026-11-08T12-34-25-308Z-a3ef1102-aebb-45bd-b582-586817ac79f1",
+      "selection": {
+        "grep": "02 · en",
+        "repeatEach": 3
+      },
+      "result": "passed",
+      "durationMs": 80006.488,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "cleanupConfirmed": true,
+      "externalStripe": false,
+      "pngCount": 6
+    },
+    {
+      "runId": "2026-11-08T12-37-19-010Z-7b0c6128-05b6-4c00-bd28-3ea7a6f06e32",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "result": "passed",
+      "durationMs": 131162.829,
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "cleanupConfirmed": true,
+      "externalStripe": false,
+      "pngCount": 27
+    }
+  ],
+  "phaseClosed": false,
+  "openAccessIncident": true,
+  "externalStripeExecuted": false
+}

@@ -1,0 +1,79 @@
+{
+  "runId": "2026-11-08T12-37-19-010Z-7b0c6128-05b6-4c00-bd28-3ea7a6f06e32",
+  "completedAt": "2026-11-08T12:40:19.623Z",
+  "selection": {
+    "grep": null,
+    "repeatEach": 1
+  },
+  "result": "passed",
+  "cleanupConfirmed": true,
+  "isolatedPostgres": {
+    "image": "postgres:18.6@sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42",
+    "tmpfs": true,
+    "stopped": true
+  },
+  "isolatedServices": [
+    {
+      "kind": "s3",
+      "image": "chrislusf/seaweedfs:4.52@sha256:57877e32bb90073b37dc109b438ba66e84fd5ed9ced5f5c04f56444ef243ce59",
+      "tmpfs": true,
+      "stopped": true,
+      "observation": {
+        "available": true,
+        "configuredVolumeMax": 24,
+        "maxSlots": [
+          24,
+          24
+        ],
+        "freeSlots": [
+          17
+        ],
+        "collectionCount": 1,
+        "noFreeVolumesObserved": false,
+        "noWritableVolumesObserved": false,
+        "logsAvailable": true
+      }
+    },
+    {
+      "kind": "mailpit",
+      "image": "axllent/mailpit:v1.33.0@sha256:9b3a463be15354c0f0eba91697d80e3e0d8a5623ef0e627cacc836bc17fd5231",
+      "tmpfs": true,
+      "stopped": true
+    }
+  ],
+  "controlledProvider": {
+    "kind": "controlled-stripe-network",
+    "externalStripe": false,
+    "requests": 39,
+    "createCalls": 7,
+    "sessions": 7,
+    "stopped": true
+  },
+  "processes": [
+    {
+      "name": "web",
+      "pid": 73172,
+      "terminated": true
+    },
+    {
+      "name": "api",
+      "pid": 26592,
+      "terminated": true
+    },
+    {
+      "name": "playwright",
+      "pid": 77212,
+      "terminated": true
+    },
+    {
+      "name": "api",
+      "pid": 20240,
+      "terminated": true
+    },
+    {
+      "name": "api",
+      "pid": 77068,
+      "terminated": true
+    }
+  ]
+}

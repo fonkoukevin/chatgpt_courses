@@ -1,0 +1,270 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\scripts\\..\\.tools\\node-v24.22.2-win-x64\\node.exe",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts",
+      "--grep",
+      "02 · en",
+      "--repeat-each",
+      "3"
+    ],
+    "configFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts",
+    "rootDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 1200000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/.runtime/browser-2026-11-08T12-34-25-308Z-a3ef1102-aebb-45bd-b582-586817ac79f1/results",
+        "repeatEach": 3,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/payments.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T12-34-25-308Z-a3ef1102-aebb-45bd-b582-586817ac79f1\\results",
+        "repeatEach": 3,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "snapshotDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/payments.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3101",
+          "browserName": "chromium",
+          "headless": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "actionTimeout": 10000,
+          "navigationTimeout": 20000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off",
+          "serviceWorkers": "block"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\docs\\evidence\\P12-browser\\2026-11-08T12-34-25-308Z-a3ef1102-aebb-45bd-b582-586817ac79f1\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "payments.spec.ts",
+      "file": "payments.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "P12 · paiement contrôlé, confirmation et droits réels",
+          "file": "payments.spec.ts",
+          "line": 13,
+          "column": 6,
+          "specs": [
+            {
+              "title": "02 · en : paiement différé sans droit puis confirmation et activation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\payments.spec.ts",
+                        "line": 13,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 27837,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T12:34:55.086Z",
+                      "annotations": [
+                        {
+                          "type": "serial",
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\payments.spec.ts",
+                            "line": 13,
+                            "column": 6
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 120000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\payments.spec.ts",
+                        "line": 13,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9213,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T12:35:33.586Z",
+                      "annotations": [
+                        {
+                          "type": "serial",
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\payments.spec.ts",
+                            "line": 13,
+                            "column": 6
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                },
+                {
+                  "timeout": 120000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\payments.spec.ts",
+                        "line": 13,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10135,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T12:35:53.945Z",
+                      "annotations": [
+                        {
+                          "type": "serial",
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\payments.spec.ts",
+                            "line": 13,
+                            "column": 6
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "bd51122182d9e4115608-03e30eb7623a43a11a7c",
+              "file": "payments.spec.ts",
+              "line": 59,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-08T12:34:53.564Z",
+    "duration": 80006.488,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

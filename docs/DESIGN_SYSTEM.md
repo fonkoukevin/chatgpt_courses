@@ -135,3 +135,15 @@ Acceptation visuelle : aucun texte tronqué essentiel, aucune superposition invo
 Le fichier `references/design-tokens.css` fournit un point de départ. Adapter l’intégration à la version Tailwind/shadcn retenue, sans mélanger des conventions incompatibles. Les classes sémantiques et composants sont la référence, pas des couleurs recopiées dans chaque JSX.
 
 Toutes les chaînes produit sont externalisées. Une variante anglaise n’est pas une interface française avec seulement le menu traduit. Les noms des composants et propriétés restent stables et explicites.
+
+## Réalisation P02 — 8 novembre 2026
+
+- Tailwind **4.3.5** : `@theme inline` dans `apps/web/src/app/globals.css` référence les couleurs de `references/design-tokens.css`. Les composants emploient `surface`, `control`, `brand`, `danger`, etc. Les alias de rayons `input`, `button`, `panel` évitent une autoréférence CSS aux tokens sources.
+- Convention shadcn source : `apps/web/components.json`, alias `@/components/ui` et utilitaire `cn`. Wrappers adaptés manuellement sur **Radix 1.8.1**, pas de génération CLI revendiquée. Select natif pour les choix simples ; Dialog/Sheet, confirmation, onglets, accordéon, radio, checkbox, infobulle et notification utilisent Radix.
+- Une seule famille d’icônes : **Lucide 1.70.0**. Police système prévue par la charte, sans téléchargement de police ni logo tiers. Pas de thème sombre ou sélecteur non réalisé.
+- Boutons et champs : cible de 44 px ; cases/radios dans un label tactile de 44 px. Focus avec contour/anneau et espace de séparation. Métadonnées et badges : au moins 13 px. Animations et transitions supprimées sous `prefers-reduced-motion: reduce`.
+- Administration mobile : état placé sous le titre du contenu sous 640 px ; colonnes secondaires masquées, action de détail conservée. Détail dans une section nommée avec transfert de focus. Navigation apprenant/admin dans un Sheet sous 1024 px ; dossier de référence dans un Sheet sous 1280 px.
+- `SaveStatus` n’affiche « enregistré » qu’avec une confirmation horodatée explicite. La démonstration utilise l’état local, jamais une fausse réponse serveur. Progression et autoévaluation ont des libellés distincts ; aucun état inconnu n’est interprété comme une réussite.
+- Textes FR/EN centralisés dans `lib/i18n/{gallery,showcase,domain}.ts`. Fixtures isolées dans `components/demos/fixtures.ts`. Routes techniques stables `/{locale}/dev/{components,public,learning,admin}` ; elles ne remplacent pas les routes produit du registre `SCREENS.md`.
+
+Mesures des combinaisons de contraste, recette exécutée, captures et limites : [preuve P02](evidence/P02.md). Les contrôles ciblés ne constituent pas un audit WCAG complet.

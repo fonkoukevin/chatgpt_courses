@@ -4,23 +4,23 @@ Plateforme de formation pratique à l’IA : choisir une tâche, apprendre, prod
 
 ## État réel
 
-P01 fournit les fondations locales : pages FR/EN, sonde Spring avec PostgreSQL réel, proxy de même origine, services Compose et première chaîne de vérification. Les parcours, comptes, paiements et écrans métier restent à développer. Aucun ancien prototype n’est repris et aucun déploiement externe n’est annoncé.
+P01 fournit les fondations locales : pages FR/EN, sonde Spring avec PostgreSQL réel, proxy de même origine, services Compose et première chaîne de vérification. P02 ajoute le système visuel, une galerie interactive et les structures public, apprenant et administration. Les données métier, comptes et paiements seront raccordés dans les prochains lots. Aucun ancien prototype n’est repris et aucun déploiement externe n’est annoncé.
 
-P01 est **validé localement**, y compris dans Chromium de test avec Playwright, selon la méthode autorisée par l’utilisateur. Sept tests et la revue des 16 captures couvrent FR/EN, clavier, formats étroits, erreur 404 et panne/reprise réelle de Spring. Cette validation concerne les fondations ; le design complet et les écrans métier restent à construire.
+La validation P01 couvre FR/EN, clavier, formats étroits, erreur 404 et panne/reprise réelle de Spring. P02 ajoute 14 tests et 54 captures examinées pour les interfaces ; les sept scénarios P01 passent à nouveau après ces changements. La validation reste locale, avec le Chromium de test autorisé.
 
-Lire [AGENTS.md](AGENTS.md), puis [docs/STATUS.md](docs/STATUS.md). Les vérifications et limites sont dans [docs/evidence/P01.md](docs/evidence/P01.md) ; l’audit initial reste dans [docs/evidence/P00.md](docs/evidence/P00.md).
+Lire [AGENTS.md](AGENTS.md), puis [docs/STATUS.md](docs/STATUS.md). Vérifications et limites : [P02](docs/evidence/P02.md), [P01](docs/evidence/P01.md) ; audit initial : [P00](docs/evidence/P00.md).
 
 ## Structure retenue
 
 | Chemin | Rôle | État P01 |
 | --- | --- | --- |
-| `apps/web` | Next App Router, TypeScript strict, Tailwind, dictionnaires FR/EN et client API | Minimal fonctionnel ; composants shadcn/Radix en P02 |
+| `apps/web` | Next App Router, TypeScript strict, Tailwind, dictionnaires FR/EN et client API | UI Radix adaptée, galerie et trois structures locales ; fondation API conservée |
 | `apps/api` | Java 21, Spring Boot, Security, sessions JDBC, JPA et Flyway | Sonde et migration d’infrastructure ; métier en P03 et suivants |
 | `infra/compose` | PostgreSQL, Mailpit, profil S3 local | Images exactes avec digests ; production ultérieure |
 | `scripts` | Outils, configuration, démarrage et vérification | Commandes ci-dessous |
 | `docs` | Contrat produit, décisions, suivi et preuves | Présent |
 | `prompts` | Lots P00–P23 et prompts de reprise | Présent |
-| `references` | Tokens de référence pour P02 | Présent |
+| `references` | Tokens utilisés par Tailwind et les composants | Intégré en P02 |
 
 Une seule origine publique ; `/api/v1` est servi par Spring. Spring reste l’autorité pour l’identité, les permissions, les achats, les droits et la progression. Sessions JDBC, CSRF et absence de cache partagé pour les données privées sont obligatoires. Le générateur prépare du texte sans API IA payante.
 
@@ -106,8 +106,41 @@ La CI Linux utilise les mêmes versions, le lockfile npm et le Wrapper, avec des
 
 ## Configuration et suite
 
-[VERSIONS.md](docs/VERSIONS.md) distingue versions résolues et outils P02 encore proposés. [CONFIGURATION.md](docs/CONFIGURATION.md) précise le chargement, les profils et les secrets ; [SCREENS.md](docs/SCREENS.md) centralise les routes FR/EN.
+[VERSIONS.md](docs/VERSIONS.md) distingue versions résolues et CLI shadcn non exécuté. [CONFIGURATION.md](docs/CONFIGURATION.md) précise le chargement, les profils et les secrets ; [SCREENS.md](docs/SCREENS.md) centralise les routes FR/EN.
 
-Les pages de fondation sont non indexables et limitées à `APP_ENV=local|test`. Le profil de production exige une origine publique HTTPS et des cookies sécurisés ; cela ne constitue pas un déploiement. Prix, conditions, médias et accès fournisseurs restent ouverts, sans bloquer P02.
+Les pages de fondation et de démonstration sont non indexables et limitées à `APP_ENV=local|test`. Le profil de production exige une origine publique HTTPS et des cookies sécurisés ; cela ne constitue pas un déploiement. Prix, conditions, médias et accès fournisseurs restent ouverts, sans bloquer le modèle de données P03.
 
-Prochain prompt : [prompts/P02_DESIGN_SYSTEM_INTERFACES.txt](prompts/P02_DESIGN_SYSTEM_INTERFACES.txt).
+## Examiner les interfaces P02
+
+Le frontend seul suffit pour la vitrine, sans démarrer PostgreSQL ou Spring :
+
+```powershell
+.\scripts\courses.cmd ci
+.\scripts\courses.cmd run dev:web
+```
+
+Arrêter ce lancement avec **Ctrl+C dans son terminal**. Sur http://localhost:3000 :
+
+| Vue locale | Français | Anglais |
+| --- | --- | --- |
+| Galerie et états | `/fr/dev/components` | `/en/dev/components` |
+| Accueil | `/fr/dev/public` | `/en/dev/public` |
+| Leçon et atelier | `/fr/dev/learning` | `/en/dev/learning` |
+| Administration | `/fr/dev/admin` | `/en/dev/admin` |
+
+Les fixtures sont signalées et séparées. Génération de prompt, saisie, autoévaluation et filtres travaillent dans la page ; aucun enregistrement serveur, rôle administrateur, publication ou achat n’est simulé comme acquis. Recharger/quitter efface le travail local. Les rubriques futures portent « En développement ». Les routes publiques finales du produit ne sont pas activées par cette vitrine ; `/fr` et `/en` conservent la sonde P01.
+
+Recette du build avec le Chromium de test déjà autorisé et installé (fermer d’abord les instances utilisant les ports 3101/8181) :
+
+```powershell
+.\scripts\courses.cmd run lint
+.\scripts\courses.cmd run typecheck
+.\scripts\courses.cmd run typecheck:browser
+.\scripts\courses.cmd run build
+.\scripts\courses.cmd run verify:contrast
+.\scripts\courses.cmd run verify:design
+```
+
+Si Chromium n’est pas installé, `run browser:install` installe la version verrouillée dans `.tools/playwright`. `verify:design` ne télécharge rien : il réserve ses propres serveurs, teste les interfaces, enregistre captures/rapport dans `docs/evidence/P02-browser`, puis vérifie les refus HTTP 404 en modes staging/production et arrête tous ses processus. Cela reste une recette locale du build, sans déploiement. `run verify:browser` conserve les sept scénarios API P01 et nécessite PostgreSQL démarré ainsi que le build API.
+
+Prochain prompt : [prompts/P03_MODELE_DONNEES_API.txt](prompts/P03_MODELE_DONNEES_API.txt).

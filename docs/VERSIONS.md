@@ -1,6 +1,19 @@
 # Versions — propositions P00 et verrouillage P01
 
-Vérifications réalisées le **7 novembre 2026**, dans les documentations officielles et les registres officiels. P00 a proposé les versions ci-dessous ; P01 les a installées et verrouillées pour les fondations effectivement présentes. Les preuves d’exécution sont dans `evidence/P01.md` ; shadcn/Radix restent des candidats pour P02, sans installation revendiquée.
+Vérifications réalisées les **7 et 8 novembre 2026**, dans les documentations officielles et les registres officiels. P00 a proposé les versions ci-dessous ; P01 les a installées et verrouillées pour les fondations effectivement présentes. P02 ajoute les primitives et utilitaires du système visuel. Preuves : `evidence/P01.md` et `evidence/P02.md`.
+
+## Compléments verrouillés en P02
+
+| Dépendance | Version exacte | Compatibilité vérifiée |
+| --- | --- | --- |
+| radix-ui | 1.8.1 | Package unifié ; peers React/DOM incluent React 19 |
+| lucide-react | 1.70.0 | Peer React `^19.0.0`, une seule famille d’icônes |
+| clsx | 2.1.1 | Node ≥6 ; utilitaire de classes sans runtime React |
+| tailwind-merge | 3.7.0 | Branche Tailwind 4 ; classes sémantiques vérifiées par build et rendu |
+
+Installation exacte puis `npm ci` réellement exécutés : **277 paquets ajoutés, 285 audités, zéro alerte**. Un seul gestionnaire/lockfile conservé, aucun override de peers ajouté. shadcn CLI **4.23.0** reste une référence vérifiée, **non installé ni exécuté** : les sources UI sont adaptées manuellement avec `components.json`, sans écraser la palette du projet. La stack et les versions P01 restent inchangées.
+
+Sources : [registre Radix exact](https://registry.npmjs.org/radix-ui/1.8.1), [Lucide exact](https://registry.npmjs.org/lucide-react/1.70.0), [clsx exact](https://registry.npmjs.org/clsx/2.1.1), [tailwind-merge exact](https://registry.npmjs.org/tailwind-merge/3.7.0), [mainteneur tailwind-merge](https://github.com/dcastil/tailwind-merge), [shadcn et Tailwind 4](https://ui.shadcn.com/docs/tailwind-v4), [convention components.json](https://ui.shadcn.com/docs/components-json). Les métadonnées ont été lues avant l’installation le 8 novembre.
 
 ## Verrouillage réellement effectué en P01
 

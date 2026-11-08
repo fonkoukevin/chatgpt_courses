@@ -1,0 +1,122 @@
+[
+  {
+    "environment": "staging",
+    "path": "/fr/dev",
+    "status": 404,
+    "fixtureVisible": false
+  },
+  {
+    "environment": "staging",
+    "path": "/fr/dev/components",
+    "status": 404,
+    "fixtureVisible": false
+  },
+  {
+    "environment": "staging",
+    "path": "/fr/dev/public",
+    "status": 404,
+    "fixtureVisible": false
+  },
+  {
+    "environment": "staging",
+    "path": "/fr/dev/learning",
+    "status": 404,
+    "fixtureVisible": false
+  },
+  {
+    "environment": "staging",
+    "path": "/fr/dev/admin",
+    "status": 404,
+    "fixtureVisible": false
+  },
+  {
+    "environment": "staging",
+    "path": "/en/dev",
+    "status": 404,
+    "fixtureVisible": false
+  },
+  {
+    "environment": "staging",
+    "path": "/en/dev/components",
+    "status": 404,
+    "fixtureVisible": false
+  },
+  {
+    "environment": "staging",
+    "path": "/en/dev/public",
+    "status": 404,
+    "fixtureVisible": false
+  },
+  {
+    "environment": "staging",
+    "path": "/en/dev/learning",
+    "status": 404,
+    "fixtureVisible": false
+  },
+  {
+    "environment": "staging",
+    "path": "/en/dev/admin",
+    "status": 404,
+    "fixtureVisible": false
+  },
+  {
+    "environment": "production",
+    "path": "/fr/dev",
+    "status": 404,
+    "fixtureVisible": false
+  },
+  {
+    "environment": "production",
+    "path": "/fr/dev/components",
+    "status": 404,
+    "fixtureVisible": false
+  },
+  {
+    "environment": "production",
+    "path": "/fr/dev/public",
+    "status": 404,
+    "fixtureVisible": false
+  },
+  {
+    "environment": "production",
+    "path": "/fr/dev/learning",
+    "status": 404,
+    "fixtureVisible": false
+  },
+  {
+    "environment": "production",
+    "path": "/fr/dev/admin",
+    "status": 404,
+    "fixtureVisible": false
+  },
+  {
+    "environment": "production",
+    "path": "/en/dev",
+    "status": 404,
+    "fixtureVisible": false
+  },
+  {
+    "environment": "production",
+    "path": "/en/dev/components",
+    "status": 404,
+    "fixtureVisible": false
+  },
+  {
+    "environment": "production",
+    "path": "/en/dev/public",
+    "status": 404,
+    "fixtureVisible": false
+  },
+  {
+    "environment": "production",
+    "path": "/en/dev/learning",
+    "status": 404,
+    "fixtureVisible": false
+  },
+  {
+    "environment": "production",
+    "path": "/en/dev/admin",
+    "status": 404,
+    "fixtureVisible": false
+  }
+]

@@ -76,7 +76,7 @@ public final class MethodDtos {
         @Override public String toString() { return "PersonalMethod[redacted]"; }
     }
     public record Summary(UUID id, long revision, String title, String locale, String category, Instant updatedAt, boolean hasSource) {
-        static Summary from(MethodTypes.MethodSummary value) { return new Summary(value.id(), value.revision(), value.title(), value.locale(), value.category(), value.updatedAt(), value.hasSource()); }
+        public static Summary from(MethodTypes.MethodSummary value) { return new Summary(value.id(), value.revision(), value.title(), value.locale(), value.category(), value.updatedAt(), value.hasSource()); }
     }
     public record Page(List<Summary> items, int page, int pageSize, long total) {
         static Page from(MethodTypes.MethodPage value) { return new Page(value.items().stream().map(Summary::from).toList(), value.page(), value.pageSize(), value.total()); }

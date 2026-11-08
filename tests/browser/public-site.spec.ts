@@ -2,6 +2,7 @@ import { expect, test, type APIRequestContext, type Page } from '@playwright/tes
 import { randomUUID } from 'node:crypto';
 import { join } from 'node:path';
 import { getPublicDictionary } from '../../apps/web/src/lib/i18n/public';
+import { getLearningDictionary } from '../../apps/web/src/lib/i18n/learning';
 import type { ContentView } from '../../apps/web/src/lib/api/generated/types.gen';
 import { catalogueHref, courseActivityHref, resourceHref as publicResourceHref } from '../../apps/web/src/lib/public/routes';
 import { controlApi } from './control';
@@ -48,7 +49,7 @@ test.describe('P06 public publications', () => {
     await noOverflow(page); await capture(page, `${locale}-390-home`);
     await page.setViewportSize({ width: 1440, height: 1000 });
     await page.getByRole('link', { name: t.try, exact: true }).click();
-    await expect(page.getByText(t.activityNotice, { exact: true })).toBeVisible();
+    await expect(page.getByText(getLearningDictionary(locale).signInHelp, { exact: true })).toBeVisible();
     await expect(page.getByRole('checkbox').first()).toBeVisible();
     await page.goto(catalogueHref(locale));
     await expect(page.getByRole('heading', { level: 1, name: t.catalogue, exact: true })).toBeVisible();
@@ -139,9 +140,9 @@ test.describe('P06 public publications', () => {
       const course = fixture.resources.course[locale].value, activity = fixture.resources.activity[locale].value;
       await page.goto(courseActivityHref(locale, course.slug, activity.slug, activity.resourceId, activity.versionId, course.versionId));
       await expect(page.getByRole('heading', { level: 1, name: activity.title })).toBeVisible();
-      await expect(page.getByText(t.activityNotice, { exact: true })).toBeVisible();
+      await expect(page.getByText(getLearningDictionary(locale).signInHelp, { exact: true })).toBeVisible();
       await page.getByRole('checkbox').first().check();
-      await expect(page.getByText(t.checklistNotice, { exact: true })).toBeVisible();
+      await expect(page.getByText(getLearningDictionary(locale).checklistNotice, { exact: true })).toBeVisible();
       await noOverflow(page); await capture(page, `${locale}-390-activity`);
     }
     const premium = fixture.resources.premium.value;

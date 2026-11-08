@@ -10,7 +10,19 @@ Le superviseur réserve les ports **3101 et 8181** par défaut (`BROWSER_WEB_POR
 
 Les sept tests couvrent FR/EN à 1440, 390 et 320 px : navigation clavier, cible du lien d’évitement, focus visible conservé après réponse, réponse réelle Spring/PostgreSQL, erreur 404 structurée, absence de défilement horizontal et d’exception JavaScript. Le dernier test arrête réellement Spring, vérifie l’indisponibilité dans les deux langues pendant que Next répond toujours, redémarre Spring, puis utilise « Réessayer » pour confirmer la reprise et le transfert de focus attendu.
 
-Depuis P06, ces contrôles techniques ouvrent `/{locale}/dev/foundations` ; l’accueil lit le catalogue publié. Les commandes `run verify:editorial` (P05) et `run verify:public` (P06) réservent leur propre PostgreSQL en tmpfs, sans employer le volume Compose. Elles créent leurs comptes et publications fictives dans cette seule instance, contrôlent son étiquette d’appartenance et l’arrêtent après les tests. Aucun compte éditeur ni contenu public n’est injecté dans la base de développement partagée.
+Depuis P06, ces contrôles techniques ouvrent `/{locale}/dev/foundations` ; l’accueil lit le catalogue publié. Les recettes P05 à P08 réservent leur propre PostgreSQL en tmpfs, sans employer le volume Compose. Elles créent leurs comptes et publications fictives dans cette seule instance, contrôlent son étiquette d’appartenance et l’arrêtent après les tests. Aucun compte éditeur ni contenu public n’est injecté dans la base de développement partagée.
+
+| Phase | Commande après `.\scripts\courses.cmd` | Données utilisées |
+| --- | --- | --- |
+| P01 fondations | `run verify:browser` | PostgreSQL Compose démarré |
+| P02 composants | `run verify:design` | Frontend seul ; garde de production vérifiée ensuite |
+| P04 identité | `run verify:identity` | PostgreSQL Compose et SMTP Mailpit locaux |
+| P05 CMS | `run verify:editorial` | PostgreSQL tmpfs propre à la recette |
+| P06 public | `run verify:public` | Publications fictives dans PostgreSQL tmpfs |
+| P07 méthodes | `run verify:methods` | Sources et copies privées fictives dans PostgreSQL tmpfs |
+| P08 apprentissage | `run verify:learning` | Programme BR01, notes et tentatives fictifs dans PostgreSQL tmpfs |
+
+Les rapports des lots ultérieurs utilisent `docs/evidence/Pxx-browser/<session>/`. Les captures P06–P08 placent le focus sur le contenu principal avant photographie pour éviter un artefact du lien d’évitement ; les assertions de clavier sont réalisées séparément. Le contrôleur IPC arrête uniquement l’API réservée à la recette, jamais les onglets ou serveurs personnels. Ne pas lancer deux recettes sur les mêmes ports en parallèle.
 
 Les captures PNG de page, sans barres du navigateur utilisateur, et le rapport JSON vont dans `docs/evidence/P01-browser/<session>/`. La capture remonte au début de page sans changer le focus, pour éviter un artefact des éléments fixes après défilement. Les résultats temporaires et journaux restent dans `.runtime/`. Chaque exécution possède son dossier. Un code de sortie non nul ou un nettoyage non confirmé reste un échec ; tous les arrêts sont tentés et regroupés dans l’erreur finale. Les images sont ensuite examinées : les assertions automatiques ne suffisent pas à déclarer une revue visuelle.
 

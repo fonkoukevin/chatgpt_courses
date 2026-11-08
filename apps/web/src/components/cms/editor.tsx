@@ -21,6 +21,7 @@ import { ReadinessPanel } from "./readiness";
 import { ChildVersionPicker } from "./child-version-picker";
 import { MetadataEditor } from "./metadata-editor";
 import { MethodDefinitionFields } from "./method-definition-fields";
+import { QuizPolicyFields } from "./quiz-policy-fields";
 
 type Props = { locale: Locale; initial: AuthResult<ContentView>; initialReadiness: AuthResult<Readiness>; initialDependencies: AuthResult<Dependencies>; permissions: string[] };
 const editable = (content: ContentView): LocalContent => ({ title: content.title, summary: content.summary, document: content.document ?? emptyDocument(), reason: "" });
@@ -171,6 +172,7 @@ function EditorReady({ locale, initial, initialEtag, initialReadiness, initialDe
         <FormField id="cms-summary" label={text.summary}><TextArea name="summary" maxLength={2000} rows={3} value={session.value.summary} readOnly={!canWrite} onChange={(event) => update("summary", event.target.value)} /></FormField>
         {canWrite ? <DocumentEditor key={resetKey} locale={locale} value={session.value.document} onChange={(document) => update("document", document)} /> : <DocumentPreview locale={locale} value={session.value.document} />}
         {canWrite && content.kind === "METHOD_TEMPLATE" && <MethodDefinitionFields locale={locale} value={session.value.document.methodDefinition} onChange={(value) => update("document", { ...session.value.document, methodDefinition: value })} />}
+        {canWrite && content.kind === "ACTIVITY" && session.value.document.quiz.length > 0 && <QuizPolicyFields locale={locale} value={session.value.document.quizPolicy} onChange={(value) => update("document", { ...session.value.document, quizPolicy: value })} />}
         {canWrite && <><FormField id="cms-reason" label={text.reason} hint={text.reasonHint} error={reasonMissing ? text.required : undefined} required><TextArea name="reason" maxLength={1000} rows={3} value={session.value.reason} onChange={(event) => update("reason", event.target.value)} /></FormField><Button type="submit" busy={saving} disabled={session.phase === "saved" || session.phase === "conflict"} loadingLabel={text.saving}>{text.save}</Button></>}
       </form>
       {(content.kind === "COURSE" || content.kind === "MODULE") && <section id="cms-composition" className="space-y-4 rounded-panel border border-border p-4 sm:p-6"><h2 className="text-xl font-semibold">{text.composition}</h2><p className="text-sm text-muted-foreground">{text.compositionHelp}</p>

@@ -307,7 +307,8 @@ public class EditorialService {
         for(int i=0;i<ids.size();i++)jdbc.update("INSERT INTO version_compositions(id,parent_version_id,child_version_id,position) VALUES(?,?,?,?)",UUID.randomUUID(),version,ids.get(i),i+1);
     }
     private boolean samePedagogy(ContentDocument before,ContentDocument after) {
-        return before!=null && Objects.equals(before.objective(),after.objective()) && Objects.equals(before.exercise(),after.exercise()) && Objects.equals(before.quiz(),after.quiz()) && Objects.equals(before.rubric(),after.rubric());
+        return before!=null && Objects.equals(before.objective(),after.objective()) && Objects.equals(before.exercise(),after.exercise()) && Objects.equals(before.quiz(),after.quiz()) && Objects.equals(before.rubric(),after.rubric())
+            && Objects.equals(com.chatgptcourses.learning.service.LearningValidation.effectivePolicy(before.quizPolicy()),com.chatgptcourses.learning.service.LearningValidation.effectivePolicy(after.quizPolicy()));
     }
     private UUID sourceCurrent(ContentView v) {
         return v.sourceTranslationId()==null?null:jdbc.queryForObject("SELECT current_revision_id FROM content_translations WHERE id=?",UUID.class,v.sourceTranslationId());
@@ -370,7 +371,8 @@ public class EditorialService {
         return new Dependencies(deps,v.state()!=EditorialState.ARCHIVED,List.of("ARCHIVE_REMOVES_PUBLIC_ACCESS","HISTORY_RETAINED","DEPENDENTS_REQUIRE_REVIEW"));
     }
     private static boolean sameAssessmentStructure(ContentDocument source,ContentDocument translated) {
-        if((source.exercise()==null)!=(translated.exercise()==null) || source.quiz().size()!=translated.quiz().size() || source.rubric().size()!=translated.rubric().size())return false;
+        if((source.exercise()==null)!=(translated.exercise()==null) || source.quiz().size()!=translated.quiz().size() || source.rubric().size()!=translated.rubric().size()
+            || !Objects.equals(com.chatgptcourses.learning.service.LearningValidation.effectivePolicy(source.quizPolicy()),com.chatgptcourses.learning.service.LearningValidation.effectivePolicy(translated.quizPolicy())))return false;
         for(int i=0;i<source.quiz().size();i++) {
             var a=source.quiz().get(i);var b=translated.quiz().get(i);
             if(!a.key().equals(b.key()) || a.options().size()!=b.options().size() || a.correctOption()!=b.correctOption() || a.points()!=b.points())return false;
@@ -383,7 +385,7 @@ public class EditorialService {
     }
     private static void issue(List<Issue> list,String code,String field,UUID id) {list.add(new Issue(code,field,id,"FIX_"+code));}
     private ContentDocument decode(String json) {return json==null?null:mapper.readValue(json,ContentDocument.class);}
-    private static PublicDocument publicDocument(ContentDocument d) {return new PublicDocument(d.objective(),d.expectedResult(),d.prerequisites(),d.blocks(),d.estimatedMinutes(),d.exercise()==null?null:d.exercise().instructions(),d.quiz().stream().map(q->new PublicQuizQuestion(q.key(),q.prompt(),q.options(),q.points())).toList(),d.rubric(),d.access(),d.media(),d.relatedResourceIds(),d.methodDefinition());}
+    private static PublicDocument publicDocument(ContentDocument d) {return new PublicDocument(d.objective(),d.expectedResult(),d.prerequisites(),d.blocks(),d.estimatedMinutes(),d.exercise()==null?null:d.exercise().instructions(),d.quiz().stream().map(q->new PublicQuizQuestion(q.key(),q.prompt(),q.options(),q.points())).toList(),d.rubric(),d.access(),d.media(),d.relatedResourceIds(),d.methodDefinition(),d.quizPolicy());}
     private static UUID uuid(ResultSet rs,String field)throws SQLException {return rs.getObject(field,UUID.class);}
     private static Instant instant(ResultSet rs,String field)throws SQLException {Timestamp t=rs.getTimestamp(field);return t==null?null:t.toInstant();}
     private record Child(UUID resource,Instant frozen,String state,UUID published) { }

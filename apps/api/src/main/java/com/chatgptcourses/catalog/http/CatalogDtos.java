@@ -76,7 +76,7 @@ public final class CatalogDtos {
     public record Curriculum(UUID resourceId, ResourceKind kind, UUID versionId, int versionNumber, String locale, String slug,
                              String availability, UUID revisionId, String title, String summary, String access, Integer estimatedMinutes,
                              List<Curriculum> children) {
-        static Curriculum from(CatalogTypes.CurriculumNode value) {
+        public static Curriculum from(CatalogTypes.CurriculumNode value) {
             return new Curriculum(value.resourceId(), value.kind(), value.versionId(), value.versionNumber(), value.locale(), value.slug(),
                     value.availability(), value.revisionId(), value.title(), value.summary(), value.access(), value.estimatedMinutes(), value.children().stream().map(Curriculum::from).toList());
         }
@@ -85,7 +85,7 @@ public final class CatalogDtos {
                          String availability, UUID revisionId, String title, String summary, String access, EditorialDtos.PublicDocument document,
                          Metadata metadata, Instant reviewedAt, List<Language> languages, List<Curriculum> curriculum, List<Card> related,
                          String objective, String expectedResult, List<String> prerequisites, Integer estimatedMinutes) {
-        static Detail from(CatalogTypes.ResourceDetail value) {
+        public static Detail from(CatalogTypes.ResourceDetail value) {
             return new Detail(value.resourceId(), value.kind(), value.versionId(), value.versionNumber(), value.locale(), value.slug(),
                     value.availability(), value.revisionId(), value.title(), value.summary(), value.access(), EditorialDtos.PublicDocument.from(value.document()),
                     Metadata.from(value.metadata()), value.reviewedAt(), value.languages().stream().map(Language::from).toList(), value.curriculum().stream().map(Curriculum::from).toList(),

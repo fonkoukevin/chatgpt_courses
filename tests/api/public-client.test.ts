@@ -11,7 +11,7 @@ import { parseCatalogueQuery, safeCatalogueReturnTo } from "../../apps/web/src/l
 const originalFetch = globalThis.fetch;
 afterEach(() => { globalThis.fetch = originalFetch; });
 const metadata = { goalCodes: [], level: null, audience: [], tools: [], sources: [], faq: [], evaluationDescription: null };
-const document: PublicDocument = { objective: "Fictional unit-test objective", expectedResult: "Fictional unit-test result", prerequisites: [], blocks: [{ type: "PARAGRAPH", text: "A safe unit-test paragraph.", url: null }], estimatedMinutes: null, quiz: [{ key: "q1", prompt: "A test question", options: ["Option A", "Option B"], points: 1 }], rubric: [], access: "FREE", media: [], relatedResourceIds: [], exerciseInstructions: "A fictional exercise.", methodDefinition: null };
+const document: PublicDocument = { objective: "Fictional unit-test objective", expectedResult: "Fictional unit-test result", prerequisites: [], blocks: [{ type: "PARAGRAPH", text: "A safe unit-test paragraph.", url: null }], estimatedMinutes: null, quiz: [{ key: "q1", prompt: "A test question", options: ["Option A", "Option B"], points: 1 }], rubric: [], access: "FREE", media: [], relatedResourceIds: [], exerciseInstructions: "A fictional exercise.", methodDefinition: null, quizPolicy: null };
 function resource(): ResourceDetail {
   return { resourceId: randomUUID(), kind: "ACTIVITY", versionId: randomUUID(), versionNumber: 1, locale: "en", slug: "unit-test", availability: "PUBLISHED", revisionId: randomUUID(), title: "Unit test", summary: "Fictional test data", access: "FREE", document, metadata, reviewedAt: "2026-11-08T00:00:00Z", languages: [{ locale: "en", status: "PUBLISHED", slug: "unit-test" }, { locale: "fr", status: "MISSING_TRANSLATION", slug: null }], curriculum: [], related: [], objective: document.objective, expectedResult: document.expectedResult, prerequisites: [], estimatedMinutes: null };
 }
@@ -20,6 +20,8 @@ test("une projection publique refuse les réponses de quiz et tout corps protég
   assert.equal(isResourceDetail(value), true);
   assert.equal(isPublicDocument({ ...document, quiz: [{ ...document.quiz[0], correctOption: 0 }] }), false);
   assert.equal(isPublicDocument({ ...document, exercise: { instructions: "Test", correction: "Private correction" } }), false);
+  assert.equal(isPublicDocument({ ...document, quizPolicy: { passPercent: 0, maxAttempts: null } }), false);
+  assert.equal(isPublicDocument({ ...document, quizPolicy: { passPercent: 100, maxAttempts: 51 } }), false);
   assert.equal(isResourceDetail({ ...value, access: "PROTECTED" }), false);
   assert.equal(isResourceDetail({ ...value, availability: "STALE" }), false);
   assert.equal(isResourceDetail({ ...value, access: "PROTECTED", document: null }), true);

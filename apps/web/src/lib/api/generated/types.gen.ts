@@ -190,6 +190,7 @@ export type ContentDocument = {
     media: Array<MediaReference>;
     relatedResourceIds: Array<Uuid>;
     methodDefinition?: MethodDefinition | null;
+    quizPolicy?: QuizPolicy | null;
 };
 
 export type CreateContent = {
@@ -414,6 +415,7 @@ export type PublicDocument = {
     relatedResourceIds: Array<Uuid>;
     exerciseInstructions: string | null;
     methodDefinition: MethodDefinition | null;
+    quizPolicy: QuizPolicy | null;
 };
 
 /**
@@ -703,6 +705,287 @@ export type MethodTemplate = {
     slug: string | null;
     availability: 'PUBLISHED' | 'MISSING_DEFINITION' | 'PROTECTED' | 'STALE' | 'WITHDRAWN' | 'MISSING_TRANSLATION';
     definition: MethodDefinition | null;
+};
+
+/**
+ * Politique éditoriale gelée avec le quiz. Champ absent/null du document historique : politique effective100% et tentatives illimitées. Un score formatif ne certifie aucune compétence.
+ */
+export type QuizPolicy = {
+    passPercent: number;
+    maxAttempts: number | null;
+};
+
+/**
+ * Faits indépendants ; dénominateur figé des versions d’activité distinctes du programme, pas de résultat projet avantP09.
+ */
+export type ProgressTotals = {
+    totalActivities: number;
+    readActivities: number;
+    completedActivities: number;
+    quizPassedActivities: number;
+    projectAvailability: 'NOT_AVAILABLE';
+};
+
+export type ResumeTarget = {
+    enrollmentId: Uuid;
+    courseResourceId: Uuid;
+    courseVersionId: Uuid;
+    courseSlug: string;
+    activityId: Uuid;
+    activityVersionId: Uuid;
+    activitySlug: string;
+    locale: Locale;
+    title: string;
+};
+
+/**
+ * Inscription de suivi, jamais un achat/droit. Un parcoursPROTECTED peut être commencé si une activitéFREE est disponible ; chaque activité conserve son autorisation propre.
+ */
+export type EnrollmentSummary = {
+    id: Uuid;
+    courseResourceId: Uuid;
+    courseVersionId: Uuid;
+    courseVersionNumber: number;
+    title: string;
+    enrolledLocale: Locale;
+    courseSlug: string | null;
+    accessStatus: 'ACTIVE' | 'PROTECTED' | 'UNAVAILABLE';
+    availability: 'PUBLISHED' | 'MISSING_TRANSLATION' | 'STALE' | 'WITHDRAWN';
+    progress: ProgressTotals;
+    createdAt: UtcInstant;
+    lastVisitedAt: UtcInstant | null;
+};
+
+export type LearningDashboard = {
+    resume: ResumeTarget | null;
+    enrollments: Array<EnrollmentSummary>;
+    recentMethods: Array<MethodSummary>;
+    recentMethodsAvailability: 'AVAILABLE' | 'FORBIDDEN';
+};
+
+/**
+ * Lecture déclarée et activité déclarée terminée, indépendantes du quiz, du projet et de toute mesure vidéo. ETag individuel ; une visite ne change pas cette révision.
+ */
+export type ActivityProgressView = {
+    id: Uuid;
+    enrollmentId: Uuid;
+    activityId: Uuid;
+    activityVersionId: Uuid;
+    revision: Revision;
+    readAt: UtcInstant | null;
+    completedAt: UtcInstant | null;
+};
+
+export type EnrolledActivity = {
+    activityId: Uuid;
+    activityVersionId: Uuid;
+    moduleId: Uuid;
+    moduleVersionId: Uuid;
+    position: number;
+    title: string;
+    accessStatus: 'ACTIVE' | 'PROTECTED' | 'UNAVAILABLE';
+    availability: 'PUBLISHED' | 'MISSING_TRANSLATION' | 'STALE' | 'WITHDRAWN';
+    progress: ActivityProgressView;
+};
+
+/**
+ * Programme épinglé aux versions exactes de l’inscription. Aucune substitution par une version plus récente.
+ */
+export type EnrollmentView = {
+    summary: EnrollmentSummary;
+    curriculum: Array<CurriculumNode>;
+    activities: Array<EnrolledActivity>;
+};
+
+export type ActivityLink = {
+    activityId: Uuid;
+    activityVersionId: Uuid;
+    slug: string | null;
+    title: string | null;
+    availability: 'PUBLISHED' | 'MISSING_TRANSLATION' | 'STALE' | 'WITHDRAWN';
+    accessStatus: 'ACTIVE' | 'PROTECTED' | 'UNAVAILABLE';
+};
+
+/**
+ * Résumé des tentatives durables du propriétaire/version, communFR/EN ; aucune réponse correcte dans la lecture initiale.
+ */
+export type QuizOverview = {
+    policy: QuizPolicy;
+    attemptsUsed: number;
+    attemptsRemaining: number | null;
+    latestAttemptId: Uuid | null;
+    passed: boolean;
+};
+
+export type LearningActivity = {
+    enrollmentId: Uuid;
+    activityId: Uuid;
+    activityVersionId: Uuid;
+    moduleId: Uuid;
+    moduleVersionId: Uuid;
+    position: number;
+    totalActivities: number;
+    resource: ResourceDetail;
+    progress: ActivityProgressView;
+    previous: ActivityLink | null;
+    next: ActivityLink | null;
+    quiz: QuizOverview | null;
+    accessStatus: 'ACTIVE' | 'PROTECTED' | 'UNAVAILABLE';
+    availability: 'PUBLISHED' | 'MISSING_TRANSLATION' | 'STALE' | 'WITHDRAWN';
+};
+
+/**
+ * Mise à jour de reprise après ouverture réelle ; ne déclare ni lecture, activité terminée, quiz ou projet.
+ */
+export type VisitView = {
+    enrollmentId: Uuid;
+    activityId: Uuid;
+    activityVersionId: Uuid;
+    visitedAt: UtcInstant;
+};
+
+/**
+ * Note du propriétaire, langue et version d’origine immuables. Lisible/modifiable après retrait sans accès à un corps premium.
+ */
+export type ActivityNoteView = {
+    id: Uuid;
+    activityId: Uuid;
+    activityVersionId: Uuid;
+    locale: Locale;
+    text: string;
+    revision: Revision;
+    createdAt: UtcInstant;
+    updatedAt: UtcInstant;
+};
+
+/**
+ * GET sans création automatique. L’ETag est fourni par le GET individuel de la note, pas par cette enveloppe.
+ */
+export type ActivityNoteLookup = {
+    note: ActivityNoteView | null;
+};
+
+export type QuizAnswer = {
+    key: string;
+    optionIndex: number;
+};
+
+/**
+ * Correction uniquement après soumission ; les index sont aussi vérifiés contre la taille réelle des options.
+ */
+export type QuizQuestionResult = {
+    key: string;
+    prompt: string;
+    options: Array<string>;
+    selectedOption: number;
+    correctOption: number;
+    correct: boolean;
+    explanation: string;
+    points: number;
+    awardedPoints: number;
+};
+
+/**
+ * Tentative append-only, snapshot des questions/options/correction/politique et langue. Score calculé parSpring ; ne valide jamais un projet.
+ */
+export type QuizAttemptView = {
+    id: Uuid;
+    submissionId: Uuid;
+    enrollmentId: Uuid;
+    activityId: Uuid;
+    activityVersionId: Uuid;
+    revisionId: Uuid;
+    locale: Locale;
+    attemptNumber: number;
+    scorePoints: number;
+    maxPoints: number;
+    passed: boolean;
+    policy: QuizPolicy;
+    submittedAt: UtcInstant;
+    results: Array<QuizQuestionResult>;
+};
+
+export type QuizAttemptPage = {
+    items: Array<QuizAttemptView>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+/**
+ * Vraie correction formative éphémère d’une publicationFREE. Aucun attemptId, date de sauvegarde, inscription, progression ou résultat durable créé.
+ */
+export type QuizCheckResult = {
+    activityId: Uuid;
+    activityVersionId: Uuid;
+    revisionId: Uuid;
+    locale: Locale;
+    scorePoints: number;
+    maxPoints: number;
+    passed: boolean;
+    policy: QuizPolicy;
+    results: Array<QuizQuestionResult>;
+};
+
+export type EnrollCourse = {
+    courseResourceId: Uuid;
+    courseVersionId: Uuid;
+    locale: Locale;
+};
+
+export type VisitActivity = {
+    activityId: Uuid;
+    activityVersionId: Uuid;
+    locale: Locale;
+};
+
+/**
+ * Chaque false efface seulement le fait correspondant ; aucun quiz/projet/temps vidéo déduit.
+ */
+export type SetActivityProgress = {
+    enrollmentId: Uuid;
+    activityVersionId: Uuid;
+    read: boolean;
+    completed: boolean;
+    locale: Locale;
+};
+
+/**
+ * Texte Unicode valide sansNUL, JSONUTF8 borné48KiB ; note vide explicitement sauvegardable.
+ */
+export type CreateActivityNote = {
+    activityId: Uuid;
+    activityVersionId: Uuid;
+    locale: Locale;
+    text: string;
+};
+
+/**
+ * Seul le texte est modifiable ; aucun propriétaire, langue ou version fourni en entrée. JSONUTF8 borné48KiB.
+ */
+export type UpdateActivityNote = {
+    text: string;
+};
+
+/**
+ * Exactement une réponse par question publiée : doublon, omission, clé inconnue et index hors options refusés. Même propriétaire/submissionId/corps retrouve la tentative ; autrecorps409. Aucun score/propriétaire autoritaire reçu.
+ */
+export type SubmitQuiz = {
+    enrollmentId: Uuid;
+    activityVersionId: Uuid;
+    revisionId: Uuid;
+    locale: Locale;
+    submissionId: Uuid;
+    answers: Array<QuizAnswer>;
+};
+
+/**
+ * Correction éphémère sanscompte. Révision exacte publiée requise ; aucune réponse correcte avant cette soumission.
+ */
+export type QuizCheck = {
+    revisionId: Uuid;
+    locale: Locale;
+    answers: Array<QuizAnswer>;
 };
 
 export type RegisterRequestWritable = {
@@ -2888,3 +3171,872 @@ export type GetMethodTemplateResponses = {
 };
 
 export type GetMethodTemplateResponse = GetMethodTemplateResponses[keyof GetMethodTemplateResponses];
+
+export type GetLearningDashboardData = {
+    body?: never;
+    path?: never;
+    query: {
+        locale: Locale;
+    };
+    url: '/me/learning';
+};
+
+export type GetLearningDashboardErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetLearningDashboardError = GetLearningDashboardErrors[keyof GetLearningDashboardErrors];
+
+export type GetLearningDashboardResponses = {
+    /**
+     * Résultat réel, sans cache partagé.
+     */
+    200: LearningDashboard;
+};
+
+export type GetLearningDashboardResponse = GetLearningDashboardResponses[keyof GetLearningDashboardResponses];
+
+export type EnrollCourseData = {
+    body: EnrollCourse;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+    };
+    path?: never;
+    query?: never;
+    url: '/me/enrollments';
+};
+
+export type EnrollCourseErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type EnrollCourseError = EnrollCourseErrors[keyof EnrollCourseErrors];
+
+export type EnrollCourseResponses = {
+    /**
+     * Résultat réel, sans cache partagé.
+     */
+    200: EnrollmentView;
+    /**
+     * Résultat réel, sans cache partagé.
+     */
+    201: EnrollmentView;
+};
+
+export type EnrollCourseResponse = EnrollCourseResponses[keyof EnrollCourseResponses];
+
+export type GetEnrollmentData = {
+    body?: never;
+    path: {
+        id: Uuid;
+    };
+    query: {
+        locale: Locale;
+    };
+    url: '/me/enrollments/{id}';
+};
+
+export type GetEnrollmentErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetEnrollmentError = GetEnrollmentErrors[keyof GetEnrollmentErrors];
+
+export type GetEnrollmentResponses = {
+    /**
+     * Résultat réel, sans cache partagé.
+     */
+    200: EnrollmentView;
+};
+
+export type GetEnrollmentResponse = GetEnrollmentResponses[keyof GetEnrollmentResponses];
+
+export type GetLearningActivityData = {
+    body?: never;
+    path: {
+        id: Uuid;
+        activityId: Uuid;
+    };
+    query: {
+        activityVersionId: Uuid;
+        locale: Locale;
+    };
+    url: '/me/enrollments/{id}/activities/{activityId}';
+};
+
+export type GetLearningActivityErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetLearningActivityError = GetLearningActivityErrors[keyof GetLearningActivityErrors];
+
+export type GetLearningActivityResponses = {
+    /**
+     * Résultat réel, sans cache partagé.
+     */
+    200: LearningActivity;
+};
+
+export type GetLearningActivityResponse = GetLearningActivityResponses[keyof GetLearningActivityResponses];
+
+export type VisitActivityData = {
+    body: VisitActivity;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+    };
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/me/enrollments/{id}/visits';
+};
+
+export type VisitActivityErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type VisitActivityError = VisitActivityErrors[keyof VisitActivityErrors];
+
+export type VisitActivityResponses = {
+    /**
+     * Résultat réel, sans cache partagé.
+     */
+    200: VisitView;
+};
+
+export type VisitActivityResponse = VisitActivityResponses[keyof VisitActivityResponses];
+
+export type GetActivityProgressData = {
+    body?: never;
+    path: {
+        activityId: Uuid;
+    };
+    query: {
+        enrollmentId: Uuid;
+        activityVersionId: Uuid;
+    };
+    url: '/me/activity-progress/{activityId}';
+};
+
+export type GetActivityProgressErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetActivityProgressError = GetActivityProgressErrors[keyof GetActivityProgressErrors];
+
+export type GetActivityProgressResponses = {
+    /**
+     * Résultat réel, sans cache partagé.
+     */
+    200: ActivityProgressView;
+};
+
+export type GetActivityProgressResponse = GetActivityProgressResponses[keyof GetActivityProgressResponses];
+
+export type SetActivityProgressData = {
+    body: SetActivityProgress;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        activityId: Uuid;
+    };
+    query?: never;
+    url: '/me/activity-progress/{activityId}';
+};
+
+export type SetActivityProgressErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type SetActivityProgressError = SetActivityProgressErrors[keyof SetActivityProgressErrors];
+
+export type SetActivityProgressResponses = {
+    /**
+     * Résultat réel, sans cache partagé.
+     */
+    200: ActivityProgressView;
+};
+
+export type SetActivityProgressResponse = SetActivityProgressResponses[keyof SetActivityProgressResponses];
+
+export type FindActivityNoteData = {
+    body?: never;
+    path: {
+        activityId: Uuid;
+    };
+    query: {
+        activityVersionId: Uuid;
+    };
+    url: '/me/activity-notes/by-activity/{activityId}';
+};
+
+export type FindActivityNoteErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type FindActivityNoteError = FindActivityNoteErrors[keyof FindActivityNoteErrors];
+
+export type FindActivityNoteResponses = {
+    /**
+     * Résultat réel, sans cache partagé.
+     */
+    200: ActivityNoteLookup;
+};
+
+export type FindActivityNoteResponse = FindActivityNoteResponses[keyof FindActivityNoteResponses];
+
+export type CreateActivityNoteData = {
+    body: CreateActivityNote;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+    };
+    path?: never;
+    query?: never;
+    url: '/me/activity-notes';
+};
+
+export type CreateActivityNoteErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type CreateActivityNoteError = CreateActivityNoteErrors[keyof CreateActivityNoteErrors];
+
+export type CreateActivityNoteResponses = {
+    /**
+     * Résultat réel, sans cache partagé.
+     */
+    201: ActivityNoteView;
+};
+
+export type CreateActivityNoteResponse = CreateActivityNoteResponses[keyof CreateActivityNoteResponses];
+
+export type GetActivityNoteData = {
+    body?: never;
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/me/activity-notes/{id}';
+};
+
+export type GetActivityNoteErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetActivityNoteError = GetActivityNoteErrors[keyof GetActivityNoteErrors];
+
+export type GetActivityNoteResponses = {
+    /**
+     * Résultat réel, sans cache partagé.
+     */
+    200: ActivityNoteView;
+};
+
+export type GetActivityNoteResponse = GetActivityNoteResponses[keyof GetActivityNoteResponses];
+
+export type UpdateActivityNoteData = {
+    body: UpdateActivityNote;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/me/activity-notes/{id}';
+};
+
+export type UpdateActivityNoteErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type UpdateActivityNoteError = UpdateActivityNoteErrors[keyof UpdateActivityNoteErrors];
+
+export type UpdateActivityNoteResponses = {
+    /**
+     * Résultat réel, sans cache partagé.
+     */
+    200: ActivityNoteView;
+};
+
+export type UpdateActivityNoteResponse = UpdateActivityNoteResponses[keyof UpdateActivityNoteResponses];
+
+export type SubmitQuizData = {
+    body: SubmitQuiz;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+    };
+    path: {
+        activityId: Uuid;
+    };
+    query?: never;
+    url: '/activities/{activityId}/quiz-attempts';
+};
+
+export type SubmitQuizErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type SubmitQuizError = SubmitQuizErrors[keyof SubmitQuizErrors];
+
+export type SubmitQuizResponses = {
+    /**
+     * Résultat réel, sans cache partagé.
+     */
+    201: QuizAttemptView;
+};
+
+export type SubmitQuizResponse = SubmitQuizResponses[keyof SubmitQuizResponses];
+
+export type ListQuizAttemptsData = {
+    body?: never;
+    path?: never;
+    query: {
+        activityVersionId: Uuid;
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/me/quiz-attempts';
+};
+
+export type ListQuizAttemptsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListQuizAttemptsError = ListQuizAttemptsErrors[keyof ListQuizAttemptsErrors];
+
+export type ListQuizAttemptsResponses = {
+    /**
+     * Résultat réel, sans cache partagé.
+     */
+    200: QuizAttemptPage;
+};
+
+export type ListQuizAttemptsResponse = ListQuizAttemptsResponses[keyof ListQuizAttemptsResponses];
+
+export type GetQuizAttemptData = {
+    body?: never;
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/me/quiz-attempts/{id}';
+};
+
+export type GetQuizAttemptErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetQuizAttemptError = GetQuizAttemptErrors[keyof GetQuizAttemptErrors];
+
+export type GetQuizAttemptResponses = {
+    /**
+     * Résultat réel, sans cache partagé.
+     */
+    200: QuizAttemptView;
+};
+
+export type GetQuizAttemptResponse = GetQuizAttemptResponses[keyof GetQuizAttemptResponses];
+
+export type CheckQuizData = {
+    body: QuizCheck;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+    };
+    path: {
+        resourceId: Uuid;
+        versionId: Uuid;
+    };
+    query?: never;
+    url: '/learning/activities/{resourceId}/versions/{versionId}/quiz-checks';
+};
+
+export type CheckQuizErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type CheckQuizError = CheckQuizErrors[keyof CheckQuizErrors];
+
+export type CheckQuizResponses = {
+    /**
+     * Résultat réel, sans cache partagé.
+     */
+    200: QuizCheckResult;
+};
+
+export type CheckQuizResponse = CheckQuizResponses[keyof CheckQuizResponses];

@@ -3,9 +3,8 @@ info:
   title: ChatGPT Courses API
   version: 0.1.0
   description: >-
-    Opérations réellement introduites jusqu’à P07 : identité, CMS éditorial, catalogue public et méthodes
-    personnelles. Le générateur prépare du texte sans appel IA. Offres, droits commerciaux et paiements des
-    lots suivants non simulés.
+    Opérations introduites jusqu’àP08 : identité, CMS, catalogue public, méthodes personnelles, apprentissage,
+    notes et quiz. Le générateur reste sansAPIIA ; aucun paiement/droit commercial fictif.
 servers:
   - url: /api/v1
     description: API de même origine, préfixe conservé jusqu'à Spring.
@@ -21,6 +20,8 @@ tags:
     description: Publications publiques, métadonnées éditoriales et programmes aux versions épinglées.
   - name: Methods
     description: Générateur déterministe et instantanés personnels propriétaires, sans API IA.
+  - name: Learning
+    description: Faits d’apprentissage distincts, notes propriétaires et quiz corrigés côté serveur.
 paths:
   /system/health:
     get:
@@ -1974,6 +1975,737 @@ paths:
           $ref: '#/components/responses/ProblemResponse'
         default:
           $ref: '#/components/responses/ProblemResponse'
+  /me/learning:
+    get:
+      operationId: getLearningDashboard
+      tags:
+        - Learning
+      summary: Reprendre une activité réellement accessible et ses faits distincts.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+      responses:
+        '200':
+          description: Résultat réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LearningDashboard'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/enrollments:
+    post:
+      operationId: enrollCourse
+      tags:
+        - Learning
+      summary: Commencer le programme exact sans créer de droit acheté.
+      security:
+        - SessionCookie: []
+      description: >-
+        Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context. Un header
+        de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun retry automatique.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnrollCourse'
+      responses:
+        '200':
+          description: Résultat réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnrollmentView'
+        '201':
+          description: Résultat réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            Location:
+              description: Lecture individuelle de la ressource créée.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnrollmentView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/enrollments/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: getEnrollment
+      tags:
+        - Learning
+      summary: Lire son programme épinglé et son dénominateur.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+      responses:
+        '200':
+          description: Résultat réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnrollmentView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/enrollments/{id}/activities/{activityId}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: activityId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: getLearningActivity
+      tags:
+        - Learning
+      summary: Lire l’activité de cette inscription sans corrigé initial.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: activityVersionId
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+      responses:
+        '200':
+          description: Résultat réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LearningActivity'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/enrollments/{id}/visits:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    post:
+      operationId: visitActivity
+      tags:
+        - Learning
+      summary: Enregistrer la dernière activité ouverte sans déclarer son achèvement.
+      security:
+        - SessionCookie: []
+      description: >-
+        Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context. Un header
+        de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun retry automatique.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VisitActivity'
+      responses:
+        '200':
+          description: Résultat réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VisitView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/activity-progress/{activityId}:
+    parameters:
+      - name: activityId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: getActivityProgress
+      tags:
+        - Learning
+      summary: Lire les faits de progression et leur ETag propre.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: enrollmentId
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: activityVersionId
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Résultat réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityProgressView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    put:
+      operationId: setActivityProgress
+      tags:
+        - Learning
+      summary: Déclarer séparément lecture et activité terminée.
+      security:
+        - SessionCookie: []
+      description: >-
+        Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context. Un header
+        de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun retry automatique.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetActivityProgress'
+      responses:
+        '200':
+          description: Résultat réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityProgressView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/activity-notes/by-activity/{activityId}:
+    parameters:
+      - name: activityId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: findActivityNote
+      tags:
+        - Learning
+      summary: Chercher sa note sans en créer une parGET.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: activityVersionId
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Résultat réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityNoteLookup'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/activity-notes:
+    post:
+      operationId: createActivityNote
+      tags:
+        - Learning
+      summary: Créer sa note dans sa langue originale.
+      security:
+        - SessionCookie: []
+      description: >-
+        Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context. Un header
+        de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun retry automatique.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateActivityNote'
+      responses:
+        '201':
+          description: Résultat réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              description: Lecture individuelle de la ressource créée.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityNoteView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/activity-notes/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: getActivityNote
+      tags:
+        - Learning
+      summary: Lire sa note même après retrait de source.
+      security:
+        - SessionCookie: []
+      parameters: []
+      responses:
+        '200':
+          description: Résultat réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityNoteView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    patch:
+      operationId: updateActivityNote
+      tags:
+        - Learning
+      summary: Modifier sa note à la révision confirmée.
+      security:
+        - SessionCookie: []
+      description: >-
+        Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context. Un header
+        de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun retry automatique.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateActivityNote'
+      responses:
+        '200':
+          description: Résultat réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityNoteView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /activities/{activityId}/quiz-attempts:
+    parameters:
+      - name: activityId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    post:
+      operationId: submitQuiz
+      tags:
+        - Learning
+      summary: Soumettre une tentative durable corrigée côté serveur.
+      security:
+        - SessionCookie: []
+      description: >-
+        Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context. Un header
+        de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun retry automatique.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitQuiz'
+      responses:
+        '201':
+          description: Résultat réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            Location:
+              description: Lecture individuelle de la ressource créée.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuizAttemptView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/quiz-attempts:
+    get:
+      operationId: listQuizAttempts
+      tags:
+        - Learning
+      summary: Retrouver les snapshots de ses tentatives FR/EN.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: activityVersionId
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Résultat réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuizAttemptPage'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/quiz-attempts/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: getQuizAttempt
+      tags:
+        - Learning
+      summary: Lire une tentative historique du propriétaire.
+      security:
+        - SessionCookie: []
+      parameters: []
+      responses:
+        '200':
+          description: Résultat réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuizAttemptView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /learning/activities/{resourceId}/versions/{versionId}/quiz-checks:
+    parameters:
+      - name: resourceId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: versionId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    post:
+      operationId: checkQuiz
+      tags:
+        - Learning
+      summary: Vérifier sa compréhension sans sauvegarde durable ni compte.
+      security: []
+      description: >-
+        Public mais CSRF Spring obligatoire, avec session anonymeframework si nécessaire. PublicationFREE
+        disponible et révision exacte, sinon refus. Aucune écriture pédagogique, tentative ou progression ; la
+        sessionCSRF reste celle du framework. Réponses/correction après soumission explicite seulement,
+        no-store. Une réussite formative ne valide pas un projet.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuizCheck'
+      responses:
+        '200':
+          description: Résultat réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuizCheckResult'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
 components:
   schemas:
     SystemHealth:
@@ -2476,6 +3208,10 @@ components:
         methodDefinition:
           anyOf:
             - $ref: '#/components/schemas/MethodDefinition'
+            - type: 'null'
+        quizPolicy:
+          anyOf:
+            - $ref: '#/components/schemas/QuizPolicy'
             - type: 'null'
       description: >-
         Document structuré privé ; taille sérialisée totale maximale 48 KiB UTF-8. La requête entière reste
@@ -3193,6 +3929,7 @@ components:
         - relatedResourceIds
         - exerciseInstructions
         - methodDefinition
+        - quizPolicy
       properties:
         objective:
           type: string
@@ -3258,6 +3995,10 @@ components:
         methodDefinition:
           anyOf:
             - $ref: '#/components/schemas/MethodDefinition'
+            - type: 'null'
+        quizPolicy:
+          anyOf:
+            - $ref: '#/components/schemas/QuizPolicy'
             - type: 'null'
       description: >-
         Projection gratuite publiée, sans corrigé d’exercice ni réponse/explication de quiz. Les contrôles
@@ -4282,6 +5023,830 @@ components:
         Version exacte, jamais latest implicite. Définition présente uniquement pour une publication FREE
         complète. Les articles historiques sans définition conservent MISSING_DEFINITION, sans générateur
         inventé.
+    QuizPolicy:
+      type: object
+      additionalProperties: false
+      required:
+        - passPercent
+        - maxAttempts
+      properties:
+        passPercent:
+          type: integer
+          minimum: 1
+          maximum: 100
+        maxAttempts:
+          anyOf:
+            - type: integer
+              minimum: 1
+              maximum: 50
+            - type: 'null'
+      description: >-
+        Politique éditoriale gelée avec le quiz. Champ absent/null du document historique : politique
+        effective100% et tentatives illimitées. Un score formatif ne certifie aucune compétence.
+    ProgressTotals:
+      type: object
+      additionalProperties: false
+      required:
+        - totalActivities
+        - readActivities
+        - completedActivities
+        - quizPassedActivities
+        - projectAvailability
+      properties:
+        totalActivities:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+        readActivities:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+        completedActivities:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+        quizPassedActivities:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+        projectAvailability:
+          type: string
+          enum:
+            - NOT_AVAILABLE
+      description: >-
+        Faits indépendants ; dénominateur figé des versions d’activité distinctes du programme, pas de
+        résultat projet avantP09.
+    ResumeTarget:
+      type: object
+      additionalProperties: false
+      required:
+        - enrollmentId
+        - courseResourceId
+        - courseVersionId
+        - courseSlug
+        - activityId
+        - activityVersionId
+        - activitySlug
+        - locale
+        - title
+      properties:
+        enrollmentId:
+          $ref: '#/components/schemas/UUID'
+        courseResourceId:
+          $ref: '#/components/schemas/UUID'
+        courseVersionId:
+          $ref: '#/components/schemas/UUID'
+        courseSlug:
+          type: string
+          minLength: 1
+          maxLength: 180
+        activityId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        activitySlug:
+          type: string
+          minLength: 1
+          maxLength: 180
+        locale:
+          $ref: '#/components/schemas/Locale'
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+    EnrollmentSummary:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - courseResourceId
+        - courseVersionId
+        - courseVersionNumber
+        - title
+        - enrolledLocale
+        - courseSlug
+        - accessStatus
+        - availability
+        - progress
+        - createdAt
+        - lastVisitedAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        courseResourceId:
+          $ref: '#/components/schemas/UUID'
+        courseVersionId:
+          $ref: '#/components/schemas/UUID'
+        courseVersionNumber:
+          type: integer
+          minimum: 1
+          maximum: 9007199254740991
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        enrolledLocale:
+          $ref: '#/components/schemas/Locale'
+        courseSlug:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 180
+            - type: 'null'
+        accessStatus:
+          type: string
+          enum:
+            - ACTIVE
+            - PROTECTED
+            - UNAVAILABLE
+        availability:
+          type: string
+          enum:
+            - PUBLISHED
+            - MISSING_TRANSLATION
+            - STALE
+            - WITHDRAWN
+        progress:
+          $ref: '#/components/schemas/ProgressTotals'
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+        lastVisitedAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+      description: >-
+        Inscription de suivi, jamais un achat/droit. Un parcoursPROTECTED peut être commencé si une
+        activitéFREE est disponible ; chaque activité conserve son autorisation propre.
+    LearningDashboard:
+      type: object
+      additionalProperties: false
+      required:
+        - resume
+        - enrollments
+        - recentMethods
+        - recentMethodsAvailability
+      properties:
+        resume:
+          anyOf:
+            - $ref: '#/components/schemas/ResumeTarget'
+            - type: 'null'
+        enrollments:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnrollmentSummary'
+          minItems: 0
+          maxItems: 100
+        recentMethods:
+          type: array
+          items:
+            $ref: '#/components/schemas/MethodSummary'
+          minItems: 0
+          maxItems: 5
+        recentMethodsAvailability:
+          type: string
+          enum:
+            - AVAILABLE
+            - FORBIDDEN
+    ActivityProgressView:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - enrollmentId
+        - activityId
+        - activityVersionId
+        - revision
+        - readAt
+        - completedAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        enrollmentId:
+          $ref: '#/components/schemas/UUID'
+        activityId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        revision:
+          $ref: '#/components/schemas/Revision'
+        readAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+        completedAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+      description: >-
+        Lecture déclarée et activité déclarée terminée, indépendantes du quiz, du projet et de toute mesure
+        vidéo. ETag individuel ; une visite ne change pas cette révision.
+    EnrolledActivity:
+      type: object
+      additionalProperties: false
+      required:
+        - activityId
+        - activityVersionId
+        - moduleId
+        - moduleVersionId
+        - position
+        - title
+        - accessStatus
+        - availability
+        - progress
+      properties:
+        activityId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        moduleId:
+          $ref: '#/components/schemas/UUID'
+        moduleVersionId:
+          $ref: '#/components/schemas/UUID'
+        position:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        accessStatus:
+          type: string
+          enum:
+            - ACTIVE
+            - PROTECTED
+            - UNAVAILABLE
+        availability:
+          type: string
+          enum:
+            - PUBLISHED
+            - MISSING_TRANSLATION
+            - STALE
+            - WITHDRAWN
+        progress:
+          $ref: '#/components/schemas/ActivityProgressView'
+    EnrollmentView:
+      type: object
+      additionalProperties: false
+      required:
+        - summary
+        - curriculum
+        - activities
+      properties:
+        summary:
+          $ref: '#/components/schemas/EnrollmentSummary'
+        curriculum:
+          type: array
+          items:
+            $ref: '#/components/schemas/CurriculumNode'
+          minItems: 0
+        activities:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnrolledActivity'
+          minItems: 0
+      description: >-
+        Programme épinglé aux versions exactes de l’inscription. Aucune substitution par une version plus
+        récente.
+    ActivityLink:
+      type: object
+      additionalProperties: false
+      required:
+        - activityId
+        - activityVersionId
+        - slug
+        - title
+        - availability
+        - accessStatus
+      properties:
+        activityId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        slug:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 180
+            - type: 'null'
+        title:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 240
+            - type: 'null'
+        availability:
+          type: string
+          enum:
+            - PUBLISHED
+            - MISSING_TRANSLATION
+            - STALE
+            - WITHDRAWN
+        accessStatus:
+          type: string
+          enum:
+            - ACTIVE
+            - PROTECTED
+            - UNAVAILABLE
+    QuizOverview:
+      type: object
+      additionalProperties: false
+      required:
+        - policy
+        - attemptsUsed
+        - attemptsRemaining
+        - latestAttemptId
+        - passed
+      properties:
+        policy:
+          $ref: '#/components/schemas/QuizPolicy'
+        attemptsUsed:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+        attemptsRemaining:
+          anyOf:
+            - type: integer
+              minimum: 0
+              maximum: 9007199254740991
+            - type: 'null'
+        latestAttemptId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        passed:
+          type: boolean
+      description: >-
+        Résumé des tentatives durables du propriétaire/version, communFR/EN ; aucune réponse correcte dans la
+        lecture initiale.
+    LearningActivity:
+      type: object
+      additionalProperties: false
+      required:
+        - enrollmentId
+        - activityId
+        - activityVersionId
+        - moduleId
+        - moduleVersionId
+        - position
+        - totalActivities
+        - resource
+        - progress
+        - previous
+        - next
+        - quiz
+        - accessStatus
+        - availability
+      properties:
+        enrollmentId:
+          $ref: '#/components/schemas/UUID'
+        activityId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        moduleId:
+          $ref: '#/components/schemas/UUID'
+        moduleVersionId:
+          $ref: '#/components/schemas/UUID'
+        position:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+        totalActivities:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+        resource:
+          $ref: '#/components/schemas/ResourceDetail'
+        progress:
+          $ref: '#/components/schemas/ActivityProgressView'
+        previous:
+          anyOf:
+            - $ref: '#/components/schemas/ActivityLink'
+            - type: 'null'
+        next:
+          anyOf:
+            - $ref: '#/components/schemas/ActivityLink'
+            - type: 'null'
+        quiz:
+          anyOf:
+            - $ref: '#/components/schemas/QuizOverview'
+            - type: 'null'
+        accessStatus:
+          type: string
+          enum:
+            - ACTIVE
+            - PROTECTED
+            - UNAVAILABLE
+        availability:
+          type: string
+          enum:
+            - PUBLISHED
+            - MISSING_TRANSLATION
+            - STALE
+            - WITHDRAWN
+    VisitView:
+      type: object
+      additionalProperties: false
+      required:
+        - enrollmentId
+        - activityId
+        - activityVersionId
+        - visitedAt
+      properties:
+        enrollmentId:
+          $ref: '#/components/schemas/UUID'
+        activityId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        visitedAt:
+          $ref: '#/components/schemas/UtcInstant'
+      description: >-
+        Mise à jour de reprise après ouverture réelle ; ne déclare ni lecture, activité terminée, quiz ou
+        projet.
+    ActivityNoteView:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - activityId
+        - activityVersionId
+        - locale
+        - text
+        - revision
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        activityId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        text:
+          type: string
+          minLength: 0
+          maxLength: 16000
+        revision:
+          $ref: '#/components/schemas/Revision'
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+        updatedAt:
+          $ref: '#/components/schemas/UtcInstant'
+      description: >-
+        Note du propriétaire, langue et version d’origine immuables. Lisible/modifiable après retrait sans
+        accès à un corps premium.
+    ActivityNoteLookup:
+      type: object
+      additionalProperties: false
+      required:
+        - note
+      properties:
+        note:
+          anyOf:
+            - $ref: '#/components/schemas/ActivityNoteView'
+            - type: 'null'
+      description: >-
+        GET sans création automatique. L’ETag est fourni par le GET individuel de la note, pas par cette
+        enveloppe.
+    QuizAnswer:
+      type: object
+      additionalProperties: false
+      required:
+        - key
+        - optionIndex
+      properties:
+        key:
+          type: string
+          minLength: 1
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9_-]*$
+        optionIndex:
+          type: integer
+          minimum: 0
+          maximum: 7
+    QuizQuestionResult:
+      type: object
+      additionalProperties: false
+      required:
+        - key
+        - prompt
+        - options
+        - selectedOption
+        - correctOption
+        - correct
+        - explanation
+        - points
+        - awardedPoints
+      properties:
+        key:
+          type: string
+          minLength: 1
+          maxLength: 64
+        prompt:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        options:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 1000
+          minItems: 2
+          maxItems: 8
+        selectedOption:
+          type: integer
+          minimum: 0
+          maximum: 7
+        correctOption:
+          type: integer
+          minimum: 0
+          maximum: 7
+        correct:
+          type: boolean
+        explanation:
+          type: string
+          minLength: 1
+          maxLength: 4000
+        points:
+          type: integer
+          minimum: 1
+          maximum: 1000
+        awardedPoints:
+          type: integer
+          minimum: 0
+          maximum: 1000
+      description: >-
+        Correction uniquement après soumission ; les index sont aussi vérifiés contre la taille réelle des
+        options.
+    QuizAttemptView:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - submissionId
+        - enrollmentId
+        - activityId
+        - activityVersionId
+        - revisionId
+        - locale
+        - attemptNumber
+        - scorePoints
+        - maxPoints
+        - passed
+        - policy
+        - submittedAt
+        - results
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        submissionId:
+          $ref: '#/components/schemas/UUID'
+        enrollmentId:
+          $ref: '#/components/schemas/UUID'
+        activityId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        revisionId:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        attemptNumber:
+          type: integer
+          minimum: 1
+          maximum: 9007199254740991
+        scorePoints:
+          type: integer
+          minimum: 0
+          maximum: 20000
+        maxPoints:
+          type: integer
+          minimum: 1
+          maximum: 20000
+        passed:
+          type: boolean
+        policy:
+          $ref: '#/components/schemas/QuizPolicy'
+        submittedAt:
+          $ref: '#/components/schemas/UtcInstant'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuizQuestionResult'
+          minItems: 1
+          maxItems: 20
+      description: >-
+        Tentative append-only, snapshot des questions/options/correction/politique et langue. Score calculé
+        parSpring ; ne valide jamais un projet.
+    QuizAttemptPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuizAttemptView'
+          minItems: 0
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    QuizCheckResult:
+      type: object
+      additionalProperties: false
+      required:
+        - activityId
+        - activityVersionId
+        - revisionId
+        - locale
+        - scorePoints
+        - maxPoints
+        - passed
+        - policy
+        - results
+      properties:
+        activityId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        revisionId:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        scorePoints:
+          type: integer
+          minimum: 0
+          maximum: 20000
+        maxPoints:
+          type: integer
+          minimum: 1
+          maximum: 20000
+        passed:
+          type: boolean
+        policy:
+          $ref: '#/components/schemas/QuizPolicy'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuizQuestionResult'
+          minItems: 1
+          maxItems: 20
+      description: >-
+        Vraie correction formative éphémère d’une publicationFREE. Aucun attemptId, date de sauvegarde,
+        inscription, progression ou résultat durable créé.
+    EnrollCourse:
+      type: object
+      additionalProperties: false
+      required:
+        - courseResourceId
+        - courseVersionId
+        - locale
+      properties:
+        courseResourceId:
+          $ref: '#/components/schemas/UUID'
+        courseVersionId:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+    VisitActivity:
+      type: object
+      additionalProperties: false
+      required:
+        - activityId
+        - activityVersionId
+        - locale
+      properties:
+        activityId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+    SetActivityProgress:
+      type: object
+      additionalProperties: false
+      required:
+        - enrollmentId
+        - activityVersionId
+        - read
+        - completed
+        - locale
+      properties:
+        enrollmentId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        read:
+          type: boolean
+        completed:
+          type: boolean
+        locale:
+          $ref: '#/components/schemas/Locale'
+      description: Chaque false efface seulement le fait correspondant ; aucun quiz/projet/temps vidéo déduit.
+    CreateActivityNote:
+      type: object
+      additionalProperties: false
+      required:
+        - activityId
+        - activityVersionId
+        - locale
+        - text
+      properties:
+        activityId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        text:
+          type: string
+          minLength: 0
+          maxLength: 16000
+      description: Texte Unicode valide sansNUL, JSONUTF8 borné48KiB ; note vide explicitement sauvegardable.
+    UpdateActivityNote:
+      type: object
+      additionalProperties: false
+      required:
+        - text
+      properties:
+        text:
+          type: string
+          minLength: 0
+          maxLength: 16000
+      description: >-
+        Seul le texte est modifiable ; aucun propriétaire, langue ou version fourni en entrée. JSONUTF8
+        borné48KiB.
+    SubmitQuiz:
+      type: object
+      additionalProperties: false
+      required:
+        - enrollmentId
+        - activityVersionId
+        - revisionId
+        - locale
+        - submissionId
+        - answers
+      properties:
+        enrollmentId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        revisionId:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        submissionId:
+          $ref: '#/components/schemas/UUID'
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuizAnswer'
+          minItems: 1
+          maxItems: 20
+      description: >-
+        Exactement une réponse par question publiée : doublon, omission, clé inconnue et index hors options
+        refusés. Même propriétaire/submissionId/corps retrouve la tentative ; autrecorps409. Aucun
+        score/propriétaire autoritaire reçu.
+    QuizCheck:
+      type: object
+      additionalProperties: false
+      required:
+        - revisionId
+        - locale
+        - answers
+      properties:
+        revisionId:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuizAnswer'
+          minItems: 1
+          maxItems: 20
+      description: >-
+        Correction éphémère sanscompte. Révision exacte publiée requise ; aucune réponse correcte avant cette
+        soumission.
   headers:
     NoStore:
       description: Réponse non stockable ; les erreurs sont également privées.

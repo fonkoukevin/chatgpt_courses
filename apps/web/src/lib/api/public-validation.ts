@@ -1,5 +1,6 @@
 import { record } from "./auth-validation";
 import { isMethodDefinition } from "../methods/validation";
+import { isQuizPolicy } from "./quiz-policy-validation";
 import type { CatalogueFacets, CataloguePage, PublicDocument, PublicMetadata, ResourceDetail } from "./generated/types.gen";
 
 const keys = (v: Record<string, unknown>, allowed: string[]) => Object.keys(v).every((key) => allowed.includes(key));
@@ -32,10 +33,11 @@ export function isPublicMetadata(v: unknown): v is PublicMetadata {
     && nullableString(v.evaluationDescription);
 }
 export function isPublicDocument(v: unknown): v is PublicDocument {
-  if (!record(v) || !keys(v, ["objective", "expectedResult", "prerequisites", "blocks", "estimatedMinutes", "quiz", "rubric", "access", "media", "relatedResourceIds", "exerciseInstructions", "methodDefinition"])) return false;
+  if (!record(v) || !keys(v, ["objective", "expectedResult", "prerequisites", "blocks", "estimatedMinutes", "quiz", "rubric", "access", "media", "relatedResourceIds", "exerciseInstructions", "methodDefinition", "quizPolicy"])) return false;
   return str(v.objective) && str(v.expectedResult) && strings(v.prerequisites) && duration(v.estimatedMinutes) && access(v.access) && nullableString(v.exerciseInstructions)
     && Array.isArray(v.relatedResourceIds) && v.relatedResourceIds.every(uuid)
     && (v.methodDefinition === undefined || v.methodDefinition === null || isMethodDefinition(v.methodDefinition))
+    && (v.quizPolicy === undefined || v.quizPolicy === null || isQuizPolicy(v.quizPolicy))
     && Array.isArray(v.blocks) && v.blocks.length <= 60 && v.blocks.every((x) => record(x) && keys(x, ["type", "text", "url"])
       && oneOf(x.type, ["HEADING", "PARAGRAPH", "LIST", "CALLOUT", "CODE", "LINK"]) && str(x.text) && (x.url === null || safePublicLink(x.url) !== null))
     && Array.isArray(v.quiz) && v.quiz.length <= 20 && v.quiz.every((x) => record(x) && keys(x, ["key", "prompt", "options", "points"])
@@ -57,11 +59,11 @@ export function isCatalogueFacets(v: unknown): v is CatalogueFacets {
   if (!record(v) || !keys(v, ["types", "goals", "levels", "accesses", "locales"])) return false;
   return ["types", "goals", "levels", "accesses", "locales"].every((key) => Array.isArray(v[key]) && v[key].every((x: unknown) => record(x) && keys(x, ["code", "label", "count"]) && str(x.code) && str(x.label) && integer(x.count)));
 }
-function curriculum(v: unknown, depth = 0): boolean {
+export function isCurriculumNode(v: unknown, depth = 0): boolean {
   return depth <= 4 && record(v) && keys(v, ["resourceId", "kind", "versionId", "versionNumber", "locale", "slug", "availability", "revisionId", "title", "summary", "access", "estimatedMinutes", "children"])
     && uuid(v.resourceId) && oneOf(v.kind, kinds) && uuid(v.versionId) && integer(v.versionNumber) && locale(v.locale) && nullableString(v.slug) && availability(v.availability)
     && (v.revisionId === null || uuid(v.revisionId)) && nullableString(v.title) && nullableString(v.summary) && (v.access === null || access(v.access)) && duration(v.estimatedMinutes)
-    && Array.isArray(v.children) && v.children.length <= 100 && v.children.every((x) => curriculum(x, depth + 1));
+    && Array.isArray(v.children) && v.children.length <= 100 && v.children.every((x) => isCurriculumNode(x, depth + 1));
 }
 export function isResourceDetail(v: unknown): v is ResourceDetail {
   return record(v) && keys(v, ["resourceId", "kind", "versionId", "versionNumber", "locale", "slug", "availability", "revisionId", "title", "summary", "access", "document", "metadata", "reviewedAt", "languages", "curriculum", "related", "objective", "expectedResult", "prerequisites", "estimatedMinutes"])
@@ -69,6 +71,6 @@ export function isResourceDetail(v: unknown): v is ResourceDetail {
     && (v.revisionId === null || uuid(v.revisionId)) && nullableString(v.title) && nullableString(v.summary) && (v.access === null || access(v.access))
     && (v.document === null || (v.availability === "PUBLISHED" && v.access === "FREE" && isPublicDocument(v.document))) && isPublicMetadata(v.metadata) && instant(v.reviewedAt)
     && Array.isArray(v.languages) && v.languages.length <= 2 && v.languages.every((x) => record(x) && keys(x, ["locale", "status", "slug"]) && locale(x.locale) && availability(x.status) && nullableString(x.slug))
-    && Array.isArray(v.curriculum) && v.curriculum.length <= 100 && v.curriculum.every((x) => curriculum(x)) && Array.isArray(v.related) && v.related.length <= 100 && v.related.every(card)
+    && Array.isArray(v.curriculum) && v.curriculum.length <= 100 && v.curriculum.every((x) => isCurriculumNode(x)) && Array.isArray(v.related) && v.related.length <= 100 && v.related.every(card)
     && nullableString(v.objective) && nullableString(v.expectedResult) && strings(v.prerequisites) && duration(v.estimatedMinutes);
 }

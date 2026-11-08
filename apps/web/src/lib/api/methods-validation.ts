@@ -26,7 +26,7 @@ export function isMethodView(value: unknown): value is MethodView {
     && (value.origin === null || isMethodOrigin(value.origin)) && instant(value.createdAt) && instant(value.updatedAt) && Date.parse(value.updatedAt) >= Date.parse(value.createdAt);
 }
 export function methodEtagMatches(value: MethodView, etag: string | null | undefined): boolean { return etag === `"personal-method-${value.id}-r${value.revision}"`; }
-function isMethodSummary(value: unknown): value is MethodSummary {
+export function isMethodSummary(value: unknown): value is MethodSummary {
   return record(value) && keys(value, ["id", "revision", "title", "locale", "category", "updatedAt", "hasSource"])
     && isUuid(value.id) && integer(value.revision) && validMethodText(value.title, 240, 1) && locale(value.locale) && category(value.category)
     && instant(value.updatedAt) && typeof value.hasSource === "boolean";

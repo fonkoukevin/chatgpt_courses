@@ -7,16 +7,21 @@ import java.util.List;
 import java.util.UUID;
 import com.chatgptcourses.catalog.service.CatalogTypes.PublicMetadata;
 import com.chatgptcourses.methods.service.MethodTypes.MethodDefinition;
+import com.chatgptcourses.learning.service.LearningTypes.QuizPolicy;
 
 /** Explicit editorial contracts; no persistence entity is exposed through HTTP. */
 public final class ContentTypes {
     private ContentTypes() { }
     public record ContentDocument(String objective, String expectedResult, List<String> prerequisites,
         List<ContentBlock> blocks, Integer estimatedMinutes, Exercise exercise, List<QuizQuestion> quiz,
-        List<RubricCriterion> rubric, String access, List<MediaReference> media, List<UUID> relatedResourceIds, MethodDefinition methodDefinition) {
+        List<RubricCriterion> rubric, String access, List<MediaReference> media, List<UUID> relatedResourceIds, MethodDefinition methodDefinition, QuizPolicy quizPolicy) {
+        public ContentDocument(String objective,String expectedResult,List<String> prerequisites,List<ContentBlock> blocks,Integer estimatedMinutes,
+            Exercise exercise,List<QuizQuestion> quiz,List<RubricCriterion> rubric,String access,List<MediaReference> media,List<UUID> relatedResourceIds,MethodDefinition methodDefinition) {
+            this(objective,expectedResult,prerequisites,blocks,estimatedMinutes,exercise,quiz,rubric,access,media,relatedResourceIds,methodDefinition,null);
+        }
         public ContentDocument(String objective,String expectedResult,List<String> prerequisites,List<ContentBlock> blocks,Integer estimatedMinutes,
             Exercise exercise,List<QuizQuestion> quiz,List<RubricCriterion> rubric,String access,List<MediaReference> media,List<UUID> relatedResourceIds) {
-            this(objective,expectedResult,prerequisites,blocks,estimatedMinutes,exercise,quiz,rubric,access,media,relatedResourceIds,null);
+            this(objective,expectedResult,prerequisites,blocks,estimatedMinutes,exercise,quiz,rubric,access,media,relatedResourceIds,null,null);
         }
     }
     public record ContentBlock(String type, String text, String url) { }
@@ -56,10 +61,14 @@ public final class ContentTypes {
     public record PublicQuizQuestion(String key, String prompt, List<String> options, int points) { }
     public record PublicDocument(String objective, String expectedResult, List<String> prerequisites,
         List<ContentBlock> blocks, Integer estimatedMinutes, String exerciseInstructions, List<PublicQuizQuestion> quiz,
-        List<RubricCriterion> rubric, String access, List<MediaReference> media, List<UUID> relatedResourceIds, MethodDefinition methodDefinition) {
+        List<RubricCriterion> rubric, String access, List<MediaReference> media, List<UUID> relatedResourceIds, MethodDefinition methodDefinition, QuizPolicy quizPolicy) {
+        public PublicDocument(String objective,String expectedResult,List<String> prerequisites,List<ContentBlock> blocks,Integer estimatedMinutes,
+            String exerciseInstructions,List<PublicQuizQuestion> quiz,List<RubricCriterion> rubric,String access,List<MediaReference> media,List<UUID> relatedResourceIds,MethodDefinition methodDefinition) {
+            this(objective,expectedResult,prerequisites,blocks,estimatedMinutes,exerciseInstructions,quiz,rubric,access,media,relatedResourceIds,methodDefinition,null);
+        }
         public PublicDocument(String objective,String expectedResult,List<String> prerequisites,List<ContentBlock> blocks,Integer estimatedMinutes,
             String exerciseInstructions,List<PublicQuizQuestion> quiz,List<RubricCriterion> rubric,String access,List<MediaReference> media,List<UUID> relatedResourceIds) {
-            this(objective,expectedResult,prerequisites,blocks,estimatedMinutes,exerciseInstructions,quiz,rubric,access,media,relatedResourceIds,null);
+            this(objective,expectedResult,prerequisites,blocks,estimatedMinutes,exerciseInstructions,quiz,rubric,access,media,relatedResourceIds,null,null);
         }
     }
     public record PublicContent(UUID resourceId, ResourceKind kind, UUID versionId, int versionNumber,

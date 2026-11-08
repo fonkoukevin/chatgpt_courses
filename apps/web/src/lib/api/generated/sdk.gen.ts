@@ -2,7 +2,7 @@
 
 import { type Client, type ClientMeta, type Options as Options2, type RequestResult, type TDataShape, urlSearchParamsBodySerializer } from './client';
 import { client } from './client.gen';
-import type { ArchiveContentData, ArchiveContentErrors, ArchiveContentResponses, CreateContentData, CreateContentErrors, CreateContentResponses, CreateContentTranslationData, CreateContentTranslationErrors, CreateContentTranslationResponses, CreateContentVersionData, CreateContentVersionErrors, CreateContentVersionResponses, CreateMethodData, CreateMethodErrors, CreateMethodFromTemplateData, CreateMethodFromTemplateErrors, CreateMethodFromTemplateResponses, CreateMethodResponses, DeleteMethodData, DeleteMethodErrors, DeleteMethodResponses, DuplicateContentData, DuplicateContentErrors, DuplicateContentResponses, DuplicateMethodData, DuplicateMethodErrors, DuplicateMethodResponses, GetCatalogueFacetsData, GetCatalogueFacetsErrors, GetCatalogueFacetsResponses, GetCatalogueResourceBySlugData, GetCatalogueResourceBySlugErrors, GetCatalogueResourceBySlugResponses, GetCatalogueResourceData, GetCatalogueResourceErrors, GetCatalogueResourceResponses, GetCatalogueResourceVersionData, GetCatalogueResourceVersionErrors, GetCatalogueResourceVersionResponses, GetContentData, GetContentDependenciesData, GetContentDependenciesErrors, GetContentDependenciesResponses, GetContentErrors, GetContentReadinessData, GetContentReadinessErrors, GetContentReadinessResponses, GetContentResponses, GetCsrfTokenData, GetCsrfTokenErrors, GetCsrfTokenResponses, GetCurrentUserData, GetCurrentUserErrors, GetCurrentUserResponses, GetMethodData, GetMethodErrors, GetMethodResponses, GetMethodSourceUpdateData, GetMethodSourceUpdateErrors, GetMethodSourceUpdateResponses, GetMethodTemplateData, GetMethodTemplateErrors, GetMethodTemplateResponses, GetPreferencesData, GetPreferencesErrors, GetPreferencesResponses, GetPublicContentData, GetPublicContentErrors, GetPublicContentResponses, GetSystemHealthData, GetSystemHealthErrors, GetSystemHealthResponses, ListContentRevisionsData, ListContentRevisionsErrors, ListContentRevisionsResponses, ListContentsData, ListContentsErrors, ListContentsResponses, ListMethodsData, ListMethodsErrors, ListMethodsResponses, LoginData, LoginErrors, LoginResponses, LogoutData, LogoutErrors, LogoutResponses, PreviewContentData, PreviewContentErrors, PreviewContentResponses, PublishContentData, PublishContentErrors, PublishContentResponses, RegisterData, RegisterErrors, RegisterResponses, ReplaceContentCompositionData, ReplaceContentCompositionErrors, ReplaceContentCompositionResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, SaveContentMetadataData, SaveContentMetadataErrors, SaveContentMetadataResponses, SaveContentRevisionData, SaveContentRevisionErrors, SaveContentRevisionResponses, SearchCatalogueData, SearchCatalogueErrors, SearchCatalogueResponses, TransitionContentData, TransitionContentErrors, TransitionContentResponses, UpdateMethodData, UpdateMethodErrors, UpdateMethodResponses, UpdatePreferencesData, UpdatePreferencesErrors, UpdatePreferencesResponses } from './types.gen';
+import type { ArchiveContentData, ArchiveContentErrors, ArchiveContentResponses, CheckQuizData, CheckQuizErrors, CheckQuizResponses, CreateActivityNoteData, CreateActivityNoteErrors, CreateActivityNoteResponses, CreateContentData, CreateContentErrors, CreateContentResponses, CreateContentTranslationData, CreateContentTranslationErrors, CreateContentTranslationResponses, CreateContentVersionData, CreateContentVersionErrors, CreateContentVersionResponses, CreateMethodData, CreateMethodErrors, CreateMethodFromTemplateData, CreateMethodFromTemplateErrors, CreateMethodFromTemplateResponses, CreateMethodResponses, DeleteMethodData, DeleteMethodErrors, DeleteMethodResponses, DuplicateContentData, DuplicateContentErrors, DuplicateContentResponses, DuplicateMethodData, DuplicateMethodErrors, DuplicateMethodResponses, EnrollCourseData, EnrollCourseErrors, EnrollCourseResponses, FindActivityNoteData, FindActivityNoteErrors, FindActivityNoteResponses, GetActivityNoteData, GetActivityNoteErrors, GetActivityNoteResponses, GetActivityProgressData, GetActivityProgressErrors, GetActivityProgressResponses, GetCatalogueFacetsData, GetCatalogueFacetsErrors, GetCatalogueFacetsResponses, GetCatalogueResourceBySlugData, GetCatalogueResourceBySlugErrors, GetCatalogueResourceBySlugResponses, GetCatalogueResourceData, GetCatalogueResourceErrors, GetCatalogueResourceResponses, GetCatalogueResourceVersionData, GetCatalogueResourceVersionErrors, GetCatalogueResourceVersionResponses, GetContentData, GetContentDependenciesData, GetContentDependenciesErrors, GetContentDependenciesResponses, GetContentErrors, GetContentReadinessData, GetContentReadinessErrors, GetContentReadinessResponses, GetContentResponses, GetCsrfTokenData, GetCsrfTokenErrors, GetCsrfTokenResponses, GetCurrentUserData, GetCurrentUserErrors, GetCurrentUserResponses, GetEnrollmentData, GetEnrollmentErrors, GetEnrollmentResponses, GetLearningActivityData, GetLearningActivityErrors, GetLearningActivityResponses, GetLearningDashboardData, GetLearningDashboardErrors, GetLearningDashboardResponses, GetMethodData, GetMethodErrors, GetMethodResponses, GetMethodSourceUpdateData, GetMethodSourceUpdateErrors, GetMethodSourceUpdateResponses, GetMethodTemplateData, GetMethodTemplateErrors, GetMethodTemplateResponses, GetPreferencesData, GetPreferencesErrors, GetPreferencesResponses, GetPublicContentData, GetPublicContentErrors, GetPublicContentResponses, GetQuizAttemptData, GetQuizAttemptErrors, GetQuizAttemptResponses, GetSystemHealthData, GetSystemHealthErrors, GetSystemHealthResponses, ListContentRevisionsData, ListContentRevisionsErrors, ListContentRevisionsResponses, ListContentsData, ListContentsErrors, ListContentsResponses, ListMethodsData, ListMethodsErrors, ListMethodsResponses, ListQuizAttemptsData, ListQuizAttemptsErrors, ListQuizAttemptsResponses, LoginData, LoginErrors, LoginResponses, LogoutData, LogoutErrors, LogoutResponses, PreviewContentData, PreviewContentErrors, PreviewContentResponses, PublishContentData, PublishContentErrors, PublishContentResponses, RegisterData, RegisterErrors, RegisterResponses, ReplaceContentCompositionData, ReplaceContentCompositionErrors, ReplaceContentCompositionResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, SaveContentMetadataData, SaveContentMetadataErrors, SaveContentMetadataResponses, SaveContentRevisionData, SaveContentRevisionErrors, SaveContentRevisionResponses, SearchCatalogueData, SearchCatalogueErrors, SearchCatalogueResponses, SetActivityProgressData, SetActivityProgressErrors, SetActivityProgressResponses, SubmitQuizData, SubmitQuizErrors, SubmitQuizResponses, TransitionContentData, TransitionContentErrors, TransitionContentResponses, UpdateActivityNoteData, UpdateActivityNoteErrors, UpdateActivityNoteResponses, UpdateMethodData, UpdateMethodErrors, UpdateMethodResponses, UpdatePreferencesData, UpdatePreferencesErrors, UpdatePreferencesResponses, VisitActivityData, VisitActivityErrors, VisitActivityResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -583,3 +583,235 @@ export const getMethodSourceUpdate = <ThrowOnError extends boolean = false>(opti
  * Lecture no-store sans création de session anonyme ; source premium privée par défaut, même avec session EDITOR. Une identité jamais publiée/type incorrect est404. Les états connus n’inventent aucune traduction ni définition.
  */
 export const getMethodTemplate = <ThrowOnError extends boolean = false>(options: Options<GetMethodTemplateData, ThrowOnError>): RequestResult<GetMethodTemplateResponses, GetMethodTemplateErrors, ThrowOnError> => (options.client ?? client).get<GetMethodTemplateResponses, GetMethodTemplateErrors, ThrowOnError>({ url: '/method-templates/{resourceId}/versions/{versionId}', ...options });
+
+/**
+ * Reprendre une activité réellement accessible et ses faits distincts.
+ */
+export const getLearningDashboard = <ThrowOnError extends boolean = false>(options: Options<GetLearningDashboardData, ThrowOnError>): RequestResult<GetLearningDashboardResponses, GetLearningDashboardErrors, ThrowOnError> => (options.client ?? client).get<GetLearningDashboardResponses, GetLearningDashboardErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/learning',
+    ...options
+});
+
+/**
+ * Commencer le programme exact sans créer de droit acheté.
+ *
+ * Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context. Un header de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun retry automatique.
+ */
+export const enrollCourse = <ThrowOnError extends boolean = false>(options: Options<EnrollCourseData, ThrowOnError>): RequestResult<EnrollCourseResponses, EnrollCourseErrors, ThrowOnError> => (options.client ?? client).post<EnrollCourseResponses, EnrollCourseErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/enrollments',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Lire son programme épinglé et son dénominateur.
+ */
+export const getEnrollment = <ThrowOnError extends boolean = false>(options: Options<GetEnrollmentData, ThrowOnError>): RequestResult<GetEnrollmentResponses, GetEnrollmentErrors, ThrowOnError> => (options.client ?? client).get<GetEnrollmentResponses, GetEnrollmentErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/enrollments/{id}',
+    ...options
+});
+
+/**
+ * Lire l’activité de cette inscription sans corrigé initial.
+ */
+export const getLearningActivity = <ThrowOnError extends boolean = false>(options: Options<GetLearningActivityData, ThrowOnError>): RequestResult<GetLearningActivityResponses, GetLearningActivityErrors, ThrowOnError> => (options.client ?? client).get<GetLearningActivityResponses, GetLearningActivityErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/enrollments/{id}/activities/{activityId}',
+    ...options
+});
+
+/**
+ * Enregistrer la dernière activité ouverte sans déclarer son achèvement.
+ *
+ * Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context. Un header de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun retry automatique.
+ */
+export const visitActivity = <ThrowOnError extends boolean = false>(options: Options<VisitActivityData, ThrowOnError>): RequestResult<VisitActivityResponses, VisitActivityErrors, ThrowOnError> => (options.client ?? client).post<VisitActivityResponses, VisitActivityErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/enrollments/{id}/visits',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Lire les faits de progression et leur ETag propre.
+ */
+export const getActivityProgress = <ThrowOnError extends boolean = false>(options: Options<GetActivityProgressData, ThrowOnError>): RequestResult<GetActivityProgressResponses, GetActivityProgressErrors, ThrowOnError> => (options.client ?? client).get<GetActivityProgressResponses, GetActivityProgressErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/activity-progress/{activityId}',
+    ...options
+});
+
+/**
+ * Déclarer séparément lecture et activité terminée.
+ *
+ * Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context. Un header de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun retry automatique.
+ */
+export const setActivityProgress = <ThrowOnError extends boolean = false>(options: Options<SetActivityProgressData, ThrowOnError>): RequestResult<SetActivityProgressResponses, SetActivityProgressErrors, ThrowOnError> => (options.client ?? client).put<SetActivityProgressResponses, SetActivityProgressErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/activity-progress/{activityId}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Chercher sa note sans en créer une parGET.
+ */
+export const findActivityNote = <ThrowOnError extends boolean = false>(options: Options<FindActivityNoteData, ThrowOnError>): RequestResult<FindActivityNoteResponses, FindActivityNoteErrors, ThrowOnError> => (options.client ?? client).get<FindActivityNoteResponses, FindActivityNoteErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/activity-notes/by-activity/{activityId}',
+    ...options
+});
+
+/**
+ * Créer sa note dans sa langue originale.
+ *
+ * Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context. Un header de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun retry automatique.
+ */
+export const createActivityNote = <ThrowOnError extends boolean = false>(options: Options<CreateActivityNoteData, ThrowOnError>): RequestResult<CreateActivityNoteResponses, CreateActivityNoteErrors, ThrowOnError> => (options.client ?? client).post<CreateActivityNoteResponses, CreateActivityNoteErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/activity-notes',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Lire sa note même après retrait de source.
+ */
+export const getActivityNote = <ThrowOnError extends boolean = false>(options: Options<GetActivityNoteData, ThrowOnError>): RequestResult<GetActivityNoteResponses, GetActivityNoteErrors, ThrowOnError> => (options.client ?? client).get<GetActivityNoteResponses, GetActivityNoteErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/activity-notes/{id}',
+    ...options
+});
+
+/**
+ * Modifier sa note à la révision confirmée.
+ *
+ * Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context. Un header de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun retry automatique.
+ */
+export const updateActivityNote = <ThrowOnError extends boolean = false>(options: Options<UpdateActivityNoteData, ThrowOnError>): RequestResult<UpdateActivityNoteResponses, UpdateActivityNoteErrors, ThrowOnError> => (options.client ?? client).patch<UpdateActivityNoteResponses, UpdateActivityNoteErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/activity-notes/{id}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Soumettre une tentative durable corrigée côté serveur.
+ *
+ * Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context. Un header de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun retry automatique.
+ */
+export const submitQuiz = <ThrowOnError extends boolean = false>(options: Options<SubmitQuizData, ThrowOnError>): RequestResult<SubmitQuizResponses, SubmitQuizErrors, ThrowOnError> => (options.client ?? client).post<SubmitQuizResponses, SubmitQuizErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/activities/{activityId}/quiz-attempts',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Retrouver les snapshots de ses tentatives FR/EN.
+ */
+export const listQuizAttempts = <ThrowOnError extends boolean = false>(options: Options<ListQuizAttemptsData, ThrowOnError>): RequestResult<ListQuizAttemptsResponses, ListQuizAttemptsErrors, ThrowOnError> => (options.client ?? client).get<ListQuizAttemptsResponses, ListQuizAttemptsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/quiz-attempts',
+    ...options
+});
+
+/**
+ * Lire une tentative historique du propriétaire.
+ */
+export const getQuizAttempt = <ThrowOnError extends boolean = false>(options: Options<GetQuizAttemptData, ThrowOnError>): RequestResult<GetQuizAttemptResponses, GetQuizAttemptErrors, ThrowOnError> => (options.client ?? client).get<GetQuizAttemptResponses, GetQuizAttemptErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/quiz-attempts/{id}',
+    ...options
+});
+
+/**
+ * Vérifier sa compréhension sans sauvegarde durable ni compte.
+ *
+ * Public mais CSRF Spring obligatoire, avec session anonymeframework si nécessaire. PublicationFREE disponible et révision exacte, sinon refus. Aucune écriture pédagogique, tentative ou progression ; la sessionCSRF reste celle du framework. Réponses/correction après soumission explicite seulement, no-store. Une réussite formative ne valide pas un projet.
+ */
+export const checkQuiz = <ThrowOnError extends boolean = false>(options: Options<CheckQuizData, ThrowOnError>): RequestResult<CheckQuizResponses, CheckQuizErrors, ThrowOnError> => (options.client ?? client).post<CheckQuizResponses, CheckQuizErrors, ThrowOnError>({
+    url: '/learning/activities/{resourceId}/versions/{versionId}/quiz-checks',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});

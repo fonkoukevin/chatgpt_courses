@@ -58,6 +58,15 @@ class SecurityConfiguration {
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/me/methods/*").hasAuthority("methods.write")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/me/methods/*").hasAuthority("methods.write")
                         .requestMatchers(HttpMethod.GET, "/api/v1/method-templates/*/versions/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/me/learning", "/api/v1/me/enrollments/*",
+                                "/api/v1/me/enrollments/*/activities/*", "/api/v1/me/activity-progress/*",
+                                "/api/v1/me/activity-notes/*", "/api/v1/me/activity-notes/by-activity/*",
+                                "/api/v1/me/quiz-attempts", "/api/v1/me/quiz-attempts/*").hasAuthority("learning.read")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/me/enrollments", "/api/v1/me/enrollments/*/visits",
+                                "/api/v1/me/activity-notes", "/api/v1/activities/*/quiz-attempts").hasAuthority("learning.write")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/me/activity-progress/*").hasAuthority("learning.write")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/me/activity-notes/*").hasAuthority("learning.write")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/learning/activities/*/versions/*/quiz-checks").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/contents/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/catalog", "/api/v1/catalog/facets", "/api/v1/catalog/resources/*",
                                 "/api/v1/catalog/by-slug/*/*", "/api/v1/catalog/resources/*/versions/*").permitAll()

@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 import tools.jackson.databind.ObjectMapper;
 import com.chatgptcourses.methods.service.MethodValidation;
+import com.chatgptcourses.learning.service.LearningValidation;
 
 /** Applied inside the use case as well as HTTP validation: direct callers cannot bypass bounds. */
 final class ContentValidation {
@@ -59,6 +60,7 @@ final class ContentValidation {
         }
         ids(d.relatedResourceIds(),30);
         if(d.methodDefinition()!=null)MethodValidation.definition(d.methodDefinition(),mapper);
+        LearningValidation.policy(d.quizPolicy());
         check(mapper.writeValueAsString(d).getBytes(StandardCharsets.UTF_8).length<=48*1024);
     }
     private static void key(String key) { text(key,1,64);check(key.matches("[a-zA-Z0-9][a-zA-Z0-9_-]*")); }

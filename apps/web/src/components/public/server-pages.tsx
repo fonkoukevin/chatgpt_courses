@@ -17,6 +17,7 @@ import { PublicGuide } from "./guide";
 import { PublicActivity } from "./activity";
 import { PublicUnavailable } from "./unavailable";
 import { PublicMethodSource } from "@/components/methods/source";
+import { readLearningDashboard, readSavedLearningActivity } from "@/lib/api/learning-server";
 
 export type PublicPageProps = { params: Promise<{ locale: string; slug?: string; courseSlug?: string; activitySlug?: string }>; searchParams: Promise<PublicParameters> };
 export function forLocale<T>(page: (props: PublicPageProps) => Promise<T>, expected: Locale) {
@@ -136,6 +137,17 @@ export function detailMetadata(kind: Exclude<ResourceCard["kind"], "ACTIVITY">) 
   };
 }
 
+async function retainedActivity(course: ResourceDetail, activityId: string, activityVersionId: string, locale: Locale): Promise<AuthResult<ResourceDetail> | null> {
+  // Only an owned, version-pinned enrollment can restore context after the
+  // public tree has been withdrawn. This never grants a pedagogical right.
+  const dashboard = await readLearningDashboard(locale);
+  if (!dashboard.ok) return dashboard.error.status === 401 ? null : dashboard;
+  const enrollment = dashboard.data.enrollments.find((entry) => entry.courseResourceId === course.resourceId && entry.courseVersionId === course.versionId);
+  if (!enrollment) return null;
+  const saved = await readSavedLearningActivity(enrollment.id, activityId, activityVersionId, locale);
+  if (!saved.ok) return saved.error.status === 404 ? null : saved;
+  return { ok: true, data: saved.data.resource, status: 200 };
+}
 async function activityData(props: PublicPageProps) {
   const route = await props.params, locale = localeFrom(route.locale), courseSlug = slugFrom(route.courseSlug), activitySlug = slugFrom(route.activitySlug), input = await props.searchParams;
   let course = apiNotFound(await readResourceBySlug("COURSE", courseSlug, locale));
@@ -145,10 +157,18 @@ async function activityData(props: PublicPageProps) {
   if ((resource !== undefined && !isUuid(resource)) || (version !== undefined && !isUuid(version)) || ((resource === undefined) !== (version === undefined))) notFound();
   if (course.ok && parentVersion) course = apiNotFound(await readResourceVersion(course.data.resourceId, parentVersion, locale));
   if (!course.ok) return { locale, result: course, languageLinks: defaultLanguages({ locale, type: "ACTIVITY" }), returnTo: catalogueReturnTo, canonical: publicCatalogueHref(locale) };
-  if (course.data.availability !== "PUBLISHED") return { locale, result: course, languageLinks: resourceLanguages(course.data, catalogueReturnTo), returnTo: catalogueReturnTo,
-    canonical: `/${locale}/${locale === "fr" ? "apprendre" : "learn"}/${courseSlug}/${activitySlug}?courseVersion=${course.data.versionId}` };
+  if (course.data.availability !== "PUBLISHED") {
+    const saved = isUuid(resource) && isUuid(version) ? await retainedActivity(course.data, resource, version, locale) : null;
+    return { locale, result: saved ?? course, languageLinks: saved?.ok ? resourceLanguages(saved.data, catalogueReturnTo, true) : resourceLanguages(course.data, catalogueReturnTo), returnTo: catalogueReturnTo,
+      canonical: `/${locale}/${locale === "fr" ? "apprendre" : "learn"}/${courseSlug}/${activitySlug}?courseVersion=${course.data.versionId}` };
+  }
   const child = nodesOf(course.data.curriculum).find((node) => node.kind === "ACTIVITY" && (resource ? node.resourceId === resource && node.versionId === version && (!node.slug || node.slug === activitySlug) : node.slug === activitySlug));
-  if (!child) notFound();
+  if (!child) {
+    const saved = isUuid(resource) && isUuid(version) ? await retainedActivity(course.data, resource, version, locale) : null;
+    if (!saved) notFound();
+    return { locale, result: saved, languageLinks: saved.ok ? resourceLanguages(saved.data, catalogueReturnTo, true) : defaultLanguages({ locale, type: "ACTIVITY" }), returnTo: catalogueReturnTo,
+      canonical: courseActivityHref(locale, courseSlug, activitySlug, resource!, version!, course.data.versionId) };
+  }
   const result = apiNotFound(await readResourceVersion(child.resourceId, child.versionId, locale));
   if (result.ok && result.data.kind !== "ACTIVITY") notFound();
   const back = `/${locale}/${locale === "fr" ? "parcours" : "courses"}/${courseSlug}?${new URLSearchParams({ version: course.data.versionId, returnTo: catalogueReturnTo })}`;
@@ -157,7 +177,7 @@ async function activityData(props: PublicPageProps) {
     const parentLanguage = course.data.languages.find((item) => item.locale === target), childLanguage = result.data.languages.find((item) => item.locale === target);
     if (parentLanguage?.status === "PUBLISHED" && parentLanguage.slug && childLanguage?.status === "PUBLISHED" && childLanguage.slug) languageLinks[target] = { available: true, href: courseActivityHref(target, parentLanguage.slug, childLanguage.slug, child.resourceId, child.versionId, course.data.versionId, catalogueReturnTo) };
   }
-  return { locale, result, languageLinks, returnTo: back, canonical: courseActivityHref(locale, courseSlug, activitySlug, child.resourceId, child.versionId, course.data.versionId) };
+  return { locale, result, languageLinks, returnTo: back, programme: { course: course.data, activityHrefs: programmeLinks(locale, course.data, catalogueReturnTo) }, canonical: courseActivityHref(locale, courseSlug, activitySlug, child.resourceId, child.versionId, course.data.versionId) };
 }
 export async function PublicActivityPage(props: PublicPageProps) { return <PublicActivity {...await activityData(props)} />; }
 export async function activityMetadata(props: PublicPageProps): Promise<Metadata> {

@@ -8,9 +8,9 @@ import { createBrowserDatabase, stopBrowserDatabase } from './lib/browser-databa
 
 const env = environment();
 const phase = process.argv[2] ?? 'P01';
-if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07'].includes(phase)) throw new Error('Phase de recette inconnue : P01, P02, P04, P05, P06 ou P07 attendu.');
+if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08'].includes(phase)) throw new Error('Phase de recette inconnue : P01, P02 ou P04 à P08 attendu.');
 const needsApi = phase !== 'P02';
-const isolatedDatabase = ['P05', 'P06', 'P07'].includes(phase);
+const isolatedDatabase = ['P05', 'P06', 'P07', 'P08'].includes(phase);
 if (!['local', 'test'].includes(env.APP_ENV)) throw new Error('Vérification navigateur réservée à local/test.');
 const port = (value, fallback) => {
   const text = value ?? String(fallback);

@@ -1,6 +1,7 @@
 import { record } from "./auth-validation";
 import { isUuid } from "./cms-validation";
 import { isResourceDetail } from "./public-validation";
+import { isMemberResourceDetail } from "./member-content-validation";
 import { isCompleteProjectPolicy } from "./project-policy-validation";
 import { validMethodText } from "../methods/validation";
 import { projectBlockingKeys, projectCategories, projectCriterionKeys, projectSections } from "../projects/schema";
@@ -80,15 +81,22 @@ export function isProjectRevisionPage(value: unknown): value is ProjectRevisionP
 export function isProjectContext(value: unknown): value is ProjectContext {
   return record(value) && keys(value, ["projectId", "activityId", "activityVersionId", "availability", "accessStatus", "sourceRevisionId", "currentPublishedRevisionId", "sourceChanged", "resource"])
     && [value.projectId, value.activityId, value.activityVersionId, value.sourceRevisionId].every(isUuid) && availability(value.availability) && access(value.accessStatus) && nullableId(value.currentPublishedRevisionId) && typeof value.sourceChanged === "boolean"
-    && (value.resource === null || value.accessStatus === "ACTIVE" && value.availability === "PUBLISHED" && isResourceDetail(value.resource) && value.resource.kind === "ACTIVITY" && value.resource.document !== null
-      && value.resource.access === "FREE" && value.resource.document.access === "FREE" && value.resource.resourceId === value.activityId && value.resource.versionId === value.activityVersionId);
+    && (value.resource === null || value.accessStatus === "ACTIVE" && value.availability === "PUBLISHED" && isMemberResourceDetail(value.resource) && value.resource.kind === "ACTIVITY" && value.resource.document !== null
+      && value.resource.document.access === value.resource.access && value.resource.resourceId === value.activityId && value.resource.versionId === value.activityVersionId);
 }
 export function isProjectTemplate(value: unknown): value is ProjectTemplate {
+  return projectTemplate(value, false);
+}
+export function isMemberProjectTemplate(value: unknown): value is ProjectTemplate {
+  return projectTemplate(value, true);
+}
+function projectTemplate(value: unknown, member: boolean): value is ProjectTemplate {
   if (!record(value) || !keys(value, ["activityId", "activityVersionId", "revisionId", "locale", "title", "availability", "resource", "rubric"])) return false;
+  const resource = member ? isMemberResourceDetail : isResourceDetail;
   return isUuid(value.activityId) && isUuid(value.activityVersionId) && nullableId(value.revisionId) && language(value.locale) && nullableText(value.title)
     && oneOf(value.availability, ["PUBLISHED", "NOT_CONFIGURED", "PROTECTED", "MISSING_TRANSLATION", "STALE", "WITHDRAWN"])
-    && (value.availability === "PUBLISHED" ? isUuid(value.revisionId) && str(value.title) && isResourceDetail(value.resource)
-      && value.resource.kind === "ACTIVITY" && value.resource.document !== null && value.resource.access === "FREE" && value.resource.document.access === "FREE" && value.resource.locale === value.locale && value.resource.resourceId === value.activityId && value.resource.versionId === value.activityVersionId && value.resource.revisionId === value.revisionId
+    && (value.availability === "PUBLISHED" ? isUuid(value.revisionId) && str(value.title) && resource(value.resource)
+      && value.resource.kind === "ACTIVITY" && value.resource.document !== null && (member || value.resource.access === "FREE" && value.resource.document.access === "FREE") && value.resource.locale === value.locale && value.resource.resourceId === value.activityId && value.resource.versionId === value.activityVersionId && value.resource.revisionId === value.revisionId
       && isProjectRubricDefinition(value.rubric) && value.rubric.sourceRevisionId === value.revisionId && value.rubric.locale === value.locale : value.resource === null && value.rubric === null);
 }
 export function isProjectPreset(value: unknown): value is ProjectPreset {

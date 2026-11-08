@@ -3,8 +3,9 @@ import { record } from "./auth-validation";
 import { isUuid } from "./cms-validation";
 import { commerceExact as exact, commerceInteger as integer, commerceInstant as instant, commerceLocales as locales, commerceLocale as locale, commerceSlug as slug, commerceString as text, isCommerceMoney, isOfferConditions, isOfferTax, isPublicOffer } from "./offers-validation";
 import { commerceCurrencyScale } from "../commerce/format";
+import { orderStatuses, paymentStatuses, fulfillmentStatuses } from "./payments-validation";
 
-function statuses(value: Record<string, unknown>) { return ["PREPARED", "EXPIRED", "CANCELLED"].includes(value.orderStatus as string) && value.paymentStatus === "NOT_STARTED" && value.fulfillmentStatus === "NOT_STARTED"; }
+function statuses(value: Record<string, unknown>) { return typeof value.orderStatus === "string" && orderStatuses.includes(value.orderStatus) && typeof value.paymentStatus === "string" && paymentStatuses.includes(value.paymentStatus) && typeof value.fulfillmentStatus === "string" && fulfillmentStatuses.includes(value.fulfillmentStatus); }
 function dates(value: Record<string, unknown>) { return instant(value.createdAt) && instant(value.expiresAt) && Date.parse(value.expiresAt) > Date.parse(value.createdAt); }
 export function isOrderSnapshot(value: unknown): value is OrderSnapshot {
   if (!record(value) || !exact(value, ["offerId", "offerRevision", "offerRevisionId", "code", "kind", "locale", "title", "resources", "locales", "total", "tax", "conditions"]) || !isUuid(value.offerId) || !integer(value.offerRevision) || !isUuid(value.offerRevisionId)
@@ -40,6 +41,6 @@ export function isPurchaseContext(value: unknown): value is PurchaseContext {
   if (!record(value) || !exact(value, ["offer", "coverage", "activeOrder"]) || !isPublicOffer(value.offer) || !coverage(value.coverage) || !(value.activeOrder === null || isOrderSummary(value.activeOrder))) return false;
   const offer = value.offer;
   return value.coverage.resources.length === offer.resources.length && new Set(value.coverage.resources.map((item) => item.resourceId)).size === offer.resources.length && value.coverage.resources.every((item) => offer.resources.some((resource) => resource.resourceId === item.resourceId && resource.versionId === item.versionId) && new Set([...item.coveredLocales, ...item.missingLocales]).size === offer.locales.length && [...item.coveredLocales, ...item.missingLocales].every((language) => offer.locales.includes(language)))
-    && (value.activeOrder === null || value.activeOrder.offerId === offer.id && value.activeOrder.orderStatus === "PREPARED");
+    && (value.activeOrder === null || value.activeOrder.offerId === offer.id && ["PREPARED", "AWAITING_PAYMENT", "CONFIRMED", "NEEDS_REVIEW"].includes(value.activeOrder.orderStatus));
 }
 export const orderEtag = (value: OrderView) => `"order-${value.id}-r${value.revision}"`;

@@ -827,7 +827,7 @@ export type LearningActivity = {
     moduleVersionId: Uuid;
     position: number;
     totalActivities: number;
-    resource: ResourceDetail;
+    resource: MemberResourceDetail;
     progress: ActivityProgressView;
     previous: ActivityLink | null;
     next: ActivityLink | null;
@@ -1208,7 +1208,7 @@ export type ProjectContext = {
     sourceRevisionId: Uuid;
     currentPublishedRevisionId: Uuid | null;
     sourceChanged: boolean;
-    resource: ResourceDetail | null;
+    resource: MemberResourceDetail | null;
 };
 
 /**
@@ -1942,9 +1942,9 @@ export type OrderSnapshot = {
 export type OrderView = {
     id: Uuid;
     revision: Revision;
-    orderStatus: 'PREPARED' | 'EXPIRED' | 'CANCELLED';
-    paymentStatus: 'NOT_STARTED';
-    fulfillmentStatus: 'NOT_STARTED';
+    orderStatus: 'PREPARED' | 'AWAITING_PAYMENT' | 'CONFIRMED' | 'EXPIRED' | 'CANCELLED' | 'NEEDS_REVIEW';
+    paymentStatus: 'NOT_STARTED' | 'REQUIRES_PAYMENT' | 'PROCESSING' | 'PAID' | 'FAILED' | 'EXPIRED' | 'UNKNOWN';
+    fulfillmentStatus: 'NOT_STARTED' | 'PENDING' | 'READY' | 'RETRYING' | 'NEEDS_REVIEW';
     snapshot: OrderSnapshot;
     acceptedTermsVersion: string;
     acceptedAt: UtcInstant;
@@ -1960,9 +1960,9 @@ export type OrderSummary = {
     locale: Locale;
     title: string;
     total: Money;
-    orderStatus: 'PREPARED' | 'EXPIRED' | 'CANCELLED';
-    paymentStatus: 'NOT_STARTED';
-    fulfillmentStatus: 'NOT_STARTED';
+    orderStatus: 'PREPARED' | 'AWAITING_PAYMENT' | 'CONFIRMED' | 'EXPIRED' | 'CANCELLED' | 'NEEDS_REVIEW';
+    paymentStatus: 'NOT_STARTED' | 'REQUIRES_PAYMENT' | 'PROCESSING' | 'PAID' | 'FAILED' | 'EXPIRED' | 'UNKNOWN';
+    fulfillmentStatus: 'NOT_STARTED' | 'PENDING' | 'READY' | 'RETRYING' | 'NEEDS_REVIEW';
     createdAt: UtcInstant;
     expiresAt: UtcInstant;
 };
@@ -1993,6 +1993,110 @@ export type PurchaseContext = {
     offer: PublicOffer;
     coverage: PurchaseCoverage;
     activeOrder: OrderSummary | null;
+};
+
+export type CreateCheckout = {
+    acceptedTermsVersion: string;
+};
+
+export type CheckoutAccess = {
+    orderId: Uuid;
+    operationId: Uuid | null;
+    state: 'PREPARED' | 'CALLING' | 'OPEN' | 'UNKNOWN' | 'COMPLETE' | 'EXPIRED' | 'FAILED' | 'NEEDS_REVIEW';
+    url: string | null;
+    expiresAt: UtcInstant | null;
+    retryAfterSeconds: number | null;
+    unavailableReason: string | null;
+};
+
+export type OrderPaymentStatus = {
+    orderId: Uuid;
+    orderRevision: Revision;
+    orderStatus: 'PREPARED' | 'AWAITING_PAYMENT' | 'CONFIRMED' | 'EXPIRED' | 'CANCELLED' | 'NEEDS_REVIEW';
+    paymentStatus: 'NOT_STARTED' | 'REQUIRES_PAYMENT' | 'PROCESSING' | 'PAID' | 'FAILED' | 'EXPIRED' | 'UNKNOWN';
+    fulfillmentStatus: 'NOT_STARTED' | 'PENDING' | 'READY' | 'RETRYING' | 'NEEDS_REVIEW';
+    checkoutState: 'NONE' | 'PREPARED' | 'CALLING' | 'OPEN' | 'UNKNOWN' | 'COMPLETE' | 'EXPIRED' | 'FAILED' | 'NEEDS_REVIEW';
+    checkoutAvailable: boolean;
+    checkoutUnavailableReason: string | null;
+    sessionExpiresAt: UtcInstant | null;
+    canRetry: boolean;
+    notificationStatus: 'NONE' | 'PENDING' | 'SENT' | 'ISSUE';
+};
+
+export type PaymentEventSummary = {
+    id: Uuid;
+    kind: 'STRIPE_EVENT' | 'RECONCILIATION_JOB';
+    eventId: string | null;
+    type: string | null;
+    objectId: string | null;
+    livemode: boolean;
+    accountId: string;
+    apiVersion: string;
+    state: 'PENDING' | 'PROCESSING' | 'RETRY' | 'WAITING' | 'PROCESSED' | 'IGNORED' | 'DEAD';
+    attempts: number;
+    nextAttemptAt: UtcInstant | null;
+    lastErrorCode: string | null;
+    createdAt: UtcInstant;
+    updatedAt: UtcInstant;
+    processedAt: UtcInstant | null;
+    orderId: Uuid | null;
+    operationId: Uuid | null;
+};
+
+export type PaymentEventPage = {
+    items: Array<PaymentEventSummary>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+export type RetryPaymentEvent = {
+    reason: 'PROVIDER_RECOVERED' | 'MANUAL_RECONCILIATION';
+};
+
+export type WebhookReceipt = {
+    received: true;
+};
+
+/**
+ * Projection pédagogique privée autorisée par propriétaire et origines courantes, sans corrigé ou réponse de quiz. Les routes publiques ResourceDetail restent fermées aux corps protégés.
+ */
+export type MemberResourceDetail = {
+    resourceId: Uuid;
+    kind: ContentKind;
+    versionId: Uuid;
+    versionNumber: number;
+    locale: Locale;
+    slug: string | null;
+    availability: 'PUBLISHED' | 'MISSING_TRANSLATION' | 'STALE' | 'WITHDRAWN';
+    revisionId: Uuid | null;
+    title: string | null;
+    summary: string | null;
+    access: ContentAccess | null;
+    document: PublicDocument | null;
+    metadata: PublicMetadata;
+    reviewedAt: UtcInstant | null;
+    languages: Array<LanguageAvailability>;
+    curriculum: Array<CurriculumNode>;
+    related: Array<ResourceCard>;
+    objective: string | null;
+    expectedResult: string | null;
+    prerequisites: Array<string>;
+    estimatedMinutes: number | null;
+};
+
+/**
+ * Préparation privée de projet ; permission projects.read et droit sur la source, sans corrigé.
+ */
+export type MemberProjectTemplate = {
+    activityId: Uuid;
+    activityVersionId: Uuid;
+    revisionId: Uuid | null;
+    locale: Locale;
+    title: string | null;
+    availability: 'PUBLISHED' | 'MISSING_TRANSLATION' | 'STALE' | 'WITHDRAWN' | 'PROTECTED' | 'NOT_CONFIGURED';
+    resource: MemberResourceDetail | null;
+    rubric: ProjectRubricDefinition | null;
 };
 
 export type RegisterRequestWritable = {
@@ -7719,3 +7823,490 @@ export type GetOrderResponses = {
 };
 
 export type GetOrderResponse = GetOrderResponses[keyof GetOrderResponses];
+
+export type CreateCheckoutData = {
+    body: CreateCheckout;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path: {
+        orderId: Uuid;
+    };
+    query?: never;
+    url: '/me/orders/{orderId}/checkout';
+};
+
+export type CreateCheckoutErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    413: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type CreateCheckoutError = CreateCheckoutErrors[keyof CreateCheckoutErrors];
+
+export type CreateCheckoutResponses = {
+    /**
+     * État réel, sans cache partagé.
+     */
+    200: CheckoutAccess;
+    /**
+     * État réel, sans cache partagé.
+     */
+    202: CheckoutAccess;
+};
+
+export type CreateCheckoutResponse = CreateCheckoutResponses[keyof CreateCheckoutResponses];
+
+export type GetOrderPaymentStatusData = {
+    body?: never;
+    path: {
+        orderId: Uuid;
+    };
+    query?: never;
+    url: '/me/orders/{orderId}/payment-status';
+};
+
+export type GetOrderPaymentStatusErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    413: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetOrderPaymentStatusError = GetOrderPaymentStatusErrors[keyof GetOrderPaymentStatusErrors];
+
+export type GetOrderPaymentStatusResponses = {
+    /**
+     * État réel, sans cache partagé.
+     */
+    200: OrderPaymentStatus;
+};
+
+export type GetOrderPaymentStatusResponse = GetOrderPaymentStatusResponses[keyof GetOrderPaymentStatusResponses];
+
+export type ReceiveStripeWebhookData = {
+    /**
+     * Octets JSON intacts pour la vérification de signature, jamais re-sérialisés avant contrôle.
+     */
+    body: {
+        [key: string]: unknown;
+    };
+    headers: {
+        'Stripe-Signature': string;
+    };
+    path?: never;
+    query?: never;
+    url: '/webhooks/stripe';
+};
+
+export type ReceiveStripeWebhookErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    413: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ReceiveStripeWebhookError = ReceiveStripeWebhookErrors[keyof ReceiveStripeWebhookErrors];
+
+export type ReceiveStripeWebhookResponses = {
+    /**
+     * État réel, sans cache partagé.
+     */
+    200: WebhookReceipt;
+};
+
+export type ReceiveStripeWebhookResponse = ReceiveStripeWebhookResponses[keyof ReceiveStripeWebhookResponses];
+
+export type ListPaymentEventsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        state?: 'PENDING' | 'PROCESSING' | 'RETRY' | 'WAITING' | 'PROCESSED' | 'IGNORED' | 'DEAD';
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/admin/payment-events';
+};
+
+export type ListPaymentEventsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    413: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListPaymentEventsError = ListPaymentEventsErrors[keyof ListPaymentEventsErrors];
+
+export type ListPaymentEventsResponses = {
+    /**
+     * État réel, sans cache partagé.
+     */
+    200: PaymentEventPage;
+};
+
+export type ListPaymentEventsResponse = ListPaymentEventsResponses[keyof ListPaymentEventsResponses];
+
+export type RetryPaymentEventData = {
+    body: RetryPaymentEvent;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+    };
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/payment-events/{id}/retry';
+};
+
+export type RetryPaymentEventErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    413: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type RetryPaymentEventError = RetryPaymentEventErrors[keyof RetryPaymentEventErrors];
+
+export type RetryPaymentEventResponses = {
+    /**
+     * État réel, sans cache partagé.
+     */
+    200: PaymentEventSummary;
+};
+
+export type RetryPaymentEventResponse = RetryPaymentEventResponses[keyof RetryPaymentEventResponses];
+
+export type GetMemberResourceData = {
+    body?: never;
+    path: {
+        resourceId: Uuid;
+        versionId: Uuid;
+    };
+    query: {
+        locale: Locale;
+    };
+    url: '/me/resources/{resourceId}/versions/{versionId}';
+};
+
+export type GetMemberResourceErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    413: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetMemberResourceError = GetMemberResourceErrors[keyof GetMemberResourceErrors];
+
+export type GetMemberResourceResponses = {
+    /**
+     * État réel, sans cache partagé.
+     */
+    200: MemberResourceDetail;
+};
+
+export type GetMemberResourceResponse = GetMemberResourceResponses[keyof GetMemberResourceResponses];
+
+export type GetMemberProjectTemplateData = {
+    body?: never;
+    path: {
+        activityId: Uuid;
+        versionId: Uuid;
+    };
+    query: {
+        locale: Locale;
+    };
+    url: '/me/project-templates/{activityId}/versions/{versionId}';
+};
+
+export type GetMemberProjectTemplateErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    413: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetMemberProjectTemplateError = GetMemberProjectTemplateErrors[keyof GetMemberProjectTemplateErrors];
+
+export type GetMemberProjectTemplateResponses = {
+    /**
+     * État réel, sans cache partagé.
+     */
+    200: MemberProjectTemplate;
+};
+
+export type GetMemberProjectTemplateResponse = GetMemberProjectTemplateResponses[keyof GetMemberProjectTemplateResponses];

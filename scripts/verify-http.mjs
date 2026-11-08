@@ -25,7 +25,7 @@ function launch(script) {
   return record;
 }
 async function ready(record, url) {
-  await Promise.race([waitFor(url, 60_000), record.exit.then(() => { throw new Error(`Serveur arrêté avant disponibilité. Voir .runtime/verify-*.log.`); })]);
+  await Promise.race([waitFor(url, 300_000), record.exit.then(() => { throw new Error(`Serveur arrêté avant disponibilité. Voir .runtime/verify-*.log.`); })]);
 }
 async function terminate(record) {
   if (!await terminateOwned(record.child.pid, !windows)) throw new Error('Arrêt du serveur de vérification non confirmé.');

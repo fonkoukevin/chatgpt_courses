@@ -1,8 +1,17 @@
 import { connect } from 'node:net';
 
-type Result = { ok: boolean; webPid: number; apiPid?: number; error?: string };
+type Result = { ok: boolean; webPid: number; apiPid?: number; error?: string; eventId?: string; status?: number; received?: boolean };
 
-export function controlApi(operation: 'stop-api' | 'start-api' | 'pause-mailpit' | 'resume-mailpit'): Promise<Result> {
+export function controlApi(operation: 'stop-api' | 'start-api' | 'pause-mailpit' | 'resume-mailpit' | 'start-payment-worker' | 'stop-payment-worker'): Promise<Result> {
+  return sendControl(operation);
+}
+
+/** Controls only the isolated provider transport; never a product HTTP backdoor. */
+export function controlPayment(orderId: string, state: 'OPEN'|'PROCESSING'|'PAID'|'FAILED'|'EXPIRED'|'REFUNDED', type: string, replayId?: string): Promise<Result> {
+  return sendControl('advance-payment', {orderId,state,type,...(replayId ? {replayId} : {})});
+}
+
+function sendControl(operation: string, data: Record<string, string> = {}): Promise<Result> {
   const ipc = process.env.COURSES_BROWSER_IPC;
   const token = process.env.COURSES_BROWSER_TOKEN;
   if (!ipc || !token) throw new Error('Superviseur navigateur absent.');
@@ -11,9 +20,9 @@ export function controlApi(operation: 'stop-api' | 'start-api' | 'pause-mailpit'
     let input = '';
     let settled = false;
     const fail = (error: Error) => { settled = true; socket.destroy(); rejectCommand(error); };
-    socket.setTimeout(90_000, () => fail(new Error('Commande IPC expirée.')));
+    socket.setTimeout(process.env.COURSES_BROWSER_PHASE === 'P12' ? 360_000 : 90_000, () => fail(new Error('Commande IPC expirée.')));
     socket.once('error', () => fail(new Error('Connexion au superviseur interrompue.')));
-    socket.once('connect', () => socket.write(`${JSON.stringify({ token, operation })}\n`));
+    socket.once('connect', () => socket.write(`${JSON.stringify({ token, operation, ...data })}\n`));
     socket.on('data', (chunk) => {
       input += chunk.toString('utf8');
       if (input.length > 4096) return fail(new Error('Réponse IPC invalide.'));

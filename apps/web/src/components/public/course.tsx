@@ -1,5 +1,6 @@
 "use client";
 
+import { CourseMemberAccess } from "@/components/learning/course-access";
 import { Accordion, Badge, Button, Card, CardContent, CardHeader, Link, StatusMessage } from "@/components/ui";
 import type { CurriculumNode } from "@/lib/api/generated/types.gen";
 import type { Locale } from "@/lib/i18n/locales";
@@ -30,7 +31,7 @@ export function PublicCourse({ locale, result, languageLinks, activityHrefs = {}
       <section className="space-y-3"><h2 className="text-xl font-semibold">{t.evaluation}</h2><p className="whitespace-pre-wrap leading-relaxed text-muted-foreground">{result.data.metadata.evaluationDescription || t.missingInfo}</p></section>
       <section className="space-y-3"><h2 className="text-xl font-semibold">{t.tools}</h2>{result.data.metadata.tools.length ? <ul className="space-y-2">{result.data.metadata.tools.map((tool, index) => <li key={index}>{tool.url ? <Link href={tool.url}>{tool.name}</Link> : tool.name}</li>)}</ul> : <p className="text-muted-foreground">{t.missingInfo}</p>}</section>
       {result.data.metadata.faq.length > 0 && <section className="space-y-4"><h2 className="text-2xl font-semibold">{t.faq}</h2><Accordion items={result.data.metadata.faq.map((item, index) => ({ value: `faq-${index}`, title: item.question, content: <p className="whitespace-pre-wrap leading-relaxed">{item.answer}</p> }))} /></section>}
-    </div><Card><CardHeader><h2 className="text-xl font-semibold">{t.offerTitle}</h2></CardHeader><CardContent className="space-y-4"><p className="text-sm leading-relaxed">{t.offerUnavailable}</p><p className="text-sm text-muted-foreground">{result.data.estimatedMinutes === null ? t.durationUnknown : `${result.data.estimatedMinutes} ${t.minutes}`}</p><p className="text-sm text-muted-foreground">{result.data.metadata.level ? t[result.data.metadata.level] : t.levelUnknown}</p>{result.data.access === "PROTECTED" && <StatusMessage>{t.protectedBody}</StatusMessage>}</CardContent></Card></div>
+    </div><Card><CardHeader><h2 className="text-xl font-semibold">{t.offerTitle}</h2></CardHeader><CardContent className="space-y-4"><CourseMemberAccess locale={locale} course={result.data} activityHrefs={activityHrefs} /><p className="text-sm text-muted-foreground">{result.data.estimatedMinutes === null ? t.durationUnknown : `${result.data.estimatedMinutes} ${t.minutes}`}</p><p className="text-sm text-muted-foreground">{result.data.metadata.level ? t[result.data.metadata.level] : t.levelUnknown}</p>{result.data.access === "PROTECTED" && <StatusMessage>{t.protectedBody}</StatusMessage>}</CardContent></Card></div>
     {result.data.related.length > 0 && <section className="space-y-5"><h2 className="text-2xl font-semibold">{t.related}</h2><ResourceCards locale={locale} resources={result.data.related} returnTo={returnTo} /></section>}
   </>}</div></PublicShell>;
 }

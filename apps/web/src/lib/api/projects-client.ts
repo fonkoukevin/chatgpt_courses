@@ -4,6 +4,7 @@ import type { CreateProject, RevealSolution, SaveProject, SubmitSelfAssessment }
 import type { Locale } from "../i18n/locales";
 import { decodeProjectsResponse } from "./projects-response";
 import { matchingProjectResponse as matching } from "./projects-validation";
+import { isMemberProjectTemplate } from "./projects-validation";
 import { isProjectContext, isProjectPage, isProjectPreset, isProjectRevisionPage, isProjectRevisionView, isProjectStatus, isProjectTemplate, isProjectView, isSelfAssessmentPage, isSelfAssessmentView, isSolutionRevealView } from "./projects-validation";
 
 export type ProjectQuery = { q?: string; state?: "DRAFT" | "READY_FOR_SELF_ASSESSMENT" | "SELF_ASSESSED" | "NEEDS_REVISION"; activityId?: string; activityVersionId?: string; page?: number; pageSize?: number };
@@ -49,6 +50,7 @@ export const listSelfAssessments = (projectId: string, page = 0, pageSize = 10) 
 export const getSelfAssessment = (projectId: string, assessmentId: string) => request(`${projectPath(projectId, "/self-assessments")}/${id(assessmentId)}`, matching(isSelfAssessmentView, (value) => value.projectId === projectId && value.id === assessmentId));
 export const revealSolution = (activityId: string, body: RevealSolution, accountContext: string) => mutate(`/activities/${id(activityId)}/solution-reveals`, "POST", body, accountContext, matching(isSolutionRevealView, (value) => value.activityId === activityId && value.projectId === body.projectId && value.projectRevisionId === body.projectRevisionId && value.activityVersionId === body.activityVersionId && value.revisionId === body.revisionId && value.locale === body.locale));
 export const getProjectTemplate = (activityId: string, activityVersionId: string, locale: Locale) => request(projectTemplatePath(activityId, activityVersionId, locale), matching(isProjectTemplate, (value) => value.activityId === activityId && value.activityVersionId === activityVersionId && value.locale === locale), {}, [200], false);
+export const getMemberProjectTemplate = (activityId: string, activityVersionId: string, locale: Locale) => request(`/me${projectTemplatePath(activityId, activityVersionId, locale)}`, matching(isMemberProjectTemplate, (value) => value.activityId === activityId && value.activityVersionId === activityVersionId && value.locale === locale));
 export const getProjectPreset = (caseCode: "BR01" | "BR02", locale: Locale) => {
   if (caseCode !== "BR01" && caseCode !== "BR02") throw new Error("Invalid project reference.");
   return request(`/admin/project-presets/${caseCode}?locale=${language(locale)}`, isProjectPreset);

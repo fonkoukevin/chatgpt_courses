@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { environment, preflightServers, root, runtimeDir, start, terminateOwned, waitFor, windows } from './lib/runtime.mjs';
 import { createBrowserDatabase, stopBrowserDatabase } from './lib/browser-database.mjs';
 import { createBrowserServices, observeBrowserStorage, setBrowserServicePaused, stopBrowserService } from './lib/browser-services.mjs';
+import { createBrowserPayments } from './lib/browser-payments.mjs';
 
 const env = environment();
 const phase = process.argv[2] ?? 'P01';
@@ -18,9 +19,9 @@ for (let index = 3; index < process.argv.length; index += 2) {
   else throw new Error('Diagnostic permis : --grep expression et --repeat-each 1..20.');
   diagnosticArgs.push(flag, value);
 }
-if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11'].includes(phase)) throw new Error('Phase de recette inconnue : P01, P02 ou P04 à P11 attendu.');
+if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12'].includes(phase)) throw new Error('Phase de recette inconnue : P01, P02 ou P04 à P12 attendu.');
 const needsApi = phase !== 'P02';
-const isolatedDatabase = ['P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11'].includes(phase);
+const isolatedDatabase = ['P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12'].includes(phase);
 if (!['local', 'test'].includes(env.APP_ENV)) throw new Error('Vérification navigateur réservée à local/test.');
 const port = (value, fallback) => {
   const text = value ?? String(fallback);
@@ -59,6 +60,7 @@ let controlQueue = Promise.resolve();
 let verificationError;
 let database;
 let services = [];
+let payments;
 
 function save() {
   writeFileSync(manifest, JSON.stringify({ root, runId, supervisor: process.pid,
@@ -81,7 +83,7 @@ function launch(name, executable, args, options = {}) {
   return record;
 }
 async function ready(record, url) {
-  await Promise.race([waitFor(url, 60_000), record.exit.then(() => {
+  await Promise.race([waitFor(url, phase === 'P12' ? 300_000 : 60_000), record.exit.then(() => {
     throw new Error(`${record.name} arrêté avant disponibilité. Voir les journaux de cette session dans .runtime.`);
   })]);
 }
@@ -108,12 +110,12 @@ async function startApi() {
   return { apiPid: api.child.pid, webPid: web?.child.pid };
 }
 
-// Private Node IPC, not a product HTTP endpoint. Only these two operations exist.
+// Private Node IPC, never a product HTTP endpoint. Operations are explicitly allowlisted.
 const control = createServer((socket) => {
   sockets.add(socket);
   socket.once('close', () => sockets.delete(socket));
   socket.on('error', () => {});
-  socket.setTimeout(90_000, () => socket.destroy());
+  socket.setTimeout(phase === 'P12' ? 360_000 : 90_000, () => socket.destroy());
   let input = '';
   let handled = false;
   socket.on('data', (chunk) => {
@@ -124,15 +126,25 @@ const control = createServer((socket) => {
     handled = true;
     let message;
     try { message = JSON.parse(input.slice(0, input.indexOf('\n'))); } catch { return socket.destroy(); }
-    if (message.token !== token || !['stop-api', 'start-api', 'pause-mailpit', 'resume-mailpit'].includes(message.operation)) return socket.destroy();
+    if (message.token !== token || !['stop-api', 'start-api', 'pause-mailpit', 'resume-mailpit', 'advance-payment', 'start-payment-worker', 'stop-payment-worker'].includes(message.operation)) return socket.destroy();
     controlQueue = controlQueue.then(async () => {
       if (stopping) throw new Error('Arrêt en cours.');
       if (message.operation === 'stop-api') {
         await terminate(api);
         return { webPid: web.child.pid };
       }
+      if (message.operation === 'advance-payment') {
+        if (phase !== 'P12' || !payments) throw new Error('Transport contrôlé de paiement absent.');
+        return { webPid: web.child.pid, ...await payments.advance(message.orderId,message.state,message.type,message.replayId) };
+      }
+      if (['start-payment-worker', 'stop-payment-worker'].includes(message.operation)) {
+        if (phase !== 'P12' || !payments) throw new Error('Worker réservé à la recette P12.');
+        const enabled = message.operation === 'start-payment-worker' ? 'true' : 'false';
+        if (env.PAYMENT_INBOX_ENABLED !== enabled) { await terminate(api); env.PAYMENT_INBOX_ENABLED = enabled; }
+        return startApi();
+      }
       if (['pause-mailpit', 'resume-mailpit'].includes(message.operation)) {
-        if (phase !== 'P10') throw new Error('Contrôle de service réservé à la recette médias.');
+        if (!['P10','P12'].includes(phase)) throw new Error('Contrôle de service réservé à la recette médias/paiements.');
         setBrowserServicePaused(services.find(({ kind }) => kind === 'mailpit'), message.operation === 'pause-mailpit'); save();
         return { webPid: web.child.pid, apiPid: api?.child.pid };
       }
@@ -155,13 +167,16 @@ try {
     env.COMMERCE_ENABLED = 'true'; env.COMMERCE_ALLOWED_CURRENCIES = 'EUR';
     env.STRIPE_ENABLED = 'false'; delete env.STRIPE_SECRET_KEY; delete env.STRIPE_WEBHOOK_SECRET;
   }
-  if (phase === 'P10') {
+  if (['P10','P12'].includes(phase)) {
     services = await createBrowserServices(env, runDirectory, runId, (records) => { services = records; save(); });
-    env.VIDEO_ENABLED = 'true'; env.VIDEO_PROVIDER = 'local-test'; env.VIDEO_LOCAL_ROOT = join(runDirectory, 'private-video');
-    mkdirSync(env.VIDEO_LOCAL_ROOT, { recursive: true, mode: 0o700 });
-    env.COURSES_BROWSER_PRIVATE_DIRECTORY = runDirectory;
+    if (phase === 'P10') {
+      env.VIDEO_ENABLED = 'true'; env.VIDEO_PROVIDER = 'local-test'; env.VIDEO_LOCAL_ROOT = join(runDirectory, 'private-video');
+      mkdirSync(env.VIDEO_LOCAL_ROOT, { recursive: true, mode: 0o700 });
+      env.COURSES_BROWSER_PRIVATE_DIRECTORY = runDirectory;
+    }
     save();
   }
+  if (phase === 'P12') { env.API_TIMEOUT_MS = '30000'; payments = await createBrowserPayments(env); }
   await new Promise((resolveListen, rejectListen) => {
     control.once('error', rejectListen);
     control.listen(ipc, resolveListen);
@@ -235,11 +250,13 @@ try {
     if (service.kind === 's3') { try { service.observation = observeBrowserStorage(service); } catch { service.observation = { available: false }; } }
     try { stopBrowserService(service); save(); } catch (error) { cleanupErrors.push(error); }
   }
+  try { await payments?.stop(); } catch(error) { cleanupErrors.push(error); }
   try {
     writeFileSync(join(evidence, 'session.json'), JSON.stringify({ runId, completedAt: new Date().toISOString(), selection: selected,
       result: verificationError || cleanupErrors.length ? 'failed' : 'passed', cleanupConfirmed: cleanupErrors.length === 0,
       ...(database ? { isolatedPostgres: { image: database.image, tmpfs: true, stopped: database.stopped } } : {}),
       isolatedServices: services.map(({ kind, image, stopped, observation }) => ({ kind, image, tmpfs: true, stopped, ...(observation ? { observation } : {}) })),
+      ...(payments ? { controlledProvider: payments.observation() } : {}),
       processes: children.map(({ name, child, terminated }) => ({ name, pid: child.pid, terminated })) }, null, 2));
   } catch (error) { cleanupErrors.push(error); }
   if (cleanupErrors.length) {

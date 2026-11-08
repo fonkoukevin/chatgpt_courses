@@ -80,6 +80,7 @@ async function proxy(request: Request, context: RouteContext): Promise<Response>
   url.search = new URL(request.url).search;
   const mediaStream = ["GET", "HEAD"].includes(request.method) && path.length === 3 && path[0] === "media"
     && /^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/.test(path[1]) && path[2] === "stream";
+  const stripeWebhook = request.method === "POST" && path.length === 2 && path[0] === "webhooks" && path[1] === "stripe";
   const headers = new Headers({ Accept: mediaStream ? "video/mp4, application/problem+json" : "application/json, application/problem+json" });
   if (mediaStream && request.headers.has("range")) headers.set("Range", request.headers.get("range")!);
   const mutation = !["GET", "HEAD", "OPTIONS"].includes(request.method);
@@ -87,19 +88,19 @@ async function proxy(request: Request, context: RouteContext): Promise<Response>
       || request.headers.get("sec-fetch-site") === "cross-site")) {
     return problem(403, "INVALID_REQUEST_ORIGIN", instance);
   }
-  for (const name of ["content-type", "x-csrf-token", "if-match", "idempotency-key", "x-account-context"]) {
+  for (const name of stripeWebhook ? ["content-type", "stripe-signature"] : ["content-type", "x-csrf-token", "if-match", "idempotency-key", "x-account-context"]) {
     const value = request.headers.get(name);
     if (value) headers.set(name, value);
   }
   const session = request.headers.get("cookie")?.split(";").map((cookie) => cookie.trim()).find((cookie) => cookie.startsWith("SESSION="));
-  if (session) headers.set("Cookie", session);
+  if (session && !stripeWebhook) headers.set("Cookie", session);
 
   let headersTimer: ReturnType<typeof setTimeout> | undefined;
   try {
     const body = mutation ? await boundedBody(request) : null;
     const controller = new AbortController();
     // A stream keeps the client's cancellation signal after its headers arrive.
-    // The ordinary metadata timeout must not cut a long video after five seconds.
+    // The ordinary metadata deadline must not cut a long video after its headers.
     if (mediaStream) headersTimer = setTimeout(() => controller.abort(), config.apiTimeoutMs);
     const upstream = await fetch(url, {
       method: request.method,

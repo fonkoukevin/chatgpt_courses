@@ -6,6 +6,7 @@ import { AvailabilityNotice, BackToCatalogue, DetailHeading, PublicApiError, Pub
 import { PublicDocumentBody, ResourceTools } from "@/components/public/document";
 import type { AuthResult } from "@/lib/api/auth-client";
 import type { ApiError } from "@/lib/api/client";
+import { getMemberResource } from "@/lib/api/member-content-client";
 import { enrollCourse, getLearningActivity, getLearningDashboard, visitActivity } from "@/lib/api/learning-client";
 import type { LearningActivity as ActivityData, PublicDocument, ResourceDetail } from "@/lib/api/generated/types.gen";
 import type { Locale } from "@/lib/i18n/locales";
@@ -37,11 +38,12 @@ function ActivityContent({ locale, resource, languageLinks, returnTo, programme 
   const { state: account, boundary } = useLearningAccount(selfHref);
   const [privateActivity, setPrivateActivity] = useState<AuthResult<ActivityData> | null>(null), [lookupDone, setLookupDone] = useState(!programme), [lookupError, setLookupError] = useState<ApiError | null>(null);
   const [enrolling, setEnrolling] = useState(false), [enrolled, setEnrolled] = useState(false), [unconfirmed, setUnconfirmed] = useState(false), [visitError, setVisitError] = useState<ApiError | null>(null), [historyRefresh, setHistoryRefresh] = useState(0);
+  const [activityScope, setActivityScope] = useState<number | null>(null), [member, setMember] = useState<{ scope: number; result: AuthResult<ResourceDetail> } | null>(null);
   const request = useRef(0), lock = useRef(false), visited = useRef("");
   const acceptActivity = useCallback((result: AuthResult<ActivityData>) => {
     if (result.ok && (result.data.activityId !== resource.resourceId || result.data.activityVersionId !== resource.versionId)) setPrivateActivity({ ok: false, error: { kind: "invalid-response", status: 200 } });
     else setPrivateActivity(result);
-    setLookupDone(true); if (!result.ok) boundary.fail(result.error);
+    setActivityScope(boundary.capture()); setLookupDone(true); if (!result.ok) boundary.fail(result.error);
   }, [resource.resourceId, resource.versionId, boundary]);
   useEffect(() => {
     if (account.status !== "active" || !programme) return;
@@ -56,12 +58,29 @@ function ActivityContent({ locale, resource, languageLinks, returnTo, programme 
     });
     return () => { active = false; };
   }, [account.status, boundary, programme, resource.locale, resource.resourceId, resource.versionId, acceptActivity]);
+  useEffect(() => {
+    if (account.status !== "active" || resource.access !== "PROTECTED" || resource.availability !== "PUBLISHED") return;
+    const scope = boundary.capture(); let active = true;
+    void getMemberResource(resource.resourceId, resource.versionId, resource.locale).then((result) => {
+      if (!active || !boundary.isCurrent(scope)) return;
+      setMember({ scope, result }); if (!result.ok) boundary.fail(result.error);
+    });
+    return () => { active = false; };
+  }, [account.status, boundary, resource.access, resource.availability, resource.resourceId, resource.versionId, resource.locale]);
   const activity = privateActivity?.ok ? privateActivity.data : null;
-  const contextBlocked = Boolean(activity && (activity.accessStatus !== "ACTIVE" || activity.availability !== "PUBLISHED"));
+  const scopedActivity = account.status === "active" && activityScope === boundary.capture() ? activity : null;
+  const scopedMember = account.status === "active" && member?.scope === boundary.capture() && member.result.ok ? member.result.data : null;
+  const ownedResource = scopedActivity?.resource ?? scopedMember;
+  const privateAvailable = Boolean(ownedResource?.document && ownedResource.availability === "PUBLISHED" && (!programme || lookupDone));
+  const contentResource = privateAvailable && ownedResource ? ownedResource : resource;
+  // Keep personal project/answer state mounted during account revalidation;
+  // premium source material itself is rendered only in the active generation.
+  const retainedResource = activity?.resource.document ? activity.resource : member?.result.ok && member.result.data.document ? member.result.data : resource;
+  const contextBlocked = Boolean(scopedActivity && (scopedActivity.accessStatus !== "ACTIVE" || scopedActivity.availability !== "PUBLISHED"));
   const publicAvailable = resource.availability === "PUBLISHED" && resource.access === "FREE" && resource.document !== null;
-  const contentAvailable = publicAvailable && !contextBlocked;
-  const revisionChanged = Boolean(activity && activity.resource.revisionId !== resource.revisionId);
-  const enrolledAvailable = Boolean(activity && !contextBlocked);
+  const contentAvailable = (publicAvailable || privateAvailable) && !contextBlocked;
+  const revisionChanged = Boolean(scopedActivity && scopedActivity.resource.revisionId !== resource.revisionId);
+  const enrolledAvailable = Boolean(scopedActivity && !contextBlocked);
   const recordVisit = useCallback(async (value: ActivityData) => {
     if (account.status !== "active" || !account.accountId || value.accessStatus !== "ACTIVE" || value.availability !== "PUBLISHED") return;
     const scope = boundary.capture();
@@ -69,11 +88,11 @@ function ActivityContent({ locale, resource, languageLinks, returnTo, programme 
     if (boundary.isCurrent(scope)) { setVisitError(result.ok ? null : result.error); if (!result.ok) boundary.fail(result.error); }
   }, [account.status, account.accountId, boundary, resource.resourceId, resource.versionId, resource.locale]);
   useEffect(() => {
-    if (!activity || account.status !== "active" || activity.accessStatus !== "ACTIVE" || activity.availability !== "PUBLISHED") return;
-    const key = `${activity.enrollmentId}:${activity.activityVersionId}:${boundary.capture()}`;
+    if (!scopedActivity || account.status !== "active" || scopedActivity.accessStatus !== "ACTIVE" || scopedActivity.availability !== "PUBLISHED") return;
+    const key = `${scopedActivity.enrollmentId}:${scopedActivity.activityVersionId}:${boundary.capture()}`;
     if (visited.current === key) return;
-    visited.current = key; void recordVisit(activity);
-  }, [activity, account.status, boundary, recordVisit]);
+    visited.current = key; void recordVisit(scopedActivity);
+  }, [scopedActivity, account.status, boundary, recordVisit]);
   async function refreshActivity() {
     if (!activity || account.status !== "active") return;
     const scope = boundary.capture(), sequence = ++request.current;
@@ -111,20 +130,21 @@ function ActivityContent({ locale, resource, languageLinks, returnTo, programme 
       <div className="min-w-0 max-w-3xl space-y-8">
         {contextBlocked && <StatusMessage tone="warning">{activity?.accessStatus === "PROTECTED" ? t.protected : activity?.availability === "MISSING_TRANSLATION" ? t.translationMissing : t.contentUnavailable}</StatusMessage>}
         {revisionChanged && <div className="space-y-3"><StatusMessage tone="warning">{t.quizVersionChanged}</StatusMessage><ConfirmationDialog title={t.reloadActivity} description={t.reloadActivityDescription} confirmLabel={t.confirm} cancelLabel={t.cancel} trigger={<Button variant="secondary" className="max-w-full whitespace-normal">{t.reloadActivity}</Button>} onConfirm={() => window.location.reload()} /></div>}
-        {contentAvailable && resource.document ? <>
-          <section className="space-y-3"><h2 className="text-2xl font-semibold">{t.objective}</h2><p className="whitespace-pre-wrap break-words leading-relaxed">{resource.document.objective}</p><h3 className="pt-2 text-lg font-semibold">{t.expectedResult}</h3><p className="whitespace-pre-wrap break-words leading-relaxed">{resource.document.expectedResult}</p>{resource.document.prerequisites.length > 0 && <><h3 className="pt-2 text-lg font-semibold">{t.prerequisites}</h3><ul className="list-disc space-y-2 pl-5">{resource.document.prerequisites.map((item, index) => <li key={index} className="break-words text-sm leading-relaxed">{item}</li>)}</ul></>}</section>
-          {resource.document.media.length === 0 && <p className="text-sm leading-relaxed text-muted-foreground">{t.noVideo}</p>}<PublicDocumentBody locale={locale} document={resource.document} prefix="activity" showMedia={false} /><LearningMedia locale={locale} resource={resource} account={account} boundary={boundary} enrollmentId={activity?.enrollmentId} />
-          <Practice key={`practice:${resource.versionId}:${resource.locale}`} locale={locale} document={resource.document} />
+        {contentAvailable && contentResource.document ? <>
+          <section className="space-y-3"><h2 className="text-2xl font-semibold">{t.objective}</h2><p className="whitespace-pre-wrap break-words leading-relaxed">{contentResource.document.objective}</p><h3 className="pt-2 text-lg font-semibold">{t.expectedResult}</h3><p className="whitespace-pre-wrap break-words leading-relaxed">{contentResource.document.expectedResult}</p>{contentResource.document.prerequisites.length > 0 && <><h3 className="pt-2 text-lg font-semibold">{t.prerequisites}</h3><ul className="list-disc space-y-2 pl-5">{contentResource.document.prerequisites.map((item, index) => <li key={index} className="break-words text-sm leading-relaxed">{item}</li>)}</ul></>}</section>
+          {contentResource.document.media.length === 0 && <p className="text-sm leading-relaxed text-muted-foreground">{t.noVideo}</p>}<PublicDocumentBody locale={locale} document={contentResource.document} prefix="activity" showMedia={false} /><LearningMedia locale={locale} resource={contentResource} account={account} boundary={boundary} enrollmentId={activity?.enrollmentId} />
+          <Practice key={`practice:${resource.versionId}:${resource.locale}`} locale={locale} document={contentResource.document} />
         </> : resource.availability === "PUBLISHED" && !contextBlocked && <StatusMessage>{resource.access === "PROTECTED" ? publicCopy.protectedBody : publicCopy.missingInfo}</StatusMessage>}
+        {account.status === "active" && member?.scope === boundary.capture() && !member.result.ok && <LearningError locale={locale} error={member.result.error} retry={() => void boundary.refresh()} />}
         <AccountNotice locale={locale} state={account} boundary={boundary} returnTo={selfHref} />
         {account.status === "active" && programme && (!lookupDone ? <p role="status">{t.loading}</p> : <div className="space-y-4">{lookupError && <LearningError locale={locale} error={lookupError} retry={() => void retryLookup()} />}{privateActivity && !privateActivity.ok && <LearningError locale={locale} error={privateActivity.error} retry={() => void retryLookup()} />}{!activity && !lookupError && !privateActivity && contentAvailable && <Button busy={enrolling} loadingLabel={t.startingCourse} onClick={() => void enroll()}>{t.startCourse}</Button>}{enrolled && <StatusMessage tone="success">{t.enrolled}</StatusMessage>}</div>)}
         {unconfirmed && <StatusMessage tone="warning">{t.accountTransition}</StatusMessage>}{visitError && <LearningError locale={locale} error={visitError} retry={activity ? () => void recordVisit(activity) : undefined} />}
         {activity && <ActivityProgress key={`progress:${activity.progress.id}`} locale={locale} contentLocale={resource.locale} initial={activity.progress} account={account} boundary={boundary} available={enrolledAvailable} />}
-        {contentAvailable && resource.document?.projectPolicy && !revisionChanged && !enrolling && !(programme && account.status === "active" && !lookupDone) && <StartProjectAction key={`project:${resource.versionId}:${resource.locale}`} locale={locale} source={resource} account={account} boundary={boundary} enrollmentId={activity?.enrollmentId} />}
-        {publicAvailable && <ActivityQuiz key={`quiz:${resource.versionId}:${resource.locale}`} locale={locale} resource={resource} account={account} boundary={boundary} enrollmentId={activity?.enrollmentId} overview={activity?.quiz} available={contentAvailable && !revisionChanged && (!activity || enrolledAvailable) && !enrolling && !(programme && account.status === "active" && !lookupDone)} onAttempt={() => { setHistoryRefresh((value) => value + 1); void refreshActivity(); }} />}
+        {retainedResource.document?.projectPolicy && <StartProjectAction key={`project:${resource.versionId}:${resource.locale}`} locale={locale} source={retainedResource} sourceAllowed={contentAvailable && !revisionChanged && !enrolling} account={account} boundary={boundary} enrollmentId={scopedActivity?.enrollmentId} />}
+        {retainedResource.document && <ActivityQuiz key={`quiz:${resource.versionId}:${resource.locale}`} locale={locale} resource={retainedResource} contentVisible={contentAvailable} account={account} boundary={boundary} enrollmentId={scopedActivity?.enrollmentId} overview={scopedActivity?.quiz} available={contentAvailable && !revisionChanged && (!activity || enrolledAvailable) && !enrolling && !(programme && account.status === "active" && !lookupDone)} onAttempt={() => { setHistoryRefresh((value) => value + 1); void refreshActivity(); }} />}
         {account.accountId && <ActivityNotes key={`notes:${account.accountId}:${resource.versionId}`} locale={locale} contentLocale={resource.locale} activityId={resource.resourceId} activityVersionId={resource.versionId} account={account} boundary={boundary} canCreate={contentAvailable} />}
         {account.accountId && <QuizHistory key={`history:${account.accountId}:${resource.versionId}`} locale={locale} activityVersionId={resource.versionId} account={account} boundary={boundary} refresh={historyRefresh} />}
-        {contentAvailable && <section className="space-y-4"><h2 className="text-2xl font-semibold">{t.resources}</h2><ResourceTools key={resource.revisionId} locale={locale} resource={resource} /></section>}
+        {contentAvailable && <section className="space-y-4"><h2 className="text-2xl font-semibold">{t.resources}</h2><ResourceTools key={contentResource.revisionId} locale={locale} resource={contentResource} /></section>}
         {programme && <ActivityNavigation locale={locale} programme={programme} currentVersionId={resource.versionId} />}
       </div>
     </div>

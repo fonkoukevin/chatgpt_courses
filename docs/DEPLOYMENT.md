@@ -124,6 +124,24 @@ Après autorisation des changements concrets sur ce domaine, appliquer les seuls
 
 ## Livraison et CI
 
+### Paiement P12 — configuration locale et reprise
+
+P12 ferme explicitement l’activation Stripe en `APP_ENV=production` : le code ne sait encore traiter que TEST. Le mode LIVE et les invariants de mode des migrations devront être étendus et vérifiés avant livraison commerciale. Un simple ajout de clés ne constitue pas cette activation.
+
+Une recherche fournisseur complète sans session peut rester en attente avant l’échéance immuable de Checkout. Après cette échéance, si aucune session n’a été liée entre-temps et que le paiement reste UNKNOWN, l’opération/commande passent en NEEDS_REVIEW et le job en DEAD avec `SESSION_NOT_FOUND_AFTER_EXPIRY`, dans une transaction sous verrou. L’état financier UNKNOWN et la clé d’intention active sont conservés. Un opérateur peut reprendre le rapprochement si des faits tardifs deviennent disponibles ; aucun nouvel appel de création n’est lancé. Les sessions connues OPEN/PROCESSING conservent leur attente normale.
+
+Le SDK Stripe34.1.0 utilise l’API2026-10-28.endive et Checkout hébergé. P12 refuse LIVE ; aucune activation de production n’est autorisée par une réussite locale. `.env.local` ignoré porte `STRIPE_ENABLED`, `STRIPE_MODE=TEST`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_ACCOUNT_ID`. L’endpoint normal reste `STRIPE_API_BASE=https://api.stripe.com` ; un serveur HTTP loopback contrôlé est accepté uniquement avec `APP_ENV=test`, jamais en recette/production. Le proxy transmet la signature uniquement pour le POST exact `webhooks/stripe`, sans cookie utilisateur et sans transformer son corps ; tous les autres contrôles CSRF restent actifs.
+
+La création a des timeouts bornés : connexion 3 s, lecture 8 s par défaut. `STRIPE_RECOVERY_WINDOW=10m` borne les reprises à paramètres et clé identiques ; la session conserve son échéance fixe d’une heure. Un résultat ambigu au-delà de cette fenêtre exige un rapprochement GET ou une intervention, jamais une nouvelle session automatique. Les opérations et snapshots ne sont pas supprimés par le worker.
+
+P12 porte le budget par défaut du proxy à `API_TIMEOUT_MS=30000`, sous la limite client de 35 s, pour couvrir la première vérification du compte et l’appel de création (deux appels réseau bornés à3s+8s chacun). Le premier essai navigateur a effectivement reçu504 avec l’ancien défaut 5 s lors d’une inscription à froid ; il reste classé échoué. Une absence d’API reste signalée explicitement. Les éventuelles surcharges d’environnement existantes sont à vérifier : un ancien `API_TIMEOUT_MS=5000` impose toujours sa valeur.
+
+`PAYMENT_INBOX_ENABLED=true`, `PAYMENT_INBOX_POLL_DELAY=1s`, `PAYMENT_INBOX_LEASE_DURATION=75s`, `PAYMENT_INBOX_MAX_ATTEMPTS=5`, `PAYMENT_INBOX_RETRY_BASE=5s`, `PAYMENT_INBOX_RETRY_MAX=5m`, `PAYMENT_INBOX_WAITING_DELAY=30s` règlent l’inbox et les jobs de rapprochement. Les attentes OPEN/PROCESSING ne consomment pas le budget d’erreurs. Un bail abandonné se reprend ; un incident final reste DEAD et visible via l’API d’exploitation, réservée à `payments.events.read/retry`. Le rôle de référence PAYMENTS_OPERATOR ne crée aucun compte et n’est attribué à personne par migration. P15 complétera l’interface opérateur ; P12 offre les routes contrôlées, pas un faux tableau de bord.
+
+Les origines de droits sont créées par ligne achetée ; leurs durées commencent à l’activation PostgreSQL effective, selon le snapshot FIXED/UNLIMITED et les conditions d’actualisation explicites. Les conditions commerciales réelles doivent confirmer cet ancrage avant vente. Un email indéterminé se reprend par le mécanisme indépendant P10 ; il ne doit déclencher aucun remboursement, retrait ou nouvel achat. Après restauration, rapprocher les opérations et inbox avec Stripe avant de rouvrir les ventes.
+
+La procédure de recette fournisseur de test est dans le [README](../README.md#p12--checkout-et-attribution-durable). La recette locale `run verify:payments` emploie des conteneurs étiquetés propres et un transport Stripe contrôlé : elle ne valide ni compte Stripe, ni endpoint distant, ni encaissement fournisseur. Les clés absentes ou un endpoint de test non accessible restent des prérequis externes explicitement bloquants.
+
 Les tests accompagnent chaque lot ; P19 consolide la recette, il ne constitue pas le début des tests. Vérifications minimales : compilation, TypeScript, lint configuré, tests des invariants métier et intégration sur PostgreSQL, puis parcours navigateur représentatifs avec l’API réelle.
 
 Les workflows utilisent le minimum de permissions. Épingler les actions à un SHA vérifié et les dépendances à des versions verrouillées. Ne pas exposer les secrets de déploiement aux contributions non approuvées. Les traces et artefacts utilisent des comptes fictifs ; limiter leur rétention. GitHub documente les permissions du jeton, le risque du code non fiable et l’épinglage des actions. [S9]

@@ -44,8 +44,11 @@ public class LearningService {
     private final ObjectMapper mapper;
     private final PublicCatalogueService catalogue;
     private final MethodService methods;
-    public LearningService(JdbcTemplate jdbc,ObjectMapper mapper,PublicCatalogueService catalogue,MethodService methods) {
-        this.jdbc=jdbc;this.mapper=mapper;this.catalogue=catalogue;this.methods=methods;
+    private final com.chatgptcourses.access.MemberContentService members;
+    private final com.chatgptcourses.access.EntitlementAccess entitlements;
+    public LearningService(JdbcTemplate jdbc,ObjectMapper mapper,PublicCatalogueService catalogue,MethodService methods,
+        com.chatgptcourses.access.MemberContentService members,com.chatgptcourses.access.EntitlementAccess entitlements) {
+        this.jdbc=jdbc;this.mapper=mapper;this.catalogue=catalogue;this.methods=methods;this.members=members;this.entitlements=entitlements;
     }
 
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
@@ -79,7 +82,7 @@ public class LearningService {
         var course=catalogue.version(command.courseResourceId(),command.courseVersionId(),command.locale());
         if(course.kind()!=ResourceKind.COURSE)throw notFound();
         if(!"PUBLISHED".equals(course.availability()))throw notFound();
-        boolean accessible=course.curriculum().stream().filter(m->"PUBLISHED".equals(m.availability())).flatMap(m->m.children().stream())
+        boolean accessible=entitlements.covers(actor,course.resourceId(),course.versionId(),command.locale())||course.curriculum().stream().filter(m->"PUBLISHED".equals(m.availability())).flatMap(m->m.children().stream())
             .anyMatch(a->a.kind()==ResourceKind.ACTIVITY&&"PUBLISHED".equals(a.availability())&&"FREE".equals(a.access()));
         if(!accessible)throw denied();
         var snapshots=jdbc.query("""
@@ -111,7 +114,7 @@ public class LearningService {
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
     public LearningActivity activity(UUID actor,UUID enrollmentId,UUID activityId,UUID activityVersionId,String locale) {
         require(actor,"learning.read");locale(locale);var row=owned(actor,enrollmentId);var course=catalogue.version(row.courseId(),row.courseVersion(),locale);
-        check(activityVersionId!=null);var items=items(row,course,locale);var item=item(items,activityId,activityVersionId);var detail=catalogue.version(item.activity(),item.version(),locale);
+        check(activityVersionId!=null);var items=items(row,course,locale);var item=item(items,activityId,activityVersionId);var detail=members.detail(actor,item.activity(),item.version(),locale);
         // Metadata can explain withdrawal, but the catalogue never sends a protected body.
         var overview="ACTIVE".equals(item.access())?quizOverview(actor,item.version(),detail):null;
         int index=items.indexOf(item);
@@ -151,7 +154,7 @@ public class LearningService {
     public ActivityNoteView createNote(UUID actor,UUID accountContext,CreateActivityNote command) {
         mutation(actor,accountContext);check(command!=null&&command.activityId()!=null&&command.activityVersionId()!=null);locale(command.locale());noteText(command.text(),mapper);
         lockActor(actor);lockResources(List.of(command.activityId()));mutation(actor,accountContext);
-        requireFree(catalogue.version(command.activityId(),command.activityVersionId(),command.locale()),ResourceKind.ACTIVITY);
+        requireReadable(members.detail(actor,command.activityId(),command.activityVersionId(),command.locale()),ResourceKind.ACTIVITY);
         if(Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM learning_activity_notes WHERE owner_id=? AND activity_version_id=?)",Boolean.class,actor,command.activityVersionId())))throw new ApiException(ApiError.ACTIVITY_NOTE_EXISTS);
         UUID id=UUID.randomUUID();jdbc.update("INSERT INTO learning_activity_notes(id,owner_id,activity_id,activity_version_id,locale,body) VALUES(?,?,?,?,?,?)",id,actor,command.activityId(),command.activityVersionId(),command.locale(),command.text());
         return ownedNote(actor,id,false);
@@ -178,7 +181,7 @@ public class LearningService {
             return replay.getFirst().value();
         }
         var row=owned(actor,command.enrollmentId());accessibleItem(actor,accountContext,row,activityId,command.activityVersionId(),command.locale());
-        var source=quizSource(activityId,command.activityVersionId(),command.locale(),command.revisionId());
+        var source=quizSource(actor,activityId,command.activityVersionId(),command.locale(),command.revisionId());
         int used=Objects.requireNonNull(jdbc.queryForObject("SELECT count(*) FROM learning_quiz_attempts WHERE owner_id=? AND activity_version_id=?",Integer.class,actor,command.activityVersionId()));
         var policy=effectivePolicy(source.document().quizPolicy());
         if(policy.maxAttempts()!=null&&used>=policy.maxAttempts())throw new ApiException(ApiError.QUIZ_ATTEMPTS_EXHAUSTED);
@@ -203,7 +206,7 @@ public class LearningService {
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
     public FormativeQuizResult checkQuiz(UUID activityId,UUID activityVersionId,CheckQuiz command) {
         check(command!=null&&activityId!=null&&activityVersionId!=null&&command.revisionId()!=null);locale(command.locale());
-        var source=quizSource(activityId,activityVersionId,command.locale(),command.revisionId());var graded=grade(source.document(),canonicalAnswers(command.answers()));
+        var source=quizSource(null,activityId,activityVersionId,command.locale(),command.revisionId());var graded=grade(source.document(),canonicalAnswers(command.answers()));
         return new FormativeQuizResult(activityId,activityVersionId,command.revisionId(),command.locale(),graded.points(),graded.max(),graded.passed(),effectivePolicy(source.document().quizPolicy()),graded.results());
     }
 
@@ -214,7 +217,7 @@ public class LearningService {
     private EnrollmentSummary summary(EnrollmentRow row,ResourceDetail course) {
         var counts=jdbc.queryForMap("SELECT count(*) FILTER(WHERE p.read_at IS NOT NULL) AS read,count(*) FILTER(WHERE p.completed_at IS NOT NULL) AS completed FROM learning_activity_progress p WHERE enrollment_id=?",row.id());
         int passed=Objects.requireNonNull(jdbc.queryForObject("SELECT count(DISTINCT q.activity_version_id) FROM learning_quiz_attempts q JOIN learning_enrollment_activities i ON i.activity_version_id=q.activity_version_id WHERE i.enrollment_id=? AND q.owner_id=? AND q.passed",Integer.class,row.id(),row.owner()));
-        return new EnrollmentSummary(row.id(),row.courseId(),row.courseVersion(),row.versionNumber(),row.title(),row.locale(),course.slug(),access(course.availability(),course.access()),course.availability(),
+        return new EnrollmentSummary(row.id(),row.courseId(),row.courseVersion(),row.versionNumber(),row.title(),row.locale(),course.slug(),access(course.availability(),course.access(),entitlements.covers(row.owner(),row.courseId(),row.courseVersion(),course.locale())),course.availability(),
             new ProgressTotals(row.count(),((Number)counts.get("read")).intValue(),((Number)counts.get("completed")).intValue(),passed,"NOT_AVAILABLE"),row.created(),row.lastVisited());
     }
     private Item accessibleItem(UUID actor,UUID context,EnrollmentRow row,UUID activityId,UUID version,String locale) {
@@ -244,14 +247,14 @@ public class LearningService {
             String availability=!"PUBLISHED".equals(course.availability())?course.availability():!"PUBLISHED".equals(rs.getString("module_status"))?rs.getString("module_status"):rs.getString("activity_status");
             String currentTitle=rs.getString("title");
             return new Item(uuid(rs,"activity_id"),uuid(rs,"activity_version_id"),uuid(rs,"module_id"),uuid(rs,"module_version_id"),rs.getInt("position"),
-                currentTitle==null?rs.getString("activity_title"):currentTitle,rs.getString("slug"),availability,access(availability,rs.getString("activity_access")),
+                currentTitle==null?rs.getString("activity_title"):currentTitle,rs.getString("slug"),availability,access(availability,rs.getString("activity_access"),entitlements.covers(row.owner(),uuid(rs,"activity_id"),uuid(rs,"activity_version_id"),locale)),
                 new ActivityProgressView(uuid(rs,"progress_id"),row.id(),uuid(rs,"activity_id"),uuid(rs,"activity_version_id"),rs.getLong("progress_revision"),instant(rs,"read_at"),instant(rs,"completed_at")));
         },locale,locale,locale,row.id());
     }
     private static String status(String t,String e,String r,String source) {
         return "CASE WHEN "+r+".archived_at IS NOT NULL OR "+t+".editorial_state='ARCHIVED' THEN 'WITHDRAWN' WHEN "+t+".published_revision_id IS NULL THEN 'MISSING_TRANSLATION' WHEN "+e+".document_json IS NULL THEN 'WITHDRAWN' WHEN "+t+".editorial_state='STALE' OR ("+t+".source_translation_id IS NOT NULL AND ("+t+".published_source_revision_id IS DISTINCT FROM "+source+".current_revision_id OR "+source+".editorial_state IN('ARCHIVED','STALE'))) THEN 'STALE' ELSE 'PUBLISHED' END";
     }
-    private static String access(String availability,String policy) {return !"PUBLISHED".equals(availability)?"UNAVAILABLE":"FREE".equals(policy)?"ACTIVE":"PROTECTED";}
+    private static String access(String availability,String policy,boolean entitled) {return !"PUBLISHED".equals(availability)?"UNAVAILABLE":"FREE".equals(policy)||entitled?"ACTIVE":"PROTECTED";}
     private static Item item(List<Item> items,UUID activity,UUID version) {return items.stream().filter(i->i.activity().equals(activity)&&(version==null||i.version().equals(version))).findFirst().orElseThrow(LearningService::notFound);}
     private static ActivityLink link(Item item) {return new ActivityLink(item.activity(),item.version(),item.slug(),item.title(),item.availability(),item.access());}
     private static ResourceDetail contextDetail(ResourceDetail d,String availability) {
@@ -264,8 +267,8 @@ public class LearningService {
         boolean passed=Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM learning_quiz_attempts WHERE owner_id=? AND activity_version_id=? AND passed)",Boolean.class,actor,activityVersion));
         return new QuizOverview(p,used,p.maxAttempts()==null?null:Math.max(0,p.maxAttempts()-used),latest.isEmpty()?null:latest.getFirst(),passed);
     }
-    private Source quizSource(UUID activityId,UUID version,String locale,UUID revision) {
-        var detail=catalogue.version(activityId,version,locale);requireFree(detail,ResourceKind.ACTIVITY);
+    private Source quizSource(UUID actor,UUID activityId,UUID version,String locale,UUID revision) {
+        var detail=members.detail(actor,activityId,version,locale);requireReadable(detail,ResourceKind.ACTIVITY);
         if(!Objects.equals(detail.revisionId(),revision))throw new ApiException(ApiError.REVISION_CONFLICT);
         var rows=jdbc.query("SELECT t.id,e.document_json::text AS document_text FROM content_translations t JOIN editorial_revisions e ON e.id=t.published_revision_id WHERE t.pedagogical_version_id=? AND t.locale=? AND e.id=?",(rs,n)->new Source(uuid(rs,"id"),mapper.readValue(rs.getString("document_text"),ContentDocument.class)),version,locale,revision);
         if(rows.isEmpty())throw new ApiException(ApiError.REVISION_CONFLICT);var source=rows.getFirst();
@@ -290,8 +293,8 @@ public class LearningService {
         try{return MessageDigest.getInstance("SHA-256").digest((activity+":"+mapper.writeValueAsString(canonical)).getBytes(StandardCharsets.UTF_8));}
         catch(NoSuchAlgorithmException unavailable){throw new IllegalStateException("SHA-256 unavailable",unavailable);}
     }
-    private static void requireFree(ResourceDetail detail,ResourceKind kind) {
-        if(detail.kind()!=kind||!"PUBLISHED".equals(detail.availability()))throw notFound();if(!"FREE".equals(detail.access())||detail.document()==null)throw denied();
+    private static void requireReadable(ResourceDetail detail,ResourceKind kind) {
+        if(detail.kind()!=kind||!"PUBLISHED".equals(detail.availability()))throw notFound();if(detail.document()==null)throw denied();
     }
     private EnrollmentRow owned(UUID actor,UUID id) {
         var rows=jdbc.query("SELECT * FROM learning_enrollments WHERE id=? AND owner_id=?",(rs,n)->enrollmentRow(rs),id,actor);if(rows.isEmpty())throw notFound();return rows.getFirst();

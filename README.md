@@ -4,7 +4,7 @@ Plateforme de formation pratique à l’IA : choisir une tâche, apprendre, prod
 
 ## État réel
 
-P01 fournit les fondations locales ; P02 ajoute le système visuel et trois structures d’interface. P03 pose le schéma identité/contenu et le contrat généré. P04 raccorde l’identité aux sessions Spring/PostgreSQL. P05 ajoute le CMS et la publication ; P06 raccorde le site public aux publications réelles. P07 ajoute le générateur sans IA et la bibliothèque personnelle ; P08 raccorde apprentissage, quiz et notes. P09 ajoute productions personnelles, autoévaluation et corrigé contrôlé ; son périmètre technique est validé localement. Les paiements restent dans leurs lots. Aucun ancien prototype repris ni déploiement externe annoncé.
+P01 fournit les fondations locales ; P02 ajoute le système visuel et trois structures d’interface. P03 pose le schéma identité/contenu et le contrat généré. P04 raccorde l’identité aux sessions Spring/PostgreSQL. P05 ajoute le CMS et la publication ; P06 raccorde le site public aux publications réelles. P07 ajoute le générateur sans IA et la bibliothèque personnelle ; P08 raccorde apprentissage, quiz et notes. P09 ajoute productions personnelles, autoévaluation et corrigé contrôlé. P10 apporte stockage, vidéo locale de test et notifications durables ; P11 les offres et commandes ; P12 raccorde Checkout et l’attribution des droits. Le niveau de validation de chaque lot est dans [STATUS](docs/STATUS.md). Aucun ancien prototype repris ni déploiement externe annoncé.
 
 La validation P01 couvre FR/EN, clavier, formats étroits, erreur 404 et panne/reprise réelle de Spring. P02 ajoute 14 tests et 54 captures examinées pour les interfaces ; les sept scénarios P01 passent à nouveau après ces changements. La validation reste locale, avec le Chromium de test autorisé.
 
@@ -360,7 +360,7 @@ Un tel passage reste ciblé ; `session.json` enregistre la sélection. La valida
 
 ## Offres et commandes P11 — validées localement
 
-Offres publiques : `/fr/offres`, `/en/offers`, puis `/{offerId}`. Commandes du propriétaire : `/fr/commandes` ou `/en/orders`, puis `/{orderId}/recapitulatif` ou `/{orderId}/summary`. Spring calcule les montants, ressources, langues et conditions ; une commande préparée ne confirme aucun paiement ni nouvel accès. Le Checkout reste indisponible jusqu’au raccordement P12.
+Offres publiques : `/fr/offres`, `/en/offers`, puis `/{offerId}`. Commandes du propriétaire : `/fr/commandes` ou `/en/orders`, puis `/{orderId}/recapitulatif` ou `/{orderId}/summary`. Spring calcule les montants, ressources, langues et conditions ; une commande préparée ne confirme aucun paiement ni nouvel accès. Le Checkout était désactivé dans la recette P11 ; son raccordement P12 reste soumis à la configuration serveur et à une offre complète.
 
 Le commerce reste désactivé par défaut : `COMMERCE_ENABLED=false`, `COMMERCE_ALLOWED_CURRENCIES=`. Les devises supportées par ce premier socle sont EUR/USD/GBP, chacune à deux décimales, avec une liste autorisée explicite côté serveur. Un prix, une durée ou des conditions absents restent non renseignés et bloquent la préparation. Aucun tarif ou texte juridique réel n’est livré. Les offres fictives sont créées explicitement par les tests sur une base temporaire ; ni Flyway ni `seed:local` n’en crée dans la base partagée.
 
@@ -377,3 +377,34 @@ Le consentement porte explicitement sur la version des conditions affichée. `Id
 ```
 
 `verify:commerce` utilise les builds et Chromium installés, avec PostgreSQL tmpfs isolé et commerce fictif explicitement activé dans ce seul processus de recette. Stripe reste désactivé, ses clés sont retirées de cet environnement. Huit scénarios passent et vingt captures FR/EN ont été examinées. Global Java155 puis ciblé final HTTP10, client77, builds et chaîne HTTP réussis ; chronologie exacte et limites dans [P11](docs/evidence/P11.md).
+
+## P12 — Checkout et attribution durable
+
+Ce lot reste réservé au mode test. Stripe activé avec `APP_ENV=production` est refusé au démarrage ; un déploiement commercial exigera le raccord LIVE et sa recette dans les lots de livraison. TEST en staging et Stripe désactivé en production restent des configurations admises.
+
+Le récapitulatif propose un consentement explicite avant Checkout hébergé. Le serveur persiste une opération et ses paramètres avant le réseau ; double clic ou timeout ne créent pas une seconde session. Les retours `/fr/commandes/{id}/statut` et `/en/orders/{id}/status` interrogent le propriétaire côté Spring : `checkout=success` ou `checkout=cancel` ne confirme rien. L’attente automatique s’arrête après douze lectures espacées de deux secondes ; l’actualisation reste volontaire. Paiement confirmé, activation des droits et email sont trois résultats distincts.
+
+Le proxy utilise désormais un budget par défaut de 30 s (`API_TIMEOUT_MS=30000`), sous le délai client de 35 s. Si un ancien fichier d’environnement impose encore 5 s, adapter ce seul paramètre avant la recette Checkout. Les exemples sont alignés ; aucun secret existant n’est remplacé.
+
+Spring reçoit les octets bruts de `POST /api/v1/webhooks/stripe`, vérifie la signature SDK puis acquitte une inbox PostgreSQL durable. Le worker rapproche les faits courants et crée les origines `ORDER_LINE` et l’intention d’email atomiquement, sans doublon métier. Une panne email conserve les accès. Les contenus privés des leçons, projets et fichiers utilisent ces droits, leurs versions, langues et périodes ; l’historique personnel reste conservé après révocation. Les routes publiques ne livrent pas les corps réservés, même avec une session acheteur.
+
+```powershell
+.\scripts\courses.cmd run api:check
+.\scripts\courses.cmd run verify:client
+.\scripts\courses.cmd run lint
+.\scripts\courses.cmd run typecheck
+.\scripts\courses.cmd run typecheck:browser
+.\scripts\courses.cmd run build:api
+.\scripts\courses.cmd run build:web
+.\scripts\courses.cmd run verify:payments
+```
+
+`verify:payments` réserve ses propres PostgreSQL, S3 et Mailpit en tmpfs. Il contrôle uniquement le transport réseau Stripe avec le SDK réel ; les signatures, l’API, les transactions, le worker et les droits sont réellement exécutés localement. Les URL Checkout restent strictement HTTPS sur `checkout.stripe.com`, y compris dans ce test. **Ce scénario ne contacte pas Stripe et ne prouve pas un paiement fournisseur.** Résultats réellement obtenus et limites : [preuve P12](docs/evidence/P12.md).
+
+Dernier passage renforcé : **8/8**, 27 captures FR/EN examinées, après six répétitions ciblées réussies et avec 24 lectures concurrentes après activation. Global Java 182 puis ciblés 23 et 16, client 84, contrats et builds passent. **P12 reste en cours** : deux refus d’accès intermédiaires n’ont pas été reproduits et leur cause reste inconnue ; les diagnostics et assertions sont conservés. Les clés et l’identifiant de compte Stripe sont encore absents ; la recette fournisseur ci-dessous n’a pas été exécutée. Aucun passage automatique à P13.
+
+Pour un essai fournisseur séparé, configurer dans le fichier ignoré `.env.local` : `STRIPE_ENABLED=true`, `STRIPE_MODE=TEST`, une clé `sk_test_…`, le secret `whsec_…` de l’endpoint de test et son `STRIPE_ACCOUNT_ID=acct_…`. Garder `STRIPE_API_BASE=https://api.stripe.com`. Spring vérifie l’identité de la clé par `GET /v1/account` avant le premier appel ; aucun en-tête de compte Connect n’est utilisé. Les valeurs restent côté Spring. Le mode LIVE est refusé par P12. Le commerce reste désactivé dans la base partagée tant que les conditions réelles ne sont pas configurées ; aucune offre fictive n’est activée par migration.
+
+Les événements de test doivent être des snapshots de version **2026-10-28.endive**, conforme à l’adaptateur. Choisir cette version pour l’endpoint ; la CLI utilise par défaut la version du compte, à vérifier avant l’essai. Ne pas remplacer la version épinglée par une preview ou désactiver son contrôle pour accepter un événement incompatible.
+
+Procédure de recette externe **à exécuter avec les accès de test** : préparer une offre de recette complète explicitement fictive, démarrer `run dev`, puis utiliser un endpoint test public autorisé ou la [CLI officielle Stripe](https://docs.stripe.com/stripe-cli). Après configuration privée de son profil test, la commande CLI est `stripe listen --events checkout.session.completed,checkout.session.async_payment_succeeded,checkout.session.async_payment_failed,checkout.session.expired --forward-to http://localhost:3000/api/v1/webhooks/stripe`. Utiliser le secret de ce listener dans la configuration Spring et redémarrer l’API. Ouvrir le récapitulatif, accepter les conditions, payer sur Checkout avec un moyen de test officiel, puis relever les références non secrètes commande/événement/opération, `PAID/READY`, une origine d’accès et une intention d’email. Rejouer l’événement et contrôler l’absence de doublon. Une visite directe de l’URL de retour n’est jamais cette preuve. Les références externes ne sont consignées qu’après cette exécution effective.

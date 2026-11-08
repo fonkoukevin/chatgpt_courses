@@ -1,7 +1,8 @@
 import { record } from "./auth-validation";
 import { isUuid } from "./cms-validation";
 import { isMethodSummary } from "./methods-validation";
-import { isCurriculumNode, isResourceDetail } from "./public-validation";
+import { isCurriculumNode } from "./public-validation";
+import { isMemberResourceDetail } from "./member-content-validation";
 import { isQuizPolicy } from "./quiz-policy-validation";
 import { validMethodText } from "../methods/validation";
 import type { ActivityNoteLookup, ActivityNoteView, ActivityProgressView, EnrollmentView, LearningActivity, LearningDashboard, QuizAttemptPage, QuizAttemptView, QuizCheckResult, QuizQuestionResult, VisitView } from "./generated/types.gen";
@@ -80,7 +81,7 @@ function overview(value: unknown): boolean {
 export function isLearningActivity(value: unknown): value is LearningActivity {
   return record(value) && keys(value, ["enrollmentId", "activityId", "activityVersionId", "moduleId", "moduleVersionId", "position", "totalActivities", "resource", "progress", "previous", "next", "quiz", "accessStatus", "availability"])
     && [value.enrollmentId, value.activityId, value.activityVersionId, value.moduleId, value.moduleVersionId].every(isUuid) && num(value.position) && num(value.totalActivities)
-    && isResourceDetail(value.resource) && isActivityProgressView(value.progress) && (value.previous === null || activityLink(value.previous))
+    && isMemberResourceDetail(value.resource) && isActivityProgressView(value.progress) && (value.previous === null || activityLink(value.previous))
     && (value.next === null || activityLink(value.next)) && (value.quiz === null || overview(value.quiz)) && access(value.accessStatus) && available(value.availability)
     && value.progress.enrollmentId === value.enrollmentId && value.progress.activityId === value.activityId && value.progress.activityVersionId === value.activityVersionId
     && value.resource.resourceId === value.activityId && value.resource.versionId === value.activityVersionId && value.resource.kind === "ACTIVITY"

@@ -44,11 +44,11 @@ public class OrderService {
         String intention=HexFormat.of().formatHex(requestHash);
         var existing=active(actor,offer.id());
         for(var value:existing){
-            if(!"NOT_STARTED".equals(value.paymentStatus())||!"NOT_STARTED".equals(value.fulfillmentStatus()))throw failure(ApiError.ACTIVE_ORDER_EXISTS);
+            if(!"NOT_STARTED".equals(value.paymentStatus())||!"NOT_STARTED".equals(value.fulfillmentStatus())||Boolean.TRUE.equals(jdbc.queryForObject("SELECT payment_operation_id IS NOT NULL FROM orders WHERE id=?",Boolean.class,value.id())))throw failure(ApiError.ACTIVE_ORDER_EXISTS);
             if(intention.equals(intention(value.snapshot()))){remember(actor,key,requestHash,value.id());return new OrderCreationResult(value,false);}
         }
         // A different explicitly accepted revision/locale/terms replaces only a preparation without a payment.
-        for(var value:existing)jdbc.update("UPDATE orders SET order_status='CANCELLED',active_intention_key=NULL,revision=revision+1 WHERE id=? AND order_status='PREPARED' AND payment_status='NOT_STARTED' AND fulfillment_status='NOT_STARTED'",value.id());
+        for(var value:existing)jdbc.update("UPDATE orders SET order_status='CANCELLED',active_intention_key=NULL,revision=revision+1 WHERE id=? AND order_status='PREPARED' AND payment_status='NOT_STARTED' AND fulfillment_status='NOT_STARTED' AND payment_operation_id IS NULL",value.id());
         UUID id=UUID.randomUUID(),revisionId=jdbc.queryForObject("SELECT current_revision_id FROM offers WHERE id=?",UUID.class,offer.id());
         var resources=offer.resources().stream().map(value->new OrderResource(UUID.randomUUID(),value.resourceId(),value.versionId(),value.versionNumber(),value.title(),value.slug(),List.copyOf(offer.locales()))).toList();
         var snapshot=new OrderSnapshot(offer.id(),offer.revision(),revisionId,offer.code(),offer.kind(),offer.locale(),offer.title(),resources,List.copyOf(offer.locales()),offer.price(),offer.tax(),offer.conditions());
@@ -71,7 +71,7 @@ public class OrderService {
         return new OrderPage(rows.stream().map(OrderService::summary).toList(),page,pageSize,total);
     }
     private void lockOwner(UUID actor){if(jdbc.query("SELECT id FROM user_accounts WHERE id=? FOR NO KEY UPDATE",(rs,n)->rs.getObject(1,UUID.class),actor).isEmpty())throw failure(ApiError.ACCOUNT_UNAVAILABLE);}
-    private void expire(UUID actor){jdbc.update("UPDATE orders SET order_status='EXPIRED',active_intention_key=NULL,revision=revision+1 WHERE owner_id=? AND order_status='PREPARED' AND payment_status='NOT_STARTED' AND fulfillment_status='NOT_STARTED' AND expires_at<=clock_timestamp()",actor);}
+    private void expire(UUID actor){jdbc.update("UPDATE orders SET order_status='EXPIRED',active_intention_key=NULL,revision=revision+1 WHERE owner_id=? AND order_status='PREPARED' AND payment_status='NOT_STARTED' AND fulfillment_status='NOT_STARTED' AND payment_operation_id IS NULL AND expires_at<=clock_timestamp()",actor);}
     private List<OrderView> active(UUID actor,UUID offer){return jdbc.query("SELECT * FROM orders WHERE owner_id=? AND offer_id=? AND active_intention_key IS NOT NULL ORDER BY created_at DESC,id",this::row,actor,offer);}
     private OrderView load(UUID actor,UUID id){var rows=jdbc.query("SELECT * FROM orders WHERE id=? AND owner_id=?",this::row,id,actor);if(rows.isEmpty())throw failure(ApiError.RESOURCE_NOT_FOUND);return rows.getFirst();}
     private OrderView row(ResultSet rs,int n)throws SQLException{return new OrderView(rs.getObject("id",UUID.class),rs.getLong("revision"),rs.getString("order_status"),rs.getString("payment_status"),rs.getString("fulfillment_status"),mapper.readValue(rs.getString("snapshot_json"),OrderSnapshot.class),rs.getString("accepted_terms_version"),rs.getTimestamp("accepted_at").toInstant(),rs.getTimestamp("created_at").toInstant(),rs.getTimestamp("expires_at").toInstant());}

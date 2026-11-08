@@ -94,6 +94,7 @@ const fr = {
   saveNote: "Enregistrer mes notes",
   savingNote: "Enregistrement des notes…",
   savedNote: "Notes enregistrées",
+  noSavedNote: "Aucune note enregistrée. Vous pouvez commencer à écrire.",
   modifiedNote: "Notes modifiées, non enregistrées",
   failedNote: "Enregistrement non confirmé : vos notes sont conservées ici",
   copyNote: "Copier mes notes",
@@ -148,6 +149,7 @@ const fr = {
 
 type Dictionary = { [Key in keyof typeof fr]: string };
 const en: Dictionary = {
+  noSavedNote: "No note has been saved. You can start writing.",
   dashboardTitle: "My learning", dashboardDescription: "Resume your work and find the facts saved in your account.", navigation: "Learning",
   resume: "Resume", courses: "My courses", recentMethods: "Recent methods", allMethods: "View my methods",
   emptyTitle: "Your learning starts here", emptyDescription: "No course has been started in this account. Choose an open activity, then keep your work when you are ready.",

@@ -9,16 +9,17 @@ import { LearnerLayout } from "@/components/layouts/learner-layout";
 import type { ApiError } from "@/lib/api/client";
 import type { OfferConditions, OfferTax } from "@/lib/api/generated/types.gen";
 import { commerceText } from "@/lib/commerce/format";
-import { offersPath, ordersPath } from "@/lib/commerce/routes";
+import { offersPath, ordersPath, orderStatusPath } from "@/lib/commerce/routes";
 import { getCommerceDictionary } from "@/lib/i18n/commerce";
+import { getPaymentDictionary } from "@/lib/i18n/payments";
 import type { Locale } from "@/lib/i18n/locales";
 
 export function CommercePublicShell({ locale, id, children }: { locale: Locale; id?: string; children: ReactNode }) {
   return <PublicShell locale={locale} languageLinks={{ fr: { href: offersPath("fr", id), available: true }, en: { href: offersPath("en", id), available: true } }}>{children}</PublicShell>;
 }
-export function CommercePrivateShell({ locale, id, children }: { locale: Locale; id?: string; children: ReactNode }) {
+export function CommercePrivateShell({ locale, id, status = false, children }: { locale: Locale; id?: string; status?: boolean; children: ReactNode }) {
   const t = getCommerceDictionary(locale);
-  return <LearnerLayout locale={locale} title={id ? t.order : t.orders} description={t.ordersHelp} product={{ languageLinks: { fr: ordersPath("fr", id), en: ordersPath("en", id) }, active: "orders" }}>{children}</LearnerLayout>;
+  return <LearnerLayout locale={locale} title={status ? getPaymentDictionary(locale).title : id ? t.order : t.orders} description={status ? getPaymentDictionary(locale).description : t.ordersHelp} product={{ languageLinks: { fr: status && id ? orderStatusPath("fr", id) : ordersPath("fr", id), en: status && id ? orderStatusPath("en", id) : ordersPath("en", id) }, active: "orders" }}>{children}</LearnerLayout>;
 }
 export function CommerceError({ locale, error, target }: { locale: Locale; error: ApiError; target?: "order" }) {
   const t = getCommerceDictionary(locale);

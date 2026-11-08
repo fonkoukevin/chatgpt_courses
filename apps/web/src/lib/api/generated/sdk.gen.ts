@@ -2,7 +2,7 @@
 
 import { type Client, type ClientMeta, type Options as Options2, type RequestResult, type TDataShape, urlSearchParamsBodySerializer } from './client';
 import { client } from './client.gen';
-import type { ActivateOfferData, ActivateOfferErrors, ActivateOfferResponses, ArchiveContentData, ArchiveContentErrors, ArchiveContentResponses, CheckQuizData, CheckQuizErrors, CheckQuizResponses, ConfirmEditorialUploadData, ConfirmEditorialUploadErrors, ConfirmEditorialUploadResponses, ConfirmProjectUploadData, ConfirmProjectUploadErrors, ConfirmProjectUploadResponses, CreateActivityNoteData, CreateActivityNoteErrors, CreateActivityNoteResponses, CreateContentData, CreateContentErrors, CreateContentResponses, CreateContentTranslationData, CreateContentTranslationErrors, CreateContentTranslationResponses, CreateContentVersionData, CreateContentVersionErrors, CreateContentVersionResponses, CreateEditorialUploadData, CreateEditorialUploadErrors, CreateEditorialUploadResponses, CreateMethodData, CreateMethodErrors, CreateMethodFromTemplateData, CreateMethodFromTemplateErrors, CreateMethodFromTemplateResponses, CreateMethodResponses, CreateOfferData, CreateOfferErrors, CreateOfferResponses, CreateOrderData, CreateOrderErrors, CreateOrderResponses, CreateProjectData, CreateProjectErrors, CreateProjectResponses, CreateProjectUploadData, CreateProjectUploadErrors, CreateProjectUploadResponses, DeactivateOfferData, DeactivateOfferErrors, DeactivateOfferResponses, DeleteMethodData, DeleteMethodErrors, DeleteMethodResponses, DuplicateContentData, DuplicateContentErrors, DuplicateContentResponses, DuplicateMethodData, DuplicateMethodErrors, DuplicateMethodResponses, EnrollCourseData, EnrollCourseErrors, EnrollCourseResponses, FindActivityNoteData, FindActivityNoteErrors, FindActivityNoteResponses, GetActivityNoteData, GetActivityNoteErrors, GetActivityNoteResponses, GetActivityProgressData, GetActivityProgressErrors, GetActivityProgressResponses, GetAdminOfferData, GetAdminOfferErrors, GetAdminOfferResponses, GetAssetDownloadData, GetAssetDownloadErrors, GetAssetDownloadResponses, GetCatalogueFacetsData, GetCatalogueFacetsErrors, GetCatalogueFacetsResponses, GetCatalogueResourceBySlugData, GetCatalogueResourceBySlugErrors, GetCatalogueResourceBySlugResponses, GetCatalogueResourceData, GetCatalogueResourceErrors, GetCatalogueResourceResponses, GetCatalogueResourceVersionData, GetCatalogueResourceVersionErrors, GetCatalogueResourceVersionResponses, GetContentData, GetContentDependenciesData, GetContentDependenciesErrors, GetContentDependenciesResponses, GetContentErrors, GetContentReadinessData, GetContentReadinessErrors, GetContentReadinessResponses, GetContentResponses, GetCsrfTokenData, GetCsrfTokenErrors, GetCsrfTokenResponses, GetCurrentUserData, GetCurrentUserErrors, GetCurrentUserResponses, GetEditorialAssetData, GetEditorialAssetErrors, GetEditorialAssetPreviewData, GetEditorialAssetPreviewErrors, GetEditorialAssetPreviewResponses, GetEditorialAssetResponses, GetEditorialUploadPolicyData, GetEditorialUploadPolicyErrors, GetEditorialUploadPolicyResponses, GetEnrollmentData, GetEnrollmentErrors, GetEnrollmentResponses, GetLearningActivityData, GetLearningActivityErrors, GetLearningActivityResponses, GetLearningDashboardData, GetLearningDashboardErrors, GetLearningDashboardResponses, GetMediaProgressData, GetMediaProgressErrors, GetMediaProgressResponses, GetMethodData, GetMethodErrors, GetMethodResponses, GetMethodSourceUpdateData, GetMethodSourceUpdateErrors, GetMethodSourceUpdateResponses, GetMethodTemplateData, GetMethodTemplateErrors, GetMethodTemplateResponses, GetOfferReadinessData, GetOfferReadinessErrors, GetOfferReadinessResponses, GetOrderData, GetOrderErrors, GetOrderResponses, GetPreferencesData, GetPreferencesErrors, GetPreferencesResponses, GetProjectContextData, GetProjectContextErrors, GetProjectContextResponses, GetProjectData, GetProjectErrors, GetProjectFilePolicyData, GetProjectFilePolicyErrors, GetProjectFilePolicyResponses, GetProjectPresetData, GetProjectPresetErrors, GetProjectPresetResponses, GetProjectResponses, GetProjectRevisionData, GetProjectRevisionErrors, GetProjectRevisionResponses, GetProjectStatusData, GetProjectStatusErrors, GetProjectStatusResponses, GetProjectTemplateData, GetProjectTemplateErrors, GetProjectTemplateResponses, GetPublicContentData, GetPublicContentErrors, GetPublicContentResponses, GetPublicOfferData, GetPublicOfferErrors, GetPublicOfferResponses, GetPurchaseContextData, GetPurchaseContextErrors, GetPurchaseContextResponses, GetQuizAttemptData, GetQuizAttemptErrors, GetQuizAttemptResponses, GetSelfAssessmentData, GetSelfAssessmentErrors, GetSelfAssessmentResponses, GetSystemHealthData, GetSystemHealthErrors, GetSystemHealthResponses, GetVideoMediaData, GetVideoMediaErrors, GetVideoMediaResponses, GetVideoPlaybackData, GetVideoPlaybackErrors, GetVideoPlaybackResponses, GetVideoStreamData, GetVideoStreamErrors, GetVideoStreamResponses, HeadVideoStreamData, HeadVideoStreamErrors, HeadVideoStreamResponses, ListAdminOffersData, ListAdminOffersErrors, ListAdminOffersResponses, ListContentRevisionsData, ListContentRevisionsErrors, ListContentRevisionsResponses, ListContentsData, ListContentsErrors, ListContentsResponses, ListMethodsData, ListMethodsErrors, ListMethodsResponses, ListNotificationsData, ListNotificationsErrors, ListNotificationsResponses, ListOrdersData, ListOrdersErrors, ListOrdersResponses, ListProjectFilesData, ListProjectFilesErrors, ListProjectFilesResponses, ListProjectRevisionsData, ListProjectRevisionsErrors, ListProjectRevisionsResponses, ListProjectsData, ListProjectsErrors, ListProjectsResponses, ListPublicOffersData, ListPublicOffersErrors, ListPublicOffersResponses, ListQuizAttemptsData, ListQuizAttemptsErrors, ListQuizAttemptsResponses, ListSelfAssessmentsData, ListSelfAssessmentsErrors, ListSelfAssessmentsResponses, LoginData, LoginErrors, LoginResponses, LogoutData, LogoutErrors, LogoutResponses, PreviewContentData, PreviewContentErrors, PreviewContentResponses, PublishContentData, PublishContentErrors, PublishContentResponses, RegisterData, RegisterErrors, RegisterResponses, ReplaceContentCompositionData, ReplaceContentCompositionErrors, ReplaceContentCompositionResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, RetryNotificationData, RetryNotificationErrors, RetryNotificationResponses, RevealSolutionData, RevealSolutionErrors, RevealSolutionResponses, SaveContentMetadataData, SaveContentMetadataErrors, SaveContentMetadataResponses, SaveContentRevisionData, SaveContentRevisionErrors, SaveContentRevisionResponses, SaveOfferData, SaveOfferErrors, SaveOfferResponses, SaveProjectData, SaveProjectErrors, SaveProjectResponses, SearchCatalogueData, SearchCatalogueErrors, SearchCatalogueResponses, SetActivityProgressData, SetActivityProgressErrors, SetActivityProgressResponses, SetMediaProgressData, SetMediaProgressErrors, SetMediaProgressResponses, SubmitQuizData, SubmitQuizErrors, SubmitQuizResponses, SubmitSelfAssessmentData, SubmitSelfAssessmentErrors, SubmitSelfAssessmentResponses, TransitionContentData, TransitionContentErrors, TransitionContentResponses, UpdateActivityNoteData, UpdateActivityNoteErrors, UpdateActivityNoteResponses, UpdateMethodData, UpdateMethodErrors, UpdateMethodResponses, UpdatePreferencesData, UpdatePreferencesErrors, UpdatePreferencesResponses, VisitActivityData, VisitActivityErrors, VisitActivityResponses } from './types.gen';
+import type { ActivateOfferData, ActivateOfferErrors, ActivateOfferResponses, ArchiveContentData, ArchiveContentErrors, ArchiveContentResponses, CheckQuizData, CheckQuizErrors, CheckQuizResponses, ConfirmEditorialUploadData, ConfirmEditorialUploadErrors, ConfirmEditorialUploadResponses, ConfirmProjectUploadData, ConfirmProjectUploadErrors, ConfirmProjectUploadResponses, CreateActivityNoteData, CreateActivityNoteErrors, CreateActivityNoteResponses, CreateCheckoutData, CreateCheckoutErrors, CreateCheckoutResponses, CreateContentData, CreateContentErrors, CreateContentResponses, CreateContentTranslationData, CreateContentTranslationErrors, CreateContentTranslationResponses, CreateContentVersionData, CreateContentVersionErrors, CreateContentVersionResponses, CreateEditorialUploadData, CreateEditorialUploadErrors, CreateEditorialUploadResponses, CreateMethodData, CreateMethodErrors, CreateMethodFromTemplateData, CreateMethodFromTemplateErrors, CreateMethodFromTemplateResponses, CreateMethodResponses, CreateOfferData, CreateOfferErrors, CreateOfferResponses, CreateOrderData, CreateOrderErrors, CreateOrderResponses, CreateProjectData, CreateProjectErrors, CreateProjectResponses, CreateProjectUploadData, CreateProjectUploadErrors, CreateProjectUploadResponses, DeactivateOfferData, DeactivateOfferErrors, DeactivateOfferResponses, DeleteMethodData, DeleteMethodErrors, DeleteMethodResponses, DuplicateContentData, DuplicateContentErrors, DuplicateContentResponses, DuplicateMethodData, DuplicateMethodErrors, DuplicateMethodResponses, EnrollCourseData, EnrollCourseErrors, EnrollCourseResponses, FindActivityNoteData, FindActivityNoteErrors, FindActivityNoteResponses, GetActivityNoteData, GetActivityNoteErrors, GetActivityNoteResponses, GetActivityProgressData, GetActivityProgressErrors, GetActivityProgressResponses, GetAdminOfferData, GetAdminOfferErrors, GetAdminOfferResponses, GetAssetDownloadData, GetAssetDownloadErrors, GetAssetDownloadResponses, GetCatalogueFacetsData, GetCatalogueFacetsErrors, GetCatalogueFacetsResponses, GetCatalogueResourceBySlugData, GetCatalogueResourceBySlugErrors, GetCatalogueResourceBySlugResponses, GetCatalogueResourceData, GetCatalogueResourceErrors, GetCatalogueResourceResponses, GetCatalogueResourceVersionData, GetCatalogueResourceVersionErrors, GetCatalogueResourceVersionResponses, GetContentData, GetContentDependenciesData, GetContentDependenciesErrors, GetContentDependenciesResponses, GetContentErrors, GetContentReadinessData, GetContentReadinessErrors, GetContentReadinessResponses, GetContentResponses, GetCsrfTokenData, GetCsrfTokenErrors, GetCsrfTokenResponses, GetCurrentUserData, GetCurrentUserErrors, GetCurrentUserResponses, GetEditorialAssetData, GetEditorialAssetErrors, GetEditorialAssetPreviewData, GetEditorialAssetPreviewErrors, GetEditorialAssetPreviewResponses, GetEditorialAssetResponses, GetEditorialUploadPolicyData, GetEditorialUploadPolicyErrors, GetEditorialUploadPolicyResponses, GetEnrollmentData, GetEnrollmentErrors, GetEnrollmentResponses, GetLearningActivityData, GetLearningActivityErrors, GetLearningActivityResponses, GetLearningDashboardData, GetLearningDashboardErrors, GetLearningDashboardResponses, GetMediaProgressData, GetMediaProgressErrors, GetMediaProgressResponses, GetMemberProjectTemplateData, GetMemberProjectTemplateErrors, GetMemberProjectTemplateResponses, GetMemberResourceData, GetMemberResourceErrors, GetMemberResourceResponses, GetMethodData, GetMethodErrors, GetMethodResponses, GetMethodSourceUpdateData, GetMethodSourceUpdateErrors, GetMethodSourceUpdateResponses, GetMethodTemplateData, GetMethodTemplateErrors, GetMethodTemplateResponses, GetOfferReadinessData, GetOfferReadinessErrors, GetOfferReadinessResponses, GetOrderData, GetOrderErrors, GetOrderPaymentStatusData, GetOrderPaymentStatusErrors, GetOrderPaymentStatusResponses, GetOrderResponses, GetPreferencesData, GetPreferencesErrors, GetPreferencesResponses, GetProjectContextData, GetProjectContextErrors, GetProjectContextResponses, GetProjectData, GetProjectErrors, GetProjectFilePolicyData, GetProjectFilePolicyErrors, GetProjectFilePolicyResponses, GetProjectPresetData, GetProjectPresetErrors, GetProjectPresetResponses, GetProjectResponses, GetProjectRevisionData, GetProjectRevisionErrors, GetProjectRevisionResponses, GetProjectStatusData, GetProjectStatusErrors, GetProjectStatusResponses, GetProjectTemplateData, GetProjectTemplateErrors, GetProjectTemplateResponses, GetPublicContentData, GetPublicContentErrors, GetPublicContentResponses, GetPublicOfferData, GetPublicOfferErrors, GetPublicOfferResponses, GetPurchaseContextData, GetPurchaseContextErrors, GetPurchaseContextResponses, GetQuizAttemptData, GetQuizAttemptErrors, GetQuizAttemptResponses, GetSelfAssessmentData, GetSelfAssessmentErrors, GetSelfAssessmentResponses, GetSystemHealthData, GetSystemHealthErrors, GetSystemHealthResponses, GetVideoMediaData, GetVideoMediaErrors, GetVideoMediaResponses, GetVideoPlaybackData, GetVideoPlaybackErrors, GetVideoPlaybackResponses, GetVideoStreamData, GetVideoStreamErrors, GetVideoStreamResponses, HeadVideoStreamData, HeadVideoStreamErrors, HeadVideoStreamResponses, ListAdminOffersData, ListAdminOffersErrors, ListAdminOffersResponses, ListContentRevisionsData, ListContentRevisionsErrors, ListContentRevisionsResponses, ListContentsData, ListContentsErrors, ListContentsResponses, ListMethodsData, ListMethodsErrors, ListMethodsResponses, ListNotificationsData, ListNotificationsErrors, ListNotificationsResponses, ListOrdersData, ListOrdersErrors, ListOrdersResponses, ListPaymentEventsData, ListPaymentEventsErrors, ListPaymentEventsResponses, ListProjectFilesData, ListProjectFilesErrors, ListProjectFilesResponses, ListProjectRevisionsData, ListProjectRevisionsErrors, ListProjectRevisionsResponses, ListProjectsData, ListProjectsErrors, ListProjectsResponses, ListPublicOffersData, ListPublicOffersErrors, ListPublicOffersResponses, ListQuizAttemptsData, ListQuizAttemptsErrors, ListQuizAttemptsResponses, ListSelfAssessmentsData, ListSelfAssessmentsErrors, ListSelfAssessmentsResponses, LoginData, LoginErrors, LoginResponses, LogoutData, LogoutErrors, LogoutResponses, PreviewContentData, PreviewContentErrors, PreviewContentResponses, PublishContentData, PublishContentErrors, PublishContentResponses, ReceiveStripeWebhookData, ReceiveStripeWebhookErrors, ReceiveStripeWebhookResponses, RegisterData, RegisterErrors, RegisterResponses, ReplaceContentCompositionData, ReplaceContentCompositionErrors, ReplaceContentCompositionResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, RetryNotificationData, RetryNotificationErrors, RetryNotificationResponses, RetryPaymentEventData, RetryPaymentEventErrors, RetryPaymentEventResponses, RevealSolutionData, RevealSolutionErrors, RevealSolutionResponses, SaveContentMetadataData, SaveContentMetadataErrors, SaveContentMetadataResponses, SaveContentRevisionData, SaveContentRevisionErrors, SaveContentRevisionResponses, SaveOfferData, SaveOfferErrors, SaveOfferResponses, SaveProjectData, SaveProjectErrors, SaveProjectResponses, SearchCatalogueData, SearchCatalogueErrors, SearchCatalogueResponses, SetActivityProgressData, SetActivityProgressErrors, SetActivityProgressResponses, SetMediaProgressData, SetMediaProgressErrors, SetMediaProgressResponses, SubmitQuizData, SubmitQuizErrors, SubmitQuizResponses, SubmitSelfAssessmentData, SubmitSelfAssessmentErrors, SubmitSelfAssessmentResponses, TransitionContentData, TransitionContentErrors, TransitionContentResponses, UpdateActivityNoteData, UpdateActivityNoteErrors, UpdateActivityNoteResponses, UpdateMethodData, UpdateMethodErrors, UpdateMethodResponses, UpdatePreferencesData, UpdatePreferencesErrors, UpdatePreferencesResponses, VisitActivityData, VisitActivityErrors, VisitActivityResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -1462,5 +1462,117 @@ export const getOrder = <ThrowOnError extends boolean = false>(options: Options<
             type: 'apiKey'
         }],
     url: '/me/orders/{orderId}',
+    ...options
+});
+
+/**
+ * Retrouver une opération Checkout persistée sans double session.
+ *
+ * Propriétaire, conditions explicitement acceptées, montants/ressources serveur. Opération et paramètres immuables commités avant réseau ; timeout ambigu conservé, jamais une seconde session. URL HTTPS Stripe uniquement, aucun secret API client.
+ */
+export const createCheckout = <ThrowOnError extends boolean = false>(options: Options<CreateCheckoutData, ThrowOnError>): RequestResult<CreateCheckoutResponses, CreateCheckoutErrors, ThrowOnError> => (options.client ?? client).post<CreateCheckoutResponses, CreateCheckoutErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/orders/{orderId}/checkout',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Consulter séparément paiement, activation et incident email.
+ *
+ * Lecture propriétaire sans effet financier ; success/cancel du navigateur n’attribuent rien. SENT décrit un acquittement SMTP, pas une réception humaine.
+ */
+export const getOrderPaymentStatus = <ThrowOnError extends boolean = false>(options: Options<GetOrderPaymentStatusData, ThrowOnError>): RequestResult<GetOrderPaymentStatusResponses, GetOrderPaymentStatusErrors, ThrowOnError> => (options.client ?? client).get<GetOrderPaymentStatusResponses, GetOrderPaymentStatusErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/orders/{orderId}/payment-status',
+    ...options
+});
+
+/**
+ * Persister un événement signé avant l’acquittement.
+ *
+ * Corps JSON UTF8 brut borné64KiB, signature SDK et mode/compte/API version contrôlés. Seul ce POST exact est exempt de CSRF. Transaction inbox commitée avant200 ; déduplication distincte de l’unicité des droits.
+ */
+export const receiveStripeWebhook = <ThrowOnError extends boolean = false>(options: Options<ReceiveStripeWebhookData, ThrowOnError>): RequestResult<ReceiveStripeWebhookResponses, ReceiveStripeWebhookErrors, ThrowOnError> => (options.client ?? client).post<ReceiveStripeWebhookResponses, ReceiveStripeWebhookErrors, ThrowOnError>({
+    url: '/webhooks/stripe',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Lister les événements et rapprochements expurgés autorisés.
+ *
+ * payments.events.read ; kind distingue événement réel et job. attempts compte les échecs consécutifs, aucune signature/payload/carte/destinataire.
+ */
+export const listPaymentEvents = <ThrowOnError extends boolean = false>(options?: Options<ListPaymentEventsData, ThrowOnError>): RequestResult<ListPaymentEventsResponses, ListPaymentEventsErrors, ThrowOnError> => (options?.client ?? client).get<ListPaymentEventsResponses, ListPaymentEventsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/payment-events',
+    ...options
+});
+
+/**
+ * Replanifier un rapprochement existant après correction.
+ *
+ * payments.events.retry ; aucun statut financier choisi, aucun événement arbitraire ou nouveau Checkout.
+ */
+export const retryPaymentEvent = <ThrowOnError extends boolean = false>(options: Options<RetryPaymentEventData, ThrowOnError>): RequestResult<RetryPaymentEventResponses, RetryPaymentEventErrors, ThrowOnError> => (options.client ?? client).post<RetryPaymentEventResponses, RetryPaymentEventErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/payment-events/{id}/retry',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Lire une version pédagogique autorisée sans solutions.
+ *
+ * learning.read ; version/langue/périodes/origines et chemin de publication contrôlés côté serveur. Contenu protégé absent du HTML public et du cache partagé.
+ */
+export const getMemberResource = <ThrowOnError extends boolean = false>(options: Options<GetMemberResourceData, ThrowOnError>): RequestResult<GetMemberResourceResponses, GetMemberResourceErrors, ThrowOnError> => (options.client ?? client).get<GetMemberResourceResponses, GetMemberResourceErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/resources/{resourceId}/versions/{versionId}',
+    ...options
+});
+
+/**
+ * Préparer un projet depuis une source privée autorisée.
+ *
+ * projects.read ; modèle privé borné à la source courante autorisée, sans révélation du corrigé.
+ */
+export const getMemberProjectTemplate = <ThrowOnError extends boolean = false>(options: Options<GetMemberProjectTemplateData, ThrowOnError>): RequestResult<GetMemberProjectTemplateResponses, GetMemberProjectTemplateErrors, ThrowOnError> => (options.client ?? client).get<GetMemberProjectTemplateResponses, GetMemberProjectTemplateErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/project-templates/{activityId}/versions/{versionId}',
     ...options
 });

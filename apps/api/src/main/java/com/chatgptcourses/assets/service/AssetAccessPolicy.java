@@ -17,7 +17,8 @@ import org.springframework.stereotype.Component;
 @Component
 public final class AssetAccessPolicy {
     private final JdbcTemplate jdbc;private final PublicCatalogueService catalogue;private final LearningService learning;private final AccessPolicy access;
-    public AssetAccessPolicy(JdbcTemplate jdbc,PublicCatalogueService catalogue,LearningService learning,AccessPolicy access){this.jdbc=jdbc;this.catalogue=catalogue;this.learning=learning;this.access=access;}
+    private final com.chatgptcourses.access.MemberContentService members;private final com.chatgptcourses.access.EntitlementAccess entitlements;
+    public AssetAccessPolicy(JdbcTemplate jdbc,PublicCatalogueService catalogue,LearningService learning,AccessPolicy access,com.chatgptcourses.access.MemberContentService members,com.chatgptcourses.access.EntitlementAccess entitlements){this.jdbc=jdbc;this.catalogue=catalogue;this.learning=learning;this.access=access;this.members=members;this.entitlements=entitlements;}
     public void require(UUID actor,String permission){
         var action=permission.endsWith(".read")?AccessPolicy.Action.READ:AccessPolicy.Action.UPDATE;
         if(!access.decide(subject(actor),new AccessResource.AdministrativeResource(actor,java.util.Map.of(action,permission)),action).allowed())throw denied();
@@ -38,9 +39,9 @@ public final class AssetAccessPolicy {
         }
         var unique=ids.stream().distinct().toList();String slots=String.join(",",unique.stream().map(id->"?").toList());
         jdbc.query("SELECT id FROM learning_resources WHERE id IN("+slots+") ORDER BY id FOR SHARE",(rs,n)->rs.getObject(1,UUID.class),unique.toArray());
-        var detail=catalogue.version(context.resourceId(),context.versionId(),context.locale());
+        var detail=members.detail(actor,context.resourceId(),context.versionId(),context.locale());
         boolean published="PUBLISHED".equals(detail.availability()),translated=published&&context.locale().equals(detail.locale());
-        AccessResource resource="FREE".equals(detail.access())?new AccessResource.PublicContent(detail.resourceId(),published,translated):new AccessResource.PedagogicalContent(detail.resourceId(),published,translated,false);
+        AccessResource resource="FREE".equals(detail.access())?new AccessResource.PublicContent(detail.resourceId(),published,translated):new AccessResource.PedagogicalContent(detail.resourceId(),published,translated,entitlements.covers(actor,context.resourceId(),context.versionId(),context.locale()));
         var decision=access.decide(subject(actor),resource,AccessPolicy.Action.READ);
         if(!published||!translated)throw notFound();if(!decision.allowed()||detail.document()==null)throw denied();
         if(detail.document().media().stream().noneMatch(m->asset.equals(m.assetId())&&kind.equals(m.kind())))throw notFound();

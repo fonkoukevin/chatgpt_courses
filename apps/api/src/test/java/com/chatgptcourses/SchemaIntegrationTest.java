@@ -66,9 +66,9 @@ class SchemaIntegrationTest {
 
     @Test @Order(1)
     void aFreshDatabaseMigratesAndHibernateValidatesWithoutSeedingAccountsOrCommerce() {
-        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012");
+        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_accounts", Integer.class)).isZero();
-        assertThat(jdbc.queryForList("SELECT code FROM roles ORDER BY code", String.class)).containsExactly("COMMERCE_MANAGER", "EDITOR", "LEARNER");
+        assertThat(jdbc.queryForList("SELECT code FROM roles ORDER BY code", String.class)).containsExactly("COMMERCE_MANAGER", "EDITOR", "LEARNER", "PAYMENTS_OPERATOR");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_roles", Integer.class)).isZero();
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM learning_resources", Integer.class)).isZero();
         assertThat(jdbc.queryForObject("SELECT current_setting('TimeZone')", String.class)).isEqualTo("UTC");
@@ -79,7 +79,7 @@ class SchemaIntegrationTest {
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM personal_methods", Integer.class)).isZero();
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM learning_enrollments", Integer.class)).isZero();
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM projects", Integer.class)).isZero();
-        for (String table : new String[] {"assets", "notification_outbox", "notification_outbox_requeues", "video_media", "video_playback_grants", "media_progress", "products", "offers", "offer_revisions", "offer_revision_resources", "offer_events", "orders", "order_resources", "order_idempotency_keys", "access_grants"}) {
+        for (String table : new String[] {"assets", "notification_outbox", "notification_outbox_requeues", "video_media", "video_playback_grants", "media_progress", "products", "offers", "offer_revisions", "offer_revision_resources", "offer_events", "orders", "order_resources", "order_idempotency_keys", "access_grants", "checkout_operations", "checkout_idempotency_keys", "stripe_event_inbox", "payment_reconciliation_jobs", "payment_work_retries"}) {
             assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM " + table, Integer.class)).isZero();
         }
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM learning_activity_notes", Integer.class)).isZero();
@@ -110,7 +110,7 @@ class SchemaIntegrationTest {
             var database = new JdbcTemplate(new SingleConnectionDataSourceAdapter(connection));
             assertThat(database.queryForObject("SELECT session_id FROM spring_session WHERE primary_id = ?", String.class, primaryId)).isEqualTo(sessionId);
             assertThat(database.queryForObject("SELECT encode(attribute_bytes, 'hex') FROM spring_session_attributes WHERE session_primary_id = ?", String.class, primaryId)).isEqualTo("010203");
-            assertThat(database.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012");
+            assertThat(database.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014");
         }
     }
 

@@ -119,6 +119,12 @@ Sources consultées :
 
 ## Environnement P00 et limites restantes
 
+### Ajout P12 : Stripe
+
+SDK Java **34.1.0**, version d’API stable **2026-10-28.endive**, épinglés dans le POM et `StripeSettings.API_VERSION`. Sources officielles vérifiées le 8 novembre 2026 : [release exacte](https://github.com/stripe/stripe-java/releases/tag/v34.1.0), [constante au tag](https://raw.githubusercontent.com/stripe/stripe-java/v34.1.0/src/main/java/com/stripe/ApiVersion.java), [Checkout hébergé](https://docs.stripe.com/checkout/fulfillment.md?ui=full-page), [webhooks](https://docs.stripe.com/webhooks), [idempotence](https://docs.stripe.com/api/idempotent_requests). Aucune API preview ni collecte de carte locale.
+
+Les essais P12 restent en mode TEST, le mode LIVE est refusé. Les minima retenus sont EUR50, USD50, GBP30 unités mineures ; le plafond commun de **99 999 999** unités mineures est une borne conservatrice de l’application, pas une limite universelle de Stripe. Les [limites officielles](https://docs.stripe.com/currencies#minimum-and-maximum-charge-amounts) varient notamment selon devise, règlement et moyen de paiement. La résolution et les résultats effectivement exécutés sont consignés dans [P12](evidence/P12.md).
+
 Windows 11 Famille 64 bits, PowerShell 5.1.26100.9711 ; Docker Desktop 4.91.0, Engine 29.8.0 Linux x86_64, Compose 5.5.1. Le moteur répond ; aucun conteneur n’était lancé. Git 2.53.0.windows.1 et ripgrep 15.2.0 sont disponibles. Voir les commandes et distinctions d’erreur dans [evidence/P00.md](evidence/P00.md).
 
 La liste suivante décrit les travaux identifiés en P00. Les points 1–5 sont maintenant couverts pour le socle P01 par les fichiers verrouillés et `evidence/P01.md`. Les composants shadcn et les images de production restent à introduire dans leurs lots :

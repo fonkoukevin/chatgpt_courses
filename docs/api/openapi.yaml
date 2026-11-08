@@ -3,9 +3,9 @@ info:
   title: ChatGPT Courses API
   version: 0.1.0
   description: >-
-    Contrat des opérations jusqu’à P11 : identité, CMS, catalogue, méthodes, apprentissage, projets,
-    médias, outbox et commandes préparées. Stripe et attribution sont introduits en P12 ; aucune
-    préparation ne constitue un paiement.
+    Contrat jusqu’à P12 : données pédagogiques, identité et travail privé, offres/commandes,
+    Checkout Stripe test et traitement durable. Les preuves distinguent transport Stripe contrôlé,
+    essai fournisseur externe et production.
 servers:
   - url: /api/v1
     description: API de même origine, préfixe conservé jusqu'à Spring.
@@ -37,6 +37,10 @@ tags:
       production distincte.
   - name: Commerce
     description: Offres versionnées et commandes serveur, sans confirmation financière depuis le navigateur.
+  - name: Payments
+    description: >-
+      Checkout Stripe hébergé, inbox durable et rapprochement ; retour navigateur sans autorité
+      financière.
 paths:
   /system/health:
     get:
@@ -5107,6 +5111,419 @@ paths:
           $ref: '#/components/responses/ProblemResponse'
         default:
           $ref: '#/components/responses/ProblemResponse'
+  /me/orders/{orderId}/checkout:
+    post:
+      operationId: createCheckout
+      tags:
+        - Payments
+      summary: Retrouver une opération Checkout persistée sans double session.
+      description: >-
+        Propriétaire, conditions explicitement acceptées, montants/ressources serveur. Opération et
+        paramètres immuables commités avant réseau ; timeout ambigu conservé, jamais une seconde
+        session. URL HTTPS Stripe uniquement, aucun secret API client.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCheckout'
+      responses:
+        '200':
+          description: État réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutAccess'
+        '202':
+          description: État réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutAccess'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '413':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/orders/{orderId}/payment-status:
+    get:
+      operationId: getOrderPaymentStatus
+      tags:
+        - Payments
+      summary: Consulter séparément paiement, activation et incident email.
+      description: >-
+        Lecture propriétaire sans effet financier ; success/cancel du navigateur n’attribuent rien.
+        SENT décrit un acquittement SMTP, pas une réception humaine.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: État réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderPaymentStatus'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '413':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /webhooks/stripe:
+    post:
+      operationId: receiveStripeWebhook
+      tags:
+        - Payments
+      summary: Persister un événement signé avant l’acquittement.
+      description: >-
+        Corps JSON UTF8 brut borné64KiB, signature SDK et mode/compte/API version contrôlés. Seul ce
+        POST exact est exempt de CSRF. Transaction inbox commitée avant200 ; déduplication distincte
+        de l’unicité des droits.
+      security: []
+      parameters:
+        - name: Stripe-Signature
+          in: header
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 8192
+      responses:
+        '200':
+          description: État réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookReceipt'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '413':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+      requestBody:
+        required: true
+        description: >-
+          Octets JSON intacts pour la vérification de signature, jamais re-sérialisés avant
+          contrôle.
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+  /admin/payment-events:
+    get:
+      operationId: listPaymentEvents
+      tags:
+        - Payments
+      summary: Lister les événements et rapprochements expurgés autorisés.
+      description: >-
+        payments.events.read ; kind distingue événement réel et job. attempts compte les échecs
+        consécutifs, aucune signature/payload/carte/destinataire.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: state
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - PENDING
+              - PROCESSING
+              - RETRY
+              - WAITING
+              - PROCESSED
+              - IGNORED
+              - DEAD
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: État réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentEventPage'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '413':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/payment-events/{id}/retry:
+    post:
+      operationId: retryPaymentEvent
+      tags:
+        - Payments
+      summary: Replanifier un rapprochement existant après correction.
+      description: >-
+        payments.events.retry ; aucun statut financier choisi, aucun événement arbitraire ou nouveau
+        Checkout.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetryPaymentEvent'
+      responses:
+        '200':
+          description: État réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentEventSummary'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '413':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/resources/{resourceId}/versions/{versionId}:
+    get:
+      operationId: getMemberResource
+      tags:
+        - Payments
+      summary: Lire une version pédagogique autorisée sans solutions.
+      description: >-
+        learning.read ; version/langue/périodes/origines et chemin de publication contrôlés côté
+        serveur. Contenu protégé absent du HTML public et du cache partagé.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: resourceId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: versionId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+      responses:
+        '200':
+          description: État réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberResourceDetail'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '413':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/project-templates/{activityId}/versions/{versionId}:
+    get:
+      operationId: getMemberProjectTemplate
+      tags:
+        - Payments
+      summary: Préparer un projet depuis une source privée autorisée.
+      description: >-
+        projects.read ; modèle privé borné à la source courante autorisée, sans révélation du
+        corrigé.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: activityId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: versionId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+      responses:
+        '200':
+          description: État réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberProjectTemplate'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '413':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
 components:
   schemas:
     SystemHealth:
@@ -7835,7 +8252,7 @@ components:
           minimum: 0
           maximum: 9007199254740991
         resource:
-          $ref: '#/components/schemas/ResourceDetail'
+          $ref: '#/components/schemas/MemberResourceDetail'
         progress:
           $ref: '#/components/schemas/ActivityProgressView'
         previous:
@@ -8840,7 +9257,7 @@ components:
           type: boolean
         resource:
           anyOf:
-            - $ref: '#/components/schemas/ResourceDetail'
+            - $ref: '#/components/schemas/MemberResourceDetail'
             - type: 'null'
       description: >-
         Contexte pédagogique réautorisé séparément, sans corrigé. currentPublishedRevisionId
@@ -10757,16 +11174,29 @@ components:
           type: string
           enum:
             - PREPARED
+            - AWAITING_PAYMENT
+            - CONFIRMED
             - EXPIRED
             - CANCELLED
+            - NEEDS_REVIEW
         paymentStatus:
           type: string
           enum:
             - NOT_STARTED
+            - REQUIRES_PAYMENT
+            - PROCESSING
+            - PAID
+            - FAILED
+            - EXPIRED
+            - UNKNOWN
         fulfillmentStatus:
           type: string
           enum:
             - NOT_STARTED
+            - PENDING
+            - READY
+            - RETRYING
+            - NEEDS_REVIEW
         snapshot:
           $ref: '#/components/schemas/OrderSnapshot'
         acceptedTermsVersion:
@@ -10816,16 +11246,29 @@ components:
           type: string
           enum:
             - PREPARED
+            - AWAITING_PAYMENT
+            - CONFIRMED
             - EXPIRED
             - CANCELLED
+            - NEEDS_REVIEW
         paymentStatus:
           type: string
           enum:
             - NOT_STARTED
+            - REQUIRES_PAYMENT
+            - PROCESSING
+            - PAID
+            - FAILED
+            - EXPIRED
+            - UNKNOWN
         fulfillmentStatus:
           type: string
           enum:
             - NOT_STARTED
+            - PENDING
+            - READY
+            - RETRYING
+            - NEEDS_REVIEW
         createdAt:
           $ref: '#/components/schemas/UtcInstant'
         expiresAt:
@@ -10926,6 +11369,464 @@ components:
           anyOf:
             - $ref: '#/components/schemas/OrderSummary'
             - type: 'null'
+    CreateCheckout:
+      type: object
+      additionalProperties: false
+      required:
+        - acceptedTermsVersion
+      properties:
+        acceptedTermsVersion:
+          type: string
+          minLength: 1
+          maxLength: 100
+    CheckoutAccess:
+      type: object
+      additionalProperties: false
+      required:
+        - orderId
+        - operationId
+        - state
+        - url
+        - expiresAt
+        - retryAfterSeconds
+        - unavailableReason
+      properties:
+        orderId:
+          $ref: '#/components/schemas/UUID'
+        operationId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        state:
+          type: string
+          enum:
+            - PREPARED
+            - CALLING
+            - OPEN
+            - UNKNOWN
+            - COMPLETE
+            - EXPIRED
+            - FAILED
+            - NEEDS_REVIEW
+        url:
+          anyOf:
+            - type: string
+              format: uri
+              maxLength: 4096
+              pattern: ^https://checkout\.stripe\.com/
+            - type: 'null'
+        expiresAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+        retryAfterSeconds:
+          anyOf:
+            - type: integer
+              minimum: 1
+              maximum: 300
+            - type: 'null'
+        unavailableReason:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 100
+            - type: 'null'
+    OrderPaymentStatus:
+      type: object
+      additionalProperties: false
+      required:
+        - orderId
+        - orderRevision
+        - orderStatus
+        - paymentStatus
+        - fulfillmentStatus
+        - checkoutState
+        - checkoutAvailable
+        - checkoutUnavailableReason
+        - sessionExpiresAt
+        - canRetry
+        - notificationStatus
+      properties:
+        orderId:
+          $ref: '#/components/schemas/UUID'
+        orderRevision:
+          $ref: '#/components/schemas/Revision'
+        orderStatus:
+          type: string
+          enum:
+            - PREPARED
+            - AWAITING_PAYMENT
+            - CONFIRMED
+            - EXPIRED
+            - CANCELLED
+            - NEEDS_REVIEW
+        paymentStatus:
+          type: string
+          enum:
+            - NOT_STARTED
+            - REQUIRES_PAYMENT
+            - PROCESSING
+            - PAID
+            - FAILED
+            - EXPIRED
+            - UNKNOWN
+        fulfillmentStatus:
+          type: string
+          enum:
+            - NOT_STARTED
+            - PENDING
+            - READY
+            - RETRYING
+            - NEEDS_REVIEW
+        checkoutState:
+          type: string
+          enum:
+            - NONE
+            - PREPARED
+            - CALLING
+            - OPEN
+            - UNKNOWN
+            - COMPLETE
+            - EXPIRED
+            - FAILED
+            - NEEDS_REVIEW
+        checkoutAvailable:
+          type: boolean
+        checkoutUnavailableReason:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 100
+            - type: 'null'
+        sessionExpiresAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+        canRetry:
+          type: boolean
+        notificationStatus:
+          type: string
+          enum:
+            - NONE
+            - PENDING
+            - SENT
+            - ISSUE
+    PaymentEventSummary:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - kind
+        - eventId
+        - type
+        - objectId
+        - livemode
+        - accountId
+        - apiVersion
+        - state
+        - attempts
+        - nextAttemptAt
+        - lastErrorCode
+        - createdAt
+        - updatedAt
+        - processedAt
+        - orderId
+        - operationId
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        kind:
+          type: string
+          enum:
+            - STRIPE_EVENT
+            - RECONCILIATION_JOB
+        eventId:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 255
+            - type: 'null'
+        type:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 100
+            - type: 'null'
+        objectId:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 255
+            - type: 'null'
+        livemode:
+          type: boolean
+        accountId:
+          type: string
+          minLength: 1
+          maxLength: 255
+        apiVersion:
+          type: string
+          minLength: 1
+          maxLength: 100
+        state:
+          type: string
+          enum:
+            - PENDING
+            - PROCESSING
+            - RETRY
+            - WAITING
+            - PROCESSED
+            - IGNORED
+            - DEAD
+        attempts:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        nextAttemptAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+        lastErrorCode:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 100
+            - type: 'null'
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+        updatedAt:
+          $ref: '#/components/schemas/UtcInstant'
+        processedAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+        orderId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        operationId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+    PaymentEventPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentEventSummary'
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    RetryPaymentEvent:
+      type: object
+      additionalProperties: false
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          enum:
+            - PROVIDER_RECOVERED
+            - MANUAL_RECONCILIATION
+    WebhookReceipt:
+      type: object
+      additionalProperties: false
+      required:
+        - received
+      properties:
+        received:
+          type: boolean
+          const: true
+    MemberResourceDetail:
+      type: object
+      additionalProperties: false
+      required:
+        - resourceId
+        - kind
+        - versionId
+        - versionNumber
+        - locale
+        - slug
+        - availability
+        - revisionId
+        - title
+        - summary
+        - access
+        - document
+        - metadata
+        - reviewedAt
+        - languages
+        - curriculum
+        - related
+        - objective
+        - expectedResult
+        - prerequisites
+        - estimatedMinutes
+      properties:
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        kind:
+          $ref: '#/components/schemas/ContentKind'
+        versionId:
+          $ref: '#/components/schemas/UUID'
+        versionNumber:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        locale:
+          $ref: '#/components/schemas/Locale'
+        slug:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 180
+            - type: 'null'
+        availability:
+          type: string
+          enum:
+            - PUBLISHED
+            - MISSING_TRANSLATION
+            - STALE
+            - WITHDRAWN
+        revisionId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        title:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 240
+            - type: 'null'
+        summary:
+          anyOf:
+            - type: string
+              minLength: 0
+              maxLength: 2000
+            - type: 'null'
+        access:
+          anyOf:
+            - $ref: '#/components/schemas/ContentAccess'
+            - type: 'null'
+        document:
+          anyOf:
+            - $ref: '#/components/schemas/PublicDocument'
+            - type: 'null'
+        metadata:
+          $ref: '#/components/schemas/PublicMetadata'
+        reviewedAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+        languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/LanguageAvailability'
+          maxItems: 2
+        curriculum:
+          type: array
+          items:
+            $ref: '#/components/schemas/CurriculumNode'
+          maxItems: 100
+        related:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceCard'
+          maxItems: 30
+        objective:
+          anyOf:
+            - type: string
+              minLength: 0
+              maxLength: 4000
+            - type: 'null'
+        expectedResult:
+          anyOf:
+            - type: string
+              minLength: 0
+              maxLength: 4000
+            - type: 'null'
+        prerequisites:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 1000
+          maxItems: 20
+        estimatedMinutes:
+          anyOf:
+            - type: integer
+              minimum: 1
+              maximum: 1440
+            - type: 'null'
+      description: >-
+        Projection pédagogique privée autorisée par propriétaire et origines courantes, sans corrigé
+        ou réponse de quiz. Les routes publiques ResourceDetail restent fermées aux corps protégés.
+    MemberProjectTemplate:
+      type: object
+      additionalProperties: false
+      required:
+        - activityId
+        - activityVersionId
+        - revisionId
+        - locale
+        - title
+        - availability
+        - resource
+        - rubric
+      properties:
+        activityId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        revisionId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        title:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 240
+            - type: 'null'
+        availability:
+          type: string
+          enum:
+            - PUBLISHED
+            - MISSING_TRANSLATION
+            - STALE
+            - WITHDRAWN
+            - PROTECTED
+            - NOT_CONFIGURED
+        resource:
+          anyOf:
+            - $ref: '#/components/schemas/MemberResourceDetail'
+            - type: 'null'
+        rubric:
+          anyOf:
+            - $ref: '#/components/schemas/ProjectRubricDefinition'
+            - type: 'null'
+      description: >-
+        Préparation privée de projet ; permission projects.read et droit sur la source, sans
+        corrigé.
   headers:
     NoStore:
       description: Réponse non stockable ; les erreurs sont également privées.

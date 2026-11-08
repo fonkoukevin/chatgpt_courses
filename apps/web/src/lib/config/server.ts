@@ -65,7 +65,7 @@ export function getServerConfig(): ServerConfig {
   if (!isLocale(defaultLocale)) {
     configurationError("APP_DEFAULT_LOCALE", "choose fr or en");
   }
-  const timeout = process.env.API_TIMEOUT_MS ?? "5000";
+  const timeout = process.env.API_TIMEOUT_MS ?? "30000";
   if (!/^\d+$/.test(timeout) || Number(timeout) < 100 || Number(timeout) > 30000) {
     configurationError("API_TIMEOUT_MS", "use an integer between 100 and 30000");
   }

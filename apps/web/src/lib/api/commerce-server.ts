@@ -8,6 +8,8 @@ import { decodeAssetResponse } from "./assets-response";
 import { isOfferPage, isPublicOffer } from "./offers-validation";
 import { isOrderPage, isOrderView } from "./orders-validation";
 import { matchingResource as matching } from "./resource-http";
+import { paymentStatusPath } from "./payments-client";
+import { isOrderPaymentStatus } from "./payments-validation";
 
 async function read<T>(path: string, decode: (value: unknown) => value is T, personal: boolean): Promise<AuthResult<T>> {
   const session = personal ? (await cookies()).get("SESSION")?.value : undefined;
@@ -22,3 +24,4 @@ export const readOffers = (locale: Locale, page = 0, pageSize = 20) => read(offe
 export const readOffer = (offerId: string, locale: Locale) => read(offerPath(offerId, locale), matching(isPublicOffer, (value) => value.id === offerId && value.locale === locale), false);
 export const readOrders = (page = 0, pageSize = 20) => read(orderListPath(page, pageSize), matching(isOrderPage, (value) => value.page === page && value.pageSize === pageSize), true);
 export const readOrder = (orderId: string) => checkedOrder(read(orderPath(orderId), matching(isOrderView, (value) => value.id === orderId), true));
+export const readOrderPaymentStatus = (orderId: string) => read(paymentStatusPath(orderId), matching(isOrderPaymentStatus, (value) => value.orderId === orderId), true);

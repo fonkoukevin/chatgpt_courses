@@ -24,7 +24,7 @@ test("les paramètres absents restent présentables sans accepter une réponse c
   const draft = offer(); draft.state = "INACTIVE"; draft.price = null; draft.tax = { mode: null, notices: [] }; draft.conditions = { access: { mode: null, days: null }, updates: null, versionPolicy: null, support: { mode: null, descriptions: [] }, humanReviewIncluded: false, termsVersion: "", terms: [] }; draft.readiness.summaryReady = false; draft.readiness.blockingIssues = [{ code: "PRICE_REQUIRED", field: "price", resourceId: null, locale: null }]; draft.readiness.checkoutUnavailableReason = "OFFER_INACTIVE";
   assert.equal(isPublicOffer(draft), true);
   for (const value of [{ ...draft, ownerId: account }, { ...draft, readiness: { ...draft.readiness, summaryReady: true } }, { ...offer(), price: { amountMinor: Number.MAX_SAFE_INTEGER + 1, currency: "EUR" } }, { ...offer(), tax: { mode: ["EXEMPT"], notices: [] } }]) assert.equal(isPublicOffer(value), false);
-  const saved = order(); assert.equal(isOrderView(saved), true); assert.equal(isOrderView({ ...saved, paymentStatus: "PAID" }), false); assert.equal(isOrderView({ ...saved, acceptedTermsVersion: "different-terms" }), false);
+  const saved = order(); assert.equal(isOrderView(saved), true); assert.equal(isOrderView({ ...saved, paymentStatus: "UNKNOWN_PAYMENT" }), false); assert.equal(isOrderView({ ...saved, acceptedTermsVersion: "different-terms" }), false);
 });
 
 test("une langue non vendue et une ancienne préparation restent des projections valides, sans fausse couverture", () => {
@@ -35,6 +35,16 @@ test("une langue non vendue et une ancienne préparation restent des projections
   const repeatedA = { ...both, coverage: { ...both.coverage, resources: [both.coverage.resources[0], both.coverage.resources[0]] } }; assert.equal(isPurchaseContext(repeatedA), false);
   assert.equal(isPurchaseContext({ ...both, activeOrder: { ...summary(order()), offerId: randomUUID() } }), false);
   const unconfigured = offer(); unconfigured.state = "INACTIVE"; unconfigured.locales = []; unconfigured.readiness.summaryReady = false; unconfigured.readiness.blockingIssues = [{ code: "LOCALES_REQUIRED", field: "locales", locale: null, resourceId: null }]; assert.equal(isPurchaseContext(purchase(unconfigured)), true);
+});
+
+test("une commande confirmée conserve son intention sans invalider la couverture acquise", () => {
+  const context = purchase(), paid = order(context.offer);
+  paid.orderStatus = "CONFIRMED"; paid.paymentStatus = "PAID"; paid.fulfillmentStatus = "READY";
+  context.activeOrder = summary(paid);
+  context.coverage = { status: "ALL", alreadyAccessibleCount: context.offer.resources.length, newResourceCount: 0, resources: context.offer.resources.map((item) => ({ resourceId: item.resourceId, versionId: item.versionId, coveredLocales: [...context.offer.locales], missingLocales: [], alreadyAccessible: true })) };
+  assert.equal(isPurchaseContext(context), true);
+  assert.equal(isPurchaseContext({ ...context, activeOrder: { ...context.activeOrder, offerId: randomUUID() } }), false);
+  for (const orderStatus of ["EXPIRED", "CANCELLED"] as const) assert.equal(isPurchaseContext({ ...context, activeOrder: { ...context.activeOrder, orderStatus } }), false);
 });
 
 test("le montant mineur proche de MAX_SAFE_INTEGER garde exactement ses centimes et sa devise connue", () => {

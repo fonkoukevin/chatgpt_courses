@@ -41,10 +41,11 @@ public class ProjectService {
     private final ObjectMapper mapper;
     private final PublicCatalogueService catalogue;
     private final LearningService learning;
+    private final com.chatgptcourses.access.MemberContentService members;
     private static final String CURRENT=" FROM projects p JOIN project_revisions r ON r.id=p.current_revision_id JOIN pedagogical_versions sv ON sv.id=p.source_version_id ";
     private static final String LATEST=" LEFT JOIN LATERAL(SELECT a.* FROM project_self_assessments a WHERE a.project_id=p.id AND a.project_revision_id=p.current_revision_id ORDER BY a.assessment_number DESC LIMIT 1)a ON true ";
     private static final String STATE="CASE WHEN a.id IS NULL THEN r.stage WHEN a.needs_revision THEN 'NEEDS_REVISION' ELSE 'SELF_ASSESSED' END";
-    public ProjectService(JdbcTemplate jdbc,ObjectMapper mapper,PublicCatalogueService catalogue,LearningService learning) {this.jdbc=jdbc;this.mapper=mapper;this.catalogue=catalogue;this.learning=learning;}
+    public ProjectService(JdbcTemplate jdbc,ObjectMapper mapper,PublicCatalogueService catalogue,LearningService learning,com.chatgptcourses.access.MemberContentService members) {this.jdbc=jdbc;this.mapper=mapper;this.catalogue=catalogue;this.learning=learning;this.members=members;}
 
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
     public ProjectPage list(UUID actor,ProjectQuery query) {
@@ -67,9 +68,16 @@ public class ProjectService {
 
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
     public ProjectTemplate template(UUID activityId,UUID activityVersionId,String locale) {
-        locale(locale);check(activityId!=null&&activityVersionId!=null);var detail=catalogue.version(activityId,activityVersionId,locale);
+        locale(locale);check(activityId!=null&&activityVersionId!=null);return templateDetail(catalogue.version(activityId,activityVersionId,locale));
+    }
+    @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
+    public ProjectTemplate memberTemplate(UUID actor,UUID activityId,UUID activityVersionId,String locale) {
+        require(actor,"projects.read");locale(locale);check(activityId!=null&&activityVersionId!=null);return templateDetail(members.detail(actor,activityId,activityVersionId,locale));
+    }
+    private ProjectTemplate templateDetail(ResourceDetail detail) {
+        UUID activityId=detail.resourceId(),activityVersionId=detail.versionId();String locale=detail.locale();
         if(detail.kind()!=ResourceKind.ACTIVITY)throw notFound();String available=detail.availability();
-        if("PUBLISHED".equals(available))available="FREE".equals(detail.access())?"PUBLISHED":"PROTECTED";
+        if("PUBLISHED".equals(available))available=detail.document()!=null?"PUBLISHED":"PROTECTED";
         if(!"PUBLISHED".equals(available))return new ProjectTemplate(activityId,activityVersionId,detail.revisionId(),locale,detail.title(),available,null,null);
         var source=source(activityVersionId,locale,detail.revisionId());
         if(!complete(source.document()))return new ProjectTemplate(activityId,activityVersionId,detail.revisionId(),locale,detail.title(),"NOT_CONFIGURED",null,null);
@@ -81,7 +89,7 @@ public class ProjectService {
         byte[] fingerprint=digest(command);lockActor(actor);mutation(actor,accountContext);
         var replay=jdbc.query("SELECT id,creation_fingerprint FROM projects WHERE owner_id=? AND creation_id=?",(rs,n)->new Replay(uuid(rs,"id"),rs.getBytes("creation_fingerprint")),actor,command.creationId());
         if(!replay.isEmpty()){if(!Arrays.equals(fingerprint,replay.getFirst().fingerprint()))throw new ApiException(ApiError.CONFLICT);return new ProjectCreationResult(owned(actor,replay.getFirst().id(),false),false);}
-        lockSources(sourceResources(actor,command.enrollmentId(),command.activityId(),command.activityVersionId()));mutation(actor,accountContext);var template=template(command.activityId(),command.activityVersionId(),command.sourceLocale());
+        lockSources(sourceResources(actor,command.enrollmentId(),command.activityId(),command.activityVersionId()));mutation(actor,accountContext);var template=templateDetail(members.detail(actor,command.activityId(),command.activityVersionId(),command.sourceLocale()));
         if("PROTECTED".equals(template.availability()))throw denied();if("NOT_CONFIGURED".equals(template.availability()))throw new ApiException(ApiError.CONTENT_NOT_READY);if(!"PUBLISHED".equals(template.availability()))throw notFound();
         if(!template.revisionId().equals(command.revisionId()))throw new ApiException(ApiError.REVISION_CONFLICT);
         var source=source(command.activityVersionId(),command.sourceLocale(),command.revisionId());UUID course=null,courseVersion=null;String courseTitle=null;
@@ -119,8 +127,8 @@ public class ProjectService {
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
     public ProjectContext context(UUID actor,UUID projectId,String locale) {
         require(actor,"projects.read");locale(locale);var project=owned(actor,projectId,false);var origin=project.origin();
-        var original=catalogue.version(origin.activityId(),origin.activityVersionId(),origin.locale());var localized=locale.equals(origin.locale())?original:catalogue.version(origin.activityId(),origin.activityVersionId(),locale);
-        String access=!"PUBLISHED".equals(localized.availability())?"UNAVAILABLE":"FREE".equals(localized.access())?"ACTIVE":"PROTECTED";
+        var original=members.detail(actor,origin.activityId(),origin.activityVersionId(),origin.locale());var localized=locale.equals(origin.locale())?original:members.detail(actor,origin.activityId(),origin.activityVersionId(),locale);
+        String access=!"PUBLISHED".equals(localized.availability())?"UNAVAILABLE":localized.document()!=null?"ACTIVE":"PROTECTED";
         String availability=localized.availability();
         if(origin.enrollmentId()!=null) {
             var enrolled=learning.activity(actor,origin.enrollmentId(),origin.activityId(),origin.activityVersionId(),locale);
@@ -173,7 +181,7 @@ public class ProjectService {
             var enrolled=learning.activity(actor,origin.enrollmentId(),activityId,origin.activityVersionId(),origin.locale());
             if(!"PUBLISHED".equals(enrolled.availability()))throw notFound();if(!"ACTIVE".equals(enrolled.accessStatus()))throw denied();
         }
-        var current=catalogue.version(activityId,origin.activityVersionId(),origin.locale());requireFree(current);
+        var current=members.detail(actor,activityId,origin.activityVersionId(),origin.locale());requireReadable(current);
         if("AFTER_SUBMISSION".equals(project.rubric().revealPolicy())&&!Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM project_self_assessments WHERE project_id=? AND project_revision_id=?)",Boolean.class,project.id(),command.projectRevisionId())))throw new ApiException(ApiError.SOLUTION_REVEAL_REQUIRES_ASSESSMENT);
         var source=source(origin.activityVersionId(),origin.locale(),origin.revisionId());if(source.document().exercise()==null||source.document().exercise().correction().isBlank())throw new ApiException(ApiError.CONTENT_NOT_READY);
         var existing=jdbc.query("SELECT id,revealed_at FROM project_solution_reveals WHERE owner_id=? AND project_revision_id=? AND source_revision_id=? AND locale=?",(rs,n)->new Reveal(uuid(rs,"id"),instant(rs,"revealed_at")),actor,command.projectRevisionId(),origin.revisionId(),origin.locale());
@@ -219,7 +227,7 @@ public class ProjectService {
     }
     private byte[] digest(Object value) {try{return MessageDigest.getInstance("SHA-256").digest(mapper.writeValueAsString(value).getBytes(StandardCharsets.UTF_8));}catch(NoSuchAlgorithmException absent){throw new IllegalStateException("SHA-256 unavailable",absent);}}
     private static void match(ProjectView project,String ifMatch) {RevisionPreconditions.requireMatch(ifMatch,EntityTags.forRevision("project",project.id(),project.revision()));}
-    private static void requireFree(ResourceDetail resource) {if(resource.kind()!=ResourceKind.ACTIVITY||!"PUBLISHED".equals(resource.availability()))throw notFound();if(!"FREE".equals(resource.access())||resource.document()==null)throw denied();}
+    private static void requireReadable(ResourceDetail resource) {if(resource.kind()!=ResourceKind.ACTIVITY||!"PUBLISHED".equals(resource.availability()))throw notFound();if(resource.document()==null)throw denied();}
     private void lockActor(UUID actor) {jdbc.query("SELECT id FROM user_accounts WHERE id=? FOR NO KEY UPDATE",(rs,n)->uuid(rs,"id"),actor);}
     private List<UUID> sourceResources(UUID actor,UUID enrollment,UUID activity,UUID version) {
         var ids=new ArrayList<UUID>();ids.add(activity);

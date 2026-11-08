@@ -149,6 +149,8 @@ La page interroge le serveur ; le paramètre « success » ne crée aucun droit.
 
 Composants : OrderStatus, OrderReference, AccessActivationState et ContextualHelp.
 
+P12 implémente `PersonalOrderPaymentStatus` et `CheckoutAction` : lectures privées bornées à douze contrôles espacés de deux secondes, reprise volontaire, refus d’un autre propriétaire et invalidation des réponses après changement de compte. PAID sans READY montre une activation retardée ; seul PAID/READY propose les ressources comprises. Un conflit d’offre, de conditions ou d’ETag retire le formulaire Checkout et demande une revue. La notification possède son propre état NONE/PENDING/SENT/ISSUE ; SENT signifie acceptation SMTP, pas lecture par le destinataire. Le niveau réellement vérifié et les limites fournisseur sont consignés dans [P12](evidence/P12.md).
+
 ## E09 Mon apprentissage
 
 Routes P08 : `/fr/espace/apprentissage`, `/en/my/learning` et détail d’inscription par UUID selon le registre. Interface/services implémentés ; état réel des validations dans [evidence/P08.md](evidence/P08.md).

@@ -43,6 +43,10 @@ public enum ApiError {
     NOT_ACCEPTABLE(HttpStatus.NOT_ACCEPTABLE, "Le format de réponse demandé n’est pas disponible."),
     UNSUPPORTED_MEDIA_TYPE(HttpStatus.UNSUPPORTED_MEDIA_TYPE, "Le format de la requête n’est pas pris en charge."),
     SERVICE_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "Le service est temporairement indisponible."),
+    ORDER_NOT_PAYABLE(HttpStatus.CONFLICT, "Cette commande ne permet pas une nouvelle session de paiement."),
+    PAYMENT_AMOUNT_NOT_SUPPORTED(HttpStatus.CONFLICT, "Ce montant n’est pas disponible pour ce mode de paiement."),
+    STRIPE_WEBHOOK_INVALID(HttpStatus.BAD_REQUEST, "La notification de paiement n’est pas valide."),
+    REQUEST_TOO_LARGE(HttpStatus.PAYLOAD_TOO_LARGE, "La requête dépasse la taille autorisée."),
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "La requête n’a pas pu être traitée.");
 
     private final HttpStatus status;

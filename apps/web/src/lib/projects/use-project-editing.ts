@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import type { AuthResult } from "../api/auth-client";
 import type { ApiError } from "../api/client";
 import type { CreateProject, ProjectFields, ProjectTemplate, ProjectView, SaveProject } from "../api/generated/types.gen";
-import { createProject, getProject, getProjectTemplate, updateProject } from "../api/projects-client";
+import { createProject, getProject, getMemberProjectTemplate, updateProject } from "../api/projects-client";
 import { projectEtag } from "../api/projects-validation";
 import type { ProjectCreationSource } from "../auth/project-draft";
 import { beginSave, changeEditSession, confirmSave, createEditSession, rebaseLocalEdit, rejectSave, type EditSession } from "../cms/edit-session";
@@ -79,7 +79,7 @@ export function useProjectEditing({ locale, initial, initialFields, source, crea
   async function readSource() {
     if (!creationSource || account.status !== "active") return;
     const generation = ++readGeneration.current, scope = boundary.capture(); setConflictPending(true);
-    const response = await getProjectTemplate(creationSource.activityId, creationSource.activityVersionId, creationSource.sourceLocale);
+    const response = await getMemberProjectTemplate(creationSource.activityId, creationSource.activityVersionId, creationSource.sourceLocale);
     if (generation !== readGeneration.current) return;
     setConflictPending(false); if (!boundary.isCurrent(scope)) return; setSourceCandidate(response);
   }

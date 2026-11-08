@@ -39,6 +39,11 @@ class ProjectController {
         return ResponseEntity.ok().header(HttpHeaders.CACHE_CONTROL, "no-store")
                 .body(ProjectDtos.ProjectTemplate.from(service.template(activityId, versionId, locale)));
     }
+    @GetMapping("/me/project-templates/{activityId}/versions/{versionId}")
+    ResponseEntity<ProjectDtos.ProjectTemplate> memberTemplate(@AuthenticationPrincipal IdentityUserDetails principal,
+            @PathVariable UUID activityId,@PathVariable UUID versionId,@RequestParam @Pattern(regexp="fr|en")String locale){
+        return privateResponse(ProjectDtos.ProjectTemplate.from(service.memberTemplate(actor(principal),activityId,versionId,locale)));
+    }
     @GetMapping("/me/projects")
     ResponseEntity<ProjectDtos.ProjectPage> list(@AuthenticationPrincipal IdentityUserDetails principal,
             @RequestParam(required = false) @Size(max = 240) String q,

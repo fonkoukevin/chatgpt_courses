@@ -14,7 +14,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -90,6 +89,13 @@ class SecurityConfiguration {
                         .requestMatchers(HttpMethod.HEAD, "/api/v1/media/*/stream").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/me/media-progress/*").hasAuthority("media.progress.read")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/me/media-progress/*").hasAuthority("media.progress.write")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/webhooks/stripe").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/me/orders/*/checkout").hasAuthority("commerce.orders.write")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/me/orders/*/payment-status").hasAuthority("commerce.orders.read")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/admin/payment-events").hasAuthority("payments.events.read")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/admin/payment-events/*/retry").hasAuthority("payments.events.retry")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/me/resources/*/versions/*").hasAuthority("learning.read")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/me/project-templates/*/versions/*").hasAuthority("projects.read")
                         .requestMatchers(HttpMethod.GET, "/api/v1/offers", "/api/v1/offers/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/me/offers/*/purchase-context", "/api/v1/me/orders", "/api/v1/me/orders/*").hasAuthority("commerce.orders.read")
                         .requestMatchers(HttpMethod.POST, "/api/v1/me/orders").hasAuthority("commerce.orders.write")
@@ -116,7 +122,8 @@ class SecurityConfiguration {
                         .requestMatchers(HttpMethod.PUT, "/api/v1/admin/contents/*/composition", "/api/v1/admin/contents/*/metadata").hasAuthority("content.write")
                         .anyRequest().denyAll())
                 // The default session token repository and XOR/BREACH handler are deliberately retained.
-                .csrf(Customizer.withDefaults())
+                .csrf(csrf -> csrf.ignoringRequestMatchers(request -> "POST".equals(request.getMethod())
+                        && "/api/v1/webhooks/stripe".equals(request.getServletPath())))
                 .addFilterAfter(new AuthSessionRefreshFilter(identities, contexts, mapper), SecurityContextHolderFilter.class)
                 .addFilterBefore(new LoginRequestFilter(mapper), UsernamePasswordAuthenticationFilter.class)
                 .formLogin(form -> form.loginPage("/api/v1/auth/login").loginProcessingUrl("/api/v1/auth/login")

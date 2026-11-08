@@ -1,16 +1,18 @@
 import "server-only";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
-import { readOffer, readOffers, readOrder, readOrders } from "@/lib/api/commerce-server";
+import { readOffer, readOffers, readOrder, readOrders, readOrderPaymentStatus } from "@/lib/api/commerce-server";
 import { readCurrentUser } from "@/lib/api/server-read";
 import { isUuid } from "@/lib/api/cms-validation";
 import { authHref } from "@/lib/auth/routes";
-import { offersPath, ordersHref, ordersPath, safeCommerceDestination, type CommercePagination } from "@/lib/commerce/routes";
+import { offersPath, ordersHref, ordersPath, orderStatusPath, safeCommerceDestination, type CommercePagination } from "@/lib/commerce/routes";
 import { getCommerceDictionary } from "@/lib/i18n/commerce";
 import type { Locale } from "@/lib/i18n/locales";
 import { PublicOfferDetails, PublicOffers } from "./offers";
 import { PersonalOrders, PersonalOrderSummary } from "./orders";
 import { CommerceError, CommercePrivateShell, CommerceRefresh } from "./parts";
+import { PersonalOrderPaymentStatus } from "./payment-status";
+import { getPaymentDictionary } from "@/lib/i18n/payments";
 
 type Props = { params: Promise<{ locale: string; offerId?: string; orderId?: string }>; searchParams: Promise<Record<string, string | string[] | undefined>> };
 async function route(props: Props, locale: Locale) { const params = await props.params; if (params.locale !== locale) notFound(); return params; }
@@ -34,4 +36,16 @@ export function orderSummaryPage(locale: Locale) { return async function Page(pr
   if (!current.ok) return <CommercePrivateShell locale={locale} id={params.orderId}><div className="space-y-4"><CommerceError locale={locale} error={current.error} /><CommerceRefresh locale={locale} /></div></CommercePrivateShell>;
   const result = await readOrder(params.orderId); if (!result.ok && result.error.kind === "http" && result.error.status === 404) notFound();
   return <PersonalOrderSummary key={`${current.data.id}:${params.orderId}`} locale={locale} initial={result} id={params.orderId} expectedAccountId={current.data.id} />;
+}; }
+export function paymentStatusMetadata(locale: Locale): Metadata { return { ...commerceMetadata(locale, true), title: `${getPaymentDictionary(locale).title} | ChatGPT Courses` }; }
+export function orderPaymentStatusPage(locale: Locale) { return async function Page(props: Props) {
+  const params = await route(props, locale); if (!isUuid(params.orderId)) notFound();
+  const query = await props.searchParams;
+  if (Object.keys(query).some((key) => key !== "checkout") || query.checkout !== undefined && query.checkout !== "success" && query.checkout !== "cancel") notFound();
+  const returned = query.checkout as "success" | "cancel" | undefined, destination = orderStatusPath(locale, params.orderId, returned), current = await user(locale, destination);
+  if (!current.ok) return <CommercePrivateShell locale={locale} id={params.orderId} status><div className="space-y-4"><CommerceError locale={locale} error={current.error} target="order" /><CommerceRefresh locale={locale} /></div></CommercePrivateShell>;
+  const order = await readOrder(params.orderId); if (!order.ok && order.error.kind === "http" && order.error.status === 404) notFound();
+  if (!order.ok) return <CommercePrivateShell locale={locale} id={params.orderId} status><div className="space-y-4"><CommerceError locale={locale} error={order.error} target="order" /><CommerceRefresh locale={locale} /></div></CommercePrivateShell>;
+  const initial = await readOrderPaymentStatus(params.orderId);
+  return <PersonalOrderPaymentStatus key={`${current.data.id}:${params.orderId}`} locale={locale} order={order.data} initial={initial} expectedAccountId={current.data.id} returned={returned} />;
 }; }

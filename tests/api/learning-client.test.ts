@@ -47,6 +47,10 @@ test("la correction est cohérente avec ses réponses, ses points et sa politiqu
     {...value,results:[{...value.results[0],correctOption:1}]},{...value,attemptId:randomUUID()},{...value,ownerId:actor}])assert.equal(isQuizCheckResult(invalid),false);
   const initial=activity();assert.equal(isLearningActivity(initial),true);
   const document=initial.resource.document!;
+  const protectedResource={...initial.resource,access:"PROTECTED" as const,document:{...document,access:"PROTECTED" as const}};
+  assert.equal(isLearningActivity({...initial,resource:protectedResource}),true);
+  assert.equal(isLearningActivity({...initial,accessStatus:"PROTECTED",resource:protectedResource}),false);
+  assert.equal(isLearningActivity({...initial,availability:"WITHDRAWN",resource:{...protectedResource,availability:"WITHDRAWN"}}),false);
   assert.equal(isLearningActivity({...initial,resource:{...initial.resource,document:{...document,quiz:[{...document.quiz[0],correctOption:0}]}}}),false);
 });
 

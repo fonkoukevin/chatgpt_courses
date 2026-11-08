@@ -119,6 +119,25 @@ courses:
     local-root: ${VIDEO_LOCAL_ROOT:}
     link-ttl-seconds: ${VIDEO_LINK_TTL_SECONDS:60}
     max-video-bytes: ${VIDEO_MAX_BYTES:20971520}
+  stripe:
+    enabled: ${STRIPE_ENABLED:false}
+    mode: ${STRIPE_MODE:TEST}
+    api-key: ${STRIPE_SECRET_KEY:}
+    webhook-secret: ${STRIPE_WEBHOOK_SECRET:}
+    account-id: ${STRIPE_ACCOUNT_ID:}
+    api-base: ${STRIPE_API_BASE:https://api.stripe.com}
+    connect-timeout: ${STRIPE_CONNECT_TIMEOUT:3s}
+    read-timeout: ${STRIPE_READ_TIMEOUT:8s}
+    recovery-window: ${STRIPE_RECOVERY_WINDOW:10m}
+  payments:
+    inbox:
+      worker-enabled: ${PAYMENT_INBOX_ENABLED:true}
+      poll-delay: ${PAYMENT_INBOX_POLL_DELAY:1s}
+      lease-duration: ${PAYMENT_INBOX_LEASE_DURATION:75s}
+      max-attempts: ${PAYMENT_INBOX_MAX_ATTEMPTS:5}
+      retry-base: ${PAYMENT_INBOX_RETRY_BASE:5s}
+      retry-max: ${PAYMENT_INBOX_RETRY_MAX:5m}
+      waiting-delay: ${PAYMENT_INBOX_WAITING_DELAY:30s}
   runtime:
     environment: ${APP_ENV}
     public-origin: ${APP_PUBLIC_ORIGIN}

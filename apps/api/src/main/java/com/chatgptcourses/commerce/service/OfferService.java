@@ -130,7 +130,7 @@ public class OfferService {
                 for(var media:source.document().media())if(registries.stream().noneMatch(r->r.ready(node.resourceId(),node.versionId(),locale,media.assetId(),media.kind())))issue(media.required()?issues:warnings,media.required()?"MEDIA_UNAVAILABLE":"OPTIONAL_MEDIA_UNAVAILABLE","resources.media",node.resourceId(),locale);
             }
         }
-        String checkoutReason=!"ACTIVE".equals(offer.state())?"OFFER_INACTIVE":!issues.isEmpty()?"OFFER_NOT_READY":!gateway.configured()?gateway.unavailableReason():null;
+        String checkoutReason=!"ACTIVE".equals(offer.state())?"OFFER_INACTIVE":!issues.isEmpty()?"OFFER_NOT_READY":!gateway.configured()?gateway.unavailableReason():!gateway.supportsAmount(f.price().amountMinor(),f.price().currency())?"AMOUNT_NOT_SUPPORTED":null;
         return new OfferReadiness(offer.id(),offer.revision(),issues.isEmpty(),checkoutReason==null,List.copyOf(issues),List.copyOf(warnings),checkoutReason);
     }
     private static boolean periodReady(OfferPeriod period,boolean updates){return period!=null&&period.mode()!=null&&((updates?"NONE":"UNLIMITED").equals(period.mode())||((updates?"PERIOD":"FIXED").equals(period.mode())&&period.days()!=null));}

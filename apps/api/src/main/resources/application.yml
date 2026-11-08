@@ -21,6 +21,8 @@ spring:
       validation-timeout: 1000
       maximum-pool-size: 5
       connection-init-sql: SET TIME ZONE 'UTC'
+      data-source-properties:
+        logServerErrorDetail: false
   jpa:
     open-in-view: false
     hibernate:

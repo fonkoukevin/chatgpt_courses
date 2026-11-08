@@ -1,6 +1,7 @@
 package com.chatgptcourses.editorial.http;
 
 import com.chatgptcourses.catalog.model.ResourceKind;
+import com.chatgptcourses.catalog.http.CatalogDtos;
 import com.chatgptcourses.editorial.model.EditorialState;
 import com.chatgptcourses.editorial.service.ContentTypes;
 import com.chatgptcourses.editorial.service.EditorialService;
@@ -120,6 +121,13 @@ class EditorialController {
             @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
             @Valid @RequestBody EditorialDtos.Composition request) {
         return content(service.composition(actor(principal), id, ifMatch, request.command()), false);
+    }
+
+    @PutMapping("/{id}/metadata")
+    ResponseEntity<EditorialDtos.Content> metadata(@AuthenticationPrincipal IdentityUserDetails principal, @PathVariable UUID id,
+            @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+            @Valid @RequestBody CatalogDtos.SaveMetadata request) {
+        return content(service.metadata(actor(principal), id, ifMatch, request.command()), false);
     }
 
     @GetMapping("/{id}/readiness")

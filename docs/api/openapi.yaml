@@ -3,8 +3,8 @@ info:
   title: ChatGPT Courses API
   version: 0.1.0
   description: >-
-    Opérations réellement introduites jusqu’à P05 : identité Spring et CMS éditorial. Le catalogue P06 et le
-    commerce ne sont pas simulés.
+    Opérations réellement introduites jusqu’à P06 : identité, CMS éditorial et catalogue public. Les offres,
+    droits privés et paiements des lots suivants ne sont pas simulés.
 servers:
   - url: /api/v1
     description: API de même origine, préfixe conservé jusqu'à Spring.
@@ -16,6 +16,8 @@ tags:
     description: Compte, session, récupération et préférences du propriétaire.
   - name: Editorial
     description: Contenus, versions, traductions et publication ; permissions distinctes du commerce.
+  - name: Catalogue
+    description: Publications publiques, métadonnées éditoriales et programmes aux versions épinglées.
 paths:
   /system/health:
     get:
@@ -1180,6 +1182,342 @@ paths:
           $ref: '#/components/responses/ProblemResponse'
         default:
           $ref: '#/components/responses/ProblemResponse'
+  /catalog:
+    get:
+      operationId: searchCatalogue
+      tags:
+        - Catalogue
+      summary: Rechercher les publications disponibles avec filtres et pagination.
+      security: []
+      description: >-
+        Recherche PostgreSQL sur titre, résumé, slug et objectif publiés. Filtres combinables ; ordre
+        déterministe TITLE (titre normalisé puis resourceId) ou RECENT (date publiée desc puis resourceId).
+        Aucune dépendance au cookie ; pas de cache partagé en P06.
+      parameters:
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+          description: Langue demandée explicite ; aucun fallback silencieux.
+        - name: q
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 240
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - COURSE
+              - ACTIVITY
+              - GUIDE
+              - METHOD_TEMPLATE
+        - name: goal
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - understand-brief
+              - define-scope
+              - prepare-prompt
+              - build-proposal
+              - check-output
+              - reuse-method
+        - name: level
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - BEGINNER
+              - INTERMEDIATE
+              - ADVANCED
+        - name: access
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/ContentAccess'
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - TITLE
+              - RECENT
+            default: TITLE
+      responses:
+        '200':
+          description: Représentation publiée et autorisée, sans personnalisation privée.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CataloguePage'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /catalog/facets:
+    get:
+      operationId: getCatalogueFacets
+      tags:
+        - Catalogue
+      summary: Lire les filtres réellement disponibles dans les publications.
+      security: []
+      parameters:
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+          description: Langue demandée explicite ; aucun fallback silencieux.
+      responses:
+        '200':
+          description: Représentation publiée et autorisée, sans personnalisation privée.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogueFacets'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /catalog/resources/{resourceId}:
+    parameters:
+      - name: resourceId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: getCatalogueResource
+      tags:
+        - Catalogue
+      summary: Lire la dernière version publiée ou son état de langue explicite.
+      security: []
+      parameters:
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+          description: Langue demandée explicite ; aucun fallback silencieux.
+      responses:
+        '200':
+          description: Représentation publiée et autorisée, sans personnalisation privée.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceDetail'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /catalog/by-slug/{kind}/{slug}:
+    parameters:
+      - name: kind
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+            - COURSE
+            - ACTIVITY
+            - GUIDE
+            - METHOD_TEMPLATE
+      - name: slug
+        in: path
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 180
+          pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+    get:
+      operationId: getCatalogueResourceBySlug
+      tags:
+        - Catalogue
+      summary: Résoudre exactement un slug localisé publié.
+      security: []
+      description: >-
+        Résolution kind+locale+slug. Pour changer de langue avec contexte, utiliser resourceId/versionId ;
+        jamais substituer le slug d’une autre langue ni retourner silencieusement un autre corps.
+      parameters:
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+          description: Langue demandée explicite ; aucun fallback silencieux.
+      responses:
+        '200':
+          description: Représentation publiée et autorisée, sans personnalisation privée.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceDetail'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /catalog/resources/{resourceId}/versions/{versionId}:
+    parameters:
+      - name: resourceId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: versionId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: getCatalogueResourceVersion
+      tags:
+        - Catalogue
+      summary: Lire la version exacte liée à un programme publié.
+      security: []
+      description: >-
+        Version appartenant à la ressource ; aucune résolution latest implicite. Sert notamment l’activité
+        gratuite réelle épinglée par un programme. La progression/les tentatives P08 restent des opérations
+        séparées.
+      parameters:
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+          description: Langue demandée explicite ; aucun fallback silencieux.
+      responses:
+        '200':
+          description: Représentation publiée et autorisée, sans personnalisation privée.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceDetail'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/contents/{id}/metadata:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    put:
+      operationId: saveContentMetadata
+      tags:
+        - Editorial
+      summary: Créer un nouvel instantané de métadonnées publiques.
+      security:
+        - SessionCookie: []
+      description: >-
+        Permission content.write, CSRF et If-Match. Titre/résumé/document copiés dans la nouvelle révision ;
+        snapshots publiés antérieurs inchangés. Le document legacy doit être converti explicitement avant
+        cette action.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveMetadata'
+      responses:
+        '200':
+          description: Représentation publiée et autorisée, sans personnalisation privée.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+            X-Robots-Tag:
+              schema:
+                type: string
+                const: noindex, nofollow
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
 components:
   schemas:
     SystemHealth:
@@ -1979,6 +2317,7 @@ components:
         - frozenAt
         - translations
         - legacyBody
+        - metadata
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -2068,6 +2407,8 @@ components:
           anyOf:
             - type: string
             - type: 'null'
+        metadata:
+          $ref: '#/components/schemas/PublicMetadata'
       description: >-
         Représentation administrative complète ; id désigne la traduction/version, resourceId l’identité
         pédagogique stable. ETag fort content-{id}-r{revision}. Ancienne donnée P03 : document:null lisible,
@@ -2144,6 +2485,7 @@ components:
         - reason
         - replacesRevisionId
         - legacyBody
+        - metadata
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -2181,6 +2523,8 @@ components:
           anyOf:
             - type: string
             - type: 'null'
+        metadata:
+          $ref: '#/components/schemas/PublicMetadata'
       description: >-
         Instantané historique append-only et motif enregistré, sans réécriture des versions ou preuves
         antérieures. Ancien instantané P03 sans document structuré : document:null.
@@ -2518,6 +2862,542 @@ components:
         Métadonnées issues uniquement d’une révision publiée. FREE/PUBLISHED peut exposer PublicDocument ;
         PROTECTED ou STALE exige document:null. Aucune projection d’un brouillon, aucun fallback de langue,
         aucun droit payant déduit d’une session.
+    PublicMetadata:
+      type: object
+      additionalProperties: false
+      required:
+        - goalCodes
+        - level
+        - audience
+        - tools
+        - sources
+        - faq
+        - evaluationDescription
+      properties:
+        goalCodes:
+          type: array
+          items:
+            type: string
+            enum:
+              - understand-brief
+              - define-scope
+              - prepare-prompt
+              - build-proposal
+              - check-output
+              - reuse-method
+          maxItems: 6
+          uniqueItems: true
+        level:
+          anyOf:
+            - type: string
+              enum:
+                - BEGINNER
+                - INTERMEDIATE
+                - ADVANCED
+            - type: 'null'
+        audience:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 500
+          maxItems: 10
+        tools:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataTool'
+          maxItems: 10
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataSource'
+          maxItems: 20
+        faq:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataFaq'
+          maxItems: 12
+        evaluationDescription:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 4000
+            - type: 'null'
+      description: >-
+        Instantané append-only lié à la révision, jamais une offre. Vide explicite pour les révisions
+        anciennes ; au plus16KiB UTF-8. evaluationDescription est une explication publique distincte de la
+        définition canonique privée de l’évaluation.
+    MetadataTool:
+      type: object
+      additionalProperties: false
+      required:
+        - name
+        - url
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+        url:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 2000
+            - type: 'null'
+      description: >-
+        URL facultative HTTPS sans credentials ou chemin interne simple ; jamais une URL à télécharger côté
+        serveur.
+    MetadataSource:
+      type: object
+      additionalProperties: false
+      required:
+        - label
+        - url
+      properties:
+        label:
+          type: string
+          minLength: 1
+          maxLength: 240
+        url:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    MetadataFaq:
+      type: object
+      additionalProperties: false
+      required:
+        - question
+        - answer
+      properties:
+        question:
+          type: string
+          minLength: 1
+          maxLength: 500
+        answer:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    SaveMetadata:
+      type: object
+      additionalProperties: false
+      required:
+        - metadata
+        - reason
+      properties:
+        metadata:
+          $ref: '#/components/schemas/PublicMetadata'
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
+      description: >-
+        Crée une nouvelle révision courante, même texte et version, état DRAFT. La publication précédente et
+        ses métadonnées restent intactes.
+    ResourceCard:
+      type: object
+      additionalProperties: false
+      required:
+        - resourceId
+        - kind
+        - versionId
+        - versionNumber
+        - revisionId
+        - locale
+        - slug
+        - title
+        - summary
+        - objective
+        - expectedResult
+        - estimatedMinutes
+        - access
+        - goalCodes
+        - level
+        - reviewedAt
+      properties:
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        kind:
+          type: string
+          enum:
+            - COURSE
+            - ACTIVITY
+            - GUIDE
+            - METHOD_TEMPLATE
+        versionId:
+          $ref: '#/components/schemas/UUID'
+        versionNumber:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        revisionId:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        slug:
+          type: string
+          minLength: 1
+          maxLength: 180
+          pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        summary:
+          type: string
+          minLength: 0
+          maxLength: 2000
+        objective:
+          type: string
+          minLength: 0
+          maxLength: 4000
+        expectedResult:
+          type: string
+          minLength: 0
+          maxLength: 4000
+        estimatedMinutes:
+          anyOf:
+            - type: integer
+              minimum: 1
+              maximum: 1440
+            - type: 'null'
+        access:
+          $ref: '#/components/schemas/ContentAccess'
+        goalCodes:
+          type: array
+          items:
+            type: string
+            enum:
+              - understand-brief
+              - define-scope
+              - prepare-prompt
+              - build-proposal
+              - check-output
+              - reuse-method
+          maxItems: 6
+          uniqueItems: true
+        level:
+          anyOf:
+            - type: string
+              enum:
+                - BEGINNER
+                - INTERMEDIATE
+                - ADVANCED
+            - type: 'null'
+        reviewedAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+      description: >-
+        Une carte correspond à la dernière version globalement publiée de l’identité, dans la langue
+        disponible demandée. Aucun module isolé, brouillon, retrait ou traduction dépassée.
+    CataloguePage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceCard'
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    FacetOption:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - label
+        - count
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 100
+        label:
+          type: string
+          minLength: 1
+          maxLength: 240
+        count:
+          type: integer
+          minimum: 1
+          maximum: 9007199254740991
+    CatalogueFacets:
+      type: object
+      additionalProperties: false
+      required:
+        - types
+        - goals
+        - levels
+        - accesses
+        - locales
+      properties:
+        types:
+          type: array
+          items:
+            $ref: '#/components/schemas/FacetOption'
+        goals:
+          type: array
+          items:
+            $ref: '#/components/schemas/FacetOption'
+        levels:
+          type: array
+          items:
+            $ref: '#/components/schemas/FacetOption'
+        accesses:
+          type: array
+          items:
+            $ref: '#/components/schemas/FacetOption'
+        locales:
+          type: array
+          items:
+            $ref: '#/components/schemas/FacetOption'
+      description: >-
+        Uniquement les valeurs réellement représentées dans des publications disponibles ; libellés FR/EN du
+        serveur. Une catégorie vide n’est pas annoncée comme remplie.
+    LanguageAvailability:
+      type: object
+      additionalProperties: false
+      required:
+        - locale
+        - status
+        - slug
+      properties:
+        locale:
+          $ref: '#/components/schemas/Locale'
+        status:
+          type: string
+          enum:
+            - PUBLISHED
+            - MISSING_TRANSLATION
+            - STALE
+            - WITHDRAWN
+        slug:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 180
+            - type: 'null'
+      description: Équivalent de la même identité/version, sans contenu emprunté à une autre publication.
+    CurriculumNode:
+      type: object
+      additionalProperties: false
+      required:
+        - resourceId
+        - kind
+        - versionId
+        - versionNumber
+        - locale
+        - slug
+        - availability
+        - revisionId
+        - title
+        - summary
+        - access
+        - estimatedMinutes
+        - children
+      properties:
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        kind:
+          $ref: '#/components/schemas/ContentKind'
+        versionId:
+          $ref: '#/components/schemas/UUID'
+        versionNumber:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        locale:
+          $ref: '#/components/schemas/Locale'
+        slug:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 180
+            - type: 'null'
+        availability:
+          type: string
+          enum:
+            - PUBLISHED
+            - MISSING_TRANSLATION
+            - STALE
+            - WITHDRAWN
+        revisionId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        title:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 240
+            - type: 'null'
+        summary:
+          anyOf:
+            - type: string
+              minLength: 0
+              maxLength: 2000
+            - type: 'null'
+        access:
+          anyOf:
+            - $ref: '#/components/schemas/ContentAccess'
+            - type: 'null'
+        estimatedMinutes:
+          anyOf:
+            - type: integer
+              minimum: 1
+              maximum: 1440
+            - type: 'null'
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/CurriculumNode'
+          maxItems: 100
+      description: >-
+        versionId est exactement la child_version_id enregistrée dans la composition du parent. Ne jamais la
+        remplacer par la dernière version globale de la ressource enfant. Les informations non publiées ne
+        sont pas exposées.
+    ResourceDetail:
+      type: object
+      additionalProperties: false
+      required:
+        - resourceId
+        - kind
+        - versionId
+        - versionNumber
+        - locale
+        - slug
+        - availability
+        - revisionId
+        - title
+        - summary
+        - access
+        - document
+        - metadata
+        - reviewedAt
+        - languages
+        - curriculum
+        - related
+        - objective
+        - expectedResult
+        - prerequisites
+        - estimatedMinutes
+      properties:
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        kind:
+          $ref: '#/components/schemas/ContentKind'
+        versionId:
+          $ref: '#/components/schemas/UUID'
+        versionNumber:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        locale:
+          $ref: '#/components/schemas/Locale'
+        slug:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 180
+            - type: 'null'
+        availability:
+          type: string
+          enum:
+            - PUBLISHED
+            - MISSING_TRANSLATION
+            - STALE
+            - WITHDRAWN
+        revisionId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        title:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 240
+            - type: 'null'
+        summary:
+          anyOf:
+            - type: string
+              minLength: 0
+              maxLength: 2000
+            - type: 'null'
+        access:
+          anyOf:
+            - $ref: '#/components/schemas/ContentAccess'
+            - type: 'null'
+        document:
+          anyOf:
+            - $ref: '#/components/schemas/PublicDocument'
+            - type: 'null'
+        metadata:
+          $ref: '#/components/schemas/PublicMetadata'
+        reviewedAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+        languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/LanguageAvailability'
+          maxItems: 2
+        curriculum:
+          type: array
+          items:
+            $ref: '#/components/schemas/CurriculumNode'
+          maxItems: 100
+        related:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceCard'
+          maxItems: 30
+        objective:
+          anyOf:
+            - type: string
+              minLength: 0
+              maxLength: 4000
+            - type: 'null'
+        expectedResult:
+          anyOf:
+            - type: string
+              minLength: 0
+              maxLength: 4000
+            - type: 'null'
+        prerequisites:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 1000
+          maxItems: 20
+        estimatedMinutes:
+          anyOf:
+            - type: integer
+              minimum: 1
+              maximum: 1440
+            - type: 'null'
+      description: >-
+        Tout provient de révisions réellement publiées. Document uniquement pour FREE+PUBLISHED, sans corrigés
+        ni réponses ; PROTECTED n’expose que les champs descriptifs publics.
+        MISSING_TRANSLATION/STALE/WITHDRAWN conservent le contexte d’identité/version et les équivalents, sans
+        document ni métadonnées empruntés. reviewedAt est la revue de la publication, pas d’un prochain
+        brouillon. Aucun auteur privé, droit personnel, prix ni fausse offre.
   headers:
     NoStore:
       description: Réponse non stockable ; les erreurs sont également privées.

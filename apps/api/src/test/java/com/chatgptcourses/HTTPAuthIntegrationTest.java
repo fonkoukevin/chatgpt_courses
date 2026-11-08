@@ -149,7 +149,7 @@ class HTTPAuthIntegrationTest {
         String firstEmail = email();
         String owner = tree(register(disabled, firstEmail, csrf(disabled))).path("id").asText();
         assertThat(login(disabled, firstEmail, PASSWORD, csrf(disabled)).statusCode()).isEqualTo(200);
-        jdbc.update("UPDATE user_accounts SET status='DISABLED',updated_at=current_timestamp WHERE id=?", UUID.fromString(owner));
+        jdbc.update("UPDATE user_accounts SET status='DISABLED',updated_at=greatest(created_at,current_timestamp) WHERE id=?", UUID.fromString(owner));
         assertProblem(get(disabled, "/api/v1/auth/me"), 401, "AUTHENTICATION_REQUIRED");
         assertThat(jdbc.queryForObject("SELECT count(*) FROM spring_session WHERE principal_name=?", Integer.class, owner)).isZero();
         assertProblem(login(disabled, firstEmail, PASSWORD, csrf(disabled)), 401, "BAD_CREDENTIALS");

@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.transaction.CannotCreateTransactionException;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
@@ -87,6 +89,11 @@ public class ApiExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     ResponseEntity<ProblemDetail> conflict(HttpServletRequest request) {
         return response(ApiProblems.create(ApiError.CONFLICT, request.getRequestURI()));
+    }
+
+    @ExceptionHandler({DataAccessException.class, CannotCreateTransactionException.class})
+    ResponseEntity<ProblemDetail> unavailableDatabase(HttpServletRequest request) {
+        return response(ApiProblems.create(ApiError.SERVICE_UNAVAILABLE, request.getRequestURI()));
     }
 
     @ExceptionHandler({HttpMessageNotReadableException.class, MethodArgumentTypeMismatchException.class})

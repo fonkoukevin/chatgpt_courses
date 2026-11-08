@@ -20,7 +20,7 @@ export function ShowcaseNav({ locale }: { locale: Locale }) {
             return <Link key={route} href={href} aria-current={active ? "page" : undefined} className={`inline-flex min-h-11 items-center rounded-input px-3 no-underline ${active ? "bg-brand-soft font-semibold text-brand" : "text-muted-foreground hover:bg-surface-hover"}`}>{copy.links[route]}</Link>;
           })}
         </nav>
-        <Link href={`/${locale}`} className="inline-flex min-h-11 items-center text-link underline lg:ml-auto">{copy.foundations}</Link>
+        <Link href={`/${locale}/dev/foundations`} className="inline-flex min-h-11 items-center text-link underline lg:ml-auto">{copy.foundations}</Link>
       </div>
       <p className="mx-auto mt-1 max-w-[var(--content-max)] text-[0.8125rem] text-muted-foreground">{copy.disclaimer}</p>
     </aside>

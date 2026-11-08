@@ -52,6 +52,8 @@ class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/v1/auth/me", "/api/v1/me/preferences").authenticated()
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/me/preferences").hasAuthority("identity.preferences.write")
                         .requestMatchers(HttpMethod.GET, "/api/v1/contents/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/catalog", "/api/v1/catalog/facets", "/api/v1/catalog/resources/*",
+                                "/api/v1/catalog/by-slug/*/*", "/api/v1/catalog/resources/*/versions/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/admin/contents", "/api/v1/admin/contents/**")
                             .hasAuthority("content.read")
                         .requestMatchers(HttpMethod.POST, "/api/v1/admin/contents/*/publish").hasAuthority("content.publish")
@@ -62,7 +64,7 @@ class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/v1/admin/contents", "/api/v1/admin/contents/*/revisions",
                                 "/api/v1/admin/contents/*/versions", "/api/v1/admin/contents/*/duplicate",
                                 "/api/v1/admin/contents/*/translations").hasAuthority("content.write")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/admin/contents/*/composition").hasAuthority("content.write")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/admin/contents/*/composition", "/api/v1/admin/contents/*/metadata").hasAuthority("content.write")
                         .anyRequest().denyAll())
                 // The default session token repository and XOR/BREACH handler are deliberately retained.
                 .csrf(Customizer.withDefaults())

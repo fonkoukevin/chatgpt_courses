@@ -2,7 +2,7 @@
 
 import { type Client, type ClientMeta, type Options as Options2, type RequestResult, type TDataShape, urlSearchParamsBodySerializer } from './client';
 import { client } from './client.gen';
-import type { ArchiveContentData, ArchiveContentErrors, ArchiveContentResponses, CreateContentData, CreateContentErrors, CreateContentResponses, CreateContentTranslationData, CreateContentTranslationErrors, CreateContentTranslationResponses, CreateContentVersionData, CreateContentVersionErrors, CreateContentVersionResponses, DuplicateContentData, DuplicateContentErrors, DuplicateContentResponses, GetContentData, GetContentDependenciesData, GetContentDependenciesErrors, GetContentDependenciesResponses, GetContentErrors, GetContentReadinessData, GetContentReadinessErrors, GetContentReadinessResponses, GetContentResponses, GetCsrfTokenData, GetCsrfTokenErrors, GetCsrfTokenResponses, GetCurrentUserData, GetCurrentUserErrors, GetCurrentUserResponses, GetPreferencesData, GetPreferencesErrors, GetPreferencesResponses, GetPublicContentData, GetPublicContentErrors, GetPublicContentResponses, GetSystemHealthData, GetSystemHealthErrors, GetSystemHealthResponses, ListContentRevisionsData, ListContentRevisionsErrors, ListContentRevisionsResponses, ListContentsData, ListContentsErrors, ListContentsResponses, LoginData, LoginErrors, LoginResponses, LogoutData, LogoutErrors, LogoutResponses, PreviewContentData, PreviewContentErrors, PreviewContentResponses, PublishContentData, PublishContentErrors, PublishContentResponses, RegisterData, RegisterErrors, RegisterResponses, ReplaceContentCompositionData, ReplaceContentCompositionErrors, ReplaceContentCompositionResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, SaveContentRevisionData, SaveContentRevisionErrors, SaveContentRevisionResponses, TransitionContentData, TransitionContentErrors, TransitionContentResponses, UpdatePreferencesData, UpdatePreferencesErrors, UpdatePreferencesResponses } from './types.gen';
+import type { ArchiveContentData, ArchiveContentErrors, ArchiveContentResponses, CreateContentData, CreateContentErrors, CreateContentResponses, CreateContentTranslationData, CreateContentTranslationErrors, CreateContentTranslationResponses, CreateContentVersionData, CreateContentVersionErrors, CreateContentVersionResponses, DuplicateContentData, DuplicateContentErrors, DuplicateContentResponses, GetCatalogueFacetsData, GetCatalogueFacetsErrors, GetCatalogueFacetsResponses, GetCatalogueResourceBySlugData, GetCatalogueResourceBySlugErrors, GetCatalogueResourceBySlugResponses, GetCatalogueResourceData, GetCatalogueResourceErrors, GetCatalogueResourceResponses, GetCatalogueResourceVersionData, GetCatalogueResourceVersionErrors, GetCatalogueResourceVersionResponses, GetContentData, GetContentDependenciesData, GetContentDependenciesErrors, GetContentDependenciesResponses, GetContentErrors, GetContentReadinessData, GetContentReadinessErrors, GetContentReadinessResponses, GetContentResponses, GetCsrfTokenData, GetCsrfTokenErrors, GetCsrfTokenResponses, GetCurrentUserData, GetCurrentUserErrors, GetCurrentUserResponses, GetPreferencesData, GetPreferencesErrors, GetPreferencesResponses, GetPublicContentData, GetPublicContentErrors, GetPublicContentResponses, GetSystemHealthData, GetSystemHealthErrors, GetSystemHealthResponses, ListContentRevisionsData, ListContentRevisionsErrors, ListContentRevisionsResponses, ListContentsData, ListContentsErrors, ListContentsResponses, LoginData, LoginErrors, LoginResponses, LogoutData, LogoutErrors, LogoutResponses, PreviewContentData, PreviewContentErrors, PreviewContentResponses, PublishContentData, PublishContentErrors, PublishContentResponses, RegisterData, RegisterErrors, RegisterResponses, ReplaceContentCompositionData, ReplaceContentCompositionErrors, ReplaceContentCompositionResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, SaveContentMetadataData, SaveContentMetadataErrors, SaveContentMetadataResponses, SaveContentRevisionData, SaveContentRevisionErrors, SaveContentRevisionResponses, SearchCatalogueData, SearchCatalogueErrors, SearchCatalogueResponses, TransitionContentData, TransitionContentErrors, TransitionContentResponses, UpdatePreferencesData, UpdatePreferencesErrors, UpdatePreferencesResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -394,3 +394,53 @@ export const getContentDependencies = <ThrowOnError extends boolean = false>(opt
  * Socle P05 pour les lots consommateurs, sans catalogue P06. Aucun brouillon ni corps premium ; langue manquante ou archive 404, traduction dépassée STALE avec document:null.
  */
 export const getPublicContent = <ThrowOnError extends boolean = false>(options: Options<GetPublicContentData, ThrowOnError>): RequestResult<GetPublicContentResponses, GetPublicContentErrors, ThrowOnError> => (options.client ?? client).get<GetPublicContentResponses, GetPublicContentErrors, ThrowOnError>({ url: '/contents/{resourceId}', ...options });
+
+/**
+ * Rechercher les publications disponibles avec filtres et pagination.
+ *
+ * Recherche PostgreSQL sur titre, résumé, slug et objectif publiés. Filtres combinables ; ordre déterministe TITLE (titre normalisé puis resourceId) ou RECENT (date publiée desc puis resourceId). Aucune dépendance au cookie ; pas de cache partagé en P06.
+ */
+export const searchCatalogue = <ThrowOnError extends boolean = false>(options: Options<SearchCatalogueData, ThrowOnError>): RequestResult<SearchCatalogueResponses, SearchCatalogueErrors, ThrowOnError> => (options.client ?? client).get<SearchCatalogueResponses, SearchCatalogueErrors, ThrowOnError>({ url: '/catalog', ...options });
+
+/**
+ * Lire les filtres réellement disponibles dans les publications.
+ */
+export const getCatalogueFacets = <ThrowOnError extends boolean = false>(options: Options<GetCatalogueFacetsData, ThrowOnError>): RequestResult<GetCatalogueFacetsResponses, GetCatalogueFacetsErrors, ThrowOnError> => (options.client ?? client).get<GetCatalogueFacetsResponses, GetCatalogueFacetsErrors, ThrowOnError>({ url: '/catalog/facets', ...options });
+
+/**
+ * Lire la dernière version publiée ou son état de langue explicite.
+ */
+export const getCatalogueResource = <ThrowOnError extends boolean = false>(options: Options<GetCatalogueResourceData, ThrowOnError>): RequestResult<GetCatalogueResourceResponses, GetCatalogueResourceErrors, ThrowOnError> => (options.client ?? client).get<GetCatalogueResourceResponses, GetCatalogueResourceErrors, ThrowOnError>({ url: '/catalog/resources/{resourceId}', ...options });
+
+/**
+ * Résoudre exactement un slug localisé publié.
+ *
+ * Résolution kind+locale+slug. Pour changer de langue avec contexte, utiliser resourceId/versionId ; jamais substituer le slug d’une autre langue ni retourner silencieusement un autre corps.
+ */
+export const getCatalogueResourceBySlug = <ThrowOnError extends boolean = false>(options: Options<GetCatalogueResourceBySlugData, ThrowOnError>): RequestResult<GetCatalogueResourceBySlugResponses, GetCatalogueResourceBySlugErrors, ThrowOnError> => (options.client ?? client).get<GetCatalogueResourceBySlugResponses, GetCatalogueResourceBySlugErrors, ThrowOnError>({ url: '/catalog/by-slug/{kind}/{slug}', ...options });
+
+/**
+ * Lire la version exacte liée à un programme publié.
+ *
+ * Version appartenant à la ressource ; aucune résolution latest implicite. Sert notamment l’activité gratuite réelle épinglée par un programme. La progression/les tentatives P08 restent des opérations séparées.
+ */
+export const getCatalogueResourceVersion = <ThrowOnError extends boolean = false>(options: Options<GetCatalogueResourceVersionData, ThrowOnError>): RequestResult<GetCatalogueResourceVersionResponses, GetCatalogueResourceVersionErrors, ThrowOnError> => (options.client ?? client).get<GetCatalogueResourceVersionResponses, GetCatalogueResourceVersionErrors, ThrowOnError>({ url: '/catalog/resources/{resourceId}/versions/{versionId}', ...options });
+
+/**
+ * Créer un nouvel instantané de métadonnées publiques.
+ *
+ * Permission content.write, CSRF et If-Match. Titre/résumé/document copiés dans la nouvelle révision ; snapshots publiés antérieurs inchangés. Le document legacy doit être converti explicitement avant cette action.
+ */
+export const saveContentMetadata = <ThrowOnError extends boolean = false>(options: Options<SaveContentMetadataData, ThrowOnError>): RequestResult<SaveContentMetadataResponses, SaveContentMetadataErrors, ThrowOnError> => (options.client ?? client).put<SaveContentMetadataResponses, SaveContentMetadataErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/contents/{id}/metadata',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});

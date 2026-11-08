@@ -8,8 +8,9 @@ import { createBrowserDatabase, stopBrowserDatabase } from './lib/browser-databa
 
 const env = environment();
 const phase = process.argv[2] ?? 'P01';
-if (!['P01', 'P02', 'P04', 'P05'].includes(phase)) throw new Error('Phase de recette inconnue : P01, P02, P04 ou P05 attendu.');
+if (!['P01', 'P02', 'P04', 'P05', 'P06'].includes(phase)) throw new Error('Phase de recette inconnue : P01, P02, P04, P05 ou P06 attendu.');
 const needsApi = phase !== 'P02';
+const isolatedDatabase = ['P05', 'P06'].includes(phase);
 if (!['local', 'test'].includes(env.APP_ENV)) throw new Error('Vérification navigateur réservée à local/test.');
 const port = (value, fallback) => {
   const text = value ?? String(fallback);
@@ -20,7 +21,7 @@ env.APP_PUBLIC_ORIGIN = `http://127.0.0.1:${port(env.BROWSER_WEB_PORT, 3101)}`;
 env.API_PORT = String(port(env.BROWSER_API_PORT, 8181));
 env.API_INTERNAL_URL = `http://127.0.0.1:${env.API_PORT}`;
 env.SPRING_PROFILES_ACTIVE = env.APP_ENV;
-for (const key of needsApi && phase !== 'P05' ? ['POSTGRES_DB', 'POSTGRES_USER', 'POSTGRES_PASSWORD'] : []) {
+for (const key of needsApi && !isolatedDatabase ? ['POSTGRES_DB', 'POSTGRES_USER', 'POSTGRES_PASSWORD'] : []) {
   if (!env[key]) throw new Error(`Configuration locale requise : ${key}.`);
 }
 const jar = join(root, 'apps/api/target/chatgpt-courses-api.jar');
@@ -132,7 +133,7 @@ const interrupted = new Promise((_, reject) => {
 });
 interrupted.catch(() => {}); // Also handle interruption during IPC initialization.
 try {
-  if (phase === 'P05') { database = await createBrowserDatabase(env, runDirectory, runId, (record) => { database = record; save(); }); save(); }
+  if (isolatedDatabase) { database = await createBrowserDatabase(env, runDirectory, runId, (record) => { database = record; save(); }); save(); }
   await new Promise((resolveListen, rejectListen) => {
     control.once('error', rejectListen);
     control.listen(ipc, resolveListen);
@@ -142,7 +143,7 @@ try {
     { cwd: join(root, 'apps/web') });
   await Promise.race([Promise.all([
     ...(needsApi ? [startApi()] : []),
-    ready(web, `${env.APP_PUBLIC_ORIGIN}/fr${phase === 'P02' ? '/dev/public' : ''}`),
+    ready(web, `${env.APP_PUBLIC_ORIGIN}/fr${phase === 'P02' ? '/dev/public' : phase === 'P01' ? '/dev/foundations' : ''}`),
   ]), interrupted]);
   const playwright = launch('playwright', process.execPath, [runner, 'test', '--config', join(root, 'playwright.config.ts')], {
     stdio: 'inherit',
@@ -171,7 +172,7 @@ try {
         await new Promise((resolveWait) => setTimeout(resolveWait, 200));
       }
       if (!started) throw new Error(`Instance ${appEnvironment} non disponible pour le contrôle d'exclusion.`);
-      for (const locale of ['fr', 'en']) for (const suffix of ['', '/components', '/public', '/learning', '/admin']) {
+      for (const locale of ['fr', 'en']) for (const suffix of ['', '/components', '/public', '/learning', '/admin', '/foundations']) {
         const path = `/${locale}/dev${suffix}`;
         const response = await fetch(`${env.APP_PUBLIC_ORIGIN}${path}`, { redirect: 'manual' });
         const body = await response.text();

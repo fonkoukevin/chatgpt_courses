@@ -305,6 +305,7 @@ export type ContentView = {
     frozenAt: UtcInstant | null;
     translations: Array<TranslationLink>;
     legacyBody: string | null;
+    metadata: PublicMetadata;
 };
 
 export type ContentSummary = {
@@ -338,6 +339,7 @@ export type RevisionView = {
     reason: string;
     replacesRevisionId: Uuid | null;
     legacyBody: string | null;
+    metadata: PublicMetadata;
 };
 
 export type ContentPage = {
@@ -429,6 +431,146 @@ export type PublicContent = {
     access: ContentAccess;
     document: PublicDocument | null;
     childResourceIds: Array<Uuid>;
+};
+
+/**
+ * Instantané append-only lié à la révision, jamais une offre. Vide explicite pour les révisions anciennes ; au plus16KiB UTF-8. evaluationDescription est une explication publique distincte de la définition canonique privée de l’évaluation.
+ */
+export type PublicMetadata = {
+    goalCodes: Array<'understand-brief' | 'define-scope' | 'prepare-prompt' | 'build-proposal' | 'check-output' | 'reuse-method'>;
+    level: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | null;
+    audience: Array<string>;
+    tools: Array<MetadataTool>;
+    sources: Array<MetadataSource>;
+    faq: Array<MetadataFaq>;
+    evaluationDescription: string | null;
+};
+
+/**
+ * URL facultative HTTPS sans credentials ou chemin interne simple ; jamais une URL à télécharger côté serveur.
+ */
+export type MetadataTool = {
+    name: string;
+    url: string | null;
+};
+
+export type MetadataSource = {
+    label: string;
+    url: string;
+};
+
+export type MetadataFaq = {
+    question: string;
+    answer: string;
+};
+
+/**
+ * Crée une nouvelle révision courante, même texte et version, état DRAFT. La publication précédente et ses métadonnées restent intactes.
+ */
+export type SaveMetadata = {
+    metadata: PublicMetadata;
+    reason: string;
+};
+
+/**
+ * Une carte correspond à la dernière version globalement publiée de l’identité, dans la langue disponible demandée. Aucun module isolé, brouillon, retrait ou traduction dépassée.
+ */
+export type ResourceCard = {
+    resourceId: Uuid;
+    kind: 'COURSE' | 'ACTIVITY' | 'GUIDE' | 'METHOD_TEMPLATE';
+    versionId: Uuid;
+    versionNumber: number;
+    revisionId: Uuid;
+    locale: Locale;
+    slug: string;
+    title: string;
+    summary: string;
+    objective: string;
+    expectedResult: string;
+    estimatedMinutes: number | null;
+    access: ContentAccess;
+    goalCodes: Array<'understand-brief' | 'define-scope' | 'prepare-prompt' | 'build-proposal' | 'check-output' | 'reuse-method'>;
+    level: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | null;
+    reviewedAt: UtcInstant | null;
+};
+
+export type CataloguePage = {
+    items: Array<ResourceCard>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+export type FacetOption = {
+    code: string;
+    label: string;
+    count: number;
+};
+
+/**
+ * Uniquement les valeurs réellement représentées dans des publications disponibles ; libellés FR/EN du serveur. Une catégorie vide n’est pas annoncée comme remplie.
+ */
+export type CatalogueFacets = {
+    types: Array<FacetOption>;
+    goals: Array<FacetOption>;
+    levels: Array<FacetOption>;
+    accesses: Array<FacetOption>;
+    locales: Array<FacetOption>;
+};
+
+/**
+ * Équivalent de la même identité/version, sans contenu emprunté à une autre publication.
+ */
+export type LanguageAvailability = {
+    locale: Locale;
+    status: 'PUBLISHED' | 'MISSING_TRANSLATION' | 'STALE' | 'WITHDRAWN';
+    slug: string | null;
+};
+
+/**
+ * versionId est exactement la child_version_id enregistrée dans la composition du parent. Ne jamais la remplacer par la dernière version globale de la ressource enfant. Les informations non publiées ne sont pas exposées.
+ */
+export type CurriculumNode = {
+    resourceId: Uuid;
+    kind: ContentKind;
+    versionId: Uuid;
+    versionNumber: number;
+    locale: Locale;
+    slug: string | null;
+    availability: 'PUBLISHED' | 'MISSING_TRANSLATION' | 'STALE' | 'WITHDRAWN';
+    revisionId: Uuid | null;
+    title: string | null;
+    summary: string | null;
+    access: ContentAccess | null;
+    estimatedMinutes: number | null;
+    children: Array<CurriculumNode>;
+};
+
+/**
+ * Tout provient de révisions réellement publiées. Document uniquement pour FREE+PUBLISHED, sans corrigés ni réponses ; PROTECTED n’expose que les champs descriptifs publics. MISSING_TRANSLATION/STALE/WITHDRAWN conservent le contexte d’identité/version et les équivalents, sans document ni métadonnées empruntés. reviewedAt est la revue de la publication, pas d’un prochain brouillon. Aucun auteur privé, droit personnel, prix ni fausse offre.
+ */
+export type ResourceDetail = {
+    resourceId: Uuid;
+    kind: ContentKind;
+    versionId: Uuid;
+    versionNumber: number;
+    locale: Locale;
+    slug: string | null;
+    availability: 'PUBLISHED' | 'MISSING_TRANSLATION' | 'STALE' | 'WITHDRAWN';
+    revisionId: Uuid | null;
+    title: string | null;
+    summary: string | null;
+    access: ContentAccess | null;
+    document: PublicDocument | null;
+    metadata: PublicMetadata;
+    reviewedAt: UtcInstant | null;
+    languages: Array<LanguageAvailability>;
+    curriculum: Array<CurriculumNode>;
+    related: Array<ResourceCard>;
+    objective: string | null;
+    expectedResult: string | null;
+    prerequisites: Array<string>;
+    estimatedMinutes: number | null;
 };
 
 export type RegisterRequestWritable = {
@@ -1775,3 +1917,298 @@ export type GetPublicContentResponses = {
 };
 
 export type GetPublicContentResponse = GetPublicContentResponses[keyof GetPublicContentResponses];
+
+export type SearchCatalogueData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * Langue demandée explicite ; aucun fallback silencieux.
+         */
+        locale: Locale;
+        q?: string;
+        type?: 'COURSE' | 'ACTIVITY' | 'GUIDE' | 'METHOD_TEMPLATE';
+        goal?: 'understand-brief' | 'define-scope' | 'prepare-prompt' | 'build-proposal' | 'check-output' | 'reuse-method';
+        level?: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
+        access?: ContentAccess;
+        page?: number;
+        pageSize?: number;
+        sort?: 'TITLE' | 'RECENT';
+    };
+    url: '/catalog';
+};
+
+export type SearchCatalogueErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type SearchCatalogueError = SearchCatalogueErrors[keyof SearchCatalogueErrors];
+
+export type SearchCatalogueResponses = {
+    /**
+     * Représentation publiée et autorisée, sans personnalisation privée.
+     */
+    200: CataloguePage;
+};
+
+export type SearchCatalogueResponse = SearchCatalogueResponses[keyof SearchCatalogueResponses];
+
+export type GetCatalogueFacetsData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * Langue demandée explicite ; aucun fallback silencieux.
+         */
+        locale: Locale;
+    };
+    url: '/catalog/facets';
+};
+
+export type GetCatalogueFacetsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetCatalogueFacetsError = GetCatalogueFacetsErrors[keyof GetCatalogueFacetsErrors];
+
+export type GetCatalogueFacetsResponses = {
+    /**
+     * Représentation publiée et autorisée, sans personnalisation privée.
+     */
+    200: CatalogueFacets;
+};
+
+export type GetCatalogueFacetsResponse = GetCatalogueFacetsResponses[keyof GetCatalogueFacetsResponses];
+
+export type GetCatalogueResourceData = {
+    body?: never;
+    path: {
+        resourceId: Uuid;
+    };
+    query: {
+        /**
+         * Langue demandée explicite ; aucun fallback silencieux.
+         */
+        locale: Locale;
+    };
+    url: '/catalog/resources/{resourceId}';
+};
+
+export type GetCatalogueResourceErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetCatalogueResourceError = GetCatalogueResourceErrors[keyof GetCatalogueResourceErrors];
+
+export type GetCatalogueResourceResponses = {
+    /**
+     * Représentation publiée et autorisée, sans personnalisation privée.
+     */
+    200: ResourceDetail;
+};
+
+export type GetCatalogueResourceResponse = GetCatalogueResourceResponses[keyof GetCatalogueResourceResponses];
+
+export type GetCatalogueResourceBySlugData = {
+    body?: never;
+    path: {
+        kind: 'COURSE' | 'ACTIVITY' | 'GUIDE' | 'METHOD_TEMPLATE';
+        slug: string;
+    };
+    query: {
+        /**
+         * Langue demandée explicite ; aucun fallback silencieux.
+         */
+        locale: Locale;
+    };
+    url: '/catalog/by-slug/{kind}/{slug}';
+};
+
+export type GetCatalogueResourceBySlugErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetCatalogueResourceBySlugError = GetCatalogueResourceBySlugErrors[keyof GetCatalogueResourceBySlugErrors];
+
+export type GetCatalogueResourceBySlugResponses = {
+    /**
+     * Représentation publiée et autorisée, sans personnalisation privée.
+     */
+    200: ResourceDetail;
+};
+
+export type GetCatalogueResourceBySlugResponse = GetCatalogueResourceBySlugResponses[keyof GetCatalogueResourceBySlugResponses];
+
+export type GetCatalogueResourceVersionData = {
+    body?: never;
+    path: {
+        resourceId: Uuid;
+        versionId: Uuid;
+    };
+    query: {
+        /**
+         * Langue demandée explicite ; aucun fallback silencieux.
+         */
+        locale: Locale;
+    };
+    url: '/catalog/resources/{resourceId}/versions/{versionId}';
+};
+
+export type GetCatalogueResourceVersionErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetCatalogueResourceVersionError = GetCatalogueResourceVersionErrors[keyof GetCatalogueResourceVersionErrors];
+
+export type GetCatalogueResourceVersionResponses = {
+    /**
+     * Représentation publiée et autorisée, sans personnalisation privée.
+     */
+    200: ResourceDetail;
+};
+
+export type GetCatalogueResourceVersionResponse = GetCatalogueResourceVersionResponses[keyof GetCatalogueResourceVersionResponses];
+
+export type SaveContentMetadataData = {
+    body: SaveMetadata;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/contents/{id}/metadata';
+};
+
+export type SaveContentMetadataErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type SaveContentMetadataError = SaveContentMetadataErrors[keyof SaveContentMetadataErrors];
+
+export type SaveContentMetadataResponses = {
+    /**
+     * Représentation publiée et autorisée, sans personnalisation privée.
+     */
+    200: ContentView;
+};
+
+export type SaveContentMetadataResponse = SaveContentMetadataResponses[keyof SaveContentMetadataResponses];

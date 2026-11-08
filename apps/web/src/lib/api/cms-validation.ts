@@ -1,4 +1,5 @@
 import { record } from "./auth-validation";
+import { isPublicMetadata } from "./public-validation";
 import type { ContentDocument, ContentPage, ContentSummary, ContentView, Dependencies, Readiness, RevisionPage, RevisionView } from "./generated/types.gen";
 
 export const isUuid = (value: unknown): value is string => typeof value === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
@@ -49,18 +50,18 @@ export function isContentSummary(value: unknown): value is ContentSummary {
     && commonContent(value) && typeof value.needsUpdate === "boolean";
 }
 export function isContentView(value: unknown): value is ContentView {
-  return record(value) && keys(value, ["id", "resourceId", "kind", "versionId", "versionNumber", "locale", "slug", "state", "revision", "currentRevisionId", "publishedRevisionId", "title", "summary", "objectives", "evaluationDefinition", "document", "childVersionIds", "sourceTranslationId", "sourceRevisionId", "reviewedSourceRevisionId", "verifiedAt", "updatedAt", "frozenAt", "translations", "legacyBody"])
+  return record(value) && keys(value, ["id", "resourceId", "kind", "versionId", "versionNumber", "locale", "slug", "state", "revision", "currentRevisionId", "publishedRevisionId", "title", "summary", "objectives", "evaluationDefinition", "document", "childVersionIds", "sourceTranslationId", "sourceRevisionId", "reviewedSourceRevisionId", "verifiedAt", "updatedAt", "frozenAt", "translations", "legacyBody", "metadata"])
     && commonContent(value) && isUuid(value.currentRevisionId) && nullableUuid(value.publishedRevisionId)
     && string(value.objectives) && string(value.evaluationDefinition) && (value.document === null || isContentDocument(value.document))
     && uuids(value.childVersionIds) && nullableUuid(value.sourceTranslationId) && nullableUuid(value.sourceRevisionId) && nullableUuid(value.reviewedSourceRevisionId)
-    && (value.legacyBody === null || string(value.legacyBody)) && nullableInstant(value.frozenAt) && Array.isArray(value.translations) && value.translations.every((translation) => record(translation)
+    && isPublicMetadata(value.metadata) && (value.legacyBody === null || string(value.legacyBody)) && nullableInstant(value.frozenAt) && Array.isArray(value.translations) && value.translations.every((translation) => record(translation)
       && keys(translation, ["id", "locale", "state", "sourceRevisionId", "reviewedSourceRevisionId"]) && isUuid(translation.id) && locale(translation.locale) && state(translation.state)
       && nullableUuid(translation.sourceRevisionId) && nullableUuid(translation.reviewedSourceRevisionId));
 }
 function isRevision(value: unknown): value is RevisionView {
-  return record(value) && keys(value, ["id", "revisionNumber", "title", "summary", "document", "authorId", "createdAt", "reason", "replacesRevisionId", "legacyBody"])
+  return record(value) && keys(value, ["id", "revisionNumber", "title", "summary", "document", "authorId", "createdAt", "reason", "replacesRevisionId", "legacyBody", "metadata"])
     && isUuid(value.id) && integer(value.revisionNumber) && string(value.title) && string(value.summary) && (value.document === null || isContentDocument(value.document))
-    && nullableUuid(value.authorId) && instant(value.createdAt) && string(value.reason) && nullableUuid(value.replacesRevisionId) && (value.legacyBody === null || string(value.legacyBody));
+    && isPublicMetadata(value.metadata) && nullableUuid(value.authorId) && instant(value.createdAt) && string(value.reason) && nullableUuid(value.replacesRevisionId) && (value.legacyBody === null || string(value.legacyBody));
 }
 function page(value: unknown, item: (value: unknown) => boolean): boolean {
   return record(value) && keys(value, ["items", "page", "size", "total"]) && Array.isArray(value.items) && value.items.length <= 100 && value.items.every(item)

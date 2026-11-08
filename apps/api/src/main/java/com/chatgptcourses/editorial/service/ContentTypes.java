@@ -5,6 +5,7 @@ import com.chatgptcourses.editorial.model.EditorialState;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
+import com.chatgptcourses.catalog.service.CatalogTypes.PublicMetadata;
 
 /** Explicit editorial contracts; no persistence entity is exposed through HTTP. */
 public final class ContentTypes {
@@ -32,7 +33,7 @@ public final class ContentTypes {
         String locale, String slug, EditorialState state, long revision, UUID currentRevisionId, UUID publishedRevisionId,
         String title, String summary, String objectives, String evaluationDefinition, ContentDocument document,
         List<UUID> childVersionIds, UUID sourceTranslationId, UUID sourceRevisionId, UUID reviewedSourceRevisionId,
-        Instant verifiedAt, Instant updatedAt, Instant frozenAt, List<TranslationLink> translations, String legacyBody) { }
+        Instant verifiedAt, Instant updatedAt, Instant frozenAt, List<TranslationLink> translations, String legacyBody, PublicMetadata metadata) { }
     public record TranslationLink(UUID id, String locale, EditorialState state, UUID sourceRevisionId, UUID reviewedSourceRevisionId) { }
     public record ContentSummary(UUID id, UUID resourceId, ResourceKind kind, UUID versionId, int versionNumber,
         String locale, String slug, EditorialState state, long revision, String title, String summary,
@@ -41,7 +42,7 @@ public final class ContentTypes {
         Instant verifiedBefore, Boolean needsUpdate, int page, int size) { }
     public record Page<T>(List<T> items, int page, int size, long total) { }
     public record RevisionView(UUID id, int revisionNumber, String title, String summary, ContentDocument document,
-        UUID authorId, Instant createdAt, String reason, UUID replacesRevisionId, String legacyBody) { }
+        UUID authorId, Instant createdAt, String reason, UUID replacesRevisionId, String legacyBody, PublicMetadata metadata) { }
     public record Issue(String code, String field, UUID resourceId, String action) { }
     public record Readiness(boolean ready, List<Issue> blockingIssues, List<Issue> warnings, UUID checkedRevision) { }
     public record Dependency(UUID resourceId, UUID versionId, ResourceKind kind, String title, String relation) { }

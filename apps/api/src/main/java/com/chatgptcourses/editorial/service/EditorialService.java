@@ -3,6 +3,9 @@ package com.chatgptcourses.editorial.service;
 import static com.chatgptcourses.editorial.service.ContentTypes.*;
 import static com.chatgptcourses.editorial.service.ContentValidation.*;
 import com.chatgptcourses.catalog.model.ResourceKind;
+import com.chatgptcourses.catalog.service.CatalogTypes.PublicMetadata;
+import com.chatgptcourses.catalog.service.CatalogTypes.SaveMetadata;
+import com.chatgptcourses.catalog.service.PublicMetadataStore;
 import com.chatgptcourses.editorial.model.EditorialState;
 import com.chatgptcourses.shared.http.ApiError;
 import com.chatgptcourses.shared.http.ApiException;
@@ -28,6 +31,7 @@ import tools.jackson.databind.ObjectMapper;
 public class EditorialService {
     private final JdbcTemplate jdbc;
     private final ObjectMapper mapper;
+    private final PublicMetadataStore publicMetadata;
     private static final String SELECT = """
         SELECT t.*,v.resource_id,v.version_number,v.objectives,v.evaluation_definition,v.frozen_at,r.kind,
           s.slug,e.title,e.summary,e.document_json::text AS document_text,e.body AS legacy_body
@@ -36,7 +40,7 @@ public class EditorialService {
         LEFT JOIN resource_slugs s ON s.resource_id=r.id AND s.locale=t.locale
         LEFT JOIN editorial_revisions e ON e.id=t.current_revision_id
         """;
-    public EditorialService(JdbcTemplate jdbc,ObjectMapper mapper) {this.jdbc=jdbc;this.mapper=mapper;}
+    public EditorialService(JdbcTemplate jdbc,ObjectMapper mapper) {this.jdbc=jdbc;this.mapper=mapper;this.publicMetadata=new PublicMetadataStore(jdbc,mapper);}
 
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
     public ContentView get(UUID actor,UUID id) {require(actor,"content.read");return view(row(id));}
@@ -92,13 +96,22 @@ public class EditorialService {
     }
 
     @Transactional
+    public ContentView metadata(UUID actor,UUID id,String ifMatch,SaveMetadata c) {
+        require(actor,"content.write");var old=locked(id,ifMatch);require(actor,"content.write");editable(old);check(c!=null);
+        text(c.reason(),1,1000);publicMetadata.validate(c.metadata());
+        if(old.document()==null)throw new ApiException(ApiError.CONTENT_NOT_READY);
+        append(id,old.title(),old.summary(),old.document(),actor,c.reason(),old.currentRevisionId(),c.metadata());
+        staleDependents(id,actor);event(id,actor,"REVISE",c.reason());return changed(id);
+    }
+
+    @Transactional
     public ContentView newVersion(UUID actor,UUID id,String ifMatch,NewVersion c) {
         require(actor,"content.write");var old=locked(id,ifMatch);require(actor,"content.write");editable(old);check(c!=null);
         header(c.title(),c.summary(),c.reason());pedagogy(c.objectives(),c.evaluationDefinition());document(c.document(),mapper);ids(c.childVersionIds(),100);
         Integer next=jdbc.queryForObject("SELECT coalesce(max(version_number),0)+1 FROM pedagogical_versions WHERE resource_id=?",Integer.class,old.resourceId());
         UUID version=createVersion(old.resourceId(),next,c.objectives(),c.evaluationDefinition(),old.versionId());
         setComposition(version,old.kind(),c.childVersionIds());UUID created=createTranslation(version,old.locale(),null,null);
-        append(created,c.title(),c.summary(),c.document(),actor,c.reason(),null);event(created,actor,"NEW_VERSION",c.reason());
+        UUID revision=append(created,c.title(),c.summary(),c.document(),actor,c.reason(),null);publicMetadata.copy(old.currentRevisionId(),revision);event(created,actor,"NEW_VERSION",c.reason());
         return changed(created);
     }
 
@@ -109,7 +122,7 @@ public class EditorialService {
         UUID resource=UUID.randomUUID();jdbc.update("INSERT INTO learning_resources(id,kind,duplicated_from_id) VALUES(?,?,?)",resource,old.kind().name(),old.resourceId());
         UUID version=createVersion(resource,1,old.objectives(),old.evaluationDefinition(),null);
         setComposition(version,old.kind(),children(old.versionId()));putSlug(resource,old.kind(),old.locale(),c.slug());
-        UUID created=createTranslation(version,old.locale(),null,null);append(created,c.title(),old.summary(),old.document(),actor,c.reason(),null);
+        UUID created=createTranslation(version,old.locale(),null,null);UUID revision=append(created,c.title(),old.summary(),old.document(),actor,c.reason(),null);publicMetadata.copy(old.currentRevisionId(),revision);
         event(created,actor,"DUPLICATE",c.reason());return changed(created);
     }
 
@@ -155,7 +168,7 @@ public class EditorialService {
         if(!Objects.equals(old.currentRevisionId(),c.revisionId()))throw new ApiException(ApiError.REVISION_CONFLICT);
         if(old.state()!=EditorialState.READY || !readiness(old,true).ready())throw new ApiException(ApiError.CONTENT_NOT_READY);
         if(old.frozenAt()==null)jdbc.update("UPDATE pedagogical_versions SET frozen_at=greatest(created_at,CURRENT_TIMESTAMP),revision=revision+1,updated_at=greatest(created_at,CURRENT_TIMESTAMP) WHERE id=?",old.versionId());
-        jdbc.update("UPDATE content_translations SET editorial_state='PUBLISHED',published_revision_id=?,revision=revision+1,updated_at=greatest(created_at,CURRENT_TIMESTAMP) WHERE id=?",c.revisionId(),id);
+        jdbc.update("UPDATE content_translations SET editorial_state='PUBLISHED',published_revision_id=?,published_verified_at=verified_at,published_source_revision_id=reviewed_source_revision_id,revision=revision+1,updated_at=greatest(created_at,CURRENT_TIMESTAMP) WHERE id=?",c.revisionId(),id);
         staleDependents(id,actor);event(id,actor,"PUBLISH",c.reason());return changed(id);
     }
 
@@ -184,7 +197,7 @@ public class EditorialService {
         require(actor,"content.read");row(id);page(page,size);
         long count=Objects.requireNonNull(jdbc.queryForObject("SELECT count(*) FROM editorial_revisions WHERE translation_id=?",Long.class,id));
         var revisions=jdbc.query("SELECT * FROM editorial_revisions WHERE translation_id=? ORDER BY revision_number DESC LIMIT ? OFFSET ?",
-            (rs,n)->new RevisionView(uuid(rs,"id"),rs.getInt("revision_number"),rs.getString("title"),rs.getString("summary"),decode(rs.getString("document_json")),uuid(rs,"author_id"),instant(rs,"created_at"),rs.getString("reason"),uuid(rs,"replaces_revision_id"),rs.getString("document_json")==null?rs.getString("body"):null),id,size,(long)page*size);
+            (rs,n)->new RevisionView(uuid(rs,"id"),rs.getInt("revision_number"),rs.getString("title"),rs.getString("summary"),decode(rs.getString("document_json")),uuid(rs,"author_id"),instant(rs,"created_at"),rs.getString("reason"),uuid(rs,"replaces_revision_id"),rs.getString("document_json")==null?rs.getString("body"):null,publicMetadata.get(uuid(rs,"id"))),id,size,(long)page*size);
         return new Page<>(revisions,page,size,count);
     }
 
@@ -209,7 +222,7 @@ public class EditorialService {
                 ContentDocument d=decode(rs.getString("document_text"));
                 if(d==null)throw new ApiException(ApiError.RESOURCE_NOT_FOUND);
                 boolean stale="STALE".equals(rs.getString("editorial_state")) || (uuid(rs,"source_translation_id")!=null &&
-                    (!Objects.equals(uuid(rs,"reviewed_source_revision_id"),uuid(rs,"source_current")) || "ARCHIVED".equals(rs.getString("source_state")) || "STALE".equals(rs.getString("source_state"))));
+                    (!Objects.equals(uuid(rs,"published_source_revision_id"),uuid(rs,"source_current")) || "ARCHIVED".equals(rs.getString("source_state")) || "STALE".equals(rs.getString("source_state"))));
                 List<UUID> childResources=jdbc.query("SELECT v.resource_id FROM version_compositions c JOIN pedagogical_versions v ON v.id=c.child_version_id WHERE c.parent_version_id=? ORDER BY c.position",(s,i)->uuid(s,"resource_id"),uuid(rs,"pedagogical_version_id"));
                 return new PublicContent(uuid(rs,"resource_id"),ResourceKind.valueOf(rs.getString("kind")),uuid(rs,"pedagogical_version_id"),rs.getInt("version_number"),locale,rs.getString("slug"),stale?"STALE":"PUBLISHED",uuid(rs,"published_revision_id"),rs.getString("title"),rs.getString("summary"),d.access(),!stale && "FREE".equals(d.access())?publicDocument(d):null,childResources);
             },resourceId,locale);
@@ -238,12 +251,12 @@ public class EditorialService {
         if(rows.isEmpty())throw new ApiException(ApiError.RESOURCE_NOT_FOUND);return rows.getFirst();
     }
     private ContentView mapRow(ResultSet rs)throws SQLException {
-        return new ContentView(uuid(rs,"id"),uuid(rs,"resource_id"),ResourceKind.valueOf(rs.getString("kind")),uuid(rs,"pedagogical_version_id"),rs.getInt("version_number"),rs.getString("locale"),rs.getString("slug"),EditorialState.valueOf(rs.getString("editorial_state")),rs.getLong("revision"),uuid(rs,"current_revision_id"),uuid(rs,"published_revision_id"),rs.getString("title"),rs.getString("summary"),rs.getString("objectives"),rs.getString("evaluation_definition"),decode(rs.getString("document_text")),List.of(),uuid(rs,"source_translation_id"),uuid(rs,"source_revision_id"),uuid(rs,"reviewed_source_revision_id"),instant(rs,"verified_at"),instant(rs,"updated_at"),instant(rs,"frozen_at"),List.of(),rs.getString("document_text")==null?rs.getString("legacy_body"):null);
+        return new ContentView(uuid(rs,"id"),uuid(rs,"resource_id"),ResourceKind.valueOf(rs.getString("kind")),uuid(rs,"pedagogical_version_id"),rs.getInt("version_number"),rs.getString("locale"),rs.getString("slug"),EditorialState.valueOf(rs.getString("editorial_state")),rs.getLong("revision"),uuid(rs,"current_revision_id"),uuid(rs,"published_revision_id"),rs.getString("title"),rs.getString("summary"),rs.getString("objectives"),rs.getString("evaluation_definition"),decode(rs.getString("document_text")),List.of(),uuid(rs,"source_translation_id"),uuid(rs,"source_revision_id"),uuid(rs,"reviewed_source_revision_id"),instant(rs,"verified_at"),instant(rs,"updated_at"),instant(rs,"frozen_at"),List.of(),rs.getString("document_text")==null?rs.getString("legacy_body"):null,publicMetadata.get(uuid(rs,"current_revision_id")));
     }
     private ContentView view(ContentView v) {
         var links=jdbc.query("SELECT id,locale,editorial_state,source_revision_id,reviewed_source_revision_id FROM content_translations WHERE pedagogical_version_id=? ORDER BY locale",
             (rs,n)->new TranslationLink(uuid(rs,"id"),rs.getString("locale"),EditorialState.valueOf(rs.getString("editorial_state")),uuid(rs,"source_revision_id"),uuid(rs,"reviewed_source_revision_id")),v.versionId());
-        return new ContentView(v.id(),v.resourceId(),v.kind(),v.versionId(),v.versionNumber(),v.locale(),v.slug(),v.state(),v.revision(),v.currentRevisionId(),v.publishedRevisionId(),v.title(),v.summary(),v.objectives(),v.evaluationDefinition(),v.document(),children(v.versionId()),v.sourceTranslationId(),v.sourceRevisionId(),v.reviewedSourceRevisionId(),v.verifiedAt(),v.updatedAt(),v.frozenAt(),links,v.legacyBody());
+        return new ContentView(v.id(),v.resourceId(),v.kind(),v.versionId(),v.versionNumber(),v.locale(),v.slug(),v.state(),v.revision(),v.currentRevisionId(),v.publishedRevisionId(),v.title(),v.summary(),v.objectives(),v.evaluationDefinition(),v.document(),children(v.versionId()),v.sourceTranslationId(),v.sourceRevisionId(),v.reviewedSourceRevisionId(),v.verifiedAt(),v.updatedAt(),v.frozenAt(),links,v.legacyBody(),v.metadata());
     }
     private ContentSummary summary(ContentView v) {return new ContentSummary(v.id(),v.resourceId(),v.kind(),v.versionId(),v.versionNumber(),v.locale(),v.slug(),v.state(),v.revision(),v.title(),v.summary(),v.verifiedAt(),v.updatedAt(),v.state()==EditorialState.STALE);}
     private ContentView changed(UUID id) {
@@ -263,14 +276,19 @@ public class EditorialService {
         if(!found.isEmpty()){if(!found.getFirst().equals(value))throw new ApiException(ApiError.CONFLICT);return;}
         jdbc.update("INSERT INTO resource_slugs(id,resource_id,resource_kind,locale,slug) VALUES(?,?,?,?,?)",UUID.randomUUID(),resource,kind.name(),locale,value);
     }
-    private void append(UUID id,String title,String summary,ContentDocument d,UUID actor,String reason,UUID replaces) {
+    private UUID append(UUID id,String title,String summary,ContentDocument d,UUID actor,String reason,UUID replaces) {
+        return append(id,title,summary,d,actor,reason,replaces,null);
+    }
+    private UUID append(UUID id,String title,String summary,ContentDocument d,UUID actor,String reason,UUID replaces,PublicMetadata suppliedMetadata) {
         for(UUID resource:d.relatedResourceIds()) {
             if(!Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM learning_resources WHERE id=?)",Boolean.class,resource)))throw new ApiException(ApiError.VALIDATION_FAILED);
         }
         UUID revision=UUID.randomUUID();int number=Objects.requireNonNull(jdbc.queryForObject("SELECT coalesce(max(revision_number),0)+1 FROM editorial_revisions WHERE translation_id=?",Integer.class,id));
         jdbc.update("INSERT INTO editorial_revisions(id,translation_id,revision_number,title,summary,body,author_id,document_json,reason,replaces_revision_id) VALUES(?,?,?,?,?,'',?,?::jsonb,?,?)",revision,id,number,title,summary,actor,mapper.writeValueAsString(d),reason,replaces);
         for(UUID resource:d.relatedResourceIds())jdbc.update("INSERT INTO editorial_resource_references(revision_id,resource_id) VALUES(?,?)",revision,resource);
+        if(suppliedMetadata!=null)publicMetadata.put(revision,suppliedMetadata);else publicMetadata.copy(replaces,revision);
         jdbc.update("UPDATE content_translations SET current_revision_id=?,editorial_state='DRAFT',reviewed_revision_id=NULL,revision=revision+1,updated_at=greatest(created_at,CURRENT_TIMESTAMP) WHERE id=?",revision,id);
+        return revision;
     }
     private void event(UUID id,UUID actor,String type,String reason) {
         jdbc.update("INSERT INTO editorial_events(id,translation_id,revision_id,actor_id,event_type,reason) SELECT ?,id,current_revision_id,?,?,? FROM content_translations WHERE id=?",UUID.randomUUID(),actor,type,reason,id);

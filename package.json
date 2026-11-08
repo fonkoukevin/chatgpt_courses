@@ -39,6 +39,7 @@
     "verify:browser": "node scripts/verify-browser.mjs",
     "verify:identity": "node scripts/verify-browser.mjs P04",
     "verify:editorial": "node scripts/verify-browser.mjs P05",
+    "verify:public": "node scripts/verify-browser.mjs P06",
     "verify:design": "node scripts/verify-browser.mjs P02",
     "verify:contrast": "node scripts/verify-contrast.mjs",
     "browser:install": "node scripts/install-browser.mjs",

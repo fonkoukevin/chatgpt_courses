@@ -38,7 +38,7 @@ for (const width of [1440, 390, 320]) {
       const pageErrors: string[] = [];
       page.on('pageerror', (error) => pageErrors.push(error.message));
       await page.setViewportSize({ width, height: width === 1440 ? 1000 : 844 });
-      const navigation = await page.goto(`/${locale}`);
+      const navigation = await page.goto(`/${locale}/dev/foundations`);
       expect(navigation?.status()).toBe(200);
       await expect(page.locator('html')).toHaveAttribute('lang', locale);
       await expect(page.getByRole('heading', { level: 1 })).toHaveText(copy.heading);
@@ -48,7 +48,7 @@ for (const width of [1440, 390, 320]) {
       await page.keyboard.press('Tab');
       await expect(page.getByRole('link', { name: copy.skip })).toBeFocused();
       await page.keyboard.press('Enter');
-      await expect(page).toHaveURL(new RegExp(`/${locale}#main-content$`));
+      await expect(page).toHaveURL(new RegExp(`/${locale}/dev/foundations#main-content$`));
       await expect(page.getByRole('main')).toBeFocused();
       await page.keyboard.press('Tab');
       await expect(page.getByRole('button', { name: copy.check, exact: true })).toBeFocused();
@@ -98,7 +98,7 @@ test('panne réelle de l’API, interface disponible et reprise FR/EN', async ({
     for (const locale of ['fr', 'en'] as const) {
       const page = await context.newPage();
       pages.push({ page, locale });
-      const navigation = await page.goto(`/${locale}`);
+      const navigation = await page.goto(`/${locale}/dev/foundations`);
       expect(navigation?.status()).toBe(200); // Next stays running while Spring is stopped.
       const health = responseFor(page, 'health');
       await page.getByRole('button', { name: labels[locale].check, exact: true }).click();

@@ -1,6 +1,7 @@
 package com.chatgptcourses.editorial.http;
 
 import com.chatgptcourses.catalog.model.ResourceKind;
+import com.chatgptcourses.catalog.http.CatalogDtos;
 import com.chatgptcourses.editorial.model.EditorialState;
 import com.chatgptcourses.editorial.service.ContentTypes;
 import jakarta.validation.Valid;
@@ -116,11 +117,11 @@ public final class EditorialDtos {
                           String slug, EditorialState state, long revision, UUID currentRevisionId, UUID publishedRevisionId,
                           String title, String summary, String objectives, String evaluationDefinition, Document document,
                           List<UUID> childVersionIds, UUID sourceTranslationId, UUID sourceRevisionId, UUID reviewedSourceRevisionId,
-                          Instant verifiedAt, Instant updatedAt, Instant frozenAt, List<TranslationLink> translations, String legacyBody) {
+                          Instant verifiedAt, Instant updatedAt, Instant frozenAt, List<TranslationLink> translations, String legacyBody, CatalogDtos.Metadata metadata) {
         static Content from(ContentTypes.ContentView value) {
             return new Content(value.id(), value.resourceId(), value.kind(), value.versionId(), value.versionNumber(), value.locale(), value.slug(), value.state(),
                     value.revision(), value.currentRevisionId(), value.publishedRevisionId(), value.title(), value.summary(), value.objectives(), value.evaluationDefinition(),
-                    Document.from(value.document()), value.childVersionIds(), value.sourceTranslationId(), value.sourceRevisionId(), value.reviewedSourceRevisionId(), value.verifiedAt(), value.updatedAt(), value.frozenAt(), value.translations().stream().map(TranslationLink::from).toList(), value.legacyBody());
+                    Document.from(value.document()), value.childVersionIds(), value.sourceTranslationId(), value.sourceRevisionId(), value.reviewedSourceRevisionId(), value.verifiedAt(), value.updatedAt(), value.frozenAt(), value.translations().stream().map(TranslationLink::from).toList(), value.legacyBody(), CatalogDtos.Metadata.from(value.metadata()));
         }
         @Override public String toString() { return "ContentView[redacted]"; }
     }
@@ -134,8 +135,8 @@ public final class EditorialDtos {
     }
     public record Page<T>(List<T> items, int page, int size, long total) { }
     public record Revision(UUID id, int revisionNumber, String title, String summary, Document document, UUID authorId,
-                           Instant createdAt, String reason, UUID replacesRevisionId, String legacyBody) {
-        static Revision from(ContentTypes.RevisionView value) { return new Revision(value.id(), value.revisionNumber(), value.title(), value.summary(), Document.from(value.document()), value.authorId(), value.createdAt(), value.reason(), value.replacesRevisionId(), value.legacyBody()); }
+                           Instant createdAt, String reason, UUID replacesRevisionId, String legacyBody, CatalogDtos.Metadata metadata) {
+        static Revision from(ContentTypes.RevisionView value) { return new Revision(value.id(), value.revisionNumber(), value.title(), value.summary(), Document.from(value.document()), value.authorId(), value.createdAt(), value.reason(), value.replacesRevisionId(), value.legacyBody(), CatalogDtos.Metadata.from(value.metadata())); }
         @Override public String toString() { return "RevisionView[redacted]"; }
     }
     public record Issue(String code, String field, UUID resourceId, String action) {
@@ -156,7 +157,7 @@ public final class EditorialDtos {
     public record PublicDocument(String objective, String expectedResult, List<String> prerequisites, List<Block> blocks,
                                  Integer estimatedMinutes, String exerciseInstructions, List<PublicQuiz> quiz, List<Rubric> rubric,
                                  String access, List<Media> media, List<UUID> relatedResourceIds) {
-        static PublicDocument from(ContentTypes.PublicDocument value) {
+        public static PublicDocument from(ContentTypes.PublicDocument value) {
             return value == null ? null : new PublicDocument(value.objective(), value.expectedResult(), value.prerequisites(), value.blocks().stream().map(Block::from).toList(), value.estimatedMinutes(), value.exerciseInstructions(), value.quiz().stream().map(PublicQuiz::from).toList(), value.rubric().stream().map(Rubric::from).toList(), value.access(), value.media().stream().map(Media::from).toList(), value.relatedResourceIds());
         }
     }

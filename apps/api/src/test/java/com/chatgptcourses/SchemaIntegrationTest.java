@@ -63,7 +63,7 @@ class SchemaIntegrationTest {
 
     @Test @Order(1)
     void aFreshDatabaseMigratesAndHibernateValidatesWithoutSeedingAccountsOrCommerce() {
-        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004");
+        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_accounts", Integer.class)).isZero();
         assertThat(jdbc.queryForList("SELECT code FROM roles ORDER BY code", String.class)).containsExactly("EDITOR", "LEARNER");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_roles", Integer.class)).isZero();
@@ -99,7 +99,7 @@ class SchemaIntegrationTest {
             var database = new JdbcTemplate(new SingleConnectionDataSourceAdapter(connection));
             assertThat(database.queryForObject("SELECT session_id FROM spring_session WHERE primary_id = ?", String.class, primaryId)).isEqualTo(sessionId);
             assertThat(database.queryForObject("SELECT encode(attribute_bytes, 'hex') FROM spring_session_attributes WHERE session_primary_id = ?", String.class, primaryId)).isEqualTo("010203");
-            assertThat(database.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004");
+            assertThat(database.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005");
         }
     }
 
@@ -330,6 +330,22 @@ class SchemaIntegrationTest {
         connection.setSchema(schema);
         return connection;
     }
+    @Test @Order(9)
+    void databaseExceptionsKeepSqlStateWithoutLeakingFailingRowDetails() throws Exception {
+        var privateEmail = "Private." + UUID.randomUUID() + "@example.test";
+        var privateHash = "synthetic-private-hash-" + UUID.randomUUID();
+        try (var connection = dataSource.getConnection();
+             var statement = connection.prepareStatement("INSERT INTO user_accounts(id,normalized_email,password_hash,status) VALUES (?,?,?,'ACTIVE')")) {
+            statement.setObject(1, UUID.randomUUID());
+            statement.setString(2, privateEmail);
+            statement.setString(3, privateHash);
+            var failure = catchThrowable(statement::executeUpdate);
+            assertThat(failure).isInstanceOf(SQLException.class);
+            assertThat(((SQLException) failure).getSQLState()).isEqualTo("23514");
+            assertThat(failure.getMessage()).doesNotContain(privateEmail, privateHash, "Failing row");
+        }
+    }
+
     private void insertUser(UUID id, String email) {
         jdbc.update("INSERT INTO user_accounts(id,normalized_email,password_hash,status) VALUES (?,?,'synthetic-test-hash','ACTIVE')", id, email);
     }

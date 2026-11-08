@@ -19,6 +19,7 @@ import { cmsNavigation, CmsError, formatCmsInstant } from "./parts";
 import { DocumentPreview } from "./preview";
 import { ReadinessPanel } from "./readiness";
 import { ChildVersionPicker } from "./child-version-picker";
+import { MetadataEditor } from "./metadata-editor";
 
 type Props = { locale: Locale; initial: AuthResult<ContentView>; initialReadiness: AuthResult<Readiness>; initialDependencies: AuthResult<Dependencies>; permissions: string[] };
 const editable = (content: ContentView): LocalContent => ({ title: content.title, summary: content.summary, document: content.document ?? emptyDocument(), reason: "" });
@@ -44,10 +45,12 @@ function EditorReady({ locale, initial, initialEtag, initialReadiness, initialDe
   const [history, setHistory] = useState<AuthResult<RevisionPage> | null>(null); const [historyPending, setHistoryPending] = useState(false);
   const [reasonMissing, setReasonMissing] = useState(false); const [resetKey, setResetKey] = useState(0);
   const [legacyBody, setLegacyBody] = useState(initial.legacyBody); const [legacyPending, setLegacyPending] = useState(initial.document === null);
+  const [metadataDirty, setMetadataDirty] = useState(false);
   const lock = useRef(false); const requestId = useRef(0); const checkId = useRef(0); const historyId = useRef(0); const conflictId = useRef(0); const minimumRevision = useRef(initial.revision); const errorBox = useRef<HTMLDivElement>(null);
   const canWrite = permissions.includes("content.write"); const saving = session.activeRequest !== null;
   const compositionDirty = JSON.stringify(childrenDraft) !== JSON.stringify(content.childVersionIds);
-  const dirty = session.phase !== "saved" || compositionDirty;
+  const bodyDirty = session.phase !== "saved" || compositionDirty;
+  const dirty = bodyDirty || metadataDirty;
   const rememberChildLabels = useCallback((labels: Record<string, string>) => {
     setChildLabels((previous) => Object.entries(labels).some(([id, label]) => previous[id] !== label) ? { ...previous, ...labels } : previous);
   }, []);
@@ -82,7 +85,7 @@ function EditorReady({ locale, initial, initialEtag, initialReadiness, initialDe
   }
   function showError(value: ApiError) { setError(value); requestAnimationFrame(() => errorBox.current?.focus()); }
   async function save(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault(); if (lock.current || !canWrite || session.phase === "conflict") return;
+    event.preventDefault(); if (lock.current || metadataDirty || !canWrite || session.phase === "conflict") return;
     if (!session.value.reason.trim()) { setReasonMissing(true); document.getElementById("cms-reason")?.focus(); return; }
     setReasonMissing(false); setError(null); lock.current = true;
     const pending = beginSave(session, ++requestId.current); setSession(pending.state);
@@ -108,7 +111,7 @@ function EditorReady({ locale, initial, initialEtag, initialReadiness, initialDe
     const result = await listContentRevisions(content.id, page);
     if (sequence === historyId.current) { setHistory(result); setHistoryPending(false); }
   }
-  function applyOperation(value: ContentView, etag: string, mode: ContentActionMode) {
+  function applyOperation(value: ContentView, etag: string, mode: ContentActionMode | "metadata") {
     conflictId.current++; checkId.current++; historyId.current++; setHistory(null); minimumRevision.current = Math.max(minimumRevision.current, value.revision);
     if (["duplicate", "version", "translate"].includes(mode)) {
       // A new version explicitly includes the current local document. The modal
@@ -143,7 +146,7 @@ function EditorReady({ locale, initial, initialEtag, initialReadiness, initialDe
     document.getElementById("cms-title")?.focus();
   }
   const action = (mode: ContentActionMode, extraDisabled = false) => <ContentAction key={mode} locale={locale} mode={mode} content={content} etag={session.etag} draft={session.value} childrenDraft={childrenDraft}
-    disabled={saving || extraDisabled || (mode !== "version" && mode !== "composition" && dirty) || (mode === "composition" && session.phase !== "saved")}
+    disabled={saving || metadataDirty || extraDisabled || (mode !== "version" && mode !== "composition" && dirty) || (mode === "composition" && session.phase !== "saved")}
     onResult={applyOperation} onConflict={() => { setSession((state) => ({ ...state, phase: "conflict" })); void loadConflict(); }} />;
 
   return <AdminLayout locale={locale} title={text.edit} description={text.versionHelp} product={cmsNavigation(locale, content.id)}>
@@ -160,6 +163,7 @@ function EditorReady({ locale, initial, initialEtag, initialReadiness, initialDe
         {conflict?.ok && <div className="flex flex-wrap gap-3"><ConfirmationDialog title={text.reload} description={text.reloadHelp} confirmLabel={text.confirm} cancelLabel={text.cancel} destructive={false} trigger={<Button variant="secondary" className="max-w-full whitespace-normal">{text.reload}</Button>} onConfirm={loadServerVersion} /><ConfirmationDialog title={text.keepLocal} description={text.keepLocalHelp} confirmLabel={text.confirm} cancelLabel={text.cancel} destructive={false} trigger={<Button variant="secondary" className="max-w-full whitespace-normal">{text.keepLocal}</Button>} onConfirm={keepLocal} /></div>}
       </section>}
       {content.frozenAt && <StatusMessage tone="info">{text.frozen}</StatusMessage>}
+      <fieldset disabled={metadataDirty} className="min-w-0 space-y-7">
       {legacyPending && <section className="space-y-4"><StatusMessage tone="warning">{text.legacyHelp}</StatusMessage>{legacyBody && <><FormField id="cms-legacy-body" label={text.legacy}><TextArea readOnly rows={10} value={legacyBody} /></FormField>{canWrite && <Button variant="secondary" onClick={() => update("document", { ...session.value.document, blocks: [...session.value.document.blocks, { type: "PARAGRAPH", text: legacyBody, url: null }] })}>{text.importLegacy}</Button>}</>}</section>}
       <form noValidate onSubmit={(event) => void save(event)} className="space-y-6" aria-busy={saving}>
         <FormField id="cms-title" label={text.contentTitle} required><Input name="title" maxLength={240} value={session.value.title} readOnly={!canWrite} onChange={(event) => update("title", event.target.value)} /></FormField>
@@ -176,6 +180,8 @@ function EditorReady({ locale, initial, initialEtag, initialReadiness, initialDe
         </div>)}
         {canWrite && !content.frozenAt && <div className="flex flex-wrap gap-3"><Button variant="secondary" onClick={() => setChildrenDraft((items) => [...items, ""])} disabled={childrenDraft.length >= 100}>{text.addChild}</Button>{action("composition", !compositionDirty)}</div>}
       </section>}
+      </fieldset>
+      {canWrite && <MetadataEditor key={content.id} locale={locale} content={content} etag={session.etag} disabled={bodyDirty || saving || legacyPending} onDirtyChange={setMetadataDirty} onSaved={(value, etag) => applyOperation(value, etag, "metadata")} />}
       <section className="space-y-3 rounded-panel border border-border p-4 sm:p-6"><h2 className="text-xl font-semibold">{text.translations}</h2><ul className="space-y-3">{content.translations.map((translation) => <li key={translation.id} className="flex flex-wrap items-center gap-3"><Link prefetch={false} href={cmsPath(locale, translation.id)}>{translation.locale.toUpperCase()}</Link><Badge>{text.state[translation.state]}</Badge></li>)}</ul>{content.sourceTranslationId && <p><Link prefetch={false} href={cmsPath(locale, content.sourceTranslationId, "preview")} target="_blank" rel="noreferrer">{text.source}</Link></p>}{content.state === "STALE" && content.sourceTranslationId && <StatusMessage tone="warning">{text.sourceChanged}</StatusMessage>}</section>
       <ReadinessPanel locale={locale} value={readiness} content={content} dirty={dirty} current={readinessEtag === session.etag} pending={checking} refresh={() => void check()} />
       <section className="flex flex-wrap gap-3" aria-label={text.status}>
@@ -186,7 +192,7 @@ function EditorReady({ locale, initial, initialEtag, initialReadiness, initialDe
       </section>
       <section className="space-y-5 rounded-panel border border-border p-4 sm:p-6"><h2 className="text-xl font-semibold">{text.history}</h2><Button variant="secondary" busy={historyPending} onClick={() => void loadHistory()} loadingLabel={text.loading}>{text.history}</Button>
         {history && !history.ok && <CmsError error={history.error} locale={locale} returnTo={cmsPath(locale, content.id)} />}
-        {history?.ok && <>{history.data.items.length === 0 && <p>{text.historyEmpty}</p>}<ol className="space-y-5">{history.data.items.map((revision) => <li key={revision.id} className="space-y-3 rounded-input border border-border p-4"><h3 className="font-semibold">{text.revision} {revision.revisionNumber} · {revision.title}</h3><p className="text-sm text-muted-foreground">{formatCmsInstant(revision.createdAt, locale)}</p><p className="whitespace-pre-wrap text-sm">{revision.reason}</p><p className="break-words text-sm text-muted-foreground">{text.author}: {revision.authorId ?? text.noAuthor}</p>{canWrite && <Button variant="secondary" disabled={saving} onClick={() => restore(revision)}>{text.restoreRevision}</Button>}</li>)}</ol>
+        {history?.ok && <>{history.data.items.length === 0 && <p>{text.historyEmpty}</p>}<ol className="space-y-5">{history.data.items.map((revision) => <li key={revision.id} className="space-y-3 rounded-input border border-border p-4"><h3 className="font-semibold">{text.revision} {revision.revisionNumber} · {revision.title}</h3><p className="text-sm text-muted-foreground">{formatCmsInstant(revision.createdAt, locale)}</p><p className="whitespace-pre-wrap text-sm">{revision.reason}</p><p className="break-words text-sm text-muted-foreground">{text.author}: {revision.authorId ?? text.noAuthor}</p>{canWrite && <Button variant="secondary" disabled={saving || metadataDirty} onClick={() => restore(revision)}>{text.restoreRevision}</Button>}</li>)}</ol>
           {history.data.total > history.data.size && <Pagination page={history.data.page + 1} totalPages={Math.ceil(history.data.total / history.data.size)} label={text.history} previousLabel={text.previous} nextLabel={text.next} pageLabel={text.page} onPageChange={(page) => void loadHistory(page - 1)} />}</>}
       </section>
     </div>

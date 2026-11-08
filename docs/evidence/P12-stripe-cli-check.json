@@ -1,0 +1,13 @@
+{
+  "verifiedAt": "2026-11-08T13:57:10.409Z",
+  "cliVersion": "1.55.8",
+  "archiveSha256Verified": true,
+  "officialChecksumManifestVerified": true,
+  "configuredAccountPreviouslyVerified": true,
+  "testMode": true,
+  "signingSecretRetrieved": true,
+  "secretStoredInIgnoredFile": true,
+  "secretValuesPrinted": false,
+  "forwardingListenerStarted": false,
+  "checkoutCreated": false
+}

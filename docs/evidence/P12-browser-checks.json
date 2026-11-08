@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-11-08T12:42:50.696Z",
+  "exportedAt": "2026-11-08T14:07:51.223Z",
   "runs": [
     {
       "runId": "2026-11-08T10-54-55-476Z-22027de7-00b6-46b2-b64e-38d4fbc11eb8",
@@ -176,9 +176,41 @@
       "cleanupConfirmed": true,
       "externalStripe": false,
       "pngCount": 27
+    },
+    {
+      "runId": "2026-11-08T13-49-28-101Z-306970e1-d7e8-4ac6-851f-9e85d56c5cfa",
+      "selection": {
+        "grep": "0[12] ·",
+        "repeatEach": 3
+      },
+      "result": "passed",
+      "durationMs": 232084.324,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "cleanupConfirmed": true,
+      "externalStripe": false,
+      "pngCount": 14
+    },
+    {
+      "runId": "2026-11-08T13-55-21-225Z-0c1f37f5-1b92-4ab7-80d5-9cfe30bdbc9e",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "result": "passed",
+      "durationMs": 128288.47,
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "cleanupConfirmed": true,
+      "externalStripe": false,
+      "pngCount": 27
     }
   ],
   "phaseClosed": false,
   "openAccessIncident": true,
-  "externalStripeExecuted": false
+  "externalStripeInBrowserRuns": false
 }

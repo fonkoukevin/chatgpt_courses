@@ -1,0 +1,20 @@
+{
+  "externalStripe": true,
+  "testMode": true,
+  "testAmountMinor": 100,
+  "currency": "EUR",
+  "stage": "hosted-email",
+  "result": "failed",
+  "bearerUrlsWritten": false,
+  "secretsPrinted": false,
+  "orderId": "f9e8ccfe-8832-4aec-a0a5-44bb41820a80",
+  "offerId": "bcb5668f-0d0d-48b8-bf69-85b299b21ed6",
+  "resourceId": "cb90c1d4-f63c-40ff-bc58-705b64d01812",
+  "versionId": "b06ce19f-d52c-4b1f-b5d4-74068874da84",
+  "forgedReturnCreatesNoGrant": true,
+  "sessionId": "cs_test_a1UObEmRg8xU62bI4EXdhSfU6saXoaejWIVhucTmhnict8uzSIOLHSRaea",
+  "amountMinor": 100,
+  "operationId": "ac899211-c18a-4c13-89e3-e5f9b10507b1",
+  "secondCheckoutReusesSameSession": true,
+  "failedAt": "2026-11-08T17:57:19.291Z"
+}

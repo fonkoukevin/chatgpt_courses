@@ -1,0 +1,96 @@
+{
+  "externalStripe": true,
+  "testMode": true,
+  "testAmountMinor": 100,
+  "currency": "EUR",
+  "stage": "hosted-card-number",
+  "result": "failed",
+  "bearerUrlsWritten": false,
+  "secretsPrinted": false,
+  "orderId": "ac6715e9-4f30-49c5-ba13-61fab8b9a3a4",
+  "offerId": "3d6713f0-a627-4fa6-8c26-2e163a4c7bab",
+  "resourceId": "0ea2eb05-e7c6-4044-86fd-b889c33306f2",
+  "versionId": "634fb0f2-8359-4fa1-a22c-a22d305b343d",
+  "forgedReturnCreatesNoGrant": true,
+  "sessionId": "cs_test_a1VCKH5OuXw5CGm7l0866ITfBJQ3nqX6ormPrYJVxjfs72Xk1x4oNj7N0E",
+  "amountMinor": 100,
+  "operationId": "2d67fb6b-7e0e-443a-909f-c938f08db1ba",
+  "secondCheckoutReusesSameSession": true,
+  "hostedFieldDiagnostics": [
+    {
+      "stripeFrame": true,
+      "inputs": [
+        {
+          "name": "email",
+          "type": "text",
+          "visible": true,
+          "readOnly": false,
+          "disabled": false
+        },
+        {
+          "name": "unclassified",
+          "type": "checkbox",
+          "visible": true,
+          "readOnly": false,
+          "disabled": false
+        },
+        {
+          "name": "unclassified",
+          "type": "text",
+          "visible": true,
+          "readOnly": false,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "stripeFrame": true,
+      "inputs": []
+    },
+    {
+      "stripeFrame": true,
+      "inputs": []
+    },
+    {
+      "stripeFrame": true,
+      "inputs": []
+    },
+    {
+      "stripeFrame": true,
+      "inputs": []
+    },
+    {
+      "stripeFrame": true,
+      "inputs": []
+    },
+    {
+      "stripeFrame": true,
+      "inputs": []
+    },
+    {
+      "stripeFrame": true,
+      "inputs": []
+    },
+    {
+      "stripeFrame": false,
+      "inputs": []
+    },
+    {
+      "stripeFrame": true,
+      "inputs": []
+    },
+    {
+      "stripeFrame": false,
+      "inputs": []
+    },
+    {
+      "stripeFrame": false,
+      "inputs": []
+    },
+    {
+      "stripeFrame": false,
+      "inputs": []
+    }
+  ],
+  "failedAt": "2026-11-08T17:59:52.262Z"
+}

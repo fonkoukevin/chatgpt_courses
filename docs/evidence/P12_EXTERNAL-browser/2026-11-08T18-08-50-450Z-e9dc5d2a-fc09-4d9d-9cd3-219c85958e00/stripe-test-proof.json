@@ -1,0 +1,45 @@
+{
+  "externalStripe": true,
+  "testMode": true,
+  "testAmountMinor": 100,
+  "currency": "EUR",
+  "stage": "provider-replay",
+  "result": "failed",
+  "bearerUrlsWritten": false,
+  "secretsPrinted": false,
+  "orderId": "649ad30e-2472-44d8-a4d9-c2cdec501c7e",
+  "offerId": "161e7661-6b4a-4da3-bfcb-8ab67e357fbb",
+  "resourceId": "6941b7bf-84d1-4108-ab3b-df655bf6c7e4",
+  "versionId": "56a3ba2a-b5b8-4d9d-b652-1011de5c9f7c",
+  "forgedReturnCreatesNoGrant": true,
+  "sessionId": "cs_test_a1YvZ1XRR9RaBMRW9XmX9hAk1wZfq2f13l1IWku9GpY7VXbdowCul3kn4b",
+  "amountMinor": 100,
+  "operationId": "ad43f9e3-a287-414f-8c1a-d25fd6324a64",
+  "checkoutOperationExists": true,
+  "secondCheckoutReusesSameSession": true,
+  "hostedKeyboardSteps": [
+    {
+      "tag": "BUTTON",
+      "role": null,
+      "type": "button"
+    }
+  ],
+  "hostedReturnObserved": true,
+  "eventId": "evt_1UZaXEHQH6PJvBLPJUcDodLz",
+  "durableReceiptBeforeWorkerWithoutGrants": true,
+  "workerRestartPaidReady": true,
+  "privateMemberAndActivityVisible": true,
+  "publicStillRedacted": true,
+  "failureDiagnostics": {
+    "timeout": false,
+    "notEditable": false,
+    "notEnabled": false,
+    "notVisible": false,
+    "pointerIntercepted": false,
+    "interceptorTag": null,
+    "locatorFill": false,
+    "locatorCheck": false,
+    "locatorClick": false
+  },
+  "failedAt": "2026-11-08T18:10:23.003Z"
+}

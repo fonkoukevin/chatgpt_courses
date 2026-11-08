@@ -314,7 +314,7 @@ MANUAL_TEST possède son identifiant d’origine distinct et n’est lu qu’en 
 
 Les mutations prennent le verrou utilisateur `FOR NO KEY UPDATE`, puis offre et ressources pédagogiques dans un ordre stable. Le graphe est relu après attente des verrous : changement de portée ⇒ CONFLICT. Les dates métier sont prises avec `clock_timestamp()` après les attentes. Les lectures privées de commandes et couvertures restent no-store, et l’état dynamique de couverture n’entre pas dans l’ETag fort d’un snapshot personnel.
 
-## Checkout durable — V013 / P12 en cours, contrôles locaux réussis
+## Checkout durable — V013 / P12 validé localement
 
 [`V013__stripe_checkout_operations_and_order_states.sql`](../apps/api/src/main/resources/db/migration/V013__stripe_checkout_operations_and_order_states.sql) ajoute `checkout_operations` et `checkout_idempotency_keys`, sans paiement ou attribution fictifs. Une opération unique par commande garde propriétaire, compte/mode, clé fournisseur, paramètres JSON/empreinte/montant/devise, révision d'ordre consultée et deux échéances fixes : session à création + 1 h, reprise création de 1..15 min (10 par défaut). Origine, paramètres et échéances sont immuables. SessionId, une fois fixé, ne change pas ; l'URL bearer interne n'est pas journalisée. Les FK composites relient commande/propriétaire/opération ; les clés de requête sont append-only.
 
@@ -322,7 +322,7 @@ Les mutations prennent le verrou utilisateur `FOR NO KEY UPDATE`, puis offre et 
 
 Le plafond applicatif `99_999_999` unités mineures est conservateur pour les seules devises admises ; ce n'est pas une limite universelle de Stripe. Les valeurs ne viennent jamais du navigateur. Une première transaction conserve PAID/PENDING ; l'activation suivante ajoute origines et intention d'email atomiquement avant READY. paid_at est la date du constat serveur de confirmation, sans prétendre dater l'exécution bancaire à la milliseconde.
 
-## Inbox et rapprochements — V014 / P12 en cours, contrôles locaux réussis
+## Inbox et rapprochements — V014 / P12 validé localement
 
 [`V014__durable_stripe_inbox_and_reconciliation.sql`](../apps/api/src/main/resources/db/migration/V014__durable_stripe_inbox_and_reconciliation.sql) ajoute trois tables :
 
@@ -336,7 +336,9 @@ Les origines ORDER_LINE de V012 s'appuient sur les vrais order_resources, une co
 
 Décision technique : activation effective PostgreSQL comme starts_at et origine des périodes FIXED/UPDATES. UNLIMITED reste explicite dans le snapshot ; aucune durée absente n'est inventée. EntitlementAccess lit périodes/langues/origines indépendantes, versions promises et descendants épinglés disponibles ; MANUAL_TEST est ignoré en production. Les conditions de vente réelles devront expliciter cet ancrage avant activation commerciale.
 
-Les permissions payments.events.read/retry sont liées au seul rôle de référence PAYMENTS_OPERATOR, sans compte ni attribution utilisateur créés. Le backend P12 est vérifié localement ; l'upgrade V012→V014 conserve les données des 45 tables préexistantes, hors ajouts de permissions documentés, et laisse les cinq nouvelles tables vides dans la base partagée. Les diagnostics croisés 6/6 et la suite complète 8/8 ont réussi avant la dernière reprise technique, sans nouveau parcours métier exécuté ; les deux refus antérieurs 403/PROTECTED non reproduits restent de cause inconnue. P12 reste en cours, sans clôture ni démarrage de P13. La lecture Stripe du compte et l'obtention du secret de signature CLI sont réalisées. L'ancienne différence de secret est résolue par l'action explicite `stripe:sync-secret` de l'utilisateur, avec reçu expurgé et sauvegarde privée ; sa sortie du listener atteste ensuite TEST prêt pour l'API attendue. Aucun Checkout ni paiement externe n'est exécuté. Clé, compte, secret et sauvegarde restent privés. [Chronologie et limites](evidence/P12.md).
+Les permissions payments.events.read/retry sont liées au seul rôle de référence PAYMENTS_OPERATOR, sans compte ni attribution utilisateur créés. Le périmètre technique P12 est validé localement. L'upgrade V012→V014 conserve les données des 45 tables préexistantes, hors ajouts de permissions documentés, et laisse les cinq nouvelles tables vides dans la base partagée. Le dernier ciblé d'accès réussit 5/5 et la suite contrôlée 8/8, avec 27 captures examinées.
+
+La recette distincte de vrai Checkout Stripe TEST réussit 1/1 dans une base isolée : événement durable avant worker, redémarrage vers PAID/READY, accès privé 200 et visible, public expurgé, puis deux rejeux CLI séquentiels acquittés en 2xx. Elle conserve une opération, un événement, une origine et une intention de notification. La livraison vérifiée est épinglée à `2026-10-28.endive` ; la version historique `2022-11-15` de l'événement source lu par GET est consignée séparément, sans changement global de version du compte. Le montant fictif temporaire de 1 EUR ne constitue pas un prix commercial. Clé, compte, secret et sauvegarde restent privés ; aucun déploiement ni mode LIVE n'est validé. Les deux refus historiques 403/PROTECTED restent non reproduits, de cause inconnue et au [suivi P17/P19 avant livraison](evidence/P12-access-follow-up.md). [Chronologie et limites](evidence/P12.md).
 
 ## Types, concurrence et suppression
 
@@ -347,14 +349,14 @@ Les permissions payments.events.read/retry sont liées au seul rôle de référe
 - Les FK métier sont `ON DELETE RESTRICT`. Les instantanés éditoriaux et attributions historiques sont protégés. L’anonymisation du compte est distincte de la suppression physique ; rétention et procédure d’effacement seront précisées dans les lots concernés. Seule la suppression des attributs de session suit le CASCADE officiel V001.
 - Les liens JPA sont des UUID explicites, sans graphes sérialisés ni cascades implicites. Les DTO publics sont construits par mapping ; les entités ne sont pas des réponses HTTP.
 
-## Relations réservées aux lots suivants
+## État des relations et lots suivants
 
-Les noms suivants expriment les clés et règles attendues. Ils seront concrétisés par migrations additionnelles avec leur fonctionnalité et ses tests, sans CRUD anticipé.
+Les lignes P12 récapitulent les relations réalisées. Les suivantes expriment les clés et règles à concrétiser par migrations avec leur fonctionnalité et ses tests, sans CRUD anticipé.
 
 | Lot | Relations/contraintes à introduire | Conservation obligatoire |
 | --- | --- | --- |
-| P12 paiements | V013/V014 et contrôles locaux réussis, dernière suite 8/8 ; P12 en cours, refus antérieurs inexpliqués ; préparation Stripe réelle, Checkout fournisseur non exécuté | Réception durable et effet métier uniques séparément ; paiement confirmé et activation en attente restent distincts |
-| P12 attribution de droits | Origines V012 attribuées après confirmation, FK vers les lignes et périodes/langues ; backend vérifié, P12 en cours selon les limites ci-dessus | Unicité par origine et ressource, jamais seulement `(user, course)` ; chaque achat individuel et pack garde son origine |
+| P12 paiements | V013/V014 validées localement ; suite contrôlée 8/8 et vrai Checkout TEST 1/1 ; incident historique au suivi P17/P19 | Réception durable et effet métier uniques séparément ; paiement confirmé et activation en attente restent distincts |
+| P12 attribution de droits | Origines V012 attribuées après confirmation, FK vers les lignes et périodes/langues ; accès privé et absence de double attribution observés en Stripe TEST | Unicité par origine et ressource, jamais seulement `(user, course)` ; chaque achat individuel et pack garde son origine |
 | P13 remboursements | Remboursement → paiement, allocations de lignes et décision d’accès explicite ; réservation des montants en cours et idempotence | Réussite financière distincte de demande ; retrait des seules origines concernées après confirmation, jamais des productions/progrès |
 | P14 attestations | Attestation → utilisateur, version pédagogique et références exactes de preuves/révisions émises | Une nouvelle version ne réécrit pas l’attestation ; aucune certification ou correction humaine déduite d’une autoévaluation |
 

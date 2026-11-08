@@ -1,0 +1,32 @@
+{
+  "reviewedAt": "2026-11-08T18:21:13.638Z",
+  "runId": "2026-11-08T18-11-16-018Z-91de498c-559e-40f7-ba5a-598926bb85ae",
+  "actuallyOpenedImages": 3,
+  "files": [
+    {
+      "name": "fr-event-durable-before-worker.png",
+      "width": 1440,
+      "height": 1017,
+      "sha256": "d97cd1f3eba272b8850ef3d1b57bf92030b5883eae17d9a1d758c4ac06fb98c5"
+    },
+    {
+      "name": "fr-paid-ready.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "8c6c8beb3816a8387a8c0daae39e69792c54d21f76d921e38d872941aab6a3d0"
+    },
+    {
+      "name": "fr-private-activity-after-real-stripe.png",
+      "width": 1440,
+      "height": 3154,
+      "sha256": "1a911653fc6f77b7c4c3d0e213325f31088749fc879a3fd3fdd0c7f9963cbeaa"
+    }
+  ],
+  "observed": [
+    "Return alone does not show confirmed payment while the worker is stopped",
+    "PAID/READY clearly distinguishes access from email pending",
+    "Private activity body, notes and page footer visible after activation"
+  ],
+  "scope": "static screenshots actually inspected; provider and API assertions are in the separate automated recipe",
+  "fullPrivatePageAlsoOpenedAtOriginalResolution": true
+}

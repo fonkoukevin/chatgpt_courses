@@ -1,8 +1,11 @@
 {
-  "verifiedAt": "2026-11-08T17:41:07.506Z",
+  "verifiedAt": "2026-11-08T18:26:34.582Z",
   "privateEnvIgnored": true,
   "listenerSecretFileIgnored": true,
-  "publicFilesScanned": 2171,
+  "publicFilesScanned": 2259,
   "secretFoundInPublicFiles": false,
+  "runtimeLogsScanned": 35,
+  "configuredSecretFoundInRuntimeLogs": false,
+  "fullStripeTokenPatternFoundInRuntimeLogs": false,
   "secretValuesPrinted": false
 }

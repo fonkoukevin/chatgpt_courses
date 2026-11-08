@@ -1,0 +1,108 @@
+{
+  "externalStripe": true,
+  "testMode": true,
+  "testAmountMinor": 100,
+  "currency": "EUR",
+  "stage": "hosted-card-selection",
+  "result": "failed",
+  "bearerUrlsWritten": false,
+  "secretsPrinted": false,
+  "orderId": "90c4d7b9-c296-4bbd-98cc-395b9236e62e",
+  "offerId": "b7405bc5-6e2c-432a-8205-28c630d5a7e9",
+  "resourceId": "053e36f0-e321-48c4-b435-0b226f010811",
+  "versionId": "d066c129-0f34-4973-8c4a-b3c2cfd0cfe1",
+  "forgedReturnCreatesNoGrant": true,
+  "sessionId": "cs_test_a1X7wAf068u4gaIR6fiHUUXW8GBGwl7ItFshtgocuF0Qq5dkzE7PhqzPgc",
+  "amountMinor": 100,
+  "operationId": "fd082dce-b05e-4d06-b28e-71eb4a4cbe3d",
+  "checkoutOperationExists": true,
+  "secondCheckoutReusesSameSession": true,
+  "failureDiagnostics": {
+    "timeout": false,
+    "notEditable": false,
+    "notEnabled": false,
+    "notVisible": false,
+    "pointerIntercepted": false,
+    "interceptorTag": null,
+    "locatorFill": false,
+    "locatorCheck": false,
+    "locatorClick": false
+  },
+  "hostedFieldDiagnostics": [
+    {
+      "stripeFrame": true,
+      "inputs": [
+        {
+          "name": "email",
+          "type": "text",
+          "visible": true,
+          "readOnly": false,
+          "disabled": false
+        },
+        {
+          "name": "unclassified",
+          "type": "checkbox",
+          "visible": true,
+          "readOnly": false,
+          "disabled": false
+        },
+        {
+          "name": "unclassified",
+          "type": "text",
+          "visible": true,
+          "readOnly": false,
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "stripeFrame": true,
+      "inputs": []
+    },
+    {
+      "stripeFrame": true,
+      "inputs": []
+    },
+    {
+      "stripeFrame": true,
+      "inputs": []
+    },
+    {
+      "stripeFrame": true,
+      "inputs": []
+    },
+    {
+      "stripeFrame": true,
+      "inputs": []
+    },
+    {
+      "stripeFrame": true,
+      "inputs": []
+    },
+    {
+      "stripeFrame": false,
+      "inputs": []
+    },
+    {
+      "stripeFrame": true,
+      "inputs": []
+    },
+    {
+      "stripeFrame": true,
+      "inputs": []
+    },
+    {
+      "stripeFrame": false,
+      "inputs": []
+    },
+    {
+      "stripeFrame": false,
+      "inputs": []
+    },
+    {
+      "stripeFrame": false,
+      "inputs": []
+    }
+  ],
+  "failedAt": "2026-11-08T18:07:15.289Z"
+}

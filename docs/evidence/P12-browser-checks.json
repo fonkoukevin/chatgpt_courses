@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-11-08T14:07:51.223Z",
+  "exportedAt": "2026-11-08T18:21:13.562Z",
   "runs": [
     {
       "runId": "2026-11-08T10-54-55-476Z-22027de7-00b6-46b2-b64e-38d4fbc11eb8",
@@ -208,9 +208,27 @@
       "cleanupConfirmed": true,
       "externalStripe": false,
       "pngCount": 27
+    },
+    {
+      "runId": "2026-11-08T17-56-42-000Z-f832ce57-7f5c-4603-ac32-d90b05e4c121",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "result": "passed",
+      "durationMs": 152320.419,
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "cleanupConfirmed": true,
+      "externalStripe": false,
+      "pngCount": 27
     }
   ],
-  "phaseClosed": false,
+  "phaseClosed": true,
   "openAccessIncident": true,
-  "externalStripeInBrowserRuns": false
+  "externalStripeInBrowserRuns": false,
+  "closureLevel": "validated locally with separate external TEST integration",
+  "externalBrowserRunsIndex": "P12-stripe-external-checks.json"
 }

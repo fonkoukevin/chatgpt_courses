@@ -1,0 +1,33 @@
+{
+  "verifiedAt": "2026-11-08T18:16:37.484Z",
+  "source": "final HTTP checks against the unchanged user development application",
+  "checks": [
+    {
+      "path": "/fr",
+      "status": 200
+    },
+    {
+      "path": "/en",
+      "status": 200
+    },
+    {
+      "path": "/api/v1/system/health",
+      "status": 200,
+      "springHealthy": true
+    },
+    {
+      "path": "/api/v1/webhooks/stripe",
+      "status": 400,
+      "code": "STRIPE_WEBHOOK_INVALID",
+      "signatureAbsent": true
+    }
+  ],
+  "testMode": true,
+  "configuredWebhookMatchesCached": true,
+  "developmentApplicationStopped": false,
+  "developmentListenerTemporarilyStopped": true,
+  "developmentListenerRestoredByAgent": true,
+  "listenerApiVersion": "2026-10-28.endive",
+  "listenerNowRunsInBackground": true,
+  "secretValuesPrinted": false
+}

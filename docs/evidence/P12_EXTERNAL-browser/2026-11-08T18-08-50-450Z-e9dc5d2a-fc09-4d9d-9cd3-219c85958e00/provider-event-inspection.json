@@ -1,0 +1,16 @@
+{
+  "verifiedAt": "2026-11-08T18:10:44.091Z",
+  "eventId": "evt_1UZaXEHQH6PJvBLPJUcDodLz",
+  "testMode": true,
+  "apiVersion": "2022-11-15",
+  "eventType": "checkout.session.completed",
+  "eventIdMatches": true,
+  "sessionMatches": true,
+  "orderMatches": true,
+  "operationMatches": true,
+  "paid": true,
+  "amountMinor": 100,
+  "currency": "eur",
+  "paymentIntentId": "pi_3UZaXDHQH6PJvBLP1WSvAJ1Q",
+  "secretsPrinted": false
+}

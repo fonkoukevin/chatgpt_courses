@@ -1,0 +1,8 @@
+{
+  "verifiedAt": "2026-11-08T18:16:38.255Z",
+  "listenerPresent": true,
+  "blockedBeforeStripeCall": true,
+  "existingProcessesChanged": false,
+  "testPassed": true,
+  "secretsPrinted": false
+}

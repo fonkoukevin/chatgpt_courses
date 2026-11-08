@@ -1,0 +1,293 @@
+{
+  "phase": "P12",
+  "runId": "2026-11-08T17-56-42-000Z-f832ce57-7f5c-4603-ac32-d90b05e4c121",
+  "reviewedAt": "2026-11-08T18:03:07.340Z",
+  "scope": "Static visual review of the controlled local P12 browser run only",
+  "sourceDirectory": "docs/evidence/P12-browser/2026-11-08T17-56-42-000Z-f832ce57-7f5c-4603-ac32-d90b05e4c121",
+  "reviewMethod": "All listed PNG files were actually opened with tools.view_image in original detail; dimensions and SHA-256 were read from the same local files.",
+  "imagesReviewed": 27,
+  "locales": [
+    "fr",
+    "en"
+  ],
+  "widths": [
+    320,
+    390,
+    768,
+    1024,
+    1440
+  ],
+  "sessionEvidence": {
+    "file": "docs/evidence/P12-browser/2026-11-08T17-56-42-000Z-f832ce57-7f5c-4603-ac32-d90b05e4c121/session.json",
+    "result": "passed",
+    "cleanupConfirmed": true,
+    "completedAt": "2026-11-08T18:00:21.758Z"
+  },
+  "materialVisualDefectsObserved": [],
+  "observations": [
+    "No essential text clipping, overlap or visible horizontal overflow was observed at the reviewed widths, including 320 pixels.",
+    "Order references are present and wrap within the mobile content width. Prepared summaries do not claim payment or activation.",
+    "Unconfirmed and processing payments show no new activated access. Confirmed payment with delayed activation remains distinct from ready access.",
+    "Completed, failed and expired states do not display an obsolete payment-session validity claim.",
+    "Terms consent controls and payment actions remain readable on mobile. An offer change removes the payment form and provides explicit review links.",
+    "The forged success return remains unconfirmed, and the other-owner view shows refusal without order details.",
+    "Email incidents remain separate from activated access; the sent state does not claim inbox delivery.",
+    "The already-owned offer shows confirmation, existing access and Resume without offering another purchase.",
+    "The API outage is explicitly reported while the last confirmed order state is retained; the recovered view removes that outage message.",
+    "Protected activity pages render the test content, quiz, personal-note area and navigation legibly. Initial empty notes correctly say that no note has been saved.",
+    "The two long activity captures, up to 4216 pixels high, were read through the notes, history, navigation and footer.",
+    "The desktop delayed-activation image was opened a second time individually to confirm that an apparent initial preview clipping was not present in the file."
+  ],
+  "limitations": [
+    "This is a static image review, not a new live browser, keyboard or assistive-technology test and not a global accessibility certification.",
+    "The reviewed run uses a controlled local payment provider. This report does not validate an external Stripe Checkout or payment.",
+    "No external Stripe screenshots, credentials, environment files or private provider payloads were inspected.",
+    "Cleanup is confirmed by the recorded session.json flag; this review did not independently stop or inspect running applications or containers."
+  ],
+  "applicationFilesChanged": false,
+  "files": [
+    {
+      "file": "en-1440-deferred-payment-processing.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "9ff2f1bbc94e8aca3d078ee341be41ce1c56bb51299da580e15acd95a8cd255d",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "en-1440-deferred-payment-ready.png",
+      "width": 1440,
+      "height": 1013,
+      "sha256": "3bae70d1a3a88b0cad9af40a9f68f67117ad632f77ed7d6f428090a4e12db086",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "en-320-checkout-consent.png",
+      "width": 320,
+      "height": 2377,
+      "sha256": "ad93d354885451856eef245f25eb6852edaddb6413bcc59040f9b4241fd4506e",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "en-320-deferred-payment-ready.png",
+      "width": 320,
+      "height": 1480,
+      "sha256": "1d16c6563017177429bcfe164141fe80e1501f5ce8649c216e48e4e86097ea3e",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "en-390-confirmed-expired.png",
+      "width": 390,
+      "height": 1009,
+      "sha256": "998e445c41d459c997f903861353d7403ceb42974ef1686c1ee93559b9f80f5e",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "en-390-deferred-payment-processing.png",
+      "width": 390,
+      "height": 1000,
+      "sha256": "2a8b863276e981c93fa3276c23202ffc7293a9e4d647baa891d4b23a61b37576",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "en-390-deferred-payment-ready.png",
+      "width": 390,
+      "height": 1340,
+      "sha256": "edc3639e3d0226a9eb81243b7f24250763f316bfa1f3af15dee5ada52d8bd8f3",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "en-390-owned-offer-after-payment.png",
+      "width": 390,
+      "height": 1987,
+      "sha256": "272219a4f541b6698f86c9c7ef314640e834d520190884e22c63975cf9af6d08",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "en-390-payment-api-recovered.png",
+      "width": 390,
+      "height": 1255,
+      "sha256": "6ecfd55eb03e5cde32987f7eeb1b6582e1f3e93eec76b15f07ca47f93d6530a1",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "en-390-payment-api-unavailable.png",
+      "width": 390,
+      "height": 1317,
+      "sha256": "6970ee098b4049d6339c98c754d470a93e4437be2de877cfb6481fd61cb8c34b",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "en-390-premium-content-after-payment.png",
+      "width": 390,
+      "height": 4061,
+      "sha256": "189ed51211747290e5e3bfdbd0bd387bf4d777fd636b9a478e3bdc0dc1c806f1",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "fr-1024-payment-ready-after-worker-restart.png",
+      "width": 1024,
+      "height": 1056,
+      "sha256": "29f6c031a25a2d1d199e88b7001ecb4e5fa7209565b9a2cf4925e6d4bb1f0d88",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "fr-1440-durable-event-before-worker.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "abb5963677f5f4e42500e6b60ed9a0aca426ecc6a67631d109bbdcd0bb1a37e9",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "fr-1440-paid-activation-delayed.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "af974f4adb8f3bf1c8f51b2cc53e90be4bb163ce4fca2630e018d175b5beee0e",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "fr-1440-payment-ready-after-worker-restart.png",
+      "width": 1440,
+      "height": 1013,
+      "sha256": "8bd9c65c5998e9ea2cb5067a0053b56ceadb82e7f831c92d8949b07dc0a3524d",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "fr-320-payment-ready-after-worker-restart.png",
+      "width": 320,
+      "height": 1548,
+      "sha256": "c11a46af66b1ee1e854e896f7fd7bf9a9ae80c95352d605cd3d5b6daab367f82",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "fr-390-checkout-consent.png",
+      "width": 390,
+      "height": 2322,
+      "sha256": "34b19ce4b208e806127351295d9a938d81fcf69744b2d4bbb48bac7a74fd7596",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "fr-390-checkout-offer-change-review.png",
+      "width": 390,
+      "height": 2383,
+      "sha256": "c9648426a3ca33afec8cbab34e76525ef1cd22f02e411bd62f1bee8dffc16248",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "fr-390-confirmed-failed.png",
+      "width": 390,
+      "height": 1052,
+      "sha256": "a0268c65a4ee15c2c64e83ff184ddbfcabb4eaf7d49d5765b7e6adedce1deebc",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "fr-390-duplicates-remain-one-activation.png",
+      "width": 390,
+      "height": 1275,
+      "sha256": "3a22344013ca762f8212602cbf906190c4bca41d707c7392093afda0a08478f7",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "fr-390-email-incident-access-still-ready.png",
+      "width": 390,
+      "height": 1253,
+      "sha256": "8ca344699a9b62592679ffc1a0947f3cce29aabc8d9e19fdc1fddb20be3c55cb",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "fr-390-email-retried-access-unchanged.png",
+      "width": 390,
+      "height": 1275,
+      "sha256": "3e375def6690475860a8ef9661707becafa8c2974b8eb52da54eeebc17d88a90",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "fr-390-forged-success-without-payment.png",
+      "width": 390,
+      "height": 1278,
+      "sha256": "00606afc6307437d791c41b6bd5973ccb48ec5fd27d3f648c6e99d05be0286af",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "fr-390-other-owner-payment-refused.png",
+      "width": 390,
+      "height": 1000,
+      "sha256": "1934e37ebbd7307e7e6d5b6a5acf4ab6f4a606dfe1e3665162458f9fe739e867",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "fr-390-payment-ready-after-worker-restart.png",
+      "width": 390,
+      "height": 1406,
+      "sha256": "d1814e8dadedd7e557b08e8301bcb8350fc2468d04db480e6a9673fdc60d0dfe",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "fr-390-premium-content-after-payment.png",
+      "width": 390,
+      "height": 4216,
+      "sha256": "c11a0b1f31cfb64d1120aeff513f1f225edd7cda0423cb8cba04d3c8d0721cad",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    },
+    {
+      "file": "fr-768-payment-ready-after-worker-restart.png",
+      "width": 768,
+      "height": 1036,
+      "sha256": "2488fa5fe78f7ff156589b772f4addbfcb38824529e9d2a93869382414031c28",
+      "openedWith": "tools.view_image",
+      "detail": "original",
+      "materialVisualDefectsObserved": []
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "verifiedAt": "2026-11-08T18:21:13.625Z",
+  "suite": "EntitlementAccessIntegrationTest",
+  "tests": 5,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "durationSeconds": 37.873,
+  "actualPostgreSQL": true,
+  "newFreshGrantConcurrentGets": 16,
+  "retryUsed": false,
+  "historicalCauseEstablished": false,
+  "source": "Maven Surefire XML; real successful exit observed",
+  "secretsPrinted": false
+}

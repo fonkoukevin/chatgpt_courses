@@ -1,0 +1,513 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\scripts\\..\\.tools\\node-v24.22.2-win-x64\\node.exe",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts"
+    ],
+    "configFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts",
+    "rootDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 600000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/.runtime/browser-2026-11-08T04-23-44-748Z-a3acb5dd-0647-4c13-992e-93d422bce650/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/learning.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-23-44-748Z-a3acb5dd-0647-4c13-992e-93d422bce650\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "snapshotDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/learning.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3101",
+          "browserName": "chromium",
+          "headless": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "actionTimeout": 10000,
+          "navigationTimeout": 20000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off",
+          "serviceWorkers": "block"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\docs\\evidence\\P08-browser\\2026-11-08T04-23-44-748Z-a3acb5dd-0647-4c13-992e-93d422bce650\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "learning.spec.ts",
+      "file": "learning.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "module puis parcours retirés : notes et tentatives retrouvables, historique privé refusé à un autre compte",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11838,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T04:25:12.743Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0ec79b0c4f511f16424-825c87e9798dd0d8d756",
+          "file": "learning-history.scenario.ts",
+          "line": 21,
+          "column": 3
+        }
+      ],
+      "suites": [
+        {
+          "title": "P08 apprentissage réel",
+          "file": "learning.spec.ts",
+          "line": 54,
+          "column": 6,
+          "specs": [
+            {
+              "title": "fr : activité gratuite, quiz corrigé par Spring sans compte et programme mobile",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2629,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T04:24:05.426Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0ec79b0c4f511f16424-d211f6120274384a35ae",
+              "file": "learning.spec.ts",
+              "line": 62,
+              "column": 47
+            },
+            {
+              "title": "en : activité gratuite, quiz corrigé par Spring sans compte et programme mobile",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1989,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T04:24:16.402Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0ec79b0c4f511f16424-de0ddcbe74a7cc9a1f59",
+              "file": "learning.spec.ts",
+              "line": 62,
+              "column": 47
+            },
+            {
+              "title": "compte vide, inscription explicite, note et quiz durables, reprise sous une seconde session EN",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6441,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T04:24:18.421Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0ec79b0c4f511f16424-2795b25e38d8f35556bb",
+              "file": "learning.spec.ts",
+              "line": 95,
+              "column": 3
+            },
+            {
+              "title": "propriété réelle et ancienne page refusée après connexion d’un autre compte",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 2331,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m409\u001b[39m\nReceived: \u001b[31m403\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m409\u001b[39m\nReceived: \u001b[31m403\u001b[39m\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts:157:64",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts",
+                          "column": 64,
+                          "line": 157
+                        },
+                        "snippet": " \u001b[90m 155 |\u001b[39m       \u001b[36mconst\u001b[39m response \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mwaitForResponse((value) \u001b[33m=>\u001b[39m value\u001b[33m.\u001b[39mrequest()\u001b[33m.\u001b[39mmethod() \u001b[33m===\u001b[39m \u001b[32m'PATCH'\u001b[39m \u001b[33m&&\u001b[39m value\u001b[33m.\u001b[39murl()\u001b[33m.\u001b[39mendsWith(\u001b[32m`/activity-notes/${note.id}`\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m 156 |\u001b[39m       \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m getLearningDictionary(\u001b[32m'fr'\u001b[39m)\u001b[33m.\u001b[39msaveNote\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 157 |\u001b[39m       \u001b[36mconst\u001b[39m changed \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m response\u001b[33m;\u001b[39m expect(changed\u001b[33m.\u001b[39mstatus())\u001b[33m.\u001b[39mtoBe(\u001b[35m409\u001b[39m)\u001b[33m;\u001b[39m expect((\u001b[36mawait\u001b[39m changed\u001b[33m.\u001b[39mjson() \u001b[36mas\u001b[39m { code\u001b[33m:\u001b[39m string })\u001b[33m.\u001b[39mcode)\u001b[33m.\u001b[39mtoBe(\u001b[32m'ACCOUNT_CONTEXT_CHANGED'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 158 |\u001b[39m       \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'textbox'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m getLearningDictionary(\u001b[32m'fr'\u001b[39m)\u001b[33m.\u001b[39mnotes\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m }))\u001b[33m.\u001b[39mtoHaveValue(\u001b[32m'retained from A'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 159 |\u001b[39m       \u001b[36mawait\u001b[39m privateNotStored(page\u001b[33m,\u001b[39m \u001b[32m'retained from A'\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39msetViewportSize({ width\u001b[33m:\u001b[39m \u001b[35m390\u001b[39m\u001b[33m,\u001b[39m height\u001b[33m:\u001b[39m \u001b[35m844\u001b[39m })\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m capture(page\u001b[33m,\u001b[39m \u001b[32m'fr-390-account-changed'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 160 |\u001b[39m       \u001b[36mconst\u001b[39m empty \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m context\u001b[33m.\u001b[39mrequest\u001b[33m.\u001b[39mget(\u001b[32m'/api/v1/me/learning?locale=fr'\u001b[39m)\u001b[33m;\u001b[39m expect((\u001b[36mawait\u001b[39m empty\u001b[33m.\u001b[39mjson() \u001b[36mas\u001b[39m \u001b[33mLearningDashboard\u001b[39m)\u001b[33m.\u001b[39menrollments)\u001b[33m.\u001b[39mtoHaveLength(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts",
+                            "column": 64,
+                            "line": 157
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m409\u001b[39m\nReceived: \u001b[31m403\u001b[39m\n\n  155 |       const response = page.waitForResponse((value) => value.request().method() === 'PATCH' && value.url().endsWith(`/activity-notes/${note.id}`));\n  156 |       await page.getByRole('button', { name: getLearningDictionary('fr').saveNote, exact: true }).click();\n> 157 |       const changed = await response; expect(changed.status()).toBe(409); expect((await changed.json() as { code: string }).code).toBe('ACCOUNT_CONTEXT_CHANGED');\n      |                                                                ^\n  158 |       await expect(page.getByRole('textbox', { name: getLearningDictionary('fr').notes, exact: true })).toHaveValue('retained from A');\n  159 |       await privateNotStored(page, 'retained from A'); await page.setViewportSize({ width: 390, height: 844 }); await capture(page, 'fr-390-account-changed');\n  160 |       const empty = await context.request.get('/api/v1/me/learning?locale=fr'); expect((await empty.json() as LearningDashboard).enrollments).toHaveLength(0);\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts:157:64"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T04:24:24.882Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-23-44-748Z-a3acb5dd-0647-4c13-992e-93d422bce650\\results\\learning-P08-apprentissage-2aa46-connexion-d’un-autre-compte\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-23-44-748Z-a3acb5dd-0647-4c13-992e-93d422bce650\\results\\learning-P08-apprentissage-2aa46-connexion-d’un-autre-compte\\error-context.md"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-23-44-748Z-a3acb5dd-0647-4c13-992e-93d422bce650\\results\\learning-P08-apprentissage-2aa46-connexion-d’un-autre-compte\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts",
+                        "column": 64,
+                        "line": 157
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "e0ec79b0c4f511f16424-56562af36541305ec3aa",
+              "file": "learning.spec.ts",
+              "line": 145,
+              "column": 3
+            },
+            {
+              "title": "note : réponse retardée, saisie plus récente et conflit résolu explicitement entre onglets",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3153,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T04:24:28.666Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0ec79b0c4f511f16424-d488bb733747fd158cc8",
+              "file": "learning.spec.ts",
+              "line": 164,
+              "column": 3
+            },
+            {
+              "title": "panne réelle de Spring, reprise clavier et perte de session sans perte de note",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 18282,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T04:24:38.437Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0ec79b0c4f511f16424-586ff1f39b791648a294",
+              "file": "learning.spec.ts",
+              "line": 204,
+              "column": 3
+            },
+            {
+              "title": "quiz publié modifié : 412 explicite ; note personnelle conservée après retrait de l’activité",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11140,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T04:24:56.738Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0ec79b0c4f511f16424-2af41f74ab2130f70e53",
+              "file": "learning.spec.ts",
+              "line": 229,
+              "column": 3
+            },
+            {
+              "title": "confirmation de note committée sous A puis retardée ignorée après vraie connexion B",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2768,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T04:25:07.896Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0ec79b0c4f511f16424-880c294b3bdd942655e7",
+              "file": "learning.spec.ts",
+              "line": 255,
+              "column": 3
+            },
+            {
+              "title": "une seule confirmation de départ pour notes, déclarations et réponses non enregistrées",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2027,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T04:25:10.684Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0ec79b0c4f511f16424-58e0ffcfae084f3e690a",
+              "file": "learning.spec.ts",
+              "line": 283,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-08T04:24:04.130Z",
+    "duration": 80580.97,
+    "expected": 9,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

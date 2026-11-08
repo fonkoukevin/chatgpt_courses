@@ -4,11 +4,11 @@ Plateforme de formation pratique à l’IA : choisir une tâche, apprendre, prod
 
 ## État réel
 
-P01 fournit les fondations locales ; P02 ajoute le système visuel et trois structures d’interface. P03 pose le schéma identité/contenu et le contrat généré. P04 raccorde l’identité aux sessions Spring/PostgreSQL. P05 ajoute le CMS et la publication ; P06 raccorde le site public aux publications réelles. P07 ajoute le générateur sans IA et la bibliothèque personnelle. Apprentissage, projets et paiements seront raccordés dans leurs lots. Aucun ancien prototype repris ni déploiement externe annoncé.
+P01 fournit les fondations locales ; P02 ajoute le système visuel et trois structures d’interface. P03 pose le schéma identité/contenu et le contrat généré. P04 raccorde l’identité aux sessions Spring/PostgreSQL. P05 ajoute le CMS et la publication ; P06 raccorde le site public aux publications réelles. P07 ajoute le générateur sans IA et la bibliothèque personnelle ; P08 raccorde apprentissage, quiz et notes. Projets et paiements seront raccordés dans leurs lots. Aucun ancien prototype repris ni déploiement externe annoncé.
 
 La validation P01 couvre FR/EN, clavier, formats étroits, erreur 404 et panne/reprise réelle de Spring. P02 ajoute 14 tests et 54 captures examinées pour les interfaces ; les sept scénarios P01 passent à nouveau après ces changements. La validation reste locale, avec le Chromium de test autorisé.
 
-Lire [AGENTS.md](AGENTS.md), puis [docs/STATUS.md](docs/STATUS.md). Vérifications et limites : [P07](docs/evidence/P07.md), [P06](docs/evidence/P06.md), [P05](docs/evidence/P05.md), [P04](docs/evidence/P04.md), [P03](docs/evidence/P03.md), [P02](docs/evidence/P02.md), [P01](docs/evidence/P01.md) ; audit initial : [P00](docs/evidence/P00.md).
+Lire [AGENTS.md](AGENTS.md), puis [docs/STATUS.md](docs/STATUS.md). Vérifications et limites : [P08](docs/evidence/P08.md), [P07](docs/evidence/P07.md), [P06](docs/evidence/P06.md), [P05](docs/evidence/P05.md), [P04](docs/evidence/P04.md), [P03](docs/evidence/P03.md), [P02](docs/evidence/P02.md), [P01](docs/evidence/P01.md) ; audit initial : [P00](docs/evidence/P00.md).
 
 ## Structure retenue
 
@@ -147,7 +147,7 @@ Si Chromium n’est pas installé, `run browser:install` installe la version ver
 
 [DATA_MODEL.md](docs/DATA_MODEL.md) explique les douze tables ajoutées par **V002**, les identités UUID, les versions gelées, les traductions et les relations futures. **V001 est inchangée**. Hibernate valide le schéma ; Flyway est le seul mécanisme d’évolution. Aucune commande de reset ou suppression de volume n’est nécessaire.
 
-Le contrat machine [openapi.yaml](docs/api/openapi.yaml) décrit la sonde, l’identité P04, les opérations éditoriales P05, les lectures publiques P06 et les méthodes P07 réellement implémentées. Les autres routes métier restent planifiées dans [API_CONTRACTS.md](docs/API_CONTRACTS.md). Après modification du contrat :
+Le contrat machine [openapi.yaml](docs/api/openapi.yaml) décrit la sonde, l’identité P04, les opérations éditoriales P05, les lectures publiques P06, les méthodes P07 et l’apprentissage P08 réellement implémentés. Les autres routes métier restent planifiées dans [API_CONTRACTS.md](docs/API_CONTRACTS.md). Après modification du contrat :
 
 ```powershell
 .\scripts\courses.cmd run api:validate
@@ -237,7 +237,7 @@ Le site lit exclusivement les publications de Spring. Une base sans publication 
 
 Les liens transmettent la version sélectionnée ; ceux d’activité du programme transmettent aussi l’identité et la version du parcours. Une activité autonome s’ouvre dans le catalogue par `?activity={resourceId}&version={versionId}`, sans inventer de parcours parent. Les filtres `q`, `type`, `goal`, `level`, `locale`, `access`, `page`, `pageSize`, `sort` sont partageables et le retour conserve leur URL.
 
-L’éditeur CMS possède un panneau de métadonnées publiques : tâches, niveau, public, outils, sources, description de l’évaluation et FAQ. Leur sauvegarde crée une révision éditoriale ; leur affichage public exige revue puis publication. Les lectures publiques sont rendues sur le serveur, sans cookie et sans cache partagé. Le site reste non indexable en attendant la préparation SEO P16. Aucun prix ni achat opérationnel n’est annoncé avant P11/P12 ; copies personnelles, progression, quiz et projets seront raccordés dans leurs lots.
+L’éditeur CMS possède un panneau de métadonnées publiques : tâches, niveau, public, outils, sources, description de l’évaluation et FAQ. Leur sauvegarde crée une révision éditoriale ; leur affichage public exige revue puis publication. Les lectures publiques sont rendues sur le serveur, sans cookie et sans cache partagé. Le site reste non indexable en attendant la préparation SEO P16. Aucun prix ni achat opérationnel n’est annoncé avant P11/P12 ; les méthodes personnelles P07 et l’apprentissage P08 utilisent leurs lectures privées séparées. Les projets restent P09.
 
 Recette dédiée, après builds, avec Docker et les ports 3101/8181 libres :
 
@@ -272,3 +272,28 @@ Recette dédiée, après builds, avec Docker et les ports 3101/8181 libres :
 ```
 
 Résultats : **78 tests Java**, **42 tests client**, builds réussis et **7/7 scénarios Chromium en 46,1 s** ; **24 captures finales examinées**. La régression publique passe également, **6/6 en 54,9 s**. PostgreSQL de recette isolé en tmpfs, nettoyage confirmé ; aucune publication GitHub ou production. Détails et limites : [P07](docs/evidence/P07.md). Le prochain lot est [P08_APPRENTISSAGE_QUIZ.txt](prompts/P08_APPRENTISSAGE_QUIZ.txt).
+
+## Apprentissage P08 — validé localement
+
+| Fonction | Français | Anglais |
+| --- | --- | --- |
+| Reprise et parcours commencés | `/fr/espace/apprentissage` | `/en/my/learning` |
+| Travail conservé d’une inscription | `/fr/espace/apprentissage/{enrollmentId}` | `/en/my/learning/{enrollmentId}` |
+| Activité du programme | `/fr/apprendre/{parcours}/{activite}` | `/en/learn/{course}/{activity}` |
+
+Les activités conservent les paramètres de version des liens P06. Une inscription est un suivi privé, sans achat ni droit premium ; son programme et son dénominateur sont figés. Lecture déclarée, activité déclarée terminée et résultat de quiz restent séparés. Les projets arrivent en P09.
+
+Le quiz gratuit utilise une correction réelle de Spring, sans résultat durable avant inscription au parcours. Les tentatives enregistrées gardent leur barème, leurs réponses et leur langue ; aucun score fourni par le navigateur ne fait autorité. Le CMS définit le seuil et une éventuelle limite de tentatives durables. Sans règle explicite, le défaut annoncé est 100 % et tentatives illimitées.
+
+Les notes sont privées, révisées et conservées dans leur langue de création. Les conflits proposent comparaison et choix explicites. Le détail « Travail conservé » permet de retrouver notes et tentatives des versions exactes après retrait d’un module ou parcours, sans ouvrir de contenu premium. Vidéos, positions persistées et fichiers sécurisés restent P10 ; aucun lecteur vide n’est ajouté.
+
+Recette dédiée après les builds, avec Docker et les ports 3101/8181 libres :
+
+```powershell
+.\scripts\courses.cmd run api:check
+.\scripts\courses.cmd run verify:client
+.\scripts\courses.cmd run typecheck:browser
+.\scripts\courses.cmd run verify:learning
+```
+
+Elle utilise PostgreSQL en tmpfs et des comptes/contenus BR01 fictifs, conservant le volume Compose. Résultats : **95 tests Java**, **51 tests client**, builds réussis, **10/10 scénarios Chromium en 72,87 s** et **33 captures finales examinées**. Régressions : P06 **6/6**, P07 **7/7** ; nettoyage confirmé. Détails et limites : [P08](docs/evidence/P08.md). Prochain lot autorisé : [P09_PROJETS_EVALUATION.txt](prompts/P09_PROJETS_EVALUATION.txt).

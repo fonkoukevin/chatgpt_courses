@@ -17,6 +17,7 @@ Cette carte reprend E01–E16 du cahier fonctionnel V1 et précise les routes in
 | E07 Récapitulatif privé | `/fr/commandes/{id}/recapitulatif` | `/en/orders/{id}/summary` |
 | E08 État de commande | `/fr/commandes/{id}/statut` | `/en/orders/{id}/status` |
 | E09 Apprentissage | `/fr/espace/apprentissage` | `/en/my/learning` |
+| E09 Programme inscrit | `/fr/espace/apprentissage/{enrollmentId}` | `/en/my/learning/{enrollmentId}` |
 | E10 Activité | `/fr/apprendre/{courseSlug}/{activitySlug}` | `/en/learn/{courseSlug}/{activitySlug}` |
 | E11 Projets et atelier | `/fr/espace/projets`, puis `/{projectId}` | `/en/my/projects`, puis `/{projectId}` |
 | E12 Bibliothèque personnelle | `/fr/espace/methodes` | `/en/my/methods` |
@@ -146,25 +147,27 @@ Composants : OrderStatus, OrderReference, AccessActivationState et ContextualHel
 
 ## E09 Mon apprentissage
 
-Routes : /fr/espace/apprentissage et /en/my/learning. Phase P08.
+Routes P08 : `/fr/espace/apprentissage`, `/en/my/learning` et détail d’inscription par UUID selon le registre. Interface/services implémentés ; état réel des validations dans [evidence/P08.md](evidence/P08.md).
 
-Dernier travail, prochaine activité, parcours acquis/commencés, projets et méthodes récents. Action principale : reprendre. L’état vide propose une activité ouverte et une entrée par objectif.
+Le tableau de bord lit reprise accessible, parcours commencés, compteurs distincts et cinq méthodes récentes autorisées au plus. Un compte neuf reçoit un état vide utile, sans activité ou pourcentage inventé. Action principale : reprendre la dernière activité accessible de la version inscrite ; si elle est retirée, choisir une autre activité accessible de ce même snapshot. Le détail conserve programme, ordre, versions et dénominateur. « Commencé » ne signifie jamais « acquis » : aucune donnée commerciale n’est déduite de l’inscription avant les droits P11/P12.
 
-Afficher des nombres et statuts exacts : lecture/consultation, activité terminée, quiz réussi, projet autoévalué ou revu. Un cours inaccessible temporairement ne fait pas disparaître son historique. Diagnostic court facultatif : règles explicables, aucun achat imposé, résultat modifiable ; son absence ne bloque pas le socle.
+Lecture déclarée, activité déclarée terminée et quiz réussi ont des compteurs séparés ; le projet est explicitement indisponible avant P09. Le total est figé par versions d’activité distinctes, partagé FR/EN, y compris les activités protégées ou retirées. Un accès indisponible ne supprime pas historique, notes ou tentatives. ACTIVE/PROTECTED/UNAVAILABLE reflètent l’état réel ; aucun achat ou accès commercial expiré/révoqué n’est fabriqué. Diagnostic facultatif non activé.
 
-Composants : ResumeCard, LearningList, ProgressSummary, ProjectCard et MethodPreview. Utiliser des données privées non mises en cache publiquement.
+Composants : `LearningDashboard`, `LearningEnrollment`, résumés de progrès/méthodes et états d’accès. SSR privé sans cache partagé, propriétaire recontrôlé par Spring. Retour d’identification et langue du détail d’inscription utilisent un UUID validé ; aucun texte privé dans les paramètres.
 
 ## E10 Leçon et activité
 
-Routes : /fr/apprendre/{courseSlug}/{activitySlug} et /en/learn/{courseSlug}/{activitySlug}. Lecture textuelle ouverte P06 ; apprentissage/progression P08, médias P10.
+Routes : `/fr/apprendre/{courseSlug}/{activitySlug}` et `/en/learn/{courseSlug}/{activitySlug}`. Lecture ouverte P06 complétée par apprentissage, quiz et notes P08 ; médias réels P10.
 
-P06 ajoute aux liens du programme `resource`, `version` et `courseVersion`. Le loader vérifie que l’activité et sa version appartiennent au programme de cette version de parcours, puis lit la version exacte. Une activité plus récente ne remplace pas un ancien lien de programme. Hors parcours, l’activité autonome utilise E02 avec son couple resourceId/versionId. Texte/exercice/checklist de la publication gratuite sont utilisables ; checklist locale déclarative, sans score calculé, progression, projet ou correction de quiz prétendus. Une activité protégée reste limitée aux informations publiques ; le corps n’est jamais envoyé puis caché.
+P06 ajoute aux liens du programme `resource`, `version` et `courseVersion`. Le loader vérifie que l’activité et sa version appartiennent au programme de cette version de parcours, puis lit la version exacte. Une activité plus récente ne remplace pas un ancien lien. Hors parcours, l’activité autonome utilise E02 avec son couple resourceId/versionId. La checklist reste locale et déclarative ; P08 ajoute séparément quiz et faits persistés. Une activité protégée reste limitée aux informations publiques. Le contrôle P08 agrège aussi parcours/module/activité : un parent retiré ou sa traduction absente neutralise le corps enfant, sans masquer l’indisponibilité par une publication plus ancienne.
 
-Programme et prérequis ; objectif et travail attendu ; vidéo si disponible, texte, sous-titres, transcription ; dossier et exercice ; quiz ; aide et signalement. Les notes sont personnelles. L’activité ouverte reste utilisable sans compte ; la conservation durable passe par l’identification.
+Programme, position, objectif, prérequis, explication, exemple, pratique, ressources et navigation précédente/suivante sont raccordés au programme publié ; sur mobile, le programme utilise un panneau accessible. La première activité FREE reste utilisable avant compte : correction formative réelle après soumission, explicitement non conservée, aucune bonne réponse dans la lecture initiale. L’action authentifiée de conservation crée une tentative durable liée à l’inscription, sous contexte de compte attendu ; aucune réponse ou score client ne fait autorité.
 
-Quiz incorrect avec explication et nouvelle tentative. Progression attribuée selon le critère, sans valider automatiquement un projet. Position sauvegardée par média, tandis que les acquis équivalents sont communs aux traductions. Sans vidéo, texte utilisable et message honnête.
+Le résultat explique chaque réponse et affiche points/politique réels ; nouvelle tentative selon règle éditoriale, limite commune FR/EN de cette version. Historique : questions, correction, politique, version, langue et date conservées malgré nouvelle publication. Une réussite ne coche ni activité terminée ni projet. Visite de reprise, lecture déclarée et fin déclarée restent explicites et indépendantes, sans blocage par un temps vidéo ou un score.
 
-Les pertes réseau et changements d’activité ne jettent pas la saisie. Le programme devient un panneau mobile ; prochaine action et état de sauvegarde restent accessibles.
+Les notes sont propriétaires, uniques par version d’activité et gardent leur langue originale. Sauvegarde confirmée par ETag propre, saisie maintenue sur panne/expiration/412 ; comparer, copier, recharger ou conserver volontairement face à la nouvelle révision. Les réponses retardées et changements de compte suivent les garanties P07 ; aucune mutation automatique sous un autre compte. Les favoris restent différés.
+
+`LearningMediaPort` prépare uniquement l’autorisation et la position propre au mediaId/durée/langue/version. Aucune vidéo, durée, route de position ou ressource privée disponible n’est inventée avant P10 ; texte pédagogique utilisable et message honnête. Composants : `LearningActivity`, `ActivityProgramme`, `ActivityNavigation`, `ActivityProgress`, `ActivityNotes`, `ActivityQuiz` et historique/résultat de quiz. Les recettes clavier/mobile et captures P08 sont consignées au fur et à mesure dans la preuve, sans les déduire des tests client simulés.
 
 ## E11 Projets et vérification
 

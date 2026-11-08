@@ -1,0 +1,713 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\scripts\\..\\.tools\\node-v24.22.2-win-x64\\node.exe",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts"
+    ],
+    "configFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts",
+    "rootDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 600000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/.runtime/browser-2026-11-08T04-18-45-910Z-efb19c62-da6a-45e8-8617-a272bddb2975/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/learning.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-18-45-910Z-efb19c62-da6a-45e8-8617-a272bddb2975\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "snapshotDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/learning.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3101",
+          "browserName": "chromium",
+          "headless": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "actionTimeout": 10000,
+          "navigationTimeout": 20000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off",
+          "serviceWorkers": "block"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\docs\\evidence\\P08-browser\\2026-11-08T04-18-45-910Z-efb19c62-da6a-45e8-8617-a272bddb2975\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "learning.spec.ts",
+      "file": "learning.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "module puis parcours retirés : notes et tentatives retrouvables, historique privé refusé à un autre compte",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12572,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T04:20:35.468Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0ec79b0c4f511f16424-825c87e9798dd0d8d756",
+          "file": "learning-history.scenario.ts",
+          "line": 21,
+          "column": 3
+        }
+      ],
+      "suites": [
+        {
+          "title": "P08 apprentissage réel",
+          "file": "learning.spec.ts",
+          "line": 54,
+          "column": 6,
+          "specs": [
+            {
+              "title": "fr : activité gratuite, quiz corrigé par Spring sans compte et programme mobile",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3008,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T04:19:06.570Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0ec79b0c4f511f16424-d211f6120274384a35ae",
+              "file": "learning.spec.ts",
+              "line": 62,
+              "column": 47
+            },
+            {
+              "title": "en : activité gratuite, quiz corrigé par Spring sans compte et programme mobile",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1967,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T04:19:17.906Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0ec79b0c4f511f16424-de0ddcbe74a7cc9a1f59",
+              "file": "learning.spec.ts",
+              "line": 62,
+              "column": 47
+            },
+            {
+              "title": "compte vide, inscription explicite, note et quiz durables, reprise sous une seconde session EN",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 10998,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Votre apprentissage commence ici', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: 'Votre apprentissage commence ici', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Votre apprentissage commence ici', exact: true })\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Votre apprentissage commence ici', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: 'Votre apprentissage commence ici', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Votre apprentissage commence ici', exact: true })\u001b[22m\n\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts:99:82",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts",
+                          "column": 82,
+                          "line": 99
+                        },
+                        "snippet": " \u001b[90m  97 |\u001b[39m     \u001b[36mawait\u001b[39m loginMethodAccount(context\u001b[33m.\u001b[39mrequest\u001b[33m,\u001b[39m account)\u001b[33m;\u001b[39m\n \u001b[90m  98 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(learningPath(\u001b[32m'fr'\u001b[39m))\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  99 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39memptyTitle\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                                  \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 100 |\u001b[39m     \u001b[36mawait\u001b[39m capture(page\u001b[33m,\u001b[39m \u001b[32m'fr-1440-dashboard-empty'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 101 |\u001b[39m     \u001b[36mconst\u001b[39m method \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m createPersonalMethod(context\u001b[33m.\u001b[39mrequest\u001b[33m,\u001b[39m account\u001b[33m.\u001b[39mid\u001b[33m,\u001b[39m methodFields(\u001b[32m'fr'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m`P08 méthode récente ${randomUUID()}`\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m 102 |\u001b[39m     \u001b[36mawait\u001b[39m openActivity(page\u001b[33m,\u001b[39m fixture)\u001b[33m;\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts",
+                            "column": 82,
+                            "line": 99
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Votre apprentissage commence ici', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: 'Votre apprentissage commence ici', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Votre apprentissage commence ici', exact: true })\u001b[22m\n\n\n   97 |     await loginMethodAccount(context.request, account);\n   98 |     await page.goto(learningPath('fr'));\n>  99 |     await expect(page.getByRole('heading', { name: t.emptyTitle, exact: true })).toBeVisible();\n      |                                                                                  ^\n  100 |     await capture(page, 'fr-1440-dashboard-empty');\n  101 |     const method = await createPersonalMethod(context.request, account.id, methodFields('fr', `P08 méthode récente ${randomUUID()}`));\n  102 |     await openActivity(page, fixture);\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts:99:82"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T04:19:19.909Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-18-45-910Z-efb19c62-da6a-45e8-8617-a272bddb2975\\results\\learning-P08-apprentissage-c7dc1-sous-une-seconde-session-EN\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-18-45-910Z-efb19c62-da6a-45e8-8617-a272bddb2975\\results\\learning-P08-apprentissage-c7dc1-sous-une-seconde-session-EN\\error-context.md"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-18-45-910Z-efb19c62-da6a-45e8-8617-a272bddb2975\\results\\learning-P08-apprentissage-c7dc1-sous-une-seconde-session-EN\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts",
+                        "column": 82,
+                        "line": 99
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "e0ec79b0c4f511f16424-2795b25e38d8f35556bb",
+              "file": "learning.spec.ts",
+              "line": 95,
+              "column": 3
+            },
+            {
+              "title": "propriété réelle et ancienne page refusée après connexion d’un autre compte",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 1595,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-learning-note-state]')\nExpected: \u001b[32m\"saved\"\u001b[39m\nError: strict mode violation: locator('[data-learning-note-state]') resolved to 2 elements:\n    1) <section aria-labelledby=\"_r_0_-heading\" data-learning-note-state=\"saving\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).first()\n    2) <section aria-labelledby=\"_r_2_-heading\" data-learning-note-state=\"modified\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).nth(1)\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('[data-learning-note-state]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-learning-note-state]')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-learning-note-state]')\nExpected: \u001b[32m\"saved\"\u001b[39m\nError: strict mode violation: locator('[data-learning-note-state]') resolved to 2 elements:\n    1) <section aria-labelledby=\"_r_0_-heading\" data-learning-note-state=\"saving\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).first()\n    2) <section aria-labelledby=\"_r_2_-heading\" data-learning-note-state=\"modified\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).nth(1)\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('[data-learning-note-state]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-learning-note-state]')\u001b[22m\n\n    at saveNote (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts:47:60)\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts:142:53",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts",
+                          "column": 60,
+                          "line": 47
+                        },
+                        "snippet": " \u001b[90m 45 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39msaveNote\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 46 |\u001b[39m   \u001b[36mconst\u001b[39m saved \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m response\u001b[33m;\u001b[39m expect(saved\u001b[33m.\u001b[39mstatus())\u001b[33m.\u001b[39mtoBe(create \u001b[33m?\u001b[39m \u001b[35m201\u001b[39m \u001b[33m:\u001b[39m \u001b[35m200\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 47 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-learning-note-state]'\u001b[39m))\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'data-learning-note-state'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'saved'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 48 |\u001b[39m   \u001b[36mreturn\u001b[39m \u001b[36mawait\u001b[39m saved\u001b[33m.\u001b[39mjson() \u001b[36mas\u001b[39m \u001b[33mActivityNoteView\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m 49 |\u001b[39m }\n \u001b[90m 50 |\u001b[39m \u001b[36masync\u001b[39m \u001b[36mfunction\u001b[39m privateNotStored(page\u001b[33m:\u001b[39m \u001b[33mPage\u001b[39m\u001b[33m,\u001b[39m marker\u001b[33m:\u001b[39m string) {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts",
+                            "column": 60,
+                            "line": 47
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-learning-note-state]')\nExpected: \u001b[32m\"saved\"\u001b[39m\nError: strict mode violation: locator('[data-learning-note-state]') resolved to 2 elements:\n    1) <section aria-labelledby=\"_r_0_-heading\" data-learning-note-state=\"saving\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).first()\n    2) <section aria-labelledby=\"_r_2_-heading\" data-learning-note-state=\"modified\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).nth(1)\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('[data-learning-note-state]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-learning-note-state]')\u001b[22m\n\n\n  45 |   await page.getByRole('button', { name: t.saveNote, exact: true }).click();\n  46 |   const saved = await response; expect(saved.status()).toBe(create ? 201 : 200);\n> 47 |   await expect(page.locator('[data-learning-note-state]')).toHaveAttribute('data-learning-note-state', 'saved');\n     |                                                            ^\n  48 |   return await saved.json() as ActivityNoteView;\n  49 | }\n  50 | async function privateNotStored(page: Page, marker: string) {\n    at saveNote (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts:47:60)\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts:142:53"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T04:19:31.924Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-18-45-910Z-efb19c62-da6a-45e8-8617-a272bddb2975\\results\\learning-P08-apprentissage-2aa46-connexion-d’un-autre-compte\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-18-45-910Z-efb19c62-da6a-45e8-8617-a272bddb2975\\results\\learning-P08-apprentissage-2aa46-connexion-d’un-autre-compte\\error-context.md"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-18-45-910Z-efb19c62-da6a-45e8-8617-a272bddb2975\\results\\learning-P08-apprentissage-2aa46-connexion-d’un-autre-compte\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts",
+                        "column": 60,
+                        "line": 47
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "e0ec79b0c4f511f16424-56562af36541305ec3aa",
+              "file": "learning.spec.ts",
+              "line": 140,
+              "column": 3
+            },
+            {
+              "title": "note : réponse retardée, saisie plus récente et conflit résolu explicitement entre onglets",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 1515,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-learning-note-state]')\nExpected: \u001b[32m\"saved\"\u001b[39m\nError: strict mode violation: locator('[data-learning-note-state]') resolved to 2 elements:\n    1) <section aria-labelledby=\"_r_0_-heading\" data-learning-note-state=\"modified\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).first()\n    2) <section aria-labelledby=\"_r_2_-heading\" data-learning-note-state=\"modified\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).nth(1)\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('[data-learning-note-state]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-learning-note-state]')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-learning-note-state]')\nExpected: \u001b[32m\"saved\"\u001b[39m\nError: strict mode violation: locator('[data-learning-note-state]') resolved to 2 elements:\n    1) <section aria-labelledby=\"_r_0_-heading\" data-learning-note-state=\"modified\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).first()\n    2) <section aria-labelledby=\"_r_2_-heading\" data-learning-note-state=\"modified\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).nth(1)\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('[data-learning-note-state]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-learning-note-state]')\u001b[22m\n\n    at saveNote (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts:47:60)\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts:162:18",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts",
+                          "column": 60,
+                          "line": 47
+                        },
+                        "snippet": " \u001b[90m 45 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39msaveNote\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 46 |\u001b[39m   \u001b[36mconst\u001b[39m saved \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m response\u001b[33m;\u001b[39m expect(saved\u001b[33m.\u001b[39mstatus())\u001b[33m.\u001b[39mtoBe(create \u001b[33m?\u001b[39m \u001b[35m201\u001b[39m \u001b[33m:\u001b[39m \u001b[35m200\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 47 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-learning-note-state]'\u001b[39m))\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'data-learning-note-state'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'saved'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 48 |\u001b[39m   \u001b[36mreturn\u001b[39m \u001b[36mawait\u001b[39m saved\u001b[33m.\u001b[39mjson() \u001b[36mas\u001b[39m \u001b[33mActivityNoteView\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m 49 |\u001b[39m }\n \u001b[90m 50 |\u001b[39m \u001b[36masync\u001b[39m \u001b[36mfunction\u001b[39m privateNotStored(page\u001b[33m:\u001b[39m \u001b[33mPage\u001b[39m\u001b[33m,\u001b[39m marker\u001b[33m:\u001b[39m string) {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts",
+                            "column": 60,
+                            "line": 47
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-learning-note-state]')\nExpected: \u001b[32m\"saved\"\u001b[39m\nError: strict mode violation: locator('[data-learning-note-state]') resolved to 2 elements:\n    1) <section aria-labelledby=\"_r_0_-heading\" data-learning-note-state=\"modified\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).first()\n    2) <section aria-labelledby=\"_r_2_-heading\" data-learning-note-state=\"modified\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).nth(1)\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('[data-learning-note-state]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-learning-note-state]')\u001b[22m\n\n\n  45 |   await page.getByRole('button', { name: t.saveNote, exact: true }).click();\n  46 |   const saved = await response; expect(saved.status()).toBe(create ? 201 : 200);\n> 47 |   await expect(page.locator('[data-learning-note-state]')).toHaveAttribute('data-learning-note-state', 'saved');\n     |                                                            ^\n  48 |   return await saved.json() as ActivityNoteView;\n  49 | }\n  50 | async function privateNotStored(page: Page, marker: string) {\n    at saveNote (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts:47:60)\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts:162:18"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T04:19:42.181Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-18-45-910Z-efb19c62-da6a-45e8-8617-a272bddb2975\\results\\learning-P08-apprentissage-6e771-explicitement-entre-onglets\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-18-45-910Z-efb19c62-da6a-45e8-8617-a272bddb2975\\results\\learning-P08-apprentissage-6e771-explicitement-entre-onglets\\error-context.md"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-18-45-910Z-efb19c62-da6a-45e8-8617-a272bddb2975\\results\\learning-P08-apprentissage-6e771-explicitement-entre-onglets\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts",
+                        "column": 60,
+                        "line": 47
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "e0ec79b0c4f511f16424-d488bb733747fd158cc8",
+              "file": "learning.spec.ts",
+              "line": 159,
+              "column": 3
+            },
+            {
+              "title": "panne réelle de Spring, reprise clavier et perte de session sans perte de note",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 1535,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-learning-note-state]')\nExpected: \u001b[32m\"saved\"\u001b[39m\nError: strict mode violation: locator('[data-learning-note-state]') resolved to 2 elements:\n    1) <section aria-labelledby=\"_r_0_-heading\" data-learning-note-state=\"modified\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).first()\n    2) <section aria-labelledby=\"_r_2_-heading\" data-learning-note-state=\"modified\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).nth(1)\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('[data-learning-note-state]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-learning-note-state]')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-learning-note-state]')\nExpected: \u001b[32m\"saved\"\u001b[39m\nError: strict mode violation: locator('[data-learning-note-state]') resolved to 2 elements:\n    1) <section aria-labelledby=\"_r_0_-heading\" data-learning-note-state=\"modified\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).first()\n    2) <section aria-labelledby=\"_r_2_-heading\" data-learning-note-state=\"modified\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).nth(1)\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('[data-learning-note-state]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-learning-note-state]')\u001b[22m\n\n    at saveNote (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts:47:60)\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts:202:18",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts",
+                          "column": 60,
+                          "line": 47
+                        },
+                        "snippet": " \u001b[90m 45 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39msaveNote\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 46 |\u001b[39m   \u001b[36mconst\u001b[39m saved \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m response\u001b[33m;\u001b[39m expect(saved\u001b[33m.\u001b[39mstatus())\u001b[33m.\u001b[39mtoBe(create \u001b[33m?\u001b[39m \u001b[35m201\u001b[39m \u001b[33m:\u001b[39m \u001b[35m200\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 47 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-learning-note-state]'\u001b[39m))\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'data-learning-note-state'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'saved'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 48 |\u001b[39m   \u001b[36mreturn\u001b[39m \u001b[36mawait\u001b[39m saved\u001b[33m.\u001b[39mjson() \u001b[36mas\u001b[39m \u001b[33mActivityNoteView\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m 49 |\u001b[39m }\n \u001b[90m 50 |\u001b[39m \u001b[36masync\u001b[39m \u001b[36mfunction\u001b[39m privateNotStored(page\u001b[33m:\u001b[39m \u001b[33mPage\u001b[39m\u001b[33m,\u001b[39m marker\u001b[33m:\u001b[39m string) {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts",
+                            "column": 60,
+                            "line": 47
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-learning-note-state]')\nExpected: \u001b[32m\"saved\"\u001b[39m\nError: strict mode violation: locator('[data-learning-note-state]') resolved to 2 elements:\n    1) <section aria-labelledby=\"_r_0_-heading\" data-learning-note-state=\"modified\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).first()\n    2) <section aria-labelledby=\"_r_2_-heading\" data-learning-note-state=\"modified\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).nth(1)\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('[data-learning-note-state]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-learning-note-state]')\u001b[22m\n\n\n  45 |   await page.getByRole('button', { name: t.saveNote, exact: true }).click();\n  46 |   const saved = await response; expect(saved.status()).toBe(create ? 201 : 200);\n> 47 |   await expect(page.locator('[data-learning-note-state]')).toHaveAttribute('data-learning-note-state', 'saved');\n     |                                                            ^\n  48 |   return await saved.json() as ActivityNoteView;\n  49 | }\n  50 | async function privateNotStored(page: Page, marker: string) {\n    at saveNote (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts:47:60)\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts:202:18"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T04:19:52.024Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-18-45-910Z-efb19c62-da6a-45e8-8617-a272bddb2975\\results\\learning-P08-apprentissage-78f10--session-sans-perte-de-note\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-18-45-910Z-efb19c62-da6a-45e8-8617-a272bddb2975\\results\\learning-P08-apprentissage-78f10--session-sans-perte-de-note\\error-context.md"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-18-45-910Z-efb19c62-da6a-45e8-8617-a272bddb2975\\results\\learning-P08-apprentissage-78f10--session-sans-perte-de-note\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts",
+                        "column": 60,
+                        "line": 47
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "e0ec79b0c4f511f16424-586ff1f39b791648a294",
+              "file": "learning.spec.ts",
+              "line": 199,
+              "column": 3
+            },
+            {
+              "title": "quiz publié modifié : 412 explicite ; note personnelle conservée après retrait de l’activité",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 7621,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-learning-note-state]')\nExpected: \u001b[32m\"saved\"\u001b[39m\nError: strict mode violation: locator('[data-learning-note-state]') resolved to 2 elements:\n    1) <section aria-labelledby=\"_r_0_-heading\" data-learning-note-state=\"modified\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).first()\n    2) <section aria-labelledby=\"_r_2_-heading\" data-learning-note-state=\"modified\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).nth(1)\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('[data-learning-note-state]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-learning-note-state]')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-learning-note-state]')\nExpected: \u001b[32m\"saved\"\u001b[39m\nError: strict mode violation: locator('[data-learning-note-state]') resolved to 2 elements:\n    1) <section aria-labelledby=\"_r_0_-heading\" data-learning-note-state=\"modified\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).first()\n    2) <section aria-labelledby=\"_r_2_-heading\" data-learning-note-state=\"modified\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).nth(1)\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('[data-learning-note-state]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-learning-note-state]')\u001b[22m\n\n    at saveNote (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts:47:60)\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts:229:110",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts",
+                          "column": 60,
+                          "line": 47
+                        },
+                        "snippet": " \u001b[90m 45 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39msaveNote\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 46 |\u001b[39m   \u001b[36mconst\u001b[39m saved \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m response\u001b[33m;\u001b[39m expect(saved\u001b[33m.\u001b[39mstatus())\u001b[33m.\u001b[39mtoBe(create \u001b[33m?\u001b[39m \u001b[35m201\u001b[39m \u001b[33m:\u001b[39m \u001b[35m200\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 47 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-learning-note-state]'\u001b[39m))\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'data-learning-note-state'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'saved'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 48 |\u001b[39m   \u001b[36mreturn\u001b[39m \u001b[36mawait\u001b[39m saved\u001b[33m.\u001b[39mjson() \u001b[36mas\u001b[39m \u001b[33mActivityNoteView\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m 49 |\u001b[39m }\n \u001b[90m 50 |\u001b[39m \u001b[36masync\u001b[39m \u001b[36mfunction\u001b[39m privateNotStored(page\u001b[33m:\u001b[39m \u001b[33mPage\u001b[39m\u001b[33m,\u001b[39m marker\u001b[33m:\u001b[39m string) {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts",
+                            "column": 60,
+                            "line": 47
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-learning-note-state]')\nExpected: \u001b[32m\"saved\"\u001b[39m\nError: strict mode violation: locator('[data-learning-note-state]') resolved to 2 elements:\n    1) <section aria-labelledby=\"_r_0_-heading\" data-learning-note-state=\"modified\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).first()\n    2) <section aria-labelledby=\"_r_2_-heading\" data-learning-note-state=\"modified\" class=\"min-w-0 space-y-5 rounded-panel border border-border p-4 sm:p-6\">…</section> aka getByRole('region', { name: 'Mes notes personnelles' }).nth(1)\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('[data-learning-note-state]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-learning-note-state]')\u001b[22m\n\n\n  45 |   await page.getByRole('button', { name: t.saveNote, exact: true }).click();\n  46 |   const saved = await response; expect(saved.status()).toBe(create ? 201 : 200);\n> 47 |   await expect(page.locator('[data-learning-note-state]')).toHaveAttribute('data-learning-note-state', 'saved');\n     |                                                            ^\n  48 |   return await saved.json() as ActivityNoteView;\n  49 | }\n  50 | async function privateNotStored(page: Page, marker: string) {\n    at saveNote (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts:47:60)\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts:229:110"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T04:20:02.025Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-18-45-910Z-efb19c62-da6a-45e8-8617-a272bddb2975\\results\\learning-P08-apprentissage-6f01c-après-retrait-de-l’activité\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-18-45-910Z-efb19c62-da6a-45e8-8617-a272bddb2975\\results\\learning-P08-apprentissage-6f01c-après-retrait-de-l’activité\\error-context.md"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-18-45-910Z-efb19c62-da6a-45e8-8617-a272bddb2975\\results\\learning-P08-apprentissage-6f01c-après-retrait-de-l’activité\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts",
+                        "column": 60,
+                        "line": 47
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "e0ec79b0c4f511f16424-2af41f74ab2130f70e53",
+              "file": "learning.spec.ts",
+              "line": 224,
+              "column": 3
+            },
+            {
+              "title": "confirmation de note committée sous A puis retardée ignorée après vraie connexion B",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 1611,
+                      "error": {
+                        "message": "Error: locator.fill: Error: strict mode violation: getByRole('textbox', { name: 'Mes notes personnelles', exact: true }) resolved to 2 elements:\n    1) <textarea rows=\"8\" lang=\"fr\" id=\"_r_0_-note\" name=\"activityNote\" placeholder=\"Vos observations, questions et idées pour réutiliser cette activité…\" class=\"w-full min-w-0 rounded-input border border-control bg-surface px-3 py-2 text-base text-foreground placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:bg-surface-subtle disabled:text-muted-foreground aria-invalid:border-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-v…></textarea> aka locator('[id=\"_r_0_-note\"]')\n    2) <textarea rows=\"8\" lang=\"fr\" id=\"_r_1_-note\" name=\"activityNote\" placeholder=\"Vos observations, questions et idées pour réutiliser cette activité…\" class=\"w-full min-w-0 rounded-input border border-control bg-surface px-3 py-2 text-base text-foreground placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:bg-surface-subtle disabled:text-muted-foreground aria-invalid:border-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-v…></textarea> aka locator('[id=\"_r_1_-note\"]')\n\nCall log:\n\u001b[2m  - waiting for getByRole('textbox', { name: 'Mes notes personnelles', exact: true })\u001b[22m\n",
+                        "stack": "Error: locator.fill: Error: strict mode violation: getByRole('textbox', { name: 'Mes notes personnelles', exact: true }) resolved to 2 elements:\n    1) <textarea rows=\"8\" lang=\"fr\" id=\"_r_0_-note\" name=\"activityNote\" placeholder=\"Vos observations, questions et idées pour réutiliser cette activité…\" class=\"w-full min-w-0 rounded-input border border-control bg-surface px-3 py-2 text-base text-foreground placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:bg-surface-subtle disabled:text-muted-foreground aria-invalid:border-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-v…></textarea> aka locator('[id=\"_r_0_-note\"]')\n    2) <textarea rows=\"8\" lang=\"fr\" id=\"_r_1_-note\" name=\"activityNote\" placeholder=\"Vos observations, questions et idées pour réutiliser cette activité…\" class=\"w-full min-w-0 rounded-input border border-control bg-surface px-3 py-2 text-base text-foreground placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:bg-surface-subtle disabled:text-muted-foreground aria-invalid:border-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-v…></textarea> aka locator('[id=\"_r_1_-note\"]')\n\nCall log:\n\u001b[2m  - waiting for getByRole('textbox', { name: 'Mes notes personnelles', exact: true })\u001b[22m\n\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts:265:71",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts",
+                          "column": 71,
+                          "line": 265
+                        },
+                        "snippet": " \u001b[90m 263 |\u001b[39m       \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'textbox'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39mnotes\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mfill(\u001b[32m'Snapshot note du compte A'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 264 |\u001b[39m       \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39msaveNote\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m started\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 265 |\u001b[39m       \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'textbox'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39mnotes\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mfill(\u001b[32m'Nouvelle saisie A conservée après transition'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 266 |\u001b[39m       \u001b[36mawait\u001b[39m other\u001b[33m.\u001b[39mgoto(authPath(\u001b[32m'fr'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'sign-in'\u001b[39m))\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m fillMethodLogin(other\u001b[33m,\u001b[39m \u001b[32m'fr'\u001b[39m\u001b[33m,\u001b[39m b)\u001b[33m;\u001b[39m\n \u001b[90m 267 |\u001b[39m       \u001b[36mawait\u001b[39m expect(other)\u001b[33m.\u001b[39mtoHaveURL(\u001b[36mnew\u001b[39m \u001b[33mRegExp\u001b[39m(\u001b[32m'/fr/compte'\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m 268 |\u001b[39m       \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(t\u001b[33m.\u001b[39maccountChanged\u001b[33m,\u001b[39m { exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m release()\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m finished\u001b[33m;\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts",
+                            "column": 71,
+                            "line": 265
+                          },
+                          "message": "Error: locator.fill: Error: strict mode violation: getByRole('textbox', { name: 'Mes notes personnelles', exact: true }) resolved to 2 elements:\n    1) <textarea rows=\"8\" lang=\"fr\" id=\"_r_0_-note\" name=\"activityNote\" placeholder=\"Vos observations, questions et idées pour réutiliser cette activité…\" class=\"w-full min-w-0 rounded-input border border-control bg-surface px-3 py-2 text-base text-foreground placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:bg-surface-subtle disabled:text-muted-foreground aria-invalid:border-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-v…></textarea> aka locator('[id=\"_r_0_-note\"]')\n    2) <textarea rows=\"8\" lang=\"fr\" id=\"_r_1_-note\" name=\"activityNote\" placeholder=\"Vos observations, questions et idées pour réutiliser cette activité…\" class=\"w-full min-w-0 rounded-input border border-control bg-surface px-3 py-2 text-base text-foreground placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:bg-surface-subtle disabled:text-muted-foreground aria-invalid:border-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-v…></textarea> aka locator('[id=\"_r_1_-note\"]')\n\nCall log:\n\u001b[2m  - waiting for getByRole('textbox', { name: 'Mes notes personnelles', exact: true })\u001b[22m\n\n\n  263 |       await page.getByRole('textbox', { name: t.notes, exact: true }).fill('Snapshot note du compte A');\n  264 |       await page.getByRole('button', { name: t.saveNote, exact: true }).click(); await started;\n> 265 |       await page.getByRole('textbox', { name: t.notes, exact: true }).fill('Nouvelle saisie A conservée après transition');\n      |                                                                       ^\n  266 |       await other.goto(authPath('fr', 'sign-in')); await fillMethodLogin(other, 'fr', b);\n  267 |       await expect(other).toHaveURL(new RegExp('/fr/compte'));\n  268 |       await expect(page.getByText(t.accountChanged, { exact: true })).toBeVisible(); release(); await finished;\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts:265:71"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T04:20:16.542Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-18-45-910Z-efb19c62-da6a-45e8-8617-a272bddb2975\\results\\learning-P08-apprentissage-7f539-rée-après-vraie-connexion-B\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-18-45-910Z-efb19c62-da6a-45e8-8617-a272bddb2975\\results\\learning-P08-apprentissage-7f539-rée-après-vraie-connexion-B\\error-context.md"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T04-18-45-910Z-efb19c62-da6a-45e8-8617-a272bddb2975\\results\\learning-P08-apprentissage-7f539-rée-après-vraie-connexion-B\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\learning.spec.ts",
+                        "column": 71,
+                        "line": 265
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "e0ec79b0c4f511f16424-880c294b3bdd942655e7",
+              "file": "learning.spec.ts",
+              "line": 250,
+              "column": 3
+            },
+            {
+              "title": "une seule confirmation de départ pour notes, déclarations et réponses non enregistrées",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2058,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T04:20:27.201Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0ec79b0c4f511f16424-58e0ffcfae084f3e690a",
+              "file": "learning.spec.ts",
+              "line": 278,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-08T04:19:05.027Z",
+    "duration": 103172.087,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 6,
+    "flaky": 0
+  }
+}

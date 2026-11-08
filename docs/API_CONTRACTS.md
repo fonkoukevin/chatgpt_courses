@@ -21,7 +21,7 @@ Le contrat machine des opérations disponibles est [api/openapi.yaml](api/openap
 
 Une route système absente retourne un vrai 404 Problem. Les erreurs contiennent notamment `status`, `code`, `traceId`, `detail` et `instance`. Le proxy préserve les erreurs de Spring ; sa propre erreur de connexion devient 502/504 `API_UNAVAILABLE`, sans données de remplacement. Aucun autre endpoint métier de ce document n’est annoncé implémenté par P01. Les routes privées sont refusées et CSRF reste actif.
 
-P03 conserve le payload de la sonde et le produit avec un DTO explicite. La sonde reste dans l’OpenAPI, complétée par les opérations d’identité P04, d’édition P05, de catalogue P06 et de méthodes P07 ci-dessous, sous le serveur de même origine `/api/v1`. `system/unknown` est volontairement absent : c’est une requête de diagnostic vers une route manquante, pas une nouvelle opération. Aucun contrôleur de test n’est livré en production. Son interface technique P01 se trouve désormais dans `/{locale}/dev/foundations`, limitée aux profils local/test ; `/fr` et `/en` servent l’accueil public.
+P03 conserve le payload de la sonde et le produit avec un DTO explicite. La sonde reste dans l’OpenAPI, complétée par les opérations d’identité P04, d’édition P05, de catalogue P06, de méthodes P07 et d’apprentissage P08 ci-dessous, sous le serveur de même origine `/api/v1`. `system/unknown` est volontairement absent : c’est une requête de diagnostic vers une route manquante, pas une nouvelle opération. Aucun contrôleur de test n’est livré en production. Son interface technique P01 se trouve désormais dans `/{locale}/dev/foundations`, limitée aux profils local/test ; `/fr` et `/en` servent l’accueil public.
 
 Les composants partagés `Problem`, `FieldError`, UUID, Locale, UtcInstant, Revision, Money et la convention ETag sont définis sans inventer de routes pour les utiliser. Les erreurs utilisent `type: about:blank`, un `traceId` UUID et `Cache-Control: private, no-store`. `fieldErrors`, présent pour une erreur de validation, est une liste `{ field, code, message }`, sans valeur rejetée ni message dynamique contenant une donnée saisie. `code` reste stable pour la traduction ; les détails SQL, exceptions, secrets et graphes JPA restent hors réponse.
 
@@ -192,22 +192,51 @@ Le générateur local exige objectif, données disponibles et format pour assemb
 
 Le client valide réponse, code HTTP et ETag avant confirmation ; conserve les modifications postérieures à une requête lente et la saisie sur 412, erreur ou expiration. Comparaison, copie, rechargement et rebase sont explicites. CSRF reste en mémoire ; 401/403 déclenche une nouvelle acquisition pour une prochaine action, sans répéter la mutation. Un 409 de compte ou 412 ne déclenche aucun retry POST.
 
-## Apprentissage et projets — planifié P08–P09
+## Apprentissage, notes et quiz — validé localement P08
+
+`LearningService`, DTO explicites et OpenAPI fournissent les quinze opérations ci-dessous. Le global PostgreSQL réussit avec **95 tests**, dont huit tests de services et neuf HTTP P08 ; les **51 tests client** comprennent transport simulé et règles d’état. Builds et chaîne HTTP réelle réussis, **10 scénarios Chromium en 72,87 s** et **33 captures finales examinées** ; résultats et limites dans [evidence/P08.md](evidence/P08.md). Toutes les routes ont le préfixe `/api/v1` ; aucune exécution GitHub ni publication de production n’est déduite de la validation locale.
+
+| Méthode et route | Commande ou résultat | Contrôle |
+| --- | --- | --- |
+| `GET /me/learning?locale=fr` | `LearningDashboard` : reprise, inscriptions et cinq méthodes récentes au plus | `learning.read`, données du seul propriétaire, aucune reprise inventée |
+| `POST /me/enrollments` | `{ courseResourceId, courseVersionId, locale }` → `EnrollmentView` | `learning.write`, CSRF/contexte ; 201 créée, 200 existante |
+| `GET /me/enrollments/{id}?locale=fr` | Programme/version figés et dénominateur | Propriétaire ou 404 |
+| `GET /me/enrollments/{id}/activities/{activityId}?activityVersionId={uuid}&locale=fr` | `LearningActivity` et chaîne d’accès agrégée | Propriétaire, couple activité/version du snapshot ; aucun corrigé initial |
+| `POST /me/enrollments/{id}/visits` | `{ activityId, activityVersionId, locale }` → `VisitView` | Mise à jour de reprise seulement ; activité FREE disponible |
+| `GET /me/activity-progress/{activityId}?enrollmentId={uuid}&activityVersionId={uuid}` | `ActivityProgressView` et ETag individuel | Propriétaire et version exacte |
+| `PUT /me/activity-progress/{activityId}` | `{ enrollmentId, activityVersionId, read, completed, locale }` → progrès et nouvel ETag | Propriétaire, publication FREE, If-Match ; faits déclarés séparés |
+| `GET /me/activity-notes/by-activity/{activityId}?activityVersionId={uuid}` | `{ note: ActivityNoteView|null }` | Recherche du propriétaire sans création par GET |
+| `POST /me/activity-notes` | `{ activityId, activityVersionId, locale, text }` → 201 note, Location et ETag | Création sur publication FREE ; doublon 409 `ACTIVITY_NOTE_EXISTS` |
+| `GET /me/activity-notes/{id}` | Note et ETag | Propriétaire, y compris après retrait |
+| `PATCH /me/activity-notes/{id}` | `{ text }` → note et nouvel ETag | Propriétaire et If-Match ; langue/origine immuables |
+| `POST /activities/{activityId}/quiz-attempts` | `{ enrollmentId, activityVersionId, revisionId, locale, submissionId, answers }` → 201 `QuizAttemptView` | Propriétaire, version inscrite, publication exacte et correction serveur |
+| `GET /me/quiz-attempts?activityVersionId={uuid}&page=0&pageSize=20` | Historique paginé FR/EN | Propriétaire, langue et snapshot de chaque tentative conservés |
+| `GET /me/quiz-attempts/{id}` | Tentative historique | Propriétaire ou 404, même après retrait de source |
+| `POST /learning/activities/{resourceId}/versions/{versionId}/quiz-checks` | `{ revisionId, locale, answers }` → `QuizCheckResult` | Public, CSRF obligatoire, FREE publiée exacte ; correction éphémère sans inscription/tentative/progrès |
+
+Les lectures privées sont `private, no-store`, sous permission `learning.read` ; mutations privées sous `learning.write`, CSRF et `X-Account-Context` comparé à la session, jamais utilisé comme propriétaire. Précondition de compte absente 428, autre compte 409 ; erreurs sans données privées. La correction formative publique utilise le jeton/session anonyme Spring normal, sans contexte de compte ni écriture pédagogique. Elle ne contient ni attemptId ni date de sauvegarde. Les réponses d’erreur distinguent validation 400, PROTECTED 403, publication retirée/absente 404, version publiée différente 412 et indisponibilité 503, sans donnée de remplacement.
+
+L’inscription est unique par `(owner, courseVersion)` et ne crée aucun droit acheté. Un parcours publié PROTECTED peut être commencé s’il contient une activité FREE disponible ; chaque action d’activité conserve son contrôle propre. Programme, ordre et versions sont capturés. Le dénominateur compte les **versions d’activité distinctes**, y compris protégées/retirées ; même activité/version répétée dédupliquée, deux versions de la même identité distinctes. Les GET d’activité/progrès exigent donc `activityVersionId` : aucun premier élément choisi implicitement. `LearningActivity.accessStatus` et `availability` décrivent toute la chaîne parcours/module/activité ; un parent indisponible neutralise le corps enfant. ACTIVE/PROTECTED/UNAVAILABLE sont réels ; aucun état commercial expiré/révoqué n’est fabriqué avant les droits correspondants.
+
+Visite/reprise, `readAt`, `completedAt`, réussite de quiz et projet sont des faits distincts. Le pourcentage se rapporte au dénominateur du snapshot ; un quiz réussi ne termine pas automatiquement l’activité et ne valide aucun projet (`projectAvailability=NOT_AVAILABLE` avant P09). Une visite ne change pas la révision du progrès. Progrès et note ont leurs tags forts séparés `"activity-progress-{id}-r{revision}"` et `"activity-note-{id}-r{revision}"` ; PUT/PATCH exigent If-Match après propriété/verrou, 428/412 sans écrasement. Les enveloppes dynamiques n’utilisent pas ces tags.
+
+Une note est unique par propriétaire/version d’activité, langue originale fixée à création. Texte 0..16000 caractères, JSON UTF-8 au plus 48 KiB, Unicode valide sans NUL ; note vide explicitement sauvegardable. Elle reste lisible/modifiable après retrait sans révéler le contenu réservé. FR/EN partage le même progrès et l’historique d’une version pédagogique équivalente, mais ne traduit pas la note. Les lectures privées et le client n’envoient pas son texte aux mesures ou aux journaux.
+
+`ContentDocument.quizPolicy`, nullable et optionnel en entrée historique, définit `passPercent=1..100` et `maxAttempts=null|1..50`. Null/absent signifie politique effective **100 %, tentatives illimitées**. La politique effective gèle avec l’évaluation et doit être équivalente dans la traduction revue ; expliciter le même défaut n’impose pas une nouvelle version. Une politique différente sur version gelée requiert une nouvelle version pédagogique. Le DTO initial reste sans bonnes réponses ; politique publique ne signifie pas corrigé public avant soumission.
+
+`answers` contient exactement une `{ key, optionIndex }` par question publiée : 1..20 réponses, options 0..7 puis bornes réelles vérifiées, aucune clé inconnue, omission ou duplication. Score/correction calculés côté serveur, jamais reçus comme autorité : `scorePoints*100 >= maxPoints*passPercent`. La tentative append-only capture questions/options/correction/points, politique, révision/version et langue. Limite de tentatives commune FR/EN par propriétaire/version ; quiz absent 409 `QUIZ_UNAVAILABLE`, quota atteint 409 `QUIZ_ATTEMPTS_EXHAUSTED`. Même propriétaire/submissionId/corps retrouve la même tentative en 201, autre corps 409 `CONFLICT` ; ce replay historique reste lisible après retrait sans corriger de nouveau. La correction anonyme est explicitement formative et non conservée ; une action authentifiée distincte crée le résultat durable.
+
+Dashboard borné aux cent inscriptions récentes, historique des tentatives page 0..1000000 et pageSize 1..100, ordre submittedAt DESC puis id. Reprise : dernière activité encore accessible, sinon première non terminée accessible, sinon première accessible, toujours dans la version inscrite. Les méthodes récentes ne chargent pas leurs textes ; permission absente annoncée FORBIDDEN. Aucun projet, média ou diagnostic facultatif fictif ne complète ces données. Les contrôles client vérifient aussi cohérence des identités/versions, sommes de points, résultat et tags ; 412/428/503 restent distincts sans répétition automatique de mutation.
+
+## Projets — planifié P09
 
 | Méthode et route | Fonction et contrôle |
 | --- | --- |
-| `GET /me/learning` | Reprise, parcours, progression distincte des évaluations et méthodes récentes |
-| `POST /me/enrollments` | Commencer un parcours accessible, sans doubler une inscription existante |
-| `PUT /me/activity-progress/{activityId}` | Déclaration d’une activité terminée ; validation de l’activité et prérequis côté serveur |
-| `PUT /me/media-progress/{mediaId}` | Position propre à ce média ; durée/bornes vérifiées, sans transposition FR/EN |
-| `POST /activities/{activityId}/quiz-attempts` | Réponses et version ; correction calculée côté serveur, tentative et langue conservées |
 | `GET /me/projects` / `POST /me/projects` | Liste du propriétaire ; création à partir d’une activité/version accessible |
 | `GET/PATCH /me/projects/{projectId}` | Texte structuré, état et révision ; `If-Match` sur sauvegarde |
 | `GET /me/projects/{projectId}/revisions` | Historique privé, pagination et contenu accessible au propriétaire |
 | `POST /me/projects/{projectId}/self-assessments` | Révision de production, grille/version et vérifications déclarées ; score calculé mais identifié comme déclaré |
 | `POST /activities/{activityId}/solution-reveals` | Action volontaire/tentative préalable selon activité ; consultation tracée sans validation du projet |
-
-Les notes d’activité peuvent avoir des endpoints dédiés `/me/activity-notes/{activityId}` avec les mêmes conventions de propriétaire et révision. Documenter le format exact avant de connecter leur éditeur. Le générateur de prompts assemble localement ou côté serveur des données structurées ; il n’appelle pas un modèle IA par défaut.
 
 Les résultats de quiz, autoévaluations et futures revues humaines ont des types distincts. Un DTO d’évaluation contient au minimum `method`, `projectRevisionId`, `rubricVersionId`, `score`, `blockingIssues`, `evaluatedAt`, `evaluatorId?`, `declaredByUser`. La revue humaine reste désactivée tant que le service commercial n’existe pas.
 
@@ -219,8 +248,11 @@ Les résultats de quiz, autoévaluations et futures revues humaines ont des type
 | `POST /me/projects/{projectId}/attachments` | Confirmer le transfert ; le serveur vérifie existence, taille, type et état de validation avant de l’utiliser |
 | `POST /assets/{assetId}/download-access` | Vérifier propriétaire/droit/publication puis délivrer un accès temporaire |
 | `POST /media/{mediaId}/playback-access` | Même vérification pour le média premium et le fournisseur configuré |
+| `PUT /me/media-progress/{mediaId}` | Position propre au média autorisé et à sa durée serveur, jamais transposée entre vidéos FR/EN |
 
 Le navigateur ne choisit pas une clé de bucket arbitraire ni une URL externe à récupérer. Aucune présignature n’autorise implicitement tous les fichiers du même compte. Les URLs temporaires et jetons de lecture sont exclus des logs et caches publics. En cas de révocation, un nouvel accès est refusé ; un lien précédemment délivré suit sa durée de validité.
+
+P08 prépare seulement `LearningMediaPort` : résolution serveur autorisée par mediaId, durée finie vérifiée et position bornée propre à ce média/langue/version. Aucun endpoint, lecteur vide, fichier ou durée disponible n’est déduit de cette abstraction ; registre et persistance réels restent P10.
 
 ## Offres, commandes, Stripe et remboursements — planifié P11–P13
 
@@ -262,7 +294,7 @@ Une réponse de `readiness` contient `{ ready, blockingIssues, warnings, checked
 
 ## Contrat et tests
 
-P03 livre le contrat machine et les commandes de validation/génération avec des outils compatibles avec TypeScript 6 ; P04/P05/P06/P07 les étendent aux routes réelles d’identité, CMS, catalogue public et méthodes personnelles. La CI est configurée pour ces commandes ; une exécution GitHub n’est pas présumée. Les DTO exposés ne sont jamais des entités JPA brutes. Les modèles et FK actuels/futurs sont précisés dans [DATA_MODEL.md](DATA_MODEL.md), les résultats réellement observés dans [evidence/P03.md](evidence/P03.md), [evidence/P04.md](evidence/P04.md), [evidence/P05.md](evidence/P05.md), [evidence/P06.md](evidence/P06.md) et [evidence/P07.md](evidence/P07.md).
+P03 livre le contrat machine et les commandes de validation/génération avec des outils compatibles avec TypeScript 6 ; P04 à P08 les étendent aux routes réelles d’identité, CMS, catalogue public, méthodes et apprentissage. La CI est configurée pour ces commandes ; une exécution GitHub n’est pas présumée. Les DTO exposés ne sont jamais des entités JPA brutes. Les modèles et FK actuels/futurs sont précisés dans [DATA_MODEL.md](DATA_MODEL.md), les résultats réellement observés dans les preuves [P03](evidence/P03.md), [P04](evidence/P04.md), [P05](evidence/P05.md), [P06](evidence/P06.md), [P07](evidence/P07.md) et [P08](evidence/P08.md).
 
 Chaque lot qui ajoute une route fournit des tests sur le backend réel pour ses invariants, puis met à jour le client et les écrans. Les états de facture, remboursement ou autorisation ne sont jamais inventés uniquement pour faire passer un test d’interface.
 

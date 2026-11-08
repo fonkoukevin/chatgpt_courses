@@ -1,10 +1,10 @@
-# Modèle relationnel — socles P03 à P09
+# Modèle relationnel — socles P03 à P10
 
-Les migrations sont la définition exécutable du schéma. Ce document distingue les tables livrées par P03 à P09 des extensions à créer dans les lots métier. Les preuves de chaque lot indiquent le niveau de validation réellement exécuté.
+Les migrations sont la définition exécutable du schéma. Ce document distingue les tables implémentées des extensions à créer dans les lots métier. V009/V010/V011 sont validées localement en P10 : **138 tests Java globaux**, ciblé identité **6/6 sous `MAIL_MODE=disabled`**, ciblé stockage final **8/8 à 24 slots** et **12/12 scénarios Chromium**. Les ciblés complètent le global sans s’ajouter à son décompte. Les preuves de chaque lot indiquent le niveau réellement exécuté.
 
 ## Identité et contenu présents
 
-V001 conserve les deux tables officielles de Spring Session JDBC 4.1.1. V002 ajoute douze tables, sans données de démonstration et sans mécanisme concurrent de création automatique. V003 ajoute deux tables de sécurité, la version d’authentification et des références de permission. V004 étend les instantanés éditoriaux et ajoute deux tables d’historique et de références. V005 ajoute les métadonnées publiques par révision et les instantanés de revue/source publiées. V006 ajoute les copies personnelles de méthodes ; V007 ajoute suivi, notes et tentatives ; V008 ajoute productions et preuves déclaratives. V001 à V007 restent inchangées par P09.
+V001 conserve les deux tables officielles de Spring Session JDBC 4.1.1. V002 ajoute douze tables, sans données de démonstration et sans mécanisme concurrent de création automatique. V003 ajoute deux tables de sécurité, la version d’authentification et des références de permission. V004 étend les instantanés éditoriaux et ajoute deux tables d’historique et de références. V005 ajoute les métadonnées publiques par révision et les instantanés de revue/source publiées. V006 ajoute les méthodes personnelles ; V007 ajoute suivi, notes et tentatives ; V008 ajoute productions et preuves déclaratives. V009 ajoute le registre de fichiers, V010 l’outbox durable et ses reprises, V011 les vidéos locales de test et positions. V001 à V008 restent inchangées par P10.
 
 | Table | Identité et relations | Invariants |
 | --- | --- | --- |
@@ -32,6 +32,12 @@ V001 conserve les deux tables officielles de Spring Session JDBC 4.1.1. V002 ajo
 | `project_rubric_snapshots` | UUID unique par projet, source/langue, cas, critères et politique capturés | Vingt points, quatre erreurs, seuil 1..20 ; origine du même projet par FK composite ; append-only |
 | `project_self_assessments` | UUID, propriétaire/projet/révision/grille, submissionId et empreinte, déclarations et score | Append-only ; même projet/propriétaire/grille ; seuil et besoin de révision cohérents ; aucune revue humaine |
 | `project_solution_reveals` | UUID, propriétaire, révision personnelle, source/langue et date | Trace unique, append-only ; aucun corps de corrigé stocké, aucun effet sur progression ou score |
+| `assets` | UUID, propriétaire, projet ou provenance éditoriale ressource/version/langue, clés S3 serveur et métadonnées vérifiées | Propriété et identité immuables ; READY/REJECTED/EXPIRED finaux ; clé READY distincte du staging ; aucun antivirus déduit |
+| `notification_outbox` | UUID, propriétaire, clé métier unique, type, empreinte HMAC et charge AES-GCM | Origine immuable ; purge irréversible du ciphertext ; bail/reprise distincts de la réception SMTP finale |
+| `notification_outbox_requeues` | UUID, notification, acteur, état précédent, motif et reconnaissance du risque de doublon | Journal append-only ; une issue INDETERMINATE ne se renvoie pas automatiquement |
+| `video_media` | UUID, provenance version/ressource/langue, auteur, durée/taille/hash mesurés, textes facultatifs | Registre immuable LOCAL_TEST, aucune vidéo ou durée auto-créée |
+| `video_playback_grants` | UUID, média FK, empreinte de bearer unique, propriétaire nullable, dates | Token brut jamais stocké ; liens courts, lignes expirées purgées par lots bornés |
+| `media_progress` | PK propriétaire/mediaId, position, révision et date | Position finie bornée à la durée du média ; aucune position transposée entre deux pistes FR/EN |
 
 GUIDE et METHOD_TEMPLATE sont des feuilles éditoriales depuis V004. Depuis P07, une définition de méthode appartient au document JSONB de sa révision ; la copie personnelle reste distincte dans `personal_methods`. Ces structures ne créent aucun prix, droit payant ou contenu pédagogique final.
 
@@ -68,6 +74,15 @@ erDiagram
   project_revisions ||--o{ project_self_assessments : preuves_declarees
   project_rubric_snapshots ||--o{ project_self_assessments : bareme_capture
   project_revisions ||--o{ project_solution_reveals : consultations
+  user_accounts ||--o{ assets : proprietaire
+  projects |o--o{ assets : fichiers_personnels
+  pedagogical_versions |o--o{ assets : provenance_editoriale
+  user_accounts ||--o{ notification_outbox : destinataire_metier
+  notification_outbox ||--o{ notification_outbox_requeues : reprises_tracees
+  pedagogical_versions ||--o{ video_media : provenance_video
+  video_media ||--o{ video_playback_grants : acces_temporaires
+  user_accounts ||--o{ media_progress : proprietaire_position
+  video_media ||--o{ media_progress : position_par_media
 ```
 
 ## Identité et récupération — V003 / P04
@@ -114,7 +129,7 @@ Une correction de texte ajoute une révision éditoriale sous **la même traduct
 
 Les FK composites des pointeurs courants/publiés empêchent de publier une révision appartenant à une autre traduction ou version. Le cycle est DRAFT → TO_REVIEW → READY → PUBLISHED. READY enregistre `reviewed_revision_id`, la source examinée et `verified_at` depuis une action réelle de revue. `source_revision_id` conserve l’origine de la traduction ; `reviewed_source_revision_id` avance uniquement lors d’une nouvelle revue. Une correction revient DRAFT tout en conservant le pointeur de publication précédent. Une source corrigée, marquée STALE ou archivée fait passer ses traductions examinées à STALE sans modifier leurs textes historiques. Les transitions invalides sont refusées ; l’archivage explicite est possible depuis les états non archivés et conserve les instantanés.
 
-`readiness` évalue les champs et dépendances structurels ; un brouillon complet peut donc être structurellement prêt sans avoir encore été revu. Une activité nécessite objectif, résultat, contenu, exercice, corrigé et grille. Un parent nécessite des enfants publiés dans la même langue et déjà gelés. Une ressource liée doit avoir une publication dans cette langue. Une référence média/fichier obligatoire reste `MEDIA_UNVERIFIED` et bloque : P05 n’invente aucun état de stockage disponible avant P10. Une référence facultative non vérifiée et une durée non estimée produisent des avertissements. L’absence de document structuré historique bloque également.
+`readiness` évalue les champs et dépendances structurels ; un brouillon complet peut donc être structurellement prêt sans avoir encore été revu. Une activité nécessite objectif, résultat, contenu, exercice, corrigé et grille. Un parent nécessite des enfants publiés dans la même langue et déjà gelés. Une ressource liée doit avoir une publication dans cette langue. Depuis P10, FILE/IMAGE sont vérifiés par un registre serveur READY, type/langue cohérents et présence/taille/MIME réels ; la référence obligatoire non vérifiée reste `MEDIA_UNVERIFIED` et bloque. La vidéo utilise son registre séparé V011, avec contrôle des octets et faits mesurés. Une référence facultative non vérifiée et une durée non estimée produisent des avertissements. L’absence de document structuré historique bloque également.
 
 La publication prend un `revisionId` déterminé et un motif. Dans sa transaction, le service exige READY, la révision courante demandée, une revue toujours applicable à cette révision et à la source courante, puis revérifie la readiness. Il gèle la version si nécessaire avant de déplacer le pointeur publié. La permission est vérifiée une première fois puis après l’attente des verrous. Une ancienne réponse readiness n’autorise aucune publication ultérieure à elle seule.
 
@@ -229,9 +244,49 @@ L’autoévaluation relie par FK le propriétaire, le projet, sa révision et sa
 
 La consultation d’un corrigé possède une trace unique `(owner_id, project_revision_id, source_revision_id, locale)` sans stocker le corps de la solution. Son origine doit être celle du projet. Chaque livraison ou rejeu réautorise la publication courante FREE de la même version et langue ; AFTER_SUBMISSION exige une preuve pour cette révision personnelle précise. Si le projet est lié à une inscription, contexte et corrigé reconsultent aussi la chaîne parcours/module/activité via les versions épinglées : retrait ou traduction indisponible d’un parent bloque la ressource pédagogique, sans bloquer une activité explicitement FREE d’un parcours PROTECTED encore accessible selon P08. La trace ne valide ni projet, progression, lecture ni compétence. Après retrait ou protection, production, grille et anciennes évaluations restent propriétaires ; aucun ancien corrigé n’est délivré par simple présence de sa trace. Les triggers refusent UPDATE/DELETE des révisions, grilles, évaluations et consultations, et toute réécriture de propriétaire/origine.
 
-`ProgressTotals.projectAvailability=NOT_AVAILABLE` reste le fait agrégé d’apprentissage non défini, et ne déclare pas l’absence du module personnel P09. Les projets ont leurs statuts déclaratifs séparés ; aucun taux de compétence n’en est déduit. Un brouillon anonyme volontaire peut vivre deux heures en session navigateur pour import explicite ; ce stockage n’est ni une ligne serveur ni une validation. Pièces jointes P10 et revue humaine restent désactivées.
+`ProgressTotals.projectAvailability=NOT_AVAILABLE` reste le fait agrégé d’apprentissage non défini, et ne déclare pas l’absence du module personnel P09. Les projets ont leurs statuts déclaratifs séparés ; aucun taux de compétence n’en est déduit. Un brouillon anonyme volontaire peut vivre deux heures en session navigateur pour import explicite ; ce stockage n’est ni une ligne serveur ni une validation. P10 ajoute séparément les pièces jointes ci-dessous ; la revue humaine reste désactivée.
 
 Les huit tests de service et neuf HTTP ciblés P09 ont exécuté PostgreSQL réel, dont concurrence, idempotence, propriétaire, conservation, corrigé et upgrade isolé V007→V008. Les tests client utilisent des réponses réseau simulées. Les résultats globaux, navigateur et limites du lot sont suivis dans [evidence/P09.md](evidence/P09.md) ; leur validation n’est pas déduite de ces seuls tests ciblés.
+
+## Registre de fichiers — V009 / P10 validé localement
+
+[`V009__asset_registry_and_uploads.sql`](../apps/api/src/main/resources/db/migration/V009__asset_registry_and_uploads.sql) ajoute une table `assets`, sans média, compte ou fichier de démonstration. `assets.read`/`assets.write` sont des références accordées à LEARNER ; les actions éditoriales réutilisent `content.read`/`content.write`.
+
+| Groupe de colonnes | Intégrité et rôle |
+| --- | --- |
+| `id`, `owner_id`, `scope`, `kind` | UUID, propriétaire FK RESTRICT ; PROJECT_FILE/EDITORIAL et FILE/IMAGE seulement ; aucune ligne VIDEO artificielle |
+| `project_id` ou `origin_resource_id`, `origin_version_id`, `locale` | Fichier personnel rattaché au même propriétaire par FK composite ; éditorial rattaché à une vraie version/ressource, langue FR/EN. Les deux scopes sont exclusifs |
+| `bucket_name`, `staging_key`, `ready_key` | Clés opaques uniques construites serveur, préfixes contrôlés et clés différentes ; aucun chemin client. Buckets éditorial/personnel ACL privés |
+| `declared_content_type`, `declared_size`, `filename` | MIME autorisé, taille positive bornée, nom sans chemin/contrôle ; ce sont des déclarations à contrôler, jamais une validation |
+| `verified_content_type`, `verified_size`, `content_sha256`, `ready_at` | Présents seulement pour READY ; MIME contrôlé, octets validés bornés, SHA256 de 32 octets et date UTC finie |
+| `state`, `rejection_code`, `revision`, `expires_at`, `created_at` | PENDING→READY/REJECTED/EXPIRED ; compteur borné JavaScript et échéance après création. Les états finaux et l’identité métier ne se réécrivent pas |
+| `staging_cleanup_claim_token`, `staging_cleanup_claim_until`, `staging_cleaned_at` | Bail et marqueur internes, sans modification des octets READY ni de la représentation métier ; purge staging seulement après expiration et marge |
+
+La création réserve le quota sous verrou du projet ; horodatage et TTL prennent l’horloge PostgreSQL après cette attente. La confirmation verrouille l’asset, vérifie HEAD et lit les octets bornés. Le TXT est UTF8 strict ; PNG/JPEG sont signés, décodés et réencodés avec limites de dimensions/pixels et de sortie. Seuls ces octets validés sont écrits sous `ready_key`. La PUT initiale reste attachée à `staging_key` : son rejeu ne peut pas modifier un fichier READY. FORMAT_VERIFIED décrit ces contrôles, pas un verdict antivirus ; PDF reste indisponible sans validateur documentaire adapté.
+
+Le fichier personnel appartient au projet, sans prétendre être automatiquement attaché à une révision de texte ou à une autoévaluation. Il reste au propriétaire après retrait de la ressource pédagogique. La provenance éditoriale ne force pas une nouvelle copie binaire à chaque version : une publication de même langue peut référencer explicitement un asset existant. Chaque demande publique recontrôle cette référence et la publication exacte FREE ; une inscription fournie ajoute la chaîne P08. PROTECTED reste refusé avant les droits P12.
+
+Le nettoyage prend un lot borné de clés staging connues, avec bail court SKIP LOCKED puis appel S3 hors transaction et marqueur idempotent. Il ne liste ni ne supprime globalement un bucket/préfixe ; il ne touche jamais READY. Le fournisseur devra aussi recevoir une lifecycle documentée pour staging : aucune configuration externe de cette lifecycle n’est présumée. Les huit scénarios ciblés PostgreSQL/SeaweedFS vérifient concurrence, validations, autorisation, expiration réelle du GET, cleanup et upgrade V008 préservant projet/révision/session. Le ciblé final à 24 slots et la recette Chromium complète réussissent ; l’upgrade Compose V008→V011 conserve les empreintes des trente tables existantes, sans seed ni suppression de volume. [Preuves P10](evidence/P10.md).
+
+## Outbox et reprises de notification — V010 / P10 validé localement
+
+[`V010__durable_notification_outbox.sql`](../apps/api/src/main/resources/db/migration/V010__durable_notification_outbox.sql) ajoute `notification_outbox` et `notification_outbox_requeues`. La FK propriétaire vise `user_accounts` en RESTRICT ; les reprises visent notification et acteur avec FK RESTRICT. `notifications.read`/`notifications.manage` sont installées sans attribution automatique à un compte ou rôle.
+
+La clé métier unique, le type et l’empreinte HMAC conservent une tombstone de déduplication. Le destinataire et les informations sensibles sont dans `payload_ciphertext` AES-GCM : nonce aléatoire, identité/type/clé métier authentifiés, clés de chiffrement et d’empreinte dérivées séparément de la clé maître persistée hors dépôt. Le ciphertext est immuable jusqu’à sa purge, puis ne peut pas être restauré. La charge est supprimée après SENT ou expiration ; origine et empreinte restent pour ne pas renvoyer un événement historique.
+
+États : PENDING, PROCESSING avec bail UUID/échéance, RETRY avec prochaine tentative, SENT, DEAD ou INDETERMINATE. Les contraintes imposent la cohérence bail/prochaine tentative, les dates finies, SENT/purge et l’impossibilité d’un état actif sans charge. Compteurs total, cycle et reprises restent distincts. Une connexion refusée avant SMTP peut être réessayée ; une issue ambiguë ou un bail perdu reste INDETERMINATE, sans renvoi automatique. Une reprise explicite conserve acteur, état précédent, motif et reconnaissance du doublon possible ; son journal est append-only.
+
+L’inscription et la récupération insèrent leur événement dans la même transaction que le compte/jeton. Les ports d’activation et de réponse support sont prêts pour leurs événements futurs, sans créer d’achat ou de ticket fictif. Le worker commit son claim avant SMTP ; les échecs d’email ne changent aucun droit. Les neuf tests ciblés PostgreSQL/Mailpit exécutent transaction/rollback, doublons, chiffrement, réception locale, panne/reprise, expiration et permissions. Le global et la recette Chromium P10 réussissent aussi, notamment panne réelle Mailpit et reprise explicite après issue indéterminée. Ils ne prouvent ni livraison externe ni exactement-une-fois SMTP.
+
+## Vidéo locale et positions — V011 / P10 validé localement
+
+[`V011__local_test_video_and_progress.sql`](../apps/api/src/main/resources/db/migration/V011__local_test_video_and_progress.sql) ajoute trois tables sans seed de média. `video_media` relie sa provenance à la vraie version/ressource et traduction par FK composites RESTRICT ; auteur FK, durée/taille positives bornées et SHA256 hex64. Le registre est immuable, y compris langue, durée et hash ; transcription et VTT restent facultatifs. Seul le provider LOCAL_TEST existe dans ce socle, désactivé par défaut et interdit hors local/test.
+
+`video_playback_grants` conserve uniquement empreinte SHA256 unique de 32 octets, média, propriétaire éventuel et échéance finie après création. Le bearer brut reste dans le lien court émis. L’autorisation courante s’exécute avant chaque nouvelle émission ; la lecture d’un grant existant respecte sa validité résiduelle jusqu’au TTL. Les grants expirés se nettoient par lot borné, sans supprimer le registre ou les positions.
+
+`media_progress` a pour PK `(owner_id,media_id)`. Révision 1..9007199254740991, position finie positive ou nulle et date UTC ; le trigger compare à la durée mesurée, refuse changement d’identité/propriétaire et suppression sans politique explicite. L’absence de ligne produit une vue virtuelle révision 0/date null, sans insertion cachée. Le PUT sérialise l’utilisateur, vérifie If-Match puis crée/incrémente réellement ; un no-op conserve la révision. Deux médias FR/EN restent deux positions, même si leur objectif pédagogique est équivalent.
+
+L’import local explicite vérifie le MP4, mesure sa durée/taille/hash puis copie vers une clé privée dérivée d’un UUID serveur. Même id et mêmes faits retrouvent le registre ; un candidat incompatible est rejeté avant copie, y compris lorsque l’ancien fichier manque. Une restauration identique est permise. Aucun chemin client ou URL distante ne fait autorité. Les huit tests ciblés PostgreSQL/HTTP vérifient import/readiness, fichier absent, plages/HEAD, échéance réelle, publication/retrait/chaîne, propriétaire et concurrence. Le global et les douze scénarios Chromium P10 ont ensuite réussi, dont lecture native et reprise réelle des positions. Le clip technique est documenté [hors répertoires publics](../tests/fixtures/media/README.md) ; ni cours vidéo produit ni fournisseur de production ne sont déduits de cette fixture.
 
 ## Types, concurrence et suppression
 
@@ -242,13 +297,12 @@ Les huit tests de service et neuf HTTP ciblés P09 ont exécuté PostgreSQL rée
 - Les FK métier sont `ON DELETE RESTRICT`. Les instantanés éditoriaux et attributions historiques sont protégés. L’anonymisation du compte est distincte de la suppression physique ; rétention et procédure d’effacement seront précisées dans les lots concernés. Seule la suppression des attributs de session suit le CASCADE officiel V001.
 - Les liens JPA sont des UUID explicites, sans graphes sérialisés ni cascades implicites. Les DTO publics sont construits par mapping ; les entités ne sont pas des réponses HTTP.
 
-## Relations réservées aux lots suivants — non migrées en P03 à P09
+## Relations réservées aux lots suivants
 
 Les noms suivants expriment les clés et règles attendues. Ils seront concrétisés par migrations additionnelles avec leur fonctionnalité et ses tests, sans CRUD anticipé.
 
 | Lot | Relations/contraintes à introduire | Conservation obligatoire |
 | --- | --- | --- |
-| P10 fichiers | Métadonnées UUID, propriétaire, clé objet serveur, statut ; FK au projet/révision si nécessaire | Vérification d’accès à chaque nouvel accès temporaire, aucune URL libre choisie par le navigateur |
 | P11 commandes | Commande → propriétaire ; lignes → snapshot offre/révision ; ressources promises → UUID ressource, version/politique et langues ; montant/devise/conditions figés | Ni changement de pack ni nouvelle offre ne modifie les lignes achetées ; aucun total autoritaire reçu du navigateur |
 | P12 paiements | Opération fournisseur → commande, mode/compte fournisseur, montant/devise ; événements entrants uniques par fournisseur/compte/mode/identifiant ; clés d’idempotence liées à utilisateur/opération/empreinte | Réception durable et effet métier uniques séparément ; paiement réussi et activation en attente peuvent coexister |
 | P12 droits | Attribution UUID → utilisateur, ressource/version/politique, origine **FK vérifiable** (ligne-ressource achetée ou origine manuelle explicite), périodes/langues | Unicité par origine et ressource, jamais seulement `(user, course)` ; chaque achat individuel et pack conserve sa propre attribution |
@@ -261,7 +315,7 @@ Les suppressions physiques et opérations financières nécessiteront des cas d�
 
 ## Données locales et preuves
 
-Les migrations structurelles ne contiennent aucune fixture ni prix. Les références de permission V003/V004/V006/V007/V008 sont distinctes des comptes et données de démonstration. Le chargement explicite local et les fixtures Testcontainers sont séparés, identifiés comme fictifs, réexécutables et interdits en production. Le suivi des commandes et résultats réellement exécutés est dans [evidence/P03.md](evidence/P03.md), [evidence/P04.md](evidence/P04.md), [evidence/P05.md](evidence/P05.md), [evidence/P06.md](evidence/P06.md), [evidence/P07.md](evidence/P07.md), [evidence/P08.md](evidence/P08.md) et [evidence/P09.md](evidence/P09.md).
+Les migrations structurelles ne contiennent aucune fixture ni prix. Les références de permission V003/V004/V006/V007/V008/V009/V010/V011 sont distinctes des comptes et données de démonstration. Le chargement explicite local et les fixtures Testcontainers sont séparés, identifiés comme fictifs, réexécutables et interdits en production. Le suivi des commandes et résultats réellement exécutés est dans les preuves [P03](evidence/P03.md), [P04](evidence/P04.md), [P05](evidence/P05.md), [P06](evidence/P06.md), [P07](evidence/P07.md), [P08](evidence/P08.md), [P09](evidence/P09.md) et [P10](evidence/P10.md).
 
 Références techniques consultées : [contraintes PostgreSQL 18](https://www.postgresql.org/docs/18/ddl-constraints.html), [instants PostgreSQL 18](https://www.postgresql.org/docs/18/datatype-datetime.html), [Spring Boot SQL](https://docs.spring.io/spring-boot/reference/data/sql.html), [Hibernate ORM 7.4](https://docs.hibernate.org/orm/7.4/userguide/html_single/). Les règles commerciales restent celles de [PRODUCT.md](PRODUCT.md) et [DECISIONS.md](DECISIONS.md).
 

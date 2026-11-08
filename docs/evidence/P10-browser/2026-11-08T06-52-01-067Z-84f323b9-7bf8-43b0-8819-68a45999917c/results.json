@@ -1,0 +1,205 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\scripts\\..\\.tools\\node-v24.22.2-win-x64\\node.exe",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts",
+      "--grep",
+      "image CMS"
+    ],
+    "configFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts",
+    "rootDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 600000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/.runtime/browser-2026-11-08T06-52-01-067Z-84f323b9-7bf8-43b0-8819-68a45999917c/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/media-storage.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T06-52-01-067Z-84f323b9-7bf8-43b0-8819-68a45999917c\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "snapshotDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/media-storage.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3101",
+          "browserName": "chromium",
+          "headless": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "actionTimeout": 10000,
+          "navigationTimeout": 20000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off",
+          "serviceWorkers": "block"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\docs\\evidence\\P10-browser\\2026-11-08T06-52-01-067Z-84f323b9-7bf8-43b0-8819-68a45999917c\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "media-storage.spec.ts",
+      "file": "media-storage.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "fr · image CMS réellement transférée, ajout volontaire, publication et lecture publique",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8501,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T06:52:35.403Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "s3-transport-sanitized",
+                      "contentType": "application/json",
+                      "body": "W3sibWV0aG9kIjoiT1BUSU9OUyIsInN0YXR1cyI6MjAwLCJjb3JzT3JpZ2luQWxsb3dlZCI6dHJ1ZSwiY29yc1B1dEFsbG93ZWQiOnRydWUsImNvcnNDb250ZW50VHlwZUFsbG93ZWQiOnRydWV9LHsibWV0aG9kIjoiUFVUIiwic3RhdHVzIjoyMDAsImNvcnNPcmlnaW5BbGxvd2VkIjp0cnVlLCJjb3JzUHV0QWxsb3dlZCI6dHJ1ZSwiY29yc0NvbnRlbnRUeXBlQWxsb3dlZCI6dHJ1ZX0seyJtZXRob2QiOiJHRVQiLCJzdGF0dXMiOjIwMCwiY29yc09yaWdpbkFsbG93ZWQiOnRydWUsImNvcnNQdXRBbGxvd2VkIjp0cnVlLCJjb3JzQ29udGVudFR5cGVBbGxvd2VkIjp0cnVlfV0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "76441120af85f314a455-fe16b16e378a2648898b",
+          "file": "media-ui.scenarios.ts",
+          "line": 77,
+          "column": 47
+        },
+        {
+          "title": "en · image CMS réellement transférée, ajout volontaire, publication et lecture publique",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5341,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T06:52:44.163Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "s3-transport-sanitized",
+                      "contentType": "application/json",
+                      "body": "W3sibWV0aG9kIjoiT1BUSU9OUyIsInN0YXR1cyI6MjAwLCJjb3JzT3JpZ2luQWxsb3dlZCI6dHJ1ZSwiY29yc1B1dEFsbG93ZWQiOnRydWUsImNvcnNDb250ZW50VHlwZUFsbG93ZWQiOnRydWV9LHsibWV0aG9kIjoiUFVUIiwic3RhdHVzIjoyMDAsImNvcnNPcmlnaW5BbGxvd2VkIjp0cnVlLCJjb3JzUHV0QWxsb3dlZCI6dHJ1ZSwiY29yc0NvbnRlbnRUeXBlQWxsb3dlZCI6dHJ1ZX0seyJtZXRob2QiOiJHRVQiLCJzdGF0dXMiOjIwMCwiY29yc09yaWdpbkFsbG93ZWQiOnRydWUsImNvcnNQdXRBbGxvd2VkIjp0cnVlLCJjb3JzQ29udGVudFR5cGVBbGxvd2VkIjp0cnVlfV0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "76441120af85f314a455-16be84e68d5bb923bf97",
+          "file": "media-ui.scenarios.ts",
+          "line": 77,
+          "column": 47
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-08T06:52:33.443Z",
+    "duration": 16270.409,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

@@ -184,7 +184,7 @@ Avec la stack locale démarrée par `run dev`, les pages E06 utilisent la vraie 
 
 Créer un compte avec une adresse de test que l’on contrôle localement ; aucun compte connu n’est fourni. Après inscription, se connecter normalement. Mot de passe : 12 à 128 points de code Unicode, au plus 1024 octets UTF-8. L’email est normalisé en minuscules et sans espaces de bord, sans modifier points ou suffixes. Un formulaire ne choisit ni rôle ni propriétaire.
 
-Les emails de récupération arrivent dans **Mailpit local** sur http://localhost:8025 ; le lien expire après 30 minutes et ne s’utilise qu’une fois. Trois demandes par email sur quinze minutes au plus ; la réponse reste neutre même pour un compte absent ou un quota dépassé. Ne pas copier de lien de récupération complet dans un ticket ou un journal. L’envoi SMTP local est testé ; la livraison durable et la reprise par outbox arrivent en P10, sans service email externe présumé.
+Les emails de récupération arrivent dans **Mailpit local** sur http://localhost:8025 ; le lien expire après 30 minutes et ne s’utilise qu’une fois. Trois demandes par email sur quinze minutes au plus ; la réponse reste neutre même pour un compte absent ou un quota dépassé. Ne pas copier de lien de récupération complet dans un ticket ou un journal. L’envoi SMTP local et sa reprise durable par outbox sont vérifiés en P10, sans service email externe présumé.
 
 Le cookie `SESSION` est HttpOnly, SameSite=Lax et `Path=/`, expirant après 30 minutes d’inactivité côté serveur. CSRF framework actif sur toutes les mutations de session, login compris ; le client le conserve en mémoire et le renouvelle après les transitions, sans retry de mutation automatique. Les préférences sont privées, protégées par propriétaire, permission et ETag ; les données ne sont pas mises en cache partagé.
 
@@ -321,6 +321,34 @@ Commandes disponibles :
 `api:generate` reconstruit les artefacts du contrat ; `api:check` vérifie leur reproductibilité. La recette `verify:projects` nécessite les builds web/API, Docker, Chromium installé et les ports 3101/8181 libres. Elle utilise une base PostgreSQL temporaire en tmpfs, des comptes et dossiers fictifs isolés, sans réinitialiser le volume Compose. Résultats locaux : **112 tests Java**, **58 tests client**, lint/types/builds/OpenAPI réussis, upgrade préservant les lignes de **25 tables** et chaîne HTTP réelle réussis. Recette P09 complète sans instrumentation : **8/8 en 59,9 s** ; régression P08 : **10/10**. Preuves et limites : [evidence/P09.md](docs/evidence/P09.md). Aucun fournisseur externe ni déploiement de production n’est ainsi validé.
 
 Un refus d’accusé de sauvegarde observé dans un passage intermédiaire n’a pas été reproduit sur seize répétitions du parcours FR, puis sur la recette complète finale. Sa cause reste indéterminée ; observations, traces et limites sont conservées dans [la preuve P09](docs/evidence/P09.md).
+
+## Médias, fichiers et emails P10 — validés localement
+
+Le stockage local utilise deux buckets privés distincts, même pour les fichiers éditoriaux destinés à une publication gratuite. Le serveur autorise le dépôt, contrôle les octets transférés, puis conserve une nouvelle clé immuable pour le fichier validé. Un transfert seul n’est pas un fichier prêt. TXT UTF‑8 est disponible pour les projets ; TXT et PNG/JPEG réencodés pour le CMS. PDF reste indisponible faute de validateur adapté. Le contrôle de format ne constitue pas une analyse antivirus.
+
+Commandes Windows natives, après installation des dépendances verrouillées :
+
+```powershell
+.\scripts\courses.cmd run setup:local
+.\scripts\courses.cmd run services:s3
+.\scripts\courses.cmd run build:api
+.\scripts\courses.cmd run storage:setup
+.\scripts\courses.cmd run dev
+```
+
+`storage:setup` prépare uniquement les buckets locaux absents et leur CORS pour l’origine publique locale configurée, puis active le stockage dans `.env.local`. Il préserve les objets et autres paramètres existants. Les endpoints interne/externe sont explicites ; le navigateur reçoit une adresse de boucle locale signée et transfère sans cookie de session. Les limites et formats réels apparaissent avant dépôt. Valeurs par défaut : TXT 5 MiB, image 10 MiB, dix fichiers/20 MiB par projet ; autorisation de transfert 300 s, téléchargement 60 s. Une révocation bloque les nouveaux liens ; un lien déjà émis peut rester valide jusqu’à son expiration. Le nettoyage ne vise que les clés de transfert expirées enregistrées, jamais les objets prêts ni un volume.
+
+La clé `NOTIFICATION_OUTBOX_KEY` est générée localement par `setup:local` sans affichage. Conserver cette clé avec les sauvegardes privées : les redémarrages doivent pouvoir déchiffrer les événements en attente. Les notifications FR/EN passent par une outbox PostgreSQL durable et Mailpit ; les reprises ont un délai borné et les résultats SMTP ambigus exigent un rapprochement explicite. L’écran `/fr/admin/notifications` ou `/en/admin/notifications` exige `notifications.read`, et la reprise `notifications.manage` ; aucun compte opérateur n’est créé automatiquement. Ni destinataire ni contenu d’email n’y sont exposés. Activation d’accès et support disposent de ports métier pour leurs lots suivants.
+
+Le fournisseur vidéo `local-test` reste désactivé par défaut. `VIDEO_LOCAL_ROOT` désigne un répertoire privé absolu, hors des fichiers publics ; `video:import -- chemin/manifest.json` réalise un import local explicite après création du contenu par un éditeur autorisé. Ce mécanisme ne désigne aucun fournisseur de streaming de production ni aucune vidéo de formation déjà produite. En l’absence de média, le texte et les consignes restent utilisables.
+
+```powershell
+.\scripts\courses.cmd run verify:media
+.\scripts\courses.cmd run stop
+.\scripts\courses.cmd run services:stop
+```
+
+`verify:media` nécessite les builds web/API, Docker et Chromium déjà installé. Il prépare PostgreSQL, SeaweedFS et Mailpit temporaires en tmpfs, vérifie leur propriété et les arrête en fin de recette ; aucun volume partagé n’est réinitialisé. Les douze scénarios Chromium passent, après correction d’une capacité SeaweedFS insuffisante lors du flush du journal. Le global API passe 138 tests et le client 71 ; résultats, échecs intermédiaires et limites sont consignés dans [P10](docs/evidence/P10.md). Aucun fournisseur de production ni envoi externe n’est déduit de ces vérifications.
 
 Pour diagnostiquer un scénario, le superviseur accepte `--grep` et `--repeat-each 1..20`, avec la même isolation et sans retry automatique :
 

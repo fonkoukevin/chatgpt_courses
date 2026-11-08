@@ -1,0 +1,619 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\scripts\\..\\.tools\\node-v24.22.2-win-x64\\node.exe",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts"
+    ],
+    "configFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts",
+    "rootDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 600000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/.runtime/browser-2026-11-08T06-45-33-546Z-337ccd1c-9815-4a7e-96ee-9bf0061ed09e/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/media-storage.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T06-45-33-546Z-337ccd1c-9815-4a7e-96ee-9bf0061ed09e\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "snapshotDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/media-storage.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3101",
+          "browserName": "chromium",
+          "headless": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "actionTimeout": 10000,
+          "navigationTimeout": 20000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off",
+          "serviceWorkers": "block"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\docs\\evidence\\P10-browser\\2026-11-08T06-45-33-546Z-337ccd1c-9815-4a7e-96ee-9bf0061ed09e\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "media-storage.spec.ts",
+      "file": "media-storage.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "fr · image CMS réellement transférée, ajout volontaire, publication et lecture publique",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13824,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-editorial-asset-upload]').locator('[data-asset-upload-state]')\nExpected: \u001b[32m\"transferred\"\u001b[39m\nReceived: \u001b[31m\"error\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('[data-editorial-asset-upload]').locator('[data-asset-upload-state]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-editorial-asset-upload]').locator('[data-asset-upload-state]')\u001b[22m\n\u001b[2m    23 × locator resolved to <div class=\"min-w-0 space-y-5\" data-asset-upload-state=\"error\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"error\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-editorial-asset-upload]').locator('[data-asset-upload-state]')\nExpected: \u001b[32m\"transferred\"\u001b[39m\nReceived: \u001b[31m\"error\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('[data-editorial-asset-upload]').locator('[data-asset-upload-state]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-editorial-asset-upload]').locator('[data-asset-upload-state]')\u001b[22m\n\u001b[2m    23 × locator resolved to <div class=\"min-w-0 space-y-5\" data-asset-upload-state=\"error\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"error\"\u001b[22m\n\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\media-ui.scenarios.ts:68:26",
+                    "location": {
+                      "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\media-ui.scenarios.ts",
+                      "column": 26,
+                      "line": 68
+                    },
+                    "snippet": " \u001b[90m 66 |\u001b[39m     \u001b[36mconst\u001b[39m intentResponse \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mwaitForResponse((value) \u001b[33m=>\u001b[39m value\u001b[33m.\u001b[39mrequest()\u001b[33m.\u001b[39mmethod() \u001b[33m===\u001b[39m \u001b[32m'POST'\u001b[39m \u001b[33m&&\u001b[39m value\u001b[33m.\u001b[39murl()\u001b[33m.\u001b[39mendsWith(\u001b[32m'/admin/assets/upload-intents'\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m 67 |\u001b[39m     \u001b[36mawait\u001b[39m upload\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39mtransfer\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m \u001b[36mconst\u001b[39m intent \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m intentResponse\u001b[33m;\u001b[39m expect(intent\u001b[33m.\u001b[39mstatus())\u001b[33m.\u001b[39mtoBe(\u001b[35m201\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mconst\u001b[39m pending \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m intent\u001b[33m.\u001b[39mjson() \u001b[36mas\u001b[39m \u001b[33mAssetUploadIntent\u001b[39m\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 68 |\u001b[39m     \u001b[36mawait\u001b[39m expect(upload)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'data-asset-upload-state'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'transferred'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 69 |\u001b[39m     \u001b[36mconst\u001b[39m confirmation \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mwaitForResponse((value) \u001b[33m=>\u001b[39m value\u001b[33m.\u001b[39mrequest()\u001b[33m.\u001b[39mmethod() \u001b[33m===\u001b[39m \u001b[32m'POST'\u001b[39m \u001b[33m&&\u001b[39m value\u001b[33m.\u001b[39murl()\u001b[33m.\u001b[39mendsWith(\u001b[32m`/admin/assets/${pending.asset.id}/confirmations`\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m 70 |\u001b[39m     \u001b[36mawait\u001b[39m upload\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39mconfirm\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m \u001b[36mconst\u001b[39m confirmed \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m confirmation\u001b[33m;\u001b[39m expect(confirmed\u001b[33m.\u001b[39mstatus())\u001b[33m.\u001b[39mtoBe(\u001b[35m200\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mconst\u001b[39m ready \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m confirmed\u001b[33m.\u001b[39mjson() \u001b[36mas\u001b[39m \u001b[33mAssetView\u001b[39m\u001b[33m;\u001b[39m expect(ready\u001b[33m.\u001b[39mstate)\u001b[33m.\u001b[39mtoBe(\u001b[32m'READY'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 71 |\u001b[39m     \u001b[36mawait\u001b[39m expect(upload)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'data-asset-upload-state'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'ready'\u001b[39m)\u001b[33m;\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\media-ui.scenarios.ts",
+                        "column": 26,
+                        "line": 68
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-editorial-asset-upload]').locator('[data-asset-upload-state]')\nExpected: \u001b[32m\"transferred\"\u001b[39m\nReceived: \u001b[31m\"error\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('[data-editorial-asset-upload]').locator('[data-asset-upload-state]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-editorial-asset-upload]').locator('[data-asset-upload-state]')\u001b[22m\n\u001b[2m    23 × locator resolved to <div class=\"min-w-0 space-y-5\" data-asset-upload-state=\"error\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"error\"\u001b[22m\n\n\n  66 |     const intentResponse = page.waitForResponse((value) => value.request().method() === 'POST' && value.url().endsWith('/admin/assets/upload-intents'));\n  67 |     await upload.getByRole('button', { name: t.transfer, exact: true }).click(); const intent = await intentResponse; expect(intent.status()).toBe(201); const pending = await intent.json() as AssetUploadIntent;\n> 68 |     await expect(upload).toHaveAttribute('data-asset-upload-state', 'transferred');\n     |                          ^\n  69 |     const confirmation = page.waitForResponse((value) => value.request().method() === 'POST' && value.url().endsWith(`/admin/assets/${pending.asset.id}/confirmations`));\n  70 |     await upload.getByRole('button', { name: t.confirm, exact: true }).click(); const confirmed = await confirmation; expect(confirmed.status()).toBe(200); const ready = await confirmed.json() as AssetView; expect(ready.state).toBe('READY');\n  71 |     await expect(upload).toHaveAttribute('data-asset-upload-state', 'ready');\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\media-ui.scenarios.ts:68:26"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T06:46:44.609Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T06-45-33-546Z-337ccd1c-9815-4a7e-96ee-9bf0061ed09e\\results\\media-storage-fr-·-image-C-d969f-ication-et-lecture-publique\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T06-45-33-546Z-337ccd1c-9815-4a7e-96ee-9bf0061ed09e\\results\\media-storage-fr-·-image-C-d969f-ication-et-lecture-publique\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\media-ui.scenarios.ts",
+                    "column": 26,
+                    "line": 68
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "76441120af85f314a455-fe16b16e378a2648898b",
+          "file": "media-ui.scenarios.ts",
+          "line": 59,
+          "column": 47
+        },
+        {
+          "title": "en · image CMS réellement transférée, ajout volontaire, publication et lecture publique",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13786,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-editorial-asset-upload]').locator('[data-asset-upload-state]')\nExpected: \u001b[32m\"transferred\"\u001b[39m\nReceived: \u001b[31m\"error\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('[data-editorial-asset-upload]').locator('[data-asset-upload-state]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-editorial-asset-upload]').locator('[data-asset-upload-state]')\u001b[22m\n\u001b[2m    - locator resolved to <div class=\"min-w-0 space-y-5\" data-asset-upload-state=\"transferring\">…</div>\u001b[22m\n\u001b[2m    - unexpected value \"transferring\"\u001b[22m\n\u001b[2m    22 × locator resolved to <div class=\"min-w-0 space-y-5\" data-asset-upload-state=\"error\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"error\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-editorial-asset-upload]').locator('[data-asset-upload-state]')\nExpected: \u001b[32m\"transferred\"\u001b[39m\nReceived: \u001b[31m\"error\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('[data-editorial-asset-upload]').locator('[data-asset-upload-state]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-editorial-asset-upload]').locator('[data-asset-upload-state]')\u001b[22m\n\u001b[2m    - locator resolved to <div class=\"min-w-0 space-y-5\" data-asset-upload-state=\"transferring\">…</div>\u001b[22m\n\u001b[2m    - unexpected value \"transferring\"\u001b[22m\n\u001b[2m    22 × locator resolved to <div class=\"min-w-0 space-y-5\" data-asset-upload-state=\"error\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"error\"\u001b[22m\n\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\media-ui.scenarios.ts:68:26",
+                    "location": {
+                      "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\media-ui.scenarios.ts",
+                      "column": 26,
+                      "line": 68
+                    },
+                    "snippet": " \u001b[90m 66 |\u001b[39m     \u001b[36mconst\u001b[39m intentResponse \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mwaitForResponse((value) \u001b[33m=>\u001b[39m value\u001b[33m.\u001b[39mrequest()\u001b[33m.\u001b[39mmethod() \u001b[33m===\u001b[39m \u001b[32m'POST'\u001b[39m \u001b[33m&&\u001b[39m value\u001b[33m.\u001b[39murl()\u001b[33m.\u001b[39mendsWith(\u001b[32m'/admin/assets/upload-intents'\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m 67 |\u001b[39m     \u001b[36mawait\u001b[39m upload\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39mtransfer\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m \u001b[36mconst\u001b[39m intent \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m intentResponse\u001b[33m;\u001b[39m expect(intent\u001b[33m.\u001b[39mstatus())\u001b[33m.\u001b[39mtoBe(\u001b[35m201\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mconst\u001b[39m pending \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m intent\u001b[33m.\u001b[39mjson() \u001b[36mas\u001b[39m \u001b[33mAssetUploadIntent\u001b[39m\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 68 |\u001b[39m     \u001b[36mawait\u001b[39m expect(upload)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'data-asset-upload-state'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'transferred'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 69 |\u001b[39m     \u001b[36mconst\u001b[39m confirmation \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mwaitForResponse((value) \u001b[33m=>\u001b[39m value\u001b[33m.\u001b[39mrequest()\u001b[33m.\u001b[39mmethod() \u001b[33m===\u001b[39m \u001b[32m'POST'\u001b[39m \u001b[33m&&\u001b[39m value\u001b[33m.\u001b[39murl()\u001b[33m.\u001b[39mendsWith(\u001b[32m`/admin/assets/${pending.asset.id}/confirmations`\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m 70 |\u001b[39m     \u001b[36mawait\u001b[39m upload\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39mconfirm\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m \u001b[36mconst\u001b[39m confirmed \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m confirmation\u001b[33m;\u001b[39m expect(confirmed\u001b[33m.\u001b[39mstatus())\u001b[33m.\u001b[39mtoBe(\u001b[35m200\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mconst\u001b[39m ready \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m confirmed\u001b[33m.\u001b[39mjson() \u001b[36mas\u001b[39m \u001b[33mAssetView\u001b[39m\u001b[33m;\u001b[39m expect(ready\u001b[33m.\u001b[39mstate)\u001b[33m.\u001b[39mtoBe(\u001b[32m'READY'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 71 |\u001b[39m     \u001b[36mawait\u001b[39m expect(upload)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'data-asset-upload-state'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'ready'\u001b[39m)\u001b[33m;\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\media-ui.scenarios.ts",
+                        "column": 26,
+                        "line": 68
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-editorial-asset-upload]').locator('[data-asset-upload-state]')\nExpected: \u001b[32m\"transferred\"\u001b[39m\nReceived: \u001b[31m\"error\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('[data-editorial-asset-upload]').locator('[data-asset-upload-state]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-editorial-asset-upload]').locator('[data-asset-upload-state]')\u001b[22m\n\u001b[2m    - locator resolved to <div class=\"min-w-0 space-y-5\" data-asset-upload-state=\"transferring\">…</div>\u001b[22m\n\u001b[2m    - unexpected value \"transferring\"\u001b[22m\n\u001b[2m    22 × locator resolved to <div class=\"min-w-0 space-y-5\" data-asset-upload-state=\"error\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"error\"\u001b[22m\n\n\n  66 |     const intentResponse = page.waitForResponse((value) => value.request().method() === 'POST' && value.url().endsWith('/admin/assets/upload-intents'));\n  67 |     await upload.getByRole('button', { name: t.transfer, exact: true }).click(); const intent = await intentResponse; expect(intent.status()).toBe(201); const pending = await intent.json() as AssetUploadIntent;\n> 68 |     await expect(upload).toHaveAttribute('data-asset-upload-state', 'transferred');\n     |                          ^\n  69 |     const confirmation = page.waitForResponse((value) => value.request().method() === 'POST' && value.url().endsWith(`/admin/assets/${pending.asset.id}/confirmations`));\n  70 |     await upload.getByRole('button', { name: t.confirm, exact: true }).click(); const confirmed = await confirmation; expect(confirmed.status()).toBe(200); const ready = await confirmed.json() as AssetView; expect(ready.state).toBe('READY');\n  71 |     await expect(upload).toHaveAttribute('data-asset-upload-state', 'ready');\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\media-ui.scenarios.ts:68:26"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T06:46:59.812Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T06-45-33-546Z-337ccd1c-9815-4a7e-96ee-9bf0061ed09e\\results\\media-storage-en-·-image-C-cba2d-ication-et-lecture-publique\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T06-45-33-546Z-337ccd1c-9815-4a7e-96ee-9bf0061ed09e\\results\\media-storage-en-·-image-C-cba2d-ication-et-lecture-publique\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\media-ui.scenarios.ts",
+                    "column": 26,
+                    "line": 68
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "76441120af85f314a455-16be84e68d5bb923bf97",
+          "file": "media-ui.scenarios.ts",
+          "line": 59,
+          "column": 47
+        },
+        {
+          "title": "fr · référence vidéo absente : texte utile sans lecteur ou durée inventés",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4249,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T06:47:19.142Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "76441120af85f314a455-54b7d3347a3953b35969",
+          "file": "media-ui.scenarios.ts",
+          "line": 95,
+          "column": 47
+        },
+        {
+          "title": "en · référence vidéo absente : texte utile sans lecteur ou durée inventés",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3121,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T06:47:23.697Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "76441120af85f314a455-e374c2b4a6d403480476",
+          "file": "media-ui.scenarios.ts",
+          "line": 95,
+          "column": 47
+        },
+        {
+          "title": "fr · suivi opérateur expurgé et permissions vérifiées réellement",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3892,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T06:47:26.836Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "76441120af85f314a455-237c11fdb24cc7b3899f",
+          "file": "media-ui.scenarios.ts",
+          "line": 104,
+          "column": 47
+        },
+        {
+          "title": "en · suivi opérateur expurgé et permissions vérifiées réellement",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3274,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T06:47:30.746Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "76441120af85f314a455-aaa12e74f05f48bceb9c",
+          "file": "media-ui.scenarios.ts",
+          "line": 104,
+          "column": 47
+        },
+        {
+          "title": "fr · transport réellement interrompu, reprise explicite avec risque de doublon puis un seul email",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11306,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T06:47:50.985Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "76441120af85f314a455-fd6218aec2d09355da99",
+          "file": "media-notification-retry.scenario.ts",
+          "line": 41,
+          "column": 3
+        }
+      ],
+      "suites": [
+        {
+          "title": "P10 stockage réel, fichiers privés et emails",
+          "file": "media-storage.spec.ts",
+          "line": 28,
+          "column": 6,
+          "specs": [
+            {
+              "title": "fr · transfert S3 CORS, confirmation distincte et téléchargement privé",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5685,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T06:46:06.154Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "76441120af85f314a455-dec58f8ed195ca52051e",
+              "file": "media-storage.spec.ts",
+              "line": 36,
+              "column": 47
+            },
+            {
+              "title": "en · transfert S3 CORS, confirmation distincte et téléchargement privé",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3510,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T06:46:17.106Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "76441120af85f314a455-e9802eb5ea2f2bc18fd5",
+              "file": "media-storage.spec.ts",
+              "line": 36,
+              "column": 47
+            },
+            {
+              "title": "panne API pendant autorisation : fichier en mémoire et reprise explicite",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 23925,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T06:46:20.635Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "76441120af85f314a455-c25fa993afc7f191d020",
+              "file": "media-storage.spec.ts",
+              "line": 77,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "P10 lecteur local réel et positions propres aux médias",
+          "file": "media-playback.scenarios.ts",
+          "line": 52,
+          "column": 8,
+          "specs": [
+            {
+              "title": "fr · MP4 décodé dans Chromium, Range proxy et reprise indépendante",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4151,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T06:47:34.036Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "76441120af85f314a455-ec7baa9766a472b970dc",
+              "file": "media-playback.scenarios.ts",
+              "line": 56,
+              "column": 49
+            },
+            {
+              "title": "en · MP4 décodé dans Chromium, Range proxy et reprise indépendante",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3992,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T06:47:46.964Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "76441120af85f314a455-d751f1f4dc0fae8febfe",
+              "file": "media-playback.scenarios.ts",
+              "line": 56,
+              "column": 49
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-08T06:46:03.953Z",
+    "duration": 118493.50200000001,
+    "expected": 10,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

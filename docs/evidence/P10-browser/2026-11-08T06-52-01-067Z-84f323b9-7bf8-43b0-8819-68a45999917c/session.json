@@ -1,0 +1,46 @@
+{
+  "runId": "2026-11-08T06-52-01-067Z-84f323b9-7bf8-43b0-8819-68a45999917c",
+  "completedAt": "2026-11-08T06:53:09.434Z",
+  "selection": {
+    "grep": "image CMS",
+    "repeatEach": 1
+  },
+  "result": "passed",
+  "cleanupConfirmed": true,
+  "isolatedPostgres": {
+    "image": "postgres:18.6@sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42",
+    "tmpfs": true,
+    "stopped": true
+  },
+  "isolatedServices": [
+    {
+      "kind": "s3",
+      "image": "chrislusf/seaweedfs:4.52@sha256:57877e32bb90073b37dc109b438ba66e84fd5ed9ced5f5c04f56444ef243ce59",
+      "tmpfs": true,
+      "stopped": true
+    },
+    {
+      "kind": "mailpit",
+      "image": "axllent/mailpit:v1.33.0@sha256:9b3a463be15354c0f0eba91697d80e3e0d8a5623ef0e627cacc836bc17fd5231",
+      "tmpfs": true,
+      "stopped": true
+    }
+  ],
+  "processes": [
+    {
+      "name": "web",
+      "pid": 62036,
+      "terminated": true
+    },
+    {
+      "name": "api",
+      "pid": 67312,
+      "terminated": true
+    },
+    {
+      "name": "playwright",
+      "pid": 69120,
+      "terminated": true
+    }
+  ]
+}

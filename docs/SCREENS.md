@@ -28,6 +28,7 @@ Cette carte reprend E01–E16 du cahier fonctionnel V1 et précise les routes in
 | E14 Contenus | `/fr/admin/content` | `/en/admin/content` |
 | E15 Éditeur | `/fr/admin/content/{id}/edit` | `/en/admin/content/{id}/edit` |
 | E16 Exploitation | `/fr/admin/operations` | `/en/admin/operations` |
+| E16 Suivi des emails P10 | `/fr/admin/notifications` | `/en/admin/notifications` |
 | Diagnostic technique P01, local/test | `/fr/dev/foundations` | `/en/dev/foundations` |
 
 - Locales autorisées : `fr` et `en`. `/` oriente vers la préférence autorisée ou la langue par défaut configurée. FR est la valeur de développement, sans décision sur les langues de l’offre réelle.
@@ -168,11 +169,13 @@ Le résultat explique chaque réponse et affiche points/politique réels ; nouve
 
 Les notes sont propriétaires, uniques par version d’activité et gardent leur langue originale. Sauvegarde confirmée par ETag propre, saisie maintenue sur panne/expiration/412 ; comparer, copier, recharger ou conserver volontairement face à la nouvelle révision. Les réponses retardées et changements de compte suivent les garanties P07 ; aucune mutation automatique sous un autre compte. Les favoris restent différés.
 
-`LearningMediaPort` prépare uniquement l’autorisation et la position propre au mediaId/durée/langue/version. Aucune vidéo, durée, route de position ou ressource privée disponible n’est inventée avant P10 ; texte pédagogique utilisable et message honnête. P09 raccorde l’atelier de projet quand l’activité FREE publiée possède une politique complète : préparation textuelle avant compte, puis conservation volontaire dans l’espace propriétaire. Un ancien contenu sans politique ne reçoit pas une fausse grille par défaut. Composants : `LearningActivity`, `ActivityProgramme`, `ActivityNavigation`, `ActivityProgress`, `ActivityNotes`, `ActivityQuiz` et historique/résultat de quiz. Les preuves P08 restent historiques ; le périmètre technique du raccordement P09 est validé localement, avec ses limites dans [evidence/P09.md](evidence/P09.md).
+P10 raccorde `LearningMediaPort` au registre vidéo et ajoute les ressources éditoriales à accès temporaire. Le fournisseur `local-test`, désactivé par défaut, sert seulement un MP4 importé explicitement côté serveur ; le lecteur indique clairement ce statut. Texte, transcription et sous-titres fournis restent accessibles lorsque le fournisseur manque. La position se conserve volontairement par propriétaire/mediaId et langue, avec reprise explicite et conflit de révision ; elle ne valide aucune activité ni projet. Aucune durée ou transcription n’est fabriquée pour un média absent. Ce raccordement est validé en intégration locale P10 ; aucun fournisseur vidéo de production ou film de formation n’est validé par cette recette : [preuve et limites](evidence/P10.md).
+
+P09 raccorde l’atelier de projet quand l’activité FREE publiée possède une politique complète : préparation textuelle avant compte, puis conservation volontaire dans l’espace propriétaire. Un ancien contenu sans politique ne reçoit pas une fausse grille par défaut. Composants : `LearningActivity`, `ActivityProgramme`, `ActivityNavigation`, `ActivityProgress`, `ActivityNotes`, `ActivityQuiz` et historique/résultat de quiz. Les preuves P08 restent historiques ; le périmètre technique du raccordement P09 est validé localement, avec ses limites dans [evidence/P09.md](evidence/P09.md).
 
 ## E11 Projets et vérification
 
-Routes : `/fr/espace/projets` et `/en/my/projects`, puis `/{projectId}` ; import `nouveau`/`new` avec UUID de brouillon selon le registre. Périmètre technique des interfaces et services P09 validé localement ; résultats, limites et refus d’accusé isolé non reproduit sont conservés dans [evidence/P09.md](evidence/P09.md). Pièces jointes P10 et contenu final P18 restent ouverts.
+Routes : `/fr/espace/projets` et `/en/my/projects`, puis `/{projectId}` ; import `nouveau`/`new` avec UUID de brouillon selon le registre. Périmètre technique des interfaces et services P09 validé localement ; résultats, limites et refus d’accusé isolé non reproduit sont conservés dans [evidence/P09.md](evidence/P09.md). Pièces jointes TXT P10 validées en intégration locale, PDF indisponible ; contenu final P18 encore à fournir.
 
 La liste propriétaire est paginée, recherchable par texte et filtrable par état déclaré ou activité/version. Elle expose des résumés, sans charger toutes les productions. L’atelier sépare dossier, rédaction, vérification et corrigé. Sept sections structurées et texte collé indépendant restent modifiables sans insérer un exemple à leur place. Le dossier suit la version exacte ; changement de langue d’interface conserve le même projet et sa langue personnelle. Un anonyme peut préparer un texte et conserver volontairement un brouillon non sensible deux heures dans l’onglet ; l’identification présente le compte et exige un import explicite, sans création automatique.
 
@@ -180,7 +183,9 @@ Le stade sauvegardé distingue brouillon et prêt pour autoévaluation ; prêt e
 
 L’ETag couvre le texte et son stade, séparément du statut courant et du contexte. Une sauvegarde identique peut garder le même tag. Les retouches faites pendant une requête restent modifiées ; panne, session expirée et compte changé conservent la saisie avec copie de secours. Un conflit propose lecture de la version serveur, comparaison et choix explicites, sans écrasement automatique ni retry sous un autre compte. Les historiques paginés chargent d’abord des résumés, puis le détail choisi de production ou d’évaluation.
 
-Le corrigé s’ouvre sur action volontaire selon EXPLICIT ou après autoévaluation de la révision personnelle précise selon AFTER_SUBMISSION, sans score minimal imposé. Sa consultation est tracée et ne termine pas le projet. Publication et accès sont revérifiés à chaque lecture/rejeu ; pour un projet lié à une inscription, la chaîne parcours/module/activité est aussi contrôlée. Retrait, traduction indisponible ou protection peut bloquer dossier/corrigé, tout en conservant production, grille et anciennes preuves du propriétaire. Une activité explicitement FREE reste permise dans un parcours PROTECTED selon P08. Dépôt de fichier et revue humaine restent désactivés.
+Le corrigé s’ouvre sur action volontaire selon EXPLICIT ou après autoévaluation de la révision personnelle précise selon AFTER_SUBMISSION, sans score minimal imposé. Sa consultation est tracée et ne termine pas le projet. Publication et accès sont revérifiés à chaque lecture/rejeu ; pour un projet lié à une inscription, la chaîne parcours/module/activité est aussi contrôlée. Retrait, traduction indisponible ou protection peut bloquer dossier/corrigé, tout en conservant production, grille et anciennes preuves du propriétaire. Une activité explicitement FREE reste permise dans un parcours PROTECTED selon P08. La revue humaine reste désactivée.
+
+L’onglet fichiers P10 charge sa politique serveur avant dépôt. Choix en mémoire, autorisation/transfert et confirmation sont distincts ; un résultat REJECTED, EXPIRED ou une réponse impossible à vérifier n’annonce jamais un fichier prêt. La pièce jointe ne remplace pas le texte. Le téléchargement contrôlé utilise un blob temporaire sans cookie S3 ; propriété et compte attendu sont revérifiés. Si le stockage n’est pas configuré, formats/limites et indisponibilité sont affichés, le texte reste utilisable.
 
 Composants présents : `ProjectList`, `ProjectPreparation`, `ProjectDraftImport`, `ProjectEditor`, `ProjectBriefPanel`, `ProjectAssessment`, `EvaluationSummary`, `ProjectHistory` et `ProjectSolution`. Le dossier contextuel utilise un panneau sur écran étroit ; sa recette visuelle finale n’est pas déduite de la présence de ces composants.
 
@@ -216,6 +221,8 @@ Un contenu déjà utilisé n’est pas effacé silencieusement. Son retrait expo
 
 Routes : /{locale}/admin/content/{id}/edit et variantes d’aperçu autorisées. Phase P05, média P10, contenu P18.
 
+Le panneau P10 d’ingestion propose PNG/JPEG/TXT, leur contrôle réel puis l’ajout volontaire d’une référence au brouillon. Le transfert ne publie rien et ne modifie pas seul la révision pédagogique. Les médias obligatoires doivent être prêts dans le registre et disponibles ; un UUID fourni arbitrairement ne suffit pas à leur revue. Transfert, confirmation, ajout explicite, sauvegarde et image publique FR/EN sont validés en intégration locale P10 ; un contrôle de format ne constitue pas une analyse antivirus.
+
 Édition de contenu, ordre des modules/activités, médias, ressources, quiz, grilles, prérequis, traductions, métadonnées, aperçu et historique. Des commandes clavier permettent de réordonner sans dépendre du glisser-déposer.
 
 P09 ajoute la configuration de projet BR01/BR02, le seuil et la règle de révélation. Les préparations FR/EN proviennent d’une route serveur administrateur ; remplacer une grille existante exige confirmation. Cette opération prépare une révision sans la publier. Une politique incomplète peut rester en brouillon ; la publication contrôle grille/corrigé et équivalence des traductions. Les libellés pédagogiques des préparations ne sont pas embarqués dans le bundle public.
@@ -227,6 +234,8 @@ P09 ajoute la configuration de projet BR01/BR02, le seuil et la règle de révé
 Routes : /{locale}/admin/operations et onglets/sections. Phase P15.
 
 Commandes, droits par origine, remboursements, tickets, emails et traitements en erreur, indicateurs et journal. Les opérations de reprise utilisent les services métier idempotents ; elles n’écrivent pas directement un statut financier souhaité.
+
+P10 introduit uniquement le suivi d’emails sur `/fr/admin/notifications` et `/en/admin/notifications` : état, tentatives, dates, code expurgé et reprise après contrôle, sous permissions `notifications.read/manage`. Un résultat SMTP indéterminé exige la reconnaissance du risque de doublon. Aucun destinataire, corps, jeton, clé métier ou ciphertext affiché ; les autres opérations d’exploitation restent à leurs lots respectifs. Lecture FR/EN et reprise volontaire après interruption réelle de Mailpit sont validées localement ; « accepté par le transport » ne garantit pas la réception dans une boîte externe.
 
 Les actions sensibles précisent objet et effet, demandent un motif adapté et conservent auteur/date/résultat. L’éditeur de contenu ne reçoit pas des permissions financières par défaut. Les indicateurs sont calculés sur des sources définies, par devise/période ; coûts inconnus et zéro sont distincts.
 

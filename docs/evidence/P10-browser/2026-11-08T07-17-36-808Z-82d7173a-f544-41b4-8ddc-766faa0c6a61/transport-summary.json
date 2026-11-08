@@ -1,0 +1,63 @@
+{
+  "runId": "2026-11-08T07-17-36-808Z-82d7173a-f544-41b4-8ddc-766faa0c6a61",
+  "passed": 12,
+  "failed": 0,
+  "skipped": 0,
+  "flaky": 0,
+  "durationMs": 97364.399,
+  "cleanupConfirmed": true,
+  "observations": [
+    {
+      "locale": "fr",
+      "network": [
+        {
+          "method": "OPTIONS",
+          "status": 200,
+          "corsOriginAllowed": true,
+          "corsPutAllowed": true,
+          "corsContentTypeAllowed": true
+        },
+        {
+          "method": "PUT",
+          "status": 200,
+          "corsOriginAllowed": true,
+          "corsPutAllowed": true,
+          "corsContentTypeAllowed": true
+        },
+        {
+          "method": "GET",
+          "status": 200,
+          "corsOriginAllowed": true,
+          "corsPutAllowed": true,
+          "corsContentTypeAllowed": true
+        }
+      ]
+    },
+    {
+      "locale": "en",
+      "network": [
+        {
+          "method": "OPTIONS",
+          "status": 200,
+          "corsOriginAllowed": true,
+          "corsPutAllowed": true,
+          "corsContentTypeAllowed": true
+        },
+        {
+          "method": "PUT",
+          "status": 200,
+          "corsOriginAllowed": true,
+          "corsPutAllowed": true,
+          "corsContentTypeAllowed": true
+        },
+        {
+          "method": "GET",
+          "status": 200,
+          "corsOriginAllowed": true,
+          "corsPutAllowed": true,
+          "corsContentTypeAllowed": true
+        }
+      ]
+    }
+  ]
+}

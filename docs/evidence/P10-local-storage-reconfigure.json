@@ -1,0 +1,9 @@
+{
+  "scope": "local-compose",
+  "volumeSlots": 24,
+  "s3Recreated": true,
+  "namedS3VolumePreserved": true,
+  "postgresContainerUnchanged": true,
+  "mailpitContainerUnchanged": true,
+  "volumeRemoved": false
+}

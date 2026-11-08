@@ -1,0 +1,954 @@
+{
+  "instantaneousTwoPuts": [
+    {
+      "max": 4,
+      "puts": [
+        {
+          "index": 1,
+          "status": 200,
+          "code": "OK"
+        },
+        {
+          "index": 2,
+          "status": 500,
+          "code": "InternalError"
+        }
+      ],
+      "before": {
+        "available": true,
+        "counters": {
+          "Max": [
+            4,
+            4
+          ],
+          "Free": [
+            4
+          ]
+        }
+      },
+      "after": {
+        "available": true,
+        "counters": {
+          "Max": [
+            4,
+            4
+          ],
+          "Free": [
+            0
+          ]
+        }
+      },
+      "shortageLog": true,
+      "collectionMentionCount": 14,
+      "cleaned": true
+    },
+    {
+      "max": 8,
+      "puts": [
+        {
+          "index": 1,
+          "status": 200,
+          "code": "OK"
+        },
+        {
+          "index": 2,
+          "status": 200,
+          "code": "OK"
+        }
+      ],
+      "before": {
+        "available": true,
+        "counters": {
+          "Max": [
+            8,
+            8
+          ],
+          "Free": [
+            8
+          ]
+        }
+      },
+      "after": {
+        "available": true,
+        "counters": {
+          "Max": [
+            8,
+            8
+          ],
+          "Free": [
+            0
+          ]
+        }
+      },
+      "shortageLog": false,
+      "collectionMentionCount": 10,
+      "cleaned": true
+    }
+  ],
+  "fullChainAfterJournal": [
+    {
+      "max": 8,
+      "steps": [
+        {
+          "round": 1,
+          "stage": "STAGING_HTTP",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 0,
+          "masterAvailable": true,
+          "freeSlots": 1,
+          "maxSlots": 8,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 1,
+          "stage": "VERIFY_SDK",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 1945,
+          "masterAvailable": true,
+          "freeSlots": 1,
+          "maxSlots": 8,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 1,
+          "stage": "READY_SDK",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 2593,
+          "masterAvailable": true,
+          "freeSlots": 1,
+          "maxSlots": 8,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 1,
+          "stage": "DELETE_SDK",
+          "status": 204,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 3781,
+          "masterAvailable": true,
+          "freeSlots": 1,
+          "maxSlots": 8,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 2,
+          "stage": "STAGING_HTTP",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 4442,
+          "masterAvailable": true,
+          "freeSlots": 1,
+          "maxSlots": 8,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 2,
+          "stage": "VERIFY_SDK",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 5866,
+          "masterAvailable": true,
+          "freeSlots": 1,
+          "maxSlots": 8,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 2,
+          "stage": "READY_SDK",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 7102,
+          "masterAvailable": true,
+          "freeSlots": 1,
+          "maxSlots": 8,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 2,
+          "stage": "DELETE_SDK",
+          "status": 204,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 7755,
+          "masterAvailable": true,
+          "freeSlots": 1,
+          "maxSlots": 8,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 3,
+          "stage": "STAGING_HTTP",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 8390,
+          "masterAvailable": true,
+          "freeSlots": 1,
+          "maxSlots": 8,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 3,
+          "stage": "VERIFY_SDK",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 9553,
+          "masterAvailable": true,
+          "freeSlots": 1,
+          "maxSlots": 8,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 3,
+          "stage": "READY_SDK",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 10216,
+          "masterAvailable": true,
+          "freeSlots": 1,
+          "maxSlots": 8,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 3,
+          "stage": "DELETE_SDK",
+          "status": 204,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 11366,
+          "masterAvailable": true,
+          "freeSlots": 1,
+          "maxSlots": 8,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "stage": "JOURNAL_BOUNDARY",
+          "elapsedSinceFirstPutMs": 46554,
+          "masterAvailable": true,
+          "freeSlots": 0,
+          "maxSlots": 8,
+          "volumeCount": 8,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 1,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 2
+        },
+        {
+          "round": 4,
+          "stage": "IMAGE_HTTP",
+          "status": 500,
+          "code": "InternalError",
+          "elapsedSinceFirstPutMs": 46609,
+          "masterAvailable": true,
+          "freeSlots": 0,
+          "maxSlots": 8,
+          "volumeCount": 8,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 1,
+            "other": 0
+          },
+          "shortageLog": true,
+          "collectionCount": 2
+        }
+      ],
+      "final": {
+        "masterAvailable": true,
+        "freeSlots": 0,
+        "maxSlots": 8,
+        "volumeCount": 8,
+        "collections": {
+          "personal": 7,
+          "editorial": 0,
+          "system": 1,
+          "other": 0
+        },
+        "shortageLog": true,
+        "collectionCount": 2
+      },
+      "cleaned": true
+    },
+    {
+      "max": 16,
+      "steps": [
+        {
+          "round": 1,
+          "stage": "STAGING_HTTP",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 0,
+          "masterAvailable": true,
+          "freeSlots": 9,
+          "maxSlots": 16,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 1,
+          "stage": "VERIFY_SDK",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 909,
+          "masterAvailable": true,
+          "freeSlots": 9,
+          "maxSlots": 16,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 1,
+          "stage": "READY_SDK",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 2104,
+          "masterAvailable": true,
+          "freeSlots": 9,
+          "maxSlots": 16,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 1,
+          "stage": "DELETE_SDK",
+          "status": 204,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 2762,
+          "masterAvailable": true,
+          "freeSlots": 9,
+          "maxSlots": 16,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 2,
+          "stage": "STAGING_HTTP",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 3967,
+          "masterAvailable": true,
+          "freeSlots": 9,
+          "maxSlots": 16,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 2,
+          "stage": "VERIFY_SDK",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 4604,
+          "masterAvailable": true,
+          "freeSlots": 9,
+          "maxSlots": 16,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 2,
+          "stage": "READY_SDK",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 5813,
+          "masterAvailable": true,
+          "freeSlots": 9,
+          "maxSlots": 16,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 2,
+          "stage": "DELETE_SDK",
+          "status": 204,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 6476,
+          "masterAvailable": true,
+          "freeSlots": 9,
+          "maxSlots": 16,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 3,
+          "stage": "STAGING_HTTP",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 7620,
+          "masterAvailable": true,
+          "freeSlots": 9,
+          "maxSlots": 16,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 3,
+          "stage": "VERIFY_SDK",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 8254,
+          "masterAvailable": true,
+          "freeSlots": 9,
+          "maxSlots": 16,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 3,
+          "stage": "READY_SDK",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 8900,
+          "masterAvailable": true,
+          "freeSlots": 9,
+          "maxSlots": 16,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 3,
+          "stage": "DELETE_SDK",
+          "status": 204,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 10323,
+          "masterAvailable": true,
+          "freeSlots": 9,
+          "maxSlots": 16,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "stage": "JOURNAL_BOUNDARY",
+          "elapsedSinceFirstPutMs": 48226,
+          "masterAvailable": true,
+          "freeSlots": 2,
+          "maxSlots": 16,
+          "volumeCount": 14,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 7,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 2
+        },
+        {
+          "round": 4,
+          "stage": "IMAGE_HTTP",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 48472,
+          "masterAvailable": true,
+          "freeSlots": 0,
+          "maxSlots": 16,
+          "volumeCount": 16,
+          "collections": {
+            "personal": 7,
+            "editorial": 2,
+            "system": 7,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 3
+        }
+      ],
+      "final": {
+        "masterAvailable": true,
+        "freeSlots": 0,
+        "maxSlots": 16,
+        "volumeCount": 16,
+        "collections": {
+          "personal": 7,
+          "editorial": 2,
+          "system": 7,
+          "other": 0
+        },
+        "shortageLog": false,
+        "collectionCount": 3
+      },
+      "cleaned": true
+    }
+  ],
+  "final24AfterJournal": [
+    {
+      "max": 24,
+      "steps": [
+        {
+          "round": 1,
+          "stage": "STAGING_HTTP",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 0,
+          "masterAvailable": true,
+          "freeSlots": 17,
+          "maxSlots": 24,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 1,
+          "stage": "VERIFY_SDK",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 1760,
+          "masterAvailable": true,
+          "freeSlots": 17,
+          "maxSlots": 24,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 1,
+          "stage": "READY_SDK",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 2471,
+          "masterAvailable": true,
+          "freeSlots": 17,
+          "maxSlots": 24,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 1,
+          "stage": "DELETE_SDK",
+          "status": 204,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 3955,
+          "masterAvailable": true,
+          "freeSlots": 17,
+          "maxSlots": 24,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 2,
+          "stage": "STAGING_HTTP",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 4627,
+          "masterAvailable": true,
+          "freeSlots": 17,
+          "maxSlots": 24,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 2,
+          "stage": "VERIFY_SDK",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 5815,
+          "masterAvailable": true,
+          "freeSlots": 17,
+          "maxSlots": 24,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 2,
+          "stage": "READY_SDK",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 6464,
+          "masterAvailable": true,
+          "freeSlots": 17,
+          "maxSlots": 24,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 2,
+          "stage": "DELETE_SDK",
+          "status": 204,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 7613,
+          "masterAvailable": true,
+          "freeSlots": 17,
+          "maxSlots": 24,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 3,
+          "stage": "STAGING_HTTP",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 8294,
+          "masterAvailable": true,
+          "freeSlots": 17,
+          "maxSlots": 24,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 3,
+          "stage": "VERIFY_SDK",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 9447,
+          "masterAvailable": true,
+          "freeSlots": 17,
+          "maxSlots": 24,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 3,
+          "stage": "READY_SDK",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 10084,
+          "masterAvailable": true,
+          "freeSlots": 17,
+          "maxSlots": 24,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "round": 3,
+          "stage": "DELETE_SDK",
+          "status": 204,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 11250,
+          "masterAvailable": true,
+          "freeSlots": 17,
+          "maxSlots": 24,
+          "volumeCount": 7,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 0,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 1
+        },
+        {
+          "stage": "JOURNAL_BOUNDARY",
+          "elapsedSinceFirstPutMs": 46092,
+          "masterAvailable": true,
+          "freeSlots": 10,
+          "maxSlots": 24,
+          "volumeCount": 14,
+          "collections": {
+            "personal": 7,
+            "editorial": 0,
+            "system": 7,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 2
+        },
+        {
+          "round": 4,
+          "stage": "IMAGE_HTTP",
+          "status": 200,
+          "code": "OK",
+          "elapsedSinceFirstPutMs": 46344,
+          "masterAvailable": true,
+          "freeSlots": 3,
+          "maxSlots": 24,
+          "volumeCount": 21,
+          "collections": {
+            "personal": 7,
+            "editorial": 7,
+            "system": 7,
+            "other": 0
+          },
+          "shortageLog": false,
+          "collectionCount": 3
+        }
+      ],
+      "final": {
+        "masterAvailable": true,
+        "freeSlots": 3,
+        "maxSlots": 24,
+        "volumeCount": 21,
+        "collections": {
+          "personal": 7,
+          "editorial": 7,
+          "system": 7,
+          "other": 0
+        },
+        "shortageLog": false,
+        "collectionCount": 3
+      },
+      "cleaned": true
+    }
+  ],
+  "sharedBeforeReconfiguration": {
+    "readOnly": true,
+    "labelsVerified": true,
+    "maxSlots": 8,
+    "freeSlots": 1,
+    "volumeCount": 7,
+    "collections": {
+      "personal": 0,
+      "editorial": 0,
+      "system": 7,
+      "other": 0
+    }
+  }
+}

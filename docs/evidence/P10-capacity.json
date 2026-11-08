@@ -1,0 +1,86 @@
+[
+  {
+    "max": 4,
+    "puts": [
+      {
+        "index": 1,
+        "status": 200,
+        "code": "OK"
+      },
+      {
+        "index": 2,
+        "status": 500,
+        "code": "InternalError"
+      }
+    ],
+    "before": {
+      "available": true,
+      "counters": {
+        "Max": [
+          4,
+          4
+        ],
+        "Free": [
+          4
+        ]
+      }
+    },
+    "after": {
+      "available": true,
+      "counters": {
+        "Max": [
+          4,
+          4
+        ],
+        "Free": [
+          0
+        ]
+      }
+    },
+    "shortageLog": true,
+    "collectionMentionCount": 14,
+    "cleaned": true
+  },
+  {
+    "max": 8,
+    "puts": [
+      {
+        "index": 1,
+        "status": 200,
+        "code": "OK"
+      },
+      {
+        "index": 2,
+        "status": 200,
+        "code": "OK"
+      }
+    ],
+    "before": {
+      "available": true,
+      "counters": {
+        "Max": [
+          8,
+          8
+        ],
+        "Free": [
+          8
+        ]
+      }
+    },
+    "after": {
+      "available": true,
+      "counters": {
+        "Max": [
+          8,
+          8
+        ],
+        "Free": [
+          0
+        ]
+      }
+    },
+    "shortageLog": false,
+    "collectionMentionCount": 10,
+    "cleaned": true
+  }
+]

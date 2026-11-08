@@ -1,0 +1,26 @@
+{
+  "verifiedAt": "2026-11-08T06:45:17.276Z",
+  "migrations": [
+    "001",
+    "002",
+    "003",
+    "004",
+    "005",
+    "006",
+    "007",
+    "008",
+    "009",
+    "010",
+    "011"
+  ],
+  "legacyTablesUnchanged": 30,
+  "allLegacyRowFingerprintsEqual": true,
+  "newTables": {
+    "assets": 0,
+    "notification_outbox": 0,
+    "notification_outbox_requeues": 0,
+    "video_media": 0,
+    "video_playback_grants": 0,
+    "media_progress": 0
+  }
+}

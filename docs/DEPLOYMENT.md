@@ -87,6 +87,39 @@ Pour la vidéo, utiliser un fournisseur adapté au streaming, avec contrôle d�
 
 Les événements métier qui doivent déclencher un email sont persistés de manière durable, avec statut et reprise. Une panne d’email ne retire pas un droit payé. Utiliser une clé métier de déduplication et l’idempotence du fournisseur quand elle existe ; l’envoi SMTP ne permet pas d’affirmer une livraison exactement une fois après toutes les coupures possibles. Conserver un état indéterminé et une procédure de rapprochement si l’accusé du fournisseur manque.
 
+### Paramètres et exploitation locale P10
+
+Les commandes sont détaillées dans [README](../README.md). `services:s3` démarre les trois services ; `storage:setup`, après le build API, utilise le SDK verrouillé sans lancer Spring ou un seed. Il crée les buckets locaux manquants, conserve les objets et configure une règle CORS pour l’origine publique locale exacte. Les signatures utilisent `S3_EXTERNAL_ENDPOINT`, les appels serveur `S3_ENDPOINT` : aucune réécriture de l’hôte après signature. Un hôte de conteneur `s3` ne convient pas à l’endpoint externe. Hors local/test, l’endpoint externe activé doit être HTTPS.
+
+Le profil mono-nœud, Testcontainers et la recette gardent **24 slots**, une limite de **64 MiB par volume**, sans préallocation. Les deux buckets et le journal périodique du filer ont trois collections distinctes ; la croissance locale par défaut de sept volumes par collection occupe 21 slots et laisse une réserve de trois. Le journal explique pourquoi huit slots suffisaient à deux PUT immédiats, puis échouaient lors du circuit complet après son flush. Les profils 8/16/24 ont été réellement comparés ([preuves](evidence/P10-storage-capacity.json)). Ce dimensionnement borné sert l’intégration locale, pas une production. En cas de saturation, traiter la capacité observée ; ne pas supprimer un volume pour faire réussir un dépôt.
+
+| Paramètres | Fonction et défaut local |
+| --- | --- |
+| `STORAGE_ENABLED`, `S3_ENDPOINT`, `S3_EXTERNAL_ENDPOINT`, `S3_REGION`, `S3_PATH_STYLE` | Activation explicite ; endpoints, région et adressage path-style. Le script local renseigne la boucle locale et `us-east-1`, sans désigner un fournisseur réel. |
+| `S3_PUBLIC_BUCKET`, `S3_PRIVATE_BUCKET`, `S3_ACCESS_KEY`, `S3_SECRET_KEY` | Deux buckets **à ACL privées**, éditorial et personnel ; identifiants serveur. Les noms « public/private » décrivent l’usage et non une ACL anonyme. |
+| `ASSET_MAX_FILE_BYTES`, `ASSET_MAX_IMAGE_BYTES` | 5 MiB TXT ; 10 MiB PNG/JPEG. Taille déclarée puis taille et octets effectivement reçus contrôlés. |
+| `ASSET_MAX_FILES_PER_PROJECT`, `ASSET_MAX_BYTES_PER_PROJECT` | Dix fichiers, 20 MiB par projet, intentions non expirées incluses. |
+| `ASSET_UPLOAD_TTL_SECONDS`, `ASSET_DOWNLOAD_TTL_SECONDS` | PUT 300 s ; GET 60 s. Les nouveaux liens sont réautorisés, les anciens suivent leur TTL. |
+| `ASSET_MAX_IMAGE_PIXELS`, `ASSET_MAX_IMAGE_DIMENSION` | 16 millions de pixels et 4096 px ; décodage borné puis réencodage, suppression des octets ajoutés. |
+| `ASSET_STAGING_CLEANUP_GRACE_SECONDS`, `ASSET_STAGING_CLEANUP_WORKER_ENABLED`, `ASSET_STAGING_CLEANUP_POLL_DELAY` | Marge 60 s après expiration, worker activé, cycle 60 s ; au plus 25 clés staging connues par cycle, réservation SQL et réseau séparés. Aucun listing global ni suppression READY/volume. Scheduler séparé de l’outbox. |
+| `MAIL_MODE`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_FROM`, `MAIL_USERNAME`, `MAIL_PASSWORD` | `local` envoie uniquement vers le Mailpit de boucle locale ; `smtp` exige un expéditeur configuré ; `disabled` n’annonce aucun envoi. Pas de relais externe dans la recette locale. |
+| `MAIL_SMTP_AUTH`, `MAIL_SMTP_STARTTLS`, `MAIL_SMTP_STARTTLS_REQUIRED`, `MAIL_SMTP_SSL` | Options explicites d’authentification/TLS selon le fournisseur. Toutes fausses pour Mailpit ; vérification du nom de serveur TLS activée. Aucune désactivation de confiance TLS pour rendre un test vert. |
+| `NOTIFICATION_OUTBOX_KEY` | Base64 de 32 octets, générée par `setup:local`, jamais côté navigateur. Conserver la clé pour redémarrage/restauration ; une nouvelle clé arbitraire ne déchiffre pas les anciens événements. |
+| `NOTIFICATION_OUTBOX_ENABLED`, `NOTIFICATION_OUTBOX_POLL_DELAY`, `NOTIFICATION_OUTBOX_LEASE_DURATION` | Worker activé, cycle 1 s, réservation 30 s. SMTP hors transaction SQL et requête métier. |
+| `NOTIFICATION_OUTBOX_MAX_ATTEMPTS`, `NOTIFICATION_OUTBOX_RETRY_BASE`, `NOTIFICATION_OUTBOX_RETRY_MAX`, `NOTIFICATION_OUTBOX_PAYLOAD_RETENTION` | Cinq essais par cycle, délai exponentiel de 5 s à 5 min ; payload au plus 24 h, limité par l’expiration du jeton pour un reset. |
+
+Les fichiers prêts et l’historique de leurs productions ne sont pas automatiquement supprimés. Le ciphertext d’email est purgé après acceptation SMTP ou expiration ; les métadonnées et clés de déduplication restent conservées, sans purge périodique inventée. La politique de conservation d’exploitation sera complétée aux lots concernés. Un timeout SMTP après envoi ou une réservation abandonnée devient INDETERMINATE ; aucun nouvel envoi automatique. L’opérateur vérifie le transport, choisit le motif et reconnaît explicitement le risque de doublon avant reprise. Un événement SENT/purgé ou expiré ne se rejoue pas depuis cet écran.
+
+Le contrôle `FORMAT_VERIFIED` vérifie le format, pas une absence de malware. TXT est servi en pièce jointe, PNG/JPEG sont réencodés, aucun HTML/SVG actif accepté. PDF reste fermé faute de validateur. L’ajout futur de formats complexes devra intégrer leur contrôle adapté et la décision d’antivirus ; aucune analyse antivirus actuellement exécutée n’est annoncée.
+
+La vidéo locale de test utilise `VIDEO_ENABLED=false` par défaut, puis `VIDEO_PROVIDER=local-test`, `VIDEO_LOCAL_ROOT` privé absolu, `VIDEO_LINK_TTL_SECONDS=60` et `VIDEO_MAX_BYTES=20971520` pour un essai explicitement activé. L’import opérateur lit un manifeste après création du contenu et contrôle ses permissions ; aucune URL ou chemin arbitraire n’est fourni par le navigateur. La copie MP4 de test est distincte des médias de formation. Le streaming commercial reste à configurer avec un véritable fournisseur, ses médias, langues, droits, sous-titres et accès disponibles. L’absence de fournisseur laisse le contenu textuel lisible.
+
+### Expéditeur réel et DNS — préparation, non appliquée
+
+Le domaine et le fournisseur ne sont pas fournis. Aucun DNS modifié, expéditeur vérifié ou email Internet reçu n’est revendiqué. Avant activation du relais réel : relever le domaine autorisé et les valeurs exactes du fournisseur ; inventorier le SPF existant ; préparer sa mise à jour, les sélecteurs DKIM et la politique DMARC avec les destinataires de rapports décidés par le propriétaire. Aucun `include`, sélecteur, clé publique ou domaine de rapports fictif n’est généré ici.
+
+Après autorisation des changements concrets sur ce domaine, appliquer les seuls enregistrements demandés, vérifier leur résolution et la validation du fournisseur, puis envoyer à un destinataire de recette autorisé. Conserver date, résultat fournisseur et authentification du message reçu ; une réception Mailpit ne valide ni SPF, ni DKIM, ni DMARC. Références primaires consultées le 8 novembre 2026 : [SPF, RFC 7208](https://www.rfc-editor.org/info/rfc7208/), [DKIM, RFC 6376 et mises à jour](https://www.rfc-editor.org/info/rfc6376/), [DMARC, RFC 9989](https://www.rfc-editor.org/info/rfc9989/).
+
 ## Livraison et CI
 
 Les tests accompagnent chaque lot ; P19 consolide la recette, il ne constitue pas le début des tests. Vérifications minimales : compilation, TypeScript, lint configuré, tests des invariants métier et intégration sur PostgreSQL, puis parcours navigateur représentatifs avec l’API réelle.

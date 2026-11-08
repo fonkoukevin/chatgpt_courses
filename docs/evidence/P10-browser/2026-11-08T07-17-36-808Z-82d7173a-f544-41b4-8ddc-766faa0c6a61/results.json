@@ -1,0 +1,561 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\scripts\\..\\.tools\\node-v24.22.2-win-x64\\node.exe",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts"
+    ],
+    "configFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts",
+    "rootDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 600000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/.runtime/browser-2026-11-08T07-17-36-808Z-82d7173a-f544-41b4-8ddc-766faa0c6a61/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/media-storage.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T07-17-36-808Z-82d7173a-f544-41b4-8ddc-766faa0c6a61\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "snapshotDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/media-storage.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3101",
+          "browserName": "chromium",
+          "headless": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "actionTimeout": 10000,
+          "navigationTimeout": 20000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off",
+          "serviceWorkers": "block"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\docs\\evidence\\P10-browser\\2026-11-08T07-17-36-808Z-82d7173a-f544-41b4-8ddc-766faa0c6a61\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "media-storage.spec.ts",
+      "file": "media-storage.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "fr · image CMS réellement transférée, ajout volontaire, publication et lecture publique",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6884,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T07:18:51.700Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "s3-transport-sanitized",
+                      "contentType": "application/json",
+                      "body": "W3sibWV0aG9kIjoiT1BUSU9OUyIsInN0YXR1cyI6MjAwLCJjb3JzT3JpZ2luQWxsb3dlZCI6dHJ1ZSwiY29yc1B1dEFsbG93ZWQiOnRydWUsImNvcnNDb250ZW50VHlwZUFsbG93ZWQiOnRydWV9LHsibWV0aG9kIjoiUFVUIiwic3RhdHVzIjoyMDAsImNvcnNPcmlnaW5BbGxvd2VkIjp0cnVlLCJjb3JzUHV0QWxsb3dlZCI6dHJ1ZSwiY29yc0NvbnRlbnRUeXBlQWxsb3dlZCI6dHJ1ZX0seyJtZXRob2QiOiJHRVQiLCJzdGF0dXMiOjIwMCwiY29yc09yaWdpbkFsbG93ZWQiOnRydWUsImNvcnNQdXRBbGxvd2VkIjp0cnVlLCJjb3JzQ29udGVudFR5cGVBbGxvd2VkIjp0cnVlfV0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "76441120af85f314a455-fe16b16e378a2648898b",
+          "file": "media-ui.scenarios.ts",
+          "line": 77,
+          "column": 47
+        },
+        {
+          "title": "en · image CMS réellement transférée, ajout volontaire, publication et lecture publique",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5243,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T07:18:58.604Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "s3-transport-sanitized",
+                      "contentType": "application/json",
+                      "body": "W3sibWV0aG9kIjoiT1BUSU9OUyIsInN0YXR1cyI6MjAwLCJjb3JzT3JpZ2luQWxsb3dlZCI6dHJ1ZSwiY29yc1B1dEFsbG93ZWQiOnRydWUsImNvcnNDb250ZW50VHlwZUFsbG93ZWQiOnRydWV9LHsibWV0aG9kIjoiUFVUIiwic3RhdHVzIjoyMDAsImNvcnNPcmlnaW5BbGxvd2VkIjp0cnVlLCJjb3JzUHV0QWxsb3dlZCI6dHJ1ZSwiY29yc0NvbnRlbnRUeXBlQWxsb3dlZCI6dHJ1ZX0seyJtZXRob2QiOiJHRVQiLCJzdGF0dXMiOjIwMCwiY29yc09yaWdpbkFsbG93ZWQiOnRydWUsImNvcnNQdXRBbGxvd2VkIjp0cnVlLCJjb3JzQ29udGVudFR5cGVBbGxvd2VkIjp0cnVlfV0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "76441120af85f314a455-16be84e68d5bb923bf97",
+          "file": "media-ui.scenarios.ts",
+          "line": 77,
+          "column": 47
+        },
+        {
+          "title": "fr · référence vidéo absente : texte utile sans lecteur ou durée inventés",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2638,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T07:19:03.878Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "76441120af85f314a455-54b7d3347a3953b35969",
+          "file": "media-ui.scenarios.ts",
+          "line": 116,
+          "column": 47
+        },
+        {
+          "title": "en · référence vidéo absente : texte utile sans lecteur ou durée inventés",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3132,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T07:19:06.530Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "76441120af85f314a455-e374c2b4a6d403480476",
+          "file": "media-ui.scenarios.ts",
+          "line": 116,
+          "column": 47
+        },
+        {
+          "title": "fr · suivi opérateur expurgé et permissions vérifiées réellement",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4736,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T07:19:09.679Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "76441120af85f314a455-237c11fdb24cc7b3899f",
+          "file": "media-ui.scenarios.ts",
+          "line": 125,
+          "column": 47
+        },
+        {
+          "title": "en · suivi opérateur expurgé et permissions vérifiées réellement",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3658,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T07:19:14.433Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "76441120af85f314a455-aaa12e74f05f48bceb9c",
+          "file": "media-ui.scenarios.ts",
+          "line": 125,
+          "column": 47
+        },
+        {
+          "title": "fr · transport réellement interrompu, reprise explicite avec risque de doublon puis un seul email",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11281,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T07:19:35.819Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "76441120af85f314a455-fd6218aec2d09355da99",
+          "file": "media-notification-retry.scenario.ts",
+          "line": 41,
+          "column": 3
+        }
+      ],
+      "suites": [
+        {
+          "title": "P10 stockage réel, fichiers privés et emails",
+          "file": "media-storage.spec.ts",
+          "line": 28,
+          "column": 6,
+          "specs": [
+            {
+              "title": "fr · transfert S3 CORS, confirmation distincte et téléchargement privé",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6920,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T07:18:11.990Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "76441120af85f314a455-dec58f8ed195ca52051e",
+              "file": "media-storage.spec.ts",
+              "line": 36,
+              "column": 47
+            },
+            {
+              "title": "en · transfert S3 CORS, confirmation distincte et téléchargement privé",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4247,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T07:18:24.754Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "76441120af85f314a455-e9802eb5ea2f2bc18fd5",
+              "file": "media-storage.spec.ts",
+              "line": 36,
+              "column": 47
+            },
+            {
+              "title": "panne API pendant autorisation : fichier en mémoire et reprise explicite",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 22609,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T07:18:29.031Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "76441120af85f314a455-c25fa993afc7f191d020",
+              "file": "media-storage.spec.ts",
+              "line": 77,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "P10 lecteur local réel et positions propres aux médias",
+          "file": "media-playback.scenarios.ts",
+          "line": 55,
+          "column": 8,
+          "specs": [
+            {
+              "title": "fr · MP4 décodé dans Chromium, Range proxy et reprise indépendante",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4471,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T07:19:18.113Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "76441120af85f314a455-ec7baa9766a472b970dc",
+              "file": "media-playback.scenarios.ts",
+              "line": 59,
+              "column": 49
+            },
+            {
+              "title": "en · MP4 décodé dans Chromium, Range proxy et reprise indépendante",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4124,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T07:19:31.661Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "76441120af85f314a455-d751f1f4dc0fae8febfe",
+              "file": "media-playback.scenarios.ts",
+              "line": 59,
+              "column": 49
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-08T07:18:09.909Z",
+    "duration": 97364.399,
+    "expected": 12,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

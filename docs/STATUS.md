@@ -1,19 +1,18 @@
 # État réel du projet
 
-Dernière mise à jour : **8 novembre 2026**. **P03 validé localement** : modèle de données, migration V002, OpenAPI, client généré et vérifications PostgreSQL/HTTP/navigateur exécutées. Aucun ancien prototype repris ni déploiement externe.
+Dernière mise à jour : **8 novembre 2026**. **P04 validé localement**. Autorisation utilisateur : enchaîner **P04 à P12**, dans l’ordre, en passant au lot suivant seulement après validation du précédent. Aucun ancien prototype repris ni déploiement externe.
 
 ## Situation courante
 
-- Dernière phase réalisée : P03, validée localement ; prochaine phase P04 à commencer sur demande.
-- Git local : branche `main`, code P03 **`6a53c19`**, code P02 **`b5f797d`**, références P00 **`c31c609`** ; aucun remote/push. Les 49 fichiers initiaux restent présents.
+- Dernière phase réalisée : P04, validée localement ; prochaine phase P05, autorisée sans nouvelle confirmation.
+- Git local : branche `main`, code P04 **`ba63356`**, P03 **`6a53c19`**, P02 **`b5f797d`** ; aucun remote/push. Les 49 fichiers initiaux restent présents.
 - Outils : Windows/PowerShell 5.1, Node portable 24.22.2/npm 11.19.1, Temurin 21.0.13+9, Wrapper Maven 3.10.0 ; Docker Linux 29.8.0/Compose 5.5.1.
-- Schéma : **V001 inchangée**, V002 ajoute douze tables ; UUID/UTC/révisions, historique et contraintes vérifiés. Modèle et extensions futures dans [DATA_MODEL.md](DATA_MODEL.md) ; aucune route métier fictive.
-- Démarrage : `.\scripts\courses.cmd run dev` applique Flyway ; `run seed:local` charge explicitement un dossier fictif en brouillon. Vitrine P02 : `run dev:web`. [Commandes](../README.md). Applications/services arrêtés, volumes et données conservés.
-- Preuves [P03](evidence/P03.md) : **24 tests Java réussis dont 13 PostgreSQL**, base vide, upgrade V001 et volume local, contraintes, gel concurrent et concurrence JPA. **8 tests du client** ; OpenAPI validé, 17 fichiers générés vérifiés, divergence et CRLF contrôlés.
-- Réinstallation verrouillée, lint/types et builds web/API réussis ; audit npm : zéro alerte. CI enrichie contrat/client et syntaxiquement vérifiée, run GitHub non exécuté.
-- Navigateur autorisé Playwright/Chromium : **7/7 réussis en 20,127 s** avec SDK P03, FR/EN 1440/390/320 px ; panne/reprise réelle de Spring et **16 captures examinées**. Preuves [P01](evidence/P01.md)/[P02](evidence/P02.md) conservées.
-- Blocage P03 : aucun. Authentification et cas d’utilisation métier à intégrer dans leurs lots. Prix, conditions et médias commerciaux restent ouverts ; aucune recette externe/production observée.
-- Prochaine action : réaliser `prompts/P04_IDENTITE_SECURITE.txt` sur le schéma et les contrats présents.
+- Schéma : V001/V002 conservées ; V003 ajoute récupération et révocation des sessions. [DATA_MODEL.md](DATA_MODEL.md) décrit contraintes et extensions futures.
+- Démarrage : `.\scripts\courses.cmd run dev` applique Flyway ; `run seed:local` charge explicitement un dossier fictif en brouillon. [Commandes](../README.md). Applications de vérification arrêtées ; PostgreSQL/Mailpit disponibles pour la suite, volumes et données conservés.
+- Preuves [P04](evidence/P04.md) : **37 tests Java**, **18 tests du client** ; OpenAPI validé, 17 fichiers générés identiques, lint/types et builds web/API réussis.
+- Navigateur autorisé Playwright/Chromium : **13/13 en 59,3 s**, FR/EN 1440/768/390/320 px ; vrais comptes, SMTP Mailpit, panne/reprise Spring et sessions conservées. 34 vues de formulaires et 7 vues fonctionnelles examinées dans les deux passages verts. Preuves précédentes conservées.
+- Blocage P04 : aucun. T04 reste partiel jusqu’aux vrais projets/commandes/médias. Notification asynchrone en mémoire jusqu’à l’outbox P10 ; procédure admin préparée hors dépôt, non exécutée. CI GitHub, recette externe et production non exécutées.
+- Suite : `prompts/P05_CMS_PUBLICATION.txt`, puis P06 à P12 automatiquement si chaque lot passe. L’utilisateur prévoit de renseigner les clés Stripe de test dans `.env.local` ; présence à revérifier en P12 sans afficher les valeurs. Prix, conditions et médias commerciaux restent ouverts.
 
 ## Phases
 
@@ -23,7 +22,7 @@ Dernière mise à jour : **8 novembre 2026**. **P03 validé localement** : modè
 | P01 | Validé localement | Technique et navigateur vérifiés, captures examinées ; voir `evidence/P01.md` |
 | P02 | Validé localement | Composants, trois structures, 54 captures et recette ; voir `evidence/P02.md` |
 | P03 | Validé localement | Migration, modèles, OpenAPI/client généré, 24 tests Java et intégration réelle ; voir `evidence/P03.md` |
-| P04 | À faire | Identité et sécurité |
+| P04 | Validé localement | Identité, SMTP, session/CSRF, 37 tests Java et 13 scénarios Chromium ; voir `evidence/P04.md` |
 | P05 | À faire | CMS et publication |
 | P06 | À faire | Site public |
 | P07 | À faire | Méthodes et générateur |
@@ -48,6 +47,6 @@ Dernière mise à jour : **8 novembre 2026**. **P03 validé localement** : modè
 
 ## Dernier lot
 
-Socle identité/contenu, migrations, contrat et client généré réalisés. Format Problem corrigé après test, attentes SQL RESTRICT alignées sur PostgreSQL, replay de fixture et génération CRLF vérifiés. Aucun compte connu, prix ou endpoint métier fictif créé ; aucune publication.
+Identité réelle, récupération, préférences et E06 FR/EN intégrés. Courses de reset, sélecteurs navigateur et lien de langue corrigés puis vérifiés. Aucun compte administrateur connu, prix ou endpoint métier fictif créé ; aucune publication.
 
 Garder ce suivi court ; détailler les commandes et limites dans `docs/evidence/Pxx.md`. Une reprise part des fichiers et preuves présents, sans supposer l’historique de conversation.

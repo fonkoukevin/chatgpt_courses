@@ -21,7 +21,7 @@ Le contrat machine des opérations disponibles est [api/openapi.yaml](api/openap
 
 Une route système absente retourne un vrai 404 Problem. Les erreurs contiennent notamment `status`, `code`, `traceId`, `detail` et `instance`. Le proxy préserve les erreurs de Spring ; sa propre erreur de connexion devient 502/504 `API_UNAVAILABLE`, sans données de remplacement. Aucun autre endpoint métier de ce document n’est annoncé implémenté par P01. Les routes privées sont refusées et CSRF reste actif.
 
-P03 conserve le payload de la sonde et le produit avec un DTO explicite. L’OpenAPI ne décrit que `GET /system/health`, sous le serveur de même origine `/api/v1`. `system/unknown` est volontairement absent : c’est une requête de diagnostic vers une route manquante, pas une nouvelle opération. Aucun endpoint CRUD métier ni contrôleur de test n’est livré en production.
+P03 conserve le payload de la sonde et le produit avec un DTO explicite. La sonde reste dans l’OpenAPI, complétée par les opérations d’identité P04 ci-dessous, sous le serveur de même origine `/api/v1`. `system/unknown` est volontairement absent : c’est une requête de diagnostic vers une route manquante, pas une nouvelle opération. Aucun contrôleur de test n’est livré en production.
 
 Les composants partagés `Problem`, `FieldError`, UUID, Locale, UtcInstant, Revision, Money et la convention ETag sont définis sans inventer de routes pour les utiliser. Les erreurs utilisent `type: about:blank`, un `traceId` UUID et `Cache-Control: private, no-store`. `fieldErrors`, présent pour une erreur de validation, est une liste `{ field, code, message }`, sans valeur rejetée ni message dynamique contenant une donnée saisie. `code` reste stable pour la traduction ; les détails SQL, exceptions, secrets et graphes JPA restent hors réponse.
 
@@ -50,22 +50,39 @@ Les listes If-Match utilisent une comparaison forte et un OU entre tags ; un tag
 
 Les créations risquant un doublon, notamment commandes, Checkout et demandes de remboursement, utilisent `Idempotency-Key`. Sa portée comprend utilisateur/opération et empreinte du corps. La même clé/corps retrouve le même résultat ; un autre corps reçoit 409. La base maintient les contraintes durables et la transaction correspondantes. La politique de rétention est documentée. La clé locale ne remplace ni celle du fournisseur ni l’unicité des attributions métier.
 
-## Identité et session — planifié P04
+## Identité et session — validé localement P04
+
+Ces routes existent dans Spring et dans OpenAPI. Les sept tests HTTP réels PostgreSQL/SMTP, le global de 37 tests Java et les 13 scénarios navigateur E06 ont réussi. Le détail et les limites sont dans [evidence/P04.md](evidence/P04.md). Toutes les routes du tableau ont le préfixe `/api/v1`.
 
 | Méthode et route | Entrée ou résultat | Règle |
 | --- | --- | --- |
-| `GET /auth/csrf` | `{ token, headerName, parameterName }` | Public, token Spring, `no-store`, en-tête à reprendre sur les mutations |
-| `POST /auth/register` | `{ email, password, displayName?, locale }` | Compte apprenant uniquement, validations, réponse sans mot de passe ; retour vers connexion sans auto-login artisanal |
-| `POST /auth/login` | Formulaire `email`, `password` | Filtres Spring, CSRF requis ; 200 avec résumé de session ou 401 contrôlé |
+| `GET /auth/csrf` | `{ token, headerName, parameterName }` | Public, jeton Spring masqué XOR ; `X-CSRF-TOKEN` et `_csrf`, `private, no-store` |
+| `POST /auth/register` | `{ email, password, displayName?, locale }` | 201 avec `AuthUser`, rôle LEARNER attribué côté serveur ; aucune connexion automatique |
+| `POST /auth/login` | Formulaire URL-encodé `email`, `password` | Filtres Spring, CSRF requis ; rotation de session, 200 avec `AuthUser` ou 401 contrôlé |
 | `POST /auth/logout` | Aucun corps | CSRF requis, session invalidée et cookie expiré ; 204 |
-| `GET /auth/me` | Utilisateur, langue, permissions minimales | 200 connecté ou 401 ; aucune clé de session dans le corps |
-| `POST /auth/password-reset-requests` | `{ email, locale }` | Réponse neutre 202 ; limitation d’abus et traitement d’email |
-| `POST /auth/password-resets` | `{ token, newPassword }` | Jeton opaque à usage unique, expirant, empreinte en base ; invalidation des sessions selon politique documentée |
-| `GET/PATCH /me/preferences` | Préférences et révision | Propriétaire ; `If-Match` sur PATCH |
+| `GET /auth/me` | `AuthUser` | 200 connecté ou 401 ; aucune clé de session dans le corps |
+| `POST /auth/password-reset-requests` | `{ email, locale }` | 202 vide, identique pour compte inconnu, désactivé ou quota dépassé ; SMTP local Mailpit |
+| `POST /auth/password-resets` | `{ token, newPassword }` | 204 ; jeton opaque à usage unique, empreinte en base ; toutes les sessions du compte révoquées |
+| `GET /me/preferences` | `{ id, locale, revision }` et ETag fort | Lecture du propriétaire authentifié et actif |
+| `PATCH /me/preferences` | `{ locale }` ; mêmes résultat et ETag actualisé | Propriétaire actif + permission `identity.preferences.write` ; `If-Match` et `@Version` dans la transaction |
 
-Après inscription, la connexion normale réutilise les filtres Spring et la destination locale validée. Le paramètre `returnTo` est une route interne autorisée, pas une URL libre. Un formulaire existant conserve sa saisie non sensible pendant ces transitions. Les mots de passe ne sont jamais mis dans l’URL, les logs, les événements de mesure ou le stockage navigateur.
+`AuthUser` contient exactement `{ id, email, displayName, locale, roles, permissions }` ; `displayName` est nullable. Ces listes sont un instantané serveur pour l’interface, pas une délégation de décision au navigateur. Les DTO n’exposent ni hash, entité JPA, version d’authentification, ni identifiant de session. Les propriétés JSON inconnues, notamment `roles` et `userId` dans une inscription ou une préférence, sont refusées avec 400 `INVALID_REQUEST`. Le formulaire de login accepte uniquement `email`, `password` et l’éventuel paramètre CSRF ; aucun rôle ou propriétaire choisi par le client.
 
-Le frontend charge le jeton CSRF au moment nécessaire puis le recharge après login/logout. Le client connaît `headerName` via la réponse ; il ne recopie pas une valeur de token fixe. Cookies avec credentials de même origine. Le cookie de session a `Path=/` pour les lectures SSR ; seul le backend établit l’identité.
+L’email est normalisé par suppression des espaces de bord et passage en minuscules, sans retrait de points ou de suffixe `+`, puis validé et limité à 320 caractères. Nom d’affichage facultatif : 120 caractères au plus ; langue : `fr` ou `en`. Un nouveau mot de passe contient 12 à 128 points de code Unicode et au plus 1024 octets UTF-8. Le serveur utilise l’identifiant d’encodage versionné `{pbkdf2@SpringSecurity_v5_8}` : PBKDF2-HMAC-SHA256, 310000 itérations, sel de 16 octets et sortie de 256 bits. Aucun compte ou mot de passe administrateur par défaut n’est créé.
+
+Spring Session persiste les sessions dans PostgreSQL. Le principal sérialisé contient l’UUID stable et des autorités serveur, sans mot de passe ni hash ; son nom/index JDBC est l’UUID, non l’email. À chaque requête portant une identité authentifiée, Spring recharge état actif, version d’authentification et permissions. Compte désactivé/version périmée ⇒ session invalidée ; permission retirée ⇒ la même session perd l’action protégée. La permission d’écriture des préférences est attribuée au rôle LEARNER de référence ; sa révocation est vérifiée sur la vraie route PATCH, sans endpoint d’administration factice. Les autres routes privées non implémentées restent refusées.
+
+Le cookie `SESSION` est HttpOnly, SameSite=Lax, `Path=/`, sans Domain partagé ; `Secure` provient de la configuration runtime validée. Durée d’inactivité : 30 minutes ; nettoyage JDBC chaque minute. Le profil HTTP local emploie `SESSION_COOKIE_SECURE=false` ; la production exige origine HTTPS et `true`. L’API écoute en boucle locale et `server.forward-headers-strategy=none` : elle ne transforme pas un Host ou un `X-Forwarded-*` arbitraire en origine publique. Les liens de récupération utilisent exclusivement `APP_PUBLIC_ORIGIN`. Le déploiement derrière proxy de confiance reste à recetter dans les lots de livraison.
+
+Le CSRF reste celui du framework : dépôt de jeton en session, chargement différé et masquage XOR/BREACH par défaut. Il protège aussi inscription, login, logout et récupération. Le client garde le jeton uniquement en mémoire et le recharge après connexion, déconnexion, réinitialisation ou réponse 401/403 ; il ne répète jamais automatiquement une mutation. Les réponses d’identité/préférences et les erreurs sont `private, no-store`. Les lectures SSR utilisent l’origine API interne configurée, transmettent uniquement le cookie `SESSION` nécessaire et désactivent le cache partagé.
+
+La demande de récupération a un quota atomique de trois demandes par email normalisé sur une fenêtre de quinze minutes, clé de quota hachée en base ; dépasser ce quota conserve la réponse neutre 202. Le jeton contient 32 octets aléatoires, encodés en 43 caractères base64url ; seule son empreinte SHA-256 est stockée. Échéance : 30 minutes. Émission et consommation verrouillent le compte ; consommation atomique, incrément de la version d’authentification, invalidation des autres jetons et suppression des sessions du compte. Jeton invalide, expiré ou déjà consommé ⇒ 400 `INVALID_RESET_TOKEN`. Une réinitialisation réussie invalide aussi la session courante du navigateur et demande un nouveau CSRF avant login.
+
+La notification est émise après commit et livrée de façon asynchrone au port SMTP local Mailpit. Son URL est `/fr/reinitialisation#token=…` ou `/en/reset-password#token=…`. Le frontend retire le fragment de l’historique et garde le jeton en mémoire, sans URL de requête, log ou stockage navigateur. La livraison P04 est en mémoire : l’outbox durable et la reprise opérationnelle relèvent de P10 ; aucune livraison SMTP externe n’est revendiquée.
+
+Après inscription, la connexion normale réutilise les filtres Spring et la destination locale validée. `returnTo` est une route interne en liste autorisée, sinon le compte courant ; ce n’est pas une URL libre. Un essai anonyme non sensible peut être conservé deux heures dans `sessionStorage`, sans `userId`, puis restauré volontairement. Aucun import serveur vers les futurs projets/méthodes n’est simulé avant leurs services propriétaires. Logout purge les caches personnels de cette application sans supprimer les données du compte ni effacer les autres applications.
+
+Codes P04 : 400 `VALIDATION_FAILED`/`INVALID_REQUEST`/`INVALID_RESET_TOKEN`, 409 `EMAIL_ALREADY_REGISTERED`, 401 `BAD_CREDENTIALS`/`AUTHENTICATION_REQUIRED`/`ACCOUNT_UNAVAILABLE`, 403 `CSRF_INVALID`/`ACCESS_DENIED`, et les codes de révision ci-dessus. Une indisponibilité de vérification de session reste un échec fermé, avec réponse contrôlée 503. Le quota neutre de récupération n’utilise pas le code 429 préparé pour d’autres limitations.
 
 ## Catalogue public et lecture — planifié P05/P06
 

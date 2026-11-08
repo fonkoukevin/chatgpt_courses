@@ -4,11 +4,11 @@ Plateforme de formation pratique à l’IA : choisir une tâche, apprendre, prod
 
 ## État réel
 
-P01 fournit les fondations locales ; P02 ajoute le système visuel et trois structures d’interface. P03 pose le schéma identité/contenu, les conventions d’accès/concurrence et le contrat OpenAPI avec client TypeScript généré. Les parcours métier, l’authentification et les paiements seront raccordés dans leurs lots. Aucun ancien prototype repris ni déploiement externe annoncé.
+P01 fournit les fondations locales ; P02 ajoute le système visuel et trois structures d’interface. P03 pose le schéma identité/contenu, les conventions d’accès/concurrence et le contrat OpenAPI avec client TypeScript généré. P04 raccorde inscription, connexion, récupération et préférences aux sessions Spring/PostgreSQL, vérifiées localement. Les autres parcours métier et les paiements seront raccordés dans leurs lots. Aucun ancien prototype repris ni déploiement externe annoncé.
 
 La validation P01 couvre FR/EN, clavier, formats étroits, erreur 404 et panne/reprise réelle de Spring. P02 ajoute 14 tests et 54 captures examinées pour les interfaces ; les sept scénarios P01 passent à nouveau après ces changements. La validation reste locale, avec le Chromium de test autorisé.
 
-Lire [AGENTS.md](AGENTS.md), puis [docs/STATUS.md](docs/STATUS.md). Vérifications et limites : [P03](docs/evidence/P03.md), [P02](docs/evidence/P02.md), [P01](docs/evidence/P01.md) ; audit initial : [P00](docs/evidence/P00.md).
+Lire [AGENTS.md](AGENTS.md), puis [docs/STATUS.md](docs/STATUS.md). Vérifications et limites : [P04](docs/evidence/P04.md), [P03](docs/evidence/P03.md), [P02](docs/evidence/P02.md), [P01](docs/evidence/P01.md) ; audit initial : [P00](docs/evidence/P00.md).
 
 ## Structure retenue
 
@@ -147,7 +147,7 @@ Si Chromium n’est pas installé, `run browser:install` installe la version ver
 
 [DATA_MODEL.md](docs/DATA_MODEL.md) explique les douze tables ajoutées par **V002**, les identités UUID, les versions gelées, les traductions et les relations futures. **V001 est inchangée**. Hibernate valide le schéma ; Flyway est le seul mécanisme d’évolution. Aucune commande de reset ou suppression de volume n’est nécessaire.
 
-Le contrat machine [openapi.yaml](docs/api/openapi.yaml) ne décrit que la sonde réellement implémentée. Les routes métier restent planifiées dans [API_CONTRACTS.md](docs/API_CONTRACTS.md). Après modification du contrat :
+Le contrat machine [openapi.yaml](docs/api/openapi.yaml) décrit la sonde et les opérations d’identité P04 réellement implémentées. Les autres routes métier restent planifiées dans [API_CONTRACTS.md](docs/API_CONTRACTS.md). Après modification du contrat :
 
 ```powershell
 .\scripts\courses.cmd run api:validate
@@ -170,4 +170,30 @@ Pour charger un dossier pédagogique **fictif, en brouillon**, démarrer d’abo
 
 Commande réservée à `APP_ENV=local` et au service PostgreSQL Compose de ce dépôt. La même fixture est chargée explicitement par les tests Testcontainers ; elle n’est pas incluse dans le JAR de production. Chargement transactionnel, réexécutable sans écrasement ; collision d’identifiants réservés ⇒ refus. Aucun compte, rôle attribué, prix, offre active ou droit créé. Ces données ne constituent pas un catalogue publié et les pages P02 restent des démonstrations séparées.
 
-Prochain prompt : [prompts/P04_IDENTITE_SECURITE.txt](prompts/P04_IDENTITE_SECURITE.txt).
+## Identité P04 — validée localement
+
+Avec la stack locale démarrée par `run dev`, les pages E06 utilisent la vraie API Spring :
+
+| Fonction | Français | Anglais |
+| --- | --- | --- |
+| Connexion | `/fr/connexion` | `/en/sign-in` |
+| Inscription apprenant | `/fr/inscription` | `/en/sign-up` |
+| Demande de récupération | `/fr/recuperation` | `/en/reset` |
+| Réinitialisation depuis l’email | `/fr/reinitialisation` | `/en/reset-password` |
+| Identité et préférence de langue | `/fr/compte` | `/en/account` |
+
+Créer un compte avec une adresse de test que l’on contrôle localement ; aucun compte connu n’est fourni. Après inscription, se connecter normalement. Mot de passe : 12 à 128 points de code Unicode, au plus 1024 octets UTF-8. L’email est normalisé en minuscules et sans espaces de bord, sans modifier points ou suffixes. Un formulaire ne choisit ni rôle ni propriétaire.
+
+Les emails de récupération arrivent dans **Mailpit local** sur http://localhost:8025 ; le lien expire après 30 minutes et ne s’utilise qu’une fois. Trois demandes par email sur quinze minutes au plus ; la réponse reste neutre même pour un compte absent ou un quota dépassé. Ne pas copier de lien de récupération complet dans un ticket ou un journal. L’envoi SMTP local est testé ; la livraison durable et la reprise par outbox arrivent en P10, sans service email externe présumé.
+
+Le cookie `SESSION` est HttpOnly, SameSite=Lax et `Path=/`, expirant après 30 minutes d’inactivité côté serveur. CSRF framework actif sur toutes les mutations de session, login compris ; le client le conserve en mémoire et le renouvelle après les transitions, sans retry de mutation automatique. Les préférences sont privées, protégées par propriétaire, permission et ETag ; les données ne sont pas mises en cache partagé. Un essai anonyme non sensible peut être gardé deux heures dans l’onglet, puis restauré volontairement ; son import dans de futurs projets n’est pas encore disponible.
+
+La procédure du premier administrateur est conservée **hors dépôt**, sur le poste actuel dans `C:\Users\kevin\.codex\private-runbooks\chatgpt-courses-admin-initial.md` ; elle a été préparée et n’a pas été exécutée. Aucun administrateur caché ni identifiant réel n’a été ajouté au dépôt.
+
+Recette locale dédiée, avec les builds web/API, PostgreSQL et Mailpit démarrés, et les ports de test 3101/8181 libres :
+
+```powershell
+.\scripts\courses.cmd run verify:identity
+```
+
+Cette commande a réussi : **13 scénarios Chromium**, FR/EN à 1440/768/390/320 px, comptes réels, SMTP Mailpit, rotation, panne et redémarrage de l’API avec session conservée. Les défauts observés et corrigés, les 37 tests Java et les limites sont détaillés dans [P04](docs/evidence/P04.md). Prochain lot : [P05_CMS_PUBLICATION.txt](prompts/P05_CMS_PUBLICATION.txt).

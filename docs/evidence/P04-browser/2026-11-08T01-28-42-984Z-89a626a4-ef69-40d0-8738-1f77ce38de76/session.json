@@ -1,0 +1,23 @@
+{
+  "runId": "2026-11-08T01-28-42-984Z-89a626a4-ef69-40d0-8738-1f77ce38de76",
+  "completedAt": "2026-11-08T01:31:53.598Z",
+  "result": "failed",
+  "cleanupConfirmed": true,
+  "processes": [
+    {
+      "name": "web",
+      "pid": 52300,
+      "terminated": true
+    },
+    {
+      "name": "api",
+      "pid": 51584,
+      "terminated": true
+    },
+    {
+      "name": "playwright",
+      "pid": 37848,
+      "terminated": true
+    }
+  ]
+}

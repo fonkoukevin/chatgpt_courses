@@ -20,6 +20,7 @@ import { ActivityNavigation, ActivityProgramme, type ActivityProgrammeContext } 
 import { ActivityProgress } from "./progress";
 import { ActivityQuiz, QuizHistory } from "./quiz";
 import { StartProjectAction } from "@/components/projects/preparation";
+import { LearningMedia } from "./media";
 
 export type LearningActivityProps = DetailProps & { programme?: ActivityProgrammeContext };
 
@@ -112,7 +113,7 @@ function ActivityContent({ locale, resource, languageLinks, returnTo, programme 
         {revisionChanged && <div className="space-y-3"><StatusMessage tone="warning">{t.quizVersionChanged}</StatusMessage><ConfirmationDialog title={t.reloadActivity} description={t.reloadActivityDescription} confirmLabel={t.confirm} cancelLabel={t.cancel} trigger={<Button variant="secondary" className="max-w-full whitespace-normal">{t.reloadActivity}</Button>} onConfirm={() => window.location.reload()} /></div>}
         {contentAvailable && resource.document ? <>
           <section className="space-y-3"><h2 className="text-2xl font-semibold">{t.objective}</h2><p className="whitespace-pre-wrap break-words leading-relaxed">{resource.document.objective}</p><h3 className="pt-2 text-lg font-semibold">{t.expectedResult}</h3><p className="whitespace-pre-wrap break-words leading-relaxed">{resource.document.expectedResult}</p>{resource.document.prerequisites.length > 0 && <><h3 className="pt-2 text-lg font-semibold">{t.prerequisites}</h3><ul className="list-disc space-y-2 pl-5">{resource.document.prerequisites.map((item, index) => <li key={index} className="break-words text-sm leading-relaxed">{item}</li>)}</ul></>}</section>
-          {resource.document.media.length === 0 && <p className="text-sm leading-relaxed text-muted-foreground">{t.noVideo}</p>}<PublicDocumentBody locale={locale} document={resource.document} prefix="activity" />
+          {resource.document.media.length === 0 && <p className="text-sm leading-relaxed text-muted-foreground">{t.noVideo}</p>}<PublicDocumentBody locale={locale} document={resource.document} prefix="activity" showMedia={false} /><LearningMedia locale={locale} resource={resource} account={account} boundary={boundary} enrollmentId={activity?.enrollmentId} />
           <Practice key={`practice:${resource.versionId}:${resource.locale}`} locale={locale} document={resource.document} />
         </> : resource.availability === "PUBLISHED" && !contextBlocked && <StatusMessage>{resource.access === "PROTECTED" ? publicCopy.protectedBody : publicCopy.missingInfo}</StatusMessage>}
         <AccountNotice locale={locale} state={account} boundary={boundary} returnTo={selfHref} />

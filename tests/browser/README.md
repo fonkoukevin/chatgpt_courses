@@ -1,4 +1,4 @@
-# Recette navigateur P01 — validée localement
+# Recettes navigateur P01 à P10 — intégration locale
 
 Ce scénario utilise Playwright et un Chromium dédié, sans prendre le contrôle du navigateur personnel. L’utilisateur a explicitement autorisé cette méthode le 8 novembre 2026. La recette finale a été exécutée : **sept tests réussis, aucun échec, aucun test ignoré**, puis les 16 captures ont été examinées. Les preuves sont dans [l’index de recette](../../docs/evidence/P01-browser/README.md).
 
@@ -10,7 +10,7 @@ Le superviseur réserve les ports **3101 et 8181** par défaut (`BROWSER_WEB_POR
 
 Les sept tests couvrent FR/EN à 1440, 390 et 320 px : navigation clavier, cible du lien d’évitement, focus visible conservé après réponse, réponse réelle Spring/PostgreSQL, erreur 404 structurée, absence de défilement horizontal et d’exception JavaScript. Le dernier test arrête réellement Spring, vérifie l’indisponibilité dans les deux langues pendant que Next répond toujours, redémarre Spring, puis utilise « Réessayer » pour confirmer la reprise et le transfert de focus attendu.
 
-Depuis P06, ces contrôles techniques ouvrent `/{locale}/dev/foundations` ; l’accueil lit le catalogue publié. Les recettes P05 à P08 réservent leur propre PostgreSQL en tmpfs, sans employer le volume Compose. Elles créent leurs comptes et publications fictives dans cette seule instance, contrôlent son étiquette d’appartenance et l’arrêtent après les tests. Aucun compte éditeur ni contenu public n’est injecté dans la base de développement partagée.
+Depuis P06, ces contrôles techniques ouvrent `/{locale}/dev/foundations` ; l’accueil lit le catalogue publié. Les recettes P05 à P10 réservent leur propre PostgreSQL en tmpfs, sans employer le volume Compose. Elles créent leurs comptes et publications fictives dans cette seule instance, contrôlent son étiquette d’appartenance et l’arrêtent après les tests. Aucun compte éditeur ni contenu public n’est injecté dans la base de développement partagée.
 
 | Phase | Commande après `.\scripts\courses.cmd` | Données utilisées |
 | --- | --- | --- |
@@ -21,8 +21,14 @@ Depuis P06, ces contrôles techniques ouvrent `/{locale}/dev/foundations` ; l’
 | P06 public | `run verify:public` | Publications fictives dans PostgreSQL tmpfs |
 | P07 méthodes | `run verify:methods` | Sources et copies privées fictives dans PostgreSQL tmpfs |
 | P08 apprentissage | `run verify:learning` | Programme BR01, notes et tentatives fictifs dans PostgreSQL tmpfs |
+| P09 projets | `run verify:projects` | Productions, grilles BR01/BR02 et preuves déclaratives fictives dans PostgreSQL tmpfs |
+| P10 fichiers, médias et emails | `run verify:media` | PostgreSQL, SeaweedFS S3 et Mailpit isolés en tmpfs ; fichiers synthétiques et MP4 technique CC0 |
 
-Les rapports des lots ultérieurs utilisent `docs/evidence/Pxx-browser/<session>/`. Les captures P06–P08 placent le focus sur le contenu principal avant photographie pour éviter un artefact du lien d’évitement ; les assertions de clavier sont réalisées séparément. Le contrôleur IPC arrête uniquement l’API réservée à la recette, jamais les onglets ou serveurs personnels. Ne pas lancer deux recettes sur les mêmes ports en parallèle.
+P09 a réussi ses huit scénarios finaux ; P10 ses douze scénarios complets. Les résultats et limites restent dans [P09](../../docs/evidence/P09.md) et [P10](../../docs/evidence/P10.md), sans validation de stockage, de courrier ou de fournisseur vidéo en production.
+
+P10 utilise `scripts/lib/browser-services.mjs` pour créer et arrêter ses seuls conteneurs S3/Mailpit, sur des ports de boucle locale attribués par Docker. Les étiquettes de session sont revérifiées avant arrêt ou pause. Le stockage réserve la capacité pour les deux buckets et le journal du filer ; il ne réutilise ni les identifiants ni les volumes S3 de développement. Le MP4 de test est importé explicitement dans un répertoire privé temporaire, sans prétendre qu’un film de formation a été produit. Le navigateur contrôle transfert CORS, confirmation canonique, téléchargement propriétaire, image publique, décodage et Range vidéo, positions FR/EN indépendantes, permissions et données expurgées des notifications. Une inscription réelle pendant la pause du seul Mailpit isolé produit un envoi indéterminé ; la reprise exige motif et risque de doublon, puis vérifie un unique message et le refus d’une nouvelle reprise d’un envoi accepté. Aucun état d’email n’est fabriqué en base.
+
+Les rapports des lots ultérieurs utilisent `docs/evidence/Pxx-browser/<session>/`. Les captures P06–P10 placent le focus sur le contenu principal avant photographie pour éviter un artefact du lien d’évitement ; les assertions de clavier sont réalisées séparément. Les cartes de notifications ont aussi des captures de détail, car une très longue page peut être réduite par l’outil de revue. Les diagnostics S3 joints aux cas CMS ne conservent que méthodes, statuts, codes réseau et booléens CORS, sans URL signée ni réponse XML. Le contrôleur IPC arrête uniquement l’API réservée à la recette et met en pause/reprend son Mailpit isolé, jamais les onglets ou serveurs personnels. Ne pas lancer deux recettes sur les mêmes ports en parallèle.
 
 Les captures PNG de page, sans barres du navigateur utilisateur, et le rapport JSON vont dans `docs/evidence/P01-browser/<session>/`. La capture remonte au début de page sans changer le focus, pour éviter un artefact des éléments fixes après défilement. Les résultats temporaires et journaux restent dans `.runtime/`. Chaque exécution possède son dossier. Un code de sortie non nul ou un nettoyage non confirmé reste un échec ; tous les arrêts sont tentés et regroupés dans l’erreur finale. Les images sont ensuite examinées : les assertions automatiques ne suffisent pas à déclarer une revue visuelle.
 

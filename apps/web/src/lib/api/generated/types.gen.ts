@@ -996,7 +996,7 @@ export type BlockingIssueDefinition = {
 };
 
 /**
- * Configuration éditoriale opt-in, incomplète admise en brouillon seulement. Publication exige les vingt critères exacts de document.rubric àunpoint et quatre erreurs bloquantes aux libellés nonvides ; catégories dérivées des clés. Grille, seuil et règle de révélation gelés avec la version pédagogique. Null/absent ne crée aucun atelier implicite.
+ * Configuration éditoriale opt-in, incomplète admise en brouillon seulement. Publication exige les vingt critères exacts de document.rubric à un point et quatre erreurs bloquantes aux libellés non vides ; catégories dérivées des clés. Grille, seuil et règle de révélation gelés avec la version pédagogique. Null/absent ne crée aucun atelier implicite.
  */
 export type ProjectPolicy = {
     caseCode: 'BR01' | 'BR02';
@@ -1318,7 +1318,7 @@ export type SelfAssessmentPage = {
 };
 
 /**
- * État dérivé séparé du texte àETag. Une ancienne autoévaluation reste historique après édition ; elle ne valide pas automatiquement la nouvelle révision.
+ * État dérivé séparé du texte à ETag. Une ancienne autoévaluation reste historique après édition ; elle ne valide pas automatiquement la nouvelle révision.
  */
 export type ProjectStatus = {
     projectId: Uuid;
@@ -1344,7 +1344,7 @@ export type SolutionRevealView = {
 };
 
 /**
- * Création idempotente par propriétaire+creationId et empreinte du corps : même corps retrouve le projet(200), autre corps409. Source publiéeFREE exacte requise pour une nouvelle création. Inscription facultative vérifiée côté serveur ; aucun propriétaire ou score admis dans le JSON.
+ * Création idempotente par propriétaire + creationId et empreinte du corps : même corps retrouve le projet(200), autre corps409. Source publiéeFREE exacte requise pour une nouvelle création. Inscription facultative vérifiée côté serveur ; aucun propriétaire ou score admis dans le JSON.
  */
 export type CreateProject = {
     creationId: Uuid;
@@ -1366,7 +1366,7 @@ export type SaveProject = {
 };
 
 /**
- * Vingt contrôles et quatre déclarations exacts, uniques et complets. Score fourni parSpring seulement ; corps JSONUTF8 borné48KiB. Même propriétaire/submissionId/corps retrouve la preuve avant If-Match pour une réponse déjàcommittée ; autre corps409. Jamais de retry automatique.
+ * Vingt contrôles et quatre déclarations exacts, uniques et complets. Score fourni par Spring seulement ; corps JSONUTF8 borné48KiB. Même propriétaire/submissionId/corps retrouve la preuve avant If-Match pour une réponse déjà committée ; autre corps409. Jamais de retry automatique.
  */
 export type SubmitSelfAssessment = {
     submissionId: Uuid;
@@ -1543,6 +1543,221 @@ export type ProjectPreset = {
             blocking: boolean;
         }
     ];
+};
+
+/**
+ * Fichier métier : identité, état et octets vérifiés côté serveur. Aucune clé objet, bucket ou propriété choisie par le navigateur. FORMAT_VERIFIED décrit un contrôle de format et ne prétend pas à un verdict antivirus. Scope et relations sont cohérents : projet privé ou ressource éditoriale localisée.
+ */
+export type AssetView = {
+    id: Uuid;
+    revision: Revision;
+    scope: 'PROJECT_FILE' | 'EDITORIAL';
+    kind: 'FILE' | 'IMAGE';
+    state: 'PENDING' | 'READY' | 'REJECTED' | 'EXPIRED';
+    filename: string;
+    contentType: 'text/plain' | 'application/pdf' | 'image/png' | 'image/jpeg';
+    sizeBytes: number;
+    locale: Locale | null;
+    projectId: Uuid | null;
+    createdAt: UtcInstant;
+    readyAt: UtcInstant | null;
+    rejectionCode: string | null;
+    validationStatus: 'PENDING' | 'FORMAT_VERIFIED' | 'REJECTED';
+};
+
+/**
+ * Intent de transfert : nom sans chemin ni caractère de contrôle, taille et MIME comparés à la politique serveur. Les formats non disponibles sont refusés avant le transfert. La clé et le propriétaire sont fixés côté serveur.
+ */
+export type AssetUploadRequest = {
+    filename: string;
+    contentType: 'text/plain' | 'application/pdf' | 'image/png' | 'image/jpeg';
+    sizeBytes: number;
+};
+
+/**
+ * Éditeur autorisé, identité/version/langue exactes. Une confirmation READY ne publie pas ce fichier et ne l’ajoute pas silencieusement au contenu.
+ */
+export type EditorialAssetUploadRequest = {
+    resourceId: Uuid;
+    versionId: Uuid;
+    locale: Locale;
+    filename: string;
+    contentType: 'text/plain' | 'application/pdf' | 'image/png' | 'image/jpeg';
+    sizeBytes: number;
+};
+
+/**
+ * Confirmer seulement un intent de ce projet ; le serveur relit et valide les octets réellement reçus. Aucune disponibilité fournie par le client.
+ */
+export type ConfirmProjectAsset = {
+    assetId: Uuid;
+};
+
+/**
+ * URL externe temporaire et headers à utiliser pour le transfert direct sans cookie, redirect:error. Ni URL signée dans les journaux/stockages ni état READY après le seul PUT ; la confirmation est une commande distincte. Un ancien PUT ne peut modifier les octets READY validés.
+ */
+export type AssetUploadIntent = {
+    asset: AssetView;
+    method: 'PUT';
+    uploadUrl: string;
+    headers: {
+        [key: string]: string;
+    };
+    expiresAt: UtcInstant;
+};
+
+/**
+ * Borne et disponibilité propres à ce format, affichées avant dépôt. TXT UTF-8 actif quand le stockage est configuré ; PDF indisponible sans validateur de document complexe.
+ */
+export type AssetAcceptedFormat = {
+    contentType: 'text/plain' | 'application/pdf' | 'image/png' | 'image/jpeg';
+    extensions: Array<string>;
+    kind: 'FILE' | 'IMAGE';
+    maxBytes: number;
+    available: boolean;
+    unavailableReason: string | null;
+};
+
+/**
+ * Politique serveur réelle. Stockage désactivé : enabled=false et raison explicite, jamais liste vide présentée comme absence de fichiers. Les quotas incluent PENDING non expirés et READY.
+ */
+export type AssetUploadCapabilities = {
+    enabled: boolean;
+    unavailableReason: string | null;
+    formats: Array<AssetAcceptedFormat>;
+    maxFileBytes: number;
+    maxFilesPerProject: number;
+    maxBytesPerProject: number;
+    uploadTtlSeconds: number;
+    downloadTtlSeconds: number;
+};
+
+export type AssetPage = {
+    items: Array<AssetView>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+/**
+ * Éditorial : publication exacte qui référence réellement ce fichier. Inscription facultative : chaîne pédagogique épinglée également vérifiée. Le body peut être null pour un fichier personnel, accessible uniquement à son propriétaire.
+ */
+export type AssetAccessContext = {
+    locale: Locale;
+    resourceId: Uuid;
+    versionId: Uuid;
+    enrollmentId: Uuid | null;
+};
+
+/**
+ * Accès temporaire aux seuls octets READY vérifiés. Taille et SHA-256 proviennent du serveur. Le navigateur récupère sans cookie, contrôle MIME/taille/hash puis utilise un blobURL temporaire ; pas de href signé direct envoyant SESSION au port S3. Nouvelle délivrance refusée après perte d’accès ; un ancien lien garde sa validité résiduelle jusqu’au TTL.
+ */
+export type AssetDownloadAccess = {
+    assetId: Uuid;
+    method: 'GET';
+    url: string;
+    expiresAt: UtcInstant;
+    contentType: 'text/plain' | 'application/pdf' | 'image/png' | 'image/jpeg';
+    filename: string;
+    disposition: 'attachment' | 'inline';
+    sizeBytes: number;
+    sha256: string;
+};
+
+/**
+ * Métadonnées opérationnelles seulement : aucune adresse, clé métier, empreinte, charge utile ou valeur chiffrée. L’état SENT suit un envoi déclaré par le transport, pas une promesse de livraison SMTP exactement une fois.
+ */
+export type NotificationSummary = {
+    id: Uuid;
+    type: 'PASSWORD_RESET' | 'ACCOUNT_CREATED' | 'ACCESS_ACTIVATED' | 'SUPPORT_REPLY';
+    status: 'PENDING' | 'PROCESSING' | 'RETRY' | 'SENT' | 'DEAD' | 'INDETERMINATE';
+    attempts: number;
+    cycleAttempts: number;
+    requeueCount: number;
+    nextAttemptAt: UtcInstant | null;
+    leaseUntil: UtcInstant | null;
+    lastErrorCode: string | null;
+    createdAt: UtcInstant;
+    updatedAt: UtcInstant;
+    expiresAt: UtcInstant;
+    sentAt: UtcInstant | null;
+    purgedAt: UtcInstant | null;
+    payloadAvailable: boolean;
+};
+
+export type NotificationPage = {
+    items: Array<NotificationSummary>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+/**
+ * Reprise explicite et auditée, sans destinataire ou contenu arbitraire. INDETERMINATE exige ackDuplicate=true ; un reset expiré ou un payload purgé est refusé. La reprise remet le compteur de cycle à zéro, conserve le total et ne signifie pas que le mail est livré.
+ */
+export type RetryNotification = {
+    reason: 'CONFIGURATION_FIXED' | 'MANUAL_RECONCILIATION';
+    ackDuplicate: boolean;
+};
+
+/**
+ * Publication exacte qui référence ce média VIDEO de cette langue ; inscription facultative ajoute la chaîne pédagogique épinglée. Aucun chemin ou URL de fichier reçu du navigateur.
+ */
+export type MediaAccessContext = {
+    locale: Locale;
+    resourceId: Uuid;
+    versionId: Uuid;
+    enrollmentId: Uuid | null;
+};
+
+/**
+ * Métadonnées de MP4 réellement importé, durée lue dans le conteneur et octets hachés. Provider local/test seulement, désactivé par défaut. Média absent : 404, sans durée inventée ; provider désactivé/fichier indisponible : état honnête et alternative textuelle de la leçon. Aucun film de cours produit ou fournisseur de production déduit.
+ */
+export type VideoMediaView = {
+    id: Uuid;
+    locale: Locale;
+    provider: 'LOCAL_TEST';
+    durationSeconds: number;
+    sizeBytes: number;
+    sha256: string;
+    playbackAvailable: boolean;
+    unavailableReason: 'PROVIDER_NOT_CONFIGURED' | 'MEDIA_UNAVAILABLE' | null;
+    transcript: string | null;
+    captionsVtt: string | null;
+};
+
+/**
+ * Lien bearer opaque de même origine, 60 secondes au plus ; seul son hash est stocké. Ne pas journaliser ou conserver son URL. Chaque nouvelle délivrance réautorise publication/langue/chaîne ; le lien existant reste utilisable jusqu’au TTL. La lecture ne valide aucun projet ni activité.
+ */
+export type VideoPlaybackAccess = {
+    mediaId: Uuid;
+    provider: 'LOCAL_TEST';
+    url: string;
+    expiresAt: UtcInstant;
+    contentType: 'video/mp4';
+    durationSeconds: number;
+    sizeBytes: number;
+    sha256: string;
+};
+
+/**
+ * Position du propriétaire par mediaId, bornée par sa durée mesurée ; aucun déplacement entre vidéos FR/EN. Révision0/updatedAt:null signifie aucune sauvegarde persistée, pas une confirmation de lecture. ETag propre au média, sans contexte de publication variable dans sa représentation.
+ */
+export type MediaProgressView = {
+    mediaId: Uuid;
+    locale: Locale;
+    durationSeconds: number;
+    positionSeconds: number;
+    revision: Revision;
+    updatedAt: UtcInstant | null;
+};
+
+/**
+ * Seule la position est fournie ; durée, propriétaire et révision restent serveur. If-Match atomique : absence428, conflit412. Une position identique sauvegardée conserve le tag ; aucune réussite de quiz/projet ou durée regardée n’est déduite.
+ */
+export type SetMediaProgress = {
+    context: MediaAccessContext;
+    positionSeconds: number;
 };
 
 export type RegisterRequestWritable = {
@@ -5373,3 +5588,1049 @@ export type GetProjectPresetResponses = {
 };
 
 export type GetProjectPresetResponse = GetProjectPresetResponses[keyof GetProjectPresetResponses];
+
+export type GetProjectFilePolicyData = {
+    body?: never;
+    path: {
+        projectId: Uuid;
+    };
+    query?: never;
+    url: '/me/projects/{projectId}/file-policy';
+};
+
+export type GetProjectFilePolicyErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetProjectFilePolicyError = GetProjectFilePolicyErrors[keyof GetProjectFilePolicyErrors];
+
+export type GetProjectFilePolicyResponses = {
+    /**
+     * État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+     */
+    200: AssetUploadCapabilities;
+};
+
+export type GetProjectFilePolicyResponse = GetProjectFilePolicyResponses[keyof GetProjectFilePolicyResponses];
+
+export type ListProjectFilesData = {
+    body?: never;
+    path: {
+        projectId: Uuid;
+    };
+    query?: {
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/me/projects/{projectId}/attachments';
+};
+
+export type ListProjectFilesErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListProjectFilesError = ListProjectFilesErrors[keyof ListProjectFilesErrors];
+
+export type ListProjectFilesResponses = {
+    /**
+     * État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+     */
+    200: AssetPage;
+};
+
+export type ListProjectFilesResponse = ListProjectFilesResponses[keyof ListProjectFilesResponses];
+
+export type ConfirmProjectUploadData = {
+    body: ConfirmProjectAsset;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+    };
+    path: {
+        projectId: Uuid;
+    };
+    query?: never;
+    url: '/me/projects/{projectId}/attachments';
+};
+
+export type ConfirmProjectUploadErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ConfirmProjectUploadError = ConfirmProjectUploadErrors[keyof ConfirmProjectUploadErrors];
+
+export type ConfirmProjectUploadResponses = {
+    /**
+     * État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+     */
+    200: AssetView;
+};
+
+export type ConfirmProjectUploadResponse = ConfirmProjectUploadResponses[keyof ConfirmProjectUploadResponses];
+
+export type CreateProjectUploadData = {
+    body: AssetUploadRequest;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+    };
+    path: {
+        projectId: Uuid;
+    };
+    query?: never;
+    url: '/me/projects/{projectId}/upload-intents';
+};
+
+export type CreateProjectUploadErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type CreateProjectUploadError = CreateProjectUploadErrors[keyof CreateProjectUploadErrors];
+
+export type CreateProjectUploadResponses = {
+    /**
+     * État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+     */
+    201: AssetUploadIntent;
+};
+
+export type CreateProjectUploadResponse = CreateProjectUploadResponses[keyof CreateProjectUploadResponses];
+
+export type GetEditorialUploadPolicyData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/admin/assets/upload-policy';
+};
+
+export type GetEditorialUploadPolicyErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetEditorialUploadPolicyError = GetEditorialUploadPolicyErrors[keyof GetEditorialUploadPolicyErrors];
+
+export type GetEditorialUploadPolicyResponses = {
+    /**
+     * État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+     */
+    200: AssetUploadCapabilities;
+};
+
+export type GetEditorialUploadPolicyResponse = GetEditorialUploadPolicyResponses[keyof GetEditorialUploadPolicyResponses];
+
+export type CreateEditorialUploadData = {
+    body: EditorialAssetUploadRequest;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+    };
+    path?: never;
+    query?: never;
+    url: '/admin/assets/upload-intents';
+};
+
+export type CreateEditorialUploadErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type CreateEditorialUploadError = CreateEditorialUploadErrors[keyof CreateEditorialUploadErrors];
+
+export type CreateEditorialUploadResponses = {
+    /**
+     * État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+     */
+    201: AssetUploadIntent;
+};
+
+export type CreateEditorialUploadResponse = CreateEditorialUploadResponses[keyof CreateEditorialUploadResponses];
+
+export type GetEditorialAssetData = {
+    body?: never;
+    path: {
+        assetId: Uuid;
+    };
+    query?: never;
+    url: '/admin/assets/{assetId}';
+};
+
+export type GetEditorialAssetErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetEditorialAssetError = GetEditorialAssetErrors[keyof GetEditorialAssetErrors];
+
+export type GetEditorialAssetResponses = {
+    /**
+     * État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+     */
+    200: AssetView;
+};
+
+export type GetEditorialAssetResponse = GetEditorialAssetResponses[keyof GetEditorialAssetResponses];
+
+export type ConfirmEditorialUploadData = {
+    body?: never;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+    };
+    path: {
+        assetId: Uuid;
+    };
+    query?: never;
+    url: '/admin/assets/{assetId}/confirmations';
+};
+
+export type ConfirmEditorialUploadErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ConfirmEditorialUploadError = ConfirmEditorialUploadErrors[keyof ConfirmEditorialUploadErrors];
+
+export type ConfirmEditorialUploadResponses = {
+    /**
+     * État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+     */
+    200: AssetView;
+};
+
+export type ConfirmEditorialUploadResponse = ConfirmEditorialUploadResponses[keyof ConfirmEditorialUploadResponses];
+
+export type GetEditorialAssetPreviewData = {
+    body?: never;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+    };
+    path: {
+        assetId: Uuid;
+    };
+    query?: never;
+    url: '/admin/assets/{assetId}/download-access';
+};
+
+export type GetEditorialAssetPreviewErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetEditorialAssetPreviewError = GetEditorialAssetPreviewErrors[keyof GetEditorialAssetPreviewErrors];
+
+export type GetEditorialAssetPreviewResponses = {
+    /**
+     * État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+     */
+    200: AssetDownloadAccess;
+};
+
+export type GetEditorialAssetPreviewResponse = GetEditorialAssetPreviewResponses[keyof GetEditorialAssetPreviewResponses];
+
+export type GetAssetDownloadData = {
+    body?: AssetAccessContext | null;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID de compte attendu obligatoire si une identité est authentifiée ; jamais un choix de propriétaire.
+         */
+        'X-Account-Context'?: Uuid;
+    };
+    path: {
+        assetId: Uuid;
+    };
+    query?: never;
+    url: '/assets/{assetId}/download-access';
+};
+
+export type GetAssetDownloadErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetAssetDownloadError = GetAssetDownloadErrors[keyof GetAssetDownloadErrors];
+
+export type GetAssetDownloadResponses = {
+    /**
+     * État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+     */
+    200: AssetDownloadAccess;
+};
+
+export type GetAssetDownloadResponse = GetAssetDownloadResponses[keyof GetAssetDownloadResponses];
+
+export type ListNotificationsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        status?: 'PENDING' | 'PROCESSING' | 'RETRY' | 'SENT' | 'DEAD' | 'INDETERMINATE';
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/admin/notifications';
+};
+
+export type ListNotificationsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListNotificationsError = ListNotificationsErrors[keyof ListNotificationsErrors];
+
+export type ListNotificationsResponses = {
+    /**
+     * État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+     */
+    200: NotificationPage;
+};
+
+export type ListNotificationsResponse = ListNotificationsResponses[keyof ListNotificationsResponses];
+
+export type RetryNotificationData = {
+    body: RetryNotification;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+    };
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/notifications/{id}/retry';
+};
+
+export type RetryNotificationErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type RetryNotificationError = RetryNotificationErrors[keyof RetryNotificationErrors];
+
+export type RetryNotificationResponses = {
+    /**
+     * État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+     */
+    200: NotificationSummary;
+};
+
+export type RetryNotificationResponse = RetryNotificationResponses[keyof RetryNotificationResponses];
+
+export type GetVideoMediaData = {
+    body?: never;
+    path: {
+        mediaId: Uuid;
+    };
+    query: {
+        resourceId: Uuid;
+        versionId: Uuid;
+        locale: Locale;
+        enrollmentId?: Uuid;
+    };
+    url: '/media/{mediaId}';
+};
+
+export type GetVideoMediaErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetVideoMediaError = GetVideoMediaErrors[keyof GetVideoMediaErrors];
+
+export type GetVideoMediaResponses = {
+    /**
+     * État réel, sans cache partagé.
+     */
+    200: VideoMediaView;
+};
+
+export type GetVideoMediaResponse = GetVideoMediaResponses[keyof GetVideoMediaResponses];
+
+export type GetVideoPlaybackData = {
+    body: MediaAccessContext;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * Obligatoire si authentifié ; compte attendu seulement, jamais choix du propriétaire.
+         */
+        'X-Account-Context'?: Uuid;
+    };
+    path: {
+        mediaId: Uuid;
+    };
+    query?: never;
+    url: '/media/{mediaId}/playback-access';
+};
+
+export type GetVideoPlaybackErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetVideoPlaybackError = GetVideoPlaybackErrors[keyof GetVideoPlaybackErrors];
+
+export type GetVideoPlaybackResponses = {
+    /**
+     * État réel, sans cache partagé.
+     */
+    200: VideoPlaybackAccess;
+};
+
+export type GetVideoPlaybackResponse = GetVideoPlaybackResponses[keyof GetVideoPlaybackResponses];
+
+export type GetVideoStreamData = {
+    body?: never;
+    headers?: {
+        /**
+         * Plage unique bytes=start-end, bytes=start- ou bytes=-suffix.
+         */
+        Range?: string;
+    };
+    path: {
+        mediaId: Uuid;
+    };
+    query: {
+        grant: string;
+    };
+    url: '/media/{mediaId}/stream';
+};
+
+export type GetVideoStreamErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    416: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetVideoStreamError = GetVideoStreamErrors[keyof GetVideoStreamErrors];
+
+export type GetVideoStreamResponses = {
+    /**
+     * Flux complet vérifié.
+     */
+    200: Blob | File;
+    /**
+     * Plage de flux partielle.
+     */
+    206: Blob | File;
+};
+
+export type GetVideoStreamResponse = GetVideoStreamResponses[keyof GetVideoStreamResponses];
+
+export type HeadVideoStreamData = {
+    body?: never;
+    headers?: {
+        Range?: string;
+    };
+    path: {
+        mediaId: Uuid;
+    };
+    query: {
+        grant: string;
+    };
+    url: '/media/{mediaId}/stream';
+};
+
+export type HeadVideoStreamErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    416: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type HeadVideoStreamError = HeadVideoStreamErrors[keyof HeadVideoStreamErrors];
+
+export type HeadVideoStreamResponses = {
+    /**
+     * Headers du média.
+     */
+    200: unknown;
+    /**
+     * Headers de la plage.
+     */
+    206: unknown;
+};
+
+export type GetMediaProgressData = {
+    body?: never;
+    path: {
+        mediaId: Uuid;
+    };
+    query: {
+        resourceId: Uuid;
+        versionId: Uuid;
+        locale: Locale;
+        enrollmentId?: Uuid;
+    };
+    url: '/me/media-progress/{mediaId}';
+};
+
+export type GetMediaProgressErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetMediaProgressError = GetMediaProgressErrors[keyof GetMediaProgressErrors];
+
+export type GetMediaProgressResponses = {
+    /**
+     * État réel, sans cache partagé.
+     */
+    200: MediaProgressView;
+};
+
+export type GetMediaProgressResponse = GetMediaProgressResponses[keyof GetMediaProgressResponses];
+
+export type SetMediaProgressData = {
+    body: SetMediaProgress;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        mediaId: Uuid;
+    };
+    query?: never;
+    url: '/me/media-progress/{mediaId}';
+};
+
+export type SetMediaProgressErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type SetMediaProgressError = SetMediaProgressErrors[keyof SetMediaProgressErrors];
+
+export type SetMediaProgressResponses = {
+    /**
+     * État réel, sans cache partagé.
+     */
+    200: MediaProgressView;
+};
+
+export type SetMediaProgressResponse = SetMediaProgressResponses[keyof SetMediaProgressResponses];

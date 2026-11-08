@@ -7,7 +7,7 @@ import type { PublicDocument, ResourceDetail } from "@/lib/api/generated/types.g
 import { getPublicDictionary } from "@/lib/i18n/public";
 import type { Locale } from "@/lib/i18n/locales";
 
-export function PublicDocumentBody({ locale, document, prefix = "resource" }: { locale: Locale; document: PublicDocument; prefix?: string }) {
+export function PublicDocumentBody({ locale, document, prefix = "resource", showMedia = true }: { locale: Locale; document: PublicDocument; prefix?: string; showMedia?: boolean }) {
   const t = getPublicDictionary(locale);
   return <div className="min-w-0 space-y-5">{document.blocks.map((block, index) => {
     const id = `${prefix}-section-${index}`;
@@ -19,7 +19,7 @@ export function PublicDocumentBody({ locale, document, prefix = "resource" }: { 
       case "CALLOUT": return <StatusMessage key={index}>{block.text}</StatusMessage>;
       default: return <p key={index} className="whitespace-pre-wrap break-words leading-relaxed">{block.text}</p>;
     }
-  })}{document.media.length > 0 && <ul className="space-y-3">{document.media.map((media) => <li key={media.assetId} className="rounded-input border border-border bg-surface-subtle p-4"><p className="font-medium">{media.label}</p><p className="mt-1 text-sm text-muted-foreground">{t.mediaUnavailable}</p></li>)}</ul>}</div>;
+  })}{showMedia && document.media.length > 0 && <ul className="space-y-3">{document.media.map((media) => <li key={media.assetId} className="rounded-input border border-border bg-surface-subtle p-4"><p className="font-medium">{media.label}</p><p className="mt-1 text-sm text-muted-foreground">{t.mediaUnavailable}</p></li>)}</ul>}</div>;
 }
 export function ResourceTools({ locale, resource }: { locale: Locale; resource: ResourceDetail }) {
   const t = getPublicDictionary(locale), id = useId();

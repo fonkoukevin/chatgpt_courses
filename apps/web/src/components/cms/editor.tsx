@@ -23,6 +23,7 @@ import { MetadataEditor } from "./metadata-editor";
 import { MethodDefinitionFields } from "./method-definition-fields";
 import { QuizPolicyFields } from "./quiz-policy-fields";
 import { ProjectPolicyFields } from "./project-policy-fields";
+import { EditorialImageUpload } from "./editorial-image-upload";
 
 type Props = { locale: Locale; initial: AuthResult<ContentView>; initialReadiness: AuthResult<Readiness>; initialDependencies: AuthResult<Dependencies>; permissions: string[] };
 const editable = (content: ContentView): LocalContent => ({ title: content.title, summary: content.summary, document: content.document ?? emptyDocument(), reason: "" });
@@ -177,6 +178,7 @@ function EditorReady({ locale, initial, initialEtag, initialReadiness, initialDe
         {canWrite && content.kind === "ACTIVITY" && <ProjectPolicyFields locale={locale} contentLocale={content.locale as Locale} value={session.value.document} onChange={(document) => update("document", document)} />}
         {canWrite && <><FormField id="cms-reason" label={text.reason} hint={text.reasonHint} error={reasonMissing ? text.required : undefined} required><TextArea name="reason" maxLength={1000} rows={3} value={session.value.reason} onChange={(event) => update("reason", event.target.value)} /></FormField><Button type="submit" busy={saving} disabled={session.phase === "saved" || session.phase === "conflict"} loadingLabel={text.saving}>{text.save}</Button></>}
       </form>
+      {canWrite && <EditorialImageUpload key={`editorial-upload:${content.id}`} locale={locale} resourceId={content.resourceId} versionId={content.versionId} contentLocale={content.locale} disabled={metadataDirty || saving || legacyPending || session.value.document.media.length >= 20} onAdd={(reference) => update("document", { ...session.value.document, media: [...session.value.document.media, reference] })} />}
       {(content.kind === "COURSE" || content.kind === "MODULE") && <section id="cms-composition" className="space-y-4 rounded-panel border border-border p-4 sm:p-6"><h2 className="text-xl font-semibold">{text.composition}</h2><p className="text-sm text-muted-foreground">{text.compositionHelp}</p>
         {canWrite && !content.frozenAt && <ChildVersionPicker locale={locale} parentKind={content.kind} contentLocale={content.locale} selected={childrenDraft} onAdd={(id) => setChildrenDraft((items) => items.includes(id) || items.length >= 100 ? items : [...items, id])} onLabels={rememberChildLabels} />}
         {childrenDraft.map((id, index) => <div key={index} className="grid min-w-0 gap-3 rounded-input border border-border p-3">

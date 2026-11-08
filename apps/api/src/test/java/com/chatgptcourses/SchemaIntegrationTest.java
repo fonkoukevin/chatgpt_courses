@@ -56,6 +56,7 @@ class SchemaIntegrationTest {
         registry.add("POSTGRES_DB", POSTGRES::getDatabaseName);
         registry.add("POSTGRES_USER", POSTGRES::getUsername);
         registry.add("POSTGRES_PASSWORD", POSTGRES::getPassword);
+        registry.add("NOTIFICATION_OUTBOX_KEY", NotificationTestKeys::randomKey);
     }
 
     @Autowired JdbcTemplate jdbc;
@@ -65,7 +66,7 @@ class SchemaIntegrationTest {
 
     @Test @Order(1)
     void aFreshDatabaseMigratesAndHibernateValidatesWithoutSeedingAccountsOrCommerce() {
-        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008");
+        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_accounts", Integer.class)).isZero();
         assertThat(jdbc.queryForList("SELECT code FROM roles ORDER BY code", String.class)).containsExactly("EDITOR", "LEARNER");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_roles", Integer.class)).isZero();
@@ -78,6 +79,9 @@ class SchemaIntegrationTest {
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM personal_methods", Integer.class)).isZero();
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM learning_enrollments", Integer.class)).isZero();
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM projects", Integer.class)).isZero();
+        for (String table : new String[] {"assets", "notification_outbox", "notification_outbox_requeues", "video_media", "video_playback_grants", "media_progress"}) {
+            assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM " + table, Integer.class)).isZero();
+        }
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM learning_activity_notes", Integer.class)).isZero();
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM learning_quiz_attempts", Integer.class)).isZero();
         assertThat(jdbc.queryForObject("""
@@ -106,7 +110,7 @@ class SchemaIntegrationTest {
             var database = new JdbcTemplate(new SingleConnectionDataSourceAdapter(connection));
             assertThat(database.queryForObject("SELECT session_id FROM spring_session WHERE primary_id = ?", String.class, primaryId)).isEqualTo(sessionId);
             assertThat(database.queryForObject("SELECT encode(attribute_bytes, 'hex') FROM spring_session_attributes WHERE session_primary_id = ?", String.class, primaryId)).isEqualTo("010203");
-            assertThat(database.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008");
+            assertThat(database.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011");
         }
     }
 

@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,7 @@ public class EditorialService {
     private final JdbcTemplate jdbc;
     private final ObjectMapper mapper;
     private final PublicMetadataStore publicMetadata;
+    private final List<EditorialMediaRegistry> mediaRegistries;
     private static final String SELECT = """
         SELECT t.*,v.resource_id,v.version_number,v.objectives,v.evaluation_definition,v.frozen_at,r.kind,
           s.slug,e.title,e.summary,e.document_json::text AS document_text,e.body AS legacy_body
@@ -41,7 +43,9 @@ public class EditorialService {
         LEFT JOIN resource_slugs s ON s.resource_id=r.id AND s.locale=t.locale
         LEFT JOIN editorial_revisions e ON e.id=t.current_revision_id
         """;
-    public EditorialService(JdbcTemplate jdbc,ObjectMapper mapper) {this.jdbc=jdbc;this.mapper=mapper;this.publicMetadata=new PublicMetadataStore(jdbc,mapper);}
+    public EditorialService(JdbcTemplate jdbc,ObjectMapper mapper) {this(jdbc,mapper,List.of());}
+    @Autowired
+    public EditorialService(JdbcTemplate jdbc,ObjectMapper mapper,List<EditorialMediaRegistry> mediaRegistries) {this.jdbc=jdbc;this.mapper=mapper;this.publicMetadata=new PublicMetadataStore(jdbc,mapper);this.mediaRegistries=List.copyOf(mediaRegistries);}
 
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
     public ContentView get(UUID actor,UUID id) {require(actor,"content.read");return view(row(id));}
@@ -334,7 +338,7 @@ public class EditorialService {
             if(d.rubric().isEmpty())issue(issues,"RUBRIC_REQUIRED","document.rubric",v.resourceId());
         }
         if(d.estimatedMinutes()==null)issue(warnings,"NO_ESTIMATED_DURATION","document.estimatedMinutes",v.resourceId());
-        for(var m:d.media())issue(m.required()?issues:warnings,m.required()?"MEDIA_UNVERIFIED":"OPTIONAL_MEDIA_UNVERIFIED","document.media",m.assetId());
+        for(var m:d.media())if(mediaRegistries.stream().noneMatch(registry->registry.ready(v.resourceId(),v.versionId(),v.locale(),m.assetId(),m.kind())))issue(m.required()?issues:warnings,m.required()?"MEDIA_UNVERIFIED":"OPTIONAL_MEDIA_UNVERIFIED","document.media",m.assetId());
         var childIds=children(v.versionId());
         if((v.kind()==ResourceKind.COURSE || v.kind()==ResourceKind.MODULE) && childIds.isEmpty())issue(issues,"CHILD_REQUIRED","childVersionIds",v.resourceId());
         for(UUID child:childIds) {

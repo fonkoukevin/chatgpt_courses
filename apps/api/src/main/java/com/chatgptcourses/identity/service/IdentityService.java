@@ -7,7 +7,7 @@ import com.chatgptcourses.identity.repository.UserAccountRepository;
 import com.chatgptcourses.identity.repository.UserPreferencesRepository;
 import com.chatgptcourses.identity.validation.AccountPasswordValidator;
 import com.chatgptcourses.identity.validation.EmailAddresses;
-import com.chatgptcourses.notifications.PasswordResetNotification;
+import com.chatgptcourses.notifications.TransactionalNotifications;
 import com.chatgptcourses.shared.http.ApiError;
 import com.chatgptcourses.shared.http.ApiException;
 import com.chatgptcourses.shared.http.EntityTags;
@@ -31,7 +31,6 @@ import java.util.HexFormat;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.access.AccessDeniedException;
@@ -47,14 +46,14 @@ public class IdentityService {
     private final PasswordEncoder encoder;
     private final SecureRandom random;
     private final IdentitySettings settings;
-    private final ApplicationEventPublisher events;
+    private final TransactionalNotifications notifications;
     private final Validator validator;
 
     public IdentityService(UserAccountRepository accounts, UserPreferencesRepository preferences, JdbcTemplate jdbc,
                            PasswordEncoder encoder, SecureRandom random, IdentitySettings settings,
-                           ApplicationEventPublisher events, Validator validator) {
+                           TransactionalNotifications notifications, Validator validator) {
         this.accounts = accounts; this.preferences = preferences; this.jdbc = jdbc; this.encoder = encoder;
-        this.random = random; this.settings = settings; this.events = events; this.validator = validator;
+        this.random = random; this.settings = settings; this.notifications = notifications; this.validator = validator;
     }
 
     @Transactional
@@ -72,6 +71,7 @@ public class IdentityService {
         preferences.saveAndFlush(new UserPreferences(account.getId(), locale, "UTC"));
         jdbc.update("INSERT INTO user_roles(id,user_id,role_id) SELECT ?,?,id FROM roles WHERE code = 'LEARNER'",
                 UUID.randomUUID(), account.getId());
+        notifications.accountCreated(account.getId(),normalized,locale);
         return snapshot(account).orElseThrow(() -> new ApiException(ApiError.ACCOUNT_UNAVAILABLE)).profile();
     }
 
@@ -122,7 +122,7 @@ public class IdentityService {
         var expires = now.plus(settings.resetTokenTtl());
         jdbc.update("INSERT INTO password_reset_tokens(user_id,token_hash,authentication_version,created_at,expires_at) VALUES (?,?,?,?,?)",
                 account.getId(), digest(token), account.getAuthenticationVersion(), Timestamp.from(now), Timestamp.from(expires));
-        events.publishEvent(new PasswordResetNotification(normalized, locale, token, expires));
+        notifications.passwordReset(account.getId(),digest(token),normalized,locale,token,expires);
     }
 
     @Transactional

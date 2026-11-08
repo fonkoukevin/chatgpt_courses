@@ -3,8 +3,9 @@ info:
   title: ChatGPT Courses API
   version: 0.1.0
   description: >-
-    Opérations introduites jusqu’àP09 : identité, CMS, catalogue public, méthodes, apprentissage, notes, quiz
-    et projets autoévalués. Aucun paiement/droit commercial fictif, fichierP10 ou revue humaine.
+    Contrat des opérations jusqu’à P10 : identité, CMS, catalogue, méthodes, apprentissage, quiz, projets,
+    fichiers contrôlés et outbox durable. Les preuves distinguent validation locale et fournisseur externe ;
+    aucun paiement ou droit commercial fictif ni revue humaine.
 servers:
   - url: /api/v1
     description: API de même origine, préfixe conservé jusqu'à Spring.
@@ -24,6 +25,14 @@ tags:
     description: Faits d’apprentissage distincts, notes propriétaires et quiz corrigés côté serveur.
   - name: Projects
     description: Productions personnelles, autoévaluation déclarative et consultation de corrigé réautorisée.
+  - name: Assets
+    description: 'Fichiers privés et ressources éditoriales : intent, transfert, contrôle réel et accès temporaire.'
+  - name: Notifications
+    description: Outbox durable chiffrée et opérations de reprise autorisées.
+  - name: Media
+    description: >-
+      Provider vidéo local de test et positions propres au média ; intégration streaming de production
+      distincte.
 paths:
   /system/health:
     get:
@@ -2790,8 +2799,8 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Compte actif, permissionprojects.write, propriétaire de session, CSRF et X-Account-Context attendu.
-        Header absent428, compte différent409 ; le header ne choisit jamais le propriétaire. Aucun retry
+        Compte actif, permission projects.write, propriétaire de session, CSRF et X-Account-Context attendu.
+        Header absent : 428, compte différent : 409 ; le header ne choisit jamais le propriétaire. Aucun retry
         implicite.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
@@ -2898,8 +2907,8 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Compte actif, permissionprojects.write, propriétaire de session, CSRF et X-Account-Context attendu.
-        Header absent428, compte différent409 ; le header ne choisit jamais le propriétaire. Aucun retry
+        Compte actif, permission projects.write, propriétaire de session, CSRF et X-Account-Context attendu.
+        Header absent : 428, compte différent : 409 ; le header ne choisit jamais le propriétaire. Aucun retry
         implicite.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
@@ -3089,7 +3098,7 @@ paths:
       operationId: getProjectStatus
       tags:
         - Projects
-      summary: Lire le statut déclaratif séparé du texte àETag.
+      summary: Lire le statut déclaratif séparé du texte à ETag.
       security:
         - SessionCookie: []
       parameters: []
@@ -3176,8 +3185,8 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Compte actif, permissionprojects.write, propriétaire de session, CSRF et X-Account-Context attendu.
-        Header absent428, compte différent409 ; le header ne choisit jamais le propriétaire. Aucun retry
+        Compte actif, permission projects.write, propriétaire de session, CSRF et X-Account-Context attendu.
+        Header absent : 428, compte différent : 409 ; le header ne choisit jamais le propriétaire. Aucun retry
         implicite.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
@@ -3278,8 +3287,8 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Compte actif, permissionprojects.write, propriétaire de session, CSRF et X-Account-Context attendu.
-        Header absent428, compte différent409 ; le header ne choisit jamais le propriétaire. Aucun retry
+        Compte actif, permission projects.write, propriétaire de session, CSRF et X-Account-Context attendu.
+        Header absent : 428, compte différent : 409 ; le header ne choisit jamais le propriétaire. Aucun retry
         implicite.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
@@ -3410,8 +3419,970 @@ paths:
         default:
           $ref: '#/components/responses/ProblemResponse'
       description: >-
-        Permissioncontent.read requise. Référence pédagogique protégée, sans seed/publication ; l’interface
+        Permission content.read requise. Référence pédagogique protégée, sans seed/publication ; l’interface
         confirme tout remplacement d’une grille existante.
+  /me/projects/{projectId}/file-policy:
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: getProjectFilePolicy
+      tags:
+        - Assets
+      summary: Lire formats et limites avant dépôt dans son projet.
+      security:
+        - SessionCookie: []
+      parameters: []
+      responses:
+        '200':
+          description: État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetUploadCapabilities'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/projects/{projectId}/attachments:
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: listProjectFiles
+      tags:
+        - Assets
+      summary: Lister les fichiers du propriétaire, sans URL objet permanente.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetPage'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    post:
+      operationId: confirmProjectUpload
+      tags:
+        - Assets
+      summary: Confirmer un transfert et contrôler les octets réellement reçus.
+      security:
+        - SessionCookie: []
+      description: >-
+        Session active, permission et relation métier revérifiées côté serveur ; CSRF et X-Account-Context
+        attendu. Aucun propriétaire ou clé objet arbitraire. Aucun retry automatique de mutation.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmProjectAsset'
+      responses:
+        '200':
+          description: État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/projects/{projectId}/upload-intents:
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    post:
+      operationId: createProjectUpload
+      tags:
+        - Assets
+      summary: Autoriser un transfert opaque sous quotas du projet.
+      security:
+        - SessionCookie: []
+      description: >-
+        Session active, permission et relation métier revérifiées côté serveur ; CSRF et X-Account-Context
+        attendu. Aucun propriétaire ou clé objet arbitraire. Aucun retry automatique de mutation.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetUploadRequest'
+      responses:
+        '201':
+          description: État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            Location:
+              description: Ressource métier créée.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetUploadIntent'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/assets/upload-policy:
+    get:
+      operationId: getEditorialUploadPolicy
+      tags:
+        - Assets
+      summary: Lire la politique des ressources éditoriales autorisées.
+      security:
+        - SessionCookie: []
+      parameters: []
+      responses:
+        '200':
+          description: État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetUploadCapabilities'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/assets/upload-intents:
+    post:
+      operationId: createEditorialUpload
+      tags:
+        - Assets
+      summary: Préparer une ressource pour la version et langue éditoriales exactes.
+      security:
+        - SessionCookie: []
+      description: >-
+        Session active, permission et relation métier revérifiées côté serveur ; CSRF et X-Account-Context
+        attendu. Aucun propriétaire ou clé objet arbitraire. Aucun retry automatique de mutation.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditorialAssetUploadRequest'
+      responses:
+        '201':
+          description: État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            Location:
+              description: Ressource métier créée.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetUploadIntent'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/assets/{assetId}:
+    parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: getEditorialAsset
+      tags:
+        - Assets
+      summary: Lire un fichier éditorial autorisé, y compris en brouillon.
+      security:
+        - SessionCookie: []
+      parameters: []
+      responses:
+        '200':
+          description: État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/assets/{assetId}/confirmations:
+    parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    post:
+      operationId: confirmEditorialUpload
+      tags:
+        - Assets
+      summary: Contrôler format, taille et contenu avant usage éditorial.
+      security:
+        - SessionCookie: []
+      description: >-
+        Session active, permission et relation métier revérifiées côté serveur ; CSRF et X-Account-Context
+        attendu. Aucun propriétaire ou clé objet arbitraire. Aucun retry automatique de mutation.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+      responses:
+        '200':
+          description: État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/assets/{assetId}/download-access:
+    parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    post:
+      operationId: getEditorialAssetPreview
+      tags:
+        - Assets
+      summary: Prévisualiser une ressource strictement éditoriale sous content.read.
+      security:
+        - SessionCookie: []
+      description: >-
+        Session active, permission et relation métier revérifiées côté serveur ; CSRF et X-Account-Context
+        attendu. Aucun propriétaire ou clé objet arbitraire. Aucun retry automatique de mutation.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+      responses:
+        '200':
+          description: État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetDownloadAccess'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /assets/{assetId}/download-access:
+    parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    post:
+      operationId: getAssetDownload
+      tags:
+        - Assets
+      summary: Réautoriser un fichier personnel ou une ressource éditoriale FREE publiée.
+      security:
+        - {}
+        - SessionCookie: []
+      description: >-
+        Public anonyme : CSRF obligatoire, contexte de publication exacte qui référence cet asset. Authentifié
+        : X-Account-Context également obligatoire. Fichier personnel : propriétaire uniquement, contexte
+        nullable. PROTECTED refusé tant que les droits P12 ne sont pas disponibles ; parent inscrit retiré ou
+        sans traduction refusé. URL courte à récupérer sans cookie, jamais journalisée.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - name: X-Account-Context
+          in: header
+          required: false
+          description: >-
+            UUID de compte attendu obligatoire si une identité est authentifiée ; jamais un choix de
+            propriétaire.
+          schema:
+            $ref: '#/components/schemas/UUID'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/AssetAccessContext'
+                - type: 'null'
+      responses:
+        '200':
+          description: État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetDownloadAccess'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/notifications:
+    get:
+      operationId: listNotifications
+      tags:
+        - Notifications
+      summary: Lire les états et tentatives de la file sans charge utile sensible.
+      security:
+        - SessionCookie: []
+      description: >-
+        Permission notifications.read. Statuts réels, ordre createdAt décroissant puis id ; aucune absence de
+        transport présentée comme SENT.
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - PENDING
+              - PROCESSING
+              - RETRY
+              - SENT
+              - DEAD
+              - INDETERMINATE
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationPage'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/notifications/{id}/retry:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    post:
+      operationId: retryNotification
+      tags:
+        - Notifications
+      summary: Reprendre explicitement une notification éligible après rapprochement.
+      security:
+        - SessionCookie: []
+      description: >-
+        Permission notifications.manage, CSRF, compte attendu et motif obligatoire. INDETERMINATE impose la
+        reconnaissance du risque de doublon. Pas de renvoi d’un reset expiré ni de contenu arbitraire. La
+        réponse annonce une reprise en file, pas une livraison.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetryNotification'
+      responses:
+        '200':
+          description: État réel sans cache partagé ; seule la confirmation de contrôle peut annoncer READY.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationSummary'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /media/{mediaId}:
+    parameters:
+      - name: mediaId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: getVideoMedia
+      tags:
+        - Media
+      summary: Lire la disponibilité réelle d’un média publié dans son contexte.
+      security:
+        - {}
+        - SessionCookie: []
+      parameters:
+        - name: resourceId
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: versionId
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+        - name: enrollmentId
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: État réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoMediaView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /media/{mediaId}/playback-access:
+    parameters:
+      - name: mediaId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    post:
+      operationId: getVideoPlayback
+      tags:
+        - Media
+      summary: Autoriser explicitement une lecture locale temporaire.
+      security:
+        - {}
+        - SessionCookie: []
+      description: >-
+        CSRF obligatoire, y compris anonyme. Compte attendu si authentifié. Autorisation canonique de
+        publication FREE/référence/locale/chaîne ; PROTECTED refusé avant droits P12. Provider absent ne crée
+        aucun faux lecteur.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - name: X-Account-Context
+          in: header
+          required: false
+          description: Obligatoire si authentifié ; compte attendu seulement, jamais choix du propriétaire.
+          schema:
+            $ref: '#/components/schemas/UUID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MediaAccessContext'
+      responses:
+        '200':
+          description: État réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoPlaybackAccess'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /media/{mediaId}/stream:
+    parameters:
+      - name: mediaId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: getVideoStream
+      tags:
+        - Media
+      summary: Lire les octets MP4 avec un grant court et une plage unique.
+      security: []
+      description: >-
+        Bearer de lecture temporaire, pas une session d’authentification. Grant opaque validé par
+        hash/expiration et mediaId, jamais journalisé. Une requête débutée avant expiration peut finir son
+        flux ; nouvelle requête après expiration refusée. Accepte une plage bytes unique, sans chemin client
+        ni URL distante.
+      parameters:
+        - name: grant
+          in: query
+          required: true
+          schema:
+            type: string
+            pattern: ^[A-Za-z0-9_-]{43}$
+        - name: Range
+          in: header
+          required: false
+          schema:
+            type: string
+          description: Plage unique bytes=start-end, bytes=start- ou bytes=-suffix.
+      responses:
+        '200':
+          description: Flux complet vérifié.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            Accept-Ranges:
+              schema:
+                type: string
+                const: bytes
+            Content-Length:
+              schema:
+                type: integer
+                minimum: 0
+                maximum: 9007199254740991
+            Content-Range:
+              schema:
+                type: string
+          content:
+            video/mp4:
+              schema:
+                type: string
+                format: binary
+        '206':
+          description: Plage de flux partielle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            Accept-Ranges:
+              schema:
+                type: string
+                const: bytes
+            Content-Length:
+              schema:
+                type: integer
+                minimum: 0
+                maximum: 9007199254740991
+            Content-Range:
+              schema:
+                type: string
+          content:
+            video/mp4:
+              schema:
+                type: string
+                format: binary
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '416':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    head:
+      operationId: headVideoStream
+      tags:
+        - Media
+      summary: Lire les headers du flux sans corps vidéo.
+      security: []
+      parameters:
+        - name: grant
+          in: query
+          required: true
+          schema:
+            type: string
+            pattern: ^[A-Za-z0-9_-]{43}$
+        - name: Range
+          in: header
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Headers du média.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            Accept-Ranges:
+              schema:
+                type: string
+                const: bytes
+            Content-Length:
+              schema:
+                type: integer
+                minimum: 0
+                maximum: 9007199254740991
+            Content-Range:
+              schema:
+                type: string
+        '206':
+          description: Headers de la plage.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            Accept-Ranges:
+              schema:
+                type: string
+                const: bytes
+            Content-Length:
+              schema:
+                type: integer
+                minimum: 0
+                maximum: 9007199254740991
+            Content-Range:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '416':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/media-progress/{mediaId}:
+    parameters:
+      - name: mediaId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: getMediaProgress
+      tags:
+        - Media
+      summary: Lire sa position propre au média, sans inventer de sauvegarde.
+      security:
+        - SessionCookie: []
+      description: >-
+        Permission media.progress.read et contexte pédagogique actuel autorisé. Un GET initial ne crée aucune
+        ligne.
+      parameters:
+        - name: resourceId
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: versionId
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+        - name: enrollmentId
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: État réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaProgressView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    put:
+      operationId: setMediaProgress
+      tags:
+        - Media
+      summary: Conserver une position bornée sous révision et compte attendus.
+      security:
+        - SessionCookie: []
+      description: >-
+        Permission media.progress.write, CSRF, X-Account-Context, If-Match et contrôle serveur de la durée.
+        Propriétaire de session, médias/langues distincts, aucune validation pédagogique déduite.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetMediaProgress'
+      responses:
+        '200':
+          description: État réel, sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaProgressView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
 components:
   schemas:
     SystemHealth:
@@ -6611,7 +7582,7 @@ components:
           maxItems: 4
       description: >-
         Configuration éditoriale opt-in, incomplète admise en brouillon seulement. Publication exige les vingt
-        critères exacts de document.rubric àunpoint et quatre erreurs bloquantes aux libellés nonvides ;
+        critères exacts de document.rubric à un point et quatre erreurs bloquantes aux libellés non vides ;
         catégories dérivées des clés. Grille, seuil et règle de révélation gelés avec la version pédagogique.
         Null/absent ne crée aucun atelier implicite.
     ProjectFields:
@@ -7453,7 +8424,7 @@ components:
             - $ref: '#/components/schemas/SelfAssessmentView'
             - type: 'null'
       description: >-
-        État dérivé séparé du texte àETag. Une ancienne autoévaluation reste historique après édition ; elle
+        État dérivé séparé du texte à ETag. Une ancienne autoévaluation reste historique après édition ; elle
         ne valide pas automatiquement la nouvelle révision.
     SolutionRevealView:
       type: object
@@ -7528,7 +8499,7 @@ components:
             - DRAFT
             - READY_FOR_SELF_ASSESSMENT
       description: >-
-        Création idempotente par propriétaire+creationId et empreinte du corps : même corps retrouve le
+        Création idempotente par propriétaire + creationId et empreinte du corps : même corps retrouve le
         projet(200), autre corps409. Source publiéeFREE exacte requise pour une nouvelle création. Inscription
         facultative vérifiée côté serveur ; aucun propriétaire ou score admis dans le JSON.
     SaveProject:
@@ -7582,9 +8553,9 @@ components:
           minLength: 0
           maxLength: 4000
       description: >-
-        Vingt contrôles et quatre déclarations exacts, uniques et complets. Score fourni parSpring seulement ;
-        corps JSONUTF8 borné48KiB. Même propriétaire/submissionId/corps retrouve la preuve avant If-Match pour
-        une réponse déjàcommittée ; autre corps409. Jamais de retry automatique.
+        Vingt contrôles et quatre déclarations exacts, uniques et complets. Score fourni par Spring seulement
+        ; corps JSONUTF8 borné48KiB. Même propriétaire/submissionId/corps retrouve la preuve avant If-Match
+        pour une réponse déjà committée ; autre corps409. Jamais de retry automatique.
     RevealSolution:
       type: object
       additionalProperties: false
@@ -7658,6 +8629,705 @@ components:
       description: >-
         Préparation CMS lue depuis une ressource serveur protégée. Ni seed, sauvegarde, publication ni
         promesse commerciale ; libellésBR02 adaptés au brief.
+    AssetView:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - revision
+        - scope
+        - kind
+        - state
+        - filename
+        - contentType
+        - sizeBytes
+        - locale
+        - projectId
+        - createdAt
+        - readyAt
+        - rejectionCode
+        - validationStatus
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        revision:
+          $ref: '#/components/schemas/Revision'
+        scope:
+          type: string
+          enum:
+            - PROJECT_FILE
+            - EDITORIAL
+        kind:
+          type: string
+          enum:
+            - FILE
+            - IMAGE
+        state:
+          type: string
+          enum:
+            - PENDING
+            - READY
+            - REJECTED
+            - EXPIRED
+        filename:
+          type: string
+          minLength: 1
+          maxLength: 180
+        contentType:
+          type: string
+          enum:
+            - text/plain
+            - application/pdf
+            - image/png
+            - image/jpeg
+        sizeBytes:
+          type: integer
+          minimum: 1
+          maximum: 20971520
+        locale:
+          anyOf:
+            - $ref: '#/components/schemas/Locale'
+            - type: 'null'
+        projectId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+        readyAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+        rejectionCode:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 64
+              pattern: ^[A-Z0-9_]+$
+            - type: 'null'
+        validationStatus:
+          type: string
+          enum:
+            - PENDING
+            - FORMAT_VERIFIED
+            - REJECTED
+      description: >-
+        Fichier métier : identité, état et octets vérifiés côté serveur. Aucune clé objet, bucket ou propriété
+        choisie par le navigateur. FORMAT_VERIFIED décrit un contrôle de format et ne prétend pas à un verdict
+        antivirus. Scope et relations sont cohérents : projet privé ou ressource éditoriale localisée.
+    AssetUploadRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - filename
+        - contentType
+        - sizeBytes
+      properties:
+        filename:
+          type: string
+          minLength: 1
+          maxLength: 180
+        contentType:
+          type: string
+          enum:
+            - text/plain
+            - application/pdf
+            - image/png
+            - image/jpeg
+        sizeBytes:
+          type: integer
+          minimum: 1
+          maximum: 20971520
+      description: >-
+        Intent de transfert : nom sans chemin ni caractère de contrôle, taille et MIME comparés à la politique
+        serveur. Les formats non disponibles sont refusés avant le transfert. La clé et le propriétaire sont
+        fixés côté serveur.
+    EditorialAssetUploadRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - resourceId
+        - versionId
+        - locale
+        - filename
+        - contentType
+        - sizeBytes
+      properties:
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        versionId:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        filename:
+          type: string
+          minLength: 1
+          maxLength: 180
+        contentType:
+          type: string
+          enum:
+            - text/plain
+            - application/pdf
+            - image/png
+            - image/jpeg
+        sizeBytes:
+          type: integer
+          minimum: 1
+          maximum: 20971520
+      description: >-
+        Éditeur autorisé, identité/version/langue exactes. Une confirmation READY ne publie pas ce fichier et
+        ne l’ajoute pas silencieusement au contenu.
+    ConfirmProjectAsset:
+      type: object
+      additionalProperties: false
+      required:
+        - assetId
+      properties:
+        assetId:
+          $ref: '#/components/schemas/UUID'
+      description: >-
+        Confirmer seulement un intent de ce projet ; le serveur relit et valide les octets réellement reçus.
+        Aucune disponibilité fournie par le client.
+    AssetUploadIntent:
+      type: object
+      additionalProperties: false
+      required:
+        - asset
+        - method
+        - uploadUrl
+        - headers
+        - expiresAt
+      properties:
+        asset:
+          $ref: '#/components/schemas/AssetView'
+        method:
+          type: string
+          enum:
+            - PUT
+        uploadUrl:
+          type: string
+          format: uri
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+        expiresAt:
+          $ref: '#/components/schemas/UtcInstant'
+      description: >-
+        URL externe temporaire et headers à utiliser pour le transfert direct sans cookie, redirect:error. Ni
+        URL signée dans les journaux/stockages ni état READY après le seul PUT ; la confirmation est une
+        commande distincte. Un ancien PUT ne peut modifier les octets READY validés.
+    AssetAcceptedFormat:
+      type: object
+      additionalProperties: false
+      required:
+        - contentType
+        - extensions
+        - kind
+        - maxBytes
+        - available
+        - unavailableReason
+      properties:
+        contentType:
+          type: string
+          enum:
+            - text/plain
+            - application/pdf
+            - image/png
+            - image/jpeg
+        extensions:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 12
+            pattern: ^\.[a-z0-9]+$
+          minItems: 1
+          maxItems: 4
+        kind:
+          type: string
+          enum:
+            - FILE
+            - IMAGE
+        maxBytes:
+          type: integer
+          minimum: 1
+          maximum: 20971520
+        available:
+          type: boolean
+        unavailableReason:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 64
+              pattern: ^[A-Z0-9_]+$
+            - type: 'null'
+      description: >-
+        Borne et disponibilité propres à ce format, affichées avant dépôt. TXT UTF-8 actif quand le stockage
+        est configuré ; PDF indisponible sans validateur de document complexe.
+    AssetUploadCapabilities:
+      type: object
+      additionalProperties: false
+      required:
+        - enabled
+        - unavailableReason
+        - formats
+        - maxFileBytes
+        - maxFilesPerProject
+        - maxBytesPerProject
+        - uploadTtlSeconds
+        - downloadTtlSeconds
+      properties:
+        enabled:
+          type: boolean
+        unavailableReason:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 64
+              pattern: ^[A-Z0-9_]+$
+            - type: 'null'
+        formats:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetAcceptedFormat'
+          minItems: 1
+          maxItems: 4
+        maxFileBytes:
+          type: integer
+          minimum: 1
+          maximum: 20971520
+        maxFilesPerProject:
+          type: integer
+          minimum: 1
+          maximum: 100
+        maxBytesPerProject:
+          type: integer
+          minimum: 1
+          maximum: 1073741824
+        uploadTtlSeconds:
+          type: integer
+          minimum: 1
+          maximum: 900
+        downloadTtlSeconds:
+          type: integer
+          minimum: 1
+          maximum: 300
+      description: >-
+        Politique serveur réelle. Stockage désactivé : enabled=false et raison explicite, jamais liste vide
+        présentée comme absence de fichiers. Les quotas incluent PENDING non expirés et READY.
+    AssetPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetView'
+          minItems: 0
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    AssetAccessContext:
+      type: object
+      additionalProperties: false
+      required:
+        - locale
+        - resourceId
+        - versionId
+        - enrollmentId
+      properties:
+        locale:
+          $ref: '#/components/schemas/Locale'
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        versionId:
+          $ref: '#/components/schemas/UUID'
+        enrollmentId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+      description: >-
+        Éditorial : publication exacte qui référence réellement ce fichier. Inscription facultative : chaîne
+        pédagogique épinglée également vérifiée. Le body peut être null pour un fichier personnel, accessible
+        uniquement à son propriétaire.
+    AssetDownloadAccess:
+      type: object
+      additionalProperties: false
+      required:
+        - assetId
+        - method
+        - url
+        - expiresAt
+        - contentType
+        - filename
+        - disposition
+        - sizeBytes
+        - sha256
+      properties:
+        assetId:
+          $ref: '#/components/schemas/UUID'
+        method:
+          type: string
+          enum:
+            - GET
+        url:
+          type: string
+          format: uri
+        expiresAt:
+          $ref: '#/components/schemas/UtcInstant'
+        contentType:
+          type: string
+          enum:
+            - text/plain
+            - application/pdf
+            - image/png
+            - image/jpeg
+        filename:
+          type: string
+          minLength: 1
+          maxLength: 180
+        disposition:
+          type: string
+          enum:
+            - attachment
+            - inline
+        sizeBytes:
+          type: integer
+          minimum: 1
+          maximum: 20971520
+        sha256:
+          type: string
+          pattern: ^[a-f0-9]{64}$
+          minLength: 64
+          maxLength: 64
+      description: >-
+        Accès temporaire aux seuls octets READY vérifiés. Taille et SHA-256 proviennent du serveur. Le
+        navigateur récupère sans cookie, contrôle MIME/taille/hash puis utilise un blobURL temporaire ; pas de
+        href signé direct envoyant SESSION au port S3. Nouvelle délivrance refusée après perte d’accès ; un
+        ancien lien garde sa validité résiduelle jusqu’au TTL.
+    NotificationSummary:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - type
+        - status
+        - attempts
+        - cycleAttempts
+        - requeueCount
+        - nextAttemptAt
+        - leaseUntil
+        - lastErrorCode
+        - createdAt
+        - updatedAt
+        - expiresAt
+        - sentAt
+        - purgedAt
+        - payloadAvailable
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        type:
+          type: string
+          enum:
+            - PASSWORD_RESET
+            - ACCOUNT_CREATED
+            - ACCESS_ACTIVATED
+            - SUPPORT_REPLY
+        status:
+          type: string
+          enum:
+            - PENDING
+            - PROCESSING
+            - RETRY
+            - SENT
+            - DEAD
+            - INDETERMINATE
+        attempts:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+        cycleAttempts:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+        requeueCount:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+        nextAttemptAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+        leaseUntil:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+        lastErrorCode:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 40
+              pattern: ^[A-Z0-9_]+$
+            - type: 'null'
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+        updatedAt:
+          $ref: '#/components/schemas/UtcInstant'
+        expiresAt:
+          $ref: '#/components/schemas/UtcInstant'
+        sentAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+        purgedAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+        payloadAvailable:
+          type: boolean
+      description: >-
+        Métadonnées opérationnelles seulement : aucune adresse, clé métier, empreinte, charge utile ou valeur
+        chiffrée. L’état SENT suit un envoi déclaré par le transport, pas une promesse de livraison SMTP
+        exactement une fois.
+    NotificationPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/NotificationSummary'
+          minItems: 0
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    RetryNotification:
+      type: object
+      additionalProperties: false
+      required:
+        - reason
+        - ackDuplicate
+      properties:
+        reason:
+          type: string
+          enum:
+            - CONFIGURATION_FIXED
+            - MANUAL_RECONCILIATION
+        ackDuplicate:
+          type: boolean
+      description: >-
+        Reprise explicite et auditée, sans destinataire ou contenu arbitraire. INDETERMINATE exige
+        ackDuplicate=true ; un reset expiré ou un payload purgé est refusé. La reprise remet le compteur de
+        cycle à zéro, conserve le total et ne signifie pas que le mail est livré.
+    MediaAccessContext:
+      type: object
+      additionalProperties: false
+      required:
+        - locale
+        - resourceId
+        - versionId
+        - enrollmentId
+      properties:
+        locale:
+          $ref: '#/components/schemas/Locale'
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        versionId:
+          $ref: '#/components/schemas/UUID'
+        enrollmentId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+      description: >-
+        Publication exacte qui référence ce média VIDEO de cette langue ; inscription facultative ajoute la
+        chaîne pédagogique épinglée. Aucun chemin ou URL de fichier reçu du navigateur.
+    VideoMediaView:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - locale
+        - provider
+        - durationSeconds
+        - sizeBytes
+        - sha256
+        - playbackAvailable
+        - unavailableReason
+        - transcript
+        - captionsVtt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        provider:
+          type: string
+          enum:
+            - LOCAL_TEST
+        durationSeconds:
+          type: number
+          exclusiveMinimum: 0
+          maximum: 86400
+        sizeBytes:
+          type: integer
+          minimum: 1
+          maximum: 134217728
+        sha256:
+          type: string
+          pattern: ^[a-f0-9]{64}$
+          minLength: 64
+          maxLength: 64
+        playbackAvailable:
+          type: boolean
+        unavailableReason:
+          anyOf:
+            - type: string
+              enum:
+                - PROVIDER_NOT_CONFIGURED
+                - MEDIA_UNAVAILABLE
+            - type: 'null'
+        transcript:
+          anyOf:
+            - type: string
+              maxLength: 8000
+            - type: 'null'
+        captionsVtt:
+          anyOf:
+            - type: string
+              maxLength: 8000
+            - type: 'null'
+      description: >-
+        Métadonnées de MP4 réellement importé, durée lue dans le conteneur et octets hachés. Provider
+        local/test seulement, désactivé par défaut. Média absent : 404, sans durée inventée ; provider
+        désactivé/fichier indisponible : état honnête et alternative textuelle de la leçon. Aucun film de
+        cours produit ou fournisseur de production déduit.
+    VideoPlaybackAccess:
+      type: object
+      additionalProperties: false
+      required:
+        - mediaId
+        - provider
+        - url
+        - expiresAt
+        - contentType
+        - durationSeconds
+        - sizeBytes
+        - sha256
+      properties:
+        mediaId:
+          $ref: '#/components/schemas/UUID'
+        provider:
+          type: string
+          enum:
+            - LOCAL_TEST
+        url:
+          type: string
+          pattern: ^/api/v1/media/[0-9a-fA-F-]{36}/stream\?grant=[A-Za-z0-9_-]{43}$
+        expiresAt:
+          $ref: '#/components/schemas/UtcInstant'
+        contentType:
+          type: string
+          enum:
+            - video/mp4
+        durationSeconds:
+          type: number
+          exclusiveMinimum: 0
+          maximum: 86400
+        sizeBytes:
+          type: integer
+          minimum: 1
+          maximum: 134217728
+        sha256:
+          type: string
+          pattern: ^[a-f0-9]{64}$
+          minLength: 64
+          maxLength: 64
+      description: >-
+        Lien bearer opaque de même origine, 60 secondes au plus ; seul son hash est stocké. Ne pas journaliser
+        ou conserver son URL. Chaque nouvelle délivrance réautorise publication/langue/chaîne ; le lien
+        existant reste utilisable jusqu’au TTL. La lecture ne valide aucun projet ni activité.
+    MediaProgressView:
+      type: object
+      additionalProperties: false
+      required:
+        - mediaId
+        - locale
+        - durationSeconds
+        - positionSeconds
+        - revision
+        - updatedAt
+      properties:
+        mediaId:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        durationSeconds:
+          type: number
+          exclusiveMinimum: 0
+          maximum: 86400
+        positionSeconds:
+          type: number
+          minimum: 0
+          maximum: 86400
+        revision:
+          $ref: '#/components/schemas/Revision'
+        updatedAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+      description: >-
+        Position du propriétaire par mediaId, bornée par sa durée mesurée ; aucun déplacement entre vidéos
+        FR/EN. Révision0/updatedAt:null signifie aucune sauvegarde persistée, pas une confirmation de lecture.
+        ETag propre au média, sans contexte de publication variable dans sa représentation.
+    SetMediaProgress:
+      type: object
+      additionalProperties: false
+      required:
+        - context
+        - positionSeconds
+      properties:
+        context:
+          $ref: '#/components/schemas/MediaAccessContext'
+        positionSeconds:
+          type: number
+          minimum: 0
+          maximum: 86400
+      description: >-
+        Seule la position est fournie ; durée, propriétaire et révision restent serveur. If-Match atomique :
+        absence428, conflit412. Une position identique sauvegardée conserve le tag ; aucune réussite de
+        quiz/projet ou durée regardée n’est déduite.
   headers:
     NoStore:
       description: Réponse non stockable ; les erreurs sont également privées.

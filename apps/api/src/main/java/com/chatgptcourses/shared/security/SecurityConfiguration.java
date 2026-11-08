@@ -75,6 +75,23 @@ class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/v1/me/projects", "/api/v1/me/projects/*/self-assessments",
                                 "/api/v1/activities/*/solution-reveals").hasAuthority("projects.write")
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/me/projects/*").hasAuthority("projects.write")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/me/projects/*/file-policy", "/api/v1/me/projects/*/attachments")
+                            .hasAuthority("assets.read")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/me/projects/*/upload-intents", "/api/v1/me/projects/*/attachments")
+                            .hasAuthority("assets.write")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/admin/assets/upload-policy", "/api/v1/admin/assets/*")
+                            .hasAuthority("content.read")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/admin/assets/upload-intents", "/api/v1/admin/assets/*/confirmations")
+                            .hasAuthority("content.write")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/admin/assets/*/download-access").hasAuthority("content.read")
+                        // Public editorial resources still require live publication/access checks and CSRF on POST.
+                        .requestMatchers(HttpMethod.POST, "/api/v1/assets/*/download-access", "/api/v1/media/*/playback-access").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/media/*", "/api/v1/media/*/stream").permitAll()
+                        .requestMatchers(HttpMethod.HEAD, "/api/v1/media/*/stream").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/me/media-progress/*").hasAuthority("media.progress.read")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/me/media-progress/*").hasAuthority("media.progress.write")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/admin/notifications").hasAuthority("notifications.read")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/admin/notifications/*/retry").hasAuthority("notifications.manage")
                         .requestMatchers(HttpMethod.GET, "/api/v1/admin/project-presets/*").hasAuthority("content.read")
                         .requestMatchers(HttpMethod.GET, "/api/v1/contents/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/catalog", "/api/v1/catalog/facets", "/api/v1/catalog/resources/*",

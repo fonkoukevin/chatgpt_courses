@@ -2,7 +2,7 @@ import { connect } from 'node:net';
 
 type Result = { ok: boolean; webPid: number; apiPid?: number; error?: string };
 
-export function controlApi(operation: 'stop-api' | 'start-api'): Promise<Result> {
+export function controlApi(operation: 'stop-api' | 'start-api' | 'pause-mailpit' | 'resume-mailpit'): Promise<Result> {
   const ipc = process.env.COURSES_BROWSER_IPC;
   const token = process.env.COURSES_BROWSER_TOKEN;
   if (!ipc || !token) throw new Error('Superviseur navigateur absent.');

@@ -4,8 +4,8 @@ const action = process.argv[2];
 const env = localEnvironment();
 const commands = {
   up: ['up', '-d', '--wait'],
-  stop: ['stop'],
-  status: ['ps'],
+  stop: ['--profile', 's3', 'stop'],
+  status: ['--profile', 's3', 'ps'],
   s3: ['--profile', 's3', 'up', '-d', '--wait'],
 };
 if (!commands[action]) throw new Error('Action attendue : up, stop, status ou s3.');

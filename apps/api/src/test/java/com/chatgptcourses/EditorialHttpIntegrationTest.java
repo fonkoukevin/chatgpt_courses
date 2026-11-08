@@ -49,6 +49,7 @@ class EditorialHttpIntegrationTest {
             .asCompatibleSubstituteFor("postgres"));
     @DynamicPropertySource
     static void postgres(DynamicPropertyRegistry registry) {
+        registry.add("NOTIFICATION_OUTBOX_KEY", NotificationTestKeys::randomKey);
         registry.add("POSTGRES_HOST", POSTGRES::getHost);
         registry.add("POSTGRES_PORT", () -> POSTGRES.getMappedPort(5432));
         registry.add("POSTGRES_DB", POSTGRES::getDatabaseName);

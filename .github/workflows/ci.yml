@@ -34,6 +34,7 @@ jobs:
       STRIPE_ENABLED: false
       STORAGE_ENABLED: false
       VIDEO_ENABLED: false
+      MAIL_MODE: disabled
     steps:
       - name: Check out source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -76,6 +77,9 @@ jobs:
           P01_DB_PASSWORD=$(openssl rand -hex 32)
           echo "::add-mask::$P01_DB_PASSWORD"
           printf 'POSTGRES_PASSWORD=%s\n' "$P01_DB_PASSWORD" >> "$GITHUB_ENV"
+          P10_OUTBOX_KEY=$(openssl rand -base64 32)
+          echo "::add-mask::$P10_OUTBOX_KEY"
+          printf 'NOTIFICATION_OUTBOX_KEY=%s\n' "$P10_OUTBOX_KEY" >> "$GITHUB_ENV"
           printf 'POSTGRES_PASSWORD=%s\n' "$P01_DB_PASSWORD" > .runtime/ci-db.env
           docker compose --project-name chatgpt-courses-ci --env-file .runtime/ci-db.env -f infra/compose/compose.local.yml up -d --wait postgres
       - name: Smoke test the real API through the web proxy

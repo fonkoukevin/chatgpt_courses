@@ -78,7 +78,10 @@ async function proxy(request: Request, context: RouteContext): Promise<Response>
   }
   const url = new URL(`/api/v1/${path.map(encodeURIComponent).join("/")}`, config.apiInternalOrigin);
   url.search = new URL(request.url).search;
-  const headers = new Headers({ Accept: "application/json, application/problem+json" });
+  const mediaStream = ["GET", "HEAD"].includes(request.method) && path.length === 3 && path[0] === "media"
+    && /^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/.test(path[1]) && path[2] === "stream";
+  const headers = new Headers({ Accept: mediaStream ? "video/mp4, application/problem+json" : "application/json, application/problem+json" });
+  if (mediaStream && request.headers.has("range")) headers.set("Range", request.headers.get("range")!);
   const mutation = !["GET", "HEAD", "OPTIONS"].includes(request.method);
   if (mutation && ((request.headers.has("origin") && request.headers.get("origin") !== config.publicOrigin)
       || request.headers.get("sec-fetch-site") === "cross-site")) {
@@ -91,27 +94,47 @@ async function proxy(request: Request, context: RouteContext): Promise<Response>
   const session = request.headers.get("cookie")?.split(";").map((cookie) => cookie.trim()).find((cookie) => cookie.startsWith("SESSION="));
   if (session) headers.set("Cookie", session);
 
+  let headersTimer: ReturnType<typeof setTimeout> | undefined;
   try {
     const body = mutation ? await boundedBody(request) : null;
+    const controller = new AbortController();
+    // A stream keeps the client's cancellation signal after its headers arrive.
+    // The ordinary metadata timeout must not cut a long video after five seconds.
+    if (mediaStream) headersTimer = setTimeout(() => controller.abort(), config.apiTimeoutMs);
     const upstream = await fetch(url, {
       method: request.method,
       headers,
       body: body as BodyInit | null,
       cache: "no-store",
       redirect: "manual",
-      signal: AbortSignal.timeout(config.apiTimeoutMs),
+      signal: mediaStream ? AbortSignal.any([request.signal, controller.signal]) : AbortSignal.timeout(config.apiTimeoutMs),
     });
+    if (headersTimer) clearTimeout(headersTimer);
     // Redirects never relay session cookies to another host or expose internal URLs.
     if (upstream.status >= 300 && upstream.status < 400) {
       return problem(502, "API_INVALID_RESPONSE", instance);
     }
-    const responseHeaders = new Headers({ "Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff" });
+    const responseHeaders = new Headers({ "Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff", "Referrer-Policy": "no-referrer" });
     for (const name of ["content-type", "etag", "retry-after", "allow"]) {
       const value = upstream.headers.get(name);
       if (value) responseHeaders.set(name, value);
     }
     for (const cookie of upstream.headers.getSetCookie()) {
       if (cookie.startsWith("SESSION=")) responseHeaders.append("Set-Cookie", cookie);
+    }
+    if (mediaStream) {
+      for (const name of ["accept-ranges", "content-range", "content-disposition"]) {
+        const value = upstream.headers.get(name); if (value) responseHeaders.set(name, value);
+      }
+      if ([200, 206].includes(upstream.status)) {
+        const length = upstream.headers.get("content-length");
+        if (upstream.headers.get("content-type")?.split(";")[0].trim() !== "video/mp4" || !length
+          || !/^\d+$/.test(length) || Number(length) < 1 || Number(length) > 128 * 1024 * 1024) {
+          await upstream.body?.cancel(); return problem(502, "API_INVALID_RESPONSE", instance);
+        }
+        responseHeaders.set("Content-Length", length);
+        return new Response(request.method === "HEAD" ? null : upstream.body, { status: upstream.status, headers: responseHeaders });
+      }
     }
     // Read the P01 JSON payload before sending headers, so a body timeout also
     // becomes a structured gateway error instead of a misleading HTTP 200.
@@ -121,6 +144,8 @@ async function proxy(request: Request, context: RouteContext): Promise<Response>
     if (error instanceof RangeError && error.message === "body-limit") return problem(413, "REQUEST_TOO_LARGE", instance);
     const timedOut = error instanceof Error && (error.name === "TimeoutError" || error.name === "AbortError");
     return problem(timedOut ? 504 : 502, "API_UNAVAILABLE", instance);
+  } finally {
+    if (headersTimer) clearTimeout(headersTimer);
   }
 }
 

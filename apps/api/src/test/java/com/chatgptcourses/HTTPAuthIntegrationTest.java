@@ -54,6 +54,7 @@ class HTTPAuthIntegrationTest {
 
     @DynamicPropertySource
     static void properties(DynamicPropertyRegistry registry) {
+        registry.add("NOTIFICATION_OUTBOX_KEY", NotificationTestKeys::randomKey);
         registry.add("POSTGRES_HOST", POSTGRES::getHost);
         registry.add("POSTGRES_PORT", () -> POSTGRES.getMappedPort(5432));
         registry.add("POSTGRES_DB", POSTGRES::getDatabaseName);
@@ -86,7 +87,11 @@ class HTTPAuthIntegrationTest {
         assertThat(user.path("email").asText()).isEqualTo(email);
         assertThat(user.path("roles").size()).isEqualTo(1);
         assertThat(user.path("roles").get(0).asText()).isEqualTo("LEARNER");
-        assertThat(user.path("permissions").get(0).asText()).isEqualTo("identity.preferences.write");
+        var permissionCodes = new java.util.ArrayList<String>();
+        for (var permission : user.path("permissions")) permissionCodes.add(permission.asText());
+        assertThat(permissionCodes).contains("identity.preferences.write", "assets.read", "assets.write",
+                "media.progress.read", "media.progress.write");
+        assertThat(permissionCodes).doesNotContain("notifications.read", "notifications.manage", "content.write", "content.publish");
         assertThat(response.body().contains("password")).as("credentials excluded from profile").isFalse();
         assertProblem(get(browser, "/api/v1/auth/me"), 401, "AUTHENTICATION_REQUIRED");
         assertProblem(register(browser, email, csrf), 409, "EMAIL_ALREADY_REGISTERED");
@@ -243,6 +248,8 @@ class HTTPAuthIntegrationTest {
         do {
             var listing = http.send(HttpRequest.newBuilder(URI.create(base + "/api/v1/messages")).GET().build(), HttpResponse.BodyHandlers.ofString());
             for (var message : mapper.readTree(listing.body()).path("messages")) {
+                String expectedSubject="en".equals(locale)?"Reset your ChatGPT Courses password":"Réinitialiser votre mot de passe ChatGPT Courses";
+                if(!expectedSubject.equals(message.path("Subject").asText()))continue;
                 boolean toRecipient = false;
                 for (var to : message.path("To")) if (recipient.equals(to.path("Address").asText())) toRecipient = true;
                 if (!toRecipient) continue;

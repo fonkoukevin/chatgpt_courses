@@ -2,7 +2,7 @@
 
 import { type Client, type ClientMeta, type Options as Options2, type RequestResult, type TDataShape, urlSearchParamsBodySerializer } from './client';
 import { client } from './client.gen';
-import type { ArchiveContentData, ArchiveContentErrors, ArchiveContentResponses, CheckQuizData, CheckQuizErrors, CheckQuizResponses, CreateActivityNoteData, CreateActivityNoteErrors, CreateActivityNoteResponses, CreateContentData, CreateContentErrors, CreateContentResponses, CreateContentTranslationData, CreateContentTranslationErrors, CreateContentTranslationResponses, CreateContentVersionData, CreateContentVersionErrors, CreateContentVersionResponses, CreateMethodData, CreateMethodErrors, CreateMethodFromTemplateData, CreateMethodFromTemplateErrors, CreateMethodFromTemplateResponses, CreateMethodResponses, CreateProjectData, CreateProjectErrors, CreateProjectResponses, DeleteMethodData, DeleteMethodErrors, DeleteMethodResponses, DuplicateContentData, DuplicateContentErrors, DuplicateContentResponses, DuplicateMethodData, DuplicateMethodErrors, DuplicateMethodResponses, EnrollCourseData, EnrollCourseErrors, EnrollCourseResponses, FindActivityNoteData, FindActivityNoteErrors, FindActivityNoteResponses, GetActivityNoteData, GetActivityNoteErrors, GetActivityNoteResponses, GetActivityProgressData, GetActivityProgressErrors, GetActivityProgressResponses, GetCatalogueFacetsData, GetCatalogueFacetsErrors, GetCatalogueFacetsResponses, GetCatalogueResourceBySlugData, GetCatalogueResourceBySlugErrors, GetCatalogueResourceBySlugResponses, GetCatalogueResourceData, GetCatalogueResourceErrors, GetCatalogueResourceResponses, GetCatalogueResourceVersionData, GetCatalogueResourceVersionErrors, GetCatalogueResourceVersionResponses, GetContentData, GetContentDependenciesData, GetContentDependenciesErrors, GetContentDependenciesResponses, GetContentErrors, GetContentReadinessData, GetContentReadinessErrors, GetContentReadinessResponses, GetContentResponses, GetCsrfTokenData, GetCsrfTokenErrors, GetCsrfTokenResponses, GetCurrentUserData, GetCurrentUserErrors, GetCurrentUserResponses, GetEnrollmentData, GetEnrollmentErrors, GetEnrollmentResponses, GetLearningActivityData, GetLearningActivityErrors, GetLearningActivityResponses, GetLearningDashboardData, GetLearningDashboardErrors, GetLearningDashboardResponses, GetMethodData, GetMethodErrors, GetMethodResponses, GetMethodSourceUpdateData, GetMethodSourceUpdateErrors, GetMethodSourceUpdateResponses, GetMethodTemplateData, GetMethodTemplateErrors, GetMethodTemplateResponses, GetPreferencesData, GetPreferencesErrors, GetPreferencesResponses, GetProjectContextData, GetProjectContextErrors, GetProjectContextResponses, GetProjectData, GetProjectErrors, GetProjectPresetData, GetProjectPresetErrors, GetProjectPresetResponses, GetProjectResponses, GetProjectRevisionData, GetProjectRevisionErrors, GetProjectRevisionResponses, GetProjectStatusData, GetProjectStatusErrors, GetProjectStatusResponses, GetProjectTemplateData, GetProjectTemplateErrors, GetProjectTemplateResponses, GetPublicContentData, GetPublicContentErrors, GetPublicContentResponses, GetQuizAttemptData, GetQuizAttemptErrors, GetQuizAttemptResponses, GetSelfAssessmentData, GetSelfAssessmentErrors, GetSelfAssessmentResponses, GetSystemHealthData, GetSystemHealthErrors, GetSystemHealthResponses, ListContentRevisionsData, ListContentRevisionsErrors, ListContentRevisionsResponses, ListContentsData, ListContentsErrors, ListContentsResponses, ListMethodsData, ListMethodsErrors, ListMethodsResponses, ListProjectRevisionsData, ListProjectRevisionsErrors, ListProjectRevisionsResponses, ListProjectsData, ListProjectsErrors, ListProjectsResponses, ListQuizAttemptsData, ListQuizAttemptsErrors, ListQuizAttemptsResponses, ListSelfAssessmentsData, ListSelfAssessmentsErrors, ListSelfAssessmentsResponses, LoginData, LoginErrors, LoginResponses, LogoutData, LogoutErrors, LogoutResponses, PreviewContentData, PreviewContentErrors, PreviewContentResponses, PublishContentData, PublishContentErrors, PublishContentResponses, RegisterData, RegisterErrors, RegisterResponses, ReplaceContentCompositionData, ReplaceContentCompositionErrors, ReplaceContentCompositionResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, RevealSolutionData, RevealSolutionErrors, RevealSolutionResponses, SaveContentMetadataData, SaveContentMetadataErrors, SaveContentMetadataResponses, SaveContentRevisionData, SaveContentRevisionErrors, SaveContentRevisionResponses, SaveProjectData, SaveProjectErrors, SaveProjectResponses, SearchCatalogueData, SearchCatalogueErrors, SearchCatalogueResponses, SetActivityProgressData, SetActivityProgressErrors, SetActivityProgressResponses, SubmitQuizData, SubmitQuizErrors, SubmitQuizResponses, SubmitSelfAssessmentData, SubmitSelfAssessmentErrors, SubmitSelfAssessmentResponses, TransitionContentData, TransitionContentErrors, TransitionContentResponses, UpdateActivityNoteData, UpdateActivityNoteErrors, UpdateActivityNoteResponses, UpdateMethodData, UpdateMethodErrors, UpdateMethodResponses, UpdatePreferencesData, UpdatePreferencesErrors, UpdatePreferencesResponses, VisitActivityData, VisitActivityErrors, VisitActivityResponses } from './types.gen';
+import type { ArchiveContentData, ArchiveContentErrors, ArchiveContentResponses, CheckQuizData, CheckQuizErrors, CheckQuizResponses, ConfirmEditorialUploadData, ConfirmEditorialUploadErrors, ConfirmEditorialUploadResponses, ConfirmProjectUploadData, ConfirmProjectUploadErrors, ConfirmProjectUploadResponses, CreateActivityNoteData, CreateActivityNoteErrors, CreateActivityNoteResponses, CreateContentData, CreateContentErrors, CreateContentResponses, CreateContentTranslationData, CreateContentTranslationErrors, CreateContentTranslationResponses, CreateContentVersionData, CreateContentVersionErrors, CreateContentVersionResponses, CreateEditorialUploadData, CreateEditorialUploadErrors, CreateEditorialUploadResponses, CreateMethodData, CreateMethodErrors, CreateMethodFromTemplateData, CreateMethodFromTemplateErrors, CreateMethodFromTemplateResponses, CreateMethodResponses, CreateProjectData, CreateProjectErrors, CreateProjectResponses, CreateProjectUploadData, CreateProjectUploadErrors, CreateProjectUploadResponses, DeleteMethodData, DeleteMethodErrors, DeleteMethodResponses, DuplicateContentData, DuplicateContentErrors, DuplicateContentResponses, DuplicateMethodData, DuplicateMethodErrors, DuplicateMethodResponses, EnrollCourseData, EnrollCourseErrors, EnrollCourseResponses, FindActivityNoteData, FindActivityNoteErrors, FindActivityNoteResponses, GetActivityNoteData, GetActivityNoteErrors, GetActivityNoteResponses, GetActivityProgressData, GetActivityProgressErrors, GetActivityProgressResponses, GetAssetDownloadData, GetAssetDownloadErrors, GetAssetDownloadResponses, GetCatalogueFacetsData, GetCatalogueFacetsErrors, GetCatalogueFacetsResponses, GetCatalogueResourceBySlugData, GetCatalogueResourceBySlugErrors, GetCatalogueResourceBySlugResponses, GetCatalogueResourceData, GetCatalogueResourceErrors, GetCatalogueResourceResponses, GetCatalogueResourceVersionData, GetCatalogueResourceVersionErrors, GetCatalogueResourceVersionResponses, GetContentData, GetContentDependenciesData, GetContentDependenciesErrors, GetContentDependenciesResponses, GetContentErrors, GetContentReadinessData, GetContentReadinessErrors, GetContentReadinessResponses, GetContentResponses, GetCsrfTokenData, GetCsrfTokenErrors, GetCsrfTokenResponses, GetCurrentUserData, GetCurrentUserErrors, GetCurrentUserResponses, GetEditorialAssetData, GetEditorialAssetErrors, GetEditorialAssetPreviewData, GetEditorialAssetPreviewErrors, GetEditorialAssetPreviewResponses, GetEditorialAssetResponses, GetEditorialUploadPolicyData, GetEditorialUploadPolicyErrors, GetEditorialUploadPolicyResponses, GetEnrollmentData, GetEnrollmentErrors, GetEnrollmentResponses, GetLearningActivityData, GetLearningActivityErrors, GetLearningActivityResponses, GetLearningDashboardData, GetLearningDashboardErrors, GetLearningDashboardResponses, GetMediaProgressData, GetMediaProgressErrors, GetMediaProgressResponses, GetMethodData, GetMethodErrors, GetMethodResponses, GetMethodSourceUpdateData, GetMethodSourceUpdateErrors, GetMethodSourceUpdateResponses, GetMethodTemplateData, GetMethodTemplateErrors, GetMethodTemplateResponses, GetPreferencesData, GetPreferencesErrors, GetPreferencesResponses, GetProjectContextData, GetProjectContextErrors, GetProjectContextResponses, GetProjectData, GetProjectErrors, GetProjectFilePolicyData, GetProjectFilePolicyErrors, GetProjectFilePolicyResponses, GetProjectPresetData, GetProjectPresetErrors, GetProjectPresetResponses, GetProjectResponses, GetProjectRevisionData, GetProjectRevisionErrors, GetProjectRevisionResponses, GetProjectStatusData, GetProjectStatusErrors, GetProjectStatusResponses, GetProjectTemplateData, GetProjectTemplateErrors, GetProjectTemplateResponses, GetPublicContentData, GetPublicContentErrors, GetPublicContentResponses, GetQuizAttemptData, GetQuizAttemptErrors, GetQuizAttemptResponses, GetSelfAssessmentData, GetSelfAssessmentErrors, GetSelfAssessmentResponses, GetSystemHealthData, GetSystemHealthErrors, GetSystemHealthResponses, GetVideoMediaData, GetVideoMediaErrors, GetVideoMediaResponses, GetVideoPlaybackData, GetVideoPlaybackErrors, GetVideoPlaybackResponses, GetVideoStreamData, GetVideoStreamErrors, GetVideoStreamResponses, HeadVideoStreamData, HeadVideoStreamErrors, HeadVideoStreamResponses, ListContentRevisionsData, ListContentRevisionsErrors, ListContentRevisionsResponses, ListContentsData, ListContentsErrors, ListContentsResponses, ListMethodsData, ListMethodsErrors, ListMethodsResponses, ListNotificationsData, ListNotificationsErrors, ListNotificationsResponses, ListProjectFilesData, ListProjectFilesErrors, ListProjectFilesResponses, ListProjectRevisionsData, ListProjectRevisionsErrors, ListProjectRevisionsResponses, ListProjectsData, ListProjectsErrors, ListProjectsResponses, ListQuizAttemptsData, ListQuizAttemptsErrors, ListQuizAttemptsResponses, ListSelfAssessmentsData, ListSelfAssessmentsErrors, ListSelfAssessmentsResponses, LoginData, LoginErrors, LoginResponses, LogoutData, LogoutErrors, LogoutResponses, PreviewContentData, PreviewContentErrors, PreviewContentResponses, PublishContentData, PublishContentErrors, PublishContentResponses, RegisterData, RegisterErrors, RegisterResponses, ReplaceContentCompositionData, ReplaceContentCompositionErrors, ReplaceContentCompositionResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, RetryNotificationData, RetryNotificationErrors, RetryNotificationResponses, RevealSolutionData, RevealSolutionErrors, RevealSolutionResponses, SaveContentMetadataData, SaveContentMetadataErrors, SaveContentMetadataResponses, SaveContentRevisionData, SaveContentRevisionErrors, SaveContentRevisionResponses, SaveProjectData, SaveProjectErrors, SaveProjectResponses, SearchCatalogueData, SearchCatalogueErrors, SearchCatalogueResponses, SetActivityProgressData, SetActivityProgressErrors, SetActivityProgressResponses, SetMediaProgressData, SetMediaProgressErrors, SetMediaProgressResponses, SubmitQuizData, SubmitQuizErrors, SubmitQuizResponses, SubmitSelfAssessmentData, SubmitSelfAssessmentErrors, SubmitSelfAssessmentResponses, TransitionContentData, TransitionContentErrors, TransitionContentResponses, UpdateActivityNoteData, UpdateActivityNoteErrors, UpdateActivityNoteResponses, UpdateMethodData, UpdateMethodErrors, UpdateMethodResponses, UpdatePreferencesData, UpdatePreferencesErrors, UpdatePreferencesResponses, VisitActivityData, VisitActivityErrors, VisitActivityResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -832,7 +832,7 @@ export const listProjects = <ThrowOnError extends boolean = false>(options?: Opt
 /**
  * Créer sa production depuis une activité exacte disponible.
  *
- * Compte actif, permissionprojects.write, propriétaire de session, CSRF et X-Account-Context attendu. Header absent428, compte différent409 ; le header ne choisit jamais le propriétaire. Aucun retry implicite.
+ * Compte actif, permission projects.write, propriétaire de session, CSRF et X-Account-Context attendu. Header absent : 428, compte différent : 409 ; le header ne choisit jamais le propriétaire. Aucun retry implicite.
  */
 export const createProject = <ThrowOnError extends boolean = false>(options: Options<CreateProjectData, ThrowOnError>): RequestResult<CreateProjectResponses, CreateProjectErrors, ThrowOnError> => (options.client ?? client).post<CreateProjectResponses, CreateProjectErrors, ThrowOnError>({
     security: [{
@@ -864,7 +864,7 @@ export const getProject = <ThrowOnError extends boolean = false>(options: Option
 /**
  * Sauvegarder une nouvelle révision personnelle exacte.
  *
- * Compte actif, permissionprojects.write, propriétaire de session, CSRF et X-Account-Context attendu. Header absent428, compte différent409 ; le header ne choisit jamais le propriétaire. Aucun retry implicite.
+ * Compte actif, permission projects.write, propriétaire de session, CSRF et X-Account-Context attendu. Header absent : 428, compte différent : 409 ; le header ne choisit jamais le propriétaire. Aucun retry implicite.
  */
 export const saveProject = <ThrowOnError extends boolean = false>(options: Options<SaveProjectData, ThrowOnError>): RequestResult<SaveProjectResponses, SaveProjectErrors, ThrowOnError> => (options.client ?? client).patch<SaveProjectResponses, SaveProjectErrors, ThrowOnError>({
     security: [{
@@ -920,7 +920,7 @@ export const getProjectContext = <ThrowOnError extends boolean = false>(options:
 });
 
 /**
- * Lire le statut déclaratif séparé du texte àETag.
+ * Lire le statut déclaratif séparé du texte à ETag.
  */
 export const getProjectStatus = <ThrowOnError extends boolean = false>(options: Options<GetProjectStatusData, ThrowOnError>): RequestResult<GetProjectStatusResponses, GetProjectStatusErrors, ThrowOnError> => (options.client ?? client).get<GetProjectStatusResponses, GetProjectStatusErrors, ThrowOnError>({
     security: [{
@@ -948,7 +948,7 @@ export const listSelfAssessments = <ThrowOnError extends boolean = false>(option
 /**
  * Renseigner une autoévaluation déclarative pour cette révision.
  *
- * Compte actif, permissionprojects.write, propriétaire de session, CSRF et X-Account-Context attendu. Header absent428, compte différent409 ; le header ne choisit jamais le propriétaire. Aucun retry implicite.
+ * Compte actif, permission projects.write, propriétaire de session, CSRF et X-Account-Context attendu. Header absent : 428, compte différent : 409 ; le header ne choisit jamais le propriétaire. Aucun retry implicite.
  */
 export const submitSelfAssessment = <ThrowOnError extends boolean = false>(options: Options<SubmitSelfAssessmentData, ThrowOnError>): RequestResult<SubmitSelfAssessmentResponses, SubmitSelfAssessmentErrors, ThrowOnError> => (options.client ?? client).post<SubmitSelfAssessmentResponses, SubmitSelfAssessmentErrors, ThrowOnError>({
     security: [{
@@ -980,7 +980,7 @@ export const getSelfAssessment = <ThrowOnError extends boolean = false>(options:
 /**
  * Consulter volontairement le corrigé exact après réautorisation courante.
  *
- * Compte actif, permissionprojects.write, propriétaire de session, CSRF et X-Account-Context attendu. Header absent428, compte différent409 ; le header ne choisit jamais le propriétaire. Aucun retry implicite.
+ * Compte actif, permission projects.write, propriétaire de session, CSRF et X-Account-Context attendu. Header absent : 428, compte différent : 409 ; le header ne choisit jamais le propriétaire. Aucun retry implicite.
  */
 export const revealSolution = <ThrowOnError extends boolean = false>(options: Options<RevealSolutionData, ThrowOnError>): RequestResult<RevealSolutionResponses, RevealSolutionErrors, ThrowOnError> => (options.client ?? client).post<RevealSolutionResponses, RevealSolutionErrors, ThrowOnError>({
     security: [{
@@ -1004,7 +1004,7 @@ export const getProjectTemplate = <ThrowOnError extends boolean = false>(options
 /**
  * Préparer explicitement une grilleCMS depuis une référence serveur protégée.
  *
- * Permissioncontent.read requise. Référence pédagogique protégée, sans seed/publication ; l’interface confirme tout remplacement d’une grille existante.
+ * Permission content.read requise. Référence pédagogique protégée, sans seed/publication ; l’interface confirme tout remplacement d’une grille existante.
  */
 export const getProjectPreset = <ThrowOnError extends boolean = false>(options: Options<GetProjectPresetData, ThrowOnError>): RequestResult<GetProjectPresetResponses, GetProjectPresetErrors, ThrowOnError> => (options.client ?? client).get<GetProjectPresetResponses, GetProjectPresetErrors, ThrowOnError>({
     security: [{
@@ -1014,4 +1014,274 @@ export const getProjectPreset = <ThrowOnError extends boolean = false>(options: 
         }],
     url: '/admin/project-presets/{caseCode}',
     ...options
+});
+
+/**
+ * Lire formats et limites avant dépôt dans son projet.
+ */
+export const getProjectFilePolicy = <ThrowOnError extends boolean = false>(options: Options<GetProjectFilePolicyData, ThrowOnError>): RequestResult<GetProjectFilePolicyResponses, GetProjectFilePolicyErrors, ThrowOnError> => (options.client ?? client).get<GetProjectFilePolicyResponses, GetProjectFilePolicyErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/projects/{projectId}/file-policy',
+    ...options
+});
+
+/**
+ * Lister les fichiers du propriétaire, sans URL objet permanente.
+ */
+export const listProjectFiles = <ThrowOnError extends boolean = false>(options: Options<ListProjectFilesData, ThrowOnError>): RequestResult<ListProjectFilesResponses, ListProjectFilesErrors, ThrowOnError> => (options.client ?? client).get<ListProjectFilesResponses, ListProjectFilesErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/projects/{projectId}/attachments',
+    ...options
+});
+
+/**
+ * Confirmer un transfert et contrôler les octets réellement reçus.
+ *
+ * Session active, permission et relation métier revérifiées côté serveur ; CSRF et X-Account-Context attendu. Aucun propriétaire ou clé objet arbitraire. Aucun retry automatique de mutation.
+ */
+export const confirmProjectUpload = <ThrowOnError extends boolean = false>(options: Options<ConfirmProjectUploadData, ThrowOnError>): RequestResult<ConfirmProjectUploadResponses, ConfirmProjectUploadErrors, ThrowOnError> => (options.client ?? client).post<ConfirmProjectUploadResponses, ConfirmProjectUploadErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/projects/{projectId}/attachments',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Autoriser un transfert opaque sous quotas du projet.
+ *
+ * Session active, permission et relation métier revérifiées côté serveur ; CSRF et X-Account-Context attendu. Aucun propriétaire ou clé objet arbitraire. Aucun retry automatique de mutation.
+ */
+export const createProjectUpload = <ThrowOnError extends boolean = false>(options: Options<CreateProjectUploadData, ThrowOnError>): RequestResult<CreateProjectUploadResponses, CreateProjectUploadErrors, ThrowOnError> => (options.client ?? client).post<CreateProjectUploadResponses, CreateProjectUploadErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/projects/{projectId}/upload-intents',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Lire la politique des ressources éditoriales autorisées.
+ */
+export const getEditorialUploadPolicy = <ThrowOnError extends boolean = false>(options?: Options<GetEditorialUploadPolicyData, ThrowOnError>): RequestResult<GetEditorialUploadPolicyResponses, GetEditorialUploadPolicyErrors, ThrowOnError> => (options?.client ?? client).get<GetEditorialUploadPolicyResponses, GetEditorialUploadPolicyErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/assets/upload-policy',
+    ...options
+});
+
+/**
+ * Préparer une ressource pour la version et langue éditoriales exactes.
+ *
+ * Session active, permission et relation métier revérifiées côté serveur ; CSRF et X-Account-Context attendu. Aucun propriétaire ou clé objet arbitraire. Aucun retry automatique de mutation.
+ */
+export const createEditorialUpload = <ThrowOnError extends boolean = false>(options: Options<CreateEditorialUploadData, ThrowOnError>): RequestResult<CreateEditorialUploadResponses, CreateEditorialUploadErrors, ThrowOnError> => (options.client ?? client).post<CreateEditorialUploadResponses, CreateEditorialUploadErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/assets/upload-intents',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Lire un fichier éditorial autorisé, y compris en brouillon.
+ */
+export const getEditorialAsset = <ThrowOnError extends boolean = false>(options: Options<GetEditorialAssetData, ThrowOnError>): RequestResult<GetEditorialAssetResponses, GetEditorialAssetErrors, ThrowOnError> => (options.client ?? client).get<GetEditorialAssetResponses, GetEditorialAssetErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/assets/{assetId}',
+    ...options
+});
+
+/**
+ * Contrôler format, taille et contenu avant usage éditorial.
+ *
+ * Session active, permission et relation métier revérifiées côté serveur ; CSRF et X-Account-Context attendu. Aucun propriétaire ou clé objet arbitraire. Aucun retry automatique de mutation.
+ */
+export const confirmEditorialUpload = <ThrowOnError extends boolean = false>(options: Options<ConfirmEditorialUploadData, ThrowOnError>): RequestResult<ConfirmEditorialUploadResponses, ConfirmEditorialUploadErrors, ThrowOnError> => (options.client ?? client).post<ConfirmEditorialUploadResponses, ConfirmEditorialUploadErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/assets/{assetId}/confirmations',
+    ...options
+});
+
+/**
+ * Prévisualiser une ressource strictement éditoriale sous content.read.
+ *
+ * Session active, permission et relation métier revérifiées côté serveur ; CSRF et X-Account-Context attendu. Aucun propriétaire ou clé objet arbitraire. Aucun retry automatique de mutation.
+ */
+export const getEditorialAssetPreview = <ThrowOnError extends boolean = false>(options: Options<GetEditorialAssetPreviewData, ThrowOnError>): RequestResult<GetEditorialAssetPreviewResponses, GetEditorialAssetPreviewErrors, ThrowOnError> => (options.client ?? client).post<GetEditorialAssetPreviewResponses, GetEditorialAssetPreviewErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/assets/{assetId}/download-access',
+    ...options
+});
+
+/**
+ * Réautoriser un fichier personnel ou une ressource éditoriale FREE publiée.
+ *
+ * Public anonyme : CSRF obligatoire, contexte de publication exacte qui référence cet asset. Authentifié : X-Account-Context également obligatoire. Fichier personnel : propriétaire uniquement, contexte nullable. PROTECTED refusé tant que les droits P12 ne sont pas disponibles ; parent inscrit retiré ou sans traduction refusé. URL courte à récupérer sans cookie, jamais journalisée.
+ */
+export const getAssetDownload = <ThrowOnError extends boolean = false>(options: Options<GetAssetDownloadData, ThrowOnError>): RequestResult<GetAssetDownloadResponses, GetAssetDownloadErrors, ThrowOnError> => (options.client ?? client).post<GetAssetDownloadResponses, GetAssetDownloadErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/assets/{assetId}/download-access',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Lire les états et tentatives de la file sans charge utile sensible.
+ *
+ * Permission notifications.read. Statuts réels, ordre createdAt décroissant puis id ; aucune absence de transport présentée comme SENT.
+ */
+export const listNotifications = <ThrowOnError extends boolean = false>(options?: Options<ListNotificationsData, ThrowOnError>): RequestResult<ListNotificationsResponses, ListNotificationsErrors, ThrowOnError> => (options?.client ?? client).get<ListNotificationsResponses, ListNotificationsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/notifications',
+    ...options
+});
+
+/**
+ * Reprendre explicitement une notification éligible après rapprochement.
+ *
+ * Permission notifications.manage, CSRF, compte attendu et motif obligatoire. INDETERMINATE impose la reconnaissance du risque de doublon. Pas de renvoi d’un reset expiré ni de contenu arbitraire. La réponse annonce une reprise en file, pas une livraison.
+ */
+export const retryNotification = <ThrowOnError extends boolean = false>(options: Options<RetryNotificationData, ThrowOnError>): RequestResult<RetryNotificationResponses, RetryNotificationErrors, ThrowOnError> => (options.client ?? client).post<RetryNotificationResponses, RetryNotificationErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/notifications/{id}/retry',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Lire la disponibilité réelle d’un média publié dans son contexte.
+ */
+export const getVideoMedia = <ThrowOnError extends boolean = false>(options: Options<GetVideoMediaData, ThrowOnError>): RequestResult<GetVideoMediaResponses, GetVideoMediaErrors, ThrowOnError> => (options.client ?? client).get<GetVideoMediaResponses, GetVideoMediaErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/media/{mediaId}',
+    ...options
+});
+
+/**
+ * Autoriser explicitement une lecture locale temporaire.
+ *
+ * CSRF obligatoire, y compris anonyme. Compte attendu si authentifié. Autorisation canonique de publication FREE/référence/locale/chaîne ; PROTECTED refusé avant droits P12. Provider absent ne crée aucun faux lecteur.
+ */
+export const getVideoPlayback = <ThrowOnError extends boolean = false>(options: Options<GetVideoPlaybackData, ThrowOnError>): RequestResult<GetVideoPlaybackResponses, GetVideoPlaybackErrors, ThrowOnError> => (options.client ?? client).post<GetVideoPlaybackResponses, GetVideoPlaybackErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/media/{mediaId}/playback-access',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Lire les octets MP4 avec un grant court et une plage unique.
+ *
+ * Bearer de lecture temporaire, pas une session d’authentification. Grant opaque validé par hash/expiration et mediaId, jamais journalisé. Une requête débutée avant expiration peut finir son flux ; nouvelle requête après expiration refusée. Accepte une plage bytes unique, sans chemin client ni URL distante.
+ */
+export const getVideoStream = <ThrowOnError extends boolean = false>(options: Options<GetVideoStreamData, ThrowOnError>): RequestResult<GetVideoStreamResponses, GetVideoStreamErrors, ThrowOnError> => (options.client ?? client).get<GetVideoStreamResponses, GetVideoStreamErrors, ThrowOnError>({ url: '/media/{mediaId}/stream', ...options });
+
+/**
+ * Lire les headers du flux sans corps vidéo.
+ */
+export const headVideoStream = <ThrowOnError extends boolean = false>(options: Options<HeadVideoStreamData, ThrowOnError>): RequestResult<HeadVideoStreamResponses, HeadVideoStreamErrors, ThrowOnError> => (options.client ?? client).head<HeadVideoStreamResponses, HeadVideoStreamErrors, ThrowOnError>({ url: '/media/{mediaId}/stream', ...options });
+
+/**
+ * Lire sa position propre au média, sans inventer de sauvegarde.
+ *
+ * Permission media.progress.read et contexte pédagogique actuel autorisé. Un GET initial ne crée aucune ligne.
+ */
+export const getMediaProgress = <ThrowOnError extends boolean = false>(options: Options<GetMediaProgressData, ThrowOnError>): RequestResult<GetMediaProgressResponses, GetMediaProgressErrors, ThrowOnError> => (options.client ?? client).get<GetMediaProgressResponses, GetMediaProgressErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/media-progress/{mediaId}',
+    ...options
+});
+
+/**
+ * Conserver une position bornée sous révision et compte attendus.
+ *
+ * Permission media.progress.write, CSRF, X-Account-Context, If-Match et contrôle serveur de la durée. Propriétaire de session, médias/langues distincts, aucune validation pédagogique déduite.
+ */
+export const setMediaProgress = <ThrowOnError extends boolean = false>(options: Options<SetMediaProgressData, ThrowOnError>): RequestResult<SetMediaProgressResponses, SetMediaProgressErrors, ThrowOnError> => (options.client ?? client).put<SetMediaProgressResponses, SetMediaProgressErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/media-progress/{mediaId}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
 });

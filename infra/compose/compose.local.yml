@@ -50,7 +50,8 @@ services:
       - -ip.bind=0.0.0.0
       - -master.volumeSizeLimitMB=64
       - -master.telemetry=false
-      - -volume.max=8
+      # Two application buckets and the periodic filer journal have separate collections.
+      - -volume.max=24
       - -filer
       - -s3
       - -s3.port=8333

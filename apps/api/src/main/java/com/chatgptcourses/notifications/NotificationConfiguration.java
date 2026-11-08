@@ -1,22 +1,18 @@
 package com.chatgptcourses.notifications;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties(NotificationSettings.class)
+@EnableConfigurationProperties({NotificationSettings.class,OutboxSettings.class})
+@EnableScheduling
 class NotificationConfiguration {
     @Bean
-    ThreadPoolTaskExecutor passwordResetMailExecutor() {
-        var executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(1);
-        executor.setMaxPoolSize(2);
-        executor.setQueueCapacity(100);
-        executor.setThreadNamePrefix("identity-mail-");
-        executor.setWaitForTasksToCompleteOnShutdown(true);
-        executor.setAwaitTerminationSeconds(10);
-        return executor;
+    ThreadPoolTaskScheduler notificationOutboxScheduler(){
+        var scheduler=new ThreadPoolTaskScheduler();scheduler.setPoolSize(1);scheduler.setThreadNamePrefix("notification-outbox-");
+        scheduler.setWaitForTasksToCompleteOnShutdown(true);scheduler.setAwaitTerminationSeconds(12);return scheduler;
     }
 }

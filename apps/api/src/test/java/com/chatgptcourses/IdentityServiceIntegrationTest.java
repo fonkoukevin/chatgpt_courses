@@ -9,6 +9,8 @@ import com.chatgptcourses.identity.service.AccountProfile;
 import com.chatgptcourses.identity.service.IdentityService;
 import com.chatgptcourses.identity.validation.AccountPasswordValidator;
 import com.chatgptcourses.notifications.PasswordResetNotifier;
+import com.chatgptcourses.notifications.NotificationSender;
+import com.chatgptcourses.notifications.NotificationTypes;
 import com.chatgptcourses.shared.http.ApiError;
 import com.chatgptcourses.shared.http.ApiException;
 import com.chatgptcourses.shared.http.EntityTags;
@@ -49,7 +51,8 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
-        "APP_ENV=test", "APP_PUBLIC_ORIGIN=http://localhost:3000", "SESSION_COOKIE_SECURE=false", "debug=false"
+        "APP_ENV=test", "APP_PUBLIC_ORIGIN=http://localhost:3000", "SESSION_COOKIE_SECURE=false", "debug=false",
+        "MAIL_MODE=local"
 })
 @ActiveProfiles("test")
 @Testcontainers
@@ -60,6 +63,7 @@ class IdentityServiceIntegrationTest {
             "postgres@sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42").asCompatibleSubstituteFor("postgres"));
     @DynamicPropertySource
     static void database(DynamicPropertyRegistry registry) {
+        registry.add("NOTIFICATION_OUTBOX_KEY", NotificationTestKeys::randomKey);
         registry.add("POSTGRES_HOST", POSTGRES::getHost);
         registry.add("POSTGRES_PORT", () -> POSTGRES.getMappedPort(5432));
         registry.add("POSTGRES_DB", POSTGRES::getDatabaseName);
@@ -273,5 +277,14 @@ class IdentityServiceIntegrationTest {
     @TestConfiguration
     static class TestMailConfiguration {
         @Bean @Primary MailCapture capturedPasswordResetMail() { return new MailCapture(); }
+        // This identity-domain suite exercises the durable worker with a delivery double.
+        // Real SMTP transport is covered by NotificationOutboxIntegrationTest, never shared Mailpit.
+        @Bean @Primary NotificationSender isolatedNotificationDelivery(MailCapture capture) {
+            return (id, type, payload) -> {
+                if (type == NotificationTypes.Type.PASSWORD_RESET) {
+                    capture.send(payload.recipient(), payload.locale(), payload.token(), payload.tokenExpiresAt());
+                }
+            };
+        }
     }
 }

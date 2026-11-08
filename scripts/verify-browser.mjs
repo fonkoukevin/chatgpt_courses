@@ -5,6 +5,7 @@ import { createServer } from 'node:net';
 import { join } from 'node:path';
 import { environment, preflightServers, root, runtimeDir, start, terminateOwned, waitFor, windows } from './lib/runtime.mjs';
 import { createBrowserDatabase, stopBrowserDatabase } from './lib/browser-database.mjs';
+import { createBrowserServices, observeBrowserStorage, setBrowserServicePaused, stopBrowserService } from './lib/browser-services.mjs';
 
 const env = environment();
 const phase = process.argv[2] ?? 'P01';
@@ -17,9 +18,9 @@ for (let index = 3; index < process.argv.length; index += 2) {
   else throw new Error('Diagnostic permis : --grep expression et --repeat-each 1..20.');
   diagnosticArgs.push(flag, value);
 }
-if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09'].includes(phase)) throw new Error('Phase de recette inconnue : P01, P02 ou P04 à P09 attendu.');
+if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10'].includes(phase)) throw new Error('Phase de recette inconnue : P01, P02 ou P04 à P10 attendu.');
 const needsApi = phase !== 'P02';
-const isolatedDatabase = ['P05', 'P06', 'P07', 'P08', 'P09'].includes(phase);
+const isolatedDatabase = ['P05', 'P06', 'P07', 'P08', 'P09', 'P10'].includes(phase);
 if (!['local', 'test'].includes(env.APP_ENV)) throw new Error('Vérification navigateur réservée à local/test.');
 const port = (value, fallback) => {
   const text = value ?? String(fallback);
@@ -57,11 +58,13 @@ let stopping = false;
 let controlQueue = Promise.resolve();
 let verificationError;
 let database;
+let services = [];
 
 function save() {
   writeFileSync(manifest, JSON.stringify({ root, runId, supervisor: process.pid,
     children: children.map(({ name, child, terminated }) => ({ name, pid: child.pid, terminated: Boolean(terminated) })),
-    ...(database ? { database: { id: database.id, name: database.name, stopped: database.stopped } } : {}) }, null, 2), { mode: 0o600 });
+    ...(database ? { database: { id: database.id, name: database.name, stopped: database.stopped } } : {}),
+    services: services.map(({ kind, id, name, stopped, paused }) => ({ kind, id, name, stopped, paused: Boolean(paused) })) }, null, 2), { mode: 0o600 });
 }
 function launch(name, executable, args, options = {}) {
   const handle = openSync(join(runDirectory, `${name}-${children.length}.log`), 'a', 0o600);
@@ -121,12 +124,17 @@ const control = createServer((socket) => {
     handled = true;
     let message;
     try { message = JSON.parse(input.slice(0, input.indexOf('\n'))); } catch { return socket.destroy(); }
-    if (message.token !== token || !['stop-api', 'start-api'].includes(message.operation)) return socket.destroy();
+    if (message.token !== token || !['stop-api', 'start-api', 'pause-mailpit', 'resume-mailpit'].includes(message.operation)) return socket.destroy();
     controlQueue = controlQueue.then(async () => {
       if (stopping) throw new Error('Arrêt en cours.');
       if (message.operation === 'stop-api') {
         await terminate(api);
         return { webPid: web.child.pid };
+      }
+      if (['pause-mailpit', 'resume-mailpit'].includes(message.operation)) {
+        if (phase !== 'P10') throw new Error('Contrôle de service réservé à la recette médias.');
+        setBrowserServicePaused(services.find(({ kind }) => kind === 'mailpit'), message.operation === 'pause-mailpit'); save();
+        return { webPid: web.child.pid, apiPid: api?.child.pid };
       }
       return startApi();
     });
@@ -143,6 +151,13 @@ const interrupted = new Promise((_, reject) => {
 interrupted.catch(() => {}); // Also handle interruption during IPC initialization.
 try {
   if (isolatedDatabase) { database = await createBrowserDatabase(env, runDirectory, runId, (record) => { database = record; save(); }); save(); }
+  if (phase === 'P10') {
+    services = await createBrowserServices(env, runDirectory, runId, (records) => { services = records; save(); });
+    env.VIDEO_ENABLED = 'true'; env.VIDEO_PROVIDER = 'local-test'; env.VIDEO_LOCAL_ROOT = join(runDirectory, 'private-video');
+    mkdirSync(env.VIDEO_LOCAL_ROOT, { recursive: true, mode: 0o700 });
+    env.COURSES_BROWSER_PRIVATE_DIRECTORY = runDirectory;
+    save();
+  }
   await new Promise((resolveListen, rejectListen) => {
     control.once('error', rejectListen);
     control.listen(ipc, resolveListen);
@@ -212,10 +227,15 @@ try {
   ]);
   const cleanupErrors = results.filter((result) => result.status === 'rejected').map((result) => result.reason);
   try { stopBrowserDatabase(database); save(); } catch (error) { cleanupErrors.push(error); }
+  for (const service of services.toReversed()) {
+    if (service.kind === 's3') { try { service.observation = observeBrowserStorage(service); } catch { service.observation = { available: false }; } }
+    try { stopBrowserService(service); save(); } catch (error) { cleanupErrors.push(error); }
+  }
   try {
     writeFileSync(join(evidence, 'session.json'), JSON.stringify({ runId, completedAt: new Date().toISOString(), selection: selected,
       result: verificationError || cleanupErrors.length ? 'failed' : 'passed', cleanupConfirmed: cleanupErrors.length === 0,
       ...(database ? { isolatedPostgres: { image: database.image, tmpfs: true, stopped: database.stopped } } : {}),
+      isolatedServices: services.map(({ kind, image, stopped, observation }) => ({ kind, image, tmpfs: true, stopped, ...(observation ? { observation } : {}) })),
       processes: children.map(({ name, child, terminated }) => ({ name, pid: child.pid, terminated })) }, null, 2));
   } catch (error) { cleanupErrors.push(error); }
   if (cleanupErrors.length) {

@@ -218,7 +218,7 @@ Les lectures privées sont `private, no-store`, sous permission `learning.read` 
 
 L’inscription est unique par `(owner, courseVersion)` et ne crée aucun droit acheté. Un parcours publié PROTECTED peut être commencé s’il contient une activité FREE disponible ; chaque action d’activité conserve son contrôle propre. Programme, ordre et versions sont capturés. Le dénominateur compte les **versions d’activité distinctes**, y compris protégées/retirées ; même activité/version répétée dédupliquée, deux versions de la même identité distinctes. Les GET d’activité/progrès exigent donc `activityVersionId` : aucun premier élément choisi implicitement. `LearningActivity.accessStatus` et `availability` décrivent toute la chaîne parcours/module/activité ; un parent indisponible neutralise le corps enfant. ACTIVE/PROTECTED/UNAVAILABLE sont réels ; aucun état commercial expiré/révoqué n’est fabriqué avant les droits correspondants.
 
-Visite/reprise, `readAt`, `completedAt`, réussite de quiz et projet sont des faits distincts. Le pourcentage se rapporte au dénominateur du snapshot ; un quiz réussi ne termine pas automatiquement l’activité et ne valide aucun projet (`projectAvailability=NOT_AVAILABLE` avant P09). Une visite ne change pas la révision du progrès. Progrès et note ont leurs tags forts séparés `"activity-progress-{id}-r{revision}"` et `"activity-note-{id}-r{revision}"` ; PUT/PATCH exigent If-Match après propriété/verrou, 428/412 sans écrasement. Les enveloppes dynamiques n’utilisent pas ces tags.
+Visite/reprise, `readAt`, `completedAt`, réussite de quiz et projet sont des faits distincts. Le pourcentage se rapporte au dénominateur du snapshot ; un quiz réussi ne termine pas automatiquement l’activité et ne valide aucun projet. `ProgressTotals.projectAvailability=NOT_AVAILABLE` désigne le fait agrégé d’apprentissage non défini ; il ne signifie pas l’absence de l’atelier personnel P09. Le tableau de bord pointe vers les projets sans fabriquer de taux de compétence. Une visite ne change pas la révision du progrès. Progrès et note ont leurs tags forts séparés `"activity-progress-{id}-r{revision}"` et `"activity-note-{id}-r{revision}"` ; PUT/PATCH exigent If-Match après propriété/verrou, 428/412 sans écrasement. Les enveloppes dynamiques n’utilisent pas ces tags.
 
 Une note est unique par propriétaire/version d’activité, langue originale fixée à création. Texte 0..16000 caractères, JSON UTF-8 au plus 48 KiB, Unicode valide sans NUL ; note vide explicitement sauvegardable. Elle reste lisible/modifiable après retrait sans révéler le contenu réservé. FR/EN partage le même progrès et l’historique d’une version pédagogique équivalente, mais ne traduit pas la note. Les lectures privées et le client n’envoient pas son texte aux mesures ou aux journaux.
 
@@ -228,17 +228,47 @@ Une note est unique par propriétaire/version d’activité, langue originale fi
 
 Dashboard borné aux cent inscriptions récentes, historique des tentatives page 0..1000000 et pageSize 1..100, ordre submittedAt DESC puis id. Reprise : dernière activité encore accessible, sinon première non terminée accessible, sinon première accessible, toujours dans la version inscrite. Les méthodes récentes ne chargent pas leurs textes ; permission absente annoncée FORBIDDEN. Aucun projet, média ou diagnostic facultatif fictif ne complète ces données. Les contrôles client vérifient aussi cohérence des identités/versions, sommes de points, résultat et tags ; 412/428/503 restent distincts sans répétition automatique de mutation.
 
-## Projets — planifié P09
+## Projets, autoévaluation et corrigé — P09
 
 | Méthode et route | Fonction et contrôle |
 | --- | --- |
-| `GET /me/projects` / `POST /me/projects` | Liste du propriétaire ; création à partir d’une activité/version accessible |
-| `GET/PATCH /me/projects/{projectId}` | Texte structuré, état et révision ; `If-Match` sur sauvegarde |
-| `GET /me/projects/{projectId}/revisions` | Historique privé, pagination et contenu accessible au propriétaire |
-| `POST /me/projects/{projectId}/self-assessments` | Révision de production, grille/version et vérifications déclarées ; score calculé mais identifié comme déclaré |
-| `POST /activities/{activityId}/solution-reveals` | Action volontaire/tentative préalable selon activité ; consultation tracée sans validation du projet |
+| `GET /project-templates/{activityId}/versions/{versionId}?locale` | Brief public d’une activité FREE publiée et configurée, avec grille sans identifiant d’instantané personnel ; aucune correction initiale |
+| `GET /me/projects` | Recherche propriétaire `q`, état dérivé, activité/version et pagination ; résumés sans prose complète |
+| `POST /me/projects` | `creationId`, origine exacte, inscription facultative, `fields`, `stage` ; 201 à la création, 200 au rejeu identique, Location et ETag |
+| `GET/PATCH /me/projects/{id}` | Production propriétaire et grille capturée ; PATCH crée une révision personnelle avec If-Match |
+| `GET /me/projects/{id}/status` | Stade, état dérivé et autoévaluation de la révision courante, séparés de l’ETag du texte |
+| `GET /me/projects/{id}/context?locale` | Contexte pédagogique réautorisé, IDs d’activité/version explicites ; aucune traduction du texte personnel |
+| `GET /me/projects/{id}/revisions` | Page de résumés sans champs de production |
+| `GET /me/projects/{id}/revisions/{revisionId}` | Une révision personnelle complète, avec son auteur et sa date |
+| `POST /me/projects/{id}/self-assessments` | `submissionId`, révision personnelle, grille, vingt contrôles et quatre déclarations bloquantes ; If-Match, réponse 201 |
+| `GET /me/projects/{id}/self-assessments` | Page de résumés sans commentaires ni liste de réponses complète |
+| `GET /me/projects/{id}/self-assessments/{assessmentId}` | Détail immuable d’une preuve du propriétaire |
+| `POST /activities/{activityId}/solution-reveals` | Révision personnelle et origine exacte ; consultation volontaire réautorisée et tracée, réponse 200 |
+| `GET /admin/project-presets/{caseCode}?locale` | Références BR01/BR02 FR/EN depuis une ressource serveur, permission `content.read` ; aucun seed ni publication |
 
-Les résultats de quiz, autoévaluations et futures revues humaines ont des types distincts. Un DTO d’évaluation contient au minimum `method`, `projectRevisionId`, `rubricVersionId`, `score`, `blockingIssues`, `evaluatedAt`, `evaluatorId?`, `declaredByUser`. La revue humaine reste désactivée tant que le service commercial n’existe pas.
+Les types exacts sont dans [OpenAPI](api/openapi.yaml). La validation locale du périmètre technique compte **112 tests Java**, dont huit de service P09 et neuf HTTP avec les vrais filtres et PostgreSQL, puis **58 tests unitaires client**, dont sept P09 avec réponses réseau simulées. La recette P09 complète sans instrumentation réussit **8/8 en 59,9 s**. Résultats globaux, refus d’accusé intermédiaire non reproduit sans cause confirmée et limites sont conservés dans [evidence/P09.md](evidence/P09.md) ; aucune intégration externe ou production n’en est déduite.
+
+### Production, révision et compte attendu
+
+`ProjectFields` contient titre, langue originale, sept sections (`objective`, `scope`, `method`, `timeline`, `budget`, `clarifications`, `nextStep`) et `externalText` indépendant. Titre 1..240, sections 0..8000, texte collé 0..32000 caractères ; ensemble JSON UTF-8 ≤48 KiB, Unicode valide sans NUL. Le propriétaire vient de la session ; aucun score, rôle ou propriétaire reçu en JSON ne fait autorité. Création et sauvegarde acceptent seulement `DRAFT` ou `READY_FOR_SELF_ASSESSMENT`. READY exige un texte non blanc dans une section ou le texte collé, sans prétendre vérifier sa qualité.
+
+Permissions `projects.read` et `projects.write`, propriété Spring, réponses privées `private, no-store`, mutations CSRF et `X-Account-Context`. Compte attendu absent : 428 ; différent de la session : 409 ; UUID malformé : 400. Le header est une précondition, jamais le choix du propriétaire. Les objets d’un autre compte répondent 404. PATCH et autoévaluation comparent If-Match après verrou/propriété : absence 428, révision dépassée 412, sans écrasement ni retry automatique.
+
+L’ETag fort `"project-{id}-r{revision}"` couvre `ProjectView`, dont le stade, l’origine et la grille immuables. Une sauvegarde réellement identique conserve cet ETag ; une nouvelle production ajoute une révision. Autoévaluation, statut et contexte ne modifient pas le compteur de texte. `ProjectStatus.state` distingue DRAFT, READY_FOR_SELF_ASSESSMENT, SELF_ASSESSED et NEEDS_REVISION ; une ancienne évaluation ne devient pas celle d’une nouvelle production. Les GET d’historique sont paginés (page 0..1000000, taille 1..100), révisions par numéro décroissant et évaluations par date puis numéro d’évaluation décroissants.
+
+La création est idempotente par propriétaire et `creationId` : même corps retrouve le projet, autre corps 409. L’autoévaluation utilise son propre `submissionId` et une empreinte du corps ; un rejeu déjà committé est retrouvé avant comparaison If-Match, sans le rattacher à une nouvelle révision. Les réponses ambiguës restent à rapprocher explicitement, sans répétition automatique.
+
+### Grille déclarative et correction protégée
+
+`ContentDocument.projectPolicy` est nullable : absence historique signifie atelier non configuré, pas grille inventée. Un brouillon peut être incomplet ; publication exige vingt critères à un point, quatre erreurs explicites, un seuil de 1..20 et une règle `EXPLICIT` ou `AFTER_SUBMISSION`. Catégories dérivées des clés fidelity/scope/budget/schedule/presentation, sans changement du modèle global de grille. Les préparations de référence proposent 16/20 ; BR02 adapte les critères au dossier fourni. Politique/grille restent gelées avec la version pédagogique et équivalentes entre traductions.
+
+`SelfAssessmentView` expose `method=SELF_ASSESSMENT`, `projectRevisionId`, `rubricVersionId`, `scorePoints`, `maxPoints`, `passPoints`, `thresholdMet`, `needsRevision`, déclarations/commentaires, date, auteur, `evaluatorId=null` et `declaredByUser=true`. Spring somme les contrôles déclarés satisfaits ; une erreur bloquante ou un score sous le seuil impose NEEDS_REVISION. Aucun service ne vérifie automatiquement la vérité de la prose, les calculs du devis ou une formulation attendue mot à mot. Quiz, autoévaluation et future revue humaine restent distincts.
+
+Le projet conserve production, grille et historique après retrait de la source ou perte d’accès. Le brief et le corrigé sont réautorisés séparément. Une nouvelle création exige une activité FREE publiée, la version/révision/langue exactes et, si fournie, une inscription propriétaire contenant cet item encore disponible. Pour un projet lié à une inscription, les lectures de contexte et chaque livraison/rejeu du corrigé revérifient aussi la chaîne parcours/module/activité dans les versions inscrites : un parent retiré ou sans traduction disponible bloque cette ressource pédagogique. Un parcours PROTECTED ne bloque pas son activité explicitement FREE lorsqu’elle reste accessible selon les règles P08 ; l’inscription ne confère aucun droit premium. Le template public autonome répond NOT_CONFIGURED sans corps/grille pour une ancienne activité sans politique ; une identité jamais publiée reste 404.
+
+Le corrigé reste celui de la révision source capturée. EXPLICIT exige l’action volontaire ; AFTER_SUBMISSION exige une autoévaluation déjà enregistrée pour la révision personnelle précise, sans seuil de score ou quiz imposé. Chaque livraison, y compris le rejeu d’une trace, revérifie la publication courante FREE de la même version et langue d’origine. Retrait ou protection refuse la livraison. La consultation est unique par propriétaire/révision personnelle/source/langue et ne valide ni projet ni progression. Dans `ProjectContext`, `currentPublishedRevisionId` concerne la langue d’origine ; `resource` peut être la traduction demandée avec sa propre révision, sans changer les textes personnels.
+
+L’atelier anonyme prépare un texte local ; seule une action volontaire conserve un brouillon non sensible en session navigateur pendant deux heures pour import explicite dans le compte affiché. Les productions authentifiées restent en mémoire/serveur. Fichiers P10 et revue humaine restent désactivés ; aucun prix, offre de correction ou service commercial n’est déduit de P09.
 
 ## Fichiers et vidéo — planifié P10
 

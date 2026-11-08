@@ -4,11 +4,11 @@ Plateforme de formation pratique à l’IA : choisir une tâche, apprendre, prod
 
 ## État réel
 
-P01 fournit les fondations locales ; P02 ajoute le système visuel et trois structures d’interface. P03 pose le schéma identité/contenu et le contrat généré. P04 raccorde l’identité aux sessions Spring/PostgreSQL. P05 ajoute le CMS et la publication ; P06 raccorde le site public aux publications réelles. P07 ajoute le générateur sans IA et la bibliothèque personnelle ; P08 raccorde apprentissage, quiz et notes. Projets et paiements seront raccordés dans leurs lots. Aucun ancien prototype repris ni déploiement externe annoncé.
+P01 fournit les fondations locales ; P02 ajoute le système visuel et trois structures d’interface. P03 pose le schéma identité/contenu et le contrat généré. P04 raccorde l’identité aux sessions Spring/PostgreSQL. P05 ajoute le CMS et la publication ; P06 raccorde le site public aux publications réelles. P07 ajoute le générateur sans IA et la bibliothèque personnelle ; P08 raccorde apprentissage, quiz et notes. P09 ajoute productions personnelles, autoévaluation et corrigé contrôlé ; son périmètre technique est validé localement. Les paiements restent dans leurs lots. Aucun ancien prototype repris ni déploiement externe annoncé.
 
 La validation P01 couvre FR/EN, clavier, formats étroits, erreur 404 et panne/reprise réelle de Spring. P02 ajoute 14 tests et 54 captures examinées pour les interfaces ; les sept scénarios P01 passent à nouveau après ces changements. La validation reste locale, avec le Chromium de test autorisé.
 
-Lire [AGENTS.md](AGENTS.md), puis [docs/STATUS.md](docs/STATUS.md). Vérifications et limites : [P08](docs/evidence/P08.md), [P07](docs/evidence/P07.md), [P06](docs/evidence/P06.md), [P05](docs/evidence/P05.md), [P04](docs/evidence/P04.md), [P03](docs/evidence/P03.md), [P02](docs/evidence/P02.md), [P01](docs/evidence/P01.md) ; audit initial : [P00](docs/evidence/P00.md).
+Lire [AGENTS.md](AGENTS.md), puis [docs/STATUS.md](docs/STATUS.md). Vérifications et limites : [P09](docs/evidence/P09.md), [P08](docs/evidence/P08.md), [P07](docs/evidence/P07.md), [P06](docs/evidence/P06.md), [P05](docs/evidence/P05.md), [P04](docs/evidence/P04.md), [P03](docs/evidence/P03.md), [P02](docs/evidence/P02.md), [P01](docs/evidence/P01.md) ; audit initial : [P00](docs/evidence/P00.md).
 
 ## Structure retenue
 
@@ -186,7 +186,9 @@ Créer un compte avec une adresse de test que l’on contrôle localement ; aucu
 
 Les emails de récupération arrivent dans **Mailpit local** sur http://localhost:8025 ; le lien expire après 30 minutes et ne s’utilise qu’une fois. Trois demandes par email sur quinze minutes au plus ; la réponse reste neutre même pour un compte absent ou un quota dépassé. Ne pas copier de lien de récupération complet dans un ticket ou un journal. L’envoi SMTP local est testé ; la livraison durable et la reprise par outbox arrivent en P10, sans service email externe présumé.
 
-Le cookie `SESSION` est HttpOnly, SameSite=Lax et `Path=/`, expirant après 30 minutes d’inactivité côté serveur. CSRF framework actif sur toutes les mutations de session, login compris ; le client le conserve en mémoire et le renouvelle après les transitions, sans retry de mutation automatique. Les préférences sont privées, protégées par propriétaire, permission et ETag ; les données ne sont pas mises en cache partagé. Un essai anonyme non sensible peut être gardé deux heures dans l’onglet, puis restauré volontairement ; son import dans de futurs projets n’est pas encore disponible.
+Le cookie `SESSION` est HttpOnly, SameSite=Lax et `Path=/`, expirant après 30 minutes d’inactivité côté serveur. CSRF framework actif sur toutes les mutations de session, login compris ; le client le conserve en mémoire et le renouvelle après les transitions, sans retry de mutation automatique. Les préférences sont privées, protégées par propriétaire, permission et ETag ; les données ne sont pas mises en cache partagé.
+
+L’ancien brouillon de démonstration peut être restauré dans l’atelier local `/fr/dev/learning` ou `/en/dev/learning` ; il ne se convertit pas en projet personnel. P07 et P09 ont leurs brouillons spécifiques, non sensibles, à UUID et durée de deux heures. Après identification, leur import exige une action volontaire dans le compte affiché ; les productions authentifiées ne sont pas placées dans le stockage local ou de session.
 
 La procédure du premier administrateur est conservée **hors dépôt**, sur le poste actuel dans `C:\Users\kevin\.codex\private-runbooks\chatgpt-courses-admin-initial.md` ; elle a été préparée et n’a pas été exécutée. Aucun administrateur caché ni identifiant réel n’a été ajouté au dépôt.
 
@@ -237,7 +239,7 @@ Le site lit exclusivement les publications de Spring. Une base sans publication 
 
 Les liens transmettent la version sélectionnée ; ceux d’activité du programme transmettent aussi l’identité et la version du parcours. Une activité autonome s’ouvre dans le catalogue par `?activity={resourceId}&version={versionId}`, sans inventer de parcours parent. Les filtres `q`, `type`, `goal`, `level`, `locale`, `access`, `page`, `pageSize`, `sort` sont partageables et le retour conserve leur URL.
 
-L’éditeur CMS possède un panneau de métadonnées publiques : tâches, niveau, public, outils, sources, description de l’évaluation et FAQ. Leur sauvegarde crée une révision éditoriale ; leur affichage public exige revue puis publication. Les lectures publiques sont rendues sur le serveur, sans cookie et sans cache partagé. Le site reste non indexable en attendant la préparation SEO P16. Aucun prix ni achat opérationnel n’est annoncé avant P11/P12 ; les méthodes personnelles P07 et l’apprentissage P08 utilisent leurs lectures privées séparées. Les projets restent P09.
+L’éditeur CMS possède un panneau de métadonnées publiques : tâches, niveau, public, outils, sources, description de l’évaluation et FAQ. Leur sauvegarde crée une révision éditoriale ; leur affichage public exige revue puis publication. Les lectures publiques sont rendues sur le serveur, sans cookie et sans cache partagé. Le site reste non indexable en attendant la préparation SEO P16. Aucun prix ni achat opérationnel n’est annoncé avant P11/P12 ; méthodes P07, apprentissage P08 et projets P09 utilisent leurs lectures privées séparées.
 
 Recette dédiée, après builds, avec Docker et les ports 3101/8181 libres :
 
@@ -281,7 +283,7 @@ Résultats : **78 tests Java**, **42 tests client**, builds réussis et **7/7 sc
 | Travail conservé d’une inscription | `/fr/espace/apprentissage/{enrollmentId}` | `/en/my/learning/{enrollmentId}` |
 | Activité du programme | `/fr/apprendre/{parcours}/{activite}` | `/en/learn/{course}/{activity}` |
 
-Les activités conservent les paramètres de version des liens P06. Une inscription est un suivi privé, sans achat ni droit premium ; son programme et son dénominateur sont figés. Lecture déclarée, activité déclarée terminée et résultat de quiz restent séparés. Les projets arrivent en P09.
+Les activités conservent les paramètres de version des liens P06. Une inscription est un suivi privé, sans achat ni droit premium ; son programme et son dénominateur sont figés. Lecture déclarée, activité déclarée terminée et résultat de quiz restent séparés. Les productions P09 ont leurs statuts déclaratifs propres, sans taux de compétence agrégé.
 
 Le quiz gratuit utilise une correction réelle de Spring, sans résultat durable avant inscription au parcours. Les tentatives enregistrées gardent leur barème, leurs réponses et leur langue ; aucun score fourni par le navigateur ne fait autorité. Le CMS définit le seuil et une éventuelle limite de tentatives durables. Sans règle explicite, le défaut annoncé est 100 % et tentatives illimitées.
 
@@ -296,4 +298,34 @@ Recette dédiée après les builds, avec Docker et les ports 3101/8181 libres :
 .\scripts\courses.cmd run verify:learning
 ```
 
-Elle utilise PostgreSQL en tmpfs et des comptes/contenus BR01 fictifs, conservant le volume Compose. Résultats : **95 tests Java**, **51 tests client**, builds réussis, **10/10 scénarios Chromium en 72,87 s** et **33 captures finales examinées**. Régressions : P06 **6/6**, P07 **7/7** ; nettoyage confirmé. Détails et limites : [P08](docs/evidence/P08.md). Prochain lot autorisé : [P09_PROJETS_EVALUATION.txt](prompts/P09_PROJETS_EVALUATION.txt).
+Elle utilise PostgreSQL en tmpfs et des comptes/contenus BR01 fictifs, conservant le volume Compose. Résultats P08 : **95 tests Java**, **51 tests client**, builds réussis, **10/10 scénarios Chromium en 72,87 s** et **33 captures finales examinées**. Régressions : P06 **6/6**, P07 **7/7** ; nettoyage confirmé. Détails et limites : [P08](docs/evidence/P08.md). Lot actuel : [P09_PROJETS_EVALUATION.txt](prompts/P09_PROJETS_EVALUATION.txt).
+
+## Projets P09 — périmètre technique validé localement
+
+La liste et les productions privées sont disponibles sous `/fr/espace/projets` et `/en/my/projects`, puis `/{projectId}`. L’atelier d’une activité gratuite publiée et configurée est accessible avant compte depuis sa page d’activité. Il sépare brief, rédaction, vérification et consultation volontaire du corrigé. Un compte est nécessaire pour conserver une production et ses autoévaluations.
+
+Le CMS charge explicitement les préparations BR01/BR02 FR/EN depuis une route administrateur protégée ; remplacer une grille exige confirmation. Cette préparation ne publie aucun contenu. Les vingt critères à un point et les quatre déclarations d’erreurs produisent un **score déclaré**, avec seuil éditorial configurable, sans vérification automatique de la vérité du texte ni revue humaine. Les anciennes révisions et évaluations restent intactes après édition. Le corrigé est réautorisé à chaque livraison et ne valide jamais le projet.
+
+Un anonyme peut conserver volontairement un brouillon **non sensible**, deux heures en session navigateur, puis l’importer explicitement dans le compte affiché. Les productions authentifiées sont privées, en mémoire/serveur, sans stockage navigateur persistant de leur contenu. Un changement de compte bloque la reprise implicite. Retrait d’une source n’efface pas productions et preuves personnelles ; fichiers sécurisés P10 et revue humaine restent désactivés.
+
+Commandes disponibles :
+
+```powershell
+.\scripts\courses.cmd run api:generate
+.\scripts\courses.cmd run api:check
+.\scripts\courses.cmd run verify:client
+.\scripts\courses.cmd run typecheck:browser
+.\scripts\courses.cmd run verify:projects
+```
+
+`api:generate` reconstruit les artefacts du contrat ; `api:check` vérifie leur reproductibilité. La recette `verify:projects` nécessite les builds web/API, Docker, Chromium installé et les ports 3101/8181 libres. Elle utilise une base PostgreSQL temporaire en tmpfs, des comptes et dossiers fictifs isolés, sans réinitialiser le volume Compose. Résultats locaux : **112 tests Java**, **58 tests client**, lint/types/builds/OpenAPI réussis, upgrade préservant les lignes de **25 tables** et chaîne HTTP réelle réussis. Recette P09 complète sans instrumentation : **8/8 en 59,9 s** ; régression P08 : **10/10**. Preuves et limites : [evidence/P09.md](docs/evidence/P09.md). Aucun fournisseur externe ni déploiement de production n’est ainsi validé.
+
+Un refus d’accusé de sauvegarde observé dans un passage intermédiaire n’a pas été reproduit sur seize répétitions du parcours FR, puis sur la recette complète finale. Sa cause reste indéterminée ; observations, traces et limites sont conservées dans [la preuve P09](docs/evidence/P09.md).
+
+Pour diagnostiquer un scénario, le superviseur accepte `--grep` et `--repeat-each 1..20`, avec la même isolation et sans retry automatique :
+
+```powershell
+.\scripts\courses.cmd run verify:projects -- --grep "fr · T02" --repeat-each 8
+```
+
+Un tel passage reste ciblé ; `session.json` enregistre la sélection. La validation du lot utilise aussi la commande complète sans filtre.

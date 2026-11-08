@@ -1,10 +1,10 @@
-# Modèle relationnel — socles P03 à P08
+# Modèle relationnel — socles P03 à P09
 
-Les migrations sont la définition exécutable du schéma. Ce document distingue les tables livrées par P03 à P08 des extensions à créer dans les lots métier. Les preuves de chaque lot indiquent le niveau de validation réellement exécuté.
+Les migrations sont la définition exécutable du schéma. Ce document distingue les tables livrées par P03 à P09 des extensions à créer dans les lots métier. Les preuves de chaque lot indiquent le niveau de validation réellement exécuté.
 
 ## Identité et contenu présents
 
-V001 conserve les deux tables officielles de Spring Session JDBC 4.1.1. V002 ajoute douze tables, sans données de démonstration et sans mécanisme concurrent de création automatique. V003 ajoute deux tables de sécurité, la version d’authentification et des références de permission. V004 étend les instantanés éditoriaux et ajoute deux tables d’historique et de références. V005 ajoute les métadonnées publiques par révision et les instantanés de revue/source publiées. V006 ajoute les copies personnelles de méthodes ; V007 ajoute suivi, notes et tentatives. V001 à V006 restent inchangées.
+V001 conserve les deux tables officielles de Spring Session JDBC 4.1.1. V002 ajoute douze tables, sans données de démonstration et sans mécanisme concurrent de création automatique. V003 ajoute deux tables de sécurité, la version d’authentification et des références de permission. V004 étend les instantanés éditoriaux et ajoute deux tables d’historique et de références. V005 ajoute les métadonnées publiques par révision et les instantanés de revue/source publiées. V006 ajoute les copies personnelles de méthodes ; V007 ajoute suivi, notes et tentatives ; V008 ajoute productions et preuves déclaratives. V001 à V007 restent inchangées par P09.
 
 | Table | Identité et relations | Invariants |
 | --- | --- | --- |
@@ -27,6 +27,11 @@ V001 conserve les deux tables officielles de Spring Session JDBC 4.1.1. V002 ajo
 | `learning_activity_progress` | UUID, FK composite inscription/version d’activité, lecture et fin déclarées | Unique par item, révision/ETag propre ; aucune validation de quiz/projet déduite |
 | `learning_activity_notes` | UUID, propriétaire, activité/version et langue originale | Unique propriétaire/version, texte privé révisable ; origine/langue immuables |
 | `learning_quiz_attempts` | UUID, propriétaire/inscription/item, traduction/révision source et snapshot corrigé | Append-only ; soumission idempotente et numéro de tentative uniques, score serveur |
+| `projects` | UUID, propriétaire, origine activité/version/traduction/révision/langue, inscription facultative et révision personnelle courante | Unique propriétaire/creationId et empreinte du corps ; propriétaire et origine immuables ; ETag de texte distinct des faits d’évaluation |
+| `project_revisions` | UUID, projet, numéro, champs personnels JSONB, stade et auteur | Append-only ; auteur propriétaire par FK composite ; révision courante limitée au même projet |
+| `project_rubric_snapshots` | UUID unique par projet, source/langue, cas, critères et politique capturés | Vingt points, quatre erreurs, seuil 1..20 ; origine du même projet par FK composite ; append-only |
+| `project_self_assessments` | UUID, propriétaire/projet/révision/grille, submissionId et empreinte, déclarations et score | Append-only ; même projet/propriétaire/grille ; seuil et besoin de révision cohérents ; aucune revue humaine |
+| `project_solution_reveals` | UUID, propriétaire, révision personnelle, source/langue et date | Trace unique, append-only ; aucun corps de corrigé stocké, aucun effet sur progression ou score |
 
 GUIDE et METHOD_TEMPLATE sont des feuilles éditoriales depuis V004. Depuis P07, une définition de méthode appartient au document JSONB de sa révision ; la copie personnelle reste distincte dans `personal_methods`. Ces structures ne créent aucun prix, droit payant ou contenu pédagogique final.
 
@@ -56,6 +61,13 @@ erDiagram
   user_accounts ||--o{ learning_activity_notes : notes_privees
   learning_enrollments ||--o{ learning_quiz_attempts : tentatives
   editorial_revisions ||--o{ learning_quiz_attempts : quiz_source
+  user_accounts ||--o{ projects : productions_privees
+  editorial_revisions ||--o{ projects : origine_source
+  projects ||--o{ project_revisions : texte_historique
+  projects ||--o| project_rubric_snapshots : grille_capturee
+  project_revisions ||--o{ project_self_assessments : preuves_declarees
+  project_rubric_snapshots ||--o{ project_self_assessments : bareme_capture
+  project_revisions ||--o{ project_solution_reveals : consultations
 ```
 
 ## Identité et récupération — V003 / P04
@@ -203,22 +215,39 @@ Les triggers refusent la suppression de ces historiques et la mutation de leurs 
 
 Les huit tests de services et neuf HTTP P08 utilisent PostgreSQL réel, dont concurrence, source retirée, identités à deux versions et upgrade isolé V006→V007. Les six nouveaux tests client sont des doubles réseau. Vérifications globales, navigateur et limites sont consignées dans [evidence/P08.md](evidence/P08.md) ; aucun stockage média, projet ou droit commercial n’est déduit de ces tables.
 
+## Productions et preuves déclaratives — V008 / P09
+
+[`V008__personal_projects_revisions_and_declared_assessments.sql`](../apps/api/src/main/resources/db/migration/V008__personal_projects_revisions_and_declared_assessments.sql) ajoute cinq tables, leurs contraintes et les permissions `projects.read`/`projects.write` du rôle LEARNER. Elle ne crée aucun compte, projet, prix, grille personnelle ou droit acheté. `ContentDocument.projectPolicy` reste dans le JSONB immuable des révisions éditoriales, sans table parallèle.
+
+L’origine du projet fixe activité de type ACTIVITY, version, traduction, révision et langue par FK composites RESTRICT. L’inscription facultative doit appartenir au même propriétaire et contenir exactement cette version d’activité ; son parcours/version sont liés. `activityVersionNumber` est lu depuis la version pédagogique immuable, y compris après retrait. Le propriétaire, l’empreinte de création et l’origine ne sont plus modifiables. La création utilise l’unicité `(owner_id, creation_id)` et une empreinte SHA-256 de 32 octets ; même corps retrouve le projet, autre corps entre en conflit.
+
+Chaque sauvegarde réellement différente ajoute une `project_revision` avec numéro unique, auteur propriétaire, sept sections et texte collé indépendant, langue et stade DRAFT/READY. La production sérialisée est bornée à 48 KiB UTF-8 par le service ; le JSONB SQL est borné à 65536 octets. Le pointeur courant ne peut référencer qu’une révision du même projet. Le service verrouille la ligne puis relit le pointeur courant avant If-Match ; deux écritures concurrentes ne peuvent pas écraser silencieusement la gagnante. La révision de texte JS sûre change à la sauvegarde, pas à une autoévaluation ; une sauvegarde identique reste sans nouvelle ligne.
+
+La grille personnelle unique capture source/langue, cas BR01/BR02, vingt critères à un point et quatre erreurs explicites, seuil 1..20 et politique de révélation. Elle n’est pas recalculée après modification d’un contenu. Les catégories sont dérivées des clés de critères, sans champ supplémentaire dans les grilles générales P08. Avant publication, la politique de projet exige grille complète et corrigé ; les brouillons peuvent être incomplets. Un changement de grille/seuil/politique requiert une nouvelle version pédagogique, et les traductions partagent leurs clés, points et règles. Les préparations CMS FR/EN sont une ressource serveur autorisée séparée, jamais une migration de contenu.
+
+L’autoévaluation relie par FK le propriétaire, le projet, sa révision et sa grille avec les mêmes seuil/maximal. `submissionId` est unique par propriétaire, avec empreinte du corps et numéro d’évaluation unique par projet. Vingt déclarations de critères, quatre déclarations d’erreurs, commentaires et score sont append-only. Le service calcule le score déclaré ; SQL vérifie `threshold_met=(score_points>=pass_points)` et `needs_revision=(NOT threshold_met OR jsonb_array_length(blocking_issues)>0)`. Méthode SELF_ASSESSMENT, auteur propriétaire, `declared_by_user=true`, évaluateur humain NULL. Une nouvelle production ne réutilise pas une ancienne preuve comme résultat courant ; le statut dynamique se lit séparément de l’ETag du texte.
+
+La consultation d’un corrigé possède une trace unique `(owner_id, project_revision_id, source_revision_id, locale)` sans stocker le corps de la solution. Son origine doit être celle du projet. Chaque livraison ou rejeu réautorise la publication courante FREE de la même version et langue ; AFTER_SUBMISSION exige une preuve pour cette révision personnelle précise. Si le projet est lié à une inscription, contexte et corrigé reconsultent aussi la chaîne parcours/module/activité via les versions épinglées : retrait ou traduction indisponible d’un parent bloque la ressource pédagogique, sans bloquer une activité explicitement FREE d’un parcours PROTECTED encore accessible selon P08. La trace ne valide ni projet, progression, lecture ni compétence. Après retrait ou protection, production, grille et anciennes évaluations restent propriétaires ; aucun ancien corrigé n’est délivré par simple présence de sa trace. Les triggers refusent UPDATE/DELETE des révisions, grilles, évaluations et consultations, et toute réécriture de propriétaire/origine.
+
+`ProgressTotals.projectAvailability=NOT_AVAILABLE` reste le fait agrégé d’apprentissage non défini, et ne déclare pas l’absence du module personnel P09. Les projets ont leurs statuts déclaratifs séparés ; aucun taux de compétence n’en est déduit. Un brouillon anonyme volontaire peut vivre deux heures en session navigateur pour import explicite ; ce stockage n’est ni une ligne serveur ni une validation. Pièces jointes P10 et revue humaine restent désactivées.
+
+Les huit tests de service et neuf HTTP ciblés P09 ont exécuté PostgreSQL réel, dont concurrence, idempotence, propriétaire, conservation, corrigé et upgrade isolé V007→V008. Les tests client utilisent des réponses réseau simulées. Les résultats globaux, navigateur et limites du lot sont suivis dans [evidence/P09.md](evidence/P09.md) ; leur validation n’est pas déduite de ces seuls tests ciblés.
+
 ## Types, concurrence et suppression
 
 - UUID pour les identifiants et FK métier. Les identifiants de session historiques gardent le format officiel Spring Session de V001.
 - Instants `Instant`/`timestamptz`, connexions JDBC et Hibernate en UTC. PostgreSQL conserve un instant ; le fuseau de préférence sert à l’affichage. Dates non finies et chronologies incohérentes refusées par contraintes.
-- Révision numérique optimiste `@Version` sur les entités modifiables ; les révisions éditoriales immuables ont leur numéro historique propre. Les préférences associent If-Match et contrôle Hibernate ; le CMS JDBC associe compteur et verrou de famille ; méthodes personnelles, notes et progrès associent compteur et verrou de ligne, avec comparaison transactionnelle après attente.
+- Révision numérique optimiste `@Version` sur les entités modifiables ; les révisions éditoriales immuables ont leur numéro historique propre. Les préférences associent If-Match et contrôle Hibernate ; le CMS JDBC associe compteur et verrou de famille ; méthodes personnelles, notes, progrès et productions associent compteur et verrou de ligne, avec comparaison transactionnelle après attente.
 - Montants futurs en `BIGINT` unités mineures avec devise explicite ; transport JSON limité aux entiers exacts JavaScript. Pas de `float`, pas d’hypothèse universelle de deux décimales. `Money`/OpenAPI vérifient syntaxe et bornes ; la liste des devises réellement autorisées appartiendra à la configuration commerciale serveur.
 - Les FK métier sont `ON DELETE RESTRICT`. Les instantanés éditoriaux et attributions historiques sont protégés. L’anonymisation du compte est distincte de la suppression physique ; rétention et procédure d’effacement seront précisées dans les lots concernés. Seule la suppression des attributs de session suit le CASCADE officiel V001.
 - Les liens JPA sont des UUID explicites, sans graphes sérialisés ni cascades implicites. Les DTO publics sont construits par mapping ; les entités ne sont pas des réponses HTTP.
 
-## Relations réservées aux lots suivants — non migrées en P03 à P08
+## Relations réservées aux lots suivants — non migrées en P03 à P09
 
 Les noms suivants expriment les clés et règles attendues. Ils seront concrétisés par migrations additionnelles avec leur fonctionnalité et ses tests, sans CRUD anticipé.
 
 | Lot | Relations/contraintes à introduire | Conservation obligatoire |
 | --- | --- | --- |
-| P09 productions | Projet → propriétaire, activité et version pédagogique ; révision de projet append-only ; autoévaluation → révision soumise, grille versionnée, provenance déclarative | Corrigé consulté, autoévaluation et revue humaine restent des preuves distinctes ; aucune cascade depuis achat/droit |
 | P10 fichiers | Métadonnées UUID, propriétaire, clé objet serveur, statut ; FK au projet/révision si nécessaire | Vérification d’accès à chaque nouvel accès temporaire, aucune URL libre choisie par le navigateur |
 | P11 commandes | Commande → propriétaire ; lignes → snapshot offre/révision ; ressources promises → UUID ressource, version/politique et langues ; montant/devise/conditions figés | Ni changement de pack ni nouvelle offre ne modifie les lignes achetées ; aucun total autoritaire reçu du navigateur |
 | P12 paiements | Opération fournisseur → commande, mode/compte fournisseur, montant/devise ; événements entrants uniques par fournisseur/compte/mode/identifiant ; clés d’idempotence liées à utilisateur/opération/empreinte | Réception durable et effet métier uniques séparément ; paiement réussi et activation en attente peuvent coexister |
@@ -232,7 +261,7 @@ Les suppressions physiques et opérations financières nécessiteront des cas d�
 
 ## Données locales et preuves
 
-Les migrations structurelles ne contiennent aucune fixture ni prix. Les références de permission V003/V004/V006/V007 sont distinctes des comptes et données de démonstration. Le chargement explicite local et les fixtures Testcontainers sont séparés, identifiés comme fictifs, réexécutables et interdits en production. Le suivi des commandes et résultats réellement exécutés est dans [evidence/P03.md](evidence/P03.md), [evidence/P04.md](evidence/P04.md), [evidence/P05.md](evidence/P05.md), [evidence/P06.md](evidence/P06.md), [evidence/P07.md](evidence/P07.md) et [evidence/P08.md](evidence/P08.md).
+Les migrations structurelles ne contiennent aucune fixture ni prix. Les références de permission V003/V004/V006/V007/V008 sont distinctes des comptes et données de démonstration. Le chargement explicite local et les fixtures Testcontainers sont séparés, identifiés comme fictifs, réexécutables et interdits en production. Le suivi des commandes et résultats réellement exécutés est dans [evidence/P03.md](evidence/P03.md), [evidence/P04.md](evidence/P04.md), [evidence/P05.md](evidence/P05.md), [evidence/P06.md](evidence/P06.md), [evidence/P07.md](evidence/P07.md), [evidence/P08.md](evidence/P08.md) et [evidence/P09.md](evidence/P09.md).
 
 Références techniques consultées : [contraintes PostgreSQL 18](https://www.postgresql.org/docs/18/ddl-constraints.html), [instants PostgreSQL 18](https://www.postgresql.org/docs/18/datatype-datetime.html), [Spring Boot SQL](https://docs.spring.io/spring-boot/reference/data/sql.html), [Hibernate ORM 7.4](https://docs.hibernate.org/orm/7.4/userguide/html_single/). Les règles commerciales restent celles de [PRODUCT.md](PRODUCT.md) et [DECISIONS.md](DECISIONS.md).
 

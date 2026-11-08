@@ -2,7 +2,7 @@
 
 import { type Client, type ClientMeta, type Options as Options2, type RequestResult, type TDataShape, urlSearchParamsBodySerializer } from './client';
 import { client } from './client.gen';
-import type { GetCsrfTokenData, GetCsrfTokenErrors, GetCsrfTokenResponses, GetCurrentUserData, GetCurrentUserErrors, GetCurrentUserResponses, GetPreferencesData, GetPreferencesErrors, GetPreferencesResponses, GetSystemHealthData, GetSystemHealthErrors, GetSystemHealthResponses, LoginData, LoginErrors, LoginResponses, LogoutData, LogoutErrors, LogoutResponses, RegisterData, RegisterErrors, RegisterResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, UpdatePreferencesData, UpdatePreferencesErrors, UpdatePreferencesResponses } from './types.gen';
+import type { ArchiveContentData, ArchiveContentErrors, ArchiveContentResponses, CreateContentData, CreateContentErrors, CreateContentResponses, CreateContentTranslationData, CreateContentTranslationErrors, CreateContentTranslationResponses, CreateContentVersionData, CreateContentVersionErrors, CreateContentVersionResponses, DuplicateContentData, DuplicateContentErrors, DuplicateContentResponses, GetContentData, GetContentDependenciesData, GetContentDependenciesErrors, GetContentDependenciesResponses, GetContentErrors, GetContentReadinessData, GetContentReadinessErrors, GetContentReadinessResponses, GetContentResponses, GetCsrfTokenData, GetCsrfTokenErrors, GetCsrfTokenResponses, GetCurrentUserData, GetCurrentUserErrors, GetCurrentUserResponses, GetPreferencesData, GetPreferencesErrors, GetPreferencesResponses, GetPublicContentData, GetPublicContentErrors, GetPublicContentResponses, GetSystemHealthData, GetSystemHealthErrors, GetSystemHealthResponses, ListContentRevisionsData, ListContentRevisionsErrors, ListContentRevisionsResponses, ListContentsData, ListContentsErrors, ListContentsResponses, LoginData, LoginErrors, LoginResponses, LogoutData, LogoutErrors, LogoutResponses, PreviewContentData, PreviewContentErrors, PreviewContentResponses, PublishContentData, PublishContentErrors, PublishContentResponses, RegisterData, RegisterErrors, RegisterResponses, ReplaceContentCompositionData, ReplaceContentCompositionErrors, ReplaceContentCompositionResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, SaveContentRevisionData, SaveContentRevisionErrors, SaveContentRevisionResponses, TransitionContentData, TransitionContentErrors, TransitionContentResponses, UpdatePreferencesData, UpdatePreferencesErrors, UpdatePreferencesResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -126,3 +126,271 @@ export const updatePreferences = <ThrowOnError extends boolean = false>(options:
         ...options.headers
     }
 });
+
+/**
+ * Chercher les contenus administratifs avec pagination.
+ *
+ * Permission content.read. Les filtres ne changent jamais l’autorisation serveur.
+ */
+export const listContents = <ThrowOnError extends boolean = false>(options?: Options<ListContentsData, ThrowOnError>): RequestResult<ListContentsResponses, ListContentsErrors, ThrowOnError> => (options?.client ?? client).get<ListContentsResponses, ListContentsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/contents',
+    ...options
+});
+
+/**
+ * Créer une identité et un brouillon éditorial.
+ *
+ * Permission content.write ; acteur fourni par la session, jamais par le corps.
+ */
+export const createContent = <ThrowOnError extends boolean = false>(options: Options<CreateContentData, ThrowOnError>): RequestResult<CreateContentResponses, CreateContentErrors, ThrowOnError> => (options.client ?? client).post<CreateContentResponses, CreateContentErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/contents',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Lire le document CMS courant.
+ *
+ * Permission content.read ; représentation privée complète.
+ */
+export const getContent = <ThrowOnError extends boolean = false>(options: Options<GetContentData, ThrowOnError>): RequestResult<GetContentResponses, GetContentErrors, ThrowOnError> => (options.client ?? client).get<GetContentResponses, GetContentErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/contents/{id}',
+    ...options
+});
+
+/**
+ * Lire les instantanés historiques paginés.
+ *
+ * Permission content.read ; aucun historique privé dans le catalogue public.
+ */
+export const listContentRevisions = <ThrowOnError extends boolean = false>(options: Options<ListContentRevisionsData, ThrowOnError>): RequestResult<ListContentRevisionsResponses, ListContentRevisionsErrors, ThrowOnError> => (options.client ?? client).get<ListContentRevisionsResponses, ListContentRevisionsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/contents/{id}/revisions',
+    ...options
+});
+
+/**
+ * Enregistrer une nouvelle révision éditoriale.
+ *
+ * Permission content.write. CSRF et If-Match obligatoires ; aucune mutation automatique après conflit.
+ */
+export const saveContentRevision = <ThrowOnError extends boolean = false>(options: Options<SaveContentRevisionData, ThrowOnError>): RequestResult<SaveContentRevisionResponses, SaveContentRevisionErrors, ThrowOnError> => (options.client ?? client).post<SaveContentRevisionResponses, SaveContentRevisionErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/contents/{id}/revisions',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Créer une nouvelle version pédagogique.
+ *
+ * Permission content.write. CSRF et If-Match obligatoires ; aucune mutation automatique après conflit.
+ */
+export const createContentVersion = <ThrowOnError extends boolean = false>(options: Options<CreateContentVersionData, ThrowOnError>): RequestResult<CreateContentVersionResponses, CreateContentVersionErrors, ThrowOnError> => (options.client ?? client).post<CreateContentVersionResponses, CreateContentVersionErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/contents/{id}/versions',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Dupliquer vers une nouvelle identité en brouillon.
+ *
+ * Permission content.write. CSRF et If-Match obligatoires ; aucune mutation automatique après conflit.
+ */
+export const duplicateContent = <ThrowOnError extends boolean = false>(options: Options<DuplicateContentData, ThrowOnError>): RequestResult<DuplicateContentResponses, DuplicateContentErrors, ThrowOnError> => (options.client ?? client).post<DuplicateContentResponses, DuplicateContentErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/contents/{id}/duplicate',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Créer explicitement une traduction sur la même version.
+ *
+ * Permission content.write. CSRF et If-Match obligatoires ; aucune mutation automatique après conflit.
+ */
+export const createContentTranslation = <ThrowOnError extends boolean = false>(options: Options<CreateContentTranslationData, ThrowOnError>): RequestResult<CreateContentTranslationResponses, CreateContentTranslationErrors, ThrowOnError> => (options.client ?? client).post<CreateContentTranslationResponses, CreateContentTranslationErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/contents/{id}/translations',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Soumettre, vérifier ou signaler une actualisation.
+ *
+ * Permission content.review pour READY, content.write pour TO_REVIEW/STALE. CSRF et If-Match obligatoires ; aucune mutation automatique après conflit.
+ */
+export const transitionContent = <ThrowOnError extends boolean = false>(options: Options<TransitionContentData, ThrowOnError>): RequestResult<TransitionContentResponses, TransitionContentErrors, ThrowOnError> => (options.client ?? client).post<TransitionContentResponses, TransitionContentErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/contents/{id}/transition',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Publier transactionnellement une révision déterminée.
+ *
+ * Permission content.publish. CSRF et If-Match obligatoires ; aucune mutation automatique après conflit.
+ */
+export const publishContent = <ThrowOnError extends boolean = false>(options: Options<PublishContentData, ThrowOnError>): RequestResult<PublishContentResponses, PublishContentErrors, ThrowOnError> => (options.client ?? client).post<PublishContentResponses, PublishContentErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/contents/{id}/publish',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Archiver sans supprimer l’historique.
+ *
+ * Permission content.archive. CSRF et If-Match obligatoires ; aucune mutation automatique après conflit.
+ */
+export const archiveContent = <ThrowOnError extends boolean = false>(options: Options<ArchiveContentData, ThrowOnError>): RequestResult<ArchiveContentResponses, ArchiveContentErrors, ThrowOnError> => (options.client ?? client).post<ArchiveContentResponses, ArchiveContentErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/contents/{id}/archive',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Remplacer l’ordre du programme non gelé.
+ *
+ * Permission content.write. CSRF et If-Match obligatoires ; aucune mutation automatique après conflit.
+ */
+export const replaceContentComposition = <ThrowOnError extends boolean = false>(options: Options<ReplaceContentCompositionData, ThrowOnError>): RequestResult<ReplaceContentCompositionResponses, ReplaceContentCompositionErrors, ThrowOnError> => (options.client ?? client).put<ReplaceContentCompositionResponses, ReplaceContentCompositionErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/contents/{id}/composition',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Prévisualiser un brouillon avec permission.
+ *
+ * Permission content.read ; privée, no-store et non indexable. preview=true sur une route publique ne donne aucun accès.
+ */
+export const previewContent = <ThrowOnError extends boolean = false>(options: Options<PreviewContentData, ThrowOnError>): RequestResult<PreviewContentResponses, PreviewContentErrors, ThrowOnError> => (options.client ?? client).get<PreviewContentResponses, PreviewContentErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/contents/{id}/preview',
+    ...options
+});
+
+/**
+ * Contrôler les bloqueurs de publication.
+ *
+ * Permission content.read ; privée, no-store et non indexable. preview=true sur une route publique ne donne aucun accès.
+ */
+export const getContentReadiness = <ThrowOnError extends boolean = false>(options: Options<GetContentReadinessData, ThrowOnError>): RequestResult<GetContentReadinessResponses, GetContentReadinessErrors, ThrowOnError> => (options.client ?? client).get<GetContentReadinessResponses, GetContentReadinessErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/contents/{id}/readiness',
+    ...options
+});
+
+/**
+ * Examiner les dépendances avant archivage.
+ *
+ * Permission content.read ; privée, no-store et non indexable. preview=true sur une route publique ne donne aucun accès.
+ */
+export const getContentDependencies = <ThrowOnError extends boolean = false>(options: Options<GetContentDependenciesData, ThrowOnError>): RequestResult<GetContentDependenciesResponses, GetContentDependenciesErrors, ThrowOnError> => (options.client ?? client).get<GetContentDependenciesResponses, GetContentDependenciesErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/contents/{id}/dependencies',
+    ...options
+});
+
+/**
+ * Lire une projection publiée minimale.
+ *
+ * Socle P05 pour les lots consommateurs, sans catalogue P06. Aucun brouillon ni corps premium ; langue manquante ou archive 404, traduction dépassée STALE avec document:null.
+ */
+export const getPublicContent = <ThrowOnError extends boolean = false>(options: Options<GetPublicContentData, ThrowOnError>): RequestResult<GetPublicContentResponses, GetPublicContentErrors, ThrowOnError> => (options.client ?? client).get<GetPublicContentResponses, GetPublicContentErrors, ThrowOnError>({ url: '/contents/{resourceId}', ...options });

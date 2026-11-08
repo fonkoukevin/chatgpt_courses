@@ -125,6 +125,312 @@ export type PreferencesPatch = {
     locale: Locale;
 };
 
+export type ContentKind = 'COURSE' | 'MODULE' | 'ACTIVITY' | 'GUIDE' | 'METHOD_TEMPLATE';
+
+export type EditorialState = 'DRAFT' | 'TO_REVIEW' | 'READY' | 'PUBLISHED' | 'STALE' | 'ARCHIVED';
+
+export type ContentAccess = 'FREE' | 'PROTECTED';
+
+/**
+ * Texte brut, jamais HTML/MDX. LINK exige une URL HTTPS sans credentials ou un chemin interne simple ; les autres types exigent url:null. Pas de téléchargement serveur depuis cette URL.
+ */
+export type ContentBlock = {
+    type: 'HEADING' | 'PARAGRAPH' | 'LIST' | 'CALLOUT' | 'CODE' | 'LINK';
+    text: string;
+    url: string | null;
+};
+
+export type Exercise = {
+    instructions: string;
+    correction: string;
+};
+
+/**
+ * correctOption est un index 0-based strictement inférieur au nombre d’options ; clé unique dans le document. Réponses réservées aux routes administratives.
+ */
+export type QuizQuestion = {
+    key: string;
+    prompt: string;
+    options: Array<string>;
+    correctOption: number;
+    explanation: string;
+    points: number;
+};
+
+export type RubricCriterion = {
+    key: string;
+    label: string;
+    points: number;
+    blocking: boolean;
+};
+
+/**
+ * Aucun état de disponibilité choisi par le client. Les références sont non vérifiées en P05 ; required bloque tant que le registre serveur P10 ne les valide pas.
+ */
+export type MediaReference = {
+    assetId: Uuid;
+    kind: 'IMAGE' | 'VIDEO' | 'FILE';
+    required: boolean;
+    label: string;
+};
+
+/**
+ * Document structuré privé ; taille sérialisée totale maximale 48 KiB UTF-8. La requête entière reste limitée à 64 KiB par le relais. Listes bornées et références contrôlées dans le service.
+ */
+export type ContentDocument = {
+    objective: string;
+    expectedResult: string;
+    prerequisites: Array<string>;
+    blocks: Array<ContentBlock>;
+    estimatedMinutes: number | null;
+    exercise: Exercise | null;
+    quiz: Array<QuizQuestion>;
+    rubric: Array<RubricCriterion>;
+    access: ContentAccess;
+    media: Array<MediaReference>;
+    relatedResourceIds: Array<Uuid>;
+};
+
+export type CreateContent = {
+    kind: ContentKind;
+    locale: Locale;
+    slug: string;
+    title: string;
+    summary: string;
+    objectives: string;
+    evaluationDefinition: string;
+    document: ContentDocument;
+    childVersionIds: Array<Uuid>;
+    reason: string;
+};
+
+/**
+ * Ajoute un instantané éditorial sans changer la version pédagogique. Objectif ou barème changé après gel : nouvelle version exigée (409 NEW_PEDAGOGICAL_VERSION_REQUIRED).
+ */
+export type SaveRevision = {
+    title: string;
+    summary: string;
+    document: ContentDocument;
+    reason: string;
+};
+
+export type NewVersion = {
+    objectives: string;
+    evaluationDefinition: string;
+    title: string;
+    summary: string;
+    document: ContentDocument;
+    childVersionIds: Array<Uuid>;
+    reason: string;
+};
+
+export type DuplicateContent = {
+    slug: string;
+    title: string;
+    reason: string;
+};
+
+export type CreateTranslation = {
+    locale: Locale;
+    slug: string;
+    title: string;
+    summary: string;
+    document: ContentDocument;
+    reason: string;
+};
+
+/**
+ * READY exige content.review et readiness sans bloqueur ; TO_REVIEW/STALE exigent content.write. Pour la revue d’une traduction liée, sourceRevisionId doit correspondre à la révision source courante.
+ */
+export type TransitionContent = {
+    state: 'TO_REVIEW' | 'READY' | 'STALE';
+    reason: string;
+    sourceRevisionId?: Uuid | null;
+};
+
+/**
+ * Publie la révision courante déterminée ; readiness, revue, permission et If-Match revérifiés dans la transaction.
+ */
+export type PublishContent = {
+    revisionId: Uuid;
+    reason: string;
+};
+
+export type ArchiveContent = {
+    reason: string;
+};
+
+/**
+ * Ordre complet des UUID versions enfants, position serveur 1-based. Modification réservée à une pédagogie non gelée.
+ */
+export type ReplaceComposition = {
+    childVersionIds: Array<Uuid>;
+    reason: string;
+};
+
+export type TranslationLink = {
+    id: Uuid;
+    locale: Locale;
+    state: EditorialState;
+    sourceRevisionId: Uuid | null;
+    reviewedSourceRevisionId: Uuid | null;
+};
+
+/**
+ * Représentation administrative complète ; id désigne la traduction/version, resourceId l’identité pédagogique stable. ETag fort content-{id}-r{revision}. Ancienne donnée P03 : document:null lisible, publication bloquée par STRUCTURED_DOCUMENT_REQUIRED avant une révision structurée explicite.
+ */
+export type ContentView = {
+    id: Uuid;
+    resourceId: Uuid;
+    kind: ContentKind;
+    versionId: Uuid;
+    versionNumber: number;
+    locale: Locale;
+    slug: string;
+    state: EditorialState;
+    revision: Revision;
+    currentRevisionId: Uuid;
+    publishedRevisionId: Uuid | null;
+    title: string;
+    summary: string;
+    objectives: string;
+    evaluationDefinition: string;
+    document: ContentDocument | null;
+    childVersionIds: Array<Uuid>;
+    sourceTranslationId: Uuid | null;
+    sourceRevisionId: Uuid | null;
+    reviewedSourceRevisionId: Uuid | null;
+    verifiedAt: UtcInstant | null;
+    updatedAt: UtcInstant;
+    frozenAt: UtcInstant | null;
+    translations: Array<TranslationLink>;
+    legacyBody: string | null;
+};
+
+export type ContentSummary = {
+    id: Uuid;
+    resourceId: Uuid;
+    kind: ContentKind;
+    versionId: Uuid;
+    versionNumber: number;
+    locale: Locale;
+    slug: string;
+    state: EditorialState;
+    revision: Revision;
+    title: string;
+    summary: string;
+    verifiedAt: UtcInstant | null;
+    updatedAt: UtcInstant;
+    needsUpdate: boolean;
+};
+
+/**
+ * Instantané historique append-only et motif enregistré, sans réécriture des versions ou preuves antérieures. Ancien instantané P03 sans document structuré : document:null.
+ */
+export type RevisionView = {
+    id: Uuid;
+    revisionNumber: number;
+    title: string;
+    summary: string;
+    document: ContentDocument | null;
+    authorId: Uuid | null;
+    createdAt: UtcInstant;
+    reason: string;
+    replacesRevisionId: Uuid | null;
+    legacyBody: string | null;
+};
+
+export type ContentPage = {
+    items: Array<ContentSummary>;
+    page: number;
+    size: number;
+    total: number;
+};
+
+export type RevisionPage = {
+    items: Array<RevisionView>;
+    page: number;
+    size: number;
+    total: number;
+};
+
+export type ContentIssue = {
+    code: string;
+    field: string;
+    resourceId: Uuid | null;
+    action: string;
+};
+
+/**
+ * Contrôle de la révision éditoriale courante, pas autorisation permanente de publier. Le serveur recontrôle lors de la transition et de la publication.
+ */
+export type Readiness = {
+    ready: boolean;
+    blockingIssues: Array<ContentIssue>;
+    warnings: Array<ContentIssue>;
+    checkedRevision: Uuid;
+};
+
+export type ContentDependency = {
+    resourceId: Uuid;
+    versionId: Uuid;
+    kind: ContentKind;
+    title: string;
+    relation: 'COMPOSITION' | 'REFERENCE' | 'TRANSLATION';
+};
+
+export type Dependencies = {
+    items: Array<ContentDependency>;
+    canArchive: boolean;
+    consequences: Array<string>;
+};
+
+/**
+ * Questions publiques sans correctOption ni explanation ; la correction sera autorisée par le service consommateur.
+ */
+export type PublicQuizQuestion = {
+    key: string;
+    prompt: string;
+    options: Array<string>;
+    points: number;
+};
+
+/**
+ * Projection gratuite publiée, sans corrigé d’exercice ni réponse/explication de quiz. Les contrôles d’accès du futur apprentissage restent distincts.
+ */
+export type PublicDocument = {
+    objective: string;
+    expectedResult: string;
+    prerequisites: Array<string>;
+    blocks: Array<ContentBlock>;
+    estimatedMinutes: number | null;
+    quiz: Array<PublicQuizQuestion>;
+    rubric: Array<RubricCriterion>;
+    access: ContentAccess;
+    media: Array<MediaReference>;
+    relatedResourceIds: Array<Uuid>;
+    exerciseInstructions: string | null;
+};
+
+/**
+ * Métadonnées issues uniquement d’une révision publiée. FREE/PUBLISHED peut exposer PublicDocument ; PROTECTED ou STALE exige document:null. Aucune projection d’un brouillon, aucun fallback de langue, aucun droit payant déduit d’une session.
+ */
+export type PublicContent = {
+    resourceId: Uuid;
+    kind: ContentKind;
+    versionId: Uuid;
+    versionNumber: number;
+    locale: Locale;
+    slug: string;
+    availability: 'PUBLISHED' | 'STALE';
+    revisionId: Uuid;
+    title: string;
+    summary: string;
+    access: ContentAccess;
+    document: PublicDocument | null;
+    childResourceIds: Array<Uuid>;
+};
+
 export type RegisterRequestWritable = {
     email: string;
     /**
@@ -141,7 +447,7 @@ export type LoginRequestWritable = {
 };
 
 /**
- * Convention préparée pour les futures mutations : reprendre l'ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. La comparaison et l'écriture doivent être atomiques. Aucun endpoint factice n'est ajouté en P03.
+ * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
  */
 export type IfMatch = string;
 
@@ -487,7 +793,7 @@ export type UpdatePreferencesData = {
          */
         'X-CSRF-TOKEN': string;
         /**
-         * Convention préparée pour les futures mutations : reprendre l'ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. La comparaison et l'écriture doivent être atomiques. Aucun endpoint factice n'est ajouté en P03.
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
          */
         'If-Match': string;
     };
@@ -533,3 +839,939 @@ export type UpdatePreferencesResponses = {
 };
 
 export type UpdatePreferencesResponse = UpdatePreferencesResponses[keyof UpdatePreferencesResponses];
+
+export type ListContentsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        q?: string;
+        kind?: ContentKind;
+        state?: EditorialState;
+        locale?: Locale;
+        courseId?: Uuid;
+        verifiedBefore?: UtcInstant;
+        needsUpdate?: boolean;
+        /**
+         * Page 0-based ; défaut 0.
+         */
+        page?: number;
+        /**
+         * Taille de page ; défaut 20.
+         */
+        size?: number;
+    };
+    url: '/admin/contents';
+};
+
+export type ListContentsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListContentsError = ListContentsErrors[keyof ListContentsErrors];
+
+export type ListContentsResponses = {
+    /**
+     * Représentation persistée courante.
+     */
+    200: ContentPage;
+};
+
+export type ListContentsResponse = ListContentsResponses[keyof ListContentsResponses];
+
+export type CreateContentData = {
+    body: CreateContent;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+    };
+    path?: never;
+    query?: never;
+    url: '/admin/contents';
+};
+
+export type CreateContentErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type CreateContentError = CreateContentErrors[keyof CreateContentErrors];
+
+export type CreateContentResponses = {
+    /**
+     * Document créé, brouillon sans publication.
+     */
+    201: ContentView;
+};
+
+export type CreateContentResponse = CreateContentResponses[keyof CreateContentResponses];
+
+export type GetContentData = {
+    body?: never;
+    path: {
+        /**
+         * UUID du document CMS (traduction et version), distinct de resourceId.
+         */
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/contents/{id}';
+};
+
+export type GetContentErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetContentError = GetContentErrors[keyof GetContentErrors];
+
+export type GetContentResponses = {
+    /**
+     * Représentation persistée courante.
+     */
+    200: ContentView;
+};
+
+export type GetContentResponse = GetContentResponses[keyof GetContentResponses];
+
+export type ListContentRevisionsData = {
+    body?: never;
+    path: {
+        /**
+         * UUID du document CMS (traduction et version), distinct de resourceId.
+         */
+        id: Uuid;
+    };
+    query?: {
+        /**
+         * Page 0-based ; défaut 0.
+         */
+        page?: number;
+        /**
+         * Taille de page ; défaut 20.
+         */
+        size?: number;
+    };
+    url: '/admin/contents/{id}/revisions';
+};
+
+export type ListContentRevisionsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListContentRevisionsError = ListContentRevisionsErrors[keyof ListContentRevisionsErrors];
+
+export type ListContentRevisionsResponses = {
+    /**
+     * Représentation persistée courante.
+     */
+    200: RevisionPage;
+};
+
+export type ListContentRevisionsResponse = ListContentRevisionsResponses[keyof ListContentRevisionsResponses];
+
+export type SaveContentRevisionData = {
+    body: SaveRevision;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        /**
+         * UUID du document CMS (traduction et version), distinct de resourceId.
+         */
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/contents/{id}/revisions';
+};
+
+export type SaveContentRevisionErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type SaveContentRevisionError = SaveContentRevisionErrors[keyof SaveContentRevisionErrors];
+
+export type SaveContentRevisionResponses = {
+    /**
+     * Représentation persistée courante.
+     */
+    200: ContentView;
+};
+
+export type SaveContentRevisionResponse = SaveContentRevisionResponses[keyof SaveContentRevisionResponses];
+
+export type CreateContentVersionData = {
+    body: NewVersion;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        /**
+         * UUID du document CMS (traduction et version), distinct de resourceId.
+         */
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/contents/{id}/versions';
+};
+
+export type CreateContentVersionErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type CreateContentVersionError = CreateContentVersionErrors[keyof CreateContentVersionErrors];
+
+export type CreateContentVersionResponses = {
+    /**
+     * Document créé, brouillon sans publication.
+     */
+    201: ContentView;
+};
+
+export type CreateContentVersionResponse = CreateContentVersionResponses[keyof CreateContentVersionResponses];
+
+export type DuplicateContentData = {
+    body: DuplicateContent;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        /**
+         * UUID du document CMS (traduction et version), distinct de resourceId.
+         */
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/contents/{id}/duplicate';
+};
+
+export type DuplicateContentErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type DuplicateContentError = DuplicateContentErrors[keyof DuplicateContentErrors];
+
+export type DuplicateContentResponses = {
+    /**
+     * Document créé, brouillon sans publication.
+     */
+    201: ContentView;
+};
+
+export type DuplicateContentResponse = DuplicateContentResponses[keyof DuplicateContentResponses];
+
+export type CreateContentTranslationData = {
+    body: CreateTranslation;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        /**
+         * UUID du document CMS (traduction et version), distinct de resourceId.
+         */
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/contents/{id}/translations';
+};
+
+export type CreateContentTranslationErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type CreateContentTranslationError = CreateContentTranslationErrors[keyof CreateContentTranslationErrors];
+
+export type CreateContentTranslationResponses = {
+    /**
+     * Document créé, brouillon sans publication.
+     */
+    201: ContentView;
+};
+
+export type CreateContentTranslationResponse = CreateContentTranslationResponses[keyof CreateContentTranslationResponses];
+
+export type TransitionContentData = {
+    body: TransitionContent;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        /**
+         * UUID du document CMS (traduction et version), distinct de resourceId.
+         */
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/contents/{id}/transition';
+};
+
+export type TransitionContentErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type TransitionContentError = TransitionContentErrors[keyof TransitionContentErrors];
+
+export type TransitionContentResponses = {
+    /**
+     * Représentation persistée courante.
+     */
+    200: ContentView;
+};
+
+export type TransitionContentResponse = TransitionContentResponses[keyof TransitionContentResponses];
+
+export type PublishContentData = {
+    body: PublishContent;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        /**
+         * UUID du document CMS (traduction et version), distinct de resourceId.
+         */
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/contents/{id}/publish';
+};
+
+export type PublishContentErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type PublishContentError = PublishContentErrors[keyof PublishContentErrors];
+
+export type PublishContentResponses = {
+    /**
+     * Représentation persistée courante.
+     */
+    200: ContentView;
+};
+
+export type PublishContentResponse = PublishContentResponses[keyof PublishContentResponses];
+
+export type ArchiveContentData = {
+    body: ArchiveContent;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        /**
+         * UUID du document CMS (traduction et version), distinct de resourceId.
+         */
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/contents/{id}/archive';
+};
+
+export type ArchiveContentErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ArchiveContentError = ArchiveContentErrors[keyof ArchiveContentErrors];
+
+export type ArchiveContentResponses = {
+    /**
+     * Représentation persistée courante.
+     */
+    200: ContentView;
+};
+
+export type ArchiveContentResponse = ArchiveContentResponses[keyof ArchiveContentResponses];
+
+export type ReplaceContentCompositionData = {
+    body: ReplaceComposition;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        /**
+         * UUID du document CMS (traduction et version), distinct de resourceId.
+         */
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/contents/{id}/composition';
+};
+
+export type ReplaceContentCompositionErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ReplaceContentCompositionError = ReplaceContentCompositionErrors[keyof ReplaceContentCompositionErrors];
+
+export type ReplaceContentCompositionResponses = {
+    /**
+     * Représentation persistée courante.
+     */
+    200: ContentView;
+};
+
+export type ReplaceContentCompositionResponse = ReplaceContentCompositionResponses[keyof ReplaceContentCompositionResponses];
+
+export type PreviewContentData = {
+    body?: never;
+    path: {
+        /**
+         * UUID du document CMS (traduction et version), distinct de resourceId.
+         */
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/contents/{id}/preview';
+};
+
+export type PreviewContentErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type PreviewContentError = PreviewContentErrors[keyof PreviewContentErrors];
+
+export type PreviewContentResponses = {
+    /**
+     * Représentation persistée courante.
+     */
+    200: ContentView;
+};
+
+export type PreviewContentResponse = PreviewContentResponses[keyof PreviewContentResponses];
+
+export type GetContentReadinessData = {
+    body?: never;
+    path: {
+        /**
+         * UUID du document CMS (traduction et version), distinct de resourceId.
+         */
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/contents/{id}/readiness';
+};
+
+export type GetContentReadinessErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetContentReadinessError = GetContentReadinessErrors[keyof GetContentReadinessErrors];
+
+export type GetContentReadinessResponses = {
+    /**
+     * Représentation persistée courante.
+     */
+    200: Readiness;
+};
+
+export type GetContentReadinessResponse = GetContentReadinessResponses[keyof GetContentReadinessResponses];
+
+export type GetContentDependenciesData = {
+    body?: never;
+    path: {
+        /**
+         * UUID du document CMS (traduction et version), distinct de resourceId.
+         */
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/contents/{id}/dependencies';
+};
+
+export type GetContentDependenciesErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetContentDependenciesError = GetContentDependenciesErrors[keyof GetContentDependenciesErrors];
+
+export type GetContentDependenciesResponses = {
+    /**
+     * Représentation persistée courante.
+     */
+    200: Dependencies;
+};
+
+export type GetContentDependenciesResponse = GetContentDependenciesResponses[keyof GetContentDependenciesResponses];
+
+export type GetPublicContentData = {
+    body?: never;
+    path: {
+        resourceId: Uuid;
+    };
+    query: {
+        locale: Locale;
+    };
+    url: '/contents/{resourceId}';
+};
+
+export type GetPublicContentErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetPublicContentError = GetPublicContentErrors[keyof GetPublicContentErrors];
+
+export type GetPublicContentResponses = {
+    /**
+     * Représentation persistée courante.
+     */
+    200: PublicContent;
+};
+
+export type GetPublicContentResponse = GetPublicContentResponses[keyof GetPublicContentResponses];

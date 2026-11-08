@@ -3,8 +3,8 @@ info:
   title: ChatGPT Courses API
   version: 0.1.0
   description: >-
-    Opérations réellement introduites jusqu’à P04. Identité Spring, CSRF et sessions JDBC ; aucune route
-    future ne répond un faux succès.
+    Opérations réellement introduites jusqu’à P05 : identité Spring et CMS éditorial. Le catalogue P06 et le
+    commerce ne sont pas simulés.
 servers:
   - url: /api/v1
     description: API de même origine, préfixe conservé jusqu'à Spring.
@@ -14,6 +14,8 @@ tags:
     description: Disponibilité technique, sans données privées ou configuration interne.
   - name: Identity
     description: Compte, session, récupération et préférences du propriétaire.
+  - name: Editorial
+    description: Contenus, versions, traductions et publication ; permissions distinctes du commerce.
 paths:
   /system/health:
     get:
@@ -293,6 +295,891 @@ paths:
           $ref: '#/components/responses/ProblemResponse'
         default:
           $ref: '#/components/responses/ProblemResponse'
+  /admin/contents:
+    get:
+      operationId: listContents
+      tags:
+        - Editorial
+      summary: Chercher les contenus administratifs avec pagination.
+      security:
+        - SessionCookie: []
+      description: Permission content.read. Les filtres ne changent jamais l’autorisation serveur.
+      parameters:
+        - name: q
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 240
+        - name: kind
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/ContentKind'
+        - name: state
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/EditorialState'
+        - name: locale
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/Locale'
+        - name: courseId
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: verifiedBefore
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/UtcInstant'
+        - name: needsUpdate
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+          description: Page 0-based ; défaut 0.
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+          description: Taille de page ; défaut 20.
+      responses:
+        '200':
+          description: Représentation persistée courante.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            X-Robots-Tag:
+              schema:
+                type: string
+                const: noindex, nofollow
+              description: Représentation administrative non indexable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentPage'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    post:
+      operationId: createContent
+      tags:
+        - Editorial
+      summary: Créer une identité et un brouillon éditorial.
+      security:
+        - SessionCookie: []
+      description: Permission content.write ; acteur fourni par la session, jamais par le corps.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateContent'
+      responses:
+        '201':
+          description: Document créé, brouillon sans publication.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            X-Robots-Tag:
+              schema:
+                type: string
+                const: noindex, nofollow
+              description: Représentation administrative non indexable.
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              schema:
+                type: string
+                format: uri-reference
+              description: Document CMS créé.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/contents/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+        description: UUID du document CMS (traduction et version), distinct de resourceId.
+    get:
+      operationId: getContent
+      tags:
+        - Editorial
+      summary: Lire le document CMS courant.
+      security:
+        - SessionCookie: []
+      description: Permission content.read ; représentation privée complète.
+      responses:
+        '200':
+          description: Représentation persistée courante.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            X-Robots-Tag:
+              schema:
+                type: string
+                const: noindex, nofollow
+              description: Représentation administrative non indexable.
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/contents/{id}/revisions:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+        description: UUID du document CMS (traduction et version), distinct de resourceId.
+    post:
+      operationId: saveContentRevision
+      tags:
+        - Editorial
+      summary: Enregistrer une nouvelle révision éditoriale.
+      security:
+        - SessionCookie: []
+      description: Permission content.write. CSRF et If-Match obligatoires ; aucune mutation automatique après conflit.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveRevision'
+      responses:
+        '200':
+          description: Représentation persistée courante.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            X-Robots-Tag:
+              schema:
+                type: string
+                const: noindex, nofollow
+              description: Représentation administrative non indexable.
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    get:
+      operationId: listContentRevisions
+      tags:
+        - Editorial
+      summary: Lire les instantanés historiques paginés.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+          description: Page 0-based ; défaut 0.
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+          description: Taille de page ; défaut 20.
+      description: Permission content.read ; aucun historique privé dans le catalogue public.
+      responses:
+        '200':
+          description: Représentation persistée courante.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            X-Robots-Tag:
+              schema:
+                type: string
+                const: noindex, nofollow
+              description: Représentation administrative non indexable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RevisionPage'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/contents/{id}/versions:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+        description: UUID du document CMS (traduction et version), distinct de resourceId.
+    post:
+      operationId: createContentVersion
+      tags:
+        - Editorial
+      summary: Créer une nouvelle version pédagogique.
+      security:
+        - SessionCookie: []
+      description: Permission content.write. CSRF et If-Match obligatoires ; aucune mutation automatique après conflit.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewVersion'
+      responses:
+        '201':
+          description: Document créé, brouillon sans publication.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            X-Robots-Tag:
+              schema:
+                type: string
+                const: noindex, nofollow
+              description: Représentation administrative non indexable.
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              schema:
+                type: string
+                format: uri-reference
+              description: Document CMS créé.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/contents/{id}/duplicate:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+        description: UUID du document CMS (traduction et version), distinct de resourceId.
+    post:
+      operationId: duplicateContent
+      tags:
+        - Editorial
+      summary: Dupliquer vers une nouvelle identité en brouillon.
+      security:
+        - SessionCookie: []
+      description: Permission content.write. CSRF et If-Match obligatoires ; aucune mutation automatique après conflit.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DuplicateContent'
+      responses:
+        '201':
+          description: Document créé, brouillon sans publication.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            X-Robots-Tag:
+              schema:
+                type: string
+                const: noindex, nofollow
+              description: Représentation administrative non indexable.
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              schema:
+                type: string
+                format: uri-reference
+              description: Document CMS créé.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/contents/{id}/translations:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+        description: UUID du document CMS (traduction et version), distinct de resourceId.
+    post:
+      operationId: createContentTranslation
+      tags:
+        - Editorial
+      summary: Créer explicitement une traduction sur la même version.
+      security:
+        - SessionCookie: []
+      description: Permission content.write. CSRF et If-Match obligatoires ; aucune mutation automatique après conflit.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTranslation'
+      responses:
+        '201':
+          description: Document créé, brouillon sans publication.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            X-Robots-Tag:
+              schema:
+                type: string
+                const: noindex, nofollow
+              description: Représentation administrative non indexable.
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              schema:
+                type: string
+                format: uri-reference
+              description: Document CMS créé.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/contents/{id}/transition:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+        description: UUID du document CMS (traduction et version), distinct de resourceId.
+    post:
+      operationId: transitionContent
+      tags:
+        - Editorial
+      summary: Soumettre, vérifier ou signaler une actualisation.
+      security:
+        - SessionCookie: []
+      description: >-
+        Permission content.review pour READY, content.write pour TO_REVIEW/STALE. CSRF et If-Match
+        obligatoires ; aucune mutation automatique après conflit.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransitionContent'
+      responses:
+        '200':
+          description: Représentation persistée courante.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            X-Robots-Tag:
+              schema:
+                type: string
+                const: noindex, nofollow
+              description: Représentation administrative non indexable.
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/contents/{id}/publish:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+        description: UUID du document CMS (traduction et version), distinct de resourceId.
+    post:
+      operationId: publishContent
+      tags:
+        - Editorial
+      summary: Publier transactionnellement une révision déterminée.
+      security:
+        - SessionCookie: []
+      description: Permission content.publish. CSRF et If-Match obligatoires ; aucune mutation automatique après conflit.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublishContent'
+      responses:
+        '200':
+          description: Représentation persistée courante.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            X-Robots-Tag:
+              schema:
+                type: string
+                const: noindex, nofollow
+              description: Représentation administrative non indexable.
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/contents/{id}/archive:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+        description: UUID du document CMS (traduction et version), distinct de resourceId.
+    post:
+      operationId: archiveContent
+      tags:
+        - Editorial
+      summary: Archiver sans supprimer l’historique.
+      security:
+        - SessionCookie: []
+      description: Permission content.archive. CSRF et If-Match obligatoires ; aucune mutation automatique après conflit.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArchiveContent'
+      responses:
+        '200':
+          description: Représentation persistée courante.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            X-Robots-Tag:
+              schema:
+                type: string
+                const: noindex, nofollow
+              description: Représentation administrative non indexable.
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/contents/{id}/composition:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+        description: UUID du document CMS (traduction et version), distinct de resourceId.
+    put:
+      operationId: replaceContentComposition
+      tags:
+        - Editorial
+      summary: Remplacer l’ordre du programme non gelé.
+      security:
+        - SessionCookie: []
+      description: Permission content.write. CSRF et If-Match obligatoires ; aucune mutation automatique après conflit.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReplaceComposition'
+      responses:
+        '200':
+          description: Représentation persistée courante.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            X-Robots-Tag:
+              schema:
+                type: string
+                const: noindex, nofollow
+              description: Représentation administrative non indexable.
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/contents/{id}/preview:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+        description: UUID du document CMS (traduction et version), distinct de resourceId.
+    get:
+      operationId: previewContent
+      tags:
+        - Editorial
+      summary: Prévisualiser un brouillon avec permission.
+      security:
+        - SessionCookie: []
+      description: >-
+        Permission content.read ; privée, no-store et non indexable. preview=true sur une route publique ne
+        donne aucun accès.
+      responses:
+        '200':
+          description: Représentation persistée courante.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            X-Robots-Tag:
+              schema:
+                type: string
+                const: noindex, nofollow
+              description: Représentation administrative non indexable.
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/contents/{id}/readiness:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+        description: UUID du document CMS (traduction et version), distinct de resourceId.
+    get:
+      operationId: getContentReadiness
+      tags:
+        - Editorial
+      summary: Contrôler les bloqueurs de publication.
+      security:
+        - SessionCookie: []
+      description: >-
+        Permission content.read ; privée, no-store et non indexable. preview=true sur une route publique ne
+        donne aucun accès.
+      responses:
+        '200':
+          description: Représentation persistée courante.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            X-Robots-Tag:
+              schema:
+                type: string
+                const: noindex, nofollow
+              description: Représentation administrative non indexable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Readiness'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/contents/{id}/dependencies:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+        description: UUID du document CMS (traduction et version), distinct de resourceId.
+    get:
+      operationId: getContentDependencies
+      tags:
+        - Editorial
+      summary: Examiner les dépendances avant archivage.
+      security:
+        - SessionCookie: []
+      description: >-
+        Permission content.read ; privée, no-store et non indexable. preview=true sur une route publique ne
+        donne aucun accès.
+      responses:
+        '200':
+          description: Représentation persistée courante.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            X-Robots-Tag:
+              schema:
+                type: string
+                const: noindex, nofollow
+              description: Représentation administrative non indexable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dependencies'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /contents/{resourceId}:
+    parameters:
+      - name: resourceId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: getPublicContent
+      tags:
+        - Editorial
+      summary: Lire une projection publiée minimale.
+      security: []
+      description: >-
+        Socle P05 pour les lots consommateurs, sans catalogue P06. Aucun brouillon ni corps premium ; langue
+        manquante ou archive 404, traduction dépassée STALE avec document:null.
+      parameters:
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+      responses:
+        '200':
+          description: Représentation persistée courante.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicContent'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
 components:
   schemas:
     SystemHealth:
@@ -557,6 +1444,1080 @@ components:
       properties:
         locale:
           $ref: '#/components/schemas/Locale'
+    ContentKind:
+      type: string
+      enum:
+        - COURSE
+        - MODULE
+        - ACTIVITY
+        - GUIDE
+        - METHOD_TEMPLATE
+    EditorialState:
+      type: string
+      enum:
+        - DRAFT
+        - TO_REVIEW
+        - READY
+        - PUBLISHED
+        - STALE
+        - ARCHIVED
+    ContentAccess:
+      type: string
+      enum:
+        - FREE
+        - PROTECTED
+    ContentBlock:
+      type: object
+      additionalProperties: false
+      required:
+        - type
+        - text
+        - url
+      properties:
+        type:
+          type: string
+          enum:
+            - HEADING
+            - PARAGRAPH
+            - LIST
+            - CALLOUT
+            - CODE
+            - LINK
+        text:
+          type: string
+          minLength: 1
+          maxLength: 4000
+        url:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 2000
+            - type: 'null'
+      description: >-
+        Texte brut, jamais HTML/MDX. LINK exige une URL HTTPS sans credentials ou un chemin interne simple ;
+        les autres types exigent url:null. Pas de téléchargement serveur depuis cette URL.
+    Exercise:
+      type: object
+      additionalProperties: false
+      required:
+        - instructions
+        - correction
+      properties:
+        instructions:
+          type: string
+          minLength: 0
+          maxLength: 8000
+        correction:
+          type: string
+          minLength: 0
+          maxLength: 8000
+    QuizQuestion:
+      type: object
+      additionalProperties: false
+      required:
+        - key
+        - prompt
+        - options
+        - correctOption
+        - explanation
+        - points
+      properties:
+        key:
+          type: string
+          minLength: 1
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9_-]*$
+        prompt:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        options:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 1000
+          minItems: 2
+          maxItems: 8
+        correctOption:
+          type: integer
+          minimum: 0
+          maximum: 7
+        explanation:
+          type: string
+          minLength: 1
+          maxLength: 4000
+        points:
+          type: integer
+          minimum: 1
+          maximum: 1000
+      description: >-
+        correctOption est un index 0-based strictement inférieur au nombre d’options ; clé unique dans le
+        document. Réponses réservées aux routes administratives.
+    RubricCriterion:
+      type: object
+      additionalProperties: false
+      required:
+        - key
+        - label
+        - points
+        - blocking
+      properties:
+        key:
+          type: string
+          minLength: 1
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9_-]*$
+        label:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        points:
+          type: integer
+          minimum: 1
+          maximum: 1000
+        blocking:
+          type: boolean
+    MediaReference:
+      type: object
+      additionalProperties: false
+      required:
+        - assetId
+        - kind
+        - required
+        - label
+      properties:
+        assetId:
+          $ref: '#/components/schemas/UUID'
+        kind:
+          type: string
+          enum:
+            - IMAGE
+            - VIDEO
+            - FILE
+        required:
+          type: boolean
+        label:
+          type: string
+          minLength: 1
+          maxLength: 240
+      description: >-
+        Aucun état de disponibilité choisi par le client. Les références sont non vérifiées en P05 ; required
+        bloque tant que le registre serveur P10 ne les valide pas.
+    ContentDocument:
+      type: object
+      additionalProperties: false
+      required:
+        - objective
+        - expectedResult
+        - prerequisites
+        - blocks
+        - estimatedMinutes
+        - exercise
+        - quiz
+        - rubric
+        - access
+        - media
+        - relatedResourceIds
+      properties:
+        objective:
+          type: string
+          minLength: 0
+          maxLength: 4000
+        expectedResult:
+          type: string
+          minLength: 0
+          maxLength: 4000
+        prerequisites:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 1000
+          minItems: 0
+          maxItems: 20
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentBlock'
+          minItems: 0
+          maxItems: 60
+        estimatedMinutes:
+          anyOf:
+            - type: integer
+              minimum: 1
+              maximum: 1440
+            - type: 'null'
+        exercise:
+          anyOf:
+            - $ref: '#/components/schemas/Exercise'
+            - type: 'null'
+        quiz:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuizQuestion'
+          minItems: 0
+          maxItems: 20
+        rubric:
+          type: array
+          items:
+            $ref: '#/components/schemas/RubricCriterion'
+          minItems: 0
+          maxItems: 30
+        access:
+          $ref: '#/components/schemas/ContentAccess'
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/MediaReference'
+          minItems: 0
+          maxItems: 20
+        relatedResourceIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/UUID'
+          minItems: 0
+          maxItems: 30
+          uniqueItems: true
+      description: >-
+        Document structuré privé ; taille sérialisée totale maximale 48 KiB UTF-8. La requête entière reste
+        limitée à 64 KiB par le relais. Listes bornées et références contrôlées dans le service.
+    CreateContent:
+      type: object
+      additionalProperties: false
+      required:
+        - kind
+        - locale
+        - slug
+        - title
+        - summary
+        - objectives
+        - evaluationDefinition
+        - document
+        - childVersionIds
+        - reason
+      properties:
+        kind:
+          $ref: '#/components/schemas/ContentKind'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        slug:
+          type: string
+          minLength: 1
+          maxLength: 180
+          pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        summary:
+          type: string
+          minLength: 0
+          maxLength: 2000
+        objectives:
+          type: string
+          minLength: 1
+          maxLength: 4000
+        evaluationDefinition:
+          type: string
+          minLength: 1
+          maxLength: 4000
+        document:
+          $ref: '#/components/schemas/ContentDocument'
+        childVersionIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/UUID'
+          minItems: 0
+          maxItems: 100
+          uniqueItems: true
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
+    SaveRevision:
+      type: object
+      additionalProperties: false
+      required:
+        - title
+        - summary
+        - document
+        - reason
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        summary:
+          type: string
+          minLength: 0
+          maxLength: 2000
+        document:
+          $ref: '#/components/schemas/ContentDocument'
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
+      description: >-
+        Ajoute un instantané éditorial sans changer la version pédagogique. Objectif ou barème changé après
+        gel : nouvelle version exigée (409 NEW_PEDAGOGICAL_VERSION_REQUIRED).
+    NewVersion:
+      type: object
+      additionalProperties: false
+      required:
+        - objectives
+        - evaluationDefinition
+        - title
+        - summary
+        - document
+        - childVersionIds
+        - reason
+      properties:
+        objectives:
+          type: string
+          minLength: 1
+          maxLength: 4000
+        evaluationDefinition:
+          type: string
+          minLength: 1
+          maxLength: 4000
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        summary:
+          type: string
+          minLength: 0
+          maxLength: 2000
+        document:
+          $ref: '#/components/schemas/ContentDocument'
+        childVersionIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/UUID'
+          minItems: 0
+          maxItems: 100
+          uniqueItems: true
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
+    DuplicateContent:
+      type: object
+      additionalProperties: false
+      required:
+        - slug
+        - title
+        - reason
+      properties:
+        slug:
+          type: string
+          minLength: 1
+          maxLength: 180
+          pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
+    CreateTranslation:
+      type: object
+      additionalProperties: false
+      required:
+        - locale
+        - slug
+        - title
+        - summary
+        - document
+        - reason
+      properties:
+        locale:
+          $ref: '#/components/schemas/Locale'
+        slug:
+          type: string
+          minLength: 1
+          maxLength: 180
+          pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        summary:
+          type: string
+          minLength: 0
+          maxLength: 2000
+        document:
+          $ref: '#/components/schemas/ContentDocument'
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
+    TransitionContent:
+      type: object
+      additionalProperties: false
+      required:
+        - state
+        - reason
+      properties:
+        state:
+          type: string
+          enum:
+            - TO_REVIEW
+            - READY
+            - STALE
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
+        sourceRevisionId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+      description: >-
+        READY exige content.review et readiness sans bloqueur ; TO_REVIEW/STALE exigent content.write. Pour la
+        revue d’une traduction liée, sourceRevisionId doit correspondre à la révision source courante.
+    PublishContent:
+      type: object
+      additionalProperties: false
+      required:
+        - revisionId
+        - reason
+      properties:
+        revisionId:
+          $ref: '#/components/schemas/UUID'
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
+      description: >-
+        Publie la révision courante déterminée ; readiness, revue, permission et If-Match revérifiés dans la
+        transaction.
+    ArchiveContent:
+      type: object
+      additionalProperties: false
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
+    ReplaceComposition:
+      type: object
+      additionalProperties: false
+      required:
+        - childVersionIds
+        - reason
+      properties:
+        childVersionIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/UUID'
+          minItems: 0
+          maxItems: 100
+          uniqueItems: true
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
+      description: >-
+        Ordre complet des UUID versions enfants, position serveur 1-based. Modification réservée à une
+        pédagogie non gelée.
+    TranslationLink:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - locale
+        - state
+        - sourceRevisionId
+        - reviewedSourceRevisionId
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        state:
+          $ref: '#/components/schemas/EditorialState'
+        sourceRevisionId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        reviewedSourceRevisionId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+    ContentView:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - resourceId
+        - kind
+        - versionId
+        - versionNumber
+        - locale
+        - slug
+        - state
+        - revision
+        - currentRevisionId
+        - publishedRevisionId
+        - title
+        - summary
+        - objectives
+        - evaluationDefinition
+        - document
+        - childVersionIds
+        - sourceTranslationId
+        - sourceRevisionId
+        - reviewedSourceRevisionId
+        - verifiedAt
+        - updatedAt
+        - frozenAt
+        - translations
+        - legacyBody
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        kind:
+          $ref: '#/components/schemas/ContentKind'
+        versionId:
+          $ref: '#/components/schemas/UUID'
+        versionNumber:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        locale:
+          $ref: '#/components/schemas/Locale'
+        slug:
+          type: string
+          minLength: 1
+          maxLength: 180
+          pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+        state:
+          $ref: '#/components/schemas/EditorialState'
+        revision:
+          $ref: '#/components/schemas/Revision'
+        currentRevisionId:
+          $ref: '#/components/schemas/UUID'
+        publishedRevisionId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        summary:
+          type: string
+          minLength: 0
+          maxLength: 2000
+        objectives:
+          type: string
+          minLength: 1
+          maxLength: 4000
+        evaluationDefinition:
+          type: string
+          minLength: 1
+          maxLength: 4000
+        document:
+          anyOf:
+            - $ref: '#/components/schemas/ContentDocument'
+            - type: 'null'
+        childVersionIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/UUID'
+          minItems: 0
+          maxItems: 100
+          uniqueItems: true
+        sourceTranslationId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        sourceRevisionId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        reviewedSourceRevisionId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        verifiedAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+        updatedAt:
+          $ref: '#/components/schemas/UtcInstant'
+        frozenAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+        translations:
+          type: array
+          items:
+            $ref: '#/components/schemas/TranslationLink'
+          minItems: 0
+          maxItems: 2
+        legacyBody:
+          anyOf:
+            - type: string
+            - type: 'null'
+      description: >-
+        Représentation administrative complète ; id désigne la traduction/version, resourceId l’identité
+        pédagogique stable. ETag fort content-{id}-r{revision}. Ancienne donnée P03 : document:null lisible,
+        publication bloquée par STRUCTURED_DOCUMENT_REQUIRED avant une révision structurée explicite.
+    ContentSummary:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - resourceId
+        - kind
+        - versionId
+        - versionNumber
+        - locale
+        - slug
+        - state
+        - revision
+        - title
+        - summary
+        - verifiedAt
+        - updatedAt
+        - needsUpdate
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        kind:
+          $ref: '#/components/schemas/ContentKind'
+        versionId:
+          $ref: '#/components/schemas/UUID'
+        versionNumber:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        locale:
+          $ref: '#/components/schemas/Locale'
+        slug:
+          type: string
+          minLength: 1
+          maxLength: 180
+          pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+        state:
+          $ref: '#/components/schemas/EditorialState'
+        revision:
+          $ref: '#/components/schemas/Revision'
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        summary:
+          type: string
+          minLength: 0
+          maxLength: 2000
+        verifiedAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+        updatedAt:
+          $ref: '#/components/schemas/UtcInstant'
+        needsUpdate:
+          type: boolean
+    RevisionView:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - revisionNumber
+        - title
+        - summary
+        - document
+        - authorId
+        - createdAt
+        - reason
+        - replacesRevisionId
+        - legacyBody
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        revisionNumber:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        summary:
+          type: string
+          minLength: 0
+          maxLength: 2000
+        document:
+          anyOf:
+            - $ref: '#/components/schemas/ContentDocument'
+            - type: 'null'
+        authorId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
+        replacesRevisionId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        legacyBody:
+          anyOf:
+            - type: string
+            - type: 'null'
+      description: >-
+        Instantané historique append-only et motif enregistré, sans réécriture des versions ou preuves
+        antérieures. Ancien instantané P03 sans document structuré : document:null.
+    ContentPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - size
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentSummary'
+          minItems: 0
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        size:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    RevisionPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - size
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RevisionView'
+          minItems: 0
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        size:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    ContentIssue:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - field
+        - resourceId
+        - action
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 100
+          pattern: ^[A-Z][A-Z0-9_]*$
+        field:
+          type: string
+          minLength: 1
+          maxLength: 200
+        resourceId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        action:
+          type: string
+          minLength: 1
+          maxLength: 1000
+    Readiness:
+      type: object
+      additionalProperties: false
+      required:
+        - ready
+        - blockingIssues
+        - warnings
+        - checkedRevision
+      properties:
+        ready:
+          type: boolean
+        blockingIssues:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentIssue'
+          minItems: 0
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentIssue'
+          minItems: 0
+        checkedRevision:
+          $ref: '#/components/schemas/UUID'
+      description: >-
+        Contrôle de la révision éditoriale courante, pas autorisation permanente de publier. Le serveur
+        recontrôle lors de la transition et de la publication.
+    ContentDependency:
+      type: object
+      additionalProperties: false
+      required:
+        - resourceId
+        - versionId
+        - kind
+        - title
+        - relation
+      properties:
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        versionId:
+          $ref: '#/components/schemas/UUID'
+        kind:
+          $ref: '#/components/schemas/ContentKind'
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        relation:
+          type: string
+          enum:
+            - COMPOSITION
+            - REFERENCE
+            - TRANSLATION
+    Dependencies:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - canArchive
+        - consequences
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentDependency'
+          minItems: 0
+        canArchive:
+          type: boolean
+        consequences:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 1000
+          minItems: 0
+    PublicQuizQuestion:
+      type: object
+      additionalProperties: false
+      required:
+        - key
+        - prompt
+        - options
+        - points
+      properties:
+        key:
+          type: string
+          minLength: 1
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9_-]*$
+        prompt:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        options:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 1000
+          minItems: 2
+          maxItems: 8
+        points:
+          type: integer
+          minimum: 1
+          maximum: 1000
+      description: >-
+        Questions publiques sans correctOption ni explanation ; la correction sera autorisée par le service
+        consommateur.
+    PublicDocument:
+      type: object
+      additionalProperties: false
+      required:
+        - objective
+        - expectedResult
+        - prerequisites
+        - blocks
+        - estimatedMinutes
+        - quiz
+        - rubric
+        - access
+        - media
+        - relatedResourceIds
+        - exerciseInstructions
+      properties:
+        objective:
+          type: string
+          minLength: 0
+          maxLength: 4000
+        expectedResult:
+          type: string
+          minLength: 0
+          maxLength: 4000
+        prerequisites:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 1000
+          minItems: 0
+          maxItems: 20
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentBlock'
+          minItems: 0
+          maxItems: 60
+        estimatedMinutes:
+          anyOf:
+            - type: integer
+              minimum: 1
+              maximum: 1440
+            - type: 'null'
+        quiz:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicQuizQuestion'
+          minItems: 0
+          maxItems: 20
+        rubric:
+          type: array
+          items:
+            $ref: '#/components/schemas/RubricCriterion'
+          minItems: 0
+          maxItems: 30
+        access:
+          $ref: '#/components/schemas/ContentAccess'
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/MediaReference'
+          minItems: 0
+          maxItems: 20
+        relatedResourceIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/UUID'
+          minItems: 0
+          maxItems: 30
+          uniqueItems: true
+        exerciseInstructions:
+          anyOf:
+            - type: string
+              minLength: 0
+              maxLength: 8000
+            - type: 'null'
+      description: >-
+        Projection gratuite publiée, sans corrigé d’exercice ni réponse/explication de quiz. Les contrôles
+        d’accès du futur apprentissage restent distincts.
+    PublicContent:
+      type: object
+      additionalProperties: false
+      required:
+        - resourceId
+        - kind
+        - versionId
+        - versionNumber
+        - locale
+        - slug
+        - availability
+        - revisionId
+        - title
+        - summary
+        - access
+        - document
+        - childResourceIds
+      properties:
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        kind:
+          $ref: '#/components/schemas/ContentKind'
+        versionId:
+          $ref: '#/components/schemas/UUID'
+        versionNumber:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        locale:
+          $ref: '#/components/schemas/Locale'
+        slug:
+          type: string
+          minLength: 1
+          maxLength: 180
+          pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+        availability:
+          type: string
+          enum:
+            - PUBLISHED
+            - STALE
+        revisionId:
+          $ref: '#/components/schemas/UUID'
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        summary:
+          type: string
+          minLength: 0
+          maxLength: 2000
+        access:
+          $ref: '#/components/schemas/ContentAccess'
+        document:
+          anyOf:
+            - $ref: '#/components/schemas/PublicDocument'
+            - type: 'null'
+        childResourceIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/UUID'
+          minItems: 0
+          maxItems: 100
+          uniqueItems: true
+      description: >-
+        Métadonnées issues uniquement d’une révision publiée. FREE/PUBLISHED peut exposer PublicDocument ;
+        PROTECTED ou STALE exige document:null. Aucune projection d’un brouillon, aucun fallback de langue,
+        aucun droit payant déduit d’une session.
   headers:
     NoStore:
       description: Réponse non stockable ; les erreurs sont également privées.
@@ -567,8 +2528,9 @@ components:
           - private, no-store
     ETag:
       description: >-
-        Convention préparée : ETag fort reçu du serveur pour une ressource modifiable. Aucune mutation
-        correspondante n'est disponible en P03.
+        ETag fort reçu du serveur. Préférences : preferences-{uuid}-r{revision} ; document CMS :
+        content-{translationUuid}-r{revision}. Les représentations distinctes doivent invalider leur tag
+        lorsque leurs octets changent.
       schema:
         type: string
         pattern: ^"[^"\\]*"$
@@ -578,9 +2540,9 @@ components:
       in: header
       required: true
       description: >-
-        Convention préparée pour les futures mutations : reprendre l'ETag fort reçu, sans le reconstruire.
-        Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. La
-        comparaison et l'écriture doivent être atomiques. Aucun endpoint factice n'est ajouté en P03.
+        Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag
+        faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune
+        répétition écrasante automatique.
       schema:
         type: string
         minLength: 1

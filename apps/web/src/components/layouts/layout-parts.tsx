@@ -30,11 +30,11 @@ export function FutureItem({ label, locale, icon }: { label: string; locale: Loc
   </span>;
 }
 
-export function MobileNavigation({ locale, children, title }: { locale: Locale; children: ReactNode; title?: string }) {
+export function MobileNavigation({ locale, children, title, description }: { locale: Locale; children: ReactNode; title?: string; description?: string }) {
   const [open, setOpen] = useState(false);
   const text = getShowcaseDictionary(locale).common;
   return <div className="lg:hidden">
-    <Sheet open={open} onOpenChange={setOpen} title={title ?? text.navigation} description={text.navigationDescription} closeLabel={text.close}
+    <Sheet open={open} onOpenChange={setOpen} title={title ?? text.navigation} description={description ?? text.navigationDescription} closeLabel={text.close}
       trigger={<Button variant="ghost" size="icon" aria-label={text.openMenu}><Menu size={20} aria-hidden="true" /></Button>}>
       <div onClick={(event) => { if ((event.target as HTMLElement).closest("a")) setOpen(false); }}>
         {children}

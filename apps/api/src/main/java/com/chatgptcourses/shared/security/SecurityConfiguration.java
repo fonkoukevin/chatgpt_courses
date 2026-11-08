@@ -51,6 +51,18 @@ class SecurityConfiguration {
                                 "/api/v1/auth/logout", "/api/v1/auth/password-reset-requests", "/api/v1/auth/password-resets").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/auth/me", "/api/v1/me/preferences").authenticated()
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/me/preferences").hasAuthority("identity.preferences.write")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/contents/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/admin/contents", "/api/v1/admin/contents/**")
+                            .hasAuthority("content.read")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/admin/contents/*/publish").hasAuthority("content.publish")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/admin/contents/*/archive").hasAuthority("content.archive")
+                        // READY needs review permission; other transitions need write. The service checks the target.
+                        .requestMatchers(HttpMethod.POST, "/api/v1/admin/contents/*/transition")
+                            .hasAnyAuthority("content.write", "content.review")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/admin/contents", "/api/v1/admin/contents/*/revisions",
+                                "/api/v1/admin/contents/*/versions", "/api/v1/admin/contents/*/duplicate",
+                                "/api/v1/admin/contents/*/translations").hasAuthority("content.write")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/admin/contents/*/composition").hasAuthority("content.write")
                         .anyRequest().denyAll())
                 // The default session token repository and XOR/BREACH handler are deliberately retained.
                 .csrf(Customizer.withDefaults())

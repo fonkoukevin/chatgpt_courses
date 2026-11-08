@@ -10,6 +10,12 @@ test("le retour n'accepte que les destinations internes connues de la langue cou
   assert.equal(safeReturnTo("/fr/dev/learning", "fr"), "/fr/dev/learning");
   assert.equal(translateReturnTo("/fr/dev/learning", "en"), "/en/dev/learning");
   assert.equal(authHref("en", "sign-in", "/en/dev/learning"), "/en/sign-in?returnTo=%2Fen%2Fdev%2Flearning");
+  const editor = "/fr/admin/content/05000000-0000-0000-0000-000000000001/edit";
+  assert.equal(safeReturnTo(editor, "fr"), editor);
+  assert.equal(translateReturnTo(editor, "en"), editor.replace("/fr/", "/en/"));
+  for (const value of ["/fr/admin/orders", "/fr/admin/content/arbitrary/edit", `${editor}?preview=true`, `${editor}/../preview`, editor.replace("/fr/", "/en/")]) {
+    assert.equal(safeReturnTo(value, "fr"), "/fr/compte");
+  }
 });
 
 test("une copie temporaire expire après deux heures et ne reçoit jamais un propriétaire", () => {

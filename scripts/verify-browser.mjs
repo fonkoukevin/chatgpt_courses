@@ -4,10 +4,11 @@ import { closeSync, existsSync, mkdirSync, openSync, writeFileSync, chmodSync } 
 import { createServer } from 'node:net';
 import { join } from 'node:path';
 import { environment, preflightServers, root, runtimeDir, start, terminateOwned, waitFor, windows } from './lib/runtime.mjs';
+import { createBrowserDatabase, stopBrowserDatabase } from './lib/browser-database.mjs';
 
 const env = environment();
 const phase = process.argv[2] ?? 'P01';
-if (!['P01', 'P02', 'P04'].includes(phase)) throw new Error('Phase de recette inconnue : P01, P02 ou P04 attendu.');
+if (!['P01', 'P02', 'P04', 'P05'].includes(phase)) throw new Error('Phase de recette inconnue : P01, P02, P04 ou P05 attendu.');
 const needsApi = phase !== 'P02';
 if (!['local', 'test'].includes(env.APP_ENV)) throw new Error('Vérification navigateur réservée à local/test.');
 const port = (value, fallback) => {
@@ -19,7 +20,7 @@ env.APP_PUBLIC_ORIGIN = `http://127.0.0.1:${port(env.BROWSER_WEB_PORT, 3101)}`;
 env.API_PORT = String(port(env.BROWSER_API_PORT, 8181));
 env.API_INTERNAL_URL = `http://127.0.0.1:${env.API_PORT}`;
 env.SPRING_PROFILES_ACTIVE = env.APP_ENV;
-for (const key of needsApi ? ['POSTGRES_DB', 'POSTGRES_USER', 'POSTGRES_PASSWORD'] : []) {
+for (const key of needsApi && phase !== 'P05' ? ['POSTGRES_DB', 'POSTGRES_USER', 'POSTGRES_PASSWORD'] : []) {
   if (!env[key]) throw new Error(`Configuration locale requise : ${key}.`);
 }
 const jar = join(root, 'apps/api/target/chatgpt-courses-api.jar');
@@ -45,10 +46,12 @@ let web;
 let stopping = false;
 let controlQueue = Promise.resolve();
 let verificationError;
+let database;
 
 function save() {
   writeFileSync(manifest, JSON.stringify({ root, runId, supervisor: process.pid,
-    children: children.map(({ name, child, terminated }) => ({ name, pid: child.pid, terminated: Boolean(terminated) })) }, null, 2), { mode: 0o600 });
+    children: children.map(({ name, child, terminated }) => ({ name, pid: child.pid, terminated: Boolean(terminated) })),
+    ...(database ? { database: { id: database.id, name: database.name, stopped: database.stopped } } : {}) }, null, 2), { mode: 0o600 });
 }
 function launch(name, executable, args, options = {}) {
   const handle = openSync(join(runDirectory, `${name}-${children.length}.log`), 'a', 0o600);
@@ -129,6 +132,7 @@ const interrupted = new Promise((_, reject) => {
 });
 interrupted.catch(() => {}); // Also handle interruption during IPC initialization.
 try {
+  if (phase === 'P05') { database = await createBrowserDatabase(env, runDirectory, runId, (record) => { database = record; save(); }); save(); }
   await new Promise((resolveListen, rejectListen) => {
     control.once('error', rejectListen);
     control.listen(ipc, resolveListen);
@@ -145,6 +149,7 @@ try {
     env: { ...env, COURSES_BROWSER_PHASE: phase, COURSES_BROWSER_ORIGIN: env.APP_PUBLIC_ORIGIN, COURSES_BROWSER_IPC: ipc,
       COURSES_BROWSER_TOKEN: token, COURSES_BROWSER_EVIDENCE: evidence, COURSES_BROWSER_RESULTS: join(runDirectory, 'results'),
       COURSES_BROWSER_LOGS: runDirectory,
+      ...(database ? { COURSES_BROWSER_DB_ID: database.id, COURSES_BROWSER_RUN_ID: runId } : {}),
       COURSES_MAILPIT_ORIGIN: `http://127.0.0.1:${port(env.MAIL_HTTP_PORT, 8025)}` },
   });
   const result = await Promise.race([playwright.exit, interrupted]);
@@ -196,9 +201,11 @@ try {
     })(),
   ]);
   const cleanupErrors = results.filter((result) => result.status === 'rejected').map((result) => result.reason);
+  try { stopBrowserDatabase(database); save(); } catch (error) { cleanupErrors.push(error); }
   try {
     writeFileSync(join(evidence, 'session.json'), JSON.stringify({ runId, completedAt: new Date().toISOString(),
       result: verificationError || cleanupErrors.length ? 'failed' : 'passed', cleanupConfirmed: cleanupErrors.length === 0,
+      ...(database ? { isolatedPostgres: { image: database.image, tmpfs: true, stopped: database.stopped } } : {}),
       processes: children.map(({ name, child, terminated }) => ({ name, pid: child.pid, terminated })) }, null, 2));
   } catch (error) { cleanupErrors.push(error); }
   if (cleanupErrors.length) {

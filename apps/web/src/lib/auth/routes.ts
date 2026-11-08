@@ -17,7 +17,8 @@ export function safeReturnTo(value: unknown, locale: Locale): string {
     `/${locale}`, fallback,
     ...["public", "learning", "admin", "components"].map((space) => `/${locale}/dev/${space}`),
   ]);
-  return allowed.has(value) ? value : fallback;
+  const cms = new RegExp(`^/${locale}/admin/content(?:/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/(?:edit|preview))?$`);
+  return allowed.has(value) || cms.test(value) ? value : fallback;
 }
 
 export function translateReturnTo(value: unknown, locale: Locale): string {

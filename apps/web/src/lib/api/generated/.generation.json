@@ -1,6 +1,6 @@
 {
   "source": "docs/api/openapi.yaml",
-  "sha256": "fe3021cb2107ee93c82ec07555f6553e7c0a8767a1ef66471f4f328634bde31a",
+  "sha256": "dca317277b4c2a06402f3eaebefb8c7686fc85f385b0c84133bbcee0fd040b17",
   "tools": {
     "@hey-api/openapi-ts": "0.99.0",
     "@redocly/openapi-core": "2.76.0",

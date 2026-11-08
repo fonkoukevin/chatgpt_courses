@@ -43,6 +43,7 @@ spring:
   jackson:
     deserialization:
       fail-on-unknown-properties: true
+      accept-float-as-int: false
   mvc:
     log-resolved-exception: false
     log-request-details: false

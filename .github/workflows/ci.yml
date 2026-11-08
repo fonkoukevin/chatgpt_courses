@@ -63,6 +63,7 @@ jobs:
           npm run verify:client
           npm run lint
           npm run typecheck
+          npm run typecheck:browser
           npm run build
       - name: Verify the API with PostgreSQL Testcontainers
         working-directory: apps/api

@@ -21,7 +21,7 @@ Le contrat machine des opérations disponibles est [api/openapi.yaml](api/openap
 
 Une route système absente retourne un vrai 404 Problem. Les erreurs contiennent notamment `status`, `code`, `traceId`, `detail` et `instance`. Le proxy préserve les erreurs de Spring ; sa propre erreur de connexion devient 502/504 `API_UNAVAILABLE`, sans données de remplacement. Aucun autre endpoint métier de ce document n’est annoncé implémenté par P01. Les routes privées sont refusées et CSRF reste actif.
 
-P03 conserve le payload de la sonde et le produit avec un DTO explicite. La sonde reste dans l’OpenAPI, complétée par les opérations d’identité P04 ci-dessous, sous le serveur de même origine `/api/v1`. `system/unknown` est volontairement absent : c’est une requête de diagnostic vers une route manquante, pas une nouvelle opération. Aucun contrôleur de test n’est livré en production.
+P03 conserve le payload de la sonde et le produit avec un DTO explicite. La sonde reste dans l’OpenAPI, complétée par les opérations d’identité P04, d’édition P05 et de catalogue P06 ci-dessous, sous le serveur de même origine `/api/v1`. `system/unknown` est volontairement absent : c’est une requête de diagnostic vers une route manquante, pas une nouvelle opération. Aucun contrôleur de test n’est livré en production. Son interface technique P01 se trouve désormais dans `/{locale}/dev/foundations`, limitée aux profils local/test ; `/fr` et `/en` servent l’accueil public.
 
 Les composants partagés `Problem`, `FieldError`, UUID, Locale, UtcInstant, Revision, Money et la convention ETag sont définis sans inventer de routes pour les utiliser. Les erreurs utilisent `type: about:blank`, un `traceId` UUID et `Cache-Control: private, no-store`. `fieldErrors`, présent pour une erreur de validation, est une liste `{ field, code, message }`, sans valeur rejetée ni message dynamique contenant une donnée saisie. `code` reste stable pour la traduction ; les détails SQL, exceptions, secrets et graphes JPA restent hors réponse.
 
@@ -127,21 +127,36 @@ Les anciens instantanés P03 restent lisibles : `ContentView.document`/`Revision
 
 Autres codes P05 : 409 `CONTENT_NOT_READY`/`INVALID_CONTENT_TRANSITION`, 400 `VALIDATION_FAILED`/`INVALID_REQUEST`, ainsi que les erreurs communes de permission, conflit et révision. Le rôle de référence EDITOR reçoit les cinq permissions de contenu, sans compte livré ni permission commerciale. Le refus d’une route commerciale future par `denyAll` reste une preuve partielle, pas un test d’un service financier déjà intégré.
 
-## Catalogue public et lecture — planifié P06
+## Catalogue public et lecture — implémenté P06, recette navigateur en cours
+
+Le contrat P06 décrit uniquement les cinq lectures réelles suivantes et l’extension éditoriale de métadonnées. Les six tests HTTP PostgreSQL et les six tests de service P06 ont réussi ; le global final et la recette navigateur sont suivis séparément dans [evidence/P06.md](evidence/P06.md). Aucune validation navigateur n’est déduite de la génération ou d’un test de service.
 
 | Méthode et route | Fonction |
 | --- | --- |
-| `GET /catalog` | Recherche transversale : `q`, `type`, `goal`, `level`, `locale`, `access`, `page`, `pageSize`, `sort` |
-| `GET /courses/{courseId}` | Métadonnées publiques, version publiée, modules/activités de programme, prérequis, langues, offres pertinentes |
-| `GET /courses/by-slug/{slug}?locale=fr` | Résolution du slug localisé vers l’identité stable et sa représentation publique |
-| `GET /guides/{guideId}?locale=fr` | Guide publié, blocs rendus de manière sûre, exercice associé, révision et références |
-| `GET /method-templates/{templateId}?locale=fr` | Méthode publique ou ressource autorisée, champs du générateur et version source |
-| `GET /activities/{activityId}?locale=fr` | Activité publiée autorisée, contenu, média, ressources, objectifs et version |
-| `GET /courses/{courseId}/access` | Décision privée pour le compte courant : accès, motif, langues/versions couvertes, prochaines actions |
+| `GET /catalog` | `CatalogueQuery` → `{ items, page, pageSize, total }` de `ResourceCard` publiées et disponibles |
+| `GET /catalog/facets?locale=fr` | Types, tâches, niveaux, accès et langues réellement représentés dans les publications |
+| `GET /catalog/resources/{resourceId}?locale=fr` | `ResourceDetail` de la dernière version globalement publiée ou état de langue/retrait explicite |
+| `GET /catalog/by-slug/{kind}/{slug}?locale=fr` | Résolution stricte type + langue + slug vers cette identité publiée |
+| `GET /catalog/resources/{resourceId}/versions/{versionId}?locale=fr` | Détail de la version exacte appartenant à cette ressource ; notamment activité épinglée d’un programme |
+| `PUT /admin/contents/{id}/metadata` | `{ metadata: PublicMetadata, reason }` → nouvelle révision `ContentView` et ETag ; CSRF, If-Match et `content.write` |
 
-Le catalogue public ne varie pas secrètement selon le cookie et ne contient pas les notes ou droits individuels. Les cartes peuvent présenter un tarif public configuré ; « Déjà acquis » provient de l’endpoint privé. Une activité verrouillée retourne une description d’accès, jamais son texte premium complet.
+Le préfixe de toutes ces routes est `/api/v1`. `locale=fr|en` est obligatoire ; les lectures publiques n’utilisent ni cookie, ni rôle, ni préférence personnelle. Aucun endpoint séparé `/courses/...`, `/guides/...`, `/activities/...` ou `/method-templates/...` n’est inventé pour doubler ces lectures : le type du détail réel distingue ces ressources. L’activité textuelle fonctionne avec la route de version exacte ; progression, tentatives, droits privés et projets restent à leurs lots.
 
-Motifs d’accès stables : `AUTH_REQUIRED`, `OFFER_REQUIRED`, `ACCESS_EXPIRED`, `ACCESS_SUSPENDED`, `ACCESS_REVOKED`, `CONTENT_UNPUBLISHED`, `CONTENT_UNAVAILABLE`, `TRANSLATION_UNAVAILABLE`. Ils sont distingués du code HTTP. Les traductions absentes indiquent les langues réellement disponibles et les liens équivalents, sans substitution silencieuse.
+`q` (240 caractères au plus) cherche titre, résumé, slug et objectif dans la révision publiée, jamais dans un nouveau brouillon. Filtres combinables : `type=COURSE|ACTIVITY|GUIDE|METHOD_TEMPLATE`, `goal`, `level=BEGINNER|INTERMEDIATE|ADVANCED`, `access=FREE|PROTECTED`, langue ; MODULE demeure un nœud de programme. Tâches stables : `understand-brief`, `define-scope`, `prepare-prompt`, `build-proposal`, `check-output`, `reuse-method`. Elles sont issues du dossier de référence ; une facette n’apparaît qu’avec un nombre réel de publications disponibles. Page 0-based `0..1000000`, `pageSize=1..100` (défaut 20). Tri `TITLE` par titre normalisé puis resourceId, ou `RECENT` par date réelle d’événement de publication décroissante puis resourceId ; date historique inconnue placée à la fin, sans date inventée.
+
+`ResourceCard` expose identités/version/révision publiées, langue/slug, titre/résumé, objectif/résultat attendu, durée facultative, accès, tâches/niveau et date de revue publiée. Aucun auteur privé, email, rôle, définition canonique d’évaluation ou texte personnel. Une identité/langue n’apparaît qu’une fois, dans la dernière version globalement publiée ; brouillons, archives et traductions dépassées sont exclus côté serveur.
+
+`ResourceDetail` distingue `PUBLISHED`, `MISSING_TRANSLATION`, `STALE`, `WITHDRAWN`. Une identité sans publication est 404 ; une publication connue sans traduction ou retirée conserve ses UUID et les états des langues équivalentes, sans emprunter un titre ou un corps à une autre langue/version. Le slug est localisé ; le changement de langue utilise les identifiants équivalents, pas une substitution textuelle de slug. Une traduction dépassée ne fournit aucun document. La revue d’un prochain brouillon ne modifie ni la date de revue publique ni la source publiquement examinée : ces valeurs sont capturées seulement lors de la publication explicite. Passer une traduction de STALE à READY ne la republie pas.
+
+Pour FREE/PUBLISHED, `document` est le `PublicDocument` expurgé P05 : aucun `correction`, `correctOption` ou `explanation`. Pour PROTECTED, il vaut `null`, même si le demandeur possède une session EDITOR ; seuls objectif, résultat attendu, prérequis, durée et métadonnées explicitement publics sont présents. La description publique de vérification est `metadata.evaluationDescription`, jamais `evaluationDefinition` canonique. Le programme contient des nœuds récursifs de métadonnées seulement ; chaque `versionId` est exactement la `version_compositions.child_version_id` enregistrée dans son parent. Une nouvelle version d’activité ne remplace donc pas silencieusement celle d’un ancien programme. Les liens E10 transmettent la version du parcours et celle de l’activité ; le serveur Next vérifie leur appartenance puis demande la version exacte à Spring.
+
+`PublicMetadata` contient `goalCodes`, `level`, `audience`, `tools`, `sources`, `faq`, `evaluationDescription`. V005 l’attache à une révision dans une table append-only ; les anciens instantanés reçoivent un objet vide explicite, niveau/description de vérification `null`. `ContentView` et `RevisionView` privés portent aussi ce snapshot. PUT metadata crée un nouveau brouillon à texte/identité/version conservés ; l’ancienne publication garde ses métadonnées jusqu’à revue et publication. Une simple correction conserve les métadonnées ; duplication/nouvelle version recopient leur source en brouillon, traduction initiale vide pour éviter une fausse traduction. Le document historique doit être converti explicitement avant cette action.
+
+Limites : métadonnées 16 KiB UTF-8 ; six tâches sans doublons, dix publics/outils, vingt sources, douze FAQ ; publics 500 caractères, nom d’outil 120, libellé de source 240, question 500, réponse 2000, modalités publiques 4000. URL facultative d’outil ou obligatoire de source : 2000 caractères, HTTPS sans credentials ou chemin interne simple ; pas d’URL téléchargée côté serveur. Champs inconnus et valeurs invalides sont refusés, permission et précondition revérifiées en transaction. Les textes sont échappés, pas du HTML libre.
+
+P06 utilise **`Cache-Control: no-store`**, lectures SSR de l’origine interne configurée sans cookie et fetch navigateur `credentials: omit`. Aucun cache public dépendant d’une session et aucune invalidation supposée implémentée. Les métadonnées préparent canonical et équivalents publiés, mais les pages restent **noindex/nofollow jusqu’à P16**. Les erreurs de base/transaction deviennent 503 `SERVICE_UNAVAILABLE` contrôlé ; 200 vide reste un vrai zéro résultat, sans faux catalogue de remplacement.
+
+Avant P11/P12, aucune offre, aucun prix, achat, état « déjà acquis » ou paiement ne sont fournis par ce contrat. La décision privée d’accès futur est distincte de ces projections ; ses motifs préparés (`AUTH_REQUIRED`, `OFFER_REQUIRED`, `ACCESS_EXPIRED`, etc.) ne sont pas des droits P06 déjà intégrés. Le signalement UI conserve resourceId/versionId/revisionId/langue et permet une copie ; aucun faux endpoint ni message « envoyé » avant le service de support.
 
 ## Apprentissage, projets et méthodes — planifié P07–P09
 
@@ -217,7 +232,7 @@ Une réponse de `readiness` contient `{ ready, blockingIssues, warnings, checked
 
 ## Contrat et tests
 
-P03 livre le contrat machine et les commandes de validation/génération avec des outils compatibles avec TypeScript 6 ; P04/P05 les étendent aux routes réelles d’identité/CMS. La CI est configurée pour ces commandes ; une exécution GitHub n’est pas présumée. Les DTO exposés ne sont jamais des entités JPA brutes. Les modèles et FK actuels/futurs sont précisés dans [DATA_MODEL.md](DATA_MODEL.md), les résultats réellement observés dans [evidence/P03.md](evidence/P03.md), [evidence/P04.md](evidence/P04.md) et [evidence/P05.md](evidence/P05.md).
+P03 livre le contrat machine et les commandes de validation/génération avec des outils compatibles avec TypeScript 6 ; P04/P05/P06 les étendent aux routes réelles d’identité, CMS et catalogue public. La CI est configurée pour ces commandes ; une exécution GitHub n’est pas présumée. Les DTO exposés ne sont jamais des entités JPA brutes. Les modèles et FK actuels/futurs sont précisés dans [DATA_MODEL.md](DATA_MODEL.md), les résultats réellement observés dans [evidence/P03.md](evidence/P03.md), [evidence/P04.md](evidence/P04.md), [evidence/P05.md](evidence/P05.md) et [evidence/P06.md](evidence/P06.md).
 
 Chaque lot qui ajoute une route fournit des tests sur le backend réel pour ses invariants, puis met à jour le client et les écrans. Les états de facture, remboursement ou autorisation ne sont jamais inventés uniquement pour faire passer un test d’interface.
 

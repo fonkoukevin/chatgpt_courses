@@ -1,6 +1,6 @@
 # Familles d’écrans et comportements
 
-Cette carte reprend E01–E16 du cahier fonctionnel V1. Le registre central ci-dessous fixe la convention retenue en P00 ; P01/P03 la traduiront en helpers typés et contrats vérifiables. Il ne prouve l’existence d’aucune page. Toute modification doit être répercutée dans les liens, traductions, tests et métadonnées. Les slugs publics sont localisés ; l’identité métier reste indépendante du titre et de l’URL. Les chemins privés n’autorisent jamais leur contenu.
+Cette carte reprend E01–E16 du cahier fonctionnel V1 et précise les routes introduites au fil des lots. Le registre comprend aussi les familles futures : l’état vérifié reste celui de STATUS et des preuves. P06 implémente E01–E04 et une lecture textuelle publique d’activité/méthode ; sa recette navigateur est en cours, sans validation anticipée. Toute modification doit être répercutée dans les liens, traductions, tests et métadonnées. Les slugs publics sont localisés ; l’identité métier reste indépendante du titre et de l’URL. Les chemins privés n’autorisent jamais leur contenu.
 
 ## Registre central des routes FR/EN
 
@@ -8,6 +8,7 @@ Cette carte reprend E01–E16 du cahier fonctionnel V1. Le registre central ci-d
 | --- | --- | --- |
 | E01 Accueil | `/fr` | `/en` |
 | E02 Catalogue | `/fr/catalogue` | `/en/catalog` |
+| E02 Activité autonome publiée, P06 | `/fr/catalogue?activity={resourceId}&version={versionId}` | `/en/catalog?activity={resourceId}&version={versionId}` |
 | E03 Parcours | `/fr/parcours/{slug}` | `/en/courses/{slug}` |
 | E04 Guide | `/fr/guides/{slug}` | `/en/guides/{slug}` |
 | E05 Méthode source | `/fr/methodes/{slug}` | `/en/methods/{slug}` |
@@ -23,12 +24,16 @@ Cette carte reprend E01–E16 du cahier fonctionnel V1. Le registre central ci-d
 | E14 Contenus | `/fr/admin/content` | `/en/admin/content` |
 | E15 Éditeur | `/fr/admin/content/{id}/edit` | `/en/admin/content/{id}/edit` |
 | E16 Exploitation | `/fr/admin/operations` | `/en/admin/operations` |
+| Diagnostic technique P01, local/test | `/fr/dev/foundations` | `/en/dev/foundations` |
 
 - Locales autorisées : `fr` et `en`. `/` oriente vers la préférence autorisée ou la langue par défaut configurée. FR est la valeur de développement, sans décision sur les langues de l’offre réelle.
 - L’API reste sous `/api/v1`, sans préfixe de langue. Les noms d’administration `content`, `edit`, `operations` sont conservés dans les deux langues ; leurs libellés d’interface sont traduits.
 - Les UUID métier et versions pédagogiques ne dépendent pas des slugs. Le sélecteur résout un équivalent via cette identité, pas par substitution de texte dans l’URL. Une traduction absente propose une alternative explicite.
 - `returnTo` n’accepte qu’une destination interne validée ; aucun domaine externe ni donnée sensible. Les routes privées restent contrôlées côté Spring.
 - Les sections du compte, aperçus privés et variantes de récupération seront précisées dans leur lot, dans ce registre. Aucun aperçu ne devient indexable. Le récapitulatif est privé et ne confirme pas un paiement.
+- En P06, `/fr` et `/en` sont les accueils publics ; l’ancienne sonde d’interface P01 est déplacée dans `/{locale}/dev/foundations`, gardée en local/test avec les autres démonstrations.
+- Les détails publics acceptent `?version={versionId}` pour conserver une version publiée déterminée. Les liens d’activité E10 du programme ajoutent `resource={activityId}`, `version={activityVersionId}` et `courseVersion={courseVersionId}` ; les slugs seuls ne remplacent pas cette identité/version.
+- P06 garde les lectures publiques `no-store`, sans cookie et sans personnalisation privée. Canonical et équivalents sont préparés ; **noindex/nofollow reste actif jusqu’à P16**. Aucun prix, achat ou paiement opérationnel avant P11/P12.
 
 ## Conventions communes
 
@@ -46,6 +51,8 @@ Cette carte reprend E01–E16 du cahier fonctionnel V1. Le registre central ci-d
 
 Routes : /fr et /en. Public, variante connecté. Phase principale P06.
 
+État introduit P06 : accueil SSR alimenté par les publications/facettes réelles, activité gratuite choisie dans l’API, exemples originaux signalés comme fictifs. Sans activité ouverte, le message et le lien catalogue restent honnêtes. La reprise privée attend le service d’apprentissage ; aucune fausse reprise n’est déduite d’une session. Les FAQ affichées proviennent d’une fiche COURSE/GUIDE publiée avec attribution de leur source. Recette navigateur P06 encore en cours.
+
 Présenter le résultat utile de la plateforme, une recherche et des entrées par tâche. Montrer un exemple original de réalisation, les ressources réellement disponibles, quelques parcours et la première activité ouverte. Action principale : « Essayer une activité » ; secondaire : explorer le catalogue. Pour un utilisateur connecté, proposer une reprise réelle.
 
 Le contenu provient des ressources publiées ; les catégories vides ne doivent pas paraître alimentées. Les annonces commerciales viennent de l’offre configurée, pas d’un texte indépendant. En cas de service indisponible, conserver une navigation utile sans inventer des résultats.
@@ -54,7 +61,9 @@ Composants : PublicHeader, TaskNavigation, CourseCard, ExampleResult, FAQ et Foo
 
 ## E02 Catalogue et recherche transversale
 
-Routes proposées : /fr/catalogue et /en/catalog ; type, tâche, niveau, langue, accès et pagination dans des paramètres stables. Phase P06.
+Routes introduites : /fr/catalogue et /en/catalog ; paramètres `q`, `type`, `goal`, `level`, `locale`, `access`, `page`, `pageSize`, `sort`. Page 0-based, tri TITLE/RECENT déterministe ; filtres et retour à la liste conservés dans une URL validée. Phase P06.
+
+Une activité autonome réellement publiée se consulte dans cette famille avec `activity={resourceId}&version={versionId}` ; sa version est obligatoire et ne devient pas implicitement la plus récente. `returnTo` accepte uniquement une URL de catalogue interne avec filtres autorisés. La langue de contenu peut différer de celle de l’interface ; les badges et la requête la conservent explicitement.
 
 Résultats de parcours, exercices, méthodes et guides avec type, objectif, niveau, durée estimée si connue, langue et accès. Filtres combinables et réinitialisables ; tri déterministe ; retour à la liste préservant les paramètres. La recherche initiale peut utiliser PostgreSQL ; aucun moteur externe ni recherche sémantique n’est requis.
 
@@ -65,6 +74,8 @@ Composants : SearchField, FilterGroup, ActiveFilters, ResultCard, Pagination, Em
 ## E03 Fiche de parcours
 
 Routes : /fr/parcours/{slug} et /en/courses/{slug}. Phase P06, raccord commercial P11/P12.
+
+P06 lit la fiche publiée et son programme de métadonnées. Chaque module/activité conserve la version enregistrée dans la composition, même si une version plus récente existe. Les contenus PROTECTED ne livrent aucun bloc, corrigé ou quiz au HTML public. L’encart d’accès explique l’absence d’offre/paiement ; aucun tarif ou droit n’est inventé. Les langues manquantes, dépassées ou retirées sont présentées comme telles, sans remplacer la ressource.
 
 Ordre : livrable attendu, bénéficiaire, aperçu, programme, prérequis, outils nécessaires, modalités de vérification, langues, conditions de l’offre, FAQ. Le programme expose activités ouvertes, accessibles, verrouillées et prérequis.
 
@@ -78,9 +89,13 @@ Composants : CourseHero, Curriculum, AccessNotice, OfferSummary, VersionNotice e
 
 Routes : /{locale}/guides/{slug}. Phase P06, contenu P18.
 
+P06 rend la publication réelle, ses sources CMS et sa date de revue publiée. La consultation textuelle des modèles de méthode utilise aussi `/fr/methodes/{slug}` et `/en/methods/{slug}` ; le générateur et la conservation personnelle restent P07. Les contenus et médias définitifs P18 ne sont pas déduits de la présence d’un écran ou d’une fixture.
+
 Question précise, sommaire, explication, exemple, contrôles et exercice associé. Les références présentes sont réelles et utiles. La date de revue est une preuve éditoriale enregistrée. Les blocs copiables conservent leur source ; le succès de copie dépend de l’action réelle.
 
 Le signalement identifie contenu et version. Un guide archivé ou remplacé explique l’état et oriente vers une ressource pertinente ; il ne renvoie pas silencieusement vers une page sans rapport.
+
+Signalement P06 : préparation et copie d’un contexte resourceId/versionId/revisionId/langue, texte local facultatif, aucun envoi ni persistance support annoncés. Le succès de copie attend l’acquittement réel du presse-papiers.
 
 Composants : ArticleLayout, TableOfContents, CopyBlock, ReferenceList, VersionNotice et ReportIssue.
 
@@ -136,7 +151,9 @@ Composants : ResumeCard, LearningList, ProgressSummary, ProjectCard et MethodPre
 
 ## E10 Leçon et activité
 
-Routes : /fr/apprendre/{courseSlug}/{activitySlug} et /en/learn/{courseSlug}/{activitySlug}. Phases P08/P10.
+Routes : /fr/apprendre/{courseSlug}/{activitySlug} et /en/learn/{courseSlug}/{activitySlug}. Lecture textuelle ouverte P06 ; apprentissage/progression P08, médias P10.
+
+P06 ajoute aux liens du programme `resource`, `version` et `courseVersion`. Le loader vérifie que l’activité et sa version appartiennent au programme de cette version de parcours, puis lit la version exacte. Une activité plus récente ne remplace pas un ancien lien de programme. Hors parcours, l’activité autonome utilise E02 avec son couple resourceId/versionId. Texte/exercice/checklist de la publication gratuite sont utilisables ; checklist locale déclarative, sans score calculé, progression, projet ou correction de quiz prétendus. Une activité protégée reste limitée aux informations publiques ; le corps n’est jamais envoyé puis caché.
 
 Programme et prérequis ; objectif et travail attendu ; vidéo si disponible, texte, sous-titres, transcription ; dossier et exercice ; quiz ; aide et signalement. Les notes sont personnelles. L’activité ouverte reste utilisable sans compte ; la conservation durable passe par l’identification.
 

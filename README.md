@@ -4,11 +4,11 @@ Plateforme de formation pratique à l’IA : choisir une tâche, apprendre, prod
 
 ## État réel
 
-P01 fournit les fondations locales ; P02 ajoute le système visuel et trois structures d’interface. P03 pose le schéma identité/contenu et le contrat généré. P04 raccorde l’identité aux sessions Spring/PostgreSQL. P05 ajoute le CMS et la publication, vérifiés localement dans Chromium et PostgreSQL. Les autres parcours métier et les paiements seront raccordés dans leurs lots. Aucun ancien prototype repris ni déploiement externe annoncé.
+P01 fournit les fondations locales ; P02 ajoute le système visuel et trois structures d’interface. P03 pose le schéma identité/contenu et le contrat généré. P04 raccorde l’identité aux sessions Spring/PostgreSQL. P05 ajoute le CMS et la publication ; P06 raccorde le site public et les fiches aux publications réelles. Les autres parcours métier et les paiements seront raccordés dans leurs lots. Aucun ancien prototype repris ni déploiement externe annoncé.
 
 La validation P01 couvre FR/EN, clavier, formats étroits, erreur 404 et panne/reprise réelle de Spring. P02 ajoute 14 tests et 54 captures examinées pour les interfaces ; les sept scénarios P01 passent à nouveau après ces changements. La validation reste locale, avec le Chromium de test autorisé.
 
-Lire [AGENTS.md](AGENTS.md), puis [docs/STATUS.md](docs/STATUS.md). Vérifications et limites : [P05](docs/evidence/P05.md), [P04](docs/evidence/P04.md), [P03](docs/evidence/P03.md), [P02](docs/evidence/P02.md), [P01](docs/evidence/P01.md) ; audit initial : [P00](docs/evidence/P00.md).
+Lire [AGENTS.md](AGENTS.md), puis [docs/STATUS.md](docs/STATUS.md). Vérifications et limites : [P06](docs/evidence/P06.md), [P05](docs/evidence/P05.md), [P04](docs/evidence/P04.md), [P03](docs/evidence/P03.md), [P02](docs/evidence/P02.md), [P01](docs/evidence/P01.md) ; audit initial : [P00](docs/evidence/P00.md).
 
 ## Structure retenue
 
@@ -41,7 +41,7 @@ Le bootstrap cible Windows x64 : Node **24.22.2 / npm 11.19.1** et Temurin **21.
 
 `setup:local` crée `.env.local` avec des secrets aléatoires et `infra/secrets/s3.local.json`, sans les afficher ni écraser les fichiers existants. Les deux sont ignorés par Git. Les scripts chargent ce fichier racine ; aucune copie de secret dans Next ou dans le navigateur.
 
-`dev` démarre PostgreSQL/Mailpit, Spring puis Next. Ouvrir **http://localhost:3000/fr** ou **http://localhost:3000/en** et utiliser « Vérifier la connexion ». « Tester une erreur API » appelle une route réellement absente. Les journaux locaux sont dans `.runtime/api.log` et `.runtime/web.log` ; leur contenu ne doit pas être publié automatiquement.
+`dev` démarre PostgreSQL/Mailpit, Spring puis Next. Ouvrir **http://localhost:3000/fr** ou **http://localhost:3000/en** pour le site public. Le diagnostic technique P01 est conservé dans `/fr/dev/foundations` et `/en/dev/foundations` : « Vérifier la connexion » appelle Spring et « Tester une erreur API » une route réellement absente. Les journaux locaux sont dans `.runtime/api.log` et `.runtime/web.log` ; leur contenu ne doit pas être publié automatiquement.
 
 Dans un autre terminal :
 
@@ -128,7 +128,7 @@ Arrêter ce lancement avec **Ctrl+C dans son terminal**. Sur http://localhost:30
 | Leçon et atelier | `/fr/dev/learning` | `/en/dev/learning` |
 | Administration | `/fr/dev/admin` | `/en/dev/admin` |
 
-Les fixtures sont signalées et séparées. Génération de prompt, saisie, autoévaluation et filtres travaillent dans la page ; aucun enregistrement serveur, rôle administrateur, publication ou achat n’est simulé comme acquis. Recharger/quitter efface le travail local. Les rubriques futures portent « En développement ». Les routes publiques finales du produit ne sont pas activées par cette vitrine ; `/fr` et `/en` conservent la sonde P01.
+Les fixtures sont signalées et séparées. Génération de prompt, saisie, autoévaluation et filtres travaillent dans la page ; aucun enregistrement serveur, rôle administrateur, publication ou achat n’est simulé comme acquis. Recharger/quitter efface le travail local. Les rubriques futures portent « En développement ». Cette vitrine reste distincte du site public P06, dont `/fr` et `/en` lisent les publications réelles de Spring. Le diagnostic P01 reste accessible dans `/{locale}/dev/foundations`.
 
 Recette du build avec le Chromium de test déjà autorisé et installé (fermer d’abord les instances utilisant les ports 3101/8181) :
 
@@ -147,7 +147,7 @@ Si Chromium n’est pas installé, `run browser:install` installe la version ver
 
 [DATA_MODEL.md](docs/DATA_MODEL.md) explique les douze tables ajoutées par **V002**, les identités UUID, les versions gelées, les traductions et les relations futures. **V001 est inchangée**. Hibernate valide le schéma ; Flyway est le seul mécanisme d’évolution. Aucune commande de reset ou suppression de volume n’est nécessaire.
 
-Le contrat machine [openapi.yaml](docs/api/openapi.yaml) décrit la sonde, l’identité P04 et les opérations éditoriales P05 réellement implémentées. Les autres routes métier restent planifiées dans [API_CONTRACTS.md](docs/API_CONTRACTS.md). Après modification du contrat :
+Le contrat machine [openapi.yaml](docs/api/openapi.yaml) décrit la sonde, l’identité P04, les opérations éditoriales P05 et les lectures publiques P06 réellement implémentées. Les autres routes métier restent planifiées dans [API_CONTRACTS.md](docs/API_CONTRACTS.md). Après modification du contrat :
 
 ```powershell
 .\scripts\courses.cmd run api:validate
@@ -221,3 +221,29 @@ Commande de recette dédiée, avec Docker, les builds web/API et les ports 3101/
 ```
 
 Cette commande a réussi : **5/5 scénarios en 44,8 s**, création/publication FR/EN, ordre clavier, réponse retardée, panne réelle de Spring, conflit entre onglets, aperçu privé et projection protégée. Elle réserve PostgreSQL 18.6 en tmpfs et attribue EDITOR uniquement à ses comptes synthétiques ; tous ses processus sont arrêtés ensuite. Les comptes et contenus Compose sont conservés. Les **52 tests Java**, **25 tests du client**, builds, captures examinées et limites sont dans [P05](docs/evidence/P05.md). Prochain lot autorisé : [P06_SITE_PUBLIC_CATALOGUE.txt](prompts/P06_SITE_PUBLIC_CATALOGUE.txt).
+
+## Site public P06
+
+Le site lit exclusivement les publications de Spring. Une base sans publication affiche un état vide ; la fixture P03 reste en brouillon. Un contenu protégé expose sa description, sans son corps ni les solutions des exercices. Les langues et versions pédagogiques gardent leurs identifiants.
+
+| Fonction | Français | Anglais |
+| --- | --- | --- |
+| Accueil | `/fr` | `/en` |
+| Catalogue et filtres | `/fr/catalogue` | `/en/catalog` |
+| Parcours publié | `/fr/parcours/{slug}` | `/en/courses/{slug}` |
+| Guide publié | `/fr/guides/{slug}` | `/en/guides/{slug}` |
+| Méthode en lecture | `/fr/methodes/{slug}` | `/en/methods/{slug}` |
+| Activité du programme | `/fr/apprendre/{parcours}/{activite}` | `/en/learn/{course}/{activity}` |
+
+Les liens transmettent la version sélectionnée ; ceux d’activité du programme transmettent aussi l’identité et la version du parcours. Une activité autonome s’ouvre dans le catalogue par `?activity={resourceId}&version={versionId}`, sans inventer de parcours parent. Les filtres `q`, `type`, `goal`, `level`, `locale`, `access`, `page`, `pageSize`, `sort` sont partageables et le retour conserve leur URL.
+
+L’éditeur CMS possède un panneau de métadonnées publiques : tâches, niveau, public, outils, sources, description de l’évaluation et FAQ. Leur sauvegarde crée une révision éditoriale ; leur affichage public exige revue puis publication. Les lectures publiques sont rendues sur le serveur, sans cookie et sans cache partagé. Le site reste non indexable en attendant la préparation SEO P16. Aucun prix ni achat opérationnel n’est annoncé avant P11/P12 ; copies personnelles, progression, quiz et projets seront raccordés dans leurs lots.
+
+Recette dédiée, après builds, avec Docker et les ports 3101/8181 libres :
+
+```powershell
+.\scripts\courses.cmd run typecheck:browser
+.\scripts\courses.cmd run verify:public
+```
+
+Le superviseur crée un PostgreSQL isolé en tmpfs pour les publications fictives de recette. Il conserve le volume Compose et nettoie ses seuls processus. Résultats observés et limites : [P06](docs/evidence/P06.md).

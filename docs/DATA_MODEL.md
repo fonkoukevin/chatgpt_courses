@@ -1,10 +1,10 @@
-# Modèle relationnel — socles P03 à P05
+# Modèle relationnel — socles P03 à P06
 
-Les migrations sont la définition exécutable du schéma. Ce document distingue les tables livrées par P03 à P05 des extensions à créer dans les lots métier. Les preuves de chaque lot indiquent le niveau de validation réellement exécuté.
+Les migrations sont la définition exécutable du schéma. Ce document distingue les tables livrées par P03 à P06 des extensions à créer dans les lots métier. Les preuves de chaque lot indiquent le niveau de validation réellement exécuté.
 
 ## Identité et contenu présents
 
-V001 conserve les deux tables officielles de Spring Session JDBC 4.1.1. V002 ajoute douze tables, sans données de démonstration et sans mécanisme concurrent de création automatique. V003 ajoute deux tables de sécurité, la version d’authentification et des références de permission. V004 étend les instantanés éditoriaux et ajoute deux tables d’historique et de références. V001 à V003 restent inchangées.
+V001 conserve les deux tables officielles de Spring Session JDBC 4.1.1. V002 ajoute douze tables, sans données de démonstration et sans mécanisme concurrent de création automatique. V003 ajoute deux tables de sécurité, la version d’authentification et des références de permission. V004 étend les instantanés éditoriaux et ajoute deux tables d’historique et de références. V005 ajoute les métadonnées publiques par révision et les instantanés de revue/source publiées. V001 à V004 restent inchangées.
 
 | Table | Identité et relations | Invariants |
 | --- | --- | --- |
@@ -20,6 +20,7 @@ V001 conserve les deux tables officielles de Spring Session JDBC 4.1.1. V002 ajo
 | `editorial_revisions` | UUID, FK traduction, numéro, auteur éventuel, document JSONB, motif et révision remplacée | Instantané append-only ; numéro unique par traduction ; aucun UPDATE/DELETE d’une révision historique ; remplacement limité à la même traduction |
 | `editorial_events` | UUID, traduction, révision concernée, acteur obligatoire, type, motif et date | Journal append-only des actions éditoriales ; FK de révision composite avec sa traduction |
 | `editorial_resource_references` | PK composite `(revision_id, resource_id)` et deux FK RESTRICT | Projection append-only des liens du document vers les identités réelles ; aucune réécriture d’un lien historique |
+| `editorial_public_metadata` | PK `revision_id`, FK RESTRICT vers une révision, description publique JSONB et date UTC | Une description par instantané éditorial ; UPDATE/DELETE refusés ; aucune donnée commerciale créée |
 
 GUIDE et METHOD_TEMPLATE sont des feuilles éditoriales depuis V004. Les copies personnelles de méthodes restent distinctes et seront ajoutées en P07. Ces structures ne créent aucun prix, droit payant ou contenu pédagogique final.
 
@@ -40,6 +41,7 @@ erDiagram
   content_translations ||--o{ editorial_events : actions
   editorial_revisions ||--o{ editorial_resource_references : liens
   learning_resources ||--o{ editorial_resource_references : cible
+  editorial_revisions ||--o| editorial_public_metadata : description_publique
 ```
 
 ## Identité et récupération — V003 / P04
@@ -110,6 +112,44 @@ FREE utilise `PublicDocument`, qui omet les champs de corrigé, réponse juste e
 
 Les slugs sont canoniques par type/langue. Les routes imbriquées d’activité vérifieront également l’appartenance au programme de la version du parcours. Changer un slug ne change pas la ressource ni ses acquis ; alias/redirections seront ajoutés avec le routage public, sans déduire un identifiant d’un titre.
 
+## Métadonnées et catalogue public — V005 / P06
+
+[`V005__public_catalogue_metadata_and_publication_snapshots.sql`](../apps/api/src/main/resources/db/migration/V005__public_catalogue_metadata_and_publication_snapshots.sql) conserve les textes, identités, versions, sessions et comptes existants. Elle n’insère ni ressource, ni prix, ni compte éditeur. Le catalogue est une projection des tables éditoriales, sans copie parallèle de données à maintenir.
+
+| Élément V005 | Types et intégrité | Règle de service |
+| --- | --- | --- |
+| `editorial_public_metadata` | `revision_id` UUID PK/FK RESTRICT ; `metadata_json` JSONB objet, représentation texte en base ≤32 768 octets ; `created_at` UTC finie ; trigger append-only | Métadonnées sérialisées ≤16 KiB UTF-8, listes et champs bornés ; aucune modification d’un instantané antérieur |
+| `content_translations.published_verified_at` | `TIMESTAMPTZ` nullable, finie et ≥ création de la traduction | Copie de `verified_at` lors de la publication ; une revue du prochain brouillon ne déplace pas la date de la publication encore visible |
+| `content_translations.published_source_revision_id` | UUID nullable, FK composite vers la révision de `source_translation_id` | Copie de `reviewed_source_revision_id` lors de la publication ; READY seul ne rend pas à nouveau public un corps de traduction dépassé |
+
+Les métadonnées contiennent tâches couvertes, niveau, public concerné, outils, sources, FAQ et description publique des modalités d’évaluation. Les tâches configurables viennent du dossier de référence : `understand-brief`, `define-scope`, `prepare-prompt`, `build-proposal`, `check-output`, `reuse-method`. Les niveaux sont `BEGINNER`, `INTERMEDIATE`, `ADVANCED` ou NULL. Aucune tâche ni aucun niveau n’est déduit automatiquement d’un titre. Une révision historique sans métadonnées expose un objet vide avec niveau/modalités NULL, sans inventer public, outils ou sources.
+
+Les bornes incluent six tâches sans doublons, dix publics de 500 caractères, dix outils de nom 120 caractères, vingt sources de libellé 240 caractères, douze FAQ de question 500/réponse 2 000 caractères et des modalités optionnelles de 4 000 caractères. Les URL sont bornées à 2 000 caractères, HTTPS sans identifiants ou chemin interne simple. L’enregistrement d’une URL ne prétend pas qu’un fournisseur de média ou une vérification automatique de cette page existe.
+
+`PUT /admin/contents/{id}/metadata` exige CSRF, `content.write` et If-Match. Le service ajoute une révision éditoriale avec le même document et les nouvelles métadonnées, repasse DRAFT et conserve la publication précédente. Une correction ordinaire conserve les métadonnées courantes ; duplication et nouvelle version en recopient un instantané en brouillon. Une nouvelle traduction commence avec des métadonnées vides, sans texte français présenté comme anglais. Les anciennes révisions et leurs métadonnées ne changent pas. Le texte historique `document=null` doit être converti explicitement avant cette commande.
+
+### Revue publiée et mise à niveau conservatrice
+
+La publication capture sa date de revue et la révision source examinée dans les deux nouvelles colonnes, dans la transaction qui déplace le pointeur publié. Les contrôles publics comparent ensuite la **source publiée examinée** à la source courante ; les colonnes de revue d’un prochain brouillon restent distinctes. Les événements READY/PUBLISH et les révisions antérieures sont conservés.
+
+À la mise à niveau, une traduction dans l’état PUBLISHED copie ses valeurs de revue existantes. Pour un autre état possédant une ancienne publication, V005 récupère seulement une date de revue READY de cette révision située avant son événement PUBLISH, lorsqu’elle existe. Sans preuve, la date reste NULL. La source examinée d’une publication ancienne en cours de correction ne peut pas être reconstruite avec certitude depuis le journal P05 ; elle reste NULL. Une traduction ainsi incertaine est considérée STALE par la projection publique jusqu’à une revue puis publication explicites. Cette précaution ne réécrit ni ses textes, ni ses anciens pointeurs, ni son état éditorial stocké.
+
+### Recherche, facettes et programmes
+
+`PublicCatalogueService` lit en REPEATABLE_READ. La recherche combine texte `q` (titre/résumé/slug/objectif de description), type, tâche, niveau, langue et accès, avec pagination serveur `page`/`pageSize` de 1 à 100 éléments. Les valeurs sont validées et les requêtes paramétrées ; `%` et `_` d’une saisie sont recherchés littéralement. Les cartes portent COURSE, ACTIVITY, GUIDE ou METHOD_TEMPLATE ; MODULE est réservé au programme.
+
+Un couple identité/langue n’apparaît qu’une fois : le service choisit la dernière version ayant une publication toutes langues confondues, puis exige une publication disponible de cette version dans la langue demandée. Brouillon sans publication, retrait, traduction manquante et STALE sont exclus côté SQL. Une correction en brouillon laisse uniquement son ancien instantané publié disponible. Les facettes et leurs comptes viennent des mêmes publications disponibles ; les catégories vides ne sont pas présentées comme couvertes.
+
+TITLE trie le titre normalisé avec collation C puis l’UUID stable. RECENT trie l’instant du véritable événement PUBLISH de la révision publiée, puis l’UUID ; les historiques sans événement connu sont placés en dernier. Une date de revue différente n’est pas transformée en nouvelle publication. La pagination et le tri ne dépendent ni d’un prix ni d’un état d’accès personnel.
+
+Les détails fournissent PUBLISHED, MISSING_TRANSLATION, STALE ou WITHDRAWN et les langues équivalentes de la même identité/version. La résolution par slug vérifie type et langue exacts. Une identité sans publication est 404 ; une identité connue mais indisponible dans cette langue est décrite sans emprunter le corps d’une autre langue ou d’une autre version. La recherche ne réactive pas une ancienne version après retrait de la plus récente.
+
+Le programme suit exactement `version_compositions.child_version_id`. Une requête récursive de métadonnées couvre COURSE→MODULE→ACTIVITY dans l’ordre enregistré ; elle ne recharge pas les corps des leçons et ne remplace pas l’enfant par sa version globalement la plus récente. Le retrait d’une ancienne activité épinglée apparaît comme WITHDRAWN à cet endroit, même si une version suivante reste publiée ailleurs. L’endpoint de version exacte permet d’ouvrir le contexte réellement sélectionné par le programme.
+
+Les objectifs, résultats, prérequis et durées de description constituent des champs publics explicites. Une durée absente reste NULL. Le corps détaillé reste limité à FREE et PUBLISHED et utilise le DTO sans solutions P05 ; PROTECTED ne livre aucun bloc, exercice, quiz, grille ni corrigé. Les modalités viennent de `metadata.evaluationDescription`, jamais de la définition pédagogique canonique privée. Les lectures sont `no-store` tant qu’une invalidation de cache à la publication n’est pas implémentée ; aucun cache partagé de personnalisation n’est introduit.
+
+Une ancienne version **FREE, publiée, non retirée et disponible dans la langue demandée** peut être lue par son UUID exact, notamment dans un ancien programme. Cette lecture publique explicite est différente du repli silencieux de la recherche courante, qui est interdit. Elle n’accorde aucun droit payant et ne remplace pas la future politique privée de version achetée. Les offres, prix, achats, accès personnels, tentatives et progrès restent dans leurs lots respectifs. Les tests locaux couvrent notamment l’upgrade V004, les instantanés publiés, filtres/tri/pagination, pinning et absence de solutions/premium ; résultats détaillés dans [evidence/P06.md](evidence/P06.md).
+
 ## Types, concurrence et suppression
 
 - UUID pour les identifiants et FK métier. Les identifiants de session historiques gardent le format officiel Spring Session de V001.
@@ -119,7 +159,7 @@ Les slugs sont canoniques par type/langue. Les routes imbriquées d’activité 
 - Les FK métier sont `ON DELETE RESTRICT`. Les instantanés éditoriaux et attributions historiques sont protégés. L’anonymisation du compte est distincte de la suppression physique ; rétention et procédure d’effacement seront précisées dans les lots concernés. Seule la suppression des attributs de session suit le CASCADE officiel V001.
 - Les liens JPA sont des UUID explicites, sans graphes sérialisés ni cascades implicites. Les DTO publics sont construits par mapping ; les entités ne sont pas des réponses HTTP.
 
-## Relations réservées aux lots suivants — non migrées en P03 à P05
+## Relations réservées aux lots suivants — non migrées en P03 à P06
 
 Les noms suivants expriment les clés et règles attendues. Ils seront concrétisés par migrations additionnelles avec leur fonctionnalité et ses tests, sans CRUD anticipé.
 
@@ -141,7 +181,7 @@ Les suppressions physiques et opérations financières nécessiteront des cas d�
 
 ## Données locales et preuves
 
-Les migrations structurelles ne contiennent aucune fixture ni prix. Les références de permission V003/V004 sont distinctes des comptes et données de démonstration. Le chargement explicite local et les fixtures Testcontainers sont séparés, identifiés comme fictifs, réexécutables et interdits en production. Le suivi des commandes et résultats réellement exécutés est dans [evidence/P03.md](evidence/P03.md), [evidence/P04.md](evidence/P04.md) et [evidence/P05.md](evidence/P05.md).
+Les migrations structurelles ne contiennent aucune fixture ni prix. Les références de permission V003/V004 sont distinctes des comptes et données de démonstration. Le chargement explicite local et les fixtures Testcontainers sont séparés, identifiés comme fictifs, réexécutables et interdits en production. Le suivi des commandes et résultats réellement exécutés est dans [evidence/P03.md](evidence/P03.md), [evidence/P04.md](evidence/P04.md), [evidence/P05.md](evidence/P05.md) et [evidence/P06.md](evidence/P06.md).
 
 Références techniques consultées : [contraintes PostgreSQL 18](https://www.postgresql.org/docs/18/ddl-constraints.html), [instants PostgreSQL 18](https://www.postgresql.org/docs/18/datatype-datetime.html), [Spring Boot SQL](https://docs.spring.io/spring-boot/reference/data/sql.html), [Hibernate ORM 7.4](https://docs.hibernate.org/orm/7.4/userguide/html_single/). Les règles commerciales restent celles de [PRODUCT.md](PRODUCT.md) et [DECISIONS.md](DECISIONS.md).
 

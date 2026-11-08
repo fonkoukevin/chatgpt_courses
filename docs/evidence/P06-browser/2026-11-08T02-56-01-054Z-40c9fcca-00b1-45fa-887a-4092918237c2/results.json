@@ -1,0 +1,431 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\scripts\\..\\.tools\\node-v24.22.2-win-x64\\node.exe",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts"
+    ],
+    "configFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts",
+    "rootDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 600000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/.runtime/browser-2026-11-08T02-56-01-054Z-40c9fcca-00b1-45fa-887a-4092918237c2/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/public-site.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T02-56-01-054Z-40c9fcca-00b1-45fa-887a-4092918237c2\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "snapshotDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/public-site.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3101",
+          "browserName": "chromium",
+          "headless": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "actionTimeout": 10000,
+          "navigationTimeout": 20000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off",
+          "serviceWorkers": "block"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\docs\\evidence\\P06-browser\\2026-11-08T02-56-01-054Z-40c9fcca-00b1-45fa-887a-4092918237c2\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "public-site.spec.ts",
+      "file": "public-site.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "métadonnées CMS FR/EN : saisie conservée, vrai conflit et publication explicite",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7582,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T02:56:45.683Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b5ee33d81fbb128f3ae4-0a444ea88594c92b09f9",
+          "file": "public-metadata.scenario.ts",
+          "line": 10,
+          "column": 3
+        }
+      ],
+      "suites": [
+        {
+          "title": "P06 public publications",
+          "file": "public-site.spec.ts",
+          "line": 24,
+          "column": 6,
+          "specs": [
+            {
+              "title": "fr : accueil utile, filtres combinés, retour et mobile",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\public-site.spec.ts",
+                        "line": 24,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 12649,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://127.0.0.1:3101/fr/catalogue?\u001b[7mq=BR01&pageSize=20\u001b[27m&type=COURSE&\u001b[7mgoal=&\u001b[27mlevel=BEGINNER&\u001b[7mlocale=fr&\u001b[27maccess=FREE&sort=TITLE\"\u001b[39m\nReceived: \u001b[31m\"http://127.0.0.1:3101/fr/catalogue?\u001b[7mlocale=fr&q=BR01\u001b[27m&type=COURSE&level=BEGINNER&access=FREE&\u001b[7mpage=0&pageSize=20&\u001b[27msort=TITLE\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    2 × locator resolved to <html lang=\"fr\">…</html>\u001b[22m\n\u001b[2m      - unexpected value \"http://127.0.0.1:3101/fr/parcours/p06-eabfa339-0191-4f94-878d-b38fa1c385c6-course-fr?version=e2deee08-08b5-4083-bf80-f76ef6188965&returnTo=%2Ffr%2Fcatalogue%3Flocale%3Dfr%26q%3DBR01%26type%3DCOURSE%26level%3DBEGINNER%26access%3DFREE%26page%3D0%26pageSize%3D20%26sort%3DTITLE\"\u001b[22m\n\u001b[2m    21 × locator resolved to <html lang=\"fr\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://127.0.0.1:3101/fr/catalogue?locale=fr&q=BR01&type=COURSE&level=BEGINNER&access=FREE&page=0&pageSize=20&sort=TITLE\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://127.0.0.1:3101/fr/catalogue?\u001b[7mq=BR01&pageSize=20\u001b[27m&type=COURSE&\u001b[7mgoal=&\u001b[27mlevel=BEGINNER&\u001b[7mlocale=fr&\u001b[27maccess=FREE&sort=TITLE\"\u001b[39m\nReceived: \u001b[31m\"http://127.0.0.1:3101/fr/catalogue?\u001b[7mlocale=fr&q=BR01\u001b[27m&type=COURSE&level=BEGINNER&access=FREE&\u001b[7mpage=0&pageSize=20&\u001b[27msort=TITLE\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    2 × locator resolved to <html lang=\"fr\">…</html>\u001b[22m\n\u001b[2m      - unexpected value \"http://127.0.0.1:3101/fr/parcours/p06-eabfa339-0191-4f94-878d-b38fa1c385c6-course-fr?version=e2deee08-08b5-4083-bf80-f76ef6188965&returnTo=%2Ffr%2Fcatalogue%3Flocale%3Dfr%26q%3DBR01%26type%3DCOURSE%26level%3DBEGINNER%26access%3DFREE%26page%3D0%26pageSize%3D20%26sort%3DTITLE\"\u001b[22m\n\u001b[2m    21 × locator resolved to <html lang=\"fr\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://127.0.0.1:3101/fr/catalogue?locale=fr&q=BR01&type=COURSE&level=BEGINNER&access=FREE&page=0&pageSize=20&sort=TITLE\"\u001b[22m\n\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\public-site.spec.ts:71:24",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\public-site.spec.ts",
+                          "column": 24,
+                          "line": 71
+                        },
+                        "snippet": " \u001b[90m 69 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { level\u001b[33m:\u001b[39m \u001b[35m1\u001b[39m\u001b[33m,\u001b[39m name\u001b[33m:\u001b[39m course\u001b[33m.\u001b[39mtitle }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 70 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'link'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m`← ${t.backCatalogue}`\u001b[39m\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 71 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(filtered)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 72 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoBack()\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'heading'\u001b[39m\u001b[33m,\u001b[39m { level\u001b[33m:\u001b[39m \u001b[35m1\u001b[39m\u001b[33m,\u001b[39m name\u001b[33m:\u001b[39m course\u001b[33m.\u001b[39mtitle }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 73 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoForward()\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(filtered)\u001b[33m;\u001b[39m\n \u001b[90m 74 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39msetViewportSize({ width\u001b[33m:\u001b[39m \u001b[35m390\u001b[39m\u001b[33m,\u001b[39m height\u001b[33m:\u001b[39m \u001b[35m844\u001b[39m })\u001b[33m;\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\public-site.spec.ts",
+                            "column": 24,
+                            "line": 71
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected: \u001b[32m\"http://127.0.0.1:3101/fr/catalogue?\u001b[7mq=BR01&pageSize=20\u001b[27m&type=COURSE&\u001b[7mgoal=&\u001b[27mlevel=BEGINNER&\u001b[7mlocale=fr&\u001b[27maccess=FREE&sort=TITLE\"\u001b[39m\nReceived: \u001b[31m\"http://127.0.0.1:3101/fr/catalogue?\u001b[7mlocale=fr&q=BR01\u001b[27m&type=COURSE&level=BEGINNER&access=FREE&\u001b[7mpage=0&pageSize=20&\u001b[27msort=TITLE\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    2 × locator resolved to <html lang=\"fr\">…</html>\u001b[22m\n\u001b[2m      - unexpected value \"http://127.0.0.1:3101/fr/parcours/p06-eabfa339-0191-4f94-878d-b38fa1c385c6-course-fr?version=e2deee08-08b5-4083-bf80-f76ef6188965&returnTo=%2Ffr%2Fcatalogue%3Flocale%3Dfr%26q%3DBR01%26type%3DCOURSE%26level%3DBEGINNER%26access%3DFREE%26page%3D0%26pageSize%3D20%26sort%3DTITLE\"\u001b[22m\n\u001b[2m    21 × locator resolved to <html lang=\"fr\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://127.0.0.1:3101/fr/catalogue?locale=fr&q=BR01&type=COURSE&level=BEGINNER&access=FREE&page=0&pageSize=20&sort=TITLE\"\u001b[22m\n\n\n  69 |     await expect(page.getByRole('heading', { level: 1, name: course.title })).toBeVisible();\n  70 |     await page.getByRole('link', { name: `← ${t.backCatalogue}`, exact: true }).click();\n> 71 |     await expect(page).toHaveURL(filtered);\n     |                        ^\n  72 |     await page.goBack(); await expect(page.getByRole('heading', { level: 1, name: course.title })).toBeVisible();\n  73 |     await page.goForward(); await expect(page).toHaveURL(filtered);\n  74 |     await page.setViewportSize({ width: 390, height: 844 });\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\public-site.spec.ts:71:24"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T02:56:21.320Z",
+                      "annotations": [
+                        {
+                          "type": "serial",
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\public-site.spec.ts",
+                            "line": 24,
+                            "column": 6
+                          }
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T02-56-01-054Z-40c9fcca-00b1-45fa-887a-4092918237c2\\results\\public-site-P06-public-pub-5a13c-s-combinés-retour-et-mobile\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T02-56-01-054Z-40c9fcca-00b1-45fa-887a-4092918237c2\\results\\public-site-P06-public-pub-5a13c-s-combinés-retour-et-mobile\\error-context.md"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T02-56-01-054Z-40c9fcca-00b1-45fa-887a-4092918237c2\\results\\public-site-P06-public-pub-5a13c-s-combinés-retour-et-mobile\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\public-site.spec.ts",
+                        "column": 24,
+                        "line": 71
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b5ee33d81fbb128f3ae4-7ad7bb8de9899e749321",
+              "file": "public-site.spec.ts",
+              "line": 34,
+              "column": 47
+            },
+            {
+              "title": "en : accueil utile, filtres combinés, retour et mobile",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\public-site.spec.ts",
+                        "line": 24,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T02:56:44.298Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "b5ee33d81fbb128f3ae4-50e42d5182f5bfb407b7",
+              "file": "public-site.spec.ts",
+              "line": 34,
+              "column": 47
+            },
+            {
+              "title": "guides, méthodes et activités publiés, copie réelle et premium absent du HTML/JSON",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\public-site.spec.ts",
+                        "line": 24,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T02:56:44.299Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "b5ee33d81fbb128f3ae4-083904543e560d9bc455",
+              "file": "public-site.spec.ts",
+              "line": 89,
+              "column": 3
+            },
+            {
+              "title": "publication fraîche, programme épinglé et langues manquantes/périmées/retrait explicites",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\public-site.spec.ts",
+                        "line": 24,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T02:56:44.299Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "b5ee33d81fbb128f3ae4-758c27525257b0d766ba",
+              "file": "public-site.spec.ts",
+              "line": 132,
+              "column": 3
+            },
+            {
+              "title": "zéro résultat distinct de panne réelle et reprise sans catalogue simulé",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\public-site.spec.ts",
+                        "line": 24,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-08T02:56:44.299Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "b5ee33d81fbb128f3ae4-685bca9cf9c098a6dbf4",
+              "file": "public-site.spec.ts",
+              "line": 168,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-08T02:56:20.045Z",
+    "duration": 33585.67,
+    "expected": 1,
+    "skipped": 4,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

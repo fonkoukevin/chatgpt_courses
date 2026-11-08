@@ -1,0 +1,598 @@
+[
+  {
+    "caseCode": "BR01",
+    "locale": "fr",
+    "policy": {
+      "caseCode": "BR01",
+      "passPoints": 16,
+      "revealPolicy": "EXPLICIT",
+      "blockingIssues": [
+        {
+          "key": "invented-claims",
+          "label": "Référence, ancienneté ou performance inventée."
+        },
+        {
+          "key": "definitive-wrong-total",
+          "label": "Calcul faux présenté comme définitif."
+        },
+        {
+          "key": "unpriced-inclusion",
+          "label": "Prestation non chiffrée incluse."
+        },
+        {
+          "key": "unsupported-date",
+          "label": "Date ferme promise sans conditions de démarrage connues."
+        }
+      ]
+    },
+    "rubric": [
+      {
+        "key": "fidelity-1",
+        "label": "Le besoin réel de Client R est correctement reformulé.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "fidelity-2",
+        "label": "Les quatre pages demandées sont conservées.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "fidelity-3",
+        "label": "Aucune référence, expérience ou performance commerciale n’est inventée.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "fidelity-4",
+        "label": "Les informations manquantes sont signalées.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "scope-1",
+        "label": "Les livrables sont clairement identifiés.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "scope-2",
+        "label": "Le document éditable est annoncé.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "scope-3",
+        "label": "Un cycle de retours regroupés est prévu sur le périmètre validé.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "scope-4",
+        "label": "Le logo et l’intégration sont traités séparément.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "budget-1",
+        "label": "Les cinq tarifs fournis sont repris correctement.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "budget-2",
+        "label": "Le total est de 1 200 € HT.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "budget-3",
+        "label": "La devise et la mention HT sont conservées.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "budget-4",
+        "label": "Aucun coût inventé ni service non chiffré n’est inclus.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "schedule-1",
+        "label": "La durée prévue est de quinze jours ouvrés.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "schedule-2",
+        "label": "Le démarrage dépend des éléments reçus et du brief validé.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "schedule-3",
+        "label": "Les retours client sous trois jours ouvrés sont précisés.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "schedule-4",
+        "label": "Les étapes de réalisation sont cohérentes.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "presentation-1",
+        "label": "Le document est lisible et structuré.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "presentation-2",
+        "label": "L’objectif est compréhensible et sans résultat non étayé promis.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "presentation-3",
+        "label": "Les questions permettent de confirmer des éléments précis.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "presentation-4",
+        "label": "Une prochaine étape explicite valide le périmètre.",
+        "points": 1,
+        "blocking": false
+      }
+    ]
+  },
+  {
+    "caseCode": "BR01",
+    "locale": "en",
+    "policy": {
+      "caseCode": "BR01",
+      "passPoints": 16,
+      "revealPolicy": "EXPLICIT",
+      "blockingIssues": [
+        {
+          "key": "invented-claims",
+          "label": "Invented references, years in business or performance."
+        },
+        {
+          "key": "definitive-wrong-total",
+          "label": "An incorrect calculation presented as final."
+        },
+        {
+          "key": "unpriced-inclusion",
+          "label": "An unpriced service included."
+        },
+        {
+          "key": "unsupported-date",
+          "label": "A fixed date promised without confirmed starting conditions."
+        }
+      ]
+    },
+    "rubric": [
+      {
+        "key": "fidelity-1",
+        "label": "Client R’s actual need is described accurately.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "fidelity-2",
+        "label": "All four requested pages are included.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "fidelity-3",
+        "label": "No references, experience or commercial results are invented.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "fidelity-4",
+        "label": "Missing information is identified.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "scope-1",
+        "label": "Deliverables are clearly identified.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "scope-2",
+        "label": "Delivery in an editable document is stated.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "scope-3",
+        "label": "One consolidated feedback round on the agreed scope is included.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "scope-4",
+        "label": "Logo work and website integration are addressed separately.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "budget-1",
+        "label": "All five supplied prices are used correctly.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "budget-2",
+        "label": "The total is €1,200 excluding tax.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "budget-3",
+        "label": "The currency and excluding-tax basis are retained.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "budget-4",
+        "label": "No invented cost or unpriced service is included.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "schedule-1",
+        "label": "The planned duration is fifteen business days.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "schedule-2",
+        "label": "Starting depends on receiving materials and approving the brief.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "schedule-3",
+        "label": "Client feedback within three business days is stated.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "schedule-4",
+        "label": "The work stages are consistent with the schedule.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "presentation-1",
+        "label": "The document is readable and structured.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "presentation-2",
+        "label": "The objective is clear without unsupported promises.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "presentation-3",
+        "label": "Questions resolve specific missing facts or decisions.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "presentation-4",
+        "label": "A clear next step allows the scope to be agreed.",
+        "points": 1,
+        "blocking": false
+      }
+    ]
+  },
+  {
+    "caseCode": "BR02",
+    "locale": "fr",
+    "policy": {
+      "caseCode": "BR02",
+      "passPoints": 16,
+      "revealPolicy": "EXPLICIT",
+      "blockingIssues": [
+        {
+          "key": "invented-claims",
+          "label": "Référence, ancienneté ou performance inventée."
+        },
+        {
+          "key": "definitive-wrong-total",
+          "label": "Calcul faux présenté comme définitif."
+        },
+        {
+          "key": "unpriced-inclusion",
+          "label": "Prestation non chiffrée incluse."
+        },
+        {
+          "key": "unsupported-date",
+          "label": "Date ferme promise sans conditions de démarrage connues."
+        }
+      ]
+    },
+    "rubric": [
+      {
+        "key": "fidelity-1",
+        "label": "La demande de Client S est reformulée sans inventer d’objectif commercial.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "fidelity-2",
+        "label": "La demande de quatre pages, FAQ et intégration est conservée ; toute option réduite reste soumise à accord.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "fidelity-3",
+        "label": "Aucune référence, expérience ou performance commerciale n’est inventée.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "fidelity-4",
+        "label": "Les informations manquantes sont signalées.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "scope-1",
+        "label": "Les cinq pages rédactionnelles sont distinguées de leur intégration.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "scope-2",
+        "label": "Le format de remise et les accès utiles sont proposés ou demandés sans prétendre déjà convenus.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "scope-3",
+        "label": "Les modalités de retours non fournies dans BR02 sont signalées comme à confirmer.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "scope-4",
+        "label": "L’intégration est à clarifier et à chiffrer séparément avant engagement.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "budget-1",
+        "label": "Les tarifs TR01 et les 200 € HT de FAQ sont repris correctement.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "budget-2",
+        "label": "La rédaction complète est chiffrée à 1 400 € HT, au-delà du plafond global de 1 200 € HT.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "budget-3",
+        "label": "La devise et la mention HT sont conservées.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "budget-4",
+        "label": "Si l’option à 1 180 € HT est proposée, À propos est retiré sous réserve d’accord ; les 20 € restants ne financent pas une intégration non chiffrée.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "schedule-1",
+        "label": "Le minimum de dix jours ouvrés est indiqué pour BR02, sans reprendre les quinze jours de BR01.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "schedule-2",
+        "label": "L’incompatibilité entre les cinq jours demandés et les dix jours minimum est expliquée.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "schedule-3",
+        "label": "Le démarrage et les modalités de retours restent à confirmer ; aucun délai de réponse non fourni n’est présenté comme convenu.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "schedule-4",
+        "label": "Aucune option de périmètre ne prétend rendre les cinq jours possibles avec la capacité fournie.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "presentation-1",
+        "label": "Le document est lisible et structuré.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "presentation-2",
+        "label": "Les contraintes de budget et de délai sont expliquées sans résultat commercial garanti.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "presentation-3",
+        "label": "Les questions permettent de revoir périmètre, budget ou délai et de préciser l’intégration.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "presentation-4",
+        "label": "Une prochaine étape sollicite un accord explicite avant toute réduction de périmètre ou engagement.",
+        "points": 1,
+        "blocking": false
+      }
+    ]
+  },
+  {
+    "caseCode": "BR02",
+    "locale": "en",
+    "policy": {
+      "caseCode": "BR02",
+      "passPoints": 16,
+      "revealPolicy": "EXPLICIT",
+      "blockingIssues": [
+        {
+          "key": "invented-claims",
+          "label": "Invented references, years in business or performance."
+        },
+        {
+          "key": "definitive-wrong-total",
+          "label": "An incorrect calculation presented as final."
+        },
+        {
+          "key": "unpriced-inclusion",
+          "label": "An unpriced service included."
+        },
+        {
+          "key": "unsupported-date",
+          "label": "A fixed date promised without confirmed starting conditions."
+        }
+      ]
+    },
+    "rubric": [
+      {
+        "key": "fidelity-1",
+        "label": "Client S’s request is restated without inventing a commercial objective.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "fidelity-2",
+        "label": "The request for four pages, an FAQ and integration is retained; any reduced option remains subject to agreement.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "fidelity-3",
+        "label": "No references, experience or commercial results are invented.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "fidelity-4",
+        "label": "Missing information is identified.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "scope-1",
+        "label": "The five copywriting pages are distinguished from website integration.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "scope-2",
+        "label": "The delivery format and required access are proposed or clarified without being presented as already agreed.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "scope-3",
+        "label": "Feedback terms not supplied in BR02 are identified as needing confirmation.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "scope-4",
+        "label": "Integration must be clarified and priced separately before commitment.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "budget-1",
+        "label": "TR01 prices and the €200 excluding-tax FAQ price are used correctly.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "budget-2",
+        "label": "The complete copywriting totals €1,400 excluding tax, above the €1,200 global ceiling.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "budget-3",
+        "label": "The currency and excluding-tax basis are retained.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "budget-4",
+        "label": "If the €1,180 excluding-tax option is proposed, About is removed subject to agreement; the remaining €20 does not pay for unpriced integration.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "schedule-1",
+        "label": "The BR02 minimum of ten business days is stated, without reusing BR01’s fifteen days.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "schedule-2",
+        "label": "The conflict between the requested five days and the minimum ten days is explained.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "schedule-3",
+        "label": "Starting and feedback arrangements remain to be confirmed; no unsupplied response time is presented as agreed.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "schedule-4",
+        "label": "No scope option claims to make five days possible with the supplied capacity.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "presentation-1",
+        "label": "The document is readable and structured.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "presentation-2",
+        "label": "Budget and timing constraints are explained without guaranteeing commercial results.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "presentation-3",
+        "label": "Questions allow scope, budget or timing to be reconsidered and integration to be clarified.",
+        "points": 1,
+        "blocking": false
+      },
+      {
+        "key": "presentation-4",
+        "label": "A clear next step seeks explicit agreement before any reduced scope or commitment.",
+        "points": 1,
+        "blocking": false
+      }
+    ]
+  }
+]

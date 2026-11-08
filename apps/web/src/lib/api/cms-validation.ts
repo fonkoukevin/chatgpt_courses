@@ -2,6 +2,7 @@ import { record } from "./auth-validation";
 import { isPublicMetadata } from "./public-validation";
 import { isMethodDefinition } from "../methods/validation";
 import { isQuizPolicy } from "./quiz-policy-validation";
+import { isProjectPolicy } from "./project-policy-validation";
 import type { ContentDocument, ContentPage, ContentSummary, ContentView, Dependencies, Readiness, RevisionPage, RevisionView } from "./generated/types.gen";
 
 export const isUuid = (value: unknown): value is string => typeof value === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
@@ -25,12 +26,13 @@ export function safeContentLink(value: unknown): string | null {
 }
 
 export function isContentDocument(value: unknown): value is ContentDocument {
-  if (!record(value) || !keys(value, ["objective", "expectedResult", "prerequisites", "blocks", "estimatedMinutes", "exercise", "quiz", "rubric", "access", "media", "relatedResourceIds", "methodDefinition", "quizPolicy"])) return false;
+  if (!record(value) || !keys(value, ["objective", "expectedResult", "prerequisites", "blocks", "estimatedMinutes", "exercise", "quiz", "rubric", "access", "media", "relatedResourceIds", "methodDefinition", "quizPolicy", "projectPolicy"])) return false;
   return string(value.objective) && string(value.expectedResult) && strings(value.prerequisites) && value.prerequisites.length <= 20
     && (value.estimatedMinutes === null || (integer(value.estimatedMinutes) && value.estimatedMinutes >= 1 && value.estimatedMinutes <= 1440))
     && oneOf(value.access, ["FREE", "PROTECTED"]) && uuids(value.relatedResourceIds)
     && (value.methodDefinition === undefined || value.methodDefinition === null || isMethodDefinition(value.methodDefinition))
     && (value.quizPolicy === undefined || value.quizPolicy === null || isQuizPolicy(value.quizPolicy))
+    && (value.projectPolicy === undefined || value.projectPolicy === null || isProjectPolicy(value.projectPolicy))
     && Array.isArray(value.blocks) && value.blocks.length <= 60 && value.blocks.every((block) => record(block) && keys(block, ["type", "text", "url"])
       && oneOf(block.type, ["HEADING", "PARAGRAPH", "LIST", "CALLOUT", "CODE", "LINK"]) && string(block.text)
       && (block.url === null || safeContentLink(block.url) !== null))

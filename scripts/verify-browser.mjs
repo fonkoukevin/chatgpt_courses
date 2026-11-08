@@ -8,9 +8,18 @@ import { createBrowserDatabase, stopBrowserDatabase } from './lib/browser-databa
 
 const env = environment();
 const phase = process.argv[2] ?? 'P01';
-if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08'].includes(phase)) throw new Error('Phase de recette inconnue : P01, P02 ou P04 à P08 attendu.');
+// Optional targeted diagnosis keeps the same isolation and zero automatic retries.
+const selected = { grep: null, repeatEach: 1 }, diagnosticArgs = [];
+for (let index = 3; index < process.argv.length; index += 2) {
+  const flag = process.argv[index], value = process.argv[index + 1];
+  if (flag === '--grep' && selected.grep === null && value && value.length <= 200) selected.grep = value;
+  else if (flag === '--repeat-each' && selected.repeatEach === 1 && value && /^(?:[1-9]|1[0-9]|20)$/.test(value)) selected.repeatEach = Number(value);
+  else throw new Error('Diagnostic permis : --grep expression et --repeat-each 1..20.');
+  diagnosticArgs.push(flag, value);
+}
+if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09'].includes(phase)) throw new Error('Phase de recette inconnue : P01, P02 ou P04 à P09 attendu.');
 const needsApi = phase !== 'P02';
-const isolatedDatabase = ['P05', 'P06', 'P07', 'P08'].includes(phase);
+const isolatedDatabase = ['P05', 'P06', 'P07', 'P08', 'P09'].includes(phase);
 if (!['local', 'test'].includes(env.APP_ENV)) throw new Error('Vérification navigateur réservée à local/test.');
 const port = (value, fallback) => {
   const text = value ?? String(fallback);
@@ -145,7 +154,7 @@ try {
     ...(needsApi ? [startApi()] : []),
     ready(web, `${env.APP_PUBLIC_ORIGIN}/fr${phase === 'P02' ? '/dev/public' : phase === 'P01' ? '/dev/foundations' : ''}`),
   ]), interrupted]);
-  const playwright = launch('playwright', process.execPath, [runner, 'test', '--config', join(root, 'playwright.config.ts')], {
+  const playwright = launch('playwright', process.execPath, [runner, 'test', '--config', join(root, 'playwright.config.ts'), ...diagnosticArgs], {
     stdio: 'inherit',
     env: { ...env, COURSES_BROWSER_PHASE: phase, COURSES_BROWSER_ORIGIN: env.APP_PUBLIC_ORIGIN, COURSES_BROWSER_IPC: ipc,
       COURSES_BROWSER_TOKEN: token, COURSES_BROWSER_EVIDENCE: evidence, COURSES_BROWSER_RESULTS: join(runDirectory, 'results'),
@@ -204,7 +213,7 @@ try {
   const cleanupErrors = results.filter((result) => result.status === 'rejected').map((result) => result.reason);
   try { stopBrowserDatabase(database); save(); } catch (error) { cleanupErrors.push(error); }
   try {
-    writeFileSync(join(evidence, 'session.json'), JSON.stringify({ runId, completedAt: new Date().toISOString(),
+    writeFileSync(join(evidence, 'session.json'), JSON.stringify({ runId, completedAt: new Date().toISOString(), selection: selected,
       result: verificationError || cleanupErrors.length ? 'failed' : 'passed', cleanupConfirmed: cleanupErrors.length === 0,
       ...(database ? { isolatedPostgres: { image: database.image, tmpfs: true, stopped: database.stopped } } : {}),
       processes: children.map(({ name, child, terminated }) => ({ name, pid: child.pid, terminated })) }, null, 2));

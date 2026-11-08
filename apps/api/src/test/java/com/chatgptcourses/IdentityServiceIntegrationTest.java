@@ -38,6 +38,7 @@ import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -52,6 +53,7 @@ import org.testcontainers.utility.DockerImageName;
 })
 @ActiveProfiles("test")
 @Testcontainers
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class IdentityServiceIntegrationTest {
     @Container
     static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer(DockerImageName.parse(

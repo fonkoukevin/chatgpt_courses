@@ -3,8 +3,8 @@ info:
   title: ChatGPT Courses API
   version: 0.1.0
   description: >-
-    Opérations introduites jusqu’àP08 : identité, CMS, catalogue public, méthodes personnelles, apprentissage,
-    notes et quiz. Le générateur reste sansAPIIA ; aucun paiement/droit commercial fictif.
+    Opérations introduites jusqu’àP09 : identité, CMS, catalogue public, méthodes, apprentissage, notes, quiz
+    et projets autoévalués. Aucun paiement/droit commercial fictif, fichierP10 ou revue humaine.
 servers:
   - url: /api/v1
     description: API de même origine, préfixe conservé jusqu'à Spring.
@@ -22,6 +22,8 @@ tags:
     description: Générateur déterministe et instantanés personnels propriétaires, sans API IA.
   - name: Learning
     description: Faits d’apprentissage distincts, notes propriétaires et quiz corrigés côté serveur.
+  - name: Projects
+    description: Productions personnelles, autoévaluation déclarative et consultation de corrigé réautorisée.
 paths:
   /system/health:
     get:
@@ -2706,6 +2708,710 @@ paths:
           $ref: '#/components/responses/ProblemResponse'
         default:
           $ref: '#/components/responses/ProblemResponse'
+  /me/projects:
+    get:
+      operationId: listProjects
+      tags:
+        - Projects
+      summary: Chercher ses productions sans exposer leur texte dans la liste.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: q
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 240
+        - name: state
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - DRAFT
+              - READY_FOR_SELF_ASSESSMENT
+              - SELF_ASSESSED
+              - NEEDS_REVISION
+        - name: activityId
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: activityVersionId
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectPage'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    post:
+      operationId: createProject
+      tags:
+        - Projects
+      summary: Créer sa production depuis une activité exacte disponible.
+      security:
+        - SessionCookie: []
+      description: >-
+        Compte actif, permissionprojects.write, propriétaire de session, CSRF et X-Account-Context attendu.
+        Header absent428, compte différent409 ; le header ne choisit jamais le propriétaire. Aucun retry
+        implicite.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProject'
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              description: Lecture individuelle de la ressource créée.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectView'
+        '201':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              description: Lecture individuelle de la ressource créée.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/projects/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: getProject
+      tags:
+        - Projects
+      summary: Lire sa production et son instantané de grille même après retrait.
+      security:
+        - SessionCookie: []
+      parameters: []
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    patch:
+      operationId: saveProject
+      tags:
+        - Projects
+      summary: Sauvegarder une nouvelle révision personnelle exacte.
+      security:
+        - SessionCookie: []
+      description: >-
+        Compte actif, permissionprojects.write, propriétaire de session, CSRF et X-Account-Context attendu.
+        Header absent428, compte différent409 ; le header ne choisit jamais le propriétaire. Aucun retry
+        implicite.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveProject'
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/projects/{id}/revisions:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: listProjectRevisions
+      tags:
+        - Projects
+      summary: Lister les résumés de ses révisions sans prose complète.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectRevisionPage'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/projects/{id}/revisions/{revisionId}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: revisionId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: getProjectRevision
+      tags:
+        - Projects
+      summary: Lire une révision personnelle historique précise.
+      security:
+        - SessionCookie: []
+      parameters: []
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectRevisionView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/projects/{id}/context:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: getProjectContext
+      tags:
+        - Projects
+      summary: Réautoriser le contexte pédagogique sans remplacer sa production.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectContext'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/projects/{id}/status:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: getProjectStatus
+      tags:
+        - Projects
+      summary: Lire le statut déclaratif séparé du texte àETag.
+      security:
+        - SessionCookie: []
+      parameters: []
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectStatus'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/projects/{id}/self-assessments:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: listSelfAssessments
+      tags:
+        - Projects
+      summary: Lister les preuves déclaratives sans commentaires détaillés.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SelfAssessmentPage'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    post:
+      operationId: submitSelfAssessment
+      tags:
+        - Projects
+      summary: Renseigner une autoévaluation déclarative pour cette révision.
+      security:
+        - SessionCookie: []
+      description: >-
+        Compte actif, permissionprojects.write, propriétaire de session, CSRF et X-Account-Context attendu.
+        Header absent428, compte différent409 ; le header ne choisit jamais le propriétaire. Aucun retry
+        implicite.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitSelfAssessment'
+      responses:
+        '201':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            Location:
+              description: Lecture individuelle de la ressource créée.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SelfAssessmentView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/projects/{id}/self-assessments/{assessmentId}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: assessmentId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: getSelfAssessment
+      tags:
+        - Projects
+      summary: Lire une autoévaluation historique précise.
+      security:
+        - SessionCookie: []
+      parameters: []
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SelfAssessmentView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /activities/{activityId}/solution-reveals:
+    parameters:
+      - name: activityId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    post:
+      operationId: revealSolution
+      tags:
+        - Projects
+      summary: Consulter volontairement le corrigé exact après réautorisation courante.
+      security:
+        - SessionCookie: []
+      description: >-
+        Compte actif, permissionprojects.write, propriétaire de session, CSRF et X-Account-Context attendu.
+        Header absent428, compte différent409 ; le header ne choisit jamais le propriétaire. Aucun retry
+        implicite.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RevealSolution'
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SolutionRevealView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /project-templates/{activityId}/versions/{versionId}:
+    parameters:
+      - name: activityId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: versionId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      operationId: getProjectTemplate
+      tags:
+        - Projects
+      summary: Ouvrir le brief et la grille de l’atelier public disponible.
+      security: []
+      parameters:
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectTemplate'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/project-presets/{caseCode}:
+    parameters:
+      - name: caseCode
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+            - BR01
+            - BR02
+    get:
+      operationId: getProjectPreset
+      tags:
+        - Projects
+      summary: Préparer explicitement une grilleCMS depuis une référence serveur protégée.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectPreset'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+      description: >-
+        Permissioncontent.read requise. Référence pédagogique protégée, sans seed/publication ; l’interface
+        confirme tout remplacement d’une grille existante.
 components:
   schemas:
     SystemHealth:
@@ -3212,6 +3918,10 @@ components:
         quizPolicy:
           anyOf:
             - $ref: '#/components/schemas/QuizPolicy'
+            - type: 'null'
+        projectPolicy:
+          anyOf:
+            - $ref: '#/components/schemas/ProjectPolicy'
             - type: 'null'
       description: >-
         Document structuré privé ; taille sérialisée totale maximale 48 KiB UTF-8. La requête entière reste
@@ -3930,6 +4640,7 @@ components:
         - exerciseInstructions
         - methodDefinition
         - quizPolicy
+        - projectPolicy
       properties:
         objective:
           type: string
@@ -3999,6 +4710,10 @@ components:
         quizPolicy:
           anyOf:
             - $ref: '#/components/schemas/QuizPolicy'
+            - type: 'null'
+        projectPolicy:
+          anyOf:
+            - $ref: '#/components/schemas/ProjectPolicy'
             - type: 'null'
       description: >-
         Projection gratuite publiée, sans corrigé d’exercice ni réponse/explication de quiz. Les contrôles
@@ -5847,6 +6562,1102 @@ components:
       description: >-
         Correction éphémère sanscompte. Révision exacte publiée requise ; aucune réponse correcte avant cette
         soumission.
+    BlockingIssueDefinition:
+      type: object
+      additionalProperties: false
+      required:
+        - key
+        - label
+      properties:
+        key:
+          type: string
+          enum:
+            - invented-claims
+            - definitive-wrong-total
+            - unpriced-inclusion
+            - unsupported-date
+        label:
+          type: string
+          minLength: 0
+          maxLength: 1000
+    ProjectPolicy:
+      type: object
+      additionalProperties: false
+      required:
+        - caseCode
+        - passPoints
+        - revealPolicy
+        - blockingIssues
+      properties:
+        caseCode:
+          type: string
+          enum:
+            - BR01
+            - BR02
+        passPoints:
+          type: integer
+          minimum: 1
+          maximum: 20
+        revealPolicy:
+          type: string
+          enum:
+            - EXPLICIT
+            - AFTER_SUBMISSION
+        blockingIssues:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockingIssueDefinition'
+          minItems: 0
+          maxItems: 4
+      description: >-
+        Configuration éditoriale opt-in, incomplète admise en brouillon seulement. Publication exige les vingt
+        critères exacts de document.rubric àunpoint et quatre erreurs bloquantes aux libellés nonvides ;
+        catégories dérivées des clés. Grille, seuil et règle de révélation gelés avec la version pédagogique.
+        Null/absent ne crée aucun atelier implicite.
+    ProjectFields:
+      type: object
+      additionalProperties: false
+      required:
+        - title
+        - locale
+        - objective
+        - scope
+        - method
+        - timeline
+        - budget
+        - clarifications
+        - nextStep
+        - externalText
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        locale:
+          $ref: '#/components/schemas/Locale'
+        objective:
+          type: string
+          minLength: 0
+          maxLength: 8000
+        scope:
+          type: string
+          minLength: 0
+          maxLength: 8000
+        method:
+          type: string
+          minLength: 0
+          maxLength: 8000
+        timeline:
+          type: string
+          minLength: 0
+          maxLength: 8000
+        budget:
+          type: string
+          minLength: 0
+          maxLength: 8000
+        clarifications:
+          type: string
+          minLength: 0
+          maxLength: 8000
+        nextStep:
+          type: string
+          minLength: 0
+          maxLength: 8000
+        externalText:
+          type: string
+          minLength: 0
+          maxLength: 32000
+      description: >-
+        Production personnelle : sept sections et texte collé indépendant. Unicode valide sansNUL, ensemble
+        JSONUTF8 borné48KiB. Aucune analyse automatique de véracité ou des montants. La langue originale reste
+        indépendante de la langue de navigation.
+    ProjectOrigin:
+      type: object
+      additionalProperties: false
+      required:
+        - activityId
+        - activityVersionId
+        - activityVersionNumber
+        - translationId
+        - revisionId
+        - locale
+        - title
+        - slug
+        - enrollmentId
+        - courseResourceId
+        - courseVersionId
+        - courseTitle
+      properties:
+        activityId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionNumber:
+          type: integer
+          minimum: 1
+          maximum: 9007199254740991
+        translationId:
+          $ref: '#/components/schemas/UUID'
+        revisionId:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        slug:
+          type: string
+          minLength: 1
+          maxLength: 180
+        enrollmentId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        courseResourceId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        courseVersionId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        courseTitle:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 240
+            - type: 'null'
+    ProjectCriterion:
+      type: object
+      additionalProperties: false
+      required:
+        - key
+        - category
+        - label
+        - points
+        - blocking
+      properties:
+        key:
+          type: string
+          minLength: 1
+          maxLength: 64
+          pattern: ^(fidelity|scope|budget|schedule|presentation)-[1-4]$
+        category:
+          type: string
+          enum:
+            - fidelity
+            - scope
+            - budget
+            - schedule
+            - presentation
+        label:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        points:
+          type: integer
+          minimum: 1
+          maximum: 1
+        blocking:
+          type: boolean
+    ProjectRubricDefinition:
+      type: object
+      additionalProperties: false
+      required:
+        - sourceRevisionId
+        - locale
+        - caseCode
+        - passPoints
+        - maxPoints
+        - revealPolicy
+        - criteria
+        - blockingIssues
+      properties:
+        sourceRevisionId:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        caseCode:
+          type: string
+          enum:
+            - BR01
+            - BR02
+        passPoints:
+          type: integer
+          minimum: 1
+          maximum: 20
+        maxPoints:
+          type: integer
+          minimum: 20
+          maximum: 20
+        revealPolicy:
+          type: string
+          enum:
+            - EXPLICIT
+            - AFTER_SUBMISSION
+        criteria:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectCriterion'
+          minItems: 20
+          maxItems: 20
+        blockingIssues:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockingIssueDefinition'
+          minItems: 4
+          maxItems: 4
+      description: >-
+        Grille d’une publication disponible avant toute création ; aucun identifiant d’instantané personnel
+        prétendument sauvegardé.
+    ProjectRubricSnapshot:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - sourceRevisionId
+        - locale
+        - caseCode
+        - passPoints
+        - maxPoints
+        - revealPolicy
+        - criteria
+        - blockingIssues
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        sourceRevisionId:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        caseCode:
+          type: string
+          enum:
+            - BR01
+            - BR02
+        passPoints:
+          type: integer
+          minimum: 1
+          maximum: 20
+        maxPoints:
+          type: integer
+          minimum: 20
+          maximum: 20
+        revealPolicy:
+          type: string
+          enum:
+            - EXPLICIT
+            - AFTER_SUBMISSION
+        criteria:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectCriterion'
+          minItems: 20
+          maxItems: 20
+        blockingIssues:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockingIssueDefinition'
+          minItems: 4
+          maxItems: 4
+      description: >-
+        Instantané immuable enregistré à la création du projet. Conservé avec les productions et évaluations
+        du propriétaire après retrait de la source.
+    ProjectView:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - revision
+        - currentRevisionId
+        - revisionNumber
+        - fields
+        - stage
+        - origin
+        - rubric
+        - createdAt
+        - updatedAt
+        - savedAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        revision:
+          $ref: '#/components/schemas/Revision'
+        currentRevisionId:
+          $ref: '#/components/schemas/UUID'
+        revisionNumber:
+          type: integer
+          minimum: 1
+          maximum: 9007199254740991
+        fields:
+          $ref: '#/components/schemas/ProjectFields'
+        stage:
+          type: string
+          enum:
+            - DRAFT
+            - READY_FOR_SELF_ASSESSMENT
+        origin:
+          $ref: '#/components/schemas/ProjectOrigin'
+        rubric:
+          $ref: '#/components/schemas/ProjectRubricSnapshot'
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+        updatedAt:
+          $ref: '#/components/schemas/UtcInstant'
+        savedAt:
+          $ref: '#/components/schemas/UtcInstant'
+      description: >-
+        ETag project-id-révision de la seule production personnelle. État dérivé, contexte pédagogique et
+        dernière autoévaluation sont séparés ; une autoévaluation ne modifie pas cet ETag.
+    ProjectSummary:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - revision
+        - title
+        - locale
+        - state
+        - currentRevisionId
+        - activityId
+        - activityVersionId
+        - activityVersionNumber
+        - activityTitle
+        - courseTitle
+        - updatedAt
+        - savedAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        revision:
+          $ref: '#/components/schemas/Revision'
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        locale:
+          $ref: '#/components/schemas/Locale'
+        state:
+          type: string
+          enum:
+            - DRAFT
+            - READY_FOR_SELF_ASSESSMENT
+            - SELF_ASSESSED
+            - NEEDS_REVISION
+        currentRevisionId:
+          $ref: '#/components/schemas/UUID'
+        activityId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionNumber:
+          type: integer
+          minimum: 1
+          maximum: 9007199254740991
+        activityTitle:
+          type: string
+          minLength: 1
+          maxLength: 240
+        courseTitle:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 240
+            - type: 'null'
+        updatedAt:
+          $ref: '#/components/schemas/UtcInstant'
+        savedAt:
+          $ref: '#/components/schemas/UtcInstant'
+    ProjectPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectSummary'
+          minItems: 0
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    ProjectRevisionView:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - projectId
+        - revisionNumber
+        - fields
+        - stage
+        - createdAt
+        - authorId
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        projectId:
+          $ref: '#/components/schemas/UUID'
+        revisionNumber:
+          type: integer
+          minimum: 1
+          maximum: 9007199254740991
+        fields:
+          $ref: '#/components/schemas/ProjectFields'
+        stage:
+          type: string
+          enum:
+            - DRAFT
+            - READY_FOR_SELF_ASSESSMENT
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+        authorId:
+          $ref: '#/components/schemas/UUID'
+      description: >-
+        Révision personnelle append-only. Le détail privé est lu individuellement, jamais embarqué dans une
+        page de cent productions.
+    ProjectRevisionSummary:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - projectId
+        - revisionNumber
+        - title
+        - locale
+        - stage
+        - createdAt
+        - authorId
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        projectId:
+          $ref: '#/components/schemas/UUID'
+        revisionNumber:
+          type: integer
+          minimum: 1
+          maximum: 9007199254740991
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        locale:
+          $ref: '#/components/schemas/Locale'
+        stage:
+          type: string
+          enum:
+            - DRAFT
+            - READY_FOR_SELF_ASSESSMENT
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+        authorId:
+          $ref: '#/components/schemas/UUID'
+    ProjectRevisionPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectRevisionSummary'
+          minItems: 0
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    ProjectContext:
+      type: object
+      additionalProperties: false
+      required:
+        - projectId
+        - activityId
+        - activityVersionId
+        - availability
+        - accessStatus
+        - sourceRevisionId
+        - currentPublishedRevisionId
+        - sourceChanged
+        - resource
+      properties:
+        projectId:
+          $ref: '#/components/schemas/UUID'
+        activityId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        availability:
+          type: string
+          enum:
+            - PUBLISHED
+            - MISSING_TRANSLATION
+            - STALE
+            - WITHDRAWN
+        accessStatus:
+          type: string
+          enum:
+            - ACTIVE
+            - PROTECTED
+            - UNAVAILABLE
+        sourceRevisionId:
+          $ref: '#/components/schemas/UUID'
+        currentPublishedRevisionId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        sourceChanged:
+          type: boolean
+        resource:
+          anyOf:
+            - $ref: '#/components/schemas/ResourceDetail'
+            - type: 'null'
+      description: >-
+        Contexte pédagogique réautorisé séparément, sans corrigé. currentPublishedRevisionId concerne la
+        langue d’origine pour sourceChanged ; resource peut être une traduction demandée avec sa propre
+        révision. Identifiants activité/version identiques, aucune substitution silencieuse de version ou du
+        texte personnel.
+    ProjectTemplate:
+      type: object
+      additionalProperties: false
+      required:
+        - activityId
+        - activityVersionId
+        - revisionId
+        - locale
+        - title
+        - availability
+        - resource
+        - rubric
+      properties:
+        activityId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        revisionId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        title:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 240
+            - type: 'null'
+        availability:
+          type: string
+          enum:
+            - PUBLISHED
+            - MISSING_TRANSLATION
+            - STALE
+            - WITHDRAWN
+            - PROTECTED
+            - NOT_CONFIGURED
+        resource:
+          anyOf:
+            - $ref: '#/components/schemas/ResourceDetail'
+            - type: 'null'
+        rubric:
+          anyOf:
+            - $ref: '#/components/schemas/ProjectRubricDefinition'
+            - type: 'null'
+      description: >-
+        Atelier public d’une activitéFREE publiée exacte et configurée. Autre disponibilité : aucun
+        corps/grille pédagogique. Aucune correction initiale et aucune production sauvegardée par ceGET.
+    CriterionDeclaration:
+      type: object
+      additionalProperties: false
+      required:
+        - key
+        - satisfied
+        - comment
+      properties:
+        key:
+          type: string
+          minLength: 1
+          maxLength: 64
+          pattern: ^(fidelity|scope|budget|schedule|presentation)-[1-4]$
+        satisfied:
+          type: boolean
+        comment:
+          type: string
+          minLength: 0
+          maxLength: 1000
+    BlockingDeclaration:
+      type: object
+      additionalProperties: false
+      required:
+        - key
+        - present
+        - comment
+      properties:
+        key:
+          type: string
+          enum:
+            - invented-claims
+            - definitive-wrong-total
+            - unpriced-inclusion
+            - unsupported-date
+        present:
+          type: boolean
+        comment:
+          type: string
+          minLength: 0
+          maxLength: 1000
+    DeclaredBlockingIssue:
+      type: object
+      additionalProperties: false
+      required:
+        - key
+        - label
+        - comment
+      properties:
+        key:
+          type: string
+          minLength: 1
+          maxLength: 64
+        label:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        comment:
+          type: string
+          minLength: 0
+          maxLength: 1000
+    SelfAssessmentView:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - submissionId
+        - projectId
+        - projectRevisionId
+        - rubricVersionId
+        - method
+        - scorePoints
+        - maxPoints
+        - passPoints
+        - thresholdMet
+        - needsRevision
+        - answers
+        - blockingDeclarations
+        - blockingIssues
+        - comment
+        - evaluatedAt
+        - authorId
+        - evaluatorId
+        - declaredByUser
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        submissionId:
+          $ref: '#/components/schemas/UUID'
+        projectId:
+          $ref: '#/components/schemas/UUID'
+        projectRevisionId:
+          $ref: '#/components/schemas/UUID'
+        rubricVersionId:
+          $ref: '#/components/schemas/UUID'
+        method:
+          type: string
+          enum:
+            - SELF_ASSESSMENT
+        scorePoints:
+          type: integer
+          minimum: 0
+          maximum: 20
+        maxPoints:
+          type: integer
+          minimum: 20
+          maximum: 20
+        passPoints:
+          type: integer
+          minimum: 1
+          maximum: 20
+        thresholdMet:
+          type: boolean
+        needsRevision:
+          type: boolean
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CriterionDeclaration'
+          minItems: 20
+          maxItems: 20
+        blockingDeclarations:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockingDeclaration'
+          minItems: 4
+          maxItems: 4
+        blockingIssues:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeclaredBlockingIssue'
+          minItems: 0
+          maxItems: 24
+        comment:
+          type: string
+          minLength: 0
+          maxLength: 4000
+        evaluatedAt:
+          $ref: '#/components/schemas/UtcInstant'
+        authorId:
+          $ref: '#/components/schemas/UUID'
+        evaluatorId:
+          type: 'null'
+        declaredByUser:
+          const: true
+          type: boolean
+      description: >-
+        Autoévaluation déclarative append-only rattachée à une révision personnelle et à une grille exacte.
+        Spring calcule le score ; atteindre le seuil ne certifie aucune compétence. Aucune revue humaine
+        livrée.
+    SelfAssessmentSummary:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - projectId
+        - projectRevisionId
+        - rubricVersionId
+        - method
+        - scorePoints
+        - maxPoints
+        - passPoints
+        - thresholdMet
+        - needsRevision
+        - blockingIssueCount
+        - evaluatedAt
+        - authorId
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        projectId:
+          $ref: '#/components/schemas/UUID'
+        projectRevisionId:
+          $ref: '#/components/schemas/UUID'
+        rubricVersionId:
+          $ref: '#/components/schemas/UUID'
+        method:
+          type: string
+          enum:
+            - SELF_ASSESSMENT
+        scorePoints:
+          type: integer
+          minimum: 0
+          maximum: 20
+        maxPoints:
+          type: integer
+          minimum: 20
+          maximum: 20
+        passPoints:
+          type: integer
+          minimum: 1
+          maximum: 20
+        thresholdMet:
+          type: boolean
+        needsRevision:
+          type: boolean
+        blockingIssueCount:
+          type: integer
+          minimum: 0
+          maximum: 24
+        evaluatedAt:
+          $ref: '#/components/schemas/UtcInstant'
+        authorId:
+          $ref: '#/components/schemas/UUID'
+    SelfAssessmentPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SelfAssessmentSummary'
+          minItems: 0
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    ProjectStatus:
+      type: object
+      additionalProperties: false
+      required:
+        - projectId
+        - currentRevisionId
+        - stage
+        - state
+        - latestAssessment
+      properties:
+        projectId:
+          $ref: '#/components/schemas/UUID'
+        currentRevisionId:
+          $ref: '#/components/schemas/UUID'
+        stage:
+          type: string
+          enum:
+            - DRAFT
+            - READY_FOR_SELF_ASSESSMENT
+        state:
+          type: string
+          enum:
+            - DRAFT
+            - READY_FOR_SELF_ASSESSMENT
+            - SELF_ASSESSED
+            - NEEDS_REVISION
+        latestAssessment:
+          anyOf:
+            - $ref: '#/components/schemas/SelfAssessmentView'
+            - type: 'null'
+      description: >-
+        État dérivé séparé du texte àETag. Une ancienne autoévaluation reste historique après édition ; elle
+        ne valide pas automatiquement la nouvelle révision.
+    SolutionRevealView:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - projectId
+        - projectRevisionId
+        - activityId
+        - activityVersionId
+        - revisionId
+        - locale
+        - correction
+        - revealedAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        projectId:
+          $ref: '#/components/schemas/UUID'
+        projectRevisionId:
+          $ref: '#/components/schemas/UUID'
+        activityId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        revisionId:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        correction:
+          type: string
+          minLength: 1
+          maxLength: 8000
+        revealedAt:
+          $ref: '#/components/schemas/UtcInstant'
+      description: >-
+        Consultation explicite tracée, unique par propriétaire/révision personnelle/source/langue.
+        Réautorisation de la publication couranteFREE à chaque livraison et rejeu. Ne change ni production,
+        stade, score ou progression.
+    CreateProject:
+      type: object
+      additionalProperties: false
+      required:
+        - creationId
+        - activityId
+        - activityVersionId
+        - revisionId
+        - sourceLocale
+        - enrollmentId
+        - fields
+        - stage
+      properties:
+        creationId:
+          $ref: '#/components/schemas/UUID'
+        activityId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        revisionId:
+          $ref: '#/components/schemas/UUID'
+        sourceLocale:
+          $ref: '#/components/schemas/Locale'
+        enrollmentId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        fields:
+          $ref: '#/components/schemas/ProjectFields'
+        stage:
+          type: string
+          enum:
+            - DRAFT
+            - READY_FOR_SELF_ASSESSMENT
+      description: >-
+        Création idempotente par propriétaire+creationId et empreinte du corps : même corps retrouve le
+        projet(200), autre corps409. Source publiéeFREE exacte requise pour une nouvelle création. Inscription
+        facultative vérifiée côté serveur ; aucun propriétaire ou score admis dans le JSON.
+    SaveProject:
+      type: object
+      additionalProperties: false
+      required:
+        - fields
+        - stage
+      properties:
+        fields:
+          $ref: '#/components/schemas/ProjectFields'
+        stage:
+          type: string
+          enum:
+            - DRAFT
+            - READY_FOR_SELF_ASSESSMENT
+      description: >-
+        Nouvelle révision append-only sous verrou propriétaire et If-Match. READY exige du texte non blanc
+        dans les sections ou externalText ; cette condition ne vérifie pas sa qualité.
+    SubmitSelfAssessment:
+      type: object
+      additionalProperties: false
+      required:
+        - submissionId
+        - projectRevisionId
+        - rubricVersionId
+        - answers
+        - blockingDeclarations
+        - comment
+      properties:
+        submissionId:
+          $ref: '#/components/schemas/UUID'
+        projectRevisionId:
+          $ref: '#/components/schemas/UUID'
+        rubricVersionId:
+          $ref: '#/components/schemas/UUID'
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CriterionDeclaration'
+          minItems: 20
+          maxItems: 20
+        blockingDeclarations:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockingDeclaration'
+          minItems: 4
+          maxItems: 4
+        comment:
+          type: string
+          minLength: 0
+          maxLength: 4000
+      description: >-
+        Vingt contrôles et quatre déclarations exacts, uniques et complets. Score fourni parSpring seulement ;
+        corps JSONUTF8 borné48KiB. Même propriétaire/submissionId/corps retrouve la preuve avant If-Match pour
+        une réponse déjàcommittée ; autre corps409. Jamais de retry automatique.
+    RevealSolution:
+      type: object
+      additionalProperties: false
+      required:
+        - projectId
+        - projectRevisionId
+        - activityVersionId
+        - revisionId
+        - locale
+      properties:
+        projectId:
+          $ref: '#/components/schemas/UUID'
+        projectRevisionId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        revisionId:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+      description: >-
+        Origine exacte du projet. AFTER_SUBMISSION exige une autoévaluation déjà enregistrée pour cette
+        révision personnelle, sans condition de score. EXPLICIT exige seulement l’action volontaire.
+        Retrait/PROTECTED refuse aussi le rejeu d’une consultation antérieure.
+    ProjectPreset:
+      type: object
+      additionalProperties: false
+      required:
+        - caseCode
+        - locale
+        - policy
+        - rubric
+      properties:
+        caseCode:
+          type: string
+          enum:
+            - BR01
+            - BR02
+        locale:
+          $ref: '#/components/schemas/Locale'
+        policy:
+          $ref: '#/components/schemas/ProjectPolicy'
+        rubric:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required:
+              - key
+              - label
+              - points
+              - blocking
+            properties:
+              key:
+                type: string
+                minLength: 1
+                maxLength: 64
+                pattern: ^(fidelity|scope|budget|schedule|presentation)-[1-4]$
+              label:
+                type: string
+                minLength: 1
+                maxLength: 2000
+              points:
+                type: integer
+                minimum: 1
+                maximum: 1
+              blocking:
+                type: boolean
+          minItems: 20
+          maxItems: 20
+      description: >-
+        Préparation CMS lue depuis une ressource serveur protégée. Ni seed, sauvegarde, publication ni
+        promesse commerciale ; libellésBR02 adaptés au brief.
   headers:
     NoStore:
       description: Réponse non stockable ; les erreurs sont également privées.

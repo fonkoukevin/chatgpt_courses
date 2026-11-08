@@ -26,6 +26,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.junit.jupiter.Container;
@@ -39,6 +40,7 @@ import tools.jackson.databind.ObjectMapper;
 })
 @ActiveProfiles("test")
 @Testcontainers
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class PublicCatalogueIntegrationTest {
     @Container static final PostgreSQLContainer POSTGRES=new PostgreSQLContainer(DockerImageName.parse(
         "postgres@sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42").asCompatibleSubstituteFor("postgres"));

@@ -67,6 +67,15 @@ class SecurityConfiguration {
                         .requestMatchers(HttpMethod.PUT, "/api/v1/me/activity-progress/*").hasAuthority("learning.write")
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/me/activity-notes/*").hasAuthority("learning.write")
                         .requestMatchers(HttpMethod.POST, "/api/v1/learning/activities/*/versions/*/quiz-checks").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/project-templates/*/versions/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/me/projects", "/api/v1/me/projects/*",
+                                "/api/v1/me/projects/*/revisions", "/api/v1/me/projects/*/revisions/*",
+                                "/api/v1/me/projects/*/context", "/api/v1/me/projects/*/status",
+                                "/api/v1/me/projects/*/self-assessments", "/api/v1/me/projects/*/self-assessments/*").hasAuthority("projects.read")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/me/projects", "/api/v1/me/projects/*/self-assessments",
+                                "/api/v1/activities/*/solution-reveals").hasAuthority("projects.write")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/me/projects/*").hasAuthority("projects.write")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/admin/project-presets/*").hasAuthority("content.read")
                         .requestMatchers(HttpMethod.GET, "/api/v1/contents/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/catalog", "/api/v1/catalog/facets", "/api/v1/catalog/resources/*",
                                 "/api/v1/catalog/by-slug/*/*", "/api/v1/catalog/resources/*/versions/*").permitAll()

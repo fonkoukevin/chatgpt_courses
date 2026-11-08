@@ -18,6 +18,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.session.Session;
 import org.springframework.session.SessionRepository;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.DockerClientFactory;
@@ -32,6 +33,7 @@ import tools.jackson.databind.ObjectMapper;
 })
 @ActiveProfiles("test")
 @Testcontainers
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class FoundationIntegrationTest {
     @Container

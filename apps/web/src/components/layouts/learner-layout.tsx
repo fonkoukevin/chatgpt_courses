@@ -11,8 +11,10 @@ import { methodsPath } from "@/lib/methods/routes";
 import { publicCatalogueHref } from "@/lib/public/routes";
 import { getLearningDictionary } from "@/lib/i18n/learning";
 import { learningPath } from "@/lib/learning/routes";
+import { getProjectsDictionary } from "@/lib/i18n/projects";
+import { projectsPath } from "@/lib/projects/routes";
 
-type Product = { languageLinks: Record<Locale, string>; active?: "learning" | "methods" };
+type Product = { languageLinks: Record<Locale, string>; active?: "learning" | "methods" | "projects" };
 
 export function LearnerLayout({ locale, children, title, description, product }: { locale: Locale; children: ReactNode; title?: string; description?: string; product?: Product }) {
   if (product) return <ProductLearnerLayout locale={locale} title={title} description={description} product={product}>{children}</ProductLearnerLayout>;
@@ -51,9 +53,10 @@ export function LearnerLayout({ locale, children, title, description, product }:
 }
 
 function ProductLearnerLayout({ locale, title, description, product, children }: { locale: Locale; title?: string; description?: string; product: Product; children: ReactNode }) {
-  const t = getMethodPageDictionary(locale), learning = getLearningDictionary(locale);
+  const t = getMethodPageDictionary(locale), learning = getLearningDictionary(locale), projects = getProjectsDictionary(locale);
   const brand = <NextLink href={`/${locale}`} className="inline-flex min-h-11 items-center text-base font-semibold tracking-tight no-underline">ChatGPT Courses<span aria-hidden="true" className="text-brand">.</span></NextLink>;
   const items = [{ href: learningPath(locale), label: learning.navigation, key: "learning", icon: <BookOpen size={19} aria-hidden="true" /> },
+    { href: projectsPath(locale), label: projects.projects, key: "projects", icon: <FolderOpen size={19} aria-hidden="true" /> },
     { href: methodsPath(locale), label: t.methods, key: "methods", icon: <NotebookPen size={19} aria-hidden="true" /> },
     { href: publicCatalogueHref(locale), label: t.catalogue, icon: <BookOpen size={19} aria-hidden="true" /> },
     { href: locale === "fr" ? "/fr/compte" : "/en/account", label: t.account, icon: <UserRound size={19} aria-hidden="true" /> }];

@@ -1,6 +1,7 @@
 import { record } from "./auth-validation";
 import { isMethodDefinition } from "../methods/validation";
 import { isQuizPolicy } from "./quiz-policy-validation";
+import { isProjectPolicy } from "./project-policy-validation";
 import type { CatalogueFacets, CataloguePage, PublicDocument, PublicMetadata, ResourceDetail } from "./generated/types.gen";
 
 const keys = (v: Record<string, unknown>, allowed: string[]) => Object.keys(v).every((key) => allowed.includes(key));
@@ -33,11 +34,12 @@ export function isPublicMetadata(v: unknown): v is PublicMetadata {
     && nullableString(v.evaluationDescription);
 }
 export function isPublicDocument(v: unknown): v is PublicDocument {
-  if (!record(v) || !keys(v, ["objective", "expectedResult", "prerequisites", "blocks", "estimatedMinutes", "quiz", "rubric", "access", "media", "relatedResourceIds", "exerciseInstructions", "methodDefinition", "quizPolicy"])) return false;
+  if (!record(v) || !keys(v, ["objective", "expectedResult", "prerequisites", "blocks", "estimatedMinutes", "quiz", "rubric", "access", "media", "relatedResourceIds", "exerciseInstructions", "methodDefinition", "quizPolicy", "projectPolicy"])) return false;
   return str(v.objective) && str(v.expectedResult) && strings(v.prerequisites) && duration(v.estimatedMinutes) && access(v.access) && nullableString(v.exerciseInstructions)
     && Array.isArray(v.relatedResourceIds) && v.relatedResourceIds.every(uuid)
     && (v.methodDefinition === undefined || v.methodDefinition === null || isMethodDefinition(v.methodDefinition))
     && (v.quizPolicy === undefined || v.quizPolicy === null || isQuizPolicy(v.quizPolicy))
+    && (v.projectPolicy === undefined || v.projectPolicy === null || isProjectPolicy(v.projectPolicy))
     && Array.isArray(v.blocks) && v.blocks.length <= 60 && v.blocks.every((x) => record(x) && keys(x, ["type", "text", "url"])
       && oneOf(x.type, ["HEADING", "PARAGRAPH", "LIST", "CALLOUT", "CODE", "LINK"]) && str(x.text) && (x.url === null || safePublicLink(x.url) !== null))
     && Array.isArray(v.quiz) && v.quiz.length <= 20 && v.quiz.every((x) => record(x) && keys(x, ["key", "prompt", "options", "points"])

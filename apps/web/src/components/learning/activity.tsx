@@ -19,6 +19,7 @@ import { AccountNotice, LearningError } from "./parts";
 import { ActivityNavigation, ActivityProgramme, type ActivityProgrammeContext } from "./programme";
 import { ActivityProgress } from "./progress";
 import { ActivityQuiz, QuizHistory } from "./quiz";
+import { StartProjectAction } from "@/components/projects/preparation";
 
 export type LearningActivityProps = DetailProps & { programme?: ActivityProgrammeContext };
 
@@ -118,6 +119,7 @@ function ActivityContent({ locale, resource, languageLinks, returnTo, programme 
         {account.status === "active" && programme && (!lookupDone ? <p role="status">{t.loading}</p> : <div className="space-y-4">{lookupError && <LearningError locale={locale} error={lookupError} retry={() => void retryLookup()} />}{privateActivity && !privateActivity.ok && <LearningError locale={locale} error={privateActivity.error} retry={() => void retryLookup()} />}{!activity && !lookupError && !privateActivity && contentAvailable && <Button busy={enrolling} loadingLabel={t.startingCourse} onClick={() => void enroll()}>{t.startCourse}</Button>}{enrolled && <StatusMessage tone="success">{t.enrolled}</StatusMessage>}</div>)}
         {unconfirmed && <StatusMessage tone="warning">{t.accountTransition}</StatusMessage>}{visitError && <LearningError locale={locale} error={visitError} retry={activity ? () => void recordVisit(activity) : undefined} />}
         {activity && <ActivityProgress key={`progress:${activity.progress.id}`} locale={locale} contentLocale={resource.locale} initial={activity.progress} account={account} boundary={boundary} available={enrolledAvailable} />}
+        {contentAvailable && resource.document?.projectPolicy && !revisionChanged && !enrolling && !(programme && account.status === "active" && !lookupDone) && <StartProjectAction key={`project:${resource.versionId}:${resource.locale}`} locale={locale} source={resource} account={account} boundary={boundary} enrollmentId={activity?.enrollmentId} />}
         {publicAvailable && <ActivityQuiz key={`quiz:${resource.versionId}:${resource.locale}`} locale={locale} resource={resource} account={account} boundary={boundary} enrollmentId={activity?.enrollmentId} overview={activity?.quiz} available={contentAvailable && !revisionChanged && (!activity || enrolledAvailable) && !enrolling && !(programme && account.status === "active" && !lookupDone)} onAttempt={() => { setHistoryRefresh((value) => value + 1); void refreshActivity(); }} />}
         {account.accountId && <ActivityNotes key={`notes:${account.accountId}:${resource.versionId}`} locale={locale} contentLocale={resource.locale} activityId={resource.resourceId} activityVersionId={resource.versionId} account={account} boundary={boundary} canCreate={contentAvailable} />}
         {account.accountId && <QuizHistory key={`history:${account.accountId}:${resource.versionId}`} locale={locale} activityVersionId={resource.versionId} account={account} boundary={boundary} refresh={historyRefresh} />}

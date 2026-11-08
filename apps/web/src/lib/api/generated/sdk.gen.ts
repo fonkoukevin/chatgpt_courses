@@ -2,7 +2,7 @@
 
 import { type Client, type ClientMeta, type Options as Options2, type RequestResult, type TDataShape, urlSearchParamsBodySerializer } from './client';
 import { client } from './client.gen';
-import type { ArchiveContentData, ArchiveContentErrors, ArchiveContentResponses, CheckQuizData, CheckQuizErrors, CheckQuizResponses, CreateActivityNoteData, CreateActivityNoteErrors, CreateActivityNoteResponses, CreateContentData, CreateContentErrors, CreateContentResponses, CreateContentTranslationData, CreateContentTranslationErrors, CreateContentTranslationResponses, CreateContentVersionData, CreateContentVersionErrors, CreateContentVersionResponses, CreateMethodData, CreateMethodErrors, CreateMethodFromTemplateData, CreateMethodFromTemplateErrors, CreateMethodFromTemplateResponses, CreateMethodResponses, DeleteMethodData, DeleteMethodErrors, DeleteMethodResponses, DuplicateContentData, DuplicateContentErrors, DuplicateContentResponses, DuplicateMethodData, DuplicateMethodErrors, DuplicateMethodResponses, EnrollCourseData, EnrollCourseErrors, EnrollCourseResponses, FindActivityNoteData, FindActivityNoteErrors, FindActivityNoteResponses, GetActivityNoteData, GetActivityNoteErrors, GetActivityNoteResponses, GetActivityProgressData, GetActivityProgressErrors, GetActivityProgressResponses, GetCatalogueFacetsData, GetCatalogueFacetsErrors, GetCatalogueFacetsResponses, GetCatalogueResourceBySlugData, GetCatalogueResourceBySlugErrors, GetCatalogueResourceBySlugResponses, GetCatalogueResourceData, GetCatalogueResourceErrors, GetCatalogueResourceResponses, GetCatalogueResourceVersionData, GetCatalogueResourceVersionErrors, GetCatalogueResourceVersionResponses, GetContentData, GetContentDependenciesData, GetContentDependenciesErrors, GetContentDependenciesResponses, GetContentErrors, GetContentReadinessData, GetContentReadinessErrors, GetContentReadinessResponses, GetContentResponses, GetCsrfTokenData, GetCsrfTokenErrors, GetCsrfTokenResponses, GetCurrentUserData, GetCurrentUserErrors, GetCurrentUserResponses, GetEnrollmentData, GetEnrollmentErrors, GetEnrollmentResponses, GetLearningActivityData, GetLearningActivityErrors, GetLearningActivityResponses, GetLearningDashboardData, GetLearningDashboardErrors, GetLearningDashboardResponses, GetMethodData, GetMethodErrors, GetMethodResponses, GetMethodSourceUpdateData, GetMethodSourceUpdateErrors, GetMethodSourceUpdateResponses, GetMethodTemplateData, GetMethodTemplateErrors, GetMethodTemplateResponses, GetPreferencesData, GetPreferencesErrors, GetPreferencesResponses, GetPublicContentData, GetPublicContentErrors, GetPublicContentResponses, GetQuizAttemptData, GetQuizAttemptErrors, GetQuizAttemptResponses, GetSystemHealthData, GetSystemHealthErrors, GetSystemHealthResponses, ListContentRevisionsData, ListContentRevisionsErrors, ListContentRevisionsResponses, ListContentsData, ListContentsErrors, ListContentsResponses, ListMethodsData, ListMethodsErrors, ListMethodsResponses, ListQuizAttemptsData, ListQuizAttemptsErrors, ListQuizAttemptsResponses, LoginData, LoginErrors, LoginResponses, LogoutData, LogoutErrors, LogoutResponses, PreviewContentData, PreviewContentErrors, PreviewContentResponses, PublishContentData, PublishContentErrors, PublishContentResponses, RegisterData, RegisterErrors, RegisterResponses, ReplaceContentCompositionData, ReplaceContentCompositionErrors, ReplaceContentCompositionResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, SaveContentMetadataData, SaveContentMetadataErrors, SaveContentMetadataResponses, SaveContentRevisionData, SaveContentRevisionErrors, SaveContentRevisionResponses, SearchCatalogueData, SearchCatalogueErrors, SearchCatalogueResponses, SetActivityProgressData, SetActivityProgressErrors, SetActivityProgressResponses, SubmitQuizData, SubmitQuizErrors, SubmitQuizResponses, TransitionContentData, TransitionContentErrors, TransitionContentResponses, UpdateActivityNoteData, UpdateActivityNoteErrors, UpdateActivityNoteResponses, UpdateMethodData, UpdateMethodErrors, UpdateMethodResponses, UpdatePreferencesData, UpdatePreferencesErrors, UpdatePreferencesResponses, VisitActivityData, VisitActivityErrors, VisitActivityResponses } from './types.gen';
+import type { ArchiveContentData, ArchiveContentErrors, ArchiveContentResponses, CheckQuizData, CheckQuizErrors, CheckQuizResponses, CreateActivityNoteData, CreateActivityNoteErrors, CreateActivityNoteResponses, CreateContentData, CreateContentErrors, CreateContentResponses, CreateContentTranslationData, CreateContentTranslationErrors, CreateContentTranslationResponses, CreateContentVersionData, CreateContentVersionErrors, CreateContentVersionResponses, CreateMethodData, CreateMethodErrors, CreateMethodFromTemplateData, CreateMethodFromTemplateErrors, CreateMethodFromTemplateResponses, CreateMethodResponses, CreateProjectData, CreateProjectErrors, CreateProjectResponses, DeleteMethodData, DeleteMethodErrors, DeleteMethodResponses, DuplicateContentData, DuplicateContentErrors, DuplicateContentResponses, DuplicateMethodData, DuplicateMethodErrors, DuplicateMethodResponses, EnrollCourseData, EnrollCourseErrors, EnrollCourseResponses, FindActivityNoteData, FindActivityNoteErrors, FindActivityNoteResponses, GetActivityNoteData, GetActivityNoteErrors, GetActivityNoteResponses, GetActivityProgressData, GetActivityProgressErrors, GetActivityProgressResponses, GetCatalogueFacetsData, GetCatalogueFacetsErrors, GetCatalogueFacetsResponses, GetCatalogueResourceBySlugData, GetCatalogueResourceBySlugErrors, GetCatalogueResourceBySlugResponses, GetCatalogueResourceData, GetCatalogueResourceErrors, GetCatalogueResourceResponses, GetCatalogueResourceVersionData, GetCatalogueResourceVersionErrors, GetCatalogueResourceVersionResponses, GetContentData, GetContentDependenciesData, GetContentDependenciesErrors, GetContentDependenciesResponses, GetContentErrors, GetContentReadinessData, GetContentReadinessErrors, GetContentReadinessResponses, GetContentResponses, GetCsrfTokenData, GetCsrfTokenErrors, GetCsrfTokenResponses, GetCurrentUserData, GetCurrentUserErrors, GetCurrentUserResponses, GetEnrollmentData, GetEnrollmentErrors, GetEnrollmentResponses, GetLearningActivityData, GetLearningActivityErrors, GetLearningActivityResponses, GetLearningDashboardData, GetLearningDashboardErrors, GetLearningDashboardResponses, GetMethodData, GetMethodErrors, GetMethodResponses, GetMethodSourceUpdateData, GetMethodSourceUpdateErrors, GetMethodSourceUpdateResponses, GetMethodTemplateData, GetMethodTemplateErrors, GetMethodTemplateResponses, GetPreferencesData, GetPreferencesErrors, GetPreferencesResponses, GetProjectContextData, GetProjectContextErrors, GetProjectContextResponses, GetProjectData, GetProjectErrors, GetProjectPresetData, GetProjectPresetErrors, GetProjectPresetResponses, GetProjectResponses, GetProjectRevisionData, GetProjectRevisionErrors, GetProjectRevisionResponses, GetProjectStatusData, GetProjectStatusErrors, GetProjectStatusResponses, GetProjectTemplateData, GetProjectTemplateErrors, GetProjectTemplateResponses, GetPublicContentData, GetPublicContentErrors, GetPublicContentResponses, GetQuizAttemptData, GetQuizAttemptErrors, GetQuizAttemptResponses, GetSelfAssessmentData, GetSelfAssessmentErrors, GetSelfAssessmentResponses, GetSystemHealthData, GetSystemHealthErrors, GetSystemHealthResponses, ListContentRevisionsData, ListContentRevisionsErrors, ListContentRevisionsResponses, ListContentsData, ListContentsErrors, ListContentsResponses, ListMethodsData, ListMethodsErrors, ListMethodsResponses, ListProjectRevisionsData, ListProjectRevisionsErrors, ListProjectRevisionsResponses, ListProjectsData, ListProjectsErrors, ListProjectsResponses, ListQuizAttemptsData, ListQuizAttemptsErrors, ListQuizAttemptsResponses, ListSelfAssessmentsData, ListSelfAssessmentsErrors, ListSelfAssessmentsResponses, LoginData, LoginErrors, LoginResponses, LogoutData, LogoutErrors, LogoutResponses, PreviewContentData, PreviewContentErrors, PreviewContentResponses, PublishContentData, PublishContentErrors, PublishContentResponses, RegisterData, RegisterErrors, RegisterResponses, ReplaceContentCompositionData, ReplaceContentCompositionErrors, ReplaceContentCompositionResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, RevealSolutionData, RevealSolutionErrors, RevealSolutionResponses, SaveContentMetadataData, SaveContentMetadataErrors, SaveContentMetadataResponses, SaveContentRevisionData, SaveContentRevisionErrors, SaveContentRevisionResponses, SaveProjectData, SaveProjectErrors, SaveProjectResponses, SearchCatalogueData, SearchCatalogueErrors, SearchCatalogueResponses, SetActivityProgressData, SetActivityProgressErrors, SetActivityProgressResponses, SubmitQuizData, SubmitQuizErrors, SubmitQuizResponses, SubmitSelfAssessmentData, SubmitSelfAssessmentErrors, SubmitSelfAssessmentResponses, TransitionContentData, TransitionContentErrors, TransitionContentResponses, UpdateActivityNoteData, UpdateActivityNoteErrors, UpdateActivityNoteResponses, UpdateMethodData, UpdateMethodErrors, UpdateMethodResponses, UpdatePreferencesData, UpdatePreferencesErrors, UpdatePreferencesResponses, VisitActivityData, VisitActivityErrors, VisitActivityResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -814,4 +814,204 @@ export const checkQuiz = <ThrowOnError extends boolean = false>(options: Options
         'Content-Type': 'application/json',
         ...options.headers
     }
+});
+
+/**
+ * Chercher ses productions sans exposer leur texte dans la liste.
+ */
+export const listProjects = <ThrowOnError extends boolean = false>(options?: Options<ListProjectsData, ThrowOnError>): RequestResult<ListProjectsResponses, ListProjectsErrors, ThrowOnError> => (options?.client ?? client).get<ListProjectsResponses, ListProjectsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/projects',
+    ...options
+});
+
+/**
+ * Créer sa production depuis une activité exacte disponible.
+ *
+ * Compte actif, permissionprojects.write, propriétaire de session, CSRF et X-Account-Context attendu. Header absent428, compte différent409 ; le header ne choisit jamais le propriétaire. Aucun retry implicite.
+ */
+export const createProject = <ThrowOnError extends boolean = false>(options: Options<CreateProjectData, ThrowOnError>): RequestResult<CreateProjectResponses, CreateProjectErrors, ThrowOnError> => (options.client ?? client).post<CreateProjectResponses, CreateProjectErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/projects',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Lire sa production et son instantané de grille même après retrait.
+ */
+export const getProject = <ThrowOnError extends boolean = false>(options: Options<GetProjectData, ThrowOnError>): RequestResult<GetProjectResponses, GetProjectErrors, ThrowOnError> => (options.client ?? client).get<GetProjectResponses, GetProjectErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/projects/{id}',
+    ...options
+});
+
+/**
+ * Sauvegarder une nouvelle révision personnelle exacte.
+ *
+ * Compte actif, permissionprojects.write, propriétaire de session, CSRF et X-Account-Context attendu. Header absent428, compte différent409 ; le header ne choisit jamais le propriétaire. Aucun retry implicite.
+ */
+export const saveProject = <ThrowOnError extends boolean = false>(options: Options<SaveProjectData, ThrowOnError>): RequestResult<SaveProjectResponses, SaveProjectErrors, ThrowOnError> => (options.client ?? client).patch<SaveProjectResponses, SaveProjectErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/projects/{id}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Lister les résumés de ses révisions sans prose complète.
+ */
+export const listProjectRevisions = <ThrowOnError extends boolean = false>(options: Options<ListProjectRevisionsData, ThrowOnError>): RequestResult<ListProjectRevisionsResponses, ListProjectRevisionsErrors, ThrowOnError> => (options.client ?? client).get<ListProjectRevisionsResponses, ListProjectRevisionsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/projects/{id}/revisions',
+    ...options
+});
+
+/**
+ * Lire une révision personnelle historique précise.
+ */
+export const getProjectRevision = <ThrowOnError extends boolean = false>(options: Options<GetProjectRevisionData, ThrowOnError>): RequestResult<GetProjectRevisionResponses, GetProjectRevisionErrors, ThrowOnError> => (options.client ?? client).get<GetProjectRevisionResponses, GetProjectRevisionErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/projects/{id}/revisions/{revisionId}',
+    ...options
+});
+
+/**
+ * Réautoriser le contexte pédagogique sans remplacer sa production.
+ */
+export const getProjectContext = <ThrowOnError extends boolean = false>(options: Options<GetProjectContextData, ThrowOnError>): RequestResult<GetProjectContextResponses, GetProjectContextErrors, ThrowOnError> => (options.client ?? client).get<GetProjectContextResponses, GetProjectContextErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/projects/{id}/context',
+    ...options
+});
+
+/**
+ * Lire le statut déclaratif séparé du texte àETag.
+ */
+export const getProjectStatus = <ThrowOnError extends boolean = false>(options: Options<GetProjectStatusData, ThrowOnError>): RequestResult<GetProjectStatusResponses, GetProjectStatusErrors, ThrowOnError> => (options.client ?? client).get<GetProjectStatusResponses, GetProjectStatusErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/projects/{id}/status',
+    ...options
+});
+
+/**
+ * Lister les preuves déclaratives sans commentaires détaillés.
+ */
+export const listSelfAssessments = <ThrowOnError extends boolean = false>(options: Options<ListSelfAssessmentsData, ThrowOnError>): RequestResult<ListSelfAssessmentsResponses, ListSelfAssessmentsErrors, ThrowOnError> => (options.client ?? client).get<ListSelfAssessmentsResponses, ListSelfAssessmentsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/projects/{id}/self-assessments',
+    ...options
+});
+
+/**
+ * Renseigner une autoévaluation déclarative pour cette révision.
+ *
+ * Compte actif, permissionprojects.write, propriétaire de session, CSRF et X-Account-Context attendu. Header absent428, compte différent409 ; le header ne choisit jamais le propriétaire. Aucun retry implicite.
+ */
+export const submitSelfAssessment = <ThrowOnError extends boolean = false>(options: Options<SubmitSelfAssessmentData, ThrowOnError>): RequestResult<SubmitSelfAssessmentResponses, SubmitSelfAssessmentErrors, ThrowOnError> => (options.client ?? client).post<SubmitSelfAssessmentResponses, SubmitSelfAssessmentErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/projects/{id}/self-assessments',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Lire une autoévaluation historique précise.
+ */
+export const getSelfAssessment = <ThrowOnError extends boolean = false>(options: Options<GetSelfAssessmentData, ThrowOnError>): RequestResult<GetSelfAssessmentResponses, GetSelfAssessmentErrors, ThrowOnError> => (options.client ?? client).get<GetSelfAssessmentResponses, GetSelfAssessmentErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/projects/{id}/self-assessments/{assessmentId}',
+    ...options
+});
+
+/**
+ * Consulter volontairement le corrigé exact après réautorisation courante.
+ *
+ * Compte actif, permissionprojects.write, propriétaire de session, CSRF et X-Account-Context attendu. Header absent428, compte différent409 ; le header ne choisit jamais le propriétaire. Aucun retry implicite.
+ */
+export const revealSolution = <ThrowOnError extends boolean = false>(options: Options<RevealSolutionData, ThrowOnError>): RequestResult<RevealSolutionResponses, RevealSolutionErrors, ThrowOnError> => (options.client ?? client).post<RevealSolutionResponses, RevealSolutionErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/activities/{activityId}/solution-reveals',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Ouvrir le brief et la grille de l’atelier public disponible.
+ */
+export const getProjectTemplate = <ThrowOnError extends boolean = false>(options: Options<GetProjectTemplateData, ThrowOnError>): RequestResult<GetProjectTemplateResponses, GetProjectTemplateErrors, ThrowOnError> => (options.client ?? client).get<GetProjectTemplateResponses, GetProjectTemplateErrors, ThrowOnError>({ url: '/project-templates/{activityId}/versions/{versionId}', ...options });
+
+/**
+ * Préparer explicitement une grilleCMS depuis une référence serveur protégée.
+ *
+ * Permissioncontent.read requise. Référence pédagogique protégée, sans seed/publication ; l’interface confirme tout remplacement d’une grille existante.
+ */
+export const getProjectPreset = <ThrowOnError extends boolean = false>(options: Options<GetProjectPresetData, ThrowOnError>): RequestResult<GetProjectPresetResponses, GetProjectPresetErrors, ThrowOnError> => (options.client ?? client).get<GetProjectPresetResponses, GetProjectPresetErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/project-presets/{caseCode}',
+    ...options
 });

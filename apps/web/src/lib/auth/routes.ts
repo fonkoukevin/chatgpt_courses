@@ -1,6 +1,7 @@
 import type { Locale } from "../i18n/locales";
 import { safeMethodsDestination, translateMethodsDestination } from "../methods/routes";
 import { safeLearningDestination, translateLearningDestination } from "../learning/destination";
+import { safeProjectsDestination, translateProjectsDestination } from "../projects/destination";
 
 export type AuthScreen = "sign-in" | "sign-up" | "recover" | "reset" | "account";
 const paths = {
@@ -13,6 +14,8 @@ export function authPath(locale: Locale, screen: AuthScreen): string {
 }
 
 export function safeReturnTo(value: unknown, locale: Locale): string {
+  const project = safeProjectsDestination(value, locale);
+  if (project) return project;
   const learning = safeLearningDestination(value, locale);
   if (learning) return learning;
   const method = safeMethodsDestination(value, locale);
@@ -28,6 +31,8 @@ export function safeReturnTo(value: unknown, locale: Locale): string {
 }
 
 export function translateReturnTo(value: unknown, locale: Locale): string {
+  const project = translateProjectsDestination(value, locale);
+  if (project) return project;
   const learning = translateLearningDestination(value, locale);
   if (learning) return learning;
   const method = translateMethodsDestination(value, locale);

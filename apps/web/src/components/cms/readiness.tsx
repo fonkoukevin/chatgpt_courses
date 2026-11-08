@@ -7,9 +7,11 @@ import { cmsPath } from "@/lib/cms/routes";
 import { getCmsDictionary } from "@/lib/i18n/cms";
 import type { Locale } from "@/lib/i18n/locales";
 import { CmsError } from "./parts";
+import { getProjectEditorialDictionary } from "@/lib/i18n/project-editorial";
 
 export function ReadinessPanel({ locale, value, content, dirty, current, pending, refresh }: { locale: Locale; value: AuthResult<Readiness>; content: ContentView; dirty: boolean; current: boolean; pending: boolean; refresh: () => void }) {
-  const text = getCmsDictionary(locale);
+  const text = getCmsDictionary(locale), project = getProjectEditorialDictionary(locale);
+  const projectIssues: Record<string, string> = { PROJECT_POLICY_ACTIVITY_ONLY: project.policyActivityOnly, PROJECT_RUBRIC_REQUIRED: project.rubricRequired };
   const stale = dirty || !current || (value.ok && value.data.checkedRevision !== content.currentRevisionId);
   function focus(field: string) {
     const section = field.includes("media") ? "media" : field.includes("exercise") || field.includes("correction") ? "exercise" : field.includes("rubric") ? "rubric" : field.includes("quiz") ? "quiz" : field.includes("child") || field.includes("composition") ? "composition" : field.includes("blocks") ? "blocks" : "objective";
@@ -21,7 +23,7 @@ export function ReadinessPanel({ locale, value, content, dirty, current, pending
     {stale && <StatusMessage tone="warning">{text.readinessStale}</StatusMessage>}
     {!value.ok ? <CmsError error={value.error} locale={locale} returnTo={cmsPath(locale, content.id)} /> : !stale && <>
       <StatusMessage tone={value.data.ready ? "success" : "warning"}>{value.data.ready ? text.readinessReady : text.readinessNotReady}</StatusMessage>
-      {(["blockingIssues", "warnings"] as const).map((group) => value.data[group].length > 0 && <div key={group}><h3 className="font-semibold">{group === "blockingIssues" ? text.blockers : text.warnings}</h3><ul className="mt-3 space-y-3">{value.data[group].map((issue, index) => <li key={`${issue.code}-${index}`} className="rounded-input border border-border bg-surface p-3"><p className="text-sm">{Object.hasOwn(text.issues, issue.code) ? text.issues[issue.code as keyof typeof text.issues] : text.readinessNotReady}</p><Button variant="link" className="mt-1 px-0" onClick={() => focus(issue.field)}>{text.fix}</Button></li>)}</ul></div>)}
+      {(["blockingIssues", "warnings"] as const).map((group) => value.data[group].length > 0 && <div key={group}><h3 className="font-semibold">{group === "blockingIssues" ? text.blockers : text.warnings}</h3><ul className="mt-3 space-y-3">{value.data[group].map((issue, index) => <li key={`${issue.code}-${index}`} className="rounded-input border border-border bg-surface p-3"><p className="text-sm">{projectIssues[issue.code] ?? (Object.hasOwn(text.issues, issue.code) ? text.issues[issue.code as keyof typeof text.issues] : text.readinessNotReady)}</p><Button variant="link" className="mt-1 px-0" onClick={() => focus(issue.field)}>{text.fix}</Button></li>)}</ul></div>)}
     </>}
   </section>;
 }

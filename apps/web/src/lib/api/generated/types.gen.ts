@@ -191,6 +191,7 @@ export type ContentDocument = {
     relatedResourceIds: Array<Uuid>;
     methodDefinition?: MethodDefinition | null;
     quizPolicy?: QuizPolicy | null;
+    projectPolicy?: ProjectPolicy | null;
 };
 
 export type CreateContent = {
@@ -416,6 +417,7 @@ export type PublicDocument = {
     exerciseInstructions: string | null;
     methodDefinition: MethodDefinition | null;
     quizPolicy: QuizPolicy | null;
+    projectPolicy: ProjectPolicy | null;
 };
 
 /**
@@ -986,6 +988,561 @@ export type QuizCheck = {
     revisionId: Uuid;
     locale: Locale;
     answers: Array<QuizAnswer>;
+};
+
+export type BlockingIssueDefinition = {
+    key: 'invented-claims' | 'definitive-wrong-total' | 'unpriced-inclusion' | 'unsupported-date';
+    label: string;
+};
+
+/**
+ * Configuration éditoriale opt-in, incomplète admise en brouillon seulement. Publication exige les vingt critères exacts de document.rubric àunpoint et quatre erreurs bloquantes aux libellés nonvides ; catégories dérivées des clés. Grille, seuil et règle de révélation gelés avec la version pédagogique. Null/absent ne crée aucun atelier implicite.
+ */
+export type ProjectPolicy = {
+    caseCode: 'BR01' | 'BR02';
+    passPoints: number;
+    revealPolicy: 'EXPLICIT' | 'AFTER_SUBMISSION';
+    blockingIssues: Array<BlockingIssueDefinition>;
+};
+
+/**
+ * Production personnelle : sept sections et texte collé indépendant. Unicode valide sansNUL, ensemble JSONUTF8 borné48KiB. Aucune analyse automatique de véracité ou des montants. La langue originale reste indépendante de la langue de navigation.
+ */
+export type ProjectFields = {
+    title: string;
+    locale: Locale;
+    objective: string;
+    scope: string;
+    method: string;
+    timeline: string;
+    budget: string;
+    clarifications: string;
+    nextStep: string;
+    externalText: string;
+};
+
+export type ProjectOrigin = {
+    activityId: Uuid;
+    activityVersionId: Uuid;
+    activityVersionNumber: number;
+    translationId: Uuid;
+    revisionId: Uuid;
+    locale: Locale;
+    title: string;
+    slug: string;
+    enrollmentId: Uuid | null;
+    courseResourceId: Uuid | null;
+    courseVersionId: Uuid | null;
+    courseTitle: string | null;
+};
+
+export type ProjectCriterion = {
+    key: string;
+    category: 'fidelity' | 'scope' | 'budget' | 'schedule' | 'presentation';
+    label: string;
+    points: number;
+    blocking: boolean;
+};
+
+/**
+ * Grille d’une publication disponible avant toute création ; aucun identifiant d’instantané personnel prétendument sauvegardé.
+ */
+export type ProjectRubricDefinition = {
+    sourceRevisionId: Uuid;
+    locale: Locale;
+    caseCode: 'BR01' | 'BR02';
+    passPoints: number;
+    maxPoints: number;
+    revealPolicy: 'EXPLICIT' | 'AFTER_SUBMISSION';
+    criteria: [
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion
+    ];
+    blockingIssues: [
+        BlockingIssueDefinition,
+        BlockingIssueDefinition,
+        BlockingIssueDefinition,
+        BlockingIssueDefinition
+    ];
+};
+
+/**
+ * Instantané immuable enregistré à la création du projet. Conservé avec les productions et évaluations du propriétaire après retrait de la source.
+ */
+export type ProjectRubricSnapshot = {
+    id: Uuid;
+    sourceRevisionId: Uuid;
+    locale: Locale;
+    caseCode: 'BR01' | 'BR02';
+    passPoints: number;
+    maxPoints: number;
+    revealPolicy: 'EXPLICIT' | 'AFTER_SUBMISSION';
+    criteria: [
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion,
+        ProjectCriterion
+    ];
+    blockingIssues: [
+        BlockingIssueDefinition,
+        BlockingIssueDefinition,
+        BlockingIssueDefinition,
+        BlockingIssueDefinition
+    ];
+};
+
+/**
+ * ETag project-id-révision de la seule production personnelle. État dérivé, contexte pédagogique et dernière autoévaluation sont séparés ; une autoévaluation ne modifie pas cet ETag.
+ */
+export type ProjectView = {
+    id: Uuid;
+    revision: Revision;
+    currentRevisionId: Uuid;
+    revisionNumber: number;
+    fields: ProjectFields;
+    stage: 'DRAFT' | 'READY_FOR_SELF_ASSESSMENT';
+    origin: ProjectOrigin;
+    rubric: ProjectRubricSnapshot;
+    createdAt: UtcInstant;
+    updatedAt: UtcInstant;
+    savedAt: UtcInstant;
+};
+
+export type ProjectSummary = {
+    id: Uuid;
+    revision: Revision;
+    title: string;
+    locale: Locale;
+    state: 'DRAFT' | 'READY_FOR_SELF_ASSESSMENT' | 'SELF_ASSESSED' | 'NEEDS_REVISION';
+    currentRevisionId: Uuid;
+    activityId: Uuid;
+    activityVersionId: Uuid;
+    activityVersionNumber: number;
+    activityTitle: string;
+    courseTitle: string | null;
+    updatedAt: UtcInstant;
+    savedAt: UtcInstant;
+};
+
+export type ProjectPage = {
+    items: Array<ProjectSummary>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+/**
+ * Révision personnelle append-only. Le détail privé est lu individuellement, jamais embarqué dans une page de cent productions.
+ */
+export type ProjectRevisionView = {
+    id: Uuid;
+    projectId: Uuid;
+    revisionNumber: number;
+    fields: ProjectFields;
+    stage: 'DRAFT' | 'READY_FOR_SELF_ASSESSMENT';
+    createdAt: UtcInstant;
+    authorId: Uuid;
+};
+
+export type ProjectRevisionSummary = {
+    id: Uuid;
+    projectId: Uuid;
+    revisionNumber: number;
+    title: string;
+    locale: Locale;
+    stage: 'DRAFT' | 'READY_FOR_SELF_ASSESSMENT';
+    createdAt: UtcInstant;
+    authorId: Uuid;
+};
+
+export type ProjectRevisionPage = {
+    items: Array<ProjectRevisionSummary>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+/**
+ * Contexte pédagogique réautorisé séparément, sans corrigé. currentPublishedRevisionId concerne la langue d’origine pour sourceChanged ; resource peut être une traduction demandée avec sa propre révision. Identifiants activité/version identiques, aucune substitution silencieuse de version ou du texte personnel.
+ */
+export type ProjectContext = {
+    projectId: Uuid;
+    activityId: Uuid;
+    activityVersionId: Uuid;
+    availability: 'PUBLISHED' | 'MISSING_TRANSLATION' | 'STALE' | 'WITHDRAWN';
+    accessStatus: 'ACTIVE' | 'PROTECTED' | 'UNAVAILABLE';
+    sourceRevisionId: Uuid;
+    currentPublishedRevisionId: Uuid | null;
+    sourceChanged: boolean;
+    resource: ResourceDetail | null;
+};
+
+/**
+ * Atelier public d’une activitéFREE publiée exacte et configurée. Autre disponibilité : aucun corps/grille pédagogique. Aucune correction initiale et aucune production sauvegardée par ceGET.
+ */
+export type ProjectTemplate = {
+    activityId: Uuid;
+    activityVersionId: Uuid;
+    revisionId: Uuid | null;
+    locale: Locale;
+    title: string | null;
+    availability: 'PUBLISHED' | 'MISSING_TRANSLATION' | 'STALE' | 'WITHDRAWN' | 'PROTECTED' | 'NOT_CONFIGURED';
+    resource: ResourceDetail | null;
+    rubric: ProjectRubricDefinition | null;
+};
+
+export type CriterionDeclaration = {
+    key: string;
+    satisfied: boolean;
+    comment: string;
+};
+
+export type BlockingDeclaration = {
+    key: 'invented-claims' | 'definitive-wrong-total' | 'unpriced-inclusion' | 'unsupported-date';
+    present: boolean;
+    comment: string;
+};
+
+export type DeclaredBlockingIssue = {
+    key: string;
+    label: string;
+    comment: string;
+};
+
+/**
+ * Autoévaluation déclarative append-only rattachée à une révision personnelle et à une grille exacte. Spring calcule le score ; atteindre le seuil ne certifie aucune compétence. Aucune revue humaine livrée.
+ */
+export type SelfAssessmentView = {
+    id: Uuid;
+    submissionId: Uuid;
+    projectId: Uuid;
+    projectRevisionId: Uuid;
+    rubricVersionId: Uuid;
+    method: 'SELF_ASSESSMENT';
+    scorePoints: number;
+    maxPoints: number;
+    passPoints: number;
+    thresholdMet: boolean;
+    needsRevision: boolean;
+    answers: [
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration
+    ];
+    blockingDeclarations: [
+        BlockingDeclaration,
+        BlockingDeclaration,
+        BlockingDeclaration,
+        BlockingDeclaration
+    ];
+    blockingIssues: Array<DeclaredBlockingIssue>;
+    comment: string;
+    evaluatedAt: UtcInstant;
+    authorId: Uuid;
+    evaluatorId: null;
+    declaredByUser: true;
+};
+
+export type SelfAssessmentSummary = {
+    id: Uuid;
+    projectId: Uuid;
+    projectRevisionId: Uuid;
+    rubricVersionId: Uuid;
+    method: 'SELF_ASSESSMENT';
+    scorePoints: number;
+    maxPoints: number;
+    passPoints: number;
+    thresholdMet: boolean;
+    needsRevision: boolean;
+    blockingIssueCount: number;
+    evaluatedAt: UtcInstant;
+    authorId: Uuid;
+};
+
+export type SelfAssessmentPage = {
+    items: Array<SelfAssessmentSummary>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+/**
+ * État dérivé séparé du texte àETag. Une ancienne autoévaluation reste historique après édition ; elle ne valide pas automatiquement la nouvelle révision.
+ */
+export type ProjectStatus = {
+    projectId: Uuid;
+    currentRevisionId: Uuid;
+    stage: 'DRAFT' | 'READY_FOR_SELF_ASSESSMENT';
+    state: 'DRAFT' | 'READY_FOR_SELF_ASSESSMENT' | 'SELF_ASSESSED' | 'NEEDS_REVISION';
+    latestAssessment: SelfAssessmentView | null;
+};
+
+/**
+ * Consultation explicite tracée, unique par propriétaire/révision personnelle/source/langue. Réautorisation de la publication couranteFREE à chaque livraison et rejeu. Ne change ni production, stade, score ou progression.
+ */
+export type SolutionRevealView = {
+    id: Uuid;
+    projectId: Uuid;
+    projectRevisionId: Uuid;
+    activityId: Uuid;
+    activityVersionId: Uuid;
+    revisionId: Uuid;
+    locale: Locale;
+    correction: string;
+    revealedAt: UtcInstant;
+};
+
+/**
+ * Création idempotente par propriétaire+creationId et empreinte du corps : même corps retrouve le projet(200), autre corps409. Source publiéeFREE exacte requise pour une nouvelle création. Inscription facultative vérifiée côté serveur ; aucun propriétaire ou score admis dans le JSON.
+ */
+export type CreateProject = {
+    creationId: Uuid;
+    activityId: Uuid;
+    activityVersionId: Uuid;
+    revisionId: Uuid;
+    sourceLocale: Locale;
+    enrollmentId: Uuid | null;
+    fields: ProjectFields;
+    stage: 'DRAFT' | 'READY_FOR_SELF_ASSESSMENT';
+};
+
+/**
+ * Nouvelle révision append-only sous verrou propriétaire et If-Match. READY exige du texte non blanc dans les sections ou externalText ; cette condition ne vérifie pas sa qualité.
+ */
+export type SaveProject = {
+    fields: ProjectFields;
+    stage: 'DRAFT' | 'READY_FOR_SELF_ASSESSMENT';
+};
+
+/**
+ * Vingt contrôles et quatre déclarations exacts, uniques et complets. Score fourni parSpring seulement ; corps JSONUTF8 borné48KiB. Même propriétaire/submissionId/corps retrouve la preuve avant If-Match pour une réponse déjàcommittée ; autre corps409. Jamais de retry automatique.
+ */
+export type SubmitSelfAssessment = {
+    submissionId: Uuid;
+    projectRevisionId: Uuid;
+    rubricVersionId: Uuid;
+    answers: [
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration,
+        CriterionDeclaration
+    ];
+    blockingDeclarations: [
+        BlockingDeclaration,
+        BlockingDeclaration,
+        BlockingDeclaration,
+        BlockingDeclaration
+    ];
+    comment: string;
+};
+
+/**
+ * Origine exacte du projet. AFTER_SUBMISSION exige une autoévaluation déjà enregistrée pour cette révision personnelle, sans condition de score. EXPLICIT exige seulement l’action volontaire. Retrait/PROTECTED refuse aussi le rejeu d’une consultation antérieure.
+ */
+export type RevealSolution = {
+    projectId: Uuid;
+    projectRevisionId: Uuid;
+    activityVersionId: Uuid;
+    revisionId: Uuid;
+    locale: Locale;
+};
+
+/**
+ * Préparation CMS lue depuis une ressource serveur protégée. Ni seed, sauvegarde, publication ni promesse commerciale ; libellésBR02 adaptés au brief.
+ */
+export type ProjectPreset = {
+    caseCode: 'BR01' | 'BR02';
+    locale: Locale;
+    policy: ProjectPolicy;
+    rubric: [
+        {
+            key: string;
+            label: string;
+            points: number;
+            blocking: boolean;
+        },
+        {
+            key: string;
+            label: string;
+            points: number;
+            blocking: boolean;
+        },
+        {
+            key: string;
+            label: string;
+            points: number;
+            blocking: boolean;
+        },
+        {
+            key: string;
+            label: string;
+            points: number;
+            blocking: boolean;
+        },
+        {
+            key: string;
+            label: string;
+            points: number;
+            blocking: boolean;
+        },
+        {
+            key: string;
+            label: string;
+            points: number;
+            blocking: boolean;
+        },
+        {
+            key: string;
+            label: string;
+            points: number;
+            blocking: boolean;
+        },
+        {
+            key: string;
+            label: string;
+            points: number;
+            blocking: boolean;
+        },
+        {
+            key: string;
+            label: string;
+            points: number;
+            blocking: boolean;
+        },
+        {
+            key: string;
+            label: string;
+            points: number;
+            blocking: boolean;
+        },
+        {
+            key: string;
+            label: string;
+            points: number;
+            blocking: boolean;
+        },
+        {
+            key: string;
+            label: string;
+            points: number;
+            blocking: boolean;
+        },
+        {
+            key: string;
+            label: string;
+            points: number;
+            blocking: boolean;
+        },
+        {
+            key: string;
+            label: string;
+            points: number;
+            blocking: boolean;
+        },
+        {
+            key: string;
+            label: string;
+            points: number;
+            blocking: boolean;
+        },
+        {
+            key: string;
+            label: string;
+            points: number;
+            blocking: boolean;
+        },
+        {
+            key: string;
+            label: string;
+            points: number;
+            blocking: boolean;
+        },
+        {
+            key: string;
+            label: string;
+            points: number;
+            blocking: boolean;
+        },
+        {
+            key: string;
+            label: string;
+            points: number;
+            blocking: boolean;
+        },
+        {
+            key: string;
+            label: string;
+            points: number;
+            blocking: boolean;
+        }
+    ];
 };
 
 export type RegisterRequestWritable = {
@@ -4040,3 +4597,779 @@ export type CheckQuizResponses = {
 };
 
 export type CheckQuizResponse = CheckQuizResponses[keyof CheckQuizResponses];
+
+export type ListProjectsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        q?: string;
+        state?: 'DRAFT' | 'READY_FOR_SELF_ASSESSMENT' | 'SELF_ASSESSED' | 'NEEDS_REVISION';
+        activityId?: Uuid;
+        activityVersionId?: Uuid;
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/me/projects';
+};
+
+export type ListProjectsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListProjectsError = ListProjectsErrors[keyof ListProjectsErrors];
+
+export type ListProjectsResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: ProjectPage;
+};
+
+export type ListProjectsResponse = ListProjectsResponses[keyof ListProjectsResponses];
+
+export type CreateProjectData = {
+    body: CreateProject;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+    };
+    path?: never;
+    query?: never;
+    url: '/me/projects';
+};
+
+export type CreateProjectErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type CreateProjectError = CreateProjectErrors[keyof CreateProjectErrors];
+
+export type CreateProjectResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: ProjectView;
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    201: ProjectView;
+};
+
+export type CreateProjectResponse = CreateProjectResponses[keyof CreateProjectResponses];
+
+export type GetProjectData = {
+    body?: never;
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/me/projects/{id}';
+};
+
+export type GetProjectErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetProjectError = GetProjectErrors[keyof GetProjectErrors];
+
+export type GetProjectResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: ProjectView;
+};
+
+export type GetProjectResponse = GetProjectResponses[keyof GetProjectResponses];
+
+export type SaveProjectData = {
+    body: SaveProject;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/me/projects/{id}';
+};
+
+export type SaveProjectErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type SaveProjectError = SaveProjectErrors[keyof SaveProjectErrors];
+
+export type SaveProjectResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: ProjectView;
+};
+
+export type SaveProjectResponse = SaveProjectResponses[keyof SaveProjectResponses];
+
+export type ListProjectRevisionsData = {
+    body?: never;
+    path: {
+        id: Uuid;
+    };
+    query?: {
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/me/projects/{id}/revisions';
+};
+
+export type ListProjectRevisionsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListProjectRevisionsError = ListProjectRevisionsErrors[keyof ListProjectRevisionsErrors];
+
+export type ListProjectRevisionsResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: ProjectRevisionPage;
+};
+
+export type ListProjectRevisionsResponse = ListProjectRevisionsResponses[keyof ListProjectRevisionsResponses];
+
+export type GetProjectRevisionData = {
+    body?: never;
+    path: {
+        id: Uuid;
+        revisionId: Uuid;
+    };
+    query?: never;
+    url: '/me/projects/{id}/revisions/{revisionId}';
+};
+
+export type GetProjectRevisionErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetProjectRevisionError = GetProjectRevisionErrors[keyof GetProjectRevisionErrors];
+
+export type GetProjectRevisionResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: ProjectRevisionView;
+};
+
+export type GetProjectRevisionResponse = GetProjectRevisionResponses[keyof GetProjectRevisionResponses];
+
+export type GetProjectContextData = {
+    body?: never;
+    path: {
+        id: Uuid;
+    };
+    query: {
+        locale: Locale;
+    };
+    url: '/me/projects/{id}/context';
+};
+
+export type GetProjectContextErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetProjectContextError = GetProjectContextErrors[keyof GetProjectContextErrors];
+
+export type GetProjectContextResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: ProjectContext;
+};
+
+export type GetProjectContextResponse = GetProjectContextResponses[keyof GetProjectContextResponses];
+
+export type GetProjectStatusData = {
+    body?: never;
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/me/projects/{id}/status';
+};
+
+export type GetProjectStatusErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetProjectStatusError = GetProjectStatusErrors[keyof GetProjectStatusErrors];
+
+export type GetProjectStatusResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: ProjectStatus;
+};
+
+export type GetProjectStatusResponse = GetProjectStatusResponses[keyof GetProjectStatusResponses];
+
+export type ListSelfAssessmentsData = {
+    body?: never;
+    path: {
+        id: Uuid;
+    };
+    query?: {
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/me/projects/{id}/self-assessments';
+};
+
+export type ListSelfAssessmentsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListSelfAssessmentsError = ListSelfAssessmentsErrors[keyof ListSelfAssessmentsErrors];
+
+export type ListSelfAssessmentsResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: SelfAssessmentPage;
+};
+
+export type ListSelfAssessmentsResponse = ListSelfAssessmentsResponses[keyof ListSelfAssessmentsResponses];
+
+export type SubmitSelfAssessmentData = {
+    body: SubmitSelfAssessment;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/me/projects/{id}/self-assessments';
+};
+
+export type SubmitSelfAssessmentErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type SubmitSelfAssessmentError = SubmitSelfAssessmentErrors[keyof SubmitSelfAssessmentErrors];
+
+export type SubmitSelfAssessmentResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    201: SelfAssessmentView;
+};
+
+export type SubmitSelfAssessmentResponse = SubmitSelfAssessmentResponses[keyof SubmitSelfAssessmentResponses];
+
+export type GetSelfAssessmentData = {
+    body?: never;
+    path: {
+        id: Uuid;
+        assessmentId: Uuid;
+    };
+    query?: never;
+    url: '/me/projects/{id}/self-assessments/{assessmentId}';
+};
+
+export type GetSelfAssessmentErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetSelfAssessmentError = GetSelfAssessmentErrors[keyof GetSelfAssessmentErrors];
+
+export type GetSelfAssessmentResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: SelfAssessmentView;
+};
+
+export type GetSelfAssessmentResponse = GetSelfAssessmentResponses[keyof GetSelfAssessmentResponses];
+
+export type RevealSolutionData = {
+    body: RevealSolution;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+    };
+    path: {
+        activityId: Uuid;
+    };
+    query?: never;
+    url: '/activities/{activityId}/solution-reveals';
+};
+
+export type RevealSolutionErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type RevealSolutionError = RevealSolutionErrors[keyof RevealSolutionErrors];
+
+export type RevealSolutionResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: SolutionRevealView;
+};
+
+export type RevealSolutionResponse = RevealSolutionResponses[keyof RevealSolutionResponses];
+
+export type GetProjectTemplateData = {
+    body?: never;
+    path: {
+        activityId: Uuid;
+        versionId: Uuid;
+    };
+    query: {
+        locale: Locale;
+    };
+    url: '/project-templates/{activityId}/versions/{versionId}';
+};
+
+export type GetProjectTemplateErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetProjectTemplateError = GetProjectTemplateErrors[keyof GetProjectTemplateErrors];
+
+export type GetProjectTemplateResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: ProjectTemplate;
+};
+
+export type GetProjectTemplateResponse = GetProjectTemplateResponses[keyof GetProjectTemplateResponses];
+
+export type GetProjectPresetData = {
+    body?: never;
+    path: {
+        caseCode: 'BR01' | 'BR02';
+    };
+    query: {
+        locale: Locale;
+    };
+    url: '/admin/project-presets/{caseCode}';
+};
+
+export type GetProjectPresetErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetProjectPresetError = GetProjectPresetErrors[keyof GetProjectPresetErrors];
+
+export type GetProjectPresetResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: ProjectPreset;
+};
+
+export type GetProjectPresetResponse = GetProjectPresetResponses[keyof GetProjectPresetResponses];

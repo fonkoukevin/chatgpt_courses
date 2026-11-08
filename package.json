@@ -42,6 +42,7 @@
     "verify:public": "node scripts/verify-browser.mjs P06",
     "verify:methods": "node scripts/verify-browser.mjs P07",
     "verify:learning": "node scripts/verify-browser.mjs P08",
+    "verify:projects": "node scripts/verify-browser.mjs P09",
     "verify:design": "node scripts/verify-browser.mjs P02",
     "verify:contrast": "node scripts/verify-contrast.mjs",
     "browser:install": "node scripts/install-browser.mjs",

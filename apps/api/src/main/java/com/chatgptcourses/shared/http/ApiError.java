@@ -23,6 +23,8 @@ public enum ApiError {
     ACTIVITY_NOTE_EXISTS(HttpStatus.CONFLICT, "Une note existe déjà pour cette version d’activité. Ouvrez-la avant de la modifier."),
     QUIZ_UNAVAILABLE(HttpStatus.CONFLICT, "Aucun quiz n’est disponible pour cette activité."),
     QUIZ_ATTEMPTS_EXHAUSTED(HttpStatus.CONFLICT, "Le nombre de tentatives prévu pour ce quiz est atteint."),
+    PROJECT_NOT_READY(HttpStatus.CONFLICT, "Préparez et enregistrez une production avant cette action."),
+    SOLUTION_REVEAL_REQUIRES_ASSESSMENT(HttpStatus.CONFLICT, "Renseignez d’abord une autoévaluation pour cette révision de production."),
     CONFLICT(HttpStatus.CONFLICT, "Cette opération entre en conflit avec l’état actuel."),
     REVISION_CONFLICT(HttpStatus.PRECONDITION_FAILED, "La ressource a changé. Rechargez sa révision avant de réessayer."),
     PRECONDITION_REQUIRED(HttpStatus.PRECONDITION_REQUIRED, "Fournissez dans If-Match un ETag de révision explicite obtenu à la lecture."),

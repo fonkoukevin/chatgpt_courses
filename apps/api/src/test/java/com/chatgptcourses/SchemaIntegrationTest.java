@@ -27,6 +27,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.junit.jupiter.Container;
@@ -40,6 +41,7 @@ import tools.jackson.databind.ObjectMapper;
 })
 @ActiveProfiles("test")
 @Testcontainers
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SchemaIntegrationTest {
     @Container
@@ -63,7 +65,7 @@ class SchemaIntegrationTest {
 
     @Test @Order(1)
     void aFreshDatabaseMigratesAndHibernateValidatesWithoutSeedingAccountsOrCommerce() {
-        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007");
+        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_accounts", Integer.class)).isZero();
         assertThat(jdbc.queryForList("SELECT code FROM roles ORDER BY code", String.class)).containsExactly("EDITOR", "LEARNER");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_roles", Integer.class)).isZero();
@@ -71,10 +73,11 @@ class SchemaIntegrationTest {
         assertThat(jdbc.queryForObject("SELECT current_setting('TimeZone')", String.class)).isEqualTo("UTC");
         assertThat(jdbc.queryForList("""
                 SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'
-                AND table_name IN ('orders', 'payments', 'access_grants', 'projects')
+                AND table_name IN ('orders', 'payments', 'access_grants')
                 """, String.class)).isEmpty();
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM personal_methods", Integer.class)).isZero();
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM learning_enrollments", Integer.class)).isZero();
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM projects", Integer.class)).isZero();
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM learning_activity_notes", Integer.class)).isZero();
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM learning_quiz_attempts", Integer.class)).isZero();
         assertThat(jdbc.queryForObject("""
@@ -103,7 +106,7 @@ class SchemaIntegrationTest {
             var database = new JdbcTemplate(new SingleConnectionDataSourceAdapter(connection));
             assertThat(database.queryForObject("SELECT session_id FROM spring_session WHERE primary_id = ?", String.class, primaryId)).isEqualTo(sessionId);
             assertThat(database.queryForObject("SELECT encode(attribute_bytes, 'hex') FROM spring_session_attributes WHERE session_primary_id = ?", String.class, primaryId)).isEqualTo("010203");
-            assertThat(database.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007");
+            assertThat(database.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008");
         }
     }
 

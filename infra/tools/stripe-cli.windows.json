@@ -1,0 +1,9 @@
+{
+  "version": "1.55.8",
+  "expectedApiVersion": "2026-10-28.endive",
+  "archive": "stripe_1.55.8_windows_x86_64.zip",
+  "url": "https://github.com/stripe/stripe-cli/releases/download/v1.55.8/stripe_1.55.8_windows_x86_64.zip",
+  "sha256": "d0650b491dcccab3b38ee807b6ee239713a8fff071818d672ec967abea60efed",
+  "checksumsUrl": "https://github.com/stripe/stripe-cli/releases/download/v1.55.8/stripe-windows-checksums.txt",
+  "checksumsSha256": "b735d9d5cca8b02b325c2c8f42db8c8d430a4678e92c87b5bdef30cd6749a28d"
+}

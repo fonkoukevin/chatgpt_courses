@@ -8,7 +8,7 @@ import { checkedUuid, commerceHeaders, commerceSql, createCommerceSources, type 
 import { controlApi } from './control';
 import { methodLearner, loginMethodAccount } from './methods-fixture';
 import { enrollLearning } from './learning-fixture';
-import { advancePayment, capturePayment, createPaymentCheckout, openPaidLearningActivity, openPaymentCheckoutUi, paymentCount, paymentOrder, paymentStatus, preparePaymentFixture, verifyConcurrentPaymentContent, verifyPaymentContent, waitForPayment } from './payments-fixture';
+import { advancePayment, capturePayment, createPaymentCheckout, openPaymentCheckoutUi, paymentCount, paymentOrder, paymentStatus, preparePaymentFixture, verifyPaidLearningOverlap, verifyPaymentContent, waitForPayment } from './payments-fixture';
 
 test.describe('P12 · paiement contrôlé, confirmation et droits réels', () => {
   test.describe.configure({ mode: 'serial' });
@@ -44,12 +44,11 @@ test.describe('P12 · paiement contrôlé, confirmation et droits réels', () =>
     } finally { commerceSql(`DROP TRIGGER ${fault} ON notification_outbox; DROP FUNCTION ${fault}();`); }
     await waitForPayment(context.request, fixture.order.value.id, 'PAID', 'READY');
     expect(paymentCount(fixture.order.value.id, 'grants')).toBe(1); expect(paymentCount(fixture.order.value.id, 'notifications')).toBe(1);
-    await verifyConcurrentPaymentContent(context.request, sources, 'fr');
     await page.goto(orderStatusPath('fr', fixture.order.value.id, 'success'));
     await expect(page.locator('[data-order-payment-status="ready"]')).toBeVisible(); await expect(page.getByText(t.readyTitle, { exact: true })).toBeVisible();
     for (const width of [1440, 1024, 768, 390, 320]) await capturePayment(page, `fr-${width}-payment-ready-after-worker-restart`, width);
     await enrollLearning(context.request, sources.learning, fixture.owner.id, 'fr');
-    await openPaidLearningActivity(page, sources, 'fr', fixture.owner.id);
+    await verifyPaidLearningOverlap(page, sources, 'fr', fixture.owner.id);
     await expect(page.getByText(getLearningDictionary('fr').noSavedNote, { exact: true })).toBeVisible();
     await capturePayment(page, 'fr-390-premium-content-after-payment');
     // The event and reconciliation job may both observe the purchase; business effects remain unique.
@@ -66,10 +65,9 @@ test.describe('P12 · paiement contrôlé, confirmation et droits réels', () =>
     await capturePayment(page, 'en-1440-deferred-payment-processing', 1440); await capturePayment(page, 'en-390-deferred-payment-processing');
     await advancePayment(fixture.order.value.id, 'PAID', 'checkout.session.async_payment_succeeded'); await waitForPayment(context.request, fixture.order.value.id, 'PAID', 'READY');
     await page.getByRole('button', { name: t.refresh, exact: true }).click(); await expect(page.locator('[data-order-payment-status="ready"]')).toBeVisible();
-    await verifyConcurrentPaymentContent(context.request, sources, 'en');
     for (const width of [1440, 390, 320]) await capturePayment(page, `en-${width}-deferred-payment-ready`, width);
     await enrollLearning(context.request, sources.learning, fixture.owner.id, 'en');
-    await openPaidLearningActivity(page, sources, 'en', fixture.owner.id);
+    await verifyPaidLearningOverlap(page, sources, 'en', fixture.owner.id);
     await expect(page.getByText(getLearningDictionary('en').noSavedNote, { exact: true })).toBeVisible();
     await capturePayment(page, 'en-390-premium-content-after-payment');
     expect(paymentCount(fixture.order.value.id, 'grants')).toBe(1); expect(paymentCount(fixture.order.value.id, 'notifications')).toBe(1);

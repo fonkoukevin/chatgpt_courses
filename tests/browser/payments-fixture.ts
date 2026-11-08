@@ -87,8 +87,11 @@ function paidLearningDatabase(sources: CommerceSources, locale: PaymentLocale, o
       UNION ALL SELECT p.grant_id,c.child_version_id,p.depth+1 FROM paths p JOIN version_compositions c ON c.parent_version_id=p.version_id WHERE p.depth<2
     ) SELECT jsonb_build_object('accountActive',(SELECT status='ACTIVE' FROM user_accounts WHERE id='${owner}'),'grantCount',(SELECT count(*) FROM access_grants WHERE owner_id='${owner}'),'paths',coalesce((SELECT jsonb_agg(jsonb_build_object(
       'depth',p.depth,'target',p.version_id='${target}','localeIncluded',g.locales @> '["${locale}"]'::jsonb,'started',g.starts_at<=clock_timestamp(),'unexpired',g.expires_at IS NULL OR g.expires_at>clock_timestamp(),'unrevoked',g.revoked_at IS NULL,'originOrder',g.origin_type='ORDER_LINE','resourceActive',r.archived_at IS NULL,'published',t.published_revision_id IS NOT NULL,
-      'editorialState',CASE WHEN t.editorial_state IN('DRAFT','TO_REVIEW','READY','PUBLISHED','STALE','ARCHIVED') THEN t.editorial_state ELSE 'UNVERIFIED' END,'sourceCurrent',t.source_translation_id IS NULL OR t.published_source_revision_id=s.current_revision_id))
-      FROM paths p JOIN access_grants g ON g.id=p.grant_id JOIN pedagogical_versions v ON v.id=p.version_id JOIN learning_resources r ON r.id=v.resource_id LEFT JOIN content_translations t ON t.pedagogical_version_id=v.id AND t.locale='${locale}' LEFT JOIN content_translations s ON s.id=t.source_translation_id),'[]'::jsonb));`)) };
+      'editorialState',CASE WHEN t.editorial_state IN('DRAFT','TO_REVIEW','READY','PUBLISHED','STALE','ARCHIVED') THEN t.editorial_state ELSE 'UNVERIFIED' END,'sourceCurrent',t.source_translation_id IS NULL OR t.published_source_revision_id=s.current_revision_id,
+      'structuredDocument',e.document_json IS NOT NULL,'sourceActive',t.source_translation_id IS NULL OR s.editorial_state NOT IN('ARCHIVED','STALE'),
+      'rootCourse',p.depth<>0 OR r.kind='COURSE','rootResourceMatches',p.depth<>0 OR g.resource_id=v.resource_id,
+      'rootVersionCovered',p.depth<>0 OR g.version_id=v.id OR(g.version_policy='UPDATES_DURING_PERIOD' AND v.frozen_at>=g.starts_at AND v.frozen_at<=g.updates_until)))
+      FROM paths p JOIN access_grants g ON g.id=p.grant_id JOIN pedagogical_versions v ON v.id=p.version_id JOIN learning_resources r ON r.id=v.resource_id LEFT JOIN content_translations t ON t.pedagogical_version_id=v.id AND t.locale='${locale}' LEFT JOIN editorial_revisions e ON e.id=t.published_revision_id LEFT JOIN content_translations s ON s.id=t.source_translation_id),'[]'::jsonb));`)) };
   } catch { return { available: false }; }
 }
 
@@ -184,6 +187,16 @@ export async function verifyPaymentContent(request: APIRequestContext, sources: 
 export async function verifyConcurrentPaymentContent(request: APIRequestContext, sources: CommerceSources, locale: PaymentLocale) {
   const results = await Promise.allSettled(Array.from({ length: 12 }, () => verifyPaymentContent(request, sources, locale, true)));
   const failure = results.find((result) => result.status === 'rejected');
+  if (failure?.status === 'rejected') throw failure.reason;
+}
+
+/** Exercise one persisted session through both transports at once; retain every failed observation. */
+export async function verifyPaidLearningOverlap(page: Page, sources: CommerceSources, locale: PaymentLocale, ownerId: string) {
+  const results = await Promise.allSettled([
+    verifyConcurrentPaymentContent(page.context().request, sources, locale),
+    openPaidLearningActivity(page, sources, locale, ownerId),
+  ]);
+  const failure = results.find(result => result.status === 'rejected');
   if (failure?.status === 'rejected') throw failure.reason;
 }
 

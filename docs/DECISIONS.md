@@ -69,7 +69,7 @@ Ces choix techniques sont réversibles et validés localement : ciblé combiné 
 
 ## Décisions techniques P12 — réalisation en cours
 
-- Stripe serveur stable 34.1.0 / API 2026-10-28.endive ; aucun mode live ni API preview. Les clés réelles étant absentes, les tests locaux avec transport doublé ne sont pas une transaction Stripe externe.
+- Stripe serveur stable 34.1.0 / API 2026-10-28.endive ; aucun mode live ni API preview. Les tests locaux avec transport doublé ne sont pas une transaction Stripe externe. Reprise : clé TEST configurée, compte vérifié et secret CLI obtenu en privé ; aucun Checkout/paiement fournisseur exécuté. La copie du secret reste une action manuelle de l’utilisateur.
 - L'accès commence à l'activation effective PostgreSQL. Les durées FIXED et périodes d'actualisation sont calculées depuis cette activation selon le snapshot ; UNLIMITED doit être explicite. Cette règle évite de perdre une durée pendant un incident d'activation ; les conditions commerciales réelles devront l'énoncer avant vente. Elle ne tranche ni durée, prix ou support encore ouverts.
 - Une seule opération Checkout durable par commande, paramètres/clé fournisseur et échéance de session fixes. Après timeout ambigu, reprise bornée avec la même intention puis rapprochement GET ; aucun nouveau paiement créé par le worker.
 - Une attente normale de paiement ne compte pas comme erreur. La confirmation financière est durable avant l'activation ; droits et notification d'activation sont ensuite atomiques. Échec SMTP et retrait d'accès restent indépendants.

@@ -401,10 +401,48 @@ Spring reçoit les octets bruts de `POST /api/v1/webhooks/stripe`, vérifie la s
 
 `verify:payments` réserve ses propres PostgreSQL, S3 et Mailpit en tmpfs. Il contrôle uniquement le transport réseau Stripe avec le SDK réel ; les signatures, l’API, les transactions, le worker et les droits sont réellement exécutés localement. Les URL Checkout restent strictement HTTPS sur `checkout.stripe.com`, y compris dans ce test. **Ce scénario ne contacte pas Stripe et ne prouve pas un paiement fournisseur.** Résultats réellement obtenus et limites : [preuve P12](docs/evidence/P12.md).
 
-Dernier passage renforcé : **8/8**, 27 captures FR/EN examinées, après six répétitions ciblées réussies et avec 24 lectures concurrentes après activation. Global Java 182 puis ciblés 23 et 16, client 84, contrats et builds passent. **P12 reste en cours** : deux refus d’accès intermédiaires n’ont pas été reproduits et leur cause reste inconnue ; les diagnostics et assertions sont conservés. Les clés et l’identifiant de compte Stripe sont encore absents ; la recette fournisseur ci-dessous n’a pas été exécutée. Aucun passage automatique à P13.
+Dernier passage renforcé : **8/8 en 128,288 s, sortie 0**, après un ciblé **6/6 avec 72 GET membre chevauchant les pages leçon**. Les 24 GET du passage complet chevauchent également authentification, contexte d’activité et visite. Les 27 captures de la revue précédente du même rendu sont conservées ; les deux activités privées du nouveau passage ont été réexaminées. Les résultats Java/client/builds précédents restent dans la preuve P12. **P12 reste en cours** : deux refus intermédiaires ne sont pas reproduits et leur cause reste inconnue. Le compte Stripe TEST et le secret CLI sont maintenant vérifiés ; aucun Checkout ni paiement fournisseur exécuté. Aucun passage automatique à P13.
 
-Pour un essai fournisseur séparé, configurer dans le fichier ignoré `.env.local` : `STRIPE_ENABLED=true`, `STRIPE_MODE=TEST`, une clé `sk_test_…`, le secret `whsec_…` de l’endpoint de test et son `STRIPE_ACCOUNT_ID=acct_…`. Garder `STRIPE_API_BASE=https://api.stripe.com`. Spring vérifie l’identité de la clé par `GET /v1/account` avant le premier appel ; aucun en-tête de compte Connect n’est utilisé. Les valeurs restent côté Spring. Le mode LIVE est refusé par P12. Le commerce reste désactivé dans la base partagée tant que les conditions réelles ne sont pas configurées ; aucune offre fictive n’est activée par migration.
+### Configuration privée et Stripe CLI — Windows natif
 
-Les événements de test doivent être des snapshots de version **2026-10-28.endive**, conforme à l’adaptateur. Choisir cette version pour l’endpoint ; la CLI utilise par défaut la version du compte, à vérifier avant l’essai. Ne pas remplacer la version épinglée par une preview ou désactiver son contrôle pour accepter un événement incompatible.
+Le fichier privé est **`.env.local` à la racine du dépôt**. La clé TEST déjà saisie a été conservée ; `STRIPE_ACCOUNT_ID` est renseigné et vérifié par une lecture réelle de `/v1/account`. Le secret obtenu par la CLI est dans **`.runtime/stripe-webhook-secret.txt`** : ouvrir ce fichier localement et copier sa valeur dans `STRIPE_WEBHOOK_SECRET` de `.env.local`. Les deux chemins sont effectivement ignorés par Git ; aucun secret n’est affiché par les commandes ci-dessous.
 
-Procédure de recette externe **à exécuter avec les accès de test** : préparer une offre de recette complète explicitement fictive, démarrer `run dev`, puis utiliser un endpoint test public autorisé ou la [CLI officielle Stripe](https://docs.stripe.com/stripe-cli). Après configuration privée de son profil test, la commande CLI est `stripe listen --events checkout.session.completed,checkout.session.async_payment_succeeded,checkout.session.async_payment_failed,checkout.session.expired --forward-to http://localhost:3000/api/v1/webhooks/stripe`. Utiliser le secret de ce listener dans la configuration Spring et redémarrer l’API. Ouvrir le récapitulatif, accepter les conditions, payer sur Checkout avec un moyen de test officiel, puis relever les références non secrètes commande/événement/opération, `PAID/READY`, une origine d’accès et une intention d’email. Rejouer l’événement et contrôler l’absence de doublon. Une visite directe de l’URL de retour n’est jamais cette preuve. Les références externes ne sont consignées qu’après cette exécution effective.
+Stripe reste actuellement désactivé (`STRIPE_ENABLED=false`) tant que cette copie manuelle manque. Une fois le secret renseigné, utiliser `STRIPE_ENABLED=true` uniquement dans la configuration locale et garder **`STRIPE_MODE=TEST`** ainsi que `STRIPE_API_BASE=https://api.stripe.com`. Le commerce et les conditions de l’offre restent des configurations distinctes ; aucune offre fictive n’est activée par migration.
+
+Commandes depuis la racine :
+
+```powershell
+.\scripts\courses.cmd run stripe:install
+.\scripts\courses.cmd run stripe:check
+.\scripts\courses.cmd run stripe:secret
+.\scripts\courses.cmd run stripe:plan
+.\scripts\courses.cmd run stripe:bindings
+```
+
+`stripe:install` prépare le binaire portable **1.55.8** dans `.tools/stripe/1.55.8`, après contrôle SHA-256 de l’archive et du manifeste officiels épinglés dans `infra/tools/stripe-cli.windows.json`. `stripe:check` vérifie le compte de la clé TEST. `stripe:secret` obtient le secret du listener et le place dans le fichier privé de copie, sans remplir le champ à la place de l’utilisateur. `stripe:plan` affiche les options non sensibles sans démarrer l’écoute. Le lanceur utilise la même clé TEST, uniquement dans l’environnement privé du processus CLI (`STRIPE_API_KEY`), sans argument contenant la clé ni en-tête Connect.
+
+`scripts/lib/runtime.mjs` charge `.env.local` ; `scripts/api.mjs` transmet cet environnement à Spring, qui le lie à `courses.stripe` dans `application.yml`. **`stripe:bindings` démarre réellement Spring depuis le JAR construit**, sur un port de boucle locale éphémère, compare les valeurs du bean en mémoire, puis ferme le contexte. Il exige le JDK, le JAR et PostgreSQL local ; workers désactivés, aucun appel Stripe, sorties brutes écartées et seuls des booléens publiés. Clé et compte sont déjà vérifiés ainsi ; le champ webhook était encore vide. Relancer cette commande après saisie manuelle du secret. Pour le démarrage habituel, `run dev` charge aussi le fichier privé.
+
+Après saisie du secret, démarrer l’application dans un terminal :
+
+```powershell
+.\scripts\courses.cmd run dev
+```
+
+Dans un second terminal, lancer l’écoute avec la sortie protégée :
+
+```powershell
+.\scripts\courses.cmd run stripe:listen
+```
+
+Le lanceur est configuré pour exécuter cette commande Stripe avec le binaire portable et la clé injectée en privé :
+
+```powershell
+stripe listen --latest --events-from "@self" --events checkout.session.completed,checkout.session.async_payment_succeeded,checkout.session.async_payment_failed,checkout.session.expired --forward-to http://localhost:3000/api/v1/webhooks/stripe --skip-update
+```
+
+**La destination réelle est le proxy Next sur le port 3000**, qui préserve `/api/v1/webhooks/stripe` vers Spring 8080. Le lanceur la lit dans `APP_PUBLIC_ORIGIN` et exige une origine locale. Ctrl+C arrête son processus CLI. Une modification de `.env.local` exige le redémarrage de Spring pour être prise en compte.
+
+Les événements doivent être des snapshots **2026-10-28.endive**. `listen` 1.55.8 propose la version du compte ou `--latest`, sans épinglage explicite. Le lanceur utilise ce dernier choix mais exige une version Ready exactement égale au pin de l’application et le même secret que la configuration ; il arrête sur divergence. Spring recontrôle indépendamment chaque événement. Aucun changement de version du compte ni assouplissement du contrat. **Cette vérification Ready reste à exécuter au lancement du listener**, qui n’a pas encore été démarré. [Options officielles](https://docs.stripe.com/cli/listen), [source épinglée](https://github.com/stripe/stripe-cli/blob/v1.55.8/pkg/cmd/listen.go).
+
+La recette Checkout externe reste séparée : après configuration privée, listener prêt et offre de test complète explicitement fictive, ouvrir le récapitulatif, accepter les conditions, payer avec un moyen de test officiel, puis relever commande/événement/opération, PAID/READY, une origine d’accès et une intention d’email. Rejouer l’événement et vérifier l’absence de doublon. Une visite de l’URL de retour seule ne constitue pas cette preuve. Les références fournisseur seront consignées après exécution effective.

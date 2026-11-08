@@ -1,10 +1,10 @@
-# Modèle relationnel — socles P03/P04
+# Modèle relationnel — socles P03 à P05
 
-Les migrations sont la définition exécutable du schéma. Ce document distingue les tables livrées par P03/P04 des extensions à créer dans les lots métier. Aucun diagramme ne constitue une API ou un parcours déjà intégré.
+Les migrations sont la définition exécutable du schéma. Ce document distingue les tables livrées par P03 à P05 des extensions à créer dans les lots métier. Les preuves de chaque lot indiquent le niveau de validation réellement exécuté.
 
 ## Identité et contenu présents
 
-V001 conserve les deux tables officielles de Spring Session JDBC 4.1.1. V002 ajoute douze tables, sans données de démonstration et sans mécanisme concurrent de création automatique. V003 ajoute deux tables de sécurité, la version d’authentification et des références de permission ; ses règles sont détaillées ci-dessous.
+V001 conserve les deux tables officielles de Spring Session JDBC 4.1.1. V002 ajoute douze tables, sans données de démonstration et sans mécanisme concurrent de création automatique. V003 ajoute deux tables de sécurité, la version d’authentification et des références de permission. V004 étend les instantanés éditoriaux et ajoute deux tables d’historique et de références. V001 à V003 restent inchangées.
 
 | Table | Identité et relations | Invariants |
 | --- | --- | --- |
@@ -12,14 +12,16 @@ V001 conserve les deux tables officielles de Spring Session JDBC 4.1.1. V002 ajo
 | `user_preferences` | UUID, FK utilisateur unique | Locale FR/EN, fuseau explicite ; ressource révisable distincte du compte |
 | `roles`, `permissions` | UUID et code stable unique | Autorisations éditoriales et financières séparables ; aucun rôle fourni par un navigateur ne fait autorité |
 | `user_roles`, `role_permissions` | UUID par attribution, FK explicites, révocation | Unicité des attributions actives, historique conservé ; révoquer ne réécrit ni ne supprime l’origine |
-| `learning_resources` | UUID stable, type COURSE/MODULE/ACTIVITY | L’identité et le type ne changent pas avec le titre, la langue ou le slug ; archivage distinct de suppression |
-| `pedagogical_versions` | UUID, FK ressource, numéro unique par ressource | Objectifs et définition d’évaluation ; gel irréversible après construction ; changement pédagogique ⇒ nouvelle version UUID |
+| `learning_resources` | UUID stable, type COURSE/MODULE/ACTIVITY/GUIDE/METHOD_TEMPLATE ; origine de duplication éventuelle | L’identité, le type et l’origine ne changent pas avec le titre, la langue ou le slug ; archivage distinct de suppression |
+| `pedagogical_versions` | UUID, FK ressource, numéro unique par ressource ; version remplacée éventuelle | Objectifs et définition d’évaluation ; gel irréversible après construction ; changement pédagogique ⇒ nouvelle version UUID ; remplacement limité à la même identité |
 | `version_compositions` | UUID, FK version parent/enfant, position | COURSE→MODULE→ACTIVITY ; enfant et position uniques par parent ; composition conservée pour chaque version |
 | `resource_slugs` | UUID, FK composite ressource/type, langue, slug | Unique `(type, locale, slug)` et `(resource, locale)` ; slug canonique de l’identité, indépendant de la version |
-| `content_translations` | UUID, FK version pédagogique, locale | Unique `(version, locale)` ; état éditorial et pointeurs de révision courante/publiée révisables |
-| `editorial_revisions` | UUID, FK traduction, numéro, auteur éventuel | Instantané append-only ; numéro unique par traduction ; aucun UPDATE/DELETE d’une révision historique |
+| `content_translations` | UUID, FK version pédagogique, locale ; source, révisions examinées, date de vérification | Unique `(version, locale)` ; état éditorial et pointeurs de révision courante/publiée révisables ; langue source différente sur la même version |
+| `editorial_revisions` | UUID, FK traduction, numéro, auteur éventuel, document JSONB, motif et révision remplacée | Instantané append-only ; numéro unique par traduction ; aucun UPDATE/DELETE d’une révision historique ; remplacement limité à la même traduction |
+| `editorial_events` | UUID, traduction, révision concernée, acteur obligatoire, type, motif et date | Journal append-only des actions éditoriales ; FK de révision composite avec sa traduction |
+| `editorial_resource_references` | PK composite `(revision_id, resource_id)` et deux FK RESTRICT | Projection append-only des liens du document vers les identités réelles ; aucune réécriture d’un lien historique |
 
-Les guides et modèles de méthodes n’appartiennent pas encore à l’enum COURSE/MODULE/ACTIVITY ; leur lot ajoutera leurs structures et contraintes. Aucun faux catalogue public n’est activé par ces tables.
+GUIDE et METHOD_TEMPLATE sont des feuilles éditoriales depuis V004. Les copies personnelles de méthodes restent distinctes et seront ajoutées en P07. Ces structures ne créent aucun prix, droit payant ou contenu pédagogique final.
 
 ```mermaid
 erDiagram
@@ -35,6 +37,9 @@ erDiagram
   pedagogical_versions ||--o{ version_compositions : enfant
   pedagogical_versions ||--o{ content_translations : traductions
   content_translations ||--o{ editorial_revisions : historique
+  content_translations ||--o{ editorial_events : actions
+  editorial_revisions ||--o{ editorial_resource_references : liens
+  learning_resources ||--o{ editorial_resource_references : cible
 ```
 
 ## Identité et récupération — V003 / P04
@@ -61,13 +66,47 @@ La mise à niveau crée seulement les préférences techniques manquantes des co
 
 Les tests PostgreSQL P04 vérifient notamment la mise à niveau depuis V002 en conservant hash, préférence révisée et session, la création des seules préférences manquantes, l’absence de rôle utilisateur automatique lors de cette réparation, la consommation concurrente, l’émission bloquée sur un changement de credentials et les quotas atomiques. Les tests HTTP vérifient en plus les sessions, la révocation effective et l’envoi SMTP réel ; leur état final est suivi dans [evidence/P04.md](evidence/P04.md).
 
-## Versions, corrections et publication
+## Édition, versions et publication — V004 / P05
+
+[`V004__editorial_workflow_and_structured_content.sql`](../apps/api/src/main/resources/db/migration/V004__editorial_workflow_and_structured_content.sql) conserve les identités, textes, sessions et attributions antérieurs. Les opérations sont définies par `EditorialService` : création, révision, duplication, nouvelle version pédagogique, traduction, composition, revue, publication et archivage. L’UUID `id` du document CMS désigne une **traduction d’une version** ; `resourceId` et `versionId` restent exposés séparément. Il n’existe pas de suppression physique dans l’API éditoriale.
+
+| Ajout V004 | Intégrité en base | Contrôle du cas d’utilisation |
+| --- | --- | --- |
+| `learning_resources.duplicated_from_id` | FK RESTRICT et origine immuable | Duplication explicite vers une nouvelle identité, en brouillon |
+| `pedagogical_versions.replaces_version_id` | FK composite vers `(id, resource_id)`, pas d’auto-référence, origine immuable | Numéro suivant alloué sous le verrou de l’identité ; anciennes versions conservées |
+| `editorial_revisions.document_json`, `reason`, `replaces_revision_id` | JSONB objet ou NULL historique, représentation texte en base ≤65 536 octets ; motif non vide ≤1 000 caractères ; remplacement dans la même traduction | Document sérialisé ≤48 KiB UTF-8 et structure bornée ; ajout d’une nouvelle ligne, auteur et motif enregistrés |
+| Source et revue de `content_translations` | FK composites des révisions source/examinées ; origine source immuable ; source dans l’autre langue et même version ; date de vérification UTC finie | Revue de la révision courante et de la source déterminée, état périmé si la source a changé |
+| `editorial_events` | Acteur et traduction obligatoires ; révision appartenant à cette traduction ; UPDATE/DELETE refusés | Une action enregistre son type, son motif et son instantané concerné dans la transaction |
+
+Le document contient objectif localisé, résultat attendu, prérequis, blocs de texte typés, durée estimée optionnelle, exercice/corrigé, quiz avec explications et points, grille déclarative, politique FREE/PROTECTED et références. Les liens acceptent uniquement HTTPS sans identifiants ou un chemin interne simple ; le texte ne devient jamais du HTML/MDX exécutable. Les limites comprennent 60 blocs, 20 questions avec 2 à 8 options, 30 critères, 20 médias, 30 ressources liées et 100 versions enfants. Les points vont de 1 à 1 000 par question/critère ; les clés d’évaluation sont uniques dans leur liste. Le service applique ces contrôles même en dehors d’un contrôleur HTTP.
 
 Une version pédagogique fixe objectifs, évaluation et composition. Elle peut être construite tant qu’elle n’est pas gelée ; les versions enfants doivent être gelées avant leur parent. Le verrou de ligne du parent protège aussi les modifications concurrentes de sa composition. Après gel, ajout, modification, suppression de composition et modification de version sont refusés en base.
 
-Une correction de texte ajoute une révision éditoriale sous **la même traduction et la même version pédagogique**. Une évolution d’objectif/évaluation crée une nouvelle version pédagogique ; les anciennes versions restent adressables pour les futures tentatives, productions et attestations. Les contenus traduits de versions équivalentes conservent les mêmes identifiants pédagogiques ; les révisions de texte restent propres à leur langue.
+Une correction de texte ajoute une révision éditoriale sous **la même traduction et la même version pédagogique**. Une évolution d’objectif/évaluation crée une nouvelle version pédagogique ; les anciennes versions restent adressables pour les futures tentatives, productions et attestations. Après gel, la politique P05 compare conservativement objectif localisé, exercice/corrigé, questions et grille avec la révision précédente de la même langue : une différence exige une nouvelle version, même si l’auteur la considère mineure. La première traduction non publiée peut compléter ces champs malgré le gel partagé ; la revue impose alors les mêmes clés, points, nombre d’options, index de réponse juste et structure de grille que sa source. Les textes traduits peuvent différer. Cette vérification structurelle accompagne la revue humaine enregistrée ; elle ne démontre pas automatiquement l’équivalence sémantique des traductions.
 
-Les FK composites des pointeurs courants/publiés empêchent de publier une révision appartenant à une autre traduction ou version. La publication exige une pédagogie gelée. Le workflow complet, la revue de traduction et les permissions de publication seront réalisés en P05 ; un statut stocké ne remplace pas ces contrôles serveur.
+Les FK composites des pointeurs courants/publiés empêchent de publier une révision appartenant à une autre traduction ou version. Le cycle est DRAFT → TO_REVIEW → READY → PUBLISHED. READY enregistre `reviewed_revision_id`, la source examinée et `verified_at` depuis une action réelle de revue. `source_revision_id` conserve l’origine de la traduction ; `reviewed_source_revision_id` avance uniquement lors d’une nouvelle revue. Une correction revient DRAFT tout en conservant le pointeur de publication précédent. Une source corrigée, marquée STALE ou archivée fait passer ses traductions examinées à STALE sans modifier leurs textes historiques. Les transitions invalides sont refusées ; l’archivage explicite est possible depuis les états non archivés et conserve les instantanés.
+
+`readiness` évalue les champs et dépendances structurels ; un brouillon complet peut donc être structurellement prêt sans avoir encore été revu. Une activité nécessite objectif, résultat, contenu, exercice, corrigé et grille. Un parent nécessite des enfants publiés dans la même langue et déjà gelés. Une ressource liée doit avoir une publication dans cette langue. Une référence média/fichier obligatoire reste `MEDIA_UNVERIFIED` et bloque : P05 n’invente aucun état de stockage disponible avant P10. Une référence facultative non vérifiée et une durée non estimée produisent des avertissements. L’absence de document structuré historique bloque également.
+
+La publication prend un `revisionId` déterminé et un motif. Dans sa transaction, le service exige READY, la révision courante demandée, une revue toujours applicable à cette révision et à la source courante, puis revérifie la readiness. Il gèle la version si nécessaire avant de déplacer le pointeur publié. La permission est vérifiée une première fois puis après l’attente des verrous. Une ancienne réponse readiness n’autorise aucune publication ultérieure à elle seule.
+
+Les dépendances exposent les compositions entrantes, références éditoriales et traductions sources, avec les conséquences d’un archivage. Ce graphe est **informatif** : P05 ne propage pas automatiquement STALE à tous les parcours ou guides qui citent une ressource et n’exécute aucune migration de futurs progrès, projets ou attestations. Une composition ne peut plus être réordonnée après gel ; créer une nouvelle version du parent permet une autre composition sans déplacer les historiques.
+
+### Concurrence et autorisation éditoriales
+
+Le rôle de référence EDITOR reçoit `content.read`, `content.write`, `content.review`, `content.publish` et `content.archive`. V004 ne crée aucun compte, mot de passe ou attribution utilisateur, et n’ajoute aucune permission de commerce. Les filtres HTTP et chaque service contrôlent les permissions stockées, sans faire confiance aux rôles d’un corps client.
+
+Les écritures JDBC appartiennent à une transaction de cas d’utilisation. Elles verrouillent d’abord l’identité stable, puis ses versions et traductions dans un ordre déterminé. `If-Match` est comparé à la révision rechargée **après l’attente** ; une requête concurrente dépassée reçoit 412. Le service revérifie ensuite la permission, notamment si elle a été retirée pendant l’attente. Le verrou de famille complète le compteur de révision ; l’API n’expose pas une écriture directe contournant ce chemin.
+
+Une vue contient aussi l’état des autres langues et la date de gel. Toute mutation augmente donc les révisions des documents de la même identité, afin que l’ETag fort `content-{id}-r{revision}` change avec ces informations. Les lectures de vue, liste, historique, readiness, dépendances et projection publique utilisent REPEATABLE_READ pour lire un même instantané PostgreSQL sur leurs requêtes successives. La date de revue n’est pas modifiée par un déploiement ni par ce changement de compteur.
+
+### Mise à niveau et projection publique
+
+V004 ajoute un document NULL aux révisions P03 existantes sans toucher à leur `body`. Les vues privées et l’historique exposent ce texte sous `legacyBody` lorsque `document` est NULL ; l’interface le rend comme texte échappé. Il peut ainsi être consulté et copié pour une conversion explicite ; le serveur ne fabrique pas un document prêt à publier. Le chargement local P03 peut être réexécuté et conserve son identité, ses textes, les modifications manuelles et les pointeurs déjà présents. Les tests PostgreSQL couvrent base vide, mise à niveau V003, six instantanés historiques et marqueur de session conservés.
+
+La projection publique sélectionne d’abord la dernière version possédant une publication, toutes langues confondues, puis exige la langue demandée sur cette version. Une traduction manquante produit 404 ; une traduction STALE expose uniquement les métadonnées publiées avec cette indisponibilité explicite. L’archivage de la dernière publication produit 404 sans réafficher silencieusement une ancienne version. Le document publié précédent reste consultable pendant une correction en brouillon, sous réserve de ces contrôles de source et d’archivage. Cette route ne remplace pas la future lecture historique par version et droits achetés.
+
+FREE utilise `PublicDocument`, qui omet les champs de corrigé, réponse juste et explication de quiz ; les modalités de révélation contrôlée appartiennent à P08. PROTECTED et STALE ont `document=null`, sans texte premium ni solutions envoyés puis masqués par l’interface. Aucun brouillon ni `legacyBody` n’est présent dans cette réponse publique.
 
 Les slugs sont canoniques par type/langue. Les routes imbriquées d’activité vérifieront également l’appartenance au programme de la version du parcours. Changer un slug ne change pas la ressource ni ses acquis ; alias/redirections seront ajoutés avec le routage public, sans déduire un identifiant d’un titre.
 
@@ -75,12 +114,12 @@ Les slugs sont canoniques par type/langue. Les routes imbriquées d’activité 
 
 - UUID pour les identifiants et FK métier. Les identifiants de session historiques gardent le format officiel Spring Session de V001.
 - Instants `Instant`/`timestamptz`, connexions JDBC et Hibernate en UTC. PostgreSQL conserve un instant ; le fuseau de préférence sert à l’affichage. Dates non finies et chronologies incohérentes refusées par contraintes.
-- Révision numérique optimiste `@Version` sur les ressources modifiables ; les révisions éditoriales immuables ont leur numéro historique propre. Un ETag fort référence type, UUID et révision ; la précondition HTTP doit être associée au contrôle atomique Hibernate dans la transaction du futur cas d’utilisation.
+- Révision numérique optimiste `@Version` sur les entités modifiables ; les révisions éditoriales immuables ont leur numéro historique propre. Les préférences associent If-Match et contrôle Hibernate ; le CMS JDBC associe compteur, verrou de famille et comparaison transactionnelle après attente.
 - Montants futurs en `BIGINT` unités mineures avec devise explicite ; transport JSON limité aux entiers exacts JavaScript. Pas de `float`, pas d’hypothèse universelle de deux décimales. `Money`/OpenAPI vérifient syntaxe et bornes ; la liste des devises réellement autorisées appartiendra à la configuration commerciale serveur.
 - Les FK métier sont `ON DELETE RESTRICT`. Les instantanés éditoriaux et attributions historiques sont protégés. L’anonymisation du compte est distincte de la suppression physique ; rétention et procédure d’effacement seront précisées dans les lots concernés. Seule la suppression des attributs de session suit le CASCADE officiel V001.
 - Les liens JPA sont des UUID explicites, sans graphes sérialisés ni cascades implicites. Les DTO publics sont construits par mapping ; les entités ne sont pas des réponses HTTP.
 
-## Relations réservées aux lots suivants — non migrées en P03/P04
+## Relations réservées aux lots suivants — non migrées en P03 à P05
 
 Les noms suivants expriment les clés et règles attendues. Ils seront concrétisés par migrations additionnelles avec leur fonctionnalité et ses tests, sans CRUD anticipé.
 
@@ -102,6 +141,8 @@ Les suppressions physiques et opérations financières nécessiteront des cas d�
 
 ## Données locales et preuves
 
-Les migrations structurelles ne contiennent aucune fixture ni prix. Les références de permission V003 sont distinctes des comptes et données de démonstration. Le chargement explicite local et les fixtures Testcontainers sont séparés, identifiés comme fictifs, réexécutables et interdits en production. Le suivi des commandes et résultats réellement exécutés est dans [evidence/P03.md](evidence/P03.md) et [evidence/P04.md](evidence/P04.md).
+Les migrations structurelles ne contiennent aucune fixture ni prix. Les références de permission V003/V004 sont distinctes des comptes et données de démonstration. Le chargement explicite local et les fixtures Testcontainers sont séparés, identifiés comme fictifs, réexécutables et interdits en production. Le suivi des commandes et résultats réellement exécutés est dans [evidence/P03.md](evidence/P03.md), [evidence/P04.md](evidence/P04.md) et [evidence/P05.md](evidence/P05.md).
 
 Références techniques consultées : [contraintes PostgreSQL 18](https://www.postgresql.org/docs/18/ddl-constraints.html), [instants PostgreSQL 18](https://www.postgresql.org/docs/18/datatype-datetime.html), [Spring Boot SQL](https://docs.spring.io/spring-boot/reference/data/sql.html), [Hibernate ORM 7.4](https://docs.hibernate.org/orm/7.4/userguide/html_single/). Les règles commerciales restent celles de [PRODUCT.md](PRODUCT.md) et [DECISIONS.md](DECISIONS.md).
+
+Consultées le 8 novembre 2026 pour P05 : [isolation PostgreSQL 18](https://www.postgresql.org/docs/18/transaction-iso.html), distinguant l’instantané par requête de READ_COMMITTED et celui de REPEATABLE_READ ; [configuration `@Transactional`](https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html), pour les transactions des cas d’utilisation. La page Spring flottante consultée affichait 7.0.10 ; elle ne change pas le BOM installé décrit dans VERSIONS.md.

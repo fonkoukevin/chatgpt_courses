@@ -1,0 +1,33 @@
+{
+  "runId": "2026-11-08T02-16-05-636Z-46ae85c8-c36b-49a7-9159-4856ddef65c6",
+  "completedAt": "2026-11-08T02:17:13.057Z",
+  "result": "passed",
+  "cleanupConfirmed": true,
+  "isolatedPostgres": {
+    "image": "postgres:18.6@sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42",
+    "tmpfs": true,
+    "stopped": true
+  },
+  "processes": [
+    {
+      "name": "web",
+      "pid": 11484,
+      "terminated": true
+    },
+    {
+      "name": "api",
+      "pid": 52604,
+      "terminated": true
+    },
+    {
+      "name": "playwright",
+      "pid": 54188,
+      "terminated": true
+    },
+    {
+      "name": "api",
+      "pid": 23928,
+      "terminated": true
+    }
+  ]
+}

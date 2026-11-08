@@ -8,7 +8,7 @@ Le contrat machine des opérations disponibles est [api/openapi.yaml](api/openap
 - JSON pour requêtes/réponses, sauf connexion `application/x-www-form-urlencoded`, webhook au corps brut et transferts de fichiers documentés.
 - UUID transmis comme chaînes ; dates ISO 8601 UTC avec suffixe `Z` ; montants entiers `{ amountMinor, currency }`. Aucune valeur de prix par défaut. Révisions et unités mineures JSON sont bornées à `0..9007199254740991` pour rester exactes en JavaScript ; devise explicite, syntaxe de trois lettres majuscules et liste autorisée vérifiée dans le futur service commercial.
 - Valeurs facultatives et `null` définis dans OpenAPI ; éviter les champs dont l’absence change silencieusement une permission.
-- Listes paginées `{ items, page, pageSize, total }` ; taille maximale, filtres et tris autorisés bornés côté serveur. Recherche et tris ne deviennent jamais du SQL concaténé.
+- Listes paginées et bornées ; le CMS livré utilise `{ items, page, size, total }`, page 0-based et taille maximale 100. Les schémas précisent les paramètres de chaque opération. Recherche et tris ne deviennent jamais du SQL concaténé.
 - Ressources privées obtenues depuis l’utilisateur authentifié ; un `userId` envoyé par le client ne détermine pas le propriétaire.
 - `401` pour identité requise/expirée, `403` pour permission insuffisante, `404` pour objet absent ou non divulguable, selon politique cohérente documentée. Ces codes ne servent pas à révéler les dossiers d’autrui.
 - Erreurs `application/problem+json` : `type`, `title`, `status`, `detail`, `instance`, `code`, `traceId` et éventuellement `fieldErrors`. Les codes pilotent les traductions ; `detail` ne contient ni stack trace, secret, mot de passe, jeton ou donnée privée d’un autre utilisateur.
@@ -34,7 +34,7 @@ Les composants partagés `Problem`, `FieldError`, UUID, Locale, UtcInstant, Revi
 | ETag dépassé ou conflit optimiste JPA | 412 | `REVISION_CONFLICT` |
 | Précondition de révision absente | 428 | `PRECONDITION_REQUIRED` |
 
-Ces mappings sont testés avec des contrôleurs **uniquement dans les sources de test** ; ils ne sont pas des écritures métier déjà disponibles.
+P03 teste ce socle avec des contrôleurs **uniquement dans les sources de test**. P04/P05 l’appliquent aussi aux opérations réelles décrites ci-dessous ; les contrôleurs de test restent exclus de l’application livrée.
 
 Génération reproductible : `npm run api:generate` reconstruit types, SDK et transport dans `apps/web/src/lib/api/generated`. `api:validate` vérifie OpenAPI 3.1 ; `api:check` régénère en temporaire et refuse toute différence, fichier supplémentaire ou empreinte de contrat divergente ; `verify:client` compile puis exécute les tests du wrapper et du SDK. Les commandes Windows exactes sont dans le README. La CI appelle `api:check` et `verify:client` avant la compilation web.
 
@@ -84,7 +84,50 @@ Après inscription, la connexion normale réutilise les filtres Spring et la des
 
 Codes P04 : 400 `VALIDATION_FAILED`/`INVALID_REQUEST`/`INVALID_RESET_TOKEN`, 409 `EMAIL_ALREADY_REGISTERED`, 401 `BAD_CREDENTIALS`/`AUTHENTICATION_REQUIRED`/`ACCOUNT_UNAVAILABLE`, 403 `CSRF_INVALID`/`ACCESS_DENIED`, et les codes de révision ci-dessus. Une indisponibilité de vérification de session reste un échec fermé, avec réponse contrôlée 503. Le quota neutre de récupération n’utilise pas le code 429 préparé pour d’autres limitations.
 
-## Catalogue public et lecture — planifié P05/P06
+## Éditorial — validé localement P05
+
+Ces routes existent dans Spring, OpenAPI et le client généré. Les sept tests HTTP réels P05, huit tests de services PostgreSQL et cinq scénarios navigateur passent ; le global comporte 52 tests Java réussis. Les résultats et limites sont dans [preuve P05](evidence/P05.md). Toutes les routes suivantes portent le préfixe `/api/v1`.
+
+Un objet CMS `id` est l’UUID d’une traduction et d’une version pédagogique. `resourceId` identifie la ressource stable, `versionId` sa version pédagogique ; ce sont trois concepts distincts. Types : COURSE, MODULE, ACTIVITY, GUIDE, METHOD_TEMPLATE. Le schéma `ContentView` est le document administratif complet ; liste et historique sont paginés `{ items, page, size, total }`, avec page `0..1000000` et taille `1..100` (défauts 0 et 20).
+
+| Méthode et route | Corps/résultat | Permission |
+| --- | --- | --- |
+| `GET /admin/contents` | Filtres `q` (240 max), `kind`, `state`, `locale`, `courseId`, `verifiedBefore`, `needsUpdate`, `page`, `size` → `ContentPage` | `content.read` |
+| `POST /admin/contents` | `CreateContent` → 201 `ContentView`, Location et ETag | `content.write` |
+| `GET /admin/contents/{id}` | `ContentView` et ETag | `content.read` |
+| `POST /admin/contents/{id}/revisions` | `SaveRevision` → nouvel instantané, même version | `content.write` |
+| `POST /admin/contents/{id}/versions` | `NewVersion` → 201 nouveau document/version, même ressource | `content.write` |
+| `POST /admin/contents/{id}/duplicate` | `{ slug, title, reason }` → 201 nouvelle identité en brouillon | `content.write` |
+| `POST /admin/contents/{id}/translations` | `CreateTranslation` → 201 document de la langue manquante sur la même version | `content.write` |
+| `POST /admin/contents/{id}/transition` | `{ state, reason, sourceRevisionId? }`, état TO_REVIEW/READY/STALE | `content.review` pour READY, `content.write` sinon ; service revérifie la cible |
+| `POST /admin/contents/{id}/publish` | `{ revisionId, reason }` → révision courante déterminée publiée | `content.publish` |
+| `POST /admin/contents/{id}/archive` | `{ reason }` → traduction archivée, historique conservé | `content.archive` |
+| `PUT /admin/contents/{id}/composition` | `{ childVersionIds, reason }` → ordre complet du programme non gelé | `content.write` |
+| `GET /admin/contents/{id}/readiness` | `{ ready, blockingIssues, warnings, checkedRevision }` | `content.read` |
+| `GET /admin/contents/{id}/revisions` | `RevisionPage` ; paramètres page/size | `content.read` |
+| `GET /admin/contents/{id}/preview` | Document administratif complet, aperçu privé | `content.read` |
+| `GET /admin/contents/{id}/dependencies` | `{ items, canArchive, consequences }` avant archivage | `content.read` |
+| `GET /contents/{resourceId}?locale=fr` | `PublicContent` minimal, langue explicite fr/en | Public, selon publication et politique ci-dessous |
+
+Chaque mutation d’un document existant exige CSRF et `If-Match` ; création initiale sans If-Match, avec CSRF. L’ETag fort est `"content-{id}-r{revision}"`. Les mutations verrouillent la famille de ressource et revérifient les permissions après l’attente. Toute mutation de cette famille augmente ses révisions, car les langues liées et le gel font partie de la représentation. Les lectures multi-requêtes sont REPEATABLE_READ pour produire un instantané cohérent. 428 si la précondition manque, 412 si elle est dépassée ; aucun écrasement automatique. Les réponses administratives sont `private, no-store` et `X-Robots-Tag: noindex, nofollow`. `preview=true` sur une URL publique ne donne aucun accès.
+
+`CreateContent` contient `kind`, `locale`, `slug`, `title`, `summary`, `objectives`, `evaluationDefinition`, `document`, `childVersionIds`, `reason`. `SaveRevision` contient `title`, `summary`, `document`, `reason`. `NewVersion` ajoute à ces champs les objectifs/évaluation canoniques et les versions enfants. `CreateTranslation` exige texte/document fournis explicitement, langue et slug ; aucune traduction automatique n’est présumée. Acteur, états de disponibilité des médias, pointeurs de publication, rôles et propriétaires ne sont jamais choisis par un corps client. Propriétés inconnues, nulls requis et décimaux à la place d’entiers sont refusés.
+
+`ContentDocument` porte objectif traduit, résultat attendu, prérequis, blocs, durée facultative, exercice/corrigé, quiz, grille, accès FREE/PROTECTED, références médias et ressources liées. Les blocs HEADING/PARAGRAPH/LIST/CALLOUT/CODE/LINK sont du texte brut, jamais du HTML/MDX exécuté. Les liens acceptent HTTPS sans identifiants ou un chemin interne simple ; `javascript:`, chemins réseau `//` et caractères de contrôle sont refusés. Les médias sont `{ assetId, kind, required, label }`, sans URL libre ni booléen « disponible » fourni par le client. P10 n’a pas encore de registre : une référence requise non vérifiée bloque la publication ; une référence facultative émet un avertissement.
+
+Les limites exactes figurent dans OpenAPI et sont recontrôlées dans le service : document 48 KiB UTF-8 au total, requête 64 KiB au relais ; titre 240, résumé 2000, raison 1000, objectifs/évaluation 4000 ; 60 blocs de 4000 caractères, 20 prérequis, 20 quiz avec 2..8 options, 30 critères, 20 médias, 30 références et 100 enfants au plus. Les clés de quiz/grille sont uniques et leurs points bornés ; une durée renseignée vaut 1..1440 minutes. La création d’un champ de durée ne signifie pas qu’une estimation réelle a été mesurée.
+
+Cycle : DRAFT → TO_REVIEW → READY → PUBLISHED. READY enregistre une vraie action de revue, sa date et sa révision ; publier recontrôle readiness, revue et permission dans la transaction. Une correction ajoute un instantané append-only, revient DRAFT et garde l’ancienne publication accessible jusqu’à une nouvelle publication explicite. Modifier objectif ou évaluation d’une pédagogie gelée exige une nouvelle version (409 `NEW_PEDAGOGICAL_VERSION_REQUIRED`). Un parent ne se publie qu’avec ses enfants publiés dans la langue et leurs versions gelées. L’archive conserve instantanés, origines et dépendances ; aucune suppression physique d’historique n’est exposée.
+
+Une traduction liée conserve sa révision source d’origine et sa révision source effectivement revue. Lors d’une nouvelle revue, `sourceRevisionId` doit désigner la `currentRevisionId` actuelle du document source ; l’origine historique homonyme ne la remplace pas. Une modification de source rend les traductions dépendantes STALE. La revue vérifie aussi l’équivalence des clés/points/options/index de réponse/grille ; les textes peuvent être localisés. READY est bloqué par `TRANSLATION_ASSESSMENT_MISMATCH` si l’évaluation diffère, plutôt que d’annoncer une équivalence pédagogique inexistante.
+
+Les anciens instantanés P03 restent lisibles : `ContentView.document`/`RevisionView.document` peuvent valoir `null`, avec `legacyBody` privé contenant le texte historique. `STRUCTURED_DOCUMENT_REQUIRED` empêche leur publication jusqu’à une nouvelle révision structurée explicite. Aucun texte historique n’est écrasé ou présenté automatiquement comme prêt.
+
+`PublicContent` est une projection minimale pour les lots consommateurs, pas le catalogue P06. Elle sélectionne la version publiée courante puis la langue demandée, sans retour silencieux à une ancienne version/langue. Brouillon, langue absente ou archive ⇒ 404. Une traduction STALE reste explicite, avec `document:null`. FREE/PUBLISHED peut fournir un `PublicDocument` distinct, sans `correction`, `correctOption` ni `explanation` ; exercice limité aux instructions et quiz aux questions/options/points. PROTECTED fournit seulement les métadonnées publiées et `document:null`, même avec une session EDITOR sur cette route publique. Aucun texte premium n’est envoyé puis masqué, et publier ne crée ni offre, prix, achat ou droit.
+
+Autres codes P05 : 409 `CONTENT_NOT_READY`/`INVALID_CONTENT_TRANSITION`, 400 `VALIDATION_FAILED`/`INVALID_REQUEST`, ainsi que les erreurs communes de permission, conflit et révision. Le rôle de référence EDITOR reçoit les cinq permissions de contenu, sans compte livré ni permission commerciale. Le refus d’une route commerciale future par `denyAll` reste une preuve partielle, pas un test d’un service financier déjà intégré.
+
+## Catalogue public et lecture — planifié P06
 
 | Méthode et route | Fonction |
 | --- | --- |
@@ -154,17 +197,12 @@ Les champs exacts d’un instantané incluent `offerId`, `offerRevision`, lignes
 
 La page de retour interroge la commande propriétaire avec une attente bornée et propose ensuite un retour au compte. Elle n’interroge pas Stripe directement avec une clé secrète. Une commande à état ambigu ne déclenche pas automatiquement une deuxième tentative payante.
 
-## Administration — planifié P05/P15
+## Administration commerciale et exploitation — planifiées P11–P15
 
 Les routes `/admin/**` exigent des permissions précises. Les permissions affichées au client facilitent l’interface ; elles ne dispensent pas des contrôles Spring sur chaque opération.
 
 | Groupe de routes | Opérations |
 | --- | --- |
-| `/admin/contents` | Recherche, création, édition typée et dépendances des contenus |
-| `/admin/contents/{id}/revisions` | Brouillons et historique avec préconditions de révision |
-| `/admin/contents/{id}/translations/{locale}` | Traduction reliée à la bonne version source et état de revue |
-| `/admin/contents/{id}/readiness` | Blocages pédagogiques, médias, traduction et accès |
-| `/admin/contents/{id}/publish` / `archive` | Transition explicite, permission, motif et audit |
 | `/admin/offers` et `/{id}/readiness` | Offres, prix, inclusions, conditions et bloqueurs commerciaux |
 | `/admin/offers/{id}/activate` / `deactivate` | Vente active distincte de publication ; audit et révision |
 | `/admin/orders/{id}` | Consultation opérationnelle et origine des droits |
@@ -179,7 +217,7 @@ Une réponse de `readiness` contient `{ ready, blockingIssues, warnings, checked
 
 ## Contrat et tests
 
-P03 livre le contrat machine et les commandes de validation/génération avec des outils compatibles avec TypeScript 6. La CI est configurée pour ces commandes ; une exécution GitHub n’est pas présumée. Les DTO exposés ne sont jamais des entités JPA brutes. Les modèles et FK actuels/futurs sont précisés dans [DATA_MODEL.md](DATA_MODEL.md), les résultats réellement observés dans [evidence/P03.md](evidence/P03.md).
+P03 livre le contrat machine et les commandes de validation/génération avec des outils compatibles avec TypeScript 6 ; P04/P05 les étendent aux routes réelles d’identité/CMS. La CI est configurée pour ces commandes ; une exécution GitHub n’est pas présumée. Les DTO exposés ne sont jamais des entités JPA brutes. Les modèles et FK actuels/futurs sont précisés dans [DATA_MODEL.md](DATA_MODEL.md), les résultats réellement observés dans [evidence/P03.md](evidence/P03.md), [evidence/P04.md](evidence/P04.md) et [evidence/P05.md](evidence/P05.md).
 
 Chaque lot qui ajoute une route fournit des tests sur le backend réel pour ses invariants, puis met à jour le client et les écrans. Les états de facture, remboursement ou autorisation ne sont jamais inventés uniquement pour faire passer un test d’interface.
 

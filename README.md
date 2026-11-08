@@ -4,11 +4,11 @@ Plateforme de formation pratique à l’IA : choisir une tâche, apprendre, prod
 
 ## État réel
 
-P01 fournit les fondations locales ; P02 ajoute le système visuel et trois structures d’interface. P03 pose le schéma identité/contenu, les conventions d’accès/concurrence et le contrat OpenAPI avec client TypeScript généré. P04 raccorde inscription, connexion, récupération et préférences aux sessions Spring/PostgreSQL, vérifiées localement. Les autres parcours métier et les paiements seront raccordés dans leurs lots. Aucun ancien prototype repris ni déploiement externe annoncé.
+P01 fournit les fondations locales ; P02 ajoute le système visuel et trois structures d’interface. P03 pose le schéma identité/contenu et le contrat généré. P04 raccorde l’identité aux sessions Spring/PostgreSQL. P05 ajoute le CMS et la publication, vérifiés localement dans Chromium et PostgreSQL. Les autres parcours métier et les paiements seront raccordés dans leurs lots. Aucun ancien prototype repris ni déploiement externe annoncé.
 
 La validation P01 couvre FR/EN, clavier, formats étroits, erreur 404 et panne/reprise réelle de Spring. P02 ajoute 14 tests et 54 captures examinées pour les interfaces ; les sept scénarios P01 passent à nouveau après ces changements. La validation reste locale, avec le Chromium de test autorisé.
 
-Lire [AGENTS.md](AGENTS.md), puis [docs/STATUS.md](docs/STATUS.md). Vérifications et limites : [P04](docs/evidence/P04.md), [P03](docs/evidence/P03.md), [P02](docs/evidence/P02.md), [P01](docs/evidence/P01.md) ; audit initial : [P00](docs/evidence/P00.md).
+Lire [AGENTS.md](AGENTS.md), puis [docs/STATUS.md](docs/STATUS.md). Vérifications et limites : [P05](docs/evidence/P05.md), [P04](docs/evidence/P04.md), [P03](docs/evidence/P03.md), [P02](docs/evidence/P02.md), [P01](docs/evidence/P01.md) ; audit initial : [P00](docs/evidence/P00.md).
 
 ## Structure retenue
 
@@ -147,7 +147,7 @@ Si Chromium n’est pas installé, `run browser:install` installe la version ver
 
 [DATA_MODEL.md](docs/DATA_MODEL.md) explique les douze tables ajoutées par **V002**, les identités UUID, les versions gelées, les traductions et les relations futures. **V001 est inchangée**. Hibernate valide le schéma ; Flyway est le seul mécanisme d’évolution. Aucune commande de reset ou suppression de volume n’est nécessaire.
 
-Le contrat machine [openapi.yaml](docs/api/openapi.yaml) décrit la sonde et les opérations d’identité P04 réellement implémentées. Les autres routes métier restent planifiées dans [API_CONTRACTS.md](docs/API_CONTRACTS.md). Après modification du contrat :
+Le contrat machine [openapi.yaml](docs/api/openapi.yaml) décrit la sonde, l’identité P04 et les opérations éditoriales P05 réellement implémentées. Les autres routes métier restent planifiées dans [API_CONTRACTS.md](docs/API_CONTRACTS.md). Après modification du contrat :
 
 ```powershell
 .\scripts\courses.cmd run api:validate
@@ -197,3 +197,27 @@ Recette locale dédiée, avec les builds web/API, PostgreSQL et Mailpit démarr�
 ```
 
 Cette commande a réussi : **13 scénarios Chromium**, FR/EN à 1440/768/390/320 px, comptes réels, SMTP Mailpit, rotation, panne et redémarrage de l’API avec session conservée. Les défauts observés et corrigés, les 37 tests Java et les limites sont détaillés dans [P04](docs/evidence/P04.md). Prochain lot : [P05_CMS_PUBLICATION.txt](prompts/P05_CMS_PUBLICATION.txt).
+
+## CMS P05 — validé localement
+
+Avec une session disposant des permissions de contenu, la stack `run dev` expose :
+
+| Fonction | Français | Anglais |
+| --- | --- | --- |
+| Catalogue administratif | `/fr/admin/content` | `/en/admin/content` |
+| Édition d’un document | `/fr/admin/content/{id}/edit` | `/en/admin/content/{id}/edit` |
+| Aperçu privé | `/fr/admin/content/{id}/preview` | `/en/admin/content/{id}/preview` |
+
+`id` désigne une traduction/version, distincte de l’identité pédagogique stable. Inscription publique = apprenant, sans accès CMS automatique. Le rôle EDITOR de référence porte `content.read`, `content.write`, `content.review`, `content.publish`, `content.archive`, sans permission commerciale ni compte connu livré. Un refus 401/403 sans session autorisée est attendu ; la procédure privée du premier administrateur reste hors dépôt.
+
+Le backend persiste recherches, versions, traductions, instantanés, revues et publications. Une sauvegarde conserve l’historique et exige un ETag ; une publication recontrôle la révision et ses bloqueurs. Le contenu protégé et les brouillons ne sont pas livrés par la projection publique. Les textes P03 restent accessibles en privé pour conversion explicite, sans être déclarés prêts automatiquement.
+
+Les exemples issus de [CONTENT_REFERENCE.md](docs/CONTENT_REFERENCE.md) et des fixtures sont fictifs et isolés. Ils ne constituent ni le parcours P18 terminé, ni des fichiers/vidéos produits, ni une offre achetable. Une référence média requise encore non vérifiée bloque la publication ; aucun clic ne la transforme en preuve de disponibilité.
+
+Commande de recette dédiée, avec Docker, les builds web/API et les ports 3101/8181 libres :
+
+```powershell
+.\scripts\courses.cmd run verify:editorial
+```
+
+Cette commande a réussi : **5/5 scénarios en 44,8 s**, création/publication FR/EN, ordre clavier, réponse retardée, panne réelle de Spring, conflit entre onglets, aperçu privé et projection protégée. Elle réserve PostgreSQL 18.6 en tmpfs et attribue EDITOR uniquement à ses comptes synthétiques ; tous ses processus sont arrêtés ensuite. Les comptes et contenus Compose sont conservés. Les **52 tests Java**, **25 tests du client**, builds, captures examinées et limites sont dans [P05](docs/evidence/P05.md). Prochain lot autorisé : [P06_SITE_PUBLIC_CATALOGUE.txt](prompts/P06_SITE_PUBLIC_CATALOGUE.txt).

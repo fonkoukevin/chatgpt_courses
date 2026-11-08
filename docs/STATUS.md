@@ -1,18 +1,18 @@
 # État réel du projet
 
-Dernière mise à jour : **8 novembre 2026**. **P04 validé localement**. Autorisation utilisateur : enchaîner **P04 à P12**, dans l’ordre, en passant au lot suivant seulement après validation du précédent. Aucun ancien prototype repris ni déploiement externe.
+Dernière mise à jour : **8 novembre 2026**. **P05 validé localement**. Autorisation utilisateur : enchaîner **P04 à P12**, dans l’ordre, en passant au lot suivant seulement après validation du précédent. Aucun ancien prototype repris ni déploiement externe.
 
 ## Situation courante
 
-- Dernière phase réalisée : P04, validée localement ; prochaine phase P05, autorisée sans nouvelle confirmation.
-- Git local : branche `main`, code P04 **`ba63356`**, P03 **`6a53c19`**, P02 **`b5f797d`** ; aucun remote/push. Les 49 fichiers initiaux restent présents.
+- Dernière phase réalisée : P05, validée localement ; prochaine phase P06, autorisée sans nouvelle confirmation.
+- Git local : branche `main`, code P05 **`5dab875`**, P04 **`ba63356`**, P03 **`6a53c19`** ; aucun remote/push. Les 49 fichiers initiaux restent présents.
 - Outils : Windows/PowerShell 5.1, Node portable 24.22.2/npm 11.19.1, Temurin 21.0.13+9, Wrapper Maven 3.10.0 ; Docker Linux 29.8.0/Compose 5.5.1.
-- Schéma : V001/V002 conservées ; V003 ajoute récupération et révocation des sessions. [DATA_MODEL.md](DATA_MODEL.md) décrit contraintes et extensions futures.
+- Schéma : V001–V003 conservées ; V004 ajoute le workflow éditorial. Upgrade local : 13 comptes, 3 ressources et 6 révisions conservés, aucun compte EDITOR attribué. [DATA_MODEL.md](DATA_MODEL.md).
 - Démarrage : `.\scripts\courses.cmd run dev` applique Flyway ; `run seed:local` charge explicitement un dossier fictif en brouillon. [Commandes](../README.md). Applications de vérification arrêtées ; PostgreSQL/Mailpit disponibles pour la suite, volumes et données conservés.
-- Preuves [P04](evidence/P04.md) : **37 tests Java**, **18 tests du client** ; OpenAPI validé, 17 fichiers générés identiques, lint/types et builds web/API réussis.
-- Navigateur autorisé Playwright/Chromium : **13/13 en 59,3 s**, FR/EN 1440/768/390/320 px ; vrais comptes, SMTP Mailpit, panne/reprise Spring et sessions conservées. 34 vues de formulaires et 7 vues fonctionnelles examinées dans les deux passages verts. Preuves précédentes conservées.
-- Blocage P04 : aucun. T04 reste partiel jusqu’aux vrais projets/commandes/médias. Notification asynchrone en mémoire jusqu’à l’outbox P10 ; procédure admin préparée hors dépôt, non exécutée. CI GitHub, recette externe et production non exécutées.
-- Suite : `prompts/P05_CMS_PUBLICATION.txt`, puis P06 à P12 automatiquement si chaque lot passe. L’utilisateur prévoit de renseigner les clés Stripe de test dans `.env.local` ; présence à revérifier en P12 sans afficher les valeurs. Prix, conditions et médias commerciaux restent ouverts.
+- Preuves [P05](evidence/P05.md) : **52 tests Java**, **25 tests du client**, OpenAPI validé et 17 fichiers générés identiques ; lint/types et builds web/API réussis. CI enrichie du contrôle TypeScript navigateur, YAML analysé ; aucun run GitHub.
+- Chromium P05 : **5/5 en 44,8 s**, création/publication/correction/archivage FR/EN, catalogue, ordre clavier, panne Spring, réponse retardée et conflit réel à 390 px. Captures bureau/mobile et sections d’éditeur examinées. PostgreSQL tmpfs de recette et tous les processus supervisés arrêtés ; preuves P00–P04 conservées.
+- Blocage P05 : aucun. Dépendances informatives avant archivage, médias non vérifiés bloquants jusqu’à P10, contenu final P18 restant. T04/T15–T18 se complètent dans les lots consommateurs ; aucune validation anticipée des projets/achats/attestations.
+- Suite : `prompts/P06_SITE_PUBLIC_CATALOGUE.txt`, puis P07 à P12 automatiquement si chaque lot passe. L’utilisateur prévoit de renseigner les clés Stripe de test dans `.env.local` ; présence à revérifier en P12 sans afficher les valeurs. Prix, conditions et médias commerciaux restent ouverts.
 
 ## Phases
 
@@ -23,7 +23,7 @@ Dernière mise à jour : **8 novembre 2026**. **P04 validé localement**. Autori
 | P02 | Validé localement | Composants, trois structures, 54 captures et recette ; voir `evidence/P02.md` |
 | P03 | Validé localement | Migration, modèles, OpenAPI/client généré, 24 tests Java et intégration réelle ; voir `evidence/P03.md` |
 | P04 | Validé localement | Identité, SMTP, session/CSRF, 37 tests Java et 13 scénarios Chromium ; voir `evidence/P04.md` |
-| P05 | À faire | CMS et publication |
+| P05 | Validé localement | CMS, publication, 52 tests Java, 25 tests client et 5 scénarios Chromium ; voir `evidence/P05.md` |
 | P06 | À faire | Site public |
 | P07 | À faire | Méthodes et générateur |
 | P08 | À faire | Apprentissage et quiz |
@@ -47,6 +47,6 @@ Dernière mise à jour : **8 novembre 2026**. **P04 validé localement**. Autori
 
 ## Dernier lot
 
-Identité réelle, récupération, préférences et E06 FR/EN intégrés. Courses de reset, sélecteurs navigateur et lien de langue corrigés puis vérifiés. Aucun compte administrateur connu, prix ou endpoint métier fictif créé ; aucune publication.
+CMS réel, versions/traductions, revue, publication, projections et E14/E15 intégrés. Ancien texte conservé, conflits et réponses tardives vérifiés ; défauts observés corrigés puis revérifiés. Aucune publication de production, offre ni compte administrateur connu créé.
 
 Garder ce suivi court ; détailler les commandes et limites dans `docs/evidence/Pxx.md`. Une reprise part des fichiers et preuves présents, sans supposer l’historique de conversation.

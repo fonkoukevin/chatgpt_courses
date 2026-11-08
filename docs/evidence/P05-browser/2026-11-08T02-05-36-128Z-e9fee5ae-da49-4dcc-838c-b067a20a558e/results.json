@@ -1,0 +1,336 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\scripts\\..\\.tools\\node-v24.22.2-win-x64\\node.exe",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts"
+    ],
+    "configFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts",
+    "rootDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 600000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/.runtime/browser-2026-11-08T02-05-36-128Z-e9fee5ae-da49-4dcc-838c-b067a20a558e/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/editorial.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T02-05-36-128Z-e9fee5ae-da49-4dcc-838c-b067a20a558e\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "snapshotDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/editorial.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3101",
+          "browserName": "chromium",
+          "headless": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "actionTimeout": 10000,
+          "navigationTimeout": 20000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off",
+          "serviceWorkers": "block"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\docs\\evidence\\P05-browser\\2026-11-08T02-05-36-128Z-e9fee5ae-da49-4dcc-838c-b067a20a558e\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "editorial.spec.ts",
+      "file": "editorial.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "réponse retardée, panne réelle et conflit entre deux onglets conservent la saisie",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5858,
+                  "error": {
+                    "message": "Error: route.fulfill: Route is already handled!",
+                    "stack": "Error: route.fulfill: Route is already handled!\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\editorial.spec.ts:28:32",
+                    "location": {
+                      "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\editorial.spec.ts",
+                      "column": 32,
+                      "line": 28
+                    },
+                    "snippet": " \u001b[90m 26 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mroute(target\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m (route) \u001b[33m=>\u001b[39m {\n \u001b[90m 27 |\u001b[39m     \u001b[36mconst\u001b[39m response \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m route\u001b[33m.\u001b[39mfetch()\u001b[33m;\u001b[39m committed \u001b[33m=\u001b[39m \u001b[36mtrue\u001b[39m\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 28 |\u001b[39m     \u001b[36mawait\u001b[39m delayed\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m route\u001b[33m.\u001b[39mfulfill({ response })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 29 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 30 |\u001b[39m   \u001b[36mconst\u001b[39m sent \u001b[33m=\u001b[39m \u001b[32m'Première correction envoyée au serveur.'\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m 31 |\u001b[39m   \u001b[36mconst\u001b[39m newer \u001b[33m=\u001b[39m \u001b[32m'Saisie plus récente encore locale pendant la réponse retardée.'\u001b[39m\u001b[33m;\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\editorial.spec.ts",
+                        "column": 32,
+                        "line": 28
+                      },
+                      "message": "Error: route.fulfill: Route is already handled!\n\n  26 |   await page.route(target, async (route) => {\n  27 |     const response = await route.fetch(); committed = true;\n> 28 |     await delayed; await route.fulfill({ response });\n     |                                ^\n  29 |   });\n  30 |   const sent = 'Première correction envoyée au serveur.';\n  31 |   const newer = 'Saisie plus récente encore locale pendant la réponse retardée.';\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\editorial.spec.ts:28:32"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\editorial.spec.ts",
+                        "column": 55,
+                        "line": 38
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-cms-save-state]')\nExpected: \u001b[32m\"modified\"\u001b[39m\nReceived: \u001b[31m\"conflict\"\u001b[39m\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('[data-cms-save-state]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-cms-save-state]')\u001b[22m\n\u001b[2m    2 × locator resolved to <p role=\"status\" aria-live=\"polite\" class=\"font-medium\" data-cms-save-state=\"saving\">Enregistrement…</p>\u001b[22m\n\u001b[2m      - unexpected value \"saving\"\u001b[22m\n\u001b[2m    - locator resolved to <p role=\"status\" aria-live=\"polite\" class=\"font-medium\" data-cms-save-state=\"conflict\">Une autre révision a été enregistrée</p>\u001b[22m\n\u001b[2m    - unexpected value \"conflict\"\u001b[22m\n\u001b[2m  - Test ended.\u001b[22m\n\n\n  36 |     await expect(page.locator('#cms-summary')).toBeEditable(); await page.locator('#cms-summary').fill(newer);\n  37 |   } finally { release(); await page.unroute(target); }\n> 38 |   await expect(page.locator('[data-cms-save-state]')).toHaveAttribute('data-cms-save-state', 'modified');\n     |                                                       ^\n  39 |   await expect(page.locator('#cms-summary')).toHaveValue(newer);\n  40 |   expect((await currentContent(context.request, content.value.id)).value.summary).toBe(sent);\n  41 |   await page.getByRole('button', { name: text.save, exact: true }).click();\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\editorial.spec.ts:38:55"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T02:06:03.361Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T02-05-36-128Z-e9fee5ae-da49-4dcc-838c-b067a20a558e\\results\\editorial-réponse-retardée-9c582-nglets-conservent-la-saisie\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-08T02-05-36-128Z-e9fee5ae-da49-4dcc-838c-b067a20a558e\\results\\editorial-réponse-retardée-9c582-nglets-conservent-la-saisie\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\editorial.spec.ts",
+                    "column": 32,
+                    "line": 28
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "ec079a02c0facf936b0d-fbea4b5752af3e1c107b",
+          "file": "editorial.spec.ts",
+          "line": 16,
+          "column": 1
+        },
+        {
+          "title": "ordre des activités modifiable au clavier et confirmé par PostgreSQL",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4505,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T02:06:10.665Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ec079a02c0facf936b0d-dec34e4065f5dc7d84ce",
+          "file": "editorial.spec.ts",
+          "line": 78,
+          "column": 1
+        },
+        {
+          "title": "fr : catalogue et création réels au clavier à 390 px",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8289,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T02:06:15.413Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ec079a02c0facf936b0d-7ce5c9a9094eba5d41f6",
+          "file": "editorial.spec.ts",
+          "line": 106,
+          "column": 3
+        },
+        {
+          "title": "en : catalogue et création réels au clavier à 390 px",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6487,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T02:06:23.730Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ec079a02c0facf936b0d-b70a2787889208b6e0fc",
+          "file": "editorial.spec.ts",
+          "line": 106,
+          "column": 3
+        },
+        {
+          "title": "aperçu authentifié sûr et projection protégée sans texte ni corrigé",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3970,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-08T02:06:30.235Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ec079a02c0facf936b0d-b9efb1f3f5041b119341",
+          "file": "editorial.spec.ts",
+          "line": 187,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-08T02:06:01.187Z",
+    "duration": 33164.44,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

@@ -1,8 +1,8 @@
 {
-  "verifiedAt": "2026-11-08T14:10:58.612Z",
+  "verifiedAt": "2026-11-08T14:47:17.438Z",
   "privateEnvIgnored": true,
   "listenerSecretFileIgnored": true,
-  "publicFilesScanned": 2162,
+  "publicFilesScanned": 2169,
   "secretFoundInPublicFiles": false,
   "secretValuesPrinted": false
 }

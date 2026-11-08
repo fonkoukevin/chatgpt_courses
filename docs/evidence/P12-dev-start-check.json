@@ -1,0 +1,31 @@
+{
+  "verifiedAt": "2026-11-08T14:40:19.924Z",
+  "developmentStarted": true,
+  "checks": [
+    {
+      "path": "/fr",
+      "status": 200
+    },
+    {
+      "path": "/en",
+      "status": 200
+    },
+    {
+      "path": "/api/v1/system/health",
+      "status": 200,
+      "springHealthy": true
+    },
+    {
+      "path": "/api/v1/webhooks/stripe",
+      "status": 400,
+      "code": "STRIPE_WEBHOOK_INVALID",
+      "signatureAbsent": true
+    }
+  ],
+  "processOwnershipRecorded": true,
+  "paymentCreated": false,
+  "secretsPrinted": false,
+  "temporaryProcessesStopped": true,
+  "composeStopNotCalled": true,
+  "runtimeLogsContainSecret": false
+}

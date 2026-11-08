@@ -1,0 +1,30 @@
+{
+  "observedAt": "2026-11-08T14:32:53.077Z",
+  "reports": {
+    "P12-private-config-check.json": {
+      "verifiedAt": "2026-11-08T14:28:48.129Z",
+      "springContextStarted": true,
+      "secretMatchesEnvironment": true,
+      "webhookMatchesEnvironment": true,
+      "accountMatchesEnvironment": true,
+      "testMode": true,
+      "enabledMatchesEnvironment": true,
+      "stripeEnabled": true,
+      "webhookSecretConfigured": true,
+      "secretsPrinted": false,
+      "privateFileMatchesProcessEnvironment": true,
+      "workersDisabledForProbe": true,
+      "temporaryServerStopped": true,
+      "externalStripeCalled": false
+    },
+    "P12-stripe-account-check.json": {
+      "verifiedAt": "2026-11-08T14:29:03.176Z",
+      "httpStatus": 200,
+      "testKey": true,
+      "configuredAccountMatchesStripe": true,
+      "externalAccountReadExecuted": true,
+      "paymentCreated": false,
+      "secretValuesPrinted": false
+    }
+  }
+}

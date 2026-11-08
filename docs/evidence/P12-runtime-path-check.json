@@ -1,0 +1,90 @@
+{
+  "verifiedAt": "2026-11-08T14:45:17.461Z",
+  "observations": [
+    {
+      "inputKey": "Path",
+      "scenario": "native-path",
+      "sourcePathUnchanged": true,
+      "pathKeyCount": 1,
+      "canonicalPath": true,
+      "nativePathPreserved": true,
+      "fallbackAfterInherited": true,
+      "portableNodePreserved": true,
+      "forbiddenVariableCount": 0,
+      "docker": {
+        "status": 0,
+        "errorCode": null,
+        "version": "Docker version 29.8.0, build 88096ef"
+      },
+      "compose": {
+        "status": 0,
+        "errorCode": null,
+        "version": "Docker Compose version v5.5.1"
+      }
+    },
+    {
+      "inputKey": "PATH",
+      "scenario": "native-path",
+      "sourcePathUnchanged": true,
+      "pathKeyCount": 1,
+      "canonicalPath": true,
+      "nativePathPreserved": true,
+      "fallbackAfterInherited": true,
+      "portableNodePreserved": true,
+      "forbiddenVariableCount": 0,
+      "docker": {
+        "status": 0,
+        "errorCode": null,
+        "version": "Docker version 29.8.0, build 88096ef"
+      },
+      "compose": {
+        "status": 0,
+        "errorCode": null,
+        "version": "Docker Compose version v5.5.1"
+      }
+    },
+    {
+      "inputKey": "pAtH",
+      "scenario": "native-path",
+      "sourcePathUnchanged": true,
+      "pathKeyCount": 1,
+      "canonicalPath": true,
+      "nativePathPreserved": true,
+      "fallbackAfterInherited": true,
+      "portableNodePreserved": true,
+      "forbiddenVariableCount": 0,
+      "docker": {
+        "status": 0,
+        "errorCode": null,
+        "version": "Docker version 29.8.0, build 88096ef"
+      },
+      "compose": {
+        "status": 0,
+        "errorCode": null,
+        "version": "Docker Compose version v5.5.1"
+      }
+    },
+    {
+      "inputKey": "Path",
+      "scenario": "without-docker-path",
+      "sourcePathUnchanged": true,
+      "pathKeyCount": 1,
+      "canonicalPath": true,
+      "nativePathPreserved": true,
+      "fallbackAfterInherited": true,
+      "portableNodePreserved": true,
+      "forbiddenVariableCount": 0,
+      "docker": {
+        "status": 0,
+        "errorCode": null,
+        "version": "Docker version 29.8.0, build 88096ef"
+      },
+      "compose": {
+        "status": 0,
+        "errorCode": null,
+        "version": "Docker Compose version v5.5.1"
+      }
+    }
+  ],
+  "parentPathUnchanged": true
+}

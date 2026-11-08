@@ -26,7 +26,7 @@ Une seule origine publique ; `/api/v1` est servi par Spring. Spring reste l’au
 
 ## Démarrer sous Windows
 
-Mode vérifié : PowerShell 5.1, Node et Java natifs Windows, services Linux dans Docker Desktop. Démarrer Docker Desktop avant les services/tests. Les outils portables du projet préservent les installations globales. Aucune modification de politique PowerShell ni commande Bash n’est nécessaire.
+Mode vérifié : PowerShell 5.1, Node et Java natifs Windows, services Linux dans Docker Desktop. Démarrer Docker Desktop avant les services/tests. Le lanceur conserve le chemin natif Windows avec une seule variable `PATH` et cherche aussi le binaire Docker installé dans son répertoire standard si le terminal ne le connaît pas. Aucun changement du PATH système. Les outils portables du projet préservent les installations globales. Aucune modification de politique PowerShell ni commande Bash n’est nécessaire.
 
 Depuis la racine :
 
@@ -405,9 +405,17 @@ Dernier passage renforcé : **8/8 en 128,288 s, sortie 0**, après un ciblé **6
 
 ### Configuration privée et Stripe CLI — Windows natif
 
-Le fichier privé est **`.env.local` à la racine du dépôt**. La clé TEST déjà saisie a été conservée ; `STRIPE_ACCOUNT_ID` est renseigné et vérifié par une lecture réelle de `/v1/account`. Le secret obtenu par la CLI est dans **`.runtime/stripe-webhook-secret.txt`** : ouvrir ce fichier localement et copier sa valeur dans `STRIPE_WEBHOOK_SECRET` de `.env.local`. Les deux chemins sont effectivement ignorés par Git ; aucun secret n’est affiché par les commandes ci-dessous.
+Le fichier privé est **`.env.local` à la racine du dépôt**. La clé TEST déjà saisie a été conservée ; `STRIPE_ACCOUNT_ID` est renseigné et vérifié par une lecture réelle de `/v1/account`. Le secret obtenu par la CLI est dans **`.runtime/stripe-webhook-secret.txt`**. Les deux chemins sont effectivement ignorés par Git ; aucun secret n’est affiché par les commandes ci-dessous.
 
-Stripe reste actuellement désactivé (`STRIPE_ENABLED=false`) tant que cette copie manuelle manque. Une fois le secret renseigné, utiliser `STRIPE_ENABLED=true` uniquement dans la configuration locale et garder **`STRIPE_MODE=TEST`** ainsi que `STRIPE_API_BASE=https://api.stripe.com`. Le commerce et les conditions de l’offre restent des configurations distinctes ; aucune offre fictive n’est activée par migration.
+La configuration locale contient maintenant `STRIPE_ENABLED=true` et un secret webhook ; leur chargement par Spring est confirmé. **La valeur saisie diffère pourtant du secret retourné par la CLI**, dont trois lectures successives concordent. `LISTENER_SECRET_MISMATCH` bloque donc correctement le transfert. Garder **`STRIPE_MODE=TEST`** et `STRIPE_API_BASE=https://api.stripe.com`. Le commerce et les conditions de l’offre restent des configurations distinctes ; aucune offre fictive n’est activée par migration.
+
+Pour corriger cette différence, lancer explicitement :
+
+```powershell
+.\scripts\courses.cmd run stripe:sync-secret
+```
+
+Cette commande vérifie le compte TEST, récupère le secret de l’écoute puis remplace uniquement `STRIPE_WEBHOOK_SECRET` dans `.env.local`. Elle conserve les autres valeurs, commentaires et fins de ligne ; elle refuse les champs dupliqués et une modification du fichier détectée pendant l’opération. Fermer le fichier pendant la commande : la comparaison ne verrouille pas les éditeurs externes. L’ancienne valeur est sauvegardée dans `.runtime/stripe-webhook-secret.before-sync-<identifiant>.txt`, ignoré par Git. La clé API reste intacte. Alternative manuelle : copier la valeur du fichier privé `.runtime/stripe-webhook-secret.txt` dans ce seul champ. La synchronisation réelle reste à effectuer ; la préservation a été vérifiée sur des fichiers synthétiques isolés.
 
 Commandes depuis la racine :
 
@@ -417,11 +425,14 @@ Commandes depuis la racine :
 .\scripts\courses.cmd run stripe:secret
 .\scripts\courses.cmd run stripe:plan
 .\scripts\courses.cmd run stripe:bindings
+.\scripts\courses.cmd run verify:stripe-config
 ```
 
 `stripe:install` prépare le binaire portable **1.55.8** dans `.tools/stripe/1.55.8`, après contrôle SHA-256 de l’archive et du manifeste officiels épinglés dans `infra/tools/stripe-cli.windows.json`. `stripe:check` vérifie le compte de la clé TEST. `stripe:secret` obtient le secret du listener et le place dans le fichier privé de copie, sans remplir le champ à la place de l’utilisateur. `stripe:plan` affiche les options non sensibles sans démarrer l’écoute. Le lanceur utilise la même clé TEST, uniquement dans l’environnement privé du processus CLI (`STRIPE_API_KEY`), sans argument contenant la clé ni en-tête Connect.
 
-`scripts/lib/runtime.mjs` charge `.env.local` ; `scripts/api.mjs` transmet cet environnement à Spring, qui le lie à `courses.stripe` dans `application.yml`. **`stripe:bindings` démarre réellement Spring depuis le JAR construit**, sur un port de boucle locale éphémère, compare les valeurs du bean en mémoire, puis ferme le contexte. Il exige le JDK, le JAR et PostgreSQL local ; workers désactivés, aucun appel Stripe, sorties brutes écartées et seuls des booléens publiés. Clé et compte sont déjà vérifiés ainsi ; le champ webhook était encore vide. Relancer cette commande après saisie manuelle du secret. Pour le démarrage habituel, `run dev` charge aussi le fichier privé.
+`verify:stripe-config` exécute cinq tests sur des fichiers synthétiques isolés : préservation des autres champs, commentaires et fins de ligne, sauvegarde, champ vide, fichier modifié, champ absent/dupliqué et valeur multiligne refusée. Il ne lit ni ne modifie la configuration privée réelle et ne contacte pas Stripe.
+
+`scripts/lib/runtime.mjs` charge `.env.local` ; `scripts/api.mjs` transmet cet environnement à Spring, qui le lie à `courses.stripe` dans `application.yml`. **`stripe:bindings` démarre réellement Spring depuis le JAR construit**, sur un port de boucle locale éphémère, compare les valeurs du bean en mémoire, puis ferme le contexte. Il exige le JDK, le JAR et PostgreSQL local ; workers désactivés, aucun appel Stripe, sorties brutes écartées et seuls des booléens publiés. La dernière sonde confirme clé, compte, secret renseigné et activation ; elle prouve le chargement, pas la concordance du secret avec la CLI. Relancer cette commande après modification. Pour le démarrage habituel, `run dev` charge aussi le fichier privé.
 
 Après saisie du secret, démarrer l’application dans un terminal :
 
@@ -443,6 +454,6 @@ stripe listen --latest --events-from "@self" --events checkout.session.completed
 
 **La destination réelle est le proxy Next sur le port 3000**, qui préserve `/api/v1/webhooks/stripe` vers Spring 8080. Le lanceur la lit dans `APP_PUBLIC_ORIGIN` et exige une origine locale. Ctrl+C arrête son processus CLI. Une modification de `.env.local` exige le redémarrage de Spring pour être prise en compte.
 
-Les événements doivent être des snapshots **2026-10-28.endive**. `listen` 1.55.8 propose la version du compte ou `--latest`, sans épinglage explicite. Le lanceur utilise ce dernier choix mais exige une version Ready exactement égale au pin de l’application et le même secret que la configuration ; il arrête sur divergence. Spring recontrôle indépendamment chaque événement. Aucun changement de version du compte ni assouplissement du contrat. **Cette vérification Ready reste à exécuter au lancement du listener**, qui n’a pas encore été démarré. [Options officielles](https://docs.stripe.com/cli/listen), [source épinglée](https://github.com/stripe/stripe-cli/blob/v1.55.8/pkg/cmd/listen.go).
+Les événements doivent être des snapshots **2026-10-28.endive**. `listen` 1.55.8 propose la version du compte ou `--latest`, sans épinglage explicite. Le lanceur utilise ce dernier choix mais exige une version Ready exactement égale au pin de l’application et le même secret que la configuration ; il arrête sur divergence. Spring recontrôle indépendamment chaque événement. Aucun changement de version du compte ni assouplissement du contrat. **Le dernier lancement s’est arrêté sur le secret différent : aucun état Ready validé n’est revendiqué.** [Options officielles](https://docs.stripe.com/cli/listen), [source épinglée](https://github.com/stripe/stripe-cli/blob/v1.55.8/pkg/cmd/listen.go).
 
 La recette Checkout externe reste séparée : après configuration privée, listener prêt et offre de test complète explicitement fictive, ouvrir le récapitulatif, accepter les conditions, payer avec un moyen de test officiel, puis relever commande/événement/opération, PAID/READY, une origine d’accès et une intention d’email. Rejouer l’événement et vérifier l’absence de doublon. Une visite de l’URL de retour seule ne constitue pas cette preuve. Les références fournisseur seront consignées après exécution effective.

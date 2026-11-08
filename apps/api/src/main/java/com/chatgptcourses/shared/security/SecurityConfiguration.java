@@ -1,29 +1,103 @@
 package com.chatgptcourses.shared.security;
 
 import com.chatgptcourses.shared.http.ApiProblems;
+import com.chatgptcourses.identity.http.IdentityDtos.AuthUserResponse;
+import com.chatgptcourses.identity.security.IdentityUserDetails;
+import com.chatgptcourses.identity.service.IdentityService;
+import com.chatgptcourses.identity.service.SessionUserSnapshot;
+import com.chatgptcourses.shared.config.RuntimeProperties;
+import java.util.Optional;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.DelegatingSecurityContextRepository;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextHolderFilter;
+import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.web.csrf.CsrfException;
+import org.springframework.session.web.http.CookieSerializer;
+import org.springframework.session.web.http.DefaultCookieSerializer;
 import org.springframework.security.web.SecurityFilterChain;
 import tools.jackson.databind.ObjectMapper;
 
 @Configuration(proxyBeanMethods = false)
 class SecurityConfiguration {
     @Bean
-    SecurityFilterChain apiSecurity(HttpSecurity http, ObjectMapper mapper) throws Exception {
+    SecurityFilterChain apiSecurity(HttpSecurity http, ObjectMapper mapper, IdentityService identities,
+                                    UserDetailsService users, PasswordEncoder encoder,
+                                    SecurityContextRepository contexts) throws Exception {
+        var provider = new DaoAuthenticationProvider(users);
+        provider.setPasswordEncoder(encoder);
         return http
+                .authenticationProvider(provider)
+                .securityContext(context -> context.securityContextRepository(contexts).requireExplicitSave(true))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        .sessionFixation(fixation -> fixation.changeSessionId()))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET, "/api/v1/system/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/auth/csrf").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/register", "/api/v1/auth/login",
+                                "/api/v1/auth/logout", "/api/v1/auth/password-reset-requests", "/api/v1/auth/password-resets").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/auth/me", "/api/v1/me/preferences").authenticated()
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/me/preferences").hasAuthority("identity.preferences.write")
                         .anyRequest().denyAll())
+                // The default session token repository and XOR/BREACH handler are deliberately retained.
                 .csrf(Customizer.withDefaults())
-                .formLogin(form -> form.disable())
+                .addFilterAfter(new AuthSessionRefreshFilter(identities, contexts, mapper), SecurityContextHolderFilter.class)
+                .addFilterBefore(new LoginRequestFilter(mapper), UsernamePasswordAuthenticationFilter.class)
+                .formLogin(form -> form.loginPage("/api/v1/auth/login").loginProcessingUrl("/api/v1/auth/login")
+                        .usernameParameter("email").passwordParameter("password")
+                        .successHandler((request, response, authentication) -> {
+                            var principal = (IdentityUserDetails) authentication.getPrincipal();
+                            Optional<SessionUserSnapshot> current;
+                            try { current = identities.loadSessionUser(principal.getUserId()); }
+                            catch (DataAccessException unavailable) {
+                                var session = request.getSession(false);
+                                if (session != null) session.invalidate();
+                                org.springframework.security.core.context.SecurityContextHolder.clearContext();
+                                ApiProblems.write(mapper, request, response, HttpStatus.SERVICE_UNAVAILABLE,
+                                        "SERVICE_UNAVAILABLE", "Le service de connexion est temporairement indisponible.");
+                                return;
+                            }
+                            if (current.isEmpty() || !current.get().active()
+                                    || current.get().authenticationVersion() != principal.getAuthenticationVersion()) {
+                                var session = request.getSession(false);
+                                if (session != null) session.invalidate();
+                                org.springframework.security.core.context.SecurityContextHolder.clearContext();
+                                ApiProblems.write(mapper, request, response, HttpStatus.UNAUTHORIZED,
+                                        "BAD_CREDENTIALS", "L’adresse ou le mot de passe est incorrect.");
+                                return;
+                            }
+                            response.setStatus(HttpStatus.OK.value());
+                            response.setContentType("application/json");
+                            response.setHeader("Cache-Control", "private, no-store");
+                            mapper.writeValue(response.getOutputStream(), AuthUserResponse.from(current.get().profile()));
+                        })
+                        .failureHandler((request, response, failure) -> {
+                            boolean unavailable = failure instanceof AuthenticationServiceException;
+                            ApiProblems.write(mapper, request, response,
+                                    unavailable ? HttpStatus.SERVICE_UNAVAILABLE : HttpStatus.UNAUTHORIZED,
+                                    unavailable ? "SERVICE_UNAVAILABLE" : "BAD_CREDENTIALS",
+                                    unavailable ? "Le service de connexion est temporairement indisponible." : "L’adresse ou le mot de passe est incorrect.");
+                        }))
                 .httpBasic(basic -> basic.disable())
-                .logout(logout -> logout.disable())
+                .logout(logout -> logout.logoutUrl("/api/v1/auth/logout")
+                        .invalidateHttpSession(true).clearAuthentication(true)
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            response.setStatus(HttpStatus.NO_CONTENT.value());
+                            response.setHeader("Cache-Control", "private, no-store");
+                        }))
                 .requestCache(cache -> cache.disable())
                 .exceptionHandling(errors -> errors
                         .authenticationEntryPoint((request, response, exception) -> ApiProblems.write(
@@ -31,13 +105,24 @@ class SecurityConfiguration {
                                 "AUTHENTICATION_REQUIRED", "Une authentification est nécessaire."))
                         .accessDeniedHandler((request, response, exception) -> ApiProblems.write(
                                 mapper, request, response, HttpStatus.FORBIDDEN,
-                                "ACCESS_DENIED", "Cette action n’est pas autorisée.")))
+                                exception instanceof CsrfException ? "CSRF_INVALID" : "ACCESS_DENIED",
+                                exception instanceof CsrfException ? "Le contrôle de session est invalide ou a expiré." : "Cette action n’est pas autorisée.")))
                 .build();
     }
 
-    // P04 remplacera ce refus explicite par l'identité persistée ; aucun compte généré.
     @Bean
-    UserDetailsService unavailableIdentity() {
-        return username -> { throw new UsernameNotFoundException("Authentication unavailable"); };
+    SecurityContextRepository securityContexts() {
+        return new DelegatingSecurityContextRepository(new RequestAttributeSecurityContextRepository(), new HttpSessionSecurityContextRepository());
+    }
+
+    @Bean
+    CookieSerializer sessionCookieSerializer(RuntimeProperties runtime) {
+        var serializer = new DefaultCookieSerializer();
+        serializer.setCookieName("SESSION");
+        serializer.setCookiePath("/");
+        serializer.setUseHttpOnlyCookie(true);
+        serializer.setUseSecureCookie(runtime.sessionCookieSecure());
+        serializer.setSameSite("Lax");
+        return serializer;
     }
 }

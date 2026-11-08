@@ -32,7 +32,7 @@ function isFieldError(value: unknown): value is FieldError {
     && typeof value.code === "string" && /^[A-Z][A-Z0-9_]*$/.test(value.code);
 }
 
-function isProblem(value: unknown, status: number): value is Problem {
+export function isProblem(value: unknown, status: number): value is Problem {
   return isRecord(value)
     && onlyKeys(value, ["type", "title", "status", "detail", "instance", "code", "traceId", "fieldErrors"])
     && value.type === "about:blank" && nonEmpty(value.title) && nonEmpty(value.detail)

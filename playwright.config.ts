@@ -5,7 +5,7 @@ const origin = process.env.COURSES_BROWSER_ORIGIN;
 const evidence = process.env.COURSES_BROWSER_EVIDENCE;
 const results = process.env.COURSES_BROWSER_RESULTS;
 const phase = process.env.COURSES_BROWSER_PHASE ?? 'P01';
-if (!['P01', 'P02'].includes(phase)) throw new Error('Phase navigateur inconnue.');
+if (!['P01', 'P02', 'P04'].includes(phase)) throw new Error('Phase navigateur inconnue.');
 if (!origin || !evidence || !results || !process.env.COURSES_BROWSER_IPC || !process.env.COURSES_BROWSER_TOKEN) {
   throw new Error('Utiliser scripts/verify-browser.mjs pour réserver les ports et superviser les processus.');
 }
@@ -20,7 +20,7 @@ for (const [base, path] of [[resolve(`docs/evidence/${phase}-browser`), evidence
 
 export default defineConfig({
   testDir: './tests/browser',
-  testMatch: phase === 'P01' ? '**/foundations.spec.ts' : '**/design-system.spec.ts',
+  testMatch: phase === 'P01' ? '**/foundations.spec.ts' : phase === 'P02' ? '**/design-system.spec.ts' : '**/identity.spec.ts',
   fullyParallel: false,
   workers: 1, // The outage scenario owns the dedicated API process.
   retries: 0,

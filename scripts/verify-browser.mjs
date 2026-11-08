@@ -7,7 +7,8 @@ import { environment, preflightServers, root, runtimeDir, start, terminateOwned,
 
 const env = environment();
 const phase = process.argv[2] ?? 'P01';
-if (!['P01', 'P02'].includes(phase)) throw new Error('Phase de recette inconnue : P01 ou P02 attendu.');
+if (!['P01', 'P02', 'P04'].includes(phase)) throw new Error('Phase de recette inconnue : P01, P02 ou P04 attendu.');
+const needsApi = phase !== 'P02';
 if (!['local', 'test'].includes(env.APP_ENV)) throw new Error('Vérification navigateur réservée à local/test.');
 const port = (value, fallback) => {
   const text = value ?? String(fallback);
@@ -18,13 +19,13 @@ env.APP_PUBLIC_ORIGIN = `http://127.0.0.1:${port(env.BROWSER_WEB_PORT, 3101)}`;
 env.API_PORT = String(port(env.BROWSER_API_PORT, 8181));
 env.API_INTERNAL_URL = `http://127.0.0.1:${env.API_PORT}`;
 env.SPRING_PROFILES_ACTIVE = env.APP_ENV;
-for (const key of phase === 'P01' ? ['POSTGRES_DB', 'POSTGRES_USER', 'POSTGRES_PASSWORD'] : []) {
+for (const key of needsApi ? ['POSTGRES_DB', 'POSTGRES_USER', 'POSTGRES_PASSWORD'] : []) {
   if (!env[key]) throw new Error(`Configuration locale requise : ${key}.`);
 }
 const jar = join(root, 'apps/api/target/chatgpt-courses-api.jar');
 const next = join(root, 'node_modules/next/dist/bin/next');
 const runner = join(root, 'node_modules/@playwright/test/cli.js');
-for (const file of [next, runner, join(root, 'apps/web/.next/BUILD_ID'), ...(phase === 'P01' ? [jar] : [])]) {
+for (const file of [next, runner, join(root, 'apps/web/.next/BUILD_ID'), ...(needsApi ? [jar] : [])]) {
   if (!existsSync(file)) throw new Error('Builds ou @playwright/test 1.65.0 absents. Voir la préparation documentée ; aucune installation automatique.');
 }
 await preflightServers(env); // Occupied ports fail without stopping any existing server.
@@ -136,13 +137,15 @@ try {
   web = launch('web', process.execPath, [next, 'start', '--hostname', '127.0.0.1', '--port', String(new URL(env.APP_PUBLIC_ORIGIN).port)],
     { cwd: join(root, 'apps/web') });
   await Promise.race([Promise.all([
-    ...(phase === 'P01' ? [startApi()] : []),
+    ...(needsApi ? [startApi()] : []),
     ready(web, `${env.APP_PUBLIC_ORIGIN}/fr${phase === 'P02' ? '/dev/public' : ''}`),
   ]), interrupted]);
   const playwright = launch('playwright', process.execPath, [runner, 'test', '--config', join(root, 'playwright.config.ts')], {
     stdio: 'inherit',
     env: { ...env, COURSES_BROWSER_PHASE: phase, COURSES_BROWSER_ORIGIN: env.APP_PUBLIC_ORIGIN, COURSES_BROWSER_IPC: ipc,
-      COURSES_BROWSER_TOKEN: token, COURSES_BROWSER_EVIDENCE: evidence, COURSES_BROWSER_RESULTS: join(runDirectory, 'results') },
+      COURSES_BROWSER_TOKEN: token, COURSES_BROWSER_EVIDENCE: evidence, COURSES_BROWSER_RESULTS: join(runDirectory, 'results'),
+      COURSES_BROWSER_LOGS: runDirectory,
+      COURSES_MAILPIT_ORIGIN: `http://127.0.0.1:${port(env.MAIL_HTTP_PORT, 8025)}` },
   });
   const result = await Promise.race([playwright.exit, interrupted]);
   if (result.code !== 0) throw new Error(`Recette navigateur échouée (code ${result.code}, signal ${result.signal}).`);

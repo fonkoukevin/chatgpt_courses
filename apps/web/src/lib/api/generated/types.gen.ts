@@ -74,10 +74,81 @@ export type Problem = {
     fieldErrors?: Array<FieldError>;
 };
 
+export type AuthUser = {
+    id: Uuid;
+    email: string;
+    displayName: string | null;
+    locale: Locale;
+    roles: Array<string>;
+    permissions: Array<string>;
+};
+
+export type CsrfToken = {
+    token: string;
+    headerName: 'X-CSRF-TOKEN';
+    parameterName: '_csrf';
+};
+
+export type RegisterRequest = {
+    email: string;
+    displayName?: string | null;
+    locale: Locale;
+};
+
+export type LoginRequest = {
+    email: string;
+};
+
+export type PasswordResetRequest = {
+    email: string;
+    locale: Locale;
+};
+
+export type PasswordReset = {
+    /**
+     * Jeton opaque reçu par email, jamais dans une query string.
+     */
+    token: string;
+    /**
+     * 12 à 128 points Unicode, au plus 1024 octets UTF-8. Aucun retrait ou troncature du mot de passe.
+     */
+    newPassword: string;
+};
+
+export type Preferences = {
+    id: Uuid;
+    locale: Locale;
+    revision: Revision;
+};
+
+export type PreferencesPatch = {
+    locale: Locale;
+};
+
+export type RegisterRequestWritable = {
+    email: string;
+    /**
+     * 12 à 128 points Unicode, au plus 1024 octets UTF-8. Aucun retrait ou troncature du mot de passe.
+     */
+    password: string;
+    displayName?: string | null;
+    locale: Locale;
+};
+
+export type LoginRequestWritable = {
+    email: string;
+    password: string;
+};
+
 /**
  * Convention préparée pour les futures mutations : reprendre l'ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. La comparaison et l'écriture doivent être atomiques. Aucun endpoint factice n'est ajouté en P03.
  */
 export type IfMatch = string;
+
+/**
+ * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+ */
+export type CsrfHeader = string;
 
 export type GetSystemHealthData = {
     body?: never;
@@ -115,3 +186,350 @@ export type GetSystemHealthResponses = {
 };
 
 export type GetSystemHealthResponse = GetSystemHealthResponses[keyof GetSystemHealthResponses];
+
+export type GetCsrfTokenData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/auth/csrf';
+};
+
+export type GetCsrfTokenErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetCsrfTokenError = GetCsrfTokenErrors[keyof GetCsrfTokenErrors];
+
+export type GetCsrfTokenResponses = {
+    /**
+     * Jeton Spring non mis en cache ; peut créer une session anonyme.
+     */
+    200: CsrfToken;
+};
+
+export type GetCsrfTokenResponse = GetCsrfTokenResponses[keyof GetCsrfTokenResponses];
+
+export type RegisterData = {
+    body: RegisterRequestWritable;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+    };
+    path?: never;
+    query?: never;
+    url: '/auth/register';
+};
+
+export type RegisterErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    429: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type RegisterError = RegisterErrors[keyof RegisterErrors];
+
+export type RegisterResponses = {
+    /**
+     * Compte créé ; continuer par le login Spring normal.
+     */
+    201: AuthUser;
+};
+
+export type RegisterResponse = RegisterResponses[keyof RegisterResponses];
+
+export type LoginData = {
+    body: LoginRequestWritable;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+    };
+    path?: never;
+    query?: never;
+    url: '/auth/login';
+};
+
+export type LoginErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    429: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type LoginError = LoginErrors[keyof LoginErrors];
+
+export type LoginResponses = {
+    /**
+     * Authentification confirmée, session tournée et contexte persisté.
+     */
+    200: AuthUser;
+};
+
+export type LoginResponse = LoginResponses[keyof LoginResponses];
+
+export type LogoutData = {
+    body?: never;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+    };
+    path?: never;
+    query?: never;
+    url: '/auth/logout';
+};
+
+export type LogoutErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type LogoutError = LogoutErrors[keyof LogoutErrors];
+
+export type LogoutResponses = {
+    /**
+     * Session invalidée et cookie expiré. Recharger un jeton CSRF avant une nouvelle mutation.
+     */
+    204: void;
+};
+
+export type LogoutResponse = LogoutResponses[keyof LogoutResponses];
+
+export type GetCurrentUserData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/auth/me';
+};
+
+export type GetCurrentUserErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetCurrentUserError = GetCurrentUserErrors[keyof GetCurrentUserErrors];
+
+export type GetCurrentUserResponses = {
+    /**
+     * Compte actif de la session ; aucune empreinte ni clé de session.
+     */
+    200: AuthUser;
+};
+
+export type GetCurrentUserResponse = GetCurrentUserResponses[keyof GetCurrentUserResponses];
+
+export type RequestPasswordResetData = {
+    body: PasswordResetRequest;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+    };
+    path?: never;
+    query?: never;
+    url: '/auth/password-reset-requests';
+};
+
+export type RequestPasswordResetErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    429: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type RequestPasswordResetError = RequestPasswordResetErrors[keyof RequestPasswordResetErrors];
+
+export type RequestPasswordResetResponses = {
+    /**
+     * Demande reçue, sans révéler si un compte existe.
+     */
+    202: unknown;
+};
+
+export type ResetPasswordData = {
+    body: PasswordReset;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+    };
+    path?: never;
+    query?: never;
+    url: '/auth/password-resets';
+};
+
+export type ResetPasswordErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    429: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ResetPasswordError = ResetPasswordErrors[keyof ResetPasswordErrors];
+
+export type ResetPasswordResponses = {
+    /**
+     * Mot de passe remplacé et sessions existantes révoquées.
+     */
+    204: void;
+};
+
+export type ResetPasswordResponse = ResetPasswordResponses[keyof ResetPasswordResponses];
+
+export type GetPreferencesData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/me/preferences';
+};
+
+export type GetPreferencesErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetPreferencesError = GetPreferencesErrors[keyof GetPreferencesErrors];
+
+export type GetPreferencesResponses = {
+    /**
+     * Préférences et ETag fort.
+     */
+    200: Preferences;
+};
+
+export type GetPreferencesResponse = GetPreferencesResponses[keyof GetPreferencesResponses];
+
+export type UpdatePreferencesData = {
+    body: PreferencesPatch;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * Convention préparée pour les futures mutations : reprendre l'ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. La comparaison et l'écriture doivent être atomiques. Aucun endpoint factice n'est ajouté en P03.
+         */
+        'If-Match': string;
+    };
+    path?: never;
+    query?: never;
+    url: '/me/preferences';
+};
+
+export type UpdatePreferencesErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type UpdatePreferencesError = UpdatePreferencesErrors[keyof UpdatePreferencesErrors];
+
+export type UpdatePreferencesResponses = {
+    /**
+     * Modification persistée et nouvelle révision.
+     */
+    200: Preferences;
+};
+
+export type UpdatePreferencesResponse = UpdatePreferencesResponses[keyof UpdatePreferencesResponses];

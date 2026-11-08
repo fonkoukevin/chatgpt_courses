@@ -24,12 +24,24 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
     @ExceptionHandler(ApiException.class)
     ResponseEntity<ProblemDetail> application(ApiException exception, HttpServletRequest request) {
         return response(ApiProblems.create(exception.error(), request.getRequestURI()));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    ResponseEntity<ProblemDetail> forbidden(HttpServletRequest request) {
+        return response(ApiProblems.create(ApiError.ACCESS_DENIED, request.getRequestURI()));
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    ResponseEntity<ProblemDetail> authenticationRequired(HttpServletRequest request) {
+        return response(ApiProblems.create(ApiError.AUTHENTICATION_REQUIRED, request.getRequestURI()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

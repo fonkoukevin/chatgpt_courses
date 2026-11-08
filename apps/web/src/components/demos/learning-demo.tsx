@@ -8,12 +8,21 @@ import { Button, ConfirmationDialog, FormField, Sheet, Tabs, TextArea } from "@/
 import { getShowcaseDictionary } from "@/lib/i18n/showcase";
 import type { Locale } from "@/lib/i18n/locales";
 import { proposalFixture } from "./fixtures";
+import { ResumeContext } from "@/components/auth/resume-context";
+import { clearAnonymousDraft, saveAnonymousDraft } from "@/lib/auth/anonymous-draft";
+import { getAuthDictionary } from "@/lib/i18n/auth";
 
 export function LearningDemo({ locale }: { locale: Locale }) {
   const { common, learning: text } = getShowcaseDictionary(locale);
   const fixture = proposalFixture[locale];
   const [draft, setDraft] = useState("");
   const [revealed, setRevealed] = useState(false);
+  const [temporary, setTemporary] = useState<"saved" | "failed" | null>(null);
+  const auth = getAuthDictionary(locale);
+  function editDraft(body: string) {
+    setDraft(body);
+    setTemporary(null);
+  }
   return <div data-showcase-fixture="learning"><LearnerLayout locale={locale}>
     <div className="mb-8 rounded-panel border border-border bg-surface-subtle p-5 sm:p-6"><ProgressSummary locale={locale} label={text.progressLabel} state={{ kind: "ready", completed: 1, total: 6 }} /><p className="mt-3 text-[0.8125rem] text-muted-foreground">{text.progressNote}</p></div>
     <div className="grid items-start gap-8 xl:grid-cols-[minmax(0,1fr)_18rem]">
@@ -35,9 +44,13 @@ export function LearningDemo({ locale }: { locale: Locale }) {
               <dl className="space-y-5">{fixture.facts.map((item) => <div key={item.fact} className="rounded-input bg-surface-subtle p-4"><dt className="text-[0.8125rem] font-medium text-muted-foreground">{text.factLabel}</dt><dd className="mt-1 text-sm font-medium">{item.fact}</dd><dt className="mt-3 text-[0.8125rem] font-medium text-muted-foreground">{text.consequenceLabel}</dt><dd className="mt-1 text-sm">{item.consequence}</dd></div>)}</dl>
               <p className="text-[0.8125rem] text-muted-foreground">{text.source}</p><div className="border-l-2 border-brand pl-4"><h3 className="text-sm font-semibold">{text.questionTitle}</h3><p className="mt-2 text-sm">{text.question}</p></div></div> },
             { value: "write", label: text.write, content: <div className="space-y-5"><h2 className="flex items-center gap-2 text-xl font-semibold"><PenLine size={20} aria-hidden="true" />{text.writeTitle}</h2><p className="text-sm leading-relaxed text-muted-foreground">{text.writeIntro}</p>
-              <FormField id="proposal-draft" label={text.draftLabel} hint={text.draftHint}><TextArea id="proposal-draft" rows={10} value={draft} onChange={(event) => setDraft(event.target.value)} placeholder={text.draftPlaceholder} /></FormField>
+              <p className="text-sm text-muted-foreground">{auth.draftSensitive}</p>
+              <FormField id="proposal-draft" label={text.draftLabel} hint={text.draftHint}><TextArea id="proposal-draft" rows={10} value={draft} onChange={(event) => editDraft(event.target.value)} placeholder={text.draftPlaceholder} /></FormField>
               <SaveStatus locale={locale} state={{ kind: "local" }} />
-              <ConfirmationDialog trigger={<Button variant="ghost" disabled={!draft}>{text.reset}</Button>} title={text.resetTitle} description={text.resetBody} confirmLabel={text.resetConfirm} cancelLabel={text.cancel} onConfirm={() => setDraft("")} destructive />
+              <Button variant="secondary" disabled={!draft.trim()} onClick={() => setTemporary(saveAnonymousDraft({ activityId: "p02-proposal-demo", locale, body: draft, brief: text.goalBody }) ? "saved" : "failed")}>{auth.draftSave}</Button>
+              {temporary && <p role="status" className="text-sm text-muted-foreground">{temporary === "saved" ? auth.draftSaved : auth.draftFailed}</p>}
+              <ResumeContext locale={locale} onRestore={editDraft} />
+              <ConfirmationDialog trigger={<Button variant="ghost" disabled={!draft}>{text.reset}</Button>} title={text.resetTitle} description={text.resetBody} confirmLabel={text.resetConfirm} cancelLabel={text.cancel} onConfirm={() => { editDraft(""); clearAnonymousDraft(); }} destructive />
               <div className="border-t border-border pt-6"><h3 className="mb-4 text-lg font-semibold">{text.methodTitle}</h3><MethodBuilder locale={locale} initialValues={fixture.method} /></div></div> },
             { value: "check", label: text.check, content: <div className="space-y-5"><h2 className="text-xl font-semibold">{text.checkTitle}</h2><p className="text-sm leading-relaxed text-muted-foreground">{text.checkIntro}</p><RubricChecklist locale={locale} items={fixture.rubric} /></div> },
             { value: "answer", label: text.answer, content: <div className="space-y-5"><h2 className="text-xl font-semibold">{text.answerTitle}</h2><p className="text-sm leading-relaxed text-muted-foreground">{text.answerIntro}</p>{revealed ? <div className="rounded-input bg-surface-subtle p-5"><p className="mb-3 text-[0.8125rem] font-medium text-muted-foreground">{text.answerLabel}</p><p className="text-sm leading-relaxed">{fixture.answer}</p><p role="status" className="mt-4 text-[0.8125rem] text-muted-foreground">{text.revealed}</p></div> : <Button variant="secondary" onClick={() => setRevealed(true)}>{text.reveal}</Button>}</div> },

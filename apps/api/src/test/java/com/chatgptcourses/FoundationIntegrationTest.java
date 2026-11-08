@@ -106,7 +106,7 @@ class FoundationIntegrationTest {
         assertProblem(get("/api/v1/me"), 401, "AUTHENTICATION_REQUIRED");
         var response = http.send(HttpRequest.newBuilder(uri("/api/v1/system/health"))
                 .POST(HttpRequest.BodyPublishers.noBody()).build(), HttpResponse.BodyHandlers.ofString());
-        assertProblem(response, 403, "ACCESS_DENIED");
+        assertProblem(response, 403, "CSRF_INVALID");
     }
 
     @Test

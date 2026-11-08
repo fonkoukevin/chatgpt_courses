@@ -119,7 +119,8 @@ async function check(directory) {
 }
 
 async function test(directory) {
-  const program = ts.createProgram([join(root, 'tests/api/client.test.ts')], {
+  const sources = (await readdir(join(root, 'tests/api'))).filter((name) => name.endsWith('.test.ts')).sort();
+  const program = ts.createProgram(sources.map((name) => join(root, 'tests/api', name)), {
     strict: true, noEmitOnError: true, skipLibCheck: true, esModuleInterop: true,
     target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.Node16, moduleResolution: ts.ModuleResolutionKind.Node16,
     lib: ['lib.es2022.d.ts', 'lib.dom.d.ts', 'lib.dom.iterable.d.ts'],
@@ -133,7 +134,7 @@ async function test(directory) {
     }));
     throw new Error('Le client et ses tests TypeScript ne compilent pas.');
   }
-  const execution = spawnSync(process.execPath, ['--test', join(directory, 'tests/api/client.test.js')], {
+  const execution = spawnSync(process.execPath, ['--test', ...sources.map((name) => join(directory, 'tests/api', name.replace(/\.ts$/, '.js')))], {
     cwd: root, stdio: 'inherit', windowsHide: true,
   });
   if (execution.error) throw execution.error;

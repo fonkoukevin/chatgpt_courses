@@ -1,0 +1,48 @@
+import type { Locale } from "./locales";
+
+const fr = {
+  signIn: "Se connecter", signUp: "Créer un compte", recover: "Retrouver mon accès", reset: "Choisir un nouveau mot de passe", account: "Mon compte",
+  intro: "Un compte pour retrouver votre travail personnel. La connexion est gérée par une session sécurisée.",
+  registerIntro: "Créez un compte apprenant, puis connectez-vous. Aucun achat n’est nécessaire pour créer le compte.",
+  recoverIntro: "Indiquez votre adresse email. Si un compte correspond, un lien de réinitialisation sera envoyé.",
+  resetIntro: "Le lien est à usage unique et expire. Votre nouveau mot de passe déconnectera les sessions existantes.",
+  email: "Adresse email", displayName: "Nom affiché (facultatif)", password: "Mot de passe", newPassword: "Nouveau mot de passe", confirmPassword: "Confirmer le mot de passe",
+  passwordHint: "De 12 à 128 caractères Unicode. Utilisez un mot de passe long et unique.", show: "Afficher", hide: "Masquer", required: "Champ obligatoire.",
+  emailInvalid: "Indiquez une adresse email valide (320 caractères maximum).", nameInvalid: "Le nom affiché ne doit pas dépasser 120 caractères.",
+  passwordInvalid: "Utilisez entre 12 et 128 caractères Unicode, sans dépasser 1 024 octets UTF-8.", passwordMismatch: "Les deux mots de passe doivent être identiques.",
+  submitting: "Envoi en cours…", sendLink: "Envoyer le lien", submitReset: "Modifier le mot de passe", logout: "Se déconnecter", loggingOut: "Déconnexion…",
+  forgot: "Mot de passe oublié ?", needAccount: "Pas encore de compte ?", haveAccount: "Vous avez déjà un compte ?", backSignIn: "Revenir à la connexion",
+  registered: "Votre compte est créé. Connectez-vous avec le mot de passe choisi.", resetDone: "Le mot de passe est modifié. Connectez-vous à nouveau.", loggedOut: "Votre session est fermée.", sessionRequired: "Connectez-vous pour ouvrir votre compte ou reprendre votre travail.",
+  neutralSent: "Demande reçue. Si un compte correspond, un lien de récupération peut vous être adressé. Consultez votre messagerie, y compris les courriers indésirables.",
+  invalidToken: "Ce lien est invalide, expiré ou déjà utilisé. Demandez un nouveau lien pour continuer.", requestNew: "Demander un nouveau lien",
+  BAD_CREDENTIALS: "L’adresse email ou le mot de passe est incorrect.", EMAIL_ALREADY_REGISTERED: "Ce compte ne peut pas être créé avec cette adresse. Essayez la connexion ou la récupération d’accès.",
+  CSRF_INVALID: "La vérification de sécurité a expiré. Elle a été relancée ; soumettez à nouveau le formulaire.", AUTHENTICATION_REQUIRED: "Votre session a expiré. Connectez-vous à nouveau.",
+  RATE_LIMITED: "Trop de tentatives. Attendez avant de réessayer.", VALIDATION_FAILED: "Vérifiez les champs indiqués.", FORBIDDEN: "Cette action n’est pas autorisée pour votre compte.",
+  REVISION_CONFLICT: "Les préférences ont changé depuis leur chargement. Rechargez la page avant de modifier à nouveau.",
+  unavailable: "Le service ne répond pas. Votre saisie reste sur cette page ; vous pouvez réessayer.", invalidResponse: "La réponse du service n’a pas pu être vérifiée. Aucune réussite n’est supposée.", genericError: "L’action n’a pas pu être confirmée. Réessayez ou rechargez la page.",
+  formError: "L’envoi n’a pas abouti", retry: "Réessayer", accountUnavailable: "Le compte n’a pas pu être chargé. Aucun état de session n’est supposé.",
+  identity: "Identité du compte", accountIntro: "Ces informations proviennent de votre session Spring et de votre compte enregistré.", language: "Langue préférée", savePreferences: "Enregistrer la préférence", preferenceSaved: "La préférence de langue a été enregistrée par le serveur.",
+  preferenceUnavailable: "Les préférences n’ont pas pu être chargées.", nextPhase: "Les parcours, méthodes personnelles et projets seront raccordés dans les phases suivantes.",
+  draftTitle: "Essai temporaire sur cet appareil", draftBody: "Une copie non sensible de votre essai reste dans cet onglet pendant 2 heures après sa conservation. Elle n’est pas enregistrée dans votre compte ; l’import sera disponible avec les méthodes et projets.",
+  draftResume: "Reprendre l’essai", draftRestore: "Restaurer le brouillon temporaire", draftSave: "Conserver l’essai 2 heures", draftKeep: "Se connecter avec cet essai temporaire", draftSaved: "Essai temporaire conservé dans cet onglet pour 2 heures. Aucun enregistrement dans le compte.", draftFailed: "Le stockage temporaire est indisponible. Copiez votre texte avant de quitter cette page.", draftSensitive: "Utilisez uniquement des informations fictives et non sensibles dans cet essai de démonstration.",
+  footer: "Les mots de passe et liens de réinitialisation ne sont jamais conservés dans le stockage du navigateur.", languageNavigation: "Langue du formulaire", accountNavigation: "Navigation du compte",
+};
+const en: typeof fr = {
+  signIn: "Sign in", signUp: "Create an account", recover: "Recover access", reset: "Choose a new password", account: "My account",
+  intro: "One account to find your personal work. Sign-in uses a secure server session.", registerIntro: "Create a learner account, then sign in. Creating an account does not require a purchase.",
+  recoverIntro: "Enter your email address. If it matches an account, a password reset link will be sent.", resetIntro: "The link expires and can be used once. Your new password will sign out existing sessions.",
+  email: "Email address", displayName: "Display name (optional)", password: "Password", newPassword: "New password", confirmPassword: "Confirm password",
+  passwordHint: "12 to 128 Unicode characters. Use a long, unique password.", show: "Show", hide: "Hide", required: "This field is required.",
+  emailInvalid: "Enter a valid email address (320 characters maximum).", nameInvalid: "The display name must not exceed 120 characters.", passwordInvalid: "Use 12 to 128 Unicode characters, within 1,024 UTF-8 bytes.", passwordMismatch: "The two passwords must match.",
+  submitting: "Submitting…", sendLink: "Send reset link", submitReset: "Change password", logout: "Sign out", loggingOut: "Signing out…",
+  forgot: "Forgot your password?", needAccount: "Need an account?", haveAccount: "Already have an account?", backSignIn: "Back to sign in",
+  registered: "Your account has been created. Sign in with your chosen password.", resetDone: "Your password has been changed. Sign in again.", loggedOut: "Your session has been closed.", sessionRequired: "Sign in to open your account or resume your work.",
+  neutralSent: "Request received. If an account matches, a recovery link may be sent. Check your email, including your spam folder.", invalidToken: "This link is invalid, expired or already used. Request a new link to continue.", requestNew: "Request a new link",
+  BAD_CREDENTIALS: "The email address or password is incorrect.", EMAIL_ALREADY_REGISTERED: "An account cannot be created with this address. Try signing in or recovering access.", CSRF_INVALID: "The security check expired. It has been requested again; submit the form once more.", AUTHENTICATION_REQUIRED: "Your session has expired. Sign in again.", RATE_LIMITED: "Too many attempts. Wait before trying again.", VALIDATION_FAILED: "Check the indicated fields.", FORBIDDEN: "Your account is not allowed to perform this action.", REVISION_CONFLICT: "Preferences changed after this page loaded. Reload before editing again.",
+  unavailable: "The service is not responding. Your input stays on this page; you can try again.", invalidResponse: "The service response could not be verified. No success is assumed.", genericError: "The action could not be confirmed. Try again or reload the page.", formError: "The request was not completed", retry: "Try again", accountUnavailable: "Your account could not be loaded. No session state is assumed.",
+  identity: "Account identity", accountIntro: "These details come from your Spring session and stored account.", language: "Preferred language", savePreferences: "Save preference", preferenceSaved: "The language preference has been saved by the server.", preferenceUnavailable: "Preferences could not be loaded.", nextPhase: "Learning paths, personal methods and projects will be connected in later phases.",
+  draftTitle: "Temporary trial on this device", draftBody: "A non-sensitive copy of your trial remains in this tab for 2 hours after keeping it. It is not saved to your account; importing will be available with methods and projects.", draftResume: "Resume the trial", draftRestore: "Restore the temporary draft", draftSave: "Keep this trial for 2 hours", draftKeep: "Sign in with this temporary trial", draftSaved: "Temporary trial kept in this tab for 2 hours. Nothing is saved to your account.", draftFailed: "Temporary storage is unavailable. Copy your text before leaving this page.", draftSensitive: "Only use fictional, non-sensitive information in this demonstration trial.",
+  footer: "Passwords and reset links are never kept in browser storage.", languageNavigation: "Form language", accountNavigation: "Account navigation",
+};
+export type AuthDictionary = typeof fr;
+export function getAuthDictionary(locale: Locale): AuthDictionary { return locale === "fr" ? fr : en; }

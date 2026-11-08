@@ -25,6 +25,8 @@ public class UserAccount extends VersionedEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private Status status;
+    @Column(name = "authentication_version", nullable = false)
+    private long authenticationVersion;
 
     protected UserAccount() { }
 
@@ -36,9 +38,15 @@ public class UserAccount extends VersionedEntity {
     }
 
     public void changeDisplayName(String displayName) { this.displayName = displayName; }
+    public void replacePasswordHash(String passwordHash) {
+        this.passwordHash = Objects.requireNonNull(passwordHash);
+        this.authenticationVersion = Math.addExact(authenticationVersion, 1);
+    }
+    public void disable() { this.status = Status.DISABLED; this.authenticationVersion = Math.addExact(authenticationVersion, 1); }
     public String getNormalizedEmail() { return normalizedEmail; }
     @JsonIgnore
     public String getPasswordHash() { return passwordHash; }
     public String getDisplayName() { return displayName; }
     public Status getStatus() { return status; }
+    public long getAuthenticationVersion() { return authenticationVersion; }
 }

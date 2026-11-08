@@ -3,9 +3,9 @@ info:
   title: ChatGPT Courses API
   version: 0.1.0
   description: >-
-    Contrat des opérations jusqu’à P10 : identité, CMS, catalogue, méthodes, apprentissage, quiz, projets,
-    fichiers contrôlés et outbox durable. Les preuves distinguent validation locale et fournisseur externe ;
-    aucun paiement ou droit commercial fictif ni revue humaine.
+    Contrat des opérations jusqu’à P11 : identité, CMS, catalogue, méthodes, apprentissage, projets,
+    médias, outbox et commandes préparées. Stripe et attribution sont introduits en P12 ; aucune
+    préparation ne constitue un paiement.
 servers:
   - url: /api/v1
     description: API de même origine, préfixe conservé jusqu'à Spring.
@@ -26,13 +26,17 @@ tags:
   - name: Projects
     description: Productions personnelles, autoévaluation déclarative et consultation de corrigé réautorisée.
   - name: Assets
-    description: 'Fichiers privés et ressources éditoriales : intent, transfert, contrôle réel et accès temporaire.'
+    description: >-
+      Fichiers privés et ressources éditoriales : intent, transfert, contrôle réel et accès
+      temporaire.
   - name: Notifications
     description: Outbox durable chiffrée et opérations de reprise autorisées.
   - name: Media
     description: >-
-      Provider vidéo local de test et positions propres au média ; intégration streaming de production
-      distincte.
+      Provider vidéo local de test et positions propres au média ; intégration streaming de
+      production distincte.
+  - name: Commerce
+    description: Offres versionnées et commandes serveur, sans confirmation financière depuis le navigateur.
 paths:
   /system/health:
     get:
@@ -41,9 +45,9 @@ paths:
         - System
       summary: Vérifier la connexion réelle à PostgreSQL.
       description: >-
-        Public, sans création de session anonyme. UP est renvoyé seulement après une requête SELECT 1 réussie.
-        Une panne de base produit 503 ; une panne ou un délai dépassé du relais de même origine produit 502 ou
-        504.
+        Public, sans création de session anonyme. UP est renvoyé seulement après une requête SELECT
+        1 réussie. Une panne de base produit 503 ; une panne ou un délai dépassé du relais de même
+        origine produit 502 ou 504.
       responses:
         '200':
           description: PostgreSQL répond à la requête de disponibilité.
@@ -512,7 +516,9 @@ paths:
       summary: Enregistrer une nouvelle révision éditoriale.
       security:
         - SessionCookie: []
-      description: Permission content.write. CSRF et If-Match obligatoires ; aucune mutation automatique après conflit.
+      description: >-
+        Permission content.write. CSRF et If-Match obligatoires ; aucune mutation automatique après
+        conflit.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/IfMatch'
@@ -620,7 +626,9 @@ paths:
       summary: Créer une nouvelle version pédagogique.
       security:
         - SessionCookie: []
-      description: Permission content.write. CSRF et If-Match obligatoires ; aucune mutation automatique après conflit.
+      description: >-
+        Permission content.write. CSRF et If-Match obligatoires ; aucune mutation automatique après
+        conflit.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/IfMatch'
@@ -683,7 +691,9 @@ paths:
       summary: Dupliquer vers une nouvelle identité en brouillon.
       security:
         - SessionCookie: []
-      description: Permission content.write. CSRF et If-Match obligatoires ; aucune mutation automatique après conflit.
+      description: >-
+        Permission content.write. CSRF et If-Match obligatoires ; aucune mutation automatique après
+        conflit.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/IfMatch'
@@ -746,7 +756,9 @@ paths:
       summary: Créer explicitement une traduction sur la même version.
       security:
         - SessionCookie: []
-      description: Permission content.write. CSRF et If-Match obligatoires ; aucune mutation automatique après conflit.
+      description: >-
+        Permission content.write. CSRF et If-Match obligatoires ; aucune mutation automatique après
+        conflit.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/IfMatch'
@@ -869,7 +881,9 @@ paths:
       summary: Publier transactionnellement une révision déterminée.
       security:
         - SessionCookie: []
-      description: Permission content.publish. CSRF et If-Match obligatoires ; aucune mutation automatique après conflit.
+      description: >-
+        Permission content.publish. CSRF et If-Match obligatoires ; aucune mutation automatique
+        après conflit.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/IfMatch'
@@ -927,7 +941,9 @@ paths:
       summary: Archiver sans supprimer l’historique.
       security:
         - SessionCookie: []
-      description: Permission content.archive. CSRF et If-Match obligatoires ; aucune mutation automatique après conflit.
+      description: >-
+        Permission content.archive. CSRF et If-Match obligatoires ; aucune mutation automatique
+        après conflit.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/IfMatch'
@@ -985,7 +1001,9 @@ paths:
       summary: Remplacer l’ordre du programme non gelé.
       security:
         - SessionCookie: []
-      description: Permission content.write. CSRF et If-Match obligatoires ; aucune mutation automatique après conflit.
+      description: >-
+        Permission content.write. CSRF et If-Match obligatoires ; aucune mutation automatique après
+        conflit.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/IfMatch'
@@ -1044,8 +1062,8 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Permission content.read ; privée, no-store et non indexable. preview=true sur une route publique ne
-        donne aucun accès.
+        Permission content.read ; privée, no-store et non indexable. preview=true sur une route
+        publique ne donne aucun accès.
       responses:
         '200':
           description: Représentation persistée courante.
@@ -1089,8 +1107,8 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Permission content.read ; privée, no-store et non indexable. preview=true sur une route publique ne
-        donne aucun accès.
+        Permission content.read ; privée, no-store et non indexable. preview=true sur une route
+        publique ne donne aucun accès.
       responses:
         '200':
           description: Représentation persistée courante.
@@ -1132,8 +1150,8 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Permission content.read ; privée, no-store et non indexable. preview=true sur une route publique ne
-        donne aucun accès.
+        Permission content.read ; privée, no-store et non indexable. preview=true sur une route
+        publique ne donne aucun accès.
       responses:
         '200':
           description: Représentation persistée courante.
@@ -1173,8 +1191,8 @@ paths:
       summary: Lire une projection publiée minimale.
       security: []
       description: >-
-        Socle P05 pour les lots consommateurs, sans catalogue P06. Aucun brouillon ni corps premium ; langue
-        manquante ou archive 404, traduction dépassée STALE avec document:null.
+        Socle P05 pour les lots consommateurs, sans catalogue P06. Aucun brouillon ni corps premium
+        ; langue manquante ou archive 404, traduction dépassée STALE avec document:null.
       parameters:
         - name: locale
           in: query
@@ -1205,9 +1223,9 @@ paths:
       summary: Rechercher les publications disponibles avec filtres et pagination.
       security: []
       description: >-
-        Recherche PostgreSQL sur titre, résumé, slug et objectif publiés. Filtres combinables ; ordre
-        déterministe TITLE (titre normalisé puis resourceId) ou RECENT (date publiée desc puis resourceId).
-        Aucune dépendance au cookie ; pas de cache partagé en P06.
+        Recherche PostgreSQL sur titre, résumé, slug et objectif publiés. Filtres combinables ;
+        ordre déterministe TITLE (titre normalisé puis resourceId) ou RECENT (date publiée desc puis
+        resourceId). Aucune dépendance au cookie ; pas de cache partagé en P06.
       parameters:
         - name: locale
           in: query
@@ -1398,8 +1416,9 @@ paths:
       summary: Résoudre exactement un slug localisé publié.
       security: []
       description: >-
-        Résolution kind+locale+slug. Pour changer de langue avec contexte, utiliser resourceId/versionId ;
-        jamais substituer le slug d’une autre langue ni retourner silencieusement un autre corps.
+        Résolution kind+locale+slug. Pour changer de langue avec contexte, utiliser
+        resourceId/versionId ; jamais substituer le slug d’une autre langue ni retourner
+        silencieusement un autre corps.
       parameters:
         - name: locale
           in: query
@@ -1444,9 +1463,9 @@ paths:
       summary: Lire la version exacte liée à un programme publié.
       security: []
       description: >-
-        Version appartenant à la ressource ; aucune résolution latest implicite. Sert notamment l’activité
-        gratuite réelle épinglée par un programme. La progression/les tentatives P08 restent des opérations
-        séparées.
+        Version appartenant à la ressource ; aucune résolution latest implicite. Sert notamment
+        l’activité gratuite réelle épinglée par un programme. La progression/les tentatives P08
+        restent des opérations séparées.
       parameters:
         - name: locale
           in: query
@@ -1487,9 +1506,9 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Permission content.write, CSRF et If-Match. Titre/résumé/document copiés dans la nouvelle révision ;
-        snapshots publiés antérieurs inchangés. Le document legacy doit être converti explicitement avant
-        cette action.
+        Permission content.write, CSRF et If-Match. Titre/résumé/document copiés dans la nouvelle
+        révision ; snapshots publiés antérieurs inchangés. Le document legacy doit être converti
+        explicitement avant cette action.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/IfMatch'
@@ -1542,10 +1561,10 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans
-        divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après
-        propriété. Aucun texte privé dans les erreurs. Recherche simple titre/notes/catégorie ; catégorie
-        exacte. Tri updatedAt DESC puis id, pagination stable.
+        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404
+        sans divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié
+        atomiquement après propriété. Aucun texte privé dans les erreurs. Recherche simple
+        titre/notes/catégorie ; catégorie exacte. Tri updatedAt DESC puis id, pagination stable.
       parameters:
         - name: q
           in: query
@@ -1607,9 +1626,9 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans
-        divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après
-        propriété. Aucun texte privé dans les erreurs.
+        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404
+        sans divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié
+        atomiquement après propriété. Aucun texte privé dans les erreurs.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/AccountContext'
@@ -1662,10 +1681,11 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans
-        divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après
-        propriété. Aucun texte privé dans les erreurs. FREE uniquement tant qu’aucun droit pédagogique réel
-        n’autorise une source PROTECTED ; un rôle éditorial ne remplace pas cet accès.
+        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404
+        sans divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié
+        atomiquement après propriété. Aucun texte privé dans les erreurs. FREE uniquement tant
+        qu’aucun droit pédagogique réel n’autorise une source PROTECTED ; un rôle éditorial ne
+        remplace pas cet accès.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/AccountContext'
@@ -1724,9 +1744,9 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans
-        divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après
-        propriété. Aucun texte privé dans les erreurs.
+        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404
+        sans divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié
+        atomiquement après propriété. Aucun texte privé dans les erreurs.
       responses:
         '200':
           description: Représentation réelle sans cache.
@@ -1759,10 +1779,11 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans
-        divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après
-        propriété. Aucun texte privé dans les erreurs. Aucun retry écrasant. Une412 préserve le brouillon
-        client ; comparaison/rechargement et nouvelle action sont explicites.
+        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404
+        sans divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié
+        atomiquement après propriété. Aucun texte privé dans les erreurs. Aucun retry écrasant.
+        Une412 préserve le brouillon client ; comparaison/rechargement et nouvelle action sont
+        explicites.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/AccountContext'
@@ -1811,10 +1832,11 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans
-        divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après
-        propriété. Aucun texte privé dans les erreurs. Suppression physique de la copie uniquement, aucune
-        mutation de sa source ou de ses duplications. Une seconde suppression retourne404.
+        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404
+        sans divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié
+        atomiquement après propriété. Aucun texte privé dans les erreurs. Suppression physique de la
+        copie uniquement, aucune mutation de sa source ou de ses duplications. Une seconde
+        suppression retourne404.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/AccountContext'
@@ -1858,10 +1880,10 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans
-        divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après
-        propriété. Aucun texte privé dans les erreurs. Nouveau UUID, texte/notes indépendants ; la source
-        personnelle conserve sa révision. Aucun corps requis.
+        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404
+        sans divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié
+        atomiquement après propriété. Aucun texte privé dans les erreurs. Nouveau UUID, texte/notes
+        indépendants ; la source personnelle conserve sa révision. Aucun corps requis.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/AccountContext'
@@ -1915,9 +1937,9 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404 sans
-        divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié atomiquement après
-        propriété. Aucun texte privé dans les erreurs.
+        Compte actif et permission methods.read/write selon opération. Objet d’autrui ou absent404
+        sans divulgation. Mutations CSRF et contexte de compte attendu ; If-Match vérifié
+        atomiquement après propriété. Aucun texte privé dans les erreurs.
       responses:
         '200':
           description: Représentation réelle sans cache.
@@ -1959,9 +1981,9 @@ paths:
       summary: Lire la définition publique de la version exacte d’une méthode.
       security: []
       description: >-
-        Lecture no-store sans création de session anonyme ; source premium privée par défaut, même avec
-        session EDITOR. Une identité jamais publiée/type incorrect est404. Les états connus n’inventent aucune
-        traduction ni définition.
+        Lecture no-store sans création de session anonyme ; source premium privée par défaut, même
+        avec session EDITOR. Une identité jamais publiée/type incorrect est404. Les états connus
+        n’inventent aucune traduction ni définition.
       parameters:
         - name: locale
           in: query
@@ -2031,8 +2053,9 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context. Un header
-        de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun retry automatique.
+        Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context.
+        Un header de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun
+        retry automatique.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/AccountContext'
@@ -2192,8 +2215,9 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context. Un header
-        de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun retry automatique.
+        Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context.
+        Un header de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun
+        retry automatique.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/AccountContext'
@@ -2288,8 +2312,9 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context. Un header
-        de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun retry automatique.
+        Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context.
+        Un header de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun
+        retry automatique.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/AccountContext'
@@ -2381,8 +2406,9 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context. Un header
-        de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun retry automatique.
+        Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context.
+        Un header de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun
+        retry automatique.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/AccountContext'
@@ -2473,8 +2499,9 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context. Un header
-        de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun retry automatique.
+        Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context.
+        Un header de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun
+        retry automatique.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/AccountContext'
@@ -2530,8 +2557,9 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context. Un header
-        de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun retry automatique.
+        Compte actif, permissionlearning.write, propriétaire de session, CSRF et X-Account-Context.
+        Un header de compte ne choisit jamais le propriétaire ; compte changé409, absent428. Aucun
+        retry automatique.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/AccountContext'
@@ -2681,10 +2709,11 @@ paths:
       summary: Vérifier sa compréhension sans sauvegarde durable ni compte.
       security: []
       description: >-
-        Public mais CSRF Spring obligatoire, avec session anonymeframework si nécessaire. PublicationFREE
-        disponible et révision exacte, sinon refus. Aucune écriture pédagogique, tentative ou progression ; la
-        sessionCSRF reste celle du framework. Réponses/correction après soumission explicite seulement,
-        no-store. Une réussite formative ne valide pas un projet.
+        Public mais CSRF Spring obligatoire, avec session anonymeframework si nécessaire.
+        PublicationFREE disponible et révision exacte, sinon refus. Aucune écriture pédagogique,
+        tentative ou progression ; la sessionCSRF reste celle du framework. Réponses/correction
+        après soumission explicite seulement, no-store. Une réussite formative ne valide pas un
+        projet.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
       requestBody:
@@ -2799,9 +2828,9 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Compte actif, permission projects.write, propriétaire de session, CSRF et X-Account-Context attendu.
-        Header absent : 428, compte différent : 409 ; le header ne choisit jamais le propriétaire. Aucun retry
-        implicite.
+        Compte actif, permission projects.write, propriétaire de session, CSRF et X-Account-Context
+        attendu. Header absent : 428, compte différent : 409 ; le header ne choisit jamais le
+        propriétaire. Aucun retry implicite.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/AccountContext'
@@ -2907,9 +2936,9 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Compte actif, permission projects.write, propriétaire de session, CSRF et X-Account-Context attendu.
-        Header absent : 428, compte différent : 409 ; le header ne choisit jamais le propriétaire. Aucun retry
-        implicite.
+        Compte actif, permission projects.write, propriétaire de session, CSRF et X-Account-Context
+        attendu. Header absent : 428, compte différent : 409 ; le header ne choisit jamais le
+        propriétaire. Aucun retry implicite.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/AccountContext'
@@ -3185,9 +3214,9 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Compte actif, permission projects.write, propriétaire de session, CSRF et X-Account-Context attendu.
-        Header absent : 428, compte différent : 409 ; le header ne choisit jamais le propriétaire. Aucun retry
-        implicite.
+        Compte actif, permission projects.write, propriétaire de session, CSRF et X-Account-Context
+        attendu. Header absent : 428, compte différent : 409 ; le header ne choisit jamais le
+        propriétaire. Aucun retry implicite.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/AccountContext'
@@ -3287,9 +3316,9 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Compte actif, permission projects.write, propriétaire de session, CSRF et X-Account-Context attendu.
-        Header absent : 428, compte différent : 409 ; le header ne choisit jamais le propriétaire. Aucun retry
-        implicite.
+        Compte actif, permission projects.write, propriétaire de session, CSRF et X-Account-Context
+        attendu. Header absent : 428, compte différent : 409 ; le header ne choisit jamais le
+        propriétaire. Aucun retry implicite.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/AccountContext'
@@ -3419,8 +3448,8 @@ paths:
         default:
           $ref: '#/components/responses/ProblemResponse'
       description: >-
-        Permission content.read requise. Référence pédagogique protégée, sans seed/publication ; l’interface
-        confirme tout remplacement d’une grille existante.
+        Permission content.read requise. Référence pédagogique protégée, sans seed/publication ;
+        l’interface confirme tout remplacement d’une grille existante.
   /me/projects/{projectId}/file-policy:
     parameters:
       - name: projectId
@@ -3519,8 +3548,9 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Session active, permission et relation métier revérifiées côté serveur ; CSRF et X-Account-Context
-        attendu. Aucun propriétaire ou clé objet arbitraire. Aucun retry automatique de mutation.
+        Session active, permission et relation métier revérifiées côté serveur ; CSRF et
+        X-Account-Context attendu. Aucun propriétaire ou clé objet arbitraire. Aucun retry
+        automatique de mutation.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/AccountContext'
@@ -3573,8 +3603,9 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Session active, permission et relation métier revérifiées côté serveur ; CSRF et X-Account-Context
-        attendu. Aucun propriétaire ou clé objet arbitraire. Aucun retry automatique de mutation.
+        Session active, permission et relation métier revérifiées côté serveur ; CSRF et
+        X-Account-Context attendu. Aucun propriétaire ou clé objet arbitraire. Aucun retry
+        automatique de mutation.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/AccountContext'
@@ -3656,8 +3687,9 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Session active, permission et relation métier revérifiées côté serveur ; CSRF et X-Account-Context
-        attendu. Aucun propriétaire ou clé objet arbitraire. Aucun retry automatique de mutation.
+        Session active, permission et relation métier revérifiées côté serveur ; CSRF et
+        X-Account-Context attendu. Aucun propriétaire ou clé objet arbitraire. Aucun retry
+        automatique de mutation.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/AccountContext'
@@ -3751,8 +3783,9 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Session active, permission et relation métier revérifiées côté serveur ; CSRF et X-Account-Context
-        attendu. Aucun propriétaire ou clé objet arbitraire. Aucun retry automatique de mutation.
+        Session active, permission et relation métier revérifiées côté serveur ; CSRF et
+        X-Account-Context attendu. Aucun propriétaire ou clé objet arbitraire. Aucun retry
+        automatique de mutation.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/AccountContext'
@@ -3799,8 +3832,9 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Session active, permission et relation métier revérifiées côté serveur ; CSRF et X-Account-Context
-        attendu. Aucun propriétaire ou clé objet arbitraire. Aucun retry automatique de mutation.
+        Session active, permission et relation métier revérifiées côté serveur ; CSRF et
+        X-Account-Context attendu. Aucun propriétaire ou clé objet arbitraire. Aucun retry
+        automatique de mutation.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/AccountContext'
@@ -3848,10 +3882,11 @@ paths:
         - {}
         - SessionCookie: []
       description: >-
-        Public anonyme : CSRF obligatoire, contexte de publication exacte qui référence cet asset. Authentifié
-        : X-Account-Context également obligatoire. Fichier personnel : propriétaire uniquement, contexte
-        nullable. PROTECTED refusé tant que les droits P12 ne sont pas disponibles ; parent inscrit retiré ou
-        sans traduction refusé. URL courte à récupérer sans cookie, jamais journalisée.
+        Public anonyme : CSRF obligatoire, contexte de publication exacte qui référence cet asset.
+        Authentifié : X-Account-Context également obligatoire. Fichier personnel : propriétaire
+        uniquement, contexte nullable. PROTECTED refusé tant que les droits P12 ne sont pas
+        disponibles ; parent inscrit retiré ou sans traduction refusé. URL courte à récupérer sans
+        cookie, jamais journalisée.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - name: X-Account-Context
@@ -3905,8 +3940,8 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Permission notifications.read. Statuts réels, ordre createdAt décroissant puis id ; aucune absence de
-        transport présentée comme SENT.
+        Permission notifications.read. Statuts réels, ordre createdAt décroissant puis id ; aucune
+        absence de transport présentée comme SENT.
       parameters:
         - name: status
           in: query
@@ -3971,9 +4006,9 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Permission notifications.manage, CSRF, compte attendu et motif obligatoire. INDETERMINATE impose la
-        reconnaissance du risque de doublon. Pas de renvoi d’un reset expiré ni de contenu arbitraire. La
-        réponse annonce une reprise en file, pas une livraison.
+        Permission notifications.manage, CSRF, compte attendu et motif obligatoire. INDETERMINATE
+        impose la reconnaissance du risque de doublon. Pas de renvoi d’un reset expiré ni de contenu
+        arbitraire. La réponse annonce une reprise en file, pas une livraison.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/AccountContext'
@@ -4083,9 +4118,9 @@ paths:
         - {}
         - SessionCookie: []
       description: >-
-        CSRF obligatoire, y compris anonyme. Compte attendu si authentifié. Autorisation canonique de
-        publication FREE/référence/locale/chaîne ; PROTECTED refusé avant droits P12. Provider absent ne crée
-        aucun faux lecteur.
+        CSRF obligatoire, y compris anonyme. Compte attendu si authentifié. Autorisation canonique
+        de publication FREE/référence/locale/chaîne ; PROTECTED refusé avant droits P12. Provider
+        absent ne crée aucun faux lecteur.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - name: X-Account-Context
@@ -4139,9 +4174,9 @@ paths:
       security: []
       description: >-
         Bearer de lecture temporaire, pas une session d’authentification. Grant opaque validé par
-        hash/expiration et mediaId, jamais journalisé. Une requête débutée avant expiration peut finir son
-        flux ; nouvelle requête après expiration refusée. Accepte une plage bytes unique, sans chemin client
-        ni URL distante.
+        hash/expiration et mediaId, jamais journalisé. Une requête débutée avant expiration peut
+        finir son flux ; nouvelle requête après expiration refusée. Accepte une plage bytes unique,
+        sans chemin client ni URL distante.
       parameters:
         - name: grant
           in: query
@@ -4288,8 +4323,8 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Permission media.progress.read et contexte pédagogique actuel autorisé. Un GET initial ne crée aucune
-        ligne.
+        Permission media.progress.read et contexte pédagogique actuel autorisé. Un GET initial ne
+        crée aucune ligne.
       parameters:
         - name: resourceId
           in: query
@@ -4343,8 +4378,9 @@ paths:
       security:
         - SessionCookie: []
       description: >-
-        Permission media.progress.write, CSRF, X-Account-Context, If-Match et contrôle serveur de la durée.
-        Propriétaire de session, médias/langues distincts, aucune validation pédagogique déduite.
+        Permission media.progress.write, CSRF, X-Account-Context, If-Match et contrôle serveur de la
+        durée. Propriétaire de session, médias/langues distincts, aucune validation pédagogique
+        déduite.
       parameters:
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/AccountContext'
@@ -4374,6 +4410,694 @@ paths:
         '403':
           $ref: '#/components/responses/ProblemResponse'
         '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /offers:
+    get:
+      operationId: listPublicOffers
+      tags:
+        - Commerce
+      summary: Lister les offres visibles sans personnalisation.
+      security: []
+      parameters:
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferPage'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /offers/{offerId}:
+    get:
+      operationId: getPublicOffer
+      tags:
+        - Commerce
+      summary: Consulter une offre et ses bloqueurs réels.
+      security: []
+      parameters:
+        - name: offerId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicOffer'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/offers:
+    get:
+      operationId: listAdminOffers
+      tags:
+        - Commerce
+      summary: Rechercher les offres avec permission commerciale.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: q
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 240
+        - name: state
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - DRAFT
+              - ACTIVE
+              - INACTIVE
+        - name: kind
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - COURSE
+              - PACK
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferPage'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    post:
+      operationId: createOffer
+      tags:
+        - Commerce
+      summary: Créer un produit et sa première offre en brouillon.
+      security:
+        - SessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOffer'
+      responses:
+        '201':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/offers/{offerId}:
+    get:
+      operationId: getAdminOffer
+      tags:
+        - Commerce
+      summary: Lire la révision courante d’une offre.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: offerId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    patch:
+      operationId: saveOffer
+      tags:
+        - Commerce
+      summary: Créer une révision d’offre sans modifier les commandes existantes.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: offerId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveOffer'
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/offers/{offerId}/readiness:
+    get:
+      operationId: getOfferReadiness
+      tags:
+        - Commerce
+      summary: Contrôler l’offre sans autorisation durable d’achat.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: offerId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferReadiness'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/offers/{offerId}/activate:
+    post:
+      operationId: activateOffer
+      tags:
+        - Commerce
+      summary: Activer la préparation de commande après contrôle serveur.
+      description: >-
+        Permissions commerciales distinctes de EDITOR ; disponibilité du Checkout vérifiée
+        séparément, aucun droit attribué.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: offerId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeOfferState'
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/offers/{offerId}/deactivate:
+    post:
+      operationId: deactivateOffer
+      tags:
+        - Commerce
+      summary: Suspendre une offre en préservant ses commandes.
+      description: >-
+        Permissions commerciales distinctes de EDITOR ; disponibilité du Checkout vérifiée
+        séparément, aucun droit attribué.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: offerId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeOfferState'
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/offers/{offerId}/purchase-context:
+    get:
+      operationId: getPurchaseContext
+      tags:
+        - Commerce
+      summary: Vérifier accès existants et commande en cours sans créer un achat.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: offerId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseContext'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/orders:
+    get:
+      operationId: listOrders
+      tags:
+        - Commerce
+      summary: Lister uniquement ses commandes et leurs états distincts.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderPage'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    post:
+      operationId: createOrder
+      tags:
+        - Commerce
+      summary: Préparer une commande depuis la révision et les conditions acceptées.
+      description: >-
+        Propriétaire de session et prix serveur exclusivement. Consentement explicite à
+        acceptedTermsVersion enregistré après verrous. Replay identique ou intention active
+        existante200. OFFER_CHANGED409 exige nouveau récapitulatif ; aucun paiement, appel
+        fournisseur ou droit créé.
+      security:
+        - SessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrder'
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderView'
+        '201':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '412':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/orders/{orderId}:
+    get:
+      operationId: getOrder
+      tags:
+        - Commerce
+      summary: Lire son instantané immuable sans déduire une réussite financière.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Résultat réel sans cache partagé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderView'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
           $ref: '#/components/responses/ProblemResponse'
         '412':
           $ref: '#/components/responses/ProblemResponse'
@@ -4422,8 +5146,8 @@ components:
         - amountMinor
         - currency
       description: >-
-        Montant exact en unités mineures et devise explicite. Ce schéma ne définit aucun prix ni aucune devise
-        commerciale autorisée.
+        Montant exact en unités mineures et devise explicite. Ce schéma ne définit aucun prix ni
+        aucune devise commerciale autorisée.
       properties:
         amountMinor:
           type: integer
@@ -4457,9 +5181,9 @@ components:
     Problem:
       type: object
       description: >-
-        RFC 9457. Les codes stables pilotent les traductions. Ni trace technique, secret, valeur de champ
-        rejetée ou donnée privée dans les messages. fieldErrors n'est présent que lorsqu'une validation le
-        nécessite.
+        RFC 9457. Les codes stables pilotent les traductions. Ni trace technique, secret, valeur de
+        champ rejetée ou donnée privée dans les messages. fieldErrors n'est présent que lorsqu'une
+        validation le nécessite.
       additionalProperties: false
       required:
         - type
@@ -4494,8 +5218,8 @@ components:
           description: >-
             Notamment RESOURCE_NOT_FOUND, SERVICE_UNAVAILABLE, INTERNAL_ERROR, API_UNAVAILABLE,
             API_CONFIGURATION_ERROR, API_INVALID_RESPONSE, INVALID_API_PATH, INVALID_REQUEST,
-            VALIDATION_FAILED, INVALID_IF_MATCH, CONFLICT, REVISION_CONFLICT, PRECONDITION_REQUIRED. Cette
-            liste reste ouverte aux erreurs des lots suivants.
+            VALIDATION_FAILED, INVALID_IF_MATCH, CONFLICT, REVISION_CONFLICT, PRECONDITION_REQUIRED.
+            Cette liste reste ouverte aux erreurs des lots suivants.
         traceId:
           $ref: '#/components/schemas/UUID'
         fieldErrors:
@@ -4568,7 +5292,9 @@ components:
           minLength: 12
           maxLength: 128
           writeOnly: true
-          description: 12 à 128 points Unicode, au plus 1024 octets UTF-8. Aucun retrait ou troncature du mot de passe.
+          description: >-
+            12 à 128 points Unicode, au plus 1024 octets UTF-8. Aucun retrait ou troncature du mot
+            de passe.
         displayName:
           type:
             - string
@@ -4624,7 +5350,9 @@ components:
           minLength: 12
           maxLength: 128
           writeOnly: true
-          description: 12 à 128 points Unicode, au plus 1024 octets UTF-8. Aucun retrait ou troncature du mot de passe.
+          description: >-
+            12 à 128 points Unicode, au plus 1024 octets UTF-8. Aucun retrait ou troncature du mot
+            de passe.
     Preferences:
       type: object
       additionalProperties: false
@@ -4697,8 +5425,8 @@ components:
               maxLength: 2000
             - type: 'null'
       description: >-
-        Texte brut, jamais HTML/MDX. LINK exige une URL HTTPS sans credentials ou un chemin interne simple ;
-        les autres types exigent url:null. Pas de téléchargement serveur depuis cette URL.
+        Texte brut, jamais HTML/MDX. LINK exige une URL HTTPS sans credentials ou un chemin interne
+        simple ; les autres types exigent url:null. Pas de téléchargement serveur depuis cette URL.
     Exercise:
       type: object
       additionalProperties: false
@@ -4755,8 +5483,8 @@ components:
           minimum: 1
           maximum: 1000
       description: >-
-        correctOption est un index 0-based strictement inférieur au nombre d’options ; clé unique dans le
-        document. Réponses réservées aux routes administratives.
+        correctOption est un index 0-based strictement inférieur au nombre d’options ; clé unique
+        dans le document. Réponses réservées aux routes administratives.
     RubricCriterion:
       type: object
       additionalProperties: false
@@ -4805,8 +5533,8 @@ components:
           minLength: 1
           maxLength: 240
       description: >-
-        Aucun état de disponibilité choisi par le client. Les références sont non vérifiées en P05 ; required
-        bloque tant que le registre serveur P10 ne les valide pas.
+        Aucun état de disponibilité choisi par le client. Les références sont non vérifiées en P05 ;
+        required bloque tant que le registre serveur P10 ne les valide pas.
     ContentDocument:
       type: object
       additionalProperties: false
@@ -4895,10 +5623,10 @@ components:
             - $ref: '#/components/schemas/ProjectPolicy'
             - type: 'null'
       description: >-
-        Document structuré privé ; taille sérialisée totale maximale 48 KiB UTF-8. La requête entière reste
-        limitée à 64 KiB par le relais. Listes bornées et références contrôlées dans le service.
-        methodDefinition est optionnel en entrée pour préserver les documents P05/P06 ; absent signifie null,
-        sans reconstruction depuis les blocs.
+        Document structuré privé ; taille sérialisée totale maximale 48 KiB UTF-8. La requête
+        entière reste limitée à 64 KiB par le relais. Listes bornées et références contrôlées dans
+        le service. methodDefinition est optionnel en entrée pour préserver les documents P05/P06 ;
+        absent signifie null, sans reconstruction depuis les blocs.
     CreateContent:
       type: object
       additionalProperties: false
@@ -4976,8 +5704,8 @@ components:
           minLength: 1
           maxLength: 1000
       description: >-
-        Ajoute un instantané éditorial sans changer la version pédagogique. Objectif ou barème changé après
-        gel : nouvelle version exigée (409 NEW_PEDAGOGICAL_VERSION_REQUIRED).
+        Ajoute un instantané éditorial sans changer la version pédagogique. Objectif ou barème
+        changé après gel : nouvelle version exigée (409 NEW_PEDAGOGICAL_VERSION_REQUIRED).
     NewVersion:
       type: object
       additionalProperties: false
@@ -5094,8 +5822,9 @@ components:
             - $ref: '#/components/schemas/UUID'
             - type: 'null'
       description: >-
-        READY exige content.review et readiness sans bloqueur ; TO_REVIEW/STALE exigent content.write. Pour la
-        revue d’une traduction liée, sourceRevisionId doit correspondre à la révision source courante.
+        READY exige content.review et readiness sans bloqueur ; TO_REVIEW/STALE exigent
+        content.write. Pour la revue d’une traduction liée, sourceRevisionId doit correspondre à la
+        révision source courante.
     PublishContent:
       type: object
       additionalProperties: false
@@ -5110,8 +5839,8 @@ components:
           minLength: 1
           maxLength: 1000
       description: >-
-        Publie la révision courante déterminée ; readiness, revue, permission et If-Match revérifiés dans la
-        transaction.
+        Publie la révision courante déterminée ; readiness, revue, permission et If-Match revérifiés
+        dans la transaction.
     ArchiveContent:
       type: object
       additionalProperties: false
@@ -5141,8 +5870,8 @@ components:
           minLength: 1
           maxLength: 1000
       description: >-
-        Ordre complet des UUID versions enfants, position serveur 1-based. Modification réservée à une
-        pédagogie non gelée.
+        Ordre complet des UUID versions enfants, position serveur 1-based. Modification réservée à
+        une pédagogie non gelée.
     TranslationLink:
       type: object
       additionalProperties: false
@@ -5289,9 +6018,10 @@ components:
         metadata:
           $ref: '#/components/schemas/PublicMetadata'
       description: >-
-        Représentation administrative complète ; id désigne la traduction/version, resourceId l’identité
-        pédagogique stable. ETag fort content-{id}-r{revision}. Ancienne donnée P03 : document:null lisible,
-        publication bloquée par STRUCTURED_DOCUMENT_REQUIRED avant une révision structurée explicite.
+        Représentation administrative complète ; id désigne la traduction/version, resourceId
+        l’identité pédagogique stable. ETag fort content-{id}-r{revision}. Ancienne donnée P03 :
+        document:null lisible, publication bloquée par STRUCTURED_DOCUMENT_REQUIRED avant une
+        révision structurée explicite.
     ContentSummary:
       type: object
       additionalProperties: false
@@ -5405,8 +6135,8 @@ components:
         metadata:
           $ref: '#/components/schemas/PublicMetadata'
       description: >-
-        Instantané historique append-only et motif enregistré, sans réécriture des versions ou preuves
-        antérieures. Ancien instantané P03 sans document structuré : document:null.
+        Instantané historique append-only et motif enregistré, sans réécriture des versions ou
+        preuves antérieures. Ancien instantané P03 sans document structuré : document:null.
     ContentPage:
       type: object
       additionalProperties: false
@@ -5511,8 +6241,8 @@ components:
         checkedRevision:
           $ref: '#/components/schemas/UUID'
       description: >-
-        Contrôle de la révision éditoriale courante, pas autorisation permanente de publier. Le serveur
-        recontrôle lors de la transition et de la publication.
+        Contrôle de la révision éditoriale courante, pas autorisation permanente de publier. Le
+        serveur recontrôle lors de la transition et de la publication.
     ContentDependency:
       type: object
       additionalProperties: false
@@ -5592,8 +6322,8 @@ components:
           minimum: 1
           maximum: 1000
       description: >-
-        Questions publiques sans correctOption ni explanation ; la correction sera autorisée par le service
-        consommateur.
+        Questions publiques sans correctOption ni explanation ; la correction sera autorisée par le
+        service consommateur.
     PublicDocument:
       type: object
       additionalProperties: false
@@ -5687,8 +6417,8 @@ components:
             - $ref: '#/components/schemas/ProjectPolicy'
             - type: 'null'
       description: >-
-        Projection gratuite publiée, sans corrigé d’exercice ni réponse/explication de quiz. Les contrôles
-        d’accès du futur apprentissage restent distincts.
+        Projection gratuite publiée, sans corrigé d’exercice ni réponse/explication de quiz. Les
+        contrôles d’accès du futur apprentissage restent distincts.
     PublicContent:
       type: object
       additionalProperties: false
@@ -5753,9 +6483,9 @@ components:
           maxItems: 100
           uniqueItems: true
       description: >-
-        Métadonnées issues uniquement d’une révision publiée. FREE/PUBLISHED peut exposer PublicDocument ;
-        PROTECTED ou STALE exige document:null. Aucune projection d’un brouillon, aucun fallback de langue,
-        aucun droit payant déduit d’une session.
+        Métadonnées issues uniquement d’une révision publiée. FREE/PUBLISHED peut exposer
+        PublicDocument ; PROTECTED ou STALE exige document:null. Aucune projection d’un brouillon,
+        aucun fallback de langue, aucun droit payant déduit d’une session.
     PublicMetadata:
       type: object
       additionalProperties: false
@@ -5818,9 +6548,9 @@ components:
               maxLength: 4000
             - type: 'null'
       description: >-
-        Instantané append-only lié à la révision, jamais une offre. Vide explicite pour les révisions
-        anciennes ; au plus16KiB UTF-8. evaluationDescription est une explication publique distincte de la
-        définition canonique privée de l’évaluation.
+        Instantané append-only lié à la révision, jamais une offre. Vide explicite pour les
+        révisions anciennes ; au plus16KiB UTF-8. evaluationDescription est une explication publique
+        distincte de la définition canonique privée de l’évaluation.
     MetadataTool:
       type: object
       additionalProperties: false
@@ -5839,8 +6569,8 @@ components:
               maxLength: 2000
             - type: 'null'
       description: >-
-        URL facultative HTTPS sans credentials ou chemin interne simple ; jamais une URL à télécharger côté
-        serveur.
+        URL facultative HTTPS sans credentials ou chemin interne simple ; jamais une URL à
+        télécharger côté serveur.
     MetadataSource:
       type: object
       additionalProperties: false
@@ -5885,8 +6615,8 @@ components:
           minLength: 1
           maxLength: 1000
       description: >-
-        Crée une nouvelle révision courante, même texte et version, état DRAFT. La publication précédente et
-        ses métadonnées restent intactes.
+        Crée une nouvelle révision courante, même texte et version, état DRAFT. La publication
+        précédente et ses métadonnées restent intactes.
     ResourceCard:
       type: object
       additionalProperties: false
@@ -6061,8 +6791,8 @@ components:
           items:
             $ref: '#/components/schemas/FacetOption'
       description: >-
-        Uniquement les valeurs réellement représentées dans des publications disponibles ; libellés FR/EN du
-        serveur. Une catégorie vide n’est pas annoncée comme remplie.
+        Uniquement les valeurs réellement représentées dans des publications disponibles ; libellés
+        FR/EN du serveur. Une catégorie vide n’est pas annoncée comme remplie.
     LanguageAvailability:
       type: object
       additionalProperties: false
@@ -6162,9 +6892,9 @@ components:
             $ref: '#/components/schemas/CurriculumNode'
           maxItems: 100
       description: >-
-        versionId est exactement la child_version_id enregistrée dans la composition du parent. Ne jamais la
-        remplacer par la dernière version globale de la ressource enfant. Les informations non publiées ne
-        sont pas exposées.
+        versionId est exactement la child_version_id enregistrée dans la composition du parent. Ne
+        jamais la remplacer par la dernière version globale de la ressource enfant. Les informations
+        non publiées ne sont pas exposées.
     ResourceDetail:
       type: object
       additionalProperties: false
@@ -6287,11 +7017,12 @@ components:
               maximum: 1440
             - type: 'null'
       description: >-
-        Tout provient de révisions réellement publiées. Document uniquement pour FREE+PUBLISHED, sans corrigés
-        ni réponses ; PROTECTED n’expose que les champs descriptifs publics.
-        MISSING_TRANSLATION/STALE/WITHDRAWN conservent le contexte d’identité/version et les équivalents, sans
-        document ni métadonnées empruntés. reviewedAt est la revue de la publication, pas d’un prochain
-        brouillon. Aucun auteur privé, droit personnel, prix ni fausse offre.
+        Tout provient de révisions réellement publiées. Document uniquement pour FREE+PUBLISHED,
+        sans corrigés ni réponses ; PROTECTED n’expose que les champs descriptifs publics.
+        MISSING_TRANSLATION/STALE/WITHDRAWN conservent le contexte d’identité/version et les
+        équivalents, sans document ni métadonnées empruntés. reviewedAt est la revue de la
+        publication, pas d’un prochain brouillon. Aucun auteur privé, droit personnel, prix ni
+        fausse offre.
     MethodParameters:
       type: object
       additionalProperties: false
@@ -6333,8 +7064,8 @@ components:
           minLength: 0
           maxLength: 4000
       description: >-
-        Champs structurés indépendants du texte final. Objectif, données disponibles et format sont requis
-        pour assembler localement une instruction ; aucun appel IA.
+        Champs structurés indépendants du texte final. Objectif, données disponibles et format sont
+        requis pour assembler localement une instruction ; aucun appel IA.
     MethodDefinition:
       type: object
       additionalProperties: false
@@ -6394,9 +7125,9 @@ components:
         defaults:
           $ref: '#/components/schemas/MethodParameters'
       description: >-
-        Définition localisée dans la révision éditoriale immuable, limitée à24KiB UTF8. Les listes/chaînes
-        peuvent rester vides en brouillon ; une nouvelle publication METHOD_TEMPLATE exige leur complétude.
-        Aucun contenu premium n’est révélé par cette définition.
+        Définition localisée dans la révision éditoriale immuable, limitée à24KiB UTF8. Les
+        listes/chaînes peuvent rester vides en brouillon ; une nouvelle publication METHOD_TEMPLATE
+        exige leur complétude. Aucun contenu premium n’est révélé par cette définition.
     MethodFields:
       type: object
       additionalProperties: false
@@ -6436,10 +7167,10 @@ components:
               maxLength: 80
             - type: 'null'
       description: >-
-        Instantané utilisateur complet, au plus48KiB de JSON UTF8 (generatedFrom inclus). PATCH remplace
-        explicitement ces champs. Texte, notes et langue restent indépendants de la source et de la langue
-        d’interface. Chaînes Unicode valides, sans NUL ; titre/texte/catégorie non blancs. Aucun ownerId,
-        rôle, origine ou révision autoritaire en entrée.
+        Instantané utilisateur complet, au plus48KiB de JSON UTF8 (generatedFrom inclus). PATCH
+        remplace explicitement ces champs. Texte, notes et langue restent indépendants de la source
+        et de la langue d’interface. Chaînes Unicode valides, sans NUL ; titre/texte/catégorie non
+        blancs. Aucun ownerId, rôle, origine ou révision autoritaire en entrée.
     CreateMethod:
       type: object
       additionalProperties: false
@@ -6477,9 +7208,9 @@ components:
         fields:
           $ref: '#/components/schemas/MethodFields'
       description: >-
-        Le serveur vérifie le snapshot METHOD_TEMPLATE exact, publié, FREE et défini. Une autre révision
-        publiée depuis la consultation retourne412, sans substitution silencieuse. Le client ne choisit ni
-        propriétaire ni traduction d’origine.
+        Le serveur vérifie le snapshot METHOD_TEMPLATE exact, publié, FREE et défini. Une autre
+        révision publiée depuis la consultation retourne412, sans substitution silencieuse. Le
+        client ne choisit ni propriétaire ni traduction d’origine.
     MethodOrigin:
       type: object
       additionalProperties: false
@@ -6512,8 +7243,8 @@ components:
           maxLength: 180
           pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
       description: >-
-        Origine capturée côté serveur et immuable ; aucun remplacement du texte personnel par une source
-        ultérieure.
+        Origine capturée côté serveur et immuable ; aucun remplacement du texte personnel par une
+        source ultérieure.
     MethodView:
       type: object
       additionalProperties: false
@@ -6570,8 +7301,8 @@ components:
         updatedAt:
           $ref: '#/components/schemas/UtcInstant'
       description: >-
-        Détail privé du propriétaire, sans état dynamique de source afin que son ETag fort couvre exactement
-        cette représentation.
+        Détail privé du propriétaire, sans état dynamique de source afin que son ETag fort couvre
+        exactement cette représentation.
     MethodSummary:
       type: object
       additionalProperties: false
@@ -6654,9 +7385,9 @@ components:
             - $ref: '#/components/schemas/MethodOrigin'
             - type: 'null'
       description: >-
-        Lecture séparée sans ETag de méthode personnelle. Candidate seulement si publication actuelle
-        autorisée dans la langue source ; une source retirée, protégée, absente ou non définie reste
-        indisponible. Aucune synchronisation automatique.
+        Lecture séparée sans ETag de méthode personnelle. Candidate seulement si publication
+        actuelle autorisée dans la langue source ; une source retirée, protégée, absente ou non
+        définie reste indisponible. Aucune synchronisation automatique.
     MethodTemplate:
       type: object
       additionalProperties: false
@@ -6706,9 +7437,9 @@ components:
             - $ref: '#/components/schemas/MethodDefinition'
             - type: 'null'
       description: >-
-        Version exacte, jamais latest implicite. Définition présente uniquement pour une publication FREE
-        complète. Les articles historiques sans définition conservent MISSING_DEFINITION, sans générateur
-        inventé.
+        Version exacte, jamais latest implicite. Définition présente uniquement pour une publication
+        FREE complète. Les articles historiques sans définition conservent MISSING_DEFINITION, sans
+        générateur inventé.
     QuizPolicy:
       type: object
       additionalProperties: false
@@ -6727,8 +7458,9 @@ components:
               maximum: 50
             - type: 'null'
       description: >-
-        Politique éditoriale gelée avec le quiz. Champ absent/null du document historique : politique
-        effective100% et tentatives illimitées. Un score formatif ne certifie aucune compétence.
+        Politique éditoriale gelée avec le quiz. Champ absent/null du document historique :
+        politique effective100% et tentatives illimitées. Un score formatif ne certifie aucune
+        compétence.
     ProgressTotals:
       type: object
       additionalProperties: false
@@ -6760,8 +7492,8 @@ components:
           enum:
             - NOT_AVAILABLE
       description: >-
-        Faits indépendants ; dénominateur figé des versions d’activité distinctes du programme, pas de
-        résultat projet avantP09.
+        Faits indépendants ; dénominateur figé des versions d’activité distinctes du programme, pas
+        de résultat projet avantP09.
     ResumeTarget:
       type: object
       additionalProperties: false
@@ -6924,8 +7656,8 @@ components:
             - $ref: '#/components/schemas/UtcInstant'
             - type: 'null'
       description: >-
-        Lecture déclarée et activité déclarée terminée, indépendantes du quiz, du projet et de toute mesure
-        vidéo. ETag individuel ; une visite ne change pas cette révision.
+        Lecture déclarée et activité déclarée terminée, indépendantes du quiz, du projet et de toute
+        mesure vidéo. ETag individuel ; une visite ne change pas cette révision.
     EnrolledActivity:
       type: object
       additionalProperties: false
@@ -6992,8 +7724,8 @@ components:
             $ref: '#/components/schemas/EnrolledActivity'
           minItems: 0
       description: >-
-        Programme épinglé aux versions exactes de l’inscription. Aucune substitution par une version plus
-        récente.
+        Programme épinglé aux versions exactes de l’inscription. Aucune substitution par une version
+        plus récente.
     ActivityLink:
       type: object
       additionalProperties: false
@@ -7063,8 +7795,8 @@ components:
         passed:
           type: boolean
       description: >-
-        Résumé des tentatives durables du propriétaire/version, communFR/EN ; aucune réponse correcte dans la
-        lecture initiale.
+        Résumé des tentatives durables du propriétaire/version, communFR/EN ; aucune réponse
+        correcte dans la lecture initiale.
     LearningActivity:
       type: object
       additionalProperties: false
@@ -7149,8 +7881,8 @@ components:
         visitedAt:
           $ref: '#/components/schemas/UtcInstant'
       description: >-
-        Mise à jour de reprise après ouverture réelle ; ne déclare ni lecture, activité terminée, quiz ou
-        projet.
+        Mise à jour de reprise après ouverture réelle ; ne déclare ni lecture, activité terminée,
+        quiz ou projet.
     ActivityNoteView:
       type: object
       additionalProperties: false
@@ -7183,8 +7915,8 @@ components:
         updatedAt:
           $ref: '#/components/schemas/UtcInstant'
       description: >-
-        Note du propriétaire, langue et version d’origine immuables. Lisible/modifiable après retrait sans
-        accès à un corps premium.
+        Note du propriétaire, langue et version d’origine immuables. Lisible/modifiable après
+        retrait sans accès à un corps premium.
     ActivityNoteLookup:
       type: object
       additionalProperties: false
@@ -7196,8 +7928,8 @@ components:
             - $ref: '#/components/schemas/ActivityNoteView'
             - type: 'null'
       description: >-
-        GET sans création automatique. L’ETag est fourni par le GET individuel de la note, pas par cette
-        enveloppe.
+        GET sans création automatique. L’ETag est fourni par le GET individuel de la note, pas par
+        cette enveloppe.
     QuizAnswer:
       type: object
       additionalProperties: false
@@ -7267,8 +7999,8 @@ components:
           minimum: 0
           maximum: 1000
       description: >-
-        Correction uniquement après soumission ; les index sont aussi vérifiés contre la taille réelle des
-        options.
+        Correction uniquement après soumission ; les index sont aussi vérifiés contre la taille
+        réelle des options.
     QuizAttemptView:
       type: object
       additionalProperties: false
@@ -7327,8 +8059,8 @@ components:
           minItems: 1
           maxItems: 20
       description: >-
-        Tentative append-only, snapshot des questions/options/correction/politique et langue. Score calculé
-        parSpring ; ne valide jamais un projet.
+        Tentative append-only, snapshot des questions/options/correction/politique et langue. Score
+        calculé parSpring ; ne valide jamais un projet.
     QuizAttemptPage:
       type: object
       additionalProperties: false
@@ -7397,8 +8129,8 @@ components:
           minItems: 1
           maxItems: 20
       description: >-
-        Vraie correction formative éphémère d’une publicationFREE. Aucun attemptId, date de sauvegarde,
-        inscription, progression ou résultat durable créé.
+        Vraie correction formative éphémère d’une publicationFREE. Aucun attemptId, date de
+        sauvegarde, inscription, progression ou résultat durable créé.
     EnrollCourse:
       type: object
       additionalProperties: false
@@ -7479,8 +8211,8 @@ components:
           minLength: 0
           maxLength: 16000
       description: >-
-        Seul le texte est modifiable ; aucun propriétaire, langue ou version fourni en entrée. JSONUTF8
-        borné48KiB.
+        Seul le texte est modifiable ; aucun propriétaire, langue ou version fourni en entrée.
+        JSONUTF8 borné48KiB.
     SubmitQuiz:
       type: object
       additionalProperties: false
@@ -7509,9 +8241,9 @@ components:
           minItems: 1
           maxItems: 20
       description: >-
-        Exactement une réponse par question publiée : doublon, omission, clé inconnue et index hors options
-        refusés. Même propriétaire/submissionId/corps retrouve la tentative ; autrecorps409. Aucun
-        score/propriétaire autoritaire reçu.
+        Exactement une réponse par question publiée : doublon, omission, clé inconnue et index hors
+        options refusés. Même propriétaire/submissionId/corps retrouve la tentative ; autrecorps409.
+        Aucun score/propriétaire autoritaire reçu.
     QuizCheck:
       type: object
       additionalProperties: false
@@ -7531,8 +8263,8 @@ components:
           minItems: 1
           maxItems: 20
       description: >-
-        Correction éphémère sanscompte. Révision exacte publiée requise ; aucune réponse correcte avant cette
-        soumission.
+        Correction éphémère sanscompte. Révision exacte publiée requise ; aucune réponse correcte
+        avant cette soumission.
     BlockingIssueDefinition:
       type: object
       additionalProperties: false
@@ -7581,10 +8313,10 @@ components:
           minItems: 0
           maxItems: 4
       description: >-
-        Configuration éditoriale opt-in, incomplète admise en brouillon seulement. Publication exige les vingt
-        critères exacts de document.rubric à un point et quatre erreurs bloquantes aux libellés non vides ;
-        catégories dérivées des clés. Grille, seuil et règle de révélation gelés avec la version pédagogique.
-        Null/absent ne crée aucun atelier implicite.
+        Configuration éditoriale opt-in, incomplète admise en brouillon seulement. Publication exige
+        les vingt critères exacts de document.rubric à un point et quatre erreurs bloquantes aux
+        libellés non vides ; catégories dérivées des clés. Grille, seuil et règle de révélation
+        gelés avec la version pédagogique. Null/absent ne crée aucun atelier implicite.
     ProjectFields:
       type: object
       additionalProperties: false
@@ -7639,9 +8371,9 @@ components:
           minLength: 0
           maxLength: 32000
       description: >-
-        Production personnelle : sept sections et texte collé indépendant. Unicode valide sansNUL, ensemble
-        JSONUTF8 borné48KiB. Aucune analyse automatique de véracité ou des montants. La langue originale reste
-        indépendante de la langue de navigation.
+        Production personnelle : sept sections et texte collé indépendant. Unicode valide sansNUL,
+        ensemble JSONUTF8 borné48KiB. Aucune analyse automatique de véracité ou des montants. La
+        langue originale reste indépendante de la langue de navigation.
     ProjectOrigin:
       type: object
       additionalProperties: false
@@ -7780,8 +8512,8 @@ components:
           minItems: 4
           maxItems: 4
       description: >-
-        Grille d’une publication disponible avant toute création ; aucun identifiant d’instantané personnel
-        prétendument sauvegardé.
+        Grille d’une publication disponible avant toute création ; aucun identifiant d’instantané
+        personnel prétendument sauvegardé.
     ProjectRubricSnapshot:
       type: object
       additionalProperties: false
@@ -7833,8 +8565,8 @@ components:
           minItems: 4
           maxItems: 4
       description: >-
-        Instantané immuable enregistré à la création du projet. Conservé avec les productions et évaluations
-        du propriétaire après retrait de la source.
+        Instantané immuable enregistré à la création du projet. Conservé avec les productions et
+        évaluations du propriétaire après retrait de la source.
     ProjectView:
       type: object
       additionalProperties: false
@@ -7879,8 +8611,9 @@ components:
         savedAt:
           $ref: '#/components/schemas/UtcInstant'
       description: >-
-        ETag project-id-révision de la seule production personnelle. État dérivé, contexte pédagogique et
-        dernière autoévaluation sont séparés ; une autoévaluation ne modifie pas cet ETag.
+        ETag project-id-révision de la seule production personnelle. État dérivé, contexte
+        pédagogique et dernière autoévaluation sont séparés ; une autoévaluation ne modifie pas cet
+        ETag.
     ProjectSummary:
       type: object
       additionalProperties: false
@@ -7999,8 +8732,8 @@ components:
         authorId:
           $ref: '#/components/schemas/UUID'
       description: >-
-        Révision personnelle append-only. Le détail privé est lu individuellement, jamais embarqué dans une
-        page de cent productions.
+        Révision personnelle append-only. Le détail privé est lu individuellement, jamais embarqué
+        dans une page de cent productions.
     ProjectRevisionSummary:
       type: object
       additionalProperties: false
@@ -8110,10 +8843,10 @@ components:
             - $ref: '#/components/schemas/ResourceDetail'
             - type: 'null'
       description: >-
-        Contexte pédagogique réautorisé séparément, sans corrigé. currentPublishedRevisionId concerne la
-        langue d’origine pour sourceChanged ; resource peut être une traduction demandée avec sa propre
-        révision. Identifiants activité/version identiques, aucune substitution silencieuse de version ou du
-        texte personnel.
+        Contexte pédagogique réautorisé séparément, sans corrigé. currentPublishedRevisionId
+        concerne la langue d’origine pour sourceChanged ; resource peut être une traduction demandée
+        avec sa propre révision. Identifiants activité/version identiques, aucune substitution
+        silencieuse de version ou du texte personnel.
     ProjectTemplate:
       type: object
       additionalProperties: false
@@ -8162,7 +8895,8 @@ components:
             - type: 'null'
       description: >-
         Atelier public d’une activitéFREE publiée exacte et configurée. Autre disponibilité : aucun
-        corps/grille pédagogique. Aucune correction initiale et aucune production sauvegardée par ceGET.
+        corps/grille pédagogique. Aucune correction initiale et aucune production sauvegardée par
+        ceGET.
     CriterionDeclaration:
       type: object
       additionalProperties: false
@@ -8309,9 +9043,9 @@ components:
           const: true
           type: boolean
       description: >-
-        Autoévaluation déclarative append-only rattachée à une révision personnelle et à une grille exacte.
-        Spring calcule le score ; atteindre le seuil ne certifie aucune compétence. Aucune revue humaine
-        livrée.
+        Autoévaluation déclarative append-only rattachée à une révision personnelle et à une grille
+        exacte. Spring calcule le score ; atteindre le seuil ne certifie aucune compétence. Aucune
+        revue humaine livrée.
     SelfAssessmentSummary:
       type: object
       additionalProperties: false
@@ -8424,8 +9158,8 @@ components:
             - $ref: '#/components/schemas/SelfAssessmentView'
             - type: 'null'
       description: >-
-        État dérivé séparé du texte à ETag. Une ancienne autoévaluation reste historique après édition ; elle
-        ne valide pas automatiquement la nouvelle révision.
+        État dérivé séparé du texte à ETag. Une ancienne autoévaluation reste historique après
+        édition ; elle ne valide pas automatiquement la nouvelle révision.
     SolutionRevealView:
       type: object
       additionalProperties: false
@@ -8462,8 +9196,8 @@ components:
           $ref: '#/components/schemas/UtcInstant'
       description: >-
         Consultation explicite tracée, unique par propriétaire/révision personnelle/source/langue.
-        Réautorisation de la publication couranteFREE à chaque livraison et rejeu. Ne change ni production,
-        stade, score ou progression.
+        Réautorisation de la publication couranteFREE à chaque livraison et rejeu. Ne change ni
+        production, stade, score ou progression.
     CreateProject:
       type: object
       additionalProperties: false
@@ -8499,9 +9233,10 @@ components:
             - DRAFT
             - READY_FOR_SELF_ASSESSMENT
       description: >-
-        Création idempotente par propriétaire + creationId et empreinte du corps : même corps retrouve le
-        projet(200), autre corps409. Source publiéeFREE exacte requise pour une nouvelle création. Inscription
-        facultative vérifiée côté serveur ; aucun propriétaire ou score admis dans le JSON.
+        Création idempotente par propriétaire + creationId et empreinte du corps : même corps
+        retrouve le projet(200), autre corps409. Source publiéeFREE exacte requise pour une nouvelle
+        création. Inscription facultative vérifiée côté serveur ; aucun propriétaire ou score admis
+        dans le JSON.
     SaveProject:
       type: object
       additionalProperties: false
@@ -8517,8 +9252,8 @@ components:
             - DRAFT
             - READY_FOR_SELF_ASSESSMENT
       description: >-
-        Nouvelle révision append-only sous verrou propriétaire et If-Match. READY exige du texte non blanc
-        dans les sections ou externalText ; cette condition ne vérifie pas sa qualité.
+        Nouvelle révision append-only sous verrou propriétaire et If-Match. READY exige du texte non
+        blanc dans les sections ou externalText ; cette condition ne vérifie pas sa qualité.
     SubmitSelfAssessment:
       type: object
       additionalProperties: false
@@ -8553,9 +9288,10 @@ components:
           minLength: 0
           maxLength: 4000
       description: >-
-        Vingt contrôles et quatre déclarations exacts, uniques et complets. Score fourni par Spring seulement
-        ; corps JSONUTF8 borné48KiB. Même propriétaire/submissionId/corps retrouve la preuve avant If-Match
-        pour une réponse déjà committée ; autre corps409. Jamais de retry automatique.
+        Vingt contrôles et quatre déclarations exacts, uniques et complets. Score fourni par Spring
+        seulement ; corps JSONUTF8 borné48KiB. Même propriétaire/submissionId/corps retrouve la
+        preuve avant If-Match pour une réponse déjà committée ; autre corps409. Jamais de retry
+        automatique.
     RevealSolution:
       type: object
       additionalProperties: false
@@ -8577,9 +9313,9 @@ components:
         locale:
           $ref: '#/components/schemas/Locale'
       description: >-
-        Origine exacte du projet. AFTER_SUBMISSION exige une autoévaluation déjà enregistrée pour cette
-        révision personnelle, sans condition de score. EXPLICIT exige seulement l’action volontaire.
-        Retrait/PROTECTED refuse aussi le rejeu d’une consultation antérieure.
+        Origine exacte du projet. AFTER_SUBMISSION exige une autoévaluation déjà enregistrée pour
+        cette révision personnelle, sans condition de score. EXPLICIT exige seulement l’action
+        volontaire. Retrait/PROTECTED refuse aussi le rejeu d’une consultation antérieure.
     ProjectPreset:
       type: object
       additionalProperties: false
@@ -8627,8 +9363,8 @@ components:
           minItems: 20
           maxItems: 20
       description: >-
-        Préparation CMS lue depuis une ressource serveur protégée. Ni seed, sauvegarde, publication ni
-        promesse commerciale ; libellésBR02 adaptés au brief.
+        Préparation CMS lue depuis une ressource serveur protégée. Ni seed, sauvegarde, publication
+        ni promesse commerciale ; libellésBR02 adaptés au brief.
     AssetView:
       type: object
       additionalProperties: false
@@ -8712,9 +9448,10 @@ components:
             - FORMAT_VERIFIED
             - REJECTED
       description: >-
-        Fichier métier : identité, état et octets vérifiés côté serveur. Aucune clé objet, bucket ou propriété
-        choisie par le navigateur. FORMAT_VERIFIED décrit un contrôle de format et ne prétend pas à un verdict
-        antivirus. Scope et relations sont cohérents : projet privé ou ressource éditoriale localisée.
+        Fichier métier : identité, état et octets vérifiés côté serveur. Aucune clé objet, bucket ou
+        propriété choisie par le navigateur. FORMAT_VERIFIED décrit un contrôle de format et ne
+        prétend pas à un verdict antivirus. Scope et relations sont cohérents : projet privé ou
+        ressource éditoriale localisée.
     AssetUploadRequest:
       type: object
       additionalProperties: false
@@ -8739,9 +9476,9 @@ components:
           minimum: 1
           maximum: 20971520
       description: >-
-        Intent de transfert : nom sans chemin ni caractère de contrôle, taille et MIME comparés à la politique
-        serveur. Les formats non disponibles sont refusés avant le transfert. La clé et le propriétaire sont
-        fixés côté serveur.
+        Intent de transfert : nom sans chemin ni caractère de contrôle, taille et MIME comparés à la
+        politique serveur. Les formats non disponibles sont refusés avant le transfert. La clé et le
+        propriétaire sont fixés côté serveur.
     EditorialAssetUploadRequest:
       type: object
       additionalProperties: false
@@ -8775,8 +9512,8 @@ components:
           minimum: 1
           maximum: 20971520
       description: >-
-        Éditeur autorisé, identité/version/langue exactes. Une confirmation READY ne publie pas ce fichier et
-        ne l’ajoute pas silencieusement au contenu.
+        Éditeur autorisé, identité/version/langue exactes. Une confirmation READY ne publie pas ce
+        fichier et ne l’ajoute pas silencieusement au contenu.
     ConfirmProjectAsset:
       type: object
       additionalProperties: false
@@ -8786,8 +9523,8 @@ components:
         assetId:
           $ref: '#/components/schemas/UUID'
       description: >-
-        Confirmer seulement un intent de ce projet ; le serveur relit et valide les octets réellement reçus.
-        Aucune disponibilité fournie par le client.
+        Confirmer seulement un intent de ce projet ; le serveur relit et valide les octets
+        réellement reçus. Aucune disponibilité fournie par le client.
     AssetUploadIntent:
       type: object
       additionalProperties: false
@@ -8814,9 +9551,10 @@ components:
         expiresAt:
           $ref: '#/components/schemas/UtcInstant'
       description: >-
-        URL externe temporaire et headers à utiliser pour le transfert direct sans cookie, redirect:error. Ni
-        URL signée dans les journaux/stockages ni état READY après le seul PUT ; la confirmation est une
-        commande distincte. Un ancien PUT ne peut modifier les octets READY validés.
+        URL externe temporaire et headers à utiliser pour le transfert direct sans cookie,
+        redirect:error. Ni URL signée dans les journaux/stockages ni état READY après le seul PUT ;
+        la confirmation est une commande distincte. Un ancien PUT ne peut modifier les octets READY
+        validés.
     AssetAcceptedFormat:
       type: object
       additionalProperties: false
@@ -8863,8 +9601,8 @@ components:
               pattern: ^[A-Z0-9_]+$
             - type: 'null'
       description: >-
-        Borne et disponibilité propres à ce format, affichées avant dépôt. TXT UTF-8 actif quand le stockage
-        est configuré ; PDF indisponible sans validateur de document complexe.
+        Borne et disponibilité propres à ce format, affichées avant dépôt. TXT UTF-8 actif quand le
+        stockage est configuré ; PDF indisponible sans validateur de document complexe.
     AssetUploadCapabilities:
       type: object
       additionalProperties: false
@@ -8914,8 +9652,9 @@ components:
           minimum: 1
           maximum: 300
       description: >-
-        Politique serveur réelle. Stockage désactivé : enabled=false et raison explicite, jamais liste vide
-        présentée comme absence de fichiers. Les quotas incluent PENDING non expirés et READY.
+        Politique serveur réelle. Stockage désactivé : enabled=false et raison explicite, jamais
+        liste vide présentée comme absence de fichiers. Les quotas incluent PENDING non expirés et
+        READY.
     AssetPage:
       type: object
       additionalProperties: false
@@ -8963,9 +9702,9 @@ components:
             - $ref: '#/components/schemas/UUID'
             - type: 'null'
       description: >-
-        Éditorial : publication exacte qui référence réellement ce fichier. Inscription facultative : chaîne
-        pédagogique épinglée également vérifiée. Le body peut être null pour un fichier personnel, accessible
-        uniquement à son propriétaire.
+        Éditorial : publication exacte qui référence réellement ce fichier. Inscription facultative
+        : chaîne pédagogique épinglée également vérifiée. Le body peut être null pour un fichier
+        personnel, accessible uniquement à son propriétaire.
     AssetDownloadAccess:
       type: object
       additionalProperties: false
@@ -9017,10 +9756,10 @@ components:
           minLength: 64
           maxLength: 64
       description: >-
-        Accès temporaire aux seuls octets READY vérifiés. Taille et SHA-256 proviennent du serveur. Le
-        navigateur récupère sans cookie, contrôle MIME/taille/hash puis utilise un blobURL temporaire ; pas de
-        href signé direct envoyant SESSION au port S3. Nouvelle délivrance refusée après perte d’accès ; un
-        ancien lien garde sa validité résiduelle jusqu’au TTL.
+        Accès temporaire aux seuls octets READY vérifiés. Taille et SHA-256 proviennent du serveur.
+        Le navigateur récupère sans cookie, contrôle MIME/taille/hash puis utilise un blobURL
+        temporaire ; pas de href signé direct envoyant SESSION au port S3. Nouvelle délivrance
+        refusée après perte d’accès ; un ancien lien garde sa validité résiduelle jusqu’au TTL.
     NotificationSummary:
       type: object
       additionalProperties: false
@@ -9103,9 +9842,9 @@ components:
         payloadAvailable:
           type: boolean
       description: >-
-        Métadonnées opérationnelles seulement : aucune adresse, clé métier, empreinte, charge utile ou valeur
-        chiffrée. L’état SENT suit un envoi déclaré par le transport, pas une promesse de livraison SMTP
-        exactement une fois.
+        Métadonnées opérationnelles seulement : aucune adresse, clé métier, empreinte, charge utile
+        ou valeur chiffrée. L’état SENT suit un envoi déclaré par le transport, pas une promesse de
+        livraison SMTP exactement une fois.
     NotificationPage:
       type: object
       additionalProperties: false
@@ -9149,8 +9888,8 @@ components:
           type: boolean
       description: >-
         Reprise explicite et auditée, sans destinataire ou contenu arbitraire. INDETERMINATE exige
-        ackDuplicate=true ; un reset expiré ou un payload purgé est refusé. La reprise remet le compteur de
-        cycle à zéro, conserve le total et ne signifie pas que le mail est livré.
+        ackDuplicate=true ; un reset expiré ou un payload purgé est refusé. La reprise remet le
+        compteur de cycle à zéro, conserve le total et ne signifie pas que le mail est livré.
     MediaAccessContext:
       type: object
       additionalProperties: false
@@ -9171,8 +9910,8 @@ components:
             - $ref: '#/components/schemas/UUID'
             - type: 'null'
       description: >-
-        Publication exacte qui référence ce média VIDEO de cette langue ; inscription facultative ajoute la
-        chaîne pédagogique épinglée. Aucun chemin ou URL de fichier reçu du navigateur.
+        Publication exacte qui référence ce média VIDEO de cette langue ; inscription facultative
+        ajoute la chaîne pédagogique épinglée. Aucun chemin ou URL de fichier reçu du navigateur.
     VideoMediaView:
       type: object
       additionalProperties: false
@@ -9229,10 +9968,10 @@ components:
               maxLength: 8000
             - type: 'null'
       description: >-
-        Métadonnées de MP4 réellement importé, durée lue dans le conteneur et octets hachés. Provider
-        local/test seulement, désactivé par défaut. Média absent : 404, sans durée inventée ; provider
-        désactivé/fichier indisponible : état honnête et alternative textuelle de la leçon. Aucun film de
-        cours produit ou fournisseur de production déduit.
+        Métadonnées de MP4 réellement importé, durée lue dans le conteneur et octets hachés.
+        Provider local/test seulement, désactivé par défaut. Média absent : 404, sans durée inventée
+        ; provider désactivé/fichier indisponible : état honnête et alternative textuelle de la
+        leçon. Aucun film de cours produit ou fournisseur de production déduit.
     VideoPlaybackAccess:
       type: object
       additionalProperties: false
@@ -9275,9 +10014,10 @@ components:
           minLength: 64
           maxLength: 64
       description: >-
-        Lien bearer opaque de même origine, 60 secondes au plus ; seul son hash est stocké. Ne pas journaliser
-        ou conserver son URL. Chaque nouvelle délivrance réautorise publication/langue/chaîne ; le lien
-        existant reste utilisable jusqu’au TTL. La lecture ne valide aucun projet ni activité.
+        Lien bearer opaque de même origine, 60 secondes au plus ; seul son hash est stocké. Ne pas
+        journaliser ou conserver son URL. Chaque nouvelle délivrance réautorise
+        publication/langue/chaîne ; le lien existant reste utilisable jusqu’au TTL. La lecture ne
+        valide aucun projet ni activité.
     MediaProgressView:
       type: object
       additionalProperties: false
@@ -9308,9 +10048,10 @@ components:
             - $ref: '#/components/schemas/UtcInstant'
             - type: 'null'
       description: >-
-        Position du propriétaire par mediaId, bornée par sa durée mesurée ; aucun déplacement entre vidéos
-        FR/EN. Révision0/updatedAt:null signifie aucune sauvegarde persistée, pas une confirmation de lecture.
-        ETag propre au média, sans contexte de publication variable dans sa représentation.
+        Position du propriétaire par mediaId, bornée par sa durée mesurée ; aucun déplacement entre
+        vidéos FR/EN. Révision0/updatedAt:null signifie aucune sauvegarde persistée, pas une
+        confirmation de lecture. ETag propre au média, sans contexte de publication variable dans sa
+        représentation.
     SetMediaProgress:
       type: object
       additionalProperties: false
@@ -9325,9 +10066,866 @@ components:
           minimum: 0
           maximum: 86400
       description: >-
-        Seule la position est fournie ; durée, propriétaire et révision restent serveur. If-Match atomique :
-        absence428, conflit412. Une position identique sauvegardée conserve le tag ; aucune réussite de
-        quiz/projet ou durée regardée n’est déduite.
+        Seule la position est fournie ; durée, propriétaire et révision restent serveur. If-Match
+        atomique : absence428, conflit412. Une position identique sauvegardée conserve le tag ;
+        aucune réussite de quiz/projet ou durée regardée n’est déduite.
+    LocalizedText:
+      type: object
+      additionalProperties: false
+      required:
+        - locale
+        - text
+      properties:
+        locale:
+          $ref: '#/components/schemas/Locale'
+        text:
+          type: string
+          minLength: 0
+          maxLength: 8000
+    OfferCopy:
+      type: object
+      additionalProperties: false
+      required:
+        - locale
+        - title
+        - summary
+      properties:
+        locale:
+          $ref: '#/components/schemas/Locale'
+        title:
+          type: string
+          minLength: 0
+          maxLength: 180
+        summary:
+          type: string
+          minLength: 0
+          maxLength: 2000
+    OfferResourceInput:
+      type: object
+      additionalProperties: false
+      required:
+        - resourceId
+        - versionId
+      properties:
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        versionId:
+          $ref: '#/components/schemas/UUID'
+    OfferPeriod:
+      type: object
+      additionalProperties: false
+      required:
+        - mode
+        - days
+      properties:
+        mode:
+          anyOf:
+            - type: string
+              enum:
+                - FIXED
+                - UNLIMITED
+                - NONE
+                - PERIOD
+            - type: 'null'
+        days:
+          anyOf:
+            - type: integer
+              minimum: 1
+              maximum: 36500
+            - type: 'null'
+    OfferSupport:
+      type: object
+      additionalProperties: false
+      required:
+        - mode
+        - descriptions
+      properties:
+        mode:
+          anyOf:
+            - type: string
+              enum:
+                - NONE
+                - ASYNC
+            - type: 'null'
+        descriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocalizedText'
+          maxItems: 2
+    OfferConditions:
+      type: object
+      additionalProperties: false
+      required:
+        - access
+        - updates
+        - versionPolicy
+        - support
+        - humanReviewIncluded
+        - termsVersion
+        - terms
+      properties:
+        access:
+          anyOf:
+            - $ref: '#/components/schemas/OfferPeriod'
+            - type: 'null'
+        updates:
+          anyOf:
+            - $ref: '#/components/schemas/OfferPeriod'
+            - type: 'null'
+        versionPolicy:
+          anyOf:
+            - type: string
+              enum:
+                - PINNED
+                - UPDATES_DURING_PERIOD
+            - type: 'null'
+        support:
+          anyOf:
+            - $ref: '#/components/schemas/OfferSupport'
+            - type: 'null'
+        humanReviewIncluded:
+          type: boolean
+        termsVersion:
+          anyOf:
+            - type: string
+              minLength: 0
+              maxLength: 100
+            - type: 'null'
+        terms:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocalizedText'
+          maxItems: 2
+    OfferTax:
+      type: object
+      additionalProperties: false
+      required:
+        - mode
+        - notices
+      properties:
+        mode:
+          anyOf:
+            - type: string
+              enum:
+                - INCLUSIVE
+                - EXEMPT
+                - EXCLUSIVE
+            - type: 'null'
+        notices:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocalizedText'
+          maxItems: 2
+    OfferFields:
+      type: object
+      additionalProperties: false
+      required:
+        - copies
+        - resources
+        - locales
+        - price
+        - tax
+        - conditions
+      properties:
+        copies:
+          type: array
+          items:
+            $ref: '#/components/schemas/OfferCopy'
+          maxItems: 2
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/OfferResourceInput'
+          maxItems: 20
+        locales:
+          type: array
+          items:
+            $ref: '#/components/schemas/Locale'
+          maxItems: 2
+        price:
+          anyOf:
+            - $ref: '#/components/schemas/Money'
+            - type: 'null'
+        tax:
+          anyOf:
+            - $ref: '#/components/schemas/OfferTax'
+            - type: 'null'
+        conditions:
+          anyOf:
+            - $ref: '#/components/schemas/OfferConditions'
+            - type: 'null'
+    CreateOffer:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - kind
+        - fields
+        - reason
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 80
+          pattern: ^[a-z0-9][a-z0-9-]{0,79}$
+        kind:
+          type: string
+          enum:
+            - COURSE
+            - PACK
+        fields:
+          $ref: '#/components/schemas/OfferFields'
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
+    SaveOffer:
+      type: object
+      additionalProperties: false
+      required:
+        - fields
+        - reason
+      properties:
+        fields:
+          $ref: '#/components/schemas/OfferFields'
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
+    ChangeOfferState:
+      type: object
+      additionalProperties: false
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
+    OfferView:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - productId
+        - revision
+        - currentRevisionId
+        - revisionNumber
+        - code
+        - kind
+        - state
+        - fields
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        productId:
+          $ref: '#/components/schemas/UUID'
+        revision:
+          $ref: '#/components/schemas/Revision'
+        currentRevisionId:
+          $ref: '#/components/schemas/UUID'
+        revisionNumber:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        code:
+          type: string
+          minLength: 1
+          maxLength: 80
+        kind:
+          type: string
+          enum:
+            - COURSE
+            - PACK
+        state:
+          type: string
+          enum:
+            - DRAFT
+            - ACTIVE
+            - INACTIVE
+        fields:
+          $ref: '#/components/schemas/OfferFields'
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+        updatedAt:
+          $ref: '#/components/schemas/UtcInstant'
+    CommerceIssue:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - field
+        - resourceId
+        - locale
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 100
+        field:
+          anyOf:
+            - type: string
+              minLength: 0
+              maxLength: 200
+            - type: 'null'
+        resourceId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        locale:
+          anyOf:
+            - $ref: '#/components/schemas/Locale'
+            - type: 'null'
+    OfferReadiness:
+      type: object
+      additionalProperties: false
+      required:
+        - offerId
+        - checkedRevision
+        - summaryReady
+        - checkoutAvailable
+        - blockingIssues
+        - warnings
+        - checkoutUnavailableReason
+      properties:
+        offerId:
+          $ref: '#/components/schemas/UUID'
+        checkedRevision:
+          $ref: '#/components/schemas/Revision'
+        summaryReady:
+          type: boolean
+        checkoutAvailable:
+          type: boolean
+        blockingIssues:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommerceIssue'
+          maxItems: 1000
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommerceIssue'
+          maxItems: 1000
+        checkoutUnavailableReason:
+          anyOf:
+            - type: string
+              minLength: 0
+              maxLength: 100
+            - type: 'null'
+    OfferResource:
+      type: object
+      additionalProperties: false
+      required:
+        - resourceId
+        - versionId
+        - versionNumber
+        - locale
+        - title
+        - slug
+        - availability
+        - access
+      properties:
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        versionId:
+          $ref: '#/components/schemas/UUID'
+        versionNumber:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        locale:
+          $ref: '#/components/schemas/Locale'
+        title:
+          anyOf:
+            - type: string
+              minLength: 0
+              maxLength: 240
+            - type: 'null'
+        slug:
+          anyOf:
+            - type: string
+              minLength: 0
+              maxLength: 180
+            - type: 'null'
+        availability:
+          type: string
+          enum:
+            - PUBLISHED
+            - STALE
+            - UNAVAILABLE
+            - TRANSLATION_MISSING
+            - ARCHIVED
+            - WITHDRAWN
+        access:
+          anyOf:
+            - type: string
+              enum:
+                - FREE
+                - PROTECTED
+            - type: 'null'
+    PublicOffer:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - productId
+        - revision
+        - code
+        - kind
+        - state
+        - locale
+        - translationAvailable
+        - title
+        - summary
+        - resources
+        - locales
+        - price
+        - tax
+        - conditions
+        - readiness
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        productId:
+          $ref: '#/components/schemas/UUID'
+        revision:
+          $ref: '#/components/schemas/Revision'
+        code:
+          type: string
+          minLength: 1
+          maxLength: 80
+        kind:
+          type: string
+          enum:
+            - COURSE
+            - PACK
+        state:
+          type: string
+          enum:
+            - ACTIVE
+            - INACTIVE
+        locale:
+          $ref: '#/components/schemas/Locale'
+        translationAvailable:
+          type: boolean
+        title:
+          anyOf:
+            - type: string
+              minLength: 0
+              maxLength: 180
+            - type: 'null'
+        summary:
+          anyOf:
+            - type: string
+              minLength: 0
+              maxLength: 2000
+            - type: 'null'
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/OfferResource'
+          maxItems: 40
+        locales:
+          type: array
+          items:
+            $ref: '#/components/schemas/Locale'
+          maxItems: 2
+        price:
+          anyOf:
+            - $ref: '#/components/schemas/Money'
+            - type: 'null'
+        tax:
+          anyOf:
+            - $ref: '#/components/schemas/OfferTax'
+            - type: 'null'
+        conditions:
+          anyOf:
+            - $ref: '#/components/schemas/OfferConditions'
+            - type: 'null'
+        readiness:
+          $ref: '#/components/schemas/OfferReadiness'
+    OfferSummary:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - revision
+        - code
+        - kind
+        - state
+        - locale
+        - translationAvailable
+        - title
+        - summary
+        - price
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        revision:
+          $ref: '#/components/schemas/Revision'
+        code:
+          type: string
+          minLength: 1
+          maxLength: 80
+        kind:
+          type: string
+          enum:
+            - COURSE
+            - PACK
+        state:
+          type: string
+          enum:
+            - DRAFT
+            - ACTIVE
+            - INACTIVE
+        locale:
+          $ref: '#/components/schemas/Locale'
+        translationAvailable:
+          type: boolean
+        title:
+          anyOf:
+            - type: string
+              minLength: 0
+              maxLength: 180
+            - type: 'null'
+        summary:
+          anyOf:
+            - type: string
+              minLength: 0
+              maxLength: 2000
+            - type: 'null'
+        price:
+          anyOf:
+            - $ref: '#/components/schemas/Money'
+            - type: 'null'
+    OfferPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OfferSummary'
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    CreateOrder:
+      type: object
+      additionalProperties: false
+      required:
+        - offerId
+        - offerRevision
+        - locale
+        - acceptedTermsVersion
+      properties:
+        offerId:
+          $ref: '#/components/schemas/UUID'
+        offerRevision:
+          $ref: '#/components/schemas/Revision'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        acceptedTermsVersion:
+          type: string
+          minLength: 1
+          maxLength: 100
+    OrderResource:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - resourceId
+        - versionId
+        - versionNumber
+        - title
+        - slug
+        - locales
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        versionId:
+          $ref: '#/components/schemas/UUID'
+        versionNumber:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        title:
+          type: string
+          minLength: 0
+          maxLength: 240
+        slug:
+          type: string
+          minLength: 0
+          maxLength: 180
+        locales:
+          type: array
+          items:
+            $ref: '#/components/schemas/Locale'
+          maxItems: 2
+    OrderSnapshot:
+      type: object
+      additionalProperties: false
+      required:
+        - offerId
+        - offerRevision
+        - offerRevisionId
+        - code
+        - kind
+        - locale
+        - title
+        - resources
+        - locales
+        - total
+        - tax
+        - conditions
+      properties:
+        offerId:
+          $ref: '#/components/schemas/UUID'
+        offerRevision:
+          $ref: '#/components/schemas/Revision'
+        offerRevisionId:
+          $ref: '#/components/schemas/UUID'
+        code:
+          type: string
+          minLength: 1
+          maxLength: 80
+        kind:
+          type: string
+          enum:
+            - COURSE
+            - PACK
+        locale:
+          $ref: '#/components/schemas/Locale'
+        title:
+          type: string
+          minLength: 0
+          maxLength: 180
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderResource'
+          maxItems: 20
+        locales:
+          type: array
+          items:
+            $ref: '#/components/schemas/Locale'
+          maxItems: 2
+        total:
+          $ref: '#/components/schemas/Money'
+        tax:
+          $ref: '#/components/schemas/OfferTax'
+        conditions:
+          $ref: '#/components/schemas/OfferConditions'
+    OrderView:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - revision
+        - orderStatus
+        - paymentStatus
+        - fulfillmentStatus
+        - snapshot
+        - acceptedTermsVersion
+        - acceptedAt
+        - createdAt
+        - expiresAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        revision:
+          $ref: '#/components/schemas/Revision'
+        orderStatus:
+          type: string
+          enum:
+            - PREPARED
+            - EXPIRED
+            - CANCELLED
+        paymentStatus:
+          type: string
+          enum:
+            - NOT_STARTED
+        fulfillmentStatus:
+          type: string
+          enum:
+            - NOT_STARTED
+        snapshot:
+          $ref: '#/components/schemas/OrderSnapshot'
+        acceptedTermsVersion:
+          type: string
+          minLength: 1
+          maxLength: 100
+        acceptedAt:
+          $ref: '#/components/schemas/UtcInstant'
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+        expiresAt:
+          $ref: '#/components/schemas/UtcInstant'
+    OrderSummary:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - revision
+        - offerId
+        - offerRevision
+        - locale
+        - title
+        - total
+        - orderStatus
+        - paymentStatus
+        - fulfillmentStatus
+        - createdAt
+        - expiresAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        revision:
+          $ref: '#/components/schemas/Revision'
+        offerId:
+          $ref: '#/components/schemas/UUID'
+        offerRevision:
+          $ref: '#/components/schemas/Revision'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        title:
+          type: string
+          minLength: 0
+          maxLength: 180
+        total:
+          $ref: '#/components/schemas/Money'
+        orderStatus:
+          type: string
+          enum:
+            - PREPARED
+            - EXPIRED
+            - CANCELLED
+        paymentStatus:
+          type: string
+          enum:
+            - NOT_STARTED
+        fulfillmentStatus:
+          type: string
+          enum:
+            - NOT_STARTED
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+        expiresAt:
+          $ref: '#/components/schemas/UtcInstant'
+    OrderPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderSummary'
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    CoverageResource:
+      type: object
+      additionalProperties: false
+      required:
+        - resourceId
+        - versionId
+        - coveredLocales
+        - missingLocales
+        - alreadyAccessible
+      properties:
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        versionId:
+          $ref: '#/components/schemas/UUID'
+        coveredLocales:
+          type: array
+          items:
+            $ref: '#/components/schemas/Locale'
+          maxItems: 2
+        missingLocales:
+          type: array
+          items:
+            $ref: '#/components/schemas/Locale'
+          maxItems: 2
+        alreadyAccessible:
+          type: boolean
+    PurchaseCoverage:
+      type: object
+      additionalProperties: false
+      required:
+        - status
+        - resources
+        - alreadyAccessibleCount
+        - newResourceCount
+      properties:
+        status:
+          type: string
+          enum:
+            - NONE
+            - PARTIAL
+            - ALL
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/CoverageResource'
+          maxItems: 20
+        alreadyAccessibleCount:
+          type: integer
+          minimum: 0
+          maximum: 20
+        newResourceCount:
+          type: integer
+          minimum: 0
+          maximum: 20
+    PurchaseContext:
+      type: object
+      additionalProperties: false
+      required:
+        - offer
+        - coverage
+        - activeOrder
+      properties:
+        offer:
+          $ref: '#/components/schemas/PublicOffer'
+        coverage:
+          $ref: '#/components/schemas/PurchaseCoverage'
+        activeOrder:
+          anyOf:
+            - $ref: '#/components/schemas/OrderSummary'
+            - type: 'null'
   headers:
     NoStore:
       description: Réponse non stockable ; les erreurs sont également privées.
@@ -9339,8 +10937,8 @@ components:
     ETag:
       description: >-
         ETag fort reçu du serveur. Préférences : preferences-{uuid}-r{revision} ; document CMS :
-        content-{translationUuid}-r{revision}. Les représentations distinctes doivent invalider leur tag
-        lorsque leurs octets changent.
+        content-{translationUuid}-r{revision}. Les représentations distinctes doivent invalider leur
+        tag lorsque leurs octets changent.
       schema:
         type: string
         pattern: ^"[^"\\]*"$
@@ -9350,9 +10948,9 @@ components:
       in: header
       required: true
       description: >-
-        Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag
-        faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune
-        répétition écrasante automatique.
+        Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée
+        ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le
+        service ; aucune répétition écrasante automatique.
       schema:
         type: string
         minLength: 1
@@ -9361,8 +10959,8 @@ components:
       in: header
       required: true
       description: >-
-        Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ;
-        conserver en mémoire seulement.
+        Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou
+        expiration ; conserver en mémoire seulement.
       schema:
         type: string
         minLength: 1
@@ -9371,10 +10969,19 @@ components:
       in: header
       required: true
       description: >-
-        UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté
-        serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409
-        ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après
-        changement de compte ; aucun import automatique du brouillon précédent.
+        UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session
+        côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte
+        différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le
+        contexte après changement de compte ; aucun import automatique du brouillon précédent.
+      schema:
+        $ref: '#/components/schemas/UUID'
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: >-
+        UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry
+        implicite.
       schema:
         $ref: '#/components/schemas/UUID'
   responses:

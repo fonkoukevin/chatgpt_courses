@@ -2,7 +2,7 @@
 
 import NextLink from "next/link";
 import type { ReactNode } from "react";
-import { ArrowLeft, BookOpen, CircleHelp, FileText, FolderOpen, NotebookPen, UserRound } from "lucide-react";
+import { ArrowLeft, BookOpen, CircleHelp, FileText, FolderOpen, NotebookPen, ReceiptText, UserRound } from "lucide-react";
 import { getShowcaseDictionary } from "@/lib/i18n/showcase";
 import type { Locale } from "@/lib/i18n/locales";
 import { Brand, Breadcrumb, FutureItem, LayoutLanguageSwitch, MobileNavigation } from "./layout-parts";
@@ -13,8 +13,10 @@ import { getLearningDictionary } from "@/lib/i18n/learning";
 import { learningPath } from "@/lib/learning/routes";
 import { getProjectsDictionary } from "@/lib/i18n/projects";
 import { projectsPath } from "@/lib/projects/routes";
+import { ordersPath } from "@/lib/commerce/routes";
+import { getCommerceDictionary } from "@/lib/i18n/commerce";
 
-type Product = { languageLinks: Record<Locale, string>; active?: "learning" | "methods" | "projects" };
+type Product = { languageLinks: Record<Locale, string>; active?: "learning" | "methods" | "projects" | "orders" };
 
 export function LearnerLayout({ locale, children, title, description, product }: { locale: Locale; children: ReactNode; title?: string; description?: string; product?: Product }) {
   if (product) return <ProductLearnerLayout locale={locale} title={title} description={description} product={product}>{children}</ProductLearnerLayout>;
@@ -58,6 +60,7 @@ function ProductLearnerLayout({ locale, title, description, product, children }:
   const items = [{ href: learningPath(locale), label: learning.navigation, key: "learning", icon: <BookOpen size={19} aria-hidden="true" /> },
     { href: projectsPath(locale), label: projects.projects, key: "projects", icon: <FolderOpen size={19} aria-hidden="true" /> },
     { href: methodsPath(locale), label: t.methods, key: "methods", icon: <NotebookPen size={19} aria-hidden="true" /> },
+    { href: ordersPath(locale), label: getCommerceDictionary(locale).orders, key: "orders", icon: <ReceiptText size={19} aria-hidden="true" /> },
     { href: publicCatalogueHref(locale), label: t.catalogue, icon: <BookOpen size={19} aria-hidden="true" /> },
     { href: locale === "fr" ? "/fr/compte" : "/en/account", label: t.account, icon: <UserRound size={19} aria-hidden="true" /> }];
   const navigation = <div className="space-y-6 py-4"><div className="px-3">{brand}<p className="mt-2 text-sm text-muted-foreground">{t.workspace}</p></div><nav aria-label={t.navigation} className="space-y-1">{items.map((item) => <NextLink key={item.href} href={item.href} aria-current={item.key === (product.active ?? "methods") ? "page" : undefined} className={`flex min-h-11 items-center gap-3 rounded-input px-3 py-2 text-sm font-medium no-underline ${item.key === (product.active ?? "methods") ? "bg-brand-soft text-brand" : "text-foreground hover:bg-surface-hover"}`}>{item.icon}{item.label}</NextLink>)}</nav></div>;

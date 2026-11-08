@@ -18,9 +18,9 @@ for (let index = 3; index < process.argv.length; index += 2) {
   else throw new Error('Diagnostic permis : --grep expression et --repeat-each 1..20.');
   diagnosticArgs.push(flag, value);
 }
-if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10'].includes(phase)) throw new Error('Phase de recette inconnue : P01, P02 ou P04 à P10 attendu.');
+if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11'].includes(phase)) throw new Error('Phase de recette inconnue : P01, P02 ou P04 à P11 attendu.');
 const needsApi = phase !== 'P02';
-const isolatedDatabase = ['P05', 'P06', 'P07', 'P08', 'P09', 'P10'].includes(phase);
+const isolatedDatabase = ['P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11'].includes(phase);
 if (!['local', 'test'].includes(env.APP_ENV)) throw new Error('Vérification navigateur réservée à local/test.');
 const port = (value, fallback) => {
   const text = value ?? String(fallback);
@@ -151,6 +151,10 @@ const interrupted = new Promise((_, reject) => {
 interrupted.catch(() => {}); // Also handle interruption during IPC initialization.
 try {
   if (isolatedDatabase) { database = await createBrowserDatabase(env, runDirectory, runId, (record) => { database = record; save(); }); save(); }
+  if (phase === 'P11') {
+    env.COMMERCE_ENABLED = 'true'; env.COMMERCE_ALLOWED_CURRENCIES = 'EUR';
+    env.STRIPE_ENABLED = 'false'; delete env.STRIPE_SECRET_KEY; delete env.STRIPE_WEBHOOK_SECRET;
+  }
   if (phase === 'P10') {
     services = await createBrowserServices(env, runDirectory, runId, (records) => { services = records; save(); });
     env.VIDEO_ENABLED = 'true'; env.VIDEO_PROVIDER = 'local-test'; env.VIDEO_LOCAL_ROOT = join(runDirectory, 'private-video');

@@ -1760,6 +1760,241 @@ export type SetMediaProgress = {
     positionSeconds: number;
 };
 
+export type LocalizedText = {
+    locale: Locale;
+    text: string;
+};
+
+export type OfferCopy = {
+    locale: Locale;
+    title: string;
+    summary: string;
+};
+
+export type OfferResourceInput = {
+    resourceId: Uuid;
+    versionId: Uuid;
+};
+
+export type OfferPeriod = {
+    mode: 'FIXED' | 'UNLIMITED' | 'NONE' | 'PERIOD' | null;
+    days: number | null;
+};
+
+export type OfferSupport = {
+    mode: 'NONE' | 'ASYNC' | null;
+    descriptions: Array<LocalizedText>;
+};
+
+export type OfferConditions = {
+    access: OfferPeriod | null;
+    updates: OfferPeriod | null;
+    versionPolicy: 'PINNED' | 'UPDATES_DURING_PERIOD' | null;
+    support: OfferSupport | null;
+    humanReviewIncluded: boolean;
+    termsVersion: string | null;
+    terms: Array<LocalizedText>;
+};
+
+export type OfferTax = {
+    mode: 'INCLUSIVE' | 'EXEMPT' | 'EXCLUSIVE' | null;
+    notices: Array<LocalizedText>;
+};
+
+export type OfferFields = {
+    copies: Array<OfferCopy>;
+    resources: Array<OfferResourceInput>;
+    locales: Array<Locale>;
+    price: Money | null;
+    tax: OfferTax | null;
+    conditions: OfferConditions | null;
+};
+
+export type CreateOffer = {
+    code: string;
+    kind: 'COURSE' | 'PACK';
+    fields: OfferFields;
+    reason: string;
+};
+
+export type SaveOffer = {
+    fields: OfferFields;
+    reason: string;
+};
+
+export type ChangeOfferState = {
+    reason: string;
+};
+
+export type OfferView = {
+    id: Uuid;
+    productId: Uuid;
+    revision: Revision;
+    currentRevisionId: Uuid;
+    revisionNumber: number;
+    code: string;
+    kind: 'COURSE' | 'PACK';
+    state: 'DRAFT' | 'ACTIVE' | 'INACTIVE';
+    fields: OfferFields;
+    createdAt: UtcInstant;
+    updatedAt: UtcInstant;
+};
+
+export type CommerceIssue = {
+    code: string;
+    field: string | null;
+    resourceId: Uuid | null;
+    locale: Locale | null;
+};
+
+export type OfferReadiness = {
+    offerId: Uuid;
+    checkedRevision: Revision;
+    summaryReady: boolean;
+    checkoutAvailable: boolean;
+    blockingIssues: Array<CommerceIssue>;
+    warnings: Array<CommerceIssue>;
+    checkoutUnavailableReason: string | null;
+};
+
+export type OfferResource = {
+    resourceId: Uuid;
+    versionId: Uuid;
+    versionNumber: number;
+    locale: Locale;
+    title: string | null;
+    slug: string | null;
+    availability: 'PUBLISHED' | 'STALE' | 'UNAVAILABLE' | 'TRANSLATION_MISSING' | 'ARCHIVED' | 'WITHDRAWN';
+    access: 'FREE' | 'PROTECTED' | null;
+};
+
+export type PublicOffer = {
+    id: Uuid;
+    productId: Uuid;
+    revision: Revision;
+    code: string;
+    kind: 'COURSE' | 'PACK';
+    state: 'ACTIVE' | 'INACTIVE';
+    locale: Locale;
+    translationAvailable: boolean;
+    title: string | null;
+    summary: string | null;
+    resources: Array<OfferResource>;
+    locales: Array<Locale>;
+    price: Money | null;
+    tax: OfferTax | null;
+    conditions: OfferConditions | null;
+    readiness: OfferReadiness;
+};
+
+export type OfferSummary = {
+    id: Uuid;
+    revision: Revision;
+    code: string;
+    kind: 'COURSE' | 'PACK';
+    state: 'DRAFT' | 'ACTIVE' | 'INACTIVE';
+    locale: Locale;
+    translationAvailable: boolean;
+    title: string | null;
+    summary: string | null;
+    price: Money | null;
+};
+
+export type OfferPage = {
+    items: Array<OfferSummary>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+export type CreateOrder = {
+    offerId: Uuid;
+    offerRevision: Revision;
+    locale: Locale;
+    acceptedTermsVersion: string;
+};
+
+export type OrderResource = {
+    id: Uuid;
+    resourceId: Uuid;
+    versionId: Uuid;
+    versionNumber: number;
+    title: string;
+    slug: string;
+    locales: Array<Locale>;
+};
+
+export type OrderSnapshot = {
+    offerId: Uuid;
+    offerRevision: Revision;
+    offerRevisionId: Uuid;
+    code: string;
+    kind: 'COURSE' | 'PACK';
+    locale: Locale;
+    title: string;
+    resources: Array<OrderResource>;
+    locales: Array<Locale>;
+    total: Money;
+    tax: OfferTax;
+    conditions: OfferConditions;
+};
+
+export type OrderView = {
+    id: Uuid;
+    revision: Revision;
+    orderStatus: 'PREPARED' | 'EXPIRED' | 'CANCELLED';
+    paymentStatus: 'NOT_STARTED';
+    fulfillmentStatus: 'NOT_STARTED';
+    snapshot: OrderSnapshot;
+    acceptedTermsVersion: string;
+    acceptedAt: UtcInstant;
+    createdAt: UtcInstant;
+    expiresAt: UtcInstant;
+};
+
+export type OrderSummary = {
+    id: Uuid;
+    revision: Revision;
+    offerId: Uuid;
+    offerRevision: Revision;
+    locale: Locale;
+    title: string;
+    total: Money;
+    orderStatus: 'PREPARED' | 'EXPIRED' | 'CANCELLED';
+    paymentStatus: 'NOT_STARTED';
+    fulfillmentStatus: 'NOT_STARTED';
+    createdAt: UtcInstant;
+    expiresAt: UtcInstant;
+};
+
+export type OrderPage = {
+    items: Array<OrderSummary>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+export type CoverageResource = {
+    resourceId: Uuid;
+    versionId: Uuid;
+    coveredLocales: Array<Locale>;
+    missingLocales: Array<Locale>;
+    alreadyAccessible: boolean;
+};
+
+export type PurchaseCoverage = {
+    status: 'NONE' | 'PARTIAL' | 'ALL';
+    resources: Array<CoverageResource>;
+    alreadyAccessibleCount: number;
+    newResourceCount: number;
+};
+
+export type PurchaseContext = {
+    offer: PublicOffer;
+    coverage: PurchaseCoverage;
+    activeOrder: OrderSummary | null;
+};
+
 export type RegisterRequestWritable = {
     email: string;
     /**
@@ -1789,6 +2024,11 @@ export type CsrfHeader = string;
  * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
  */
 export type AccountContext = Uuid;
+
+/**
+ * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+ */
+export type IdempotencyKey = Uuid;
 
 export type GetSystemHealthData = {
     body?: never;
@@ -6634,3 +6874,848 @@ export type SetMediaProgressResponses = {
 };
 
 export type SetMediaProgressResponse = SetMediaProgressResponses[keyof SetMediaProgressResponses];
+
+export type ListPublicOffersData = {
+    body?: never;
+    path?: never;
+    query: {
+        locale: Locale;
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/offers';
+};
+
+export type ListPublicOffersErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListPublicOffersError = ListPublicOffersErrors[keyof ListPublicOffersErrors];
+
+export type ListPublicOffersResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: OfferPage;
+};
+
+export type ListPublicOffersResponse = ListPublicOffersResponses[keyof ListPublicOffersResponses];
+
+export type GetPublicOfferData = {
+    body?: never;
+    path: {
+        offerId: Uuid;
+    };
+    query: {
+        locale: Locale;
+    };
+    url: '/offers/{offerId}';
+};
+
+export type GetPublicOfferErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetPublicOfferError = GetPublicOfferErrors[keyof GetPublicOfferErrors];
+
+export type GetPublicOfferResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: PublicOffer;
+};
+
+export type GetPublicOfferResponse = GetPublicOfferResponses[keyof GetPublicOfferResponses];
+
+export type ListAdminOffersData = {
+    body?: never;
+    path?: never;
+    query: {
+        q?: string;
+        state?: 'DRAFT' | 'ACTIVE' | 'INACTIVE';
+        kind?: 'COURSE' | 'PACK';
+        locale: Locale;
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/admin/offers';
+};
+
+export type ListAdminOffersErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListAdminOffersError = ListAdminOffersErrors[keyof ListAdminOffersErrors];
+
+export type ListAdminOffersResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: OfferPage;
+};
+
+export type ListAdminOffersResponse = ListAdminOffersResponses[keyof ListAdminOffersResponses];
+
+export type CreateOfferData = {
+    body: CreateOffer;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+    };
+    path?: never;
+    query?: never;
+    url: '/admin/offers';
+};
+
+export type CreateOfferErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type CreateOfferError = CreateOfferErrors[keyof CreateOfferErrors];
+
+export type CreateOfferResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    201: OfferView;
+};
+
+export type CreateOfferResponse = CreateOfferResponses[keyof CreateOfferResponses];
+
+export type GetAdminOfferData = {
+    body?: never;
+    path: {
+        offerId: Uuid;
+    };
+    query?: never;
+    url: '/admin/offers/{offerId}';
+};
+
+export type GetAdminOfferErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetAdminOfferError = GetAdminOfferErrors[keyof GetAdminOfferErrors];
+
+export type GetAdminOfferResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: OfferView;
+};
+
+export type GetAdminOfferResponse = GetAdminOfferResponses[keyof GetAdminOfferResponses];
+
+export type SaveOfferData = {
+    body: SaveOffer;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        offerId: Uuid;
+    };
+    query?: never;
+    url: '/admin/offers/{offerId}';
+};
+
+export type SaveOfferErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type SaveOfferError = SaveOfferErrors[keyof SaveOfferErrors];
+
+export type SaveOfferResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: OfferView;
+};
+
+export type SaveOfferResponse = SaveOfferResponses[keyof SaveOfferResponses];
+
+export type GetOfferReadinessData = {
+    body?: never;
+    path: {
+        offerId: Uuid;
+    };
+    query?: never;
+    url: '/admin/offers/{offerId}/readiness';
+};
+
+export type GetOfferReadinessErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetOfferReadinessError = GetOfferReadinessErrors[keyof GetOfferReadinessErrors];
+
+export type GetOfferReadinessResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: OfferReadiness;
+};
+
+export type GetOfferReadinessResponse = GetOfferReadinessResponses[keyof GetOfferReadinessResponses];
+
+export type ActivateOfferData = {
+    body: ChangeOfferState;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        offerId: Uuid;
+    };
+    query?: never;
+    url: '/admin/offers/{offerId}/activate';
+};
+
+export type ActivateOfferErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ActivateOfferError = ActivateOfferErrors[keyof ActivateOfferErrors];
+
+export type ActivateOfferResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: OfferView;
+};
+
+export type ActivateOfferResponse = ActivateOfferResponses[keyof ActivateOfferResponses];
+
+export type DeactivateOfferData = {
+    body: ChangeOfferState;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        offerId: Uuid;
+    };
+    query?: never;
+    url: '/admin/offers/{offerId}/deactivate';
+};
+
+export type DeactivateOfferErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type DeactivateOfferError = DeactivateOfferErrors[keyof DeactivateOfferErrors];
+
+export type DeactivateOfferResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: OfferView;
+};
+
+export type DeactivateOfferResponse = DeactivateOfferResponses[keyof DeactivateOfferResponses];
+
+export type GetPurchaseContextData = {
+    body?: never;
+    path: {
+        offerId: Uuid;
+    };
+    query: {
+        locale: Locale;
+    };
+    url: '/me/offers/{offerId}/purchase-context';
+};
+
+export type GetPurchaseContextErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetPurchaseContextError = GetPurchaseContextErrors[keyof GetPurchaseContextErrors];
+
+export type GetPurchaseContextResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: PurchaseContext;
+};
+
+export type GetPurchaseContextResponse = GetPurchaseContextResponses[keyof GetPurchaseContextResponses];
+
+export type ListOrdersData = {
+    body?: never;
+    path?: never;
+    query?: {
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/me/orders';
+};
+
+export type ListOrdersErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListOrdersError = ListOrdersErrors[keyof ListOrdersErrors];
+
+export type ListOrdersResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: OrderPage;
+};
+
+export type ListOrdersResponse = ListOrdersResponses[keyof ListOrdersResponses];
+
+export type CreateOrderData = {
+    body: CreateOrder;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path?: never;
+    query?: never;
+    url: '/me/orders';
+};
+
+export type CreateOrderErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type CreateOrderError = CreateOrderErrors[keyof CreateOrderErrors];
+
+export type CreateOrderResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: OrderView;
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    201: OrderView;
+};
+
+export type CreateOrderResponse = CreateOrderResponses[keyof CreateOrderResponses];
+
+export type GetOrderData = {
+    body?: never;
+    path: {
+        orderId: Uuid;
+    };
+    query?: never;
+    url: '/me/orders/{orderId}';
+};
+
+export type GetOrderErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    412: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetOrderError = GetOrderErrors[keyof GetOrderErrors];
+
+export type GetOrderResponses = {
+    /**
+     * Résultat réel sans cache partagé.
+     */
+    200: OrderView;
+};
+
+export type GetOrderResponse = GetOrderResponses[keyof GetOrderResponses];

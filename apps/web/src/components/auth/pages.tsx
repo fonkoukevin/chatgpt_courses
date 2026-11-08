@@ -11,6 +11,8 @@ import { AuthFrame } from "./auth-frame";
 import { ResumeContext } from "./resume-context";
 import { methodsPath } from "@/lib/methods/routes";
 import { getMethodPageDictionary } from "@/lib/i18n/method-pages";
+import { ordersPath } from "@/lib/commerce/routes";
+import { getCommerceDictionary } from "@/lib/i18n/commerce";
 
 type PageProps = { params: Promise<{ locale: string }>; searchParams: Promise<Record<string, string | string[] | undefined>> };
 export function authMetadata(locale: Locale, screen: AuthScreen): Metadata {
@@ -41,9 +43,8 @@ export function accountPage(expected: Locale) {
       <section aria-labelledby="account-identity" className="rounded-panel border border-border bg-surface p-4 sm:p-6"><h2 id="account-identity" className="text-lg font-semibold">{text.identity}</h2>
         <dl className="mt-4 space-y-4"><div><dt className="text-sm text-muted-foreground">{text.email}</dt><dd className="mt-1 break-words">{user.data.email}</dd></div>{user.data.displayName && <div><dt className="text-sm text-muted-foreground">{text.displayName}</dt><dd className="mt-1 break-words">{user.data.displayName}</dd></div>}</dl>
       </section>
-      <Link href={methodsPath(locale)} prefetch={false} className="inline-flex min-h-11 items-center font-medium">{getMethodPageDictionary(locale).methods}</Link>
+      <div className="flex flex-wrap gap-x-5 gap-y-2"><Link href={methodsPath(locale)} prefetch={false} className="inline-flex min-h-11 items-center font-medium">{getMethodPageDictionary(locale).methods}</Link><Link href={ordersPath(locale)} prefetch={false} className="inline-flex min-h-11 items-center font-medium">{getCommerceDictionary(locale).orders}</Link></div>
       <ResumeContext locale={locale} /><AccountActions locale={locale} initialPreferences={preferences} />
-      <p className="text-sm leading-relaxed text-muted-foreground">{text.nextPhase}</p>
     </AuthFrame>;
   };
 }

@@ -8,6 +8,8 @@ import type { Locale } from "@/lib/i18n/locales";
 import { Brand, FutureItem, LayoutLanguageSwitch, MobileNavigation } from "./layout-parts";
 import { getPublicDictionary } from "@/lib/i18n/public";
 import { publicCatalogueHref, type LanguageLinks } from "@/lib/public/routes";
+import { offersPath } from "@/lib/commerce/routes";
+import { getCommerceDictionary } from "@/lib/i18n/commerce";
 
 export function PublicLayout({ locale, children, product }: { locale: Locale; children: ReactNode; product?: { languageLinks: LanguageLinks } }) {
   if (product) return <ProductPublicLayout locale={locale} languageLinks={product.languageLinks}>{children}</ProductPublicLayout>;
@@ -41,7 +43,7 @@ export function PublicLayout({ locale, children, product }: { locale: Locale; ch
 
 function ProductPublicLayout({ locale, languageLinks, children }: { locale: Locale; languageLinks: LanguageLinks; children: ReactNode }) {
   const t = getPublicDictionary(locale);
-  const nav = [{ label: t.catalogue, href: publicCatalogueHref(locale) }, { label: t.methods, href: `${publicCatalogueHref(locale)}?type=METHOD_TEMPLATE&locale=${locale}` }, { label: t.guides, href: `${publicCatalogueHref(locale)}?type=GUIDE&locale=${locale}` }, { label: t.account, href: locale === "fr" ? "/fr/compte" : "/en/account" }];
+  const nav = [{ label: t.catalogue, href: publicCatalogueHref(locale) }, { label: t.methods, href: `${publicCatalogueHref(locale)}?type=METHOD_TEMPLATE&locale=${locale}` }, { label: t.guides, href: `${publicCatalogueHref(locale)}?type=GUIDE&locale=${locale}` }, { label: getCommerceDictionary(locale).offers, href: offersPath(locale) }, { label: t.account, href: locale === "fr" ? "/fr/compte" : "/en/account" }];
   const brand = <NextLink href={`/${locale}`} className="inline-flex min-h-11 items-center text-base font-semibold tracking-tight no-underline sm:text-lg">ChatGPT Courses<span aria-hidden="true" className="text-brand">.</span></NextLink>;
   const navigation = <nav aria-label={t.navigation} className="grid gap-1">{nav.map((item) => <NextLink key={item.href} href={item.href} className="flex min-h-11 items-center rounded-input px-3 text-sm font-medium no-underline hover:bg-surface-hover">{item.label}</NextLink>)}</nav>;
   return <div className="bg-background text-foreground">

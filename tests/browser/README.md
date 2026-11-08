@@ -1,4 +1,4 @@
-# Recettes navigateur P01 à P10 — intégration locale
+# Recettes navigateur P01 à P11 — intégration locale
 
 Ce scénario utilise Playwright et un Chromium dédié, sans prendre le contrôle du navigateur personnel. L’utilisateur a explicitement autorisé cette méthode le 8 novembre 2026. La recette finale a été exécutée : **sept tests réussis, aucun échec, aucun test ignoré**, puis les 16 captures ont été examinées. Les preuves sont dans [l’index de recette](../../docs/evidence/P01-browser/README.md).
 
@@ -8,9 +8,9 @@ Commandes Windows, après `npm ci` via le wrapper et builds web/API : `.\scripts
 
 Le superviseur réserve les ports **3101 et 8181** par défaut (`BROWSER_WEB_PORT` et `BROWSER_API_PORT` permettent un autre choix), puis démarre le JAR existant et le build Next sur la boucle locale. Il refuse un port occupé et ne réutilise ni n’arrête les services de développement en 3000/8080. Il enregistre ses seuls PID dans `.runtime/browser-<session>/processes.json`. L’arrêt/reprise de Spring passe par un IPC privé authentifié, sans endpoint produit de simulation.
 
-Les sept tests couvrent FR/EN à 1440, 390 et 320 px : navigation clavier, cible du lien d’évitement, focus visible conservé après réponse, réponse réelle Spring/PostgreSQL, erreur 404 structurée, absence de défilement horizontal et d’exception JavaScript. Le dernier test arrête réellement Spring, vérifie l’indisponibilité dans les deux langues pendant que Next répond toujours, redémarre Spring, puis utilise « Réessayer » pour confirmer la reprise et le transfert de focus attendu.
+Les sept tests P01 couvrent FR/EN à 1440, 390 et 320 px : navigation clavier, cible du lien d’évitement, focus visible conservé après réponse, réponse réelle Spring/PostgreSQL, erreur 404 structurée, absence de défilement horizontal et d’exception JavaScript. Le dernier test arrête réellement Spring, vérifie l’indisponibilité dans les deux langues pendant que Next répond toujours, redémarre Spring, puis utilise « Réessayer » pour confirmer la reprise et le transfert de focus attendu.
 
-Depuis P06, ces contrôles techniques ouvrent `/{locale}/dev/foundations` ; l’accueil lit le catalogue publié. Les recettes P05 à P10 réservent leur propre PostgreSQL en tmpfs, sans employer le volume Compose. Elles créent leurs comptes et publications fictives dans cette seule instance, contrôlent son étiquette d’appartenance et l’arrêtent après les tests. Aucun compte éditeur ni contenu public n’est injecté dans la base de développement partagée.
+Depuis P06, ces contrôles techniques ouvrent `/{locale}/dev/foundations` ; l’accueil lit le catalogue publié. Les recettes P05 à P11 réservent leur propre PostgreSQL en tmpfs, sans employer le volume Compose. Elles créent leurs comptes et publications fictives dans cette seule instance, contrôlent son étiquette d’appartenance et l’arrêtent après les tests. Aucun compte éditeur ni contenu public n’est injecté dans la base de développement partagée.
 
 | Phase | Commande après `.\scripts\courses.cmd` | Données utilisées |
 | --- | --- | --- |
@@ -22,6 +22,7 @@ Depuis P06, ces contrôles techniques ouvrent `/{locale}/dev/foundations` ; l’
 | P07 méthodes | `run verify:methods` | Sources et copies privées fictives dans PostgreSQL tmpfs |
 | P08 apprentissage | `run verify:learning` | Programme BR01, notes et tentatives fictifs dans PostgreSQL tmpfs |
 | P09 projets | `run verify:projects` | Productions, grilles BR01/BR02 et preuves déclaratives fictives dans PostgreSQL tmpfs |
+| P11 offres/commandes | `run verify:commerce` | Offres, conditions et origines MANUAL_TEST explicites dans PostgreSQL tmpfs ; Stripe désactivé |
 | P10 fichiers, médias et emails | `run verify:media` | PostgreSQL, SeaweedFS S3 et Mailpit isolés en tmpfs ; fichiers synthétiques et MP4 technique CC0 |
 
 P09 a réussi ses huit scénarios finaux ; P10 ses douze scénarios complets. Les résultats et limites restent dans [P09](../../docs/evidence/P09.md) et [P10](../../docs/evidence/P10.md), sans validation de stockage, de courrier ou de fournisseur vidéo en production.

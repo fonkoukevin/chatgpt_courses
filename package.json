@@ -46,6 +46,7 @@
     "verify:learning": "node scripts/verify-browser.mjs P08",
     "verify:projects": "node scripts/verify-browser.mjs P09",
     "verify:media": "node scripts/verify-browser.mjs P10",
+    "verify:commerce": "node scripts/verify-browser.mjs P11",
     "verify:design": "node scripts/verify-browser.mjs P02",
     "verify:contrast": "node scripts/verify-contrast.mjs",
     "browser:install": "node scripts/install-browser.mjs",

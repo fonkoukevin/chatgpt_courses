@@ -3,6 +3,7 @@ import { safeMethodsDestination, translateMethodsDestination } from "../methods/
 import { safeLearningDestination, translateLearningDestination } from "../learning/destination";
 import { safeProjectsDestination, translateProjectsDestination } from "../projects/destination";
 import { safeNotificationsDestination, translateNotificationsDestination } from "../notifications/routes";
+import { safeCommerceDestination, translateCommerceDestination } from "../commerce/routes";
 
 export type AuthScreen = "sign-in" | "sign-up" | "recover" | "reset" | "account";
 const paths = {
@@ -15,6 +16,8 @@ export function authPath(locale: Locale, screen: AuthScreen): string {
 }
 
 export function safeReturnTo(value: unknown, locale: Locale): string {
+  const commerce = safeCommerceDestination(value, locale);
+  if (commerce) return commerce;
   const notifications = safeNotificationsDestination(value, locale);
   if (notifications) return notifications;
   const project = safeProjectsDestination(value, locale);
@@ -34,6 +37,8 @@ export function safeReturnTo(value: unknown, locale: Locale): string {
 }
 
 export function translateReturnTo(value: unknown, locale: Locale): string {
+  const commerce = translateCommerceDestination(value, locale);
+  if (commerce) return commerce;
   const notifications = translateNotificationsDestination(value, locale);
   if (notifications) return notifications;
   const project = translateProjectsDestination(value, locale);

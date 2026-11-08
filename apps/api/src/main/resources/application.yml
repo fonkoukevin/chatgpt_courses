@@ -72,6 +72,10 @@ server:
         same-site: lax
         path: /
 courses:
+  commerce:
+    enabled: ${COMMERCE_ENABLED:false}
+    allowed-currencies: ${COMMERCE_ALLOWED_CURRENCIES:}
+    order-ttl: ${COMMERCE_ORDER_TTL:30m}
   identity:
     reset-token-ttl: 30m
     reset-window: 15m

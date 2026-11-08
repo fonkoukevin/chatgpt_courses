@@ -1,0 +1,209 @@
+{
+  "verifiedAt": "2026-11-08T19:52:02.948Z",
+  "command": ".\\scripts\\courses.cmd run verify:refunds",
+  "exitCode": 0,
+  "externalStripe": false,
+  "finalRun": "2026-11-08T19-39-50-580Z-ef7accd1-7328-438c-b3e5-68ecaa939f4e",
+  "finalStats": {
+    "startTime": "2026-11-08T19:40:26.223Z",
+    "duration": 152104.027,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "cleanupConfirmed": true,
+  "controlledProvider": {
+    "kind": "controlled-stripe-network",
+    "externalStripe": false,
+    "requests": 134,
+    "createCalls": 7,
+    "sessions": 7,
+    "stopped": true,
+    "refunds": {
+      "createCalls": 5,
+      "stableKeys": 5,
+      "localRecords": 5,
+      "records": 6,
+      "successful": 5,
+      "ambiguityCount": 1,
+      "externalStripe": false
+    }
+  },
+  "captures": [
+    "en-1440-dashboard-partial-needs-review.png",
+    "en-1440-partial-pending.png",
+    "en-320-partial-failed-access-kept.png",
+    "en-390-partial-pending.png",
+    "fr-1440-operator-preview-pack.png",
+    "fr-1440-origins-pack-refunded.png",
+    "fr-1440-refund-confirmed.png",
+    "fr-320-origins-pack-refunded.png",
+    "fr-390-ambiguous-response-not-confirmed.png",
+    "fr-390-api-unavailable-preserves-reason.png",
+    "fr-390-financial-confirmation.png",
+    "fr-390-old-payment-view-refund-aware.png",
+    "fr-390-origins-pack-refunded.png",
+    "fr-390-partial-keep-no-revocation.png",
+    "fr-390-refund-confirmed-email-incident.png"
+  ],
+  "visualReview": "Recorded separately after opening every final capture.",
+  "additionalChecks": [
+    {
+      "id": "2026-11-08T19-48-40-414Z-3666718e-7549-4e87-88f5-b870889c6ed6",
+      "selection": {
+        "grep": "01",
+        "repeatEach": 1
+      },
+      "stats": {
+        "startTime": "2026-11-08T19:49:15.312Z",
+        "duration": 35564.471,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "result": "passed",
+      "cleanupConfirmed": true
+    }
+  ],
+  "history": [
+    {
+      "id": "2026-11-08T19-17-25-972Z-d600d5ad-b816-4088-bafe-d6f81d3bf2aa",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "stats": {
+        "startTime": "2026-11-08T19:18:03.605Z",
+        "duration": 40200.725,
+        "expected": 0,
+        "skipped": 5,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "result": "failed",
+      "cleanupConfirmed": true
+    },
+    {
+      "id": "2026-11-08T19-19-52-435Z-2f0f8b9b-b15e-47e3-8b3c-533c3bbd0a66",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "stats": {
+        "startTime": "2026-11-08T19:20:29.544Z",
+        "duration": 41547.725,
+        "expected": 0,
+        "skipped": 5,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "result": "failed",
+      "cleanupConfirmed": true
+    },
+    {
+      "id": "2026-11-08T19-21-48-995Z-93735e28-6e5b-4ff7-b401-076f1b128ab4",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "stats": {
+        "startTime": "2026-11-08T19:22:23.826Z",
+        "duration": 46442.803,
+        "expected": 0,
+        "skipped": 5,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "result": "failed",
+      "cleanupConfirmed": true
+    },
+    {
+      "id": "2026-11-08T19-25-43-927Z-9404114d-0445-480d-915d-b39d0261ee99",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "stats": {
+        "startTime": "2026-11-08T19:26:14.611Z",
+        "duration": 36900.401,
+        "expected": 1,
+        "skipped": 4,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "result": "failed",
+      "cleanupConfirmed": true
+    },
+    {
+      "id": "2026-11-08T19-28-05-124Z-64343166-0586-4be3-98fc-865ea010dc28",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "stats": {
+        "startTime": "2026-11-08T19:28:50.989Z",
+        "duration": 98708.924,
+        "expected": 3,
+        "skipped": 2,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "result": "failed",
+      "cleanupConfirmed": true
+    },
+    {
+      "id": "2026-11-08T19-33-00-194Z-485fc0c6-4e06-4983-bd17-f866eaaa7eb9",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "stats": {
+        "startTime": "2026-11-08T19:33:31.264Z",
+        "duration": 132994.893,
+        "expected": 5,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "result": "failed",
+      "cleanupConfirmed": true
+    },
+    {
+      "id": "2026-11-08T19-39-50-580Z-ef7accd1-7328-438c-b3e5-68ecaa939f4e",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "stats": {
+        "startTime": "2026-11-08T19:40:26.223Z",
+        "duration": 152104.027,
+        "expected": 6,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "result": "passed",
+      "cleanupConfirmed": true
+    },
+    {
+      "id": "2026-11-08T19-48-40-414Z-3666718e-7549-4e87-88f5-b870889c6ed6",
+      "selection": {
+        "grep": "01",
+        "repeatEach": 1
+      },
+      "stats": {
+        "startTime": "2026-11-08T19:49:15.312Z",
+        "duration": 35564.471,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "result": "passed",
+      "cleanupConfirmed": true
+    }
+  ],
+  "privatePayloadsExported": false
+}

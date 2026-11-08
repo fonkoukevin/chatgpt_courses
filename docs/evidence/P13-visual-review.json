@@ -1,0 +1,46 @@
+{
+  "phase": "P13",
+  "runId": "2026-11-08T19-39-50-580Z-ef7accd1-7328-438c-b3e5-68ecaa939f4e",
+  "captureDirectory": "docs/evidence/P13-browser/2026-11-08T19-39-50-580Z-ef7accd1-7328-438c-b3e5-68ecaa939f4e",
+  "reviewMethod": "Les quinze PNG ont été réellement ouverts avec view_image en résolution originale. Les dimensions ont été lues dans les en-têtes PNG.",
+  "reviewResult": "Aucun défaut matériel visuel observé dans les captures examinées.",
+  "imageCount": 15,
+  "images": [
+    { "file": "en-1440-dashboard-partial-needs-review.png", "width": 1440, "height": 1769 },
+    { "file": "en-1440-partial-pending.png", "width": 1440, "height": 2126 },
+    { "file": "en-320-partial-failed-access-kept.png", "width": 320, "height": 2800 },
+    { "file": "en-390-partial-pending.png", "width": 390, "height": 2594 },
+    { "file": "fr-1440-operator-preview-pack.png", "width": 1440, "height": 2690 },
+    { "file": "fr-1440-origins-pack-refunded.png", "width": 1440, "height": 1231 },
+    { "file": "fr-1440-refund-confirmed.png", "width": 1440, "height": 1910 },
+    { "file": "fr-320-origins-pack-refunded.png", "width": 320, "height": 2274 },
+    { "file": "fr-390-ambiguous-response-not-confirmed.png", "width": 390, "height": 3008 },
+    { "file": "fr-390-api-unavailable-preserves-reason.png", "width": 390, "height": 2136 },
+    { "file": "fr-390-financial-confirmation.png", "width": 390, "height": 1000 },
+    { "file": "fr-390-old-payment-view-refund-aware.png", "width": 390, "height": 1530 },
+    { "file": "fr-390-origins-pack-refunded.png", "width": 390, "height": 1872 },
+    { "file": "fr-390-partial-keep-no-revocation.png", "width": 390, "height": 3809 },
+    { "file": "fr-390-refund-confirmed-email-incident.png", "width": 390, "height": 2969 }
+  ],
+  "observations": [
+    "Aucun chevauchement ou débordement essentiel observé aux largeurs capturées de 320, 390 et 1440 pixels ; textes et actions restent lisibles dans les vues examinées.",
+    "Les références de commande et de ligne rendent les origines homonymes distinctes sur les vues FR à 320, 390 et 1440 pixels. L'achat indépendant actif est distingué des origines du pack retirées.",
+    "L'aperçu et la confirmation financière présentent montant, lignes identifiées et effets proposés, sans prix unitaire fabriqué pour le pack.",
+    "Le modal financier à 390 pixels est cadré et montre un anneau de focus bleu sur Annuler ; les deux actions restent visibles.",
+    "Les vues d'attente, d'échec et de résultat inconnu ne montrent pas de remboursement confirmé ni d'effet d'accès appliqué. Le remboursement partiel KEEP confirmé affiche les droits de cette origine maintenus.",
+    "La vue de panne conserve le motif saisi et propose une copie, avec une erreur et un résultat non confirmé explicites.",
+    "L'incident email reste distinct du remboursement confirmé et des droits maintenus. La vue Dashboard distingue confirmation financière et décision d'accès encore à examiner.",
+    "E08 présente le remboursement confirmé séparément des faits historiques PAID/READY et ne propose pas de reprise des lignes retirées ; les liens vers le suivi et les origines d'accès sont visibles.",
+    "Les libellés d'interface FR/EN examinés sont cohérents ; les textes de fixture ou d'origine conservés ne sont pas présentés comme une traduction automatique."
+  ],
+  "sessionRecordRead": {
+    "file": "session.json",
+    "result": "passed",
+    "cleanupConfirmed": true
+  },
+  "limits": [
+    "Cette revue est statique et limitée aux quinze captures listées. Elle ne constitue pas une validation globale WCAG, de tous les formats d'écran ou des interactions non capturées.",
+    "Le focus visible est observé sur le PNG. Les assertions Tab/Shift+Tab et document.activeElement appartenant à alertdialog sont rapportées séparément par la recette navigateur du même passage ; elles ne sont pas déduites des images et aucun nouveau navigateur n'a été lancé pour cette revue.",
+    "Les captures et le session.json attestent cette intégration locale contrôlée. Ils ne prouvent pas un remboursement Stripe externe, un mode LIVE, une réception bancaire ou un déploiement de production."
+  ]
+}

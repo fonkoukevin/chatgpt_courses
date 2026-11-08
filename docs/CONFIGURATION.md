@@ -48,6 +48,22 @@ Les scripts ôtent le commutateur hôte `DEBUG` de l’environnement enfant de S
 
 La recette navigateur autorisée utilise Playwright 1.65.0. `browser:install` installe explicitement Chromium dans `.tools/playwright` (`PLAYWRIGHT_BROWSERS_PATH`), hors du navigateur personnel. `verify:browser` réserve par défaut 3101/8181 (`BROWSER_WEB_PORT`/`BROWSER_API_PORT`), valide les ports libres et supervise uniquement ses processus. Un IPC local authentifié commande l’arrêt/reprise du seul Spring de test ; aucun endpoint produit de simulation. Rapports et captures vont dans `docs/evidence/P01-browser/<session>`, journaux et manifests de travail dans `.runtime`.
 
+## Rapprochement des remboursements P13
+
+Les exemples conservent `REFUND_WORKER_ENABLED=false`. En développement Stripe TEST, l’activer explicitement dans `.env.local` puis redémarrer Spring permet le rapprochement des événements et opérations. Ce worker ne crée aucun remboursement : ses appels fournisseur sont des GET. Une exécution financière exige une décision autorisée, puis une action opérateur distincte avec CSRF, contexte de compte, ETag et clé d’idempotence.
+
+| Paramètre | Défaut | Rôle |
+| --- | --- | --- |
+| `REFUND_WORKER_ENABLED` | `false` | Activation du scheduler |
+| `REFUND_POLL_DELAY` | `2s` | Intervalle entre passages |
+| `REFUND_LEASE_DURATION` | `120s` | Bail de traitement, entre30s et10min |
+| `REFUND_RETRY_DELAY` | `10s` | Attente de rapprochement/reprise |
+| `REFUND_MAX_ATTEMPTS` | `5` | Tentatives bornées, entre1 et20 |
+
+Le listener local vérifie le même compte TEST, la même version et le même secret privés que Spring ; il reçoit les événements Checkout et `refund.created`, `refund.updated`, `refund.failed`, `charge.refunded`. Un dossier UNKNOWN ou à examiner conserve son montant réservé tant qu’aucun fait certain ne le libère. Aucune durée ou garantie de remboursement bancaire n’est configurée par ce lot. Les liens S3 déjà délivrés expirent selon `ASSET_DOWNLOAD_TTL_SECONDS` (défaut60s, borne1–300s) ; chaque nouvelle délivrance recontrôle les droits.
+
+Dès Stripe activé, le bail doit couvrir `7 × (STRIPE_CONNECT_TIMEOUT + STRIPE_READ_TIMEOUT) + 5s`, même si le scheduler est arrêté : les actions explicites restent possibles. Les sept requêtes couvrent aussi une commande historique sans PaymentIntent local ou une référence de remboursement exigeant une lecture de charge. Les délais par défaut3s+8s demandent82s ; le bail120s convient. Une contradiction fournisseur après confirmation reste à examiner : la réservation déjà close n’est pas réouverte, et le montant historiquement confirmé reste consommé dans le budget.
+
 ## Éléments externes encore nécessaires
 
 Domaine, hébergement autorisé, fournisseurs et secrets de recette/production, expéditeur vérifié, contenus et traductions relus, médias annoncés, identité légale, prix et conditions de chaque offre, langues vendues et support. Ces éléments ne bloquent pas les fondations locales ; leur absence interdira de déclarer fonctionnels l’intégration externe ou le lancement correspondant.

@@ -1,0 +1,17 @@
+{
+  "verifiedAt": "2026-11-08T19:32:30.493Z",
+  "springContextStarted": true,
+  "secretMatchesEnvironment": true,
+  "webhookMatchesEnvironment": true,
+  "accountMatchesEnvironment": true,
+  "testMode": true,
+  "enabledMatchesEnvironment": true,
+  "stripeEnabled": true,
+  "webhookSecretConfigured": true,
+  "refundWorkerDisabled": true,
+  "secretsPrinted": false,
+  "privateFileMatchesProcessEnvironment": true,
+  "workersDisabledForProbe": true,
+  "temporaryServerStopped": true,
+  "externalStripeCalled": false
+}

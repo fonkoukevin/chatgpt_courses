@@ -1,0 +1,15 @@
+{
+  "verifiedAt": "2026-11-08T19:55:00.211Z",
+  "originalTablesCompared": 49,
+  "existingRowsPreserved": true,
+  "changedTables": [],
+  "addedRowsByOriginalTable": {
+    "flyway_schema_history": 1,
+    "permissions": 7,
+    "role_permissions": 7,
+    "roles": 1
+  },
+  "sessionTablesExcluded": true,
+  "readOnly": true,
+  "privateRowsPrinted": false
+}

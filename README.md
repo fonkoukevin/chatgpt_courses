@@ -4,7 +4,7 @@ Plateforme de formation pratique à l’IA : choisir une tâche, apprendre, prod
 
 ## État réel
 
-P01 fournit les fondations locales ; P02 ajoute le système visuel et trois structures d’interface. P03 pose le schéma identité/contenu et le contrat généré. P04 raccorde l’identité aux sessions Spring/PostgreSQL. P05 ajoute le CMS et la publication ; P06 raccorde le site public aux publications réelles. P07 ajoute le générateur sans IA et la bibliothèque personnelle ; P08 raccorde apprentissage, quiz et notes. P09 ajoute productions personnelles, autoévaluation et corrigé contrôlé. P10 apporte stockage, vidéo locale de test et notifications durables ; P11 les offres et commandes ; P12 raccorde Checkout et l’attribution des droits. Le niveau de validation de chaque lot est dans [STATUS](docs/STATUS.md). Aucun ancien prototype repris ni déploiement externe annoncé.
+P01 fournit les fondations locales ; P02 ajoute le système visuel et trois structures d’interface. P03 pose le schéma identité/contenu et le contrat généré. P04 raccorde l’identité aux sessions Spring/PostgreSQL. P05 ajoute le CMS et la publication ; P06 raccorde le site public aux publications réelles. P07 ajoute le générateur sans IA et la bibliothèque personnelle ; P08 raccorde apprentissage, quiz et notes. P09 ajoute productions personnelles, autoévaluation et corrigé contrôlé. P10 apporte stockage, vidéo locale de test et notifications durables ; P11 les offres et commandes ; P12 raccorde Checkout et l’attribution des droits ; P13 ajoute les remboursements et leurs effets par origine. Le niveau de validation de chaque lot est dans [STATUS](docs/STATUS.md). Aucun ancien prototype repris ni déploiement externe annoncé.
 
 La validation P01 couvre FR/EN, clavier, formats étroits, erreur 404 et panne/reprise réelle de Spring. P02 ajoute 14 tests et 54 captures examinées pour les interfaces ; les sept scénarios P01 passent à nouveau après ces changements. La validation reste locale, avec le Chromium de test autorisé.
 
@@ -401,7 +401,7 @@ Spring reçoit les octets bruts de `POST /api/v1/webhooks/stripe`, vérifie la s
 
 `verify:payments` réserve ses propres PostgreSQL, S3 et Mailpit en tmpfs. Il contrôle uniquement le transport réseau Stripe avec le SDK réel ; les signatures, l’API, les transactions, le worker et les droits sont réellement exécutés localement. Les URL Checkout restent strictement HTTPS sur `checkout.stripe.com`, y compris dans ce test. **Ce scénario ne contacte pas Stripe et ne prouve pas un paiement fournisseur.** Résultats réellement obtenus et limites : [preuve P12](docs/evidence/P12.md).
 
-**P12 validé localement**, avec intégration Stripe TEST effectivement exécutée. Dernier passage contrôlé : **8/8 en 152,320 s, sortie 0**, 24 GET membre croisés et 27 captures FR/EN examinées. Nouveau ciblé PostgreSQL : **5/5**, dont 16 GET parallèles après attribution fraîche sans antidatage. Parcours externe : **1/1 en 100,933 s, sortie 0**, vrai Checkout TEST, réception durable avant worker, reprise PAID/READY, contenu privé accessible et deux rejeux fournisseur sans doublon de droit ni d’intention email. [Preuves et références](docs/evidence/P12.md). Les deux anciens refus restent de cause inconnue, non reproduits ; leur [suivi obligatoire P17/P19](docs/evidence/P12-access-follow-up.md) reste ouvert. Aucun passage automatique à P13, mode LIVE ou déploiement.
+**P12 validé localement**, avec intégration Stripe TEST effectivement exécutée. Dernier passage contrôlé : **8/8 en 152,320 s, sortie 0**, 24 GET membre croisés et 27 captures FR/EN examinées. Nouveau ciblé PostgreSQL : **5/5**, dont 16 GET parallèles après attribution fraîche sans antidatage. Parcours externe : **1/1 en 100,933 s, sortie 0**, vrai Checkout TEST, réception durable avant worker, reprise PAID/READY, contenu privé accessible et deux rejeux fournisseur sans doublon de droit ni d’intention email. [Preuves et références](docs/evidence/P12.md). Les deux anciens refus restent de cause inconnue, non reproduits ; leur [suivi obligatoire P17/P19](docs/evidence/P12-access-follow-up.md) reste ouvert. P13 a ensuite été demandé explicitement ; aucun mode LIVE ou déploiement.
 
 ### Configuration privée et Stripe CLI — Windows natif
 
@@ -467,4 +467,31 @@ Cette commande réserve `http://127.0.0.1:3101` et l’API interne8181, PostgreS
 
 Les sessions TEST ouvertes et impayées identifiées sont expirées ; les sessions payées restent dans Stripe TEST comme preuves. Les processus et conteneurs propres sont arrêtés, sans volume partagé supprimé. Les résultats sont dans `docs/evidence/P12_EXTERNAL-browser/` et leur [index](docs/evidence/P12-stripe-external-checks.json). Le parcours externe vérifié est FR/carte immédiate ; le différé, FR/EN et les pannes ont leurs tests locaux distincts. Un challenge humain ou un refus de Stripe reste un échec, jamais un succès simulé. [Tests Stripe](https://docs.stripe.com/testing), [rejeu CLI](https://docs.stripe.com/cli/events/resend).
 
-Après la recette du 8 novembre, le développement3000 est resté démarré et son listener a été rétabli **en arrière-plan**, Ready TEST ; son état local est dans `.runtime/p12-development-listener-transition.json`. L’ancien terminal d’écoute est revenu au prompt pendant l’isolation. Aucun nouveau listener n’est nécessaire pour utiliser l’application courante. La configuration `.env.local` et ses valeurs ont été préservées.
+Après la recette P12 du 8 novembre, le développement3000 est resté démarré et son listener a été rétabli **en arrière-plan**, Ready TEST ; son état local historique est dans `.runtime/p12-development-listener-transition.json`. P13 les a suspendus pour ses builds puis rétablis, avec contrôle HTTP et écoute TEST vérifiés séparément. La configuration `.env.local` et ses valeurs secrètes sont préservées.
+
+## P13 — Remboursements et origines d’accès
+
+L’apprenant consulte `/fr/commandes/{id}/remboursements` ou `/en/orders/{id}/refunds` et dépose seulement un motif sur sa propre commande. Les origines restent visibles dans `/fr/compte/acces` et `/en/account/access`. Demande, décision, résultat financier et effet sur les accès sont présentés séparément. Le contenu protégé dépend des droits actuels ; les notes, productions, méthodes et tentatives personnelles sont conservées.
+
+L’opérateur possédant les permissions `refunds.*` utilise `/fr/admin/operations/refunds` ou sa variante EN. Le rôle de référence `REFUND_OPERATOR` n’est attribué à aucun compte par migration. Il prévisualise montant, lignes et effet, confirme la décision, puis confirme séparément l’exécution. Approuver réserve le montant sans transmettre de remboursement. Refuser une demande et annuler une exécution jamais transmise ne sont pas des échecs Stripe. La création fournisseur garde la même clé et les mêmes paramètres ; une réponse perdue reste UNKNOWN et se rapproche par GET.
+
+Une allocation partielle porte un montant explicite et KEEP/REVOKE pour chaque ligne choisie. Aucun prix par cours n’est déduit du prix du pack. Un remboursement intégral retire toutes les origines de cette commande ; un achat indépendant reste valable. Un remboursement partiel découvert chez le fournisseur sans décision d’accès est à examiner. Le rapprochement ne crée aucune nouvelle opération financière. Un email en échec ne change pas le remboursement.
+
+```powershell
+.\scripts\courses.cmd run api:check
+.\scripts\courses.cmd run verify:client
+.\scripts\courses.cmd run lint
+.\scripts\courses.cmd run typecheck
+.\scripts\courses.cmd run typecheck:browser
+.\scripts\courses.cmd run build:api
+.\scripts\courses.cmd run build:web
+.\scripts\courses.cmd run verify:refunds
+```
+
+`verify:refunds` utilise les builds et Chromium installés, PostgreSQL/S3/Mailpit isolés en tmpfs et un transport Stripe HTTP contrôlé avec le véritable SDK. Aucun appel Stripe, fonds réels ou effacement de volume partagé. Les 3101/8181 doivent être libres ; la commande nettoie seulement ses propres ressources. Les preuves précisent les résultats réellement exécutés dans [P13](docs/evidence/P13.md). Les preuves Stripe TEST externes de P12 ne valent pas preuve d’un remboursement fournisseur.
+
+`build:api` et `verify:api` utilisent le profil test sans charger `.env.local`, retirent les paramètres Stripe hérités et arrêtent les schedulers financiers par défaut. Les tests d’intégration fournissent leurs propres réglages et transports contrôlés. La commande `stripe:bindings -- P13` vérifie séparément les valeurs privées réellement liées par Spring, en ne produisant que des booléens ; son serveur temporaire garde tous les workers arrêtés et ne contacte pas Stripe.
+
+Pour recevoir les mises à jour dans le développement TEST, régler **`REFUND_WORKER_ENABLED=true`** dans le fichier privé ignoré `.env.local`, puis redémarrer Spring avec `dev`. La session P13 a activé ce seul indicateur dans le fichier privé, sauvegarde locale conservée ; les secrets et autres paramètres restent inchangés. Les exemples gardent false. Valeurs par défaut : `REFUND_POLL_DELAY=2s`, `REFUND_LEASE_DURATION=120s`, `REFUND_RETRY_DELAY=10s`, `REFUND_MAX_ATTEMPTS=5`. Le worker lit les faits courants, avec tentatives bornées et état à examiner ; il ne transmet aucun POST de remboursement. `stripe:listen` écoute les quatre événements Checkout ainsi que `refund.created`, `refund.updated`, `refund.failed`, `charge.refunded`, toujours vers l’unique origine `/api/v1/webhooks/stripe`.
+
+Les nouveaux liens média privés sont refusés lorsque la dernière origine autorisant ce contenu est retirée. Un lien S3 déjà délivré reste valable jusqu’à son expiration configurée (`ASSET_DOWNLOAD_TTL_SECONDS`, défaut60s) ; un fichier déjà téléchargé ne peut pas être rappelé. Aucune politique de délai, d’éligibilité, de frais ou de garantie de remboursement n’est inventée. Les conditions commerciales et légales restent à fournir par le porteur avant lancement.

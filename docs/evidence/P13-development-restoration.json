@@ -1,0 +1,13 @@
+{
+  "verifiedAt": "2026-11-08T19:54:06.972Z",
+  "developmentRestored": true,
+  "listenerRestored": true,
+  "listenerMode": "TEST",
+  "listenerApiVersion": "2026-10-28.endive",
+  "refundWorkerFlagConfigured": true,
+  "privateSettingsPreserved": true,
+  "userNextEnvironmentPreserved": true,
+  "developmentSupervisorPid": 92764,
+  "listenerSupervisorPid": 82096,
+  "secretsPrinted": false
+}

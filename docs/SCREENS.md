@@ -25,10 +25,16 @@ Cette carte reprend E01–E16 du cahier fonctionnel V1 et précise les routes in
 | E12 Nouvelle méthode/import explicite | `/fr/espace/methodes/nouvelle`, `?draft={uuid}` facultatif | `/en/my/methods/new`, `?draft={uuid}` facultatif |
 | E12 Détail personnel | `/fr/espace/methodes/{methodId}` | `/en/my/methods/{methodId}` |
 | E13 Compte | `/fr/compte` | `/en/account` |
+| E13 Commandes propriétaires, P11 | `/fr/commandes` | `/en/orders` |
+| E13 Suivi des remboursements d’une commande, P13 | `/fr/commandes/{orderId}/remboursements` | `/en/orders/{orderId}/refunds` |
+| E13 Origines et historique des accès, P13 | `/fr/compte/acces` | `/en/account/access` |
 | E14 Contenus | `/fr/admin/content` | `/en/admin/content` |
 | E15 Éditeur | `/fr/admin/content/{id}/edit` | `/en/admin/content/{id}/edit` |
 | E16 Exploitation | `/fr/admin/operations` | `/en/admin/operations` |
 | E16 Suivi des emails P10 | `/fr/admin/notifications` | `/en/admin/notifications` |
+| E16 Demandes et exécutions de remboursement, P13 | `/fr/admin/operations/refunds` | `/en/admin/operations/refunds` |
+| E16 Examen d’une demande, P13 | `/fr/admin/operations/refunds/{requestId}` | `/en/admin/operations/refunds/{requestId}` |
+| E16 Suivi d’une exécution, P13 | `/fr/admin/operations/refunds/operations/{operationId}` | `/en/admin/operations/refunds/operations/{operationId}` |
 | Diagnostic technique P01, local/test | `/fr/dev/foundations` | `/en/dev/foundations` |
 
 - Locales autorisées : `fr` et `en`. `/` oriente vers la préférence autorisée ou la langue par défaut configurée. FR est la valeur de développement, sans décision sur les langues de l’offre réelle.
@@ -40,6 +46,7 @@ Cette carte reprend E01–E16 du cahier fonctionnel V1 et précise les routes in
 - Les détails publics acceptent `?version={versionId}` pour conserver une version publiée déterminée. Les liens d’activité E10 du programme ajoutent `resource={activityId}`, `version={activityVersionId}` et `courseVersion={courseVersionId}` ; les slugs seuls ne remplacent pas cette identité/version.
 - P06 garde les lectures publiques `no-store`, sans cookie et sans personnalisation privée. Canonical et équivalents sont préparés ; **noindex/nofollow reste actif jusqu’à P16**. Aucun prix, achat ou paiement opérationnel avant P11/P12.
 - P07 valide les retours d’identification E12 par famille de route, UUID et paramètres autorisés, puis traduit `/fr/espace/methodes/nouvelle` en `/en/my/methods/new`. Le query `draft` ne contient qu’un UUID temporaire, jamais le texte ou un propriétaire. Filtres de liste `q/category/page/pageSize` bornés ; pas de paramètres d’identité, doublons, traversées ou domaines externes.
+- P13 ajoute les retours privés exacts de remboursement et d’origines d’accès. Les listes acceptent `page/pageSize` ; l’administration ajoute `view=requests|operations`, `state` cohérent avec cette vue et `orderId` UUID. Les détails refusent tout paramètre. Le passage FR/EN conserve les mêmes identifiants, sans changer de dossier ni inclure de motif dans l’URL.
 
 ## Conventions communes
 
@@ -207,9 +214,13 @@ Composants : `PersonalMethodsList`, `PersonalMethodEditor`, `MethodDraftImport`,
 
 ## E13 Compte, achats et aide
 
-Routes : /fr/compte et /en/account, avec sections profil, achats, attestations et aide. Phase P14, identité P04, commerce P11–P13.
+Routes : /fr/compte et /en/account ; commandes P11, remboursements et origines d’accès P13 aux chemins du registre. Identité et préférences P04 restent présentes ; compte complet, attestations et aide restent P14. Les vues P13 sont validées localement en FR/EN, avec parcours réels et captures examinées ; les limites fournisseur/production restent dans [la preuve P13](evidence/P13.md).
 
 Préférences, langue, commandes, droits, demandes de remboursement, attestations et support. La commande conserve les conditions achetées. Paiement, remboursement et accès sont nommés séparément. La documentation téléchargeable ne se présente pas comme facture légale si ce document n’est pas réellement produit selon la configuration commerciale.
+
+Le récapitulatif et le statut de commande renvoient au suivi privé des remboursements. Celui-ci présente montant payé, confirmé remboursé, réservé et disponible tels que fournis par l’API, puis demande et exécutions dans des historiques séparés. Le formulaire apprenant contient seulement un motif, avec compte attendu ; aucune saisie de montant, PaymentIntent ou conséquence d’accès. L’accusé « demande enregistrée » ne vaut pas remboursement. Motif local conservé en cas de panne/conflit/changement de compte, actions bloquées et copie réelle possible ; aucune nouvelle mutation automatique après réponse ambiguë.
+
+La page des accès expose chaque origine de commande, version, langues, période, état ACTIVE/NOT_STARTED/EXPIRED/REVOKED et raison de retrait connue. Un même parcours peut conserver une autre origine active après le remboursement d’un pack. Elle renvoie à la commande et au suivi sans afficher de corps pédagogique protégé. Les états d’email restent distincts des états financiers ; aucun délai de réception bancaire ou recours légal n’est inventé. Un lien permet de retrouver le travail personnel conservé ; le retrait d’un contenu premium ne supprime pas notes, projets, méthodes ou tentatives.
 
 Une attestation indique parcours/version, date et nature des preuves ; elle reste privée par défaut. Le support contextualisé conserve la version de la leçon sans transmettre automatiquement les notes privées. Les demandes relatives au compte/données ont des états et appliquent une politique définie ; ne pas supprimer aveuglément des pièces conservées pour une obligation documentée.
 
@@ -235,11 +246,15 @@ P09 ajoute la configuration de projet BR01/BR02, le seuil et la règle de révé
 
 ## E16 Exploitation et support
 
-Routes : /{locale}/admin/operations et onglets/sections. Phase P15.
+Routes : /{locale}/admin/operations et onglets/sections prévus pour P15 ; le suivi d’emails P10 et les trois chemins de remboursement P13 du registre sont déjà écrits. La route générale seule ne devient pas disponible par la présence de ses sous-pages.
 
 Commandes, droits par origine, remboursements, tickets, emails et traitements en erreur, indicateurs et journal. Les opérations de reprise utilisent les services métier idempotents ; elles n’écrivent pas directement un statut financier souhaité.
 
 P10 introduit uniquement le suivi d’emails sur `/fr/admin/notifications` et `/en/admin/notifications` : état, tentatives, dates, code expurgé et reprise après contrôle, sous permissions `notifications.read/manage`. Un résultat SMTP indéterminé exige la reconnaissance du risque de doublon. Aucun destinataire, corps, jeton, clé métier ou ciphertext affiché ; les autres opérations d’exploitation restent à leurs lots respectifs. Lecture FR/EN et reprise volontaire après interruption réelle de Mailpit sont validées localement ; « accepté par le transport » ne garantit pas la réception dans une boîte externe.
+
+P13 implémente une liste réelle de demandes ou d’exécutions, filtrée par état/commande et paginée. L’examen d’une demande affiche son motif et les faits financiers, puis un montant proposé et des allocations de lignes explicites avec KEEP/REVOKE. La prévisualisation réelle présente montant, versions/langues et effets, sans prix par cours fabriqué. Toute modification impose un nouvel aperçu ; approbation et refus motivés ont leur propre confirmation. APPROVE affiche ensuite le lien vers l’exécution préparée, sans prétendre qu’un remboursement a déjà réussi.
+
+La page d’exécution sépare état fournisseur, effet sur les droits et notification. Les actions autorisées par le serveur et les permissions sont distinctes : exécuter, annuler PREPARED jamais transmise, demander un rapprochement, ou décider les effets d’accès d’un remboursement externe déjà confirmé. Chaque confirmation rappelle objet, montant, lignes et motif ; une relecture explicite est requise après un résultat ambigu/conflit. UNKNOWN/PENDING ne s’affichent pas comme « remboursé ». Un partiel Dashboard sans décision affiche le besoin d’examen ; une confirmation intégrale peut appliquer le retrait sans inventer d’allocations monétaires inconnues. Le travail personnel reste conservé et les autres origines d’accès restent indépendantes. Les pages privées sont `noindex`, `no-store`, sous session et contrôles Spring ; les permissions de l’éditeur ne donnent aucun pouvoir financier. Les tests de recette P13 restent à consolider avant une validation de ces vues.
 
 Les actions sensibles précisent objet et effet, demandent un motif adapté et conservent auteur/date/résultat. L’éditeur de contenu ne reçoit pas des permissions financières par défaut. Les indicateurs sont calculés sur des sources définies, par devise/période ; coûts inconnus et zéro sont distincts.
 

@@ -1,4 +1,4 @@
-# Modèle relationnel — socles P03 à P11
+# Modèle relationnel — socles P03 à P13
 
 Les migrations sont la définition exécutable du schéma. Ce document distingue les tables implémentées des extensions à créer dans les lots métier. V009/V010/V011 sont validées localement en P10 : **138 tests Java globaux**, ciblé identité **6/6 sous `MAIL_MODE=disabled`**, ciblé stockage final **8/8 à 24 slots** et **12/12 scénarios Chromium**. V012 est validée localement en P11 : global **155**, ciblé HTTP final **10/10**, Chromium **8/8** et conservation des trente-six tables existantes. Les ciblés complètent le global sans s’ajouter à son décompte ; la chronologie des correctifs est détaillée dans les preuves.
 
@@ -332,13 +332,38 @@ Le plafond applicatif `99_999_999` unités mineures est conservateur pour les se
 
 Les deux files portent état, erreurs consécutives attempts, compteur interne de claims totaux, prochaine date, UUID/échéance de bail, erreur nettoyée et dates finies. Les contraintes imposent PROCESSING/bail, prochaine tentative et terminaison cohérents. Un poll normal remet les erreurs à zéro ; il n'est pas un essai raté. Les états des traitements restent distincts des états financiers. Le réseau suit le commit du claim ; l'application prend propriétaire→commande→opération→claim. Une coupure entre réseau et base ne devient pas une transaction distribuée présumée.
 
-Les origines ORDER_LINE de V012 s'appuient sur les vrais order_resources, une commande PAID du même propriétaire et ses langues ; l'unicité empêche les doubles effets de plusieurs événements. La notification utilise l'id de commande, pas l'eventId Stripe. Grants, outbox et READY se commit ensemble ; une panne conserve PAID avec activation reprenable. Une origine révoquée n'est pas réinsérée ; un remboursement connu interdit la réactivation. Les décisions/exécutions de remboursement restent P13.
+Les origines ORDER_LINE de V012 s'appuient sur les vrais order_resources, une commande PAID du même propriétaire et ses langues ; l'unicité empêche les doubles effets de plusieurs événements. La notification utilise l'id de commande, pas l'eventId Stripe. Grants, outbox et READY se commit ensemble ; une panne conserve PAID avec activation reprenable. Une origine révoquée n'est pas réinsérée. P13 complète le marqueur historique de remboursement par les décisions, blocs d’origine et faits de rapprochement décrits ci-dessous.
 
 Décision technique : activation effective PostgreSQL comme starts_at et origine des périodes FIXED/UPDATES. UNLIMITED reste explicite dans le snapshot ; aucune durée absente n'est inventée. EntitlementAccess lit périodes/langues/origines indépendantes, versions promises et descendants épinglés disponibles ; MANUAL_TEST est ignoré en production. Les conditions de vente réelles devront expliciter cet ancrage avant activation commerciale.
 
 Les permissions payments.events.read/retry sont liées au seul rôle de référence PAYMENTS_OPERATOR, sans compte ni attribution utilisateur créés. Le périmètre technique P12 est validé localement. L'upgrade V012→V014 conserve les données des 45 tables préexistantes, hors ajouts de permissions documentés, et laisse les cinq nouvelles tables vides dans la base partagée. Le dernier ciblé d'accès réussit 5/5 et la suite contrôlée 8/8, avec 27 captures examinées.
 
 La recette distincte de vrai Checkout Stripe TEST réussit 1/1 dans une base isolée : événement durable avant worker, redémarrage vers PAID/READY, accès privé 200 et visible, public expurgé, puis deux rejeux CLI séquentiels acquittés en 2xx. Elle conserve une opération, un événement, une origine et une intention de notification. La livraison vérifiée est épinglée à `2026-10-28.endive` ; la version historique `2022-11-15` de l'événement source lu par GET est consignée séparément, sans changement global de version du compte. Le montant fictif temporaire de 1 EUR ne constitue pas un prix commercial. Clé, compte, secret et sauvegarde restent privés ; aucun déploiement ni mode LIVE n'est validé. Les deux refus historiques 403/PROTECTED restent non reproduits, de cause inconnue et au [suivi P17/P19 avant livraison](evidence/P12-access-follow-up.md). [Chronologie et limites](evidence/P12.md).
+
+## Demandes, réservations et effets de remboursement — V015 / P13 validé localement
+
+La migration [V015](../apps/api/src/main/resources/db/migration/V015__refund_decisions_reservations_and_origin_effects.sql) est appliquée localement, avec conservation vérifiée des données existantes. Les validations PostgreSQL, SDK à transport contrôlé et navigateur, ainsi que leurs limites, sont consignées dans [la preuve P13](evidence/P13.md). Elle ajoute dix tables, sans fixture, prix ou règle d’éligibilité commerciale :
+
+| Table | Identité et contraintes |
+| --- | --- |
+| `refund_requests` | UUID, propriétaire/commande par FK composite ; motif non vide ≤2000, révision et REQUESTED/APPROVED/REJECTED. Index unique partiel : une seule demande REQUESTED par commande. |
+| `refund_decisions` | Une décision par demande, acteur, motif/date, APPROVE/REJECT. Montant/devise/empreinte d’aperçu et allocations obligatoires seulement pour APPROVE ; refus sans montant ni allocation. Historique immuable. |
+| `refund_operations` | Commande/propriétaire, demande/décision liées pour LOCAL_DECISION, ou références fournisseur sans demande pour STRIPE_DASHBOARD. Montant/devise, paramètres JSON/empreinte et clé fournisseur immuables après préparation, révision, bail, état financier et état d’accès séparés. Référence de remboursement unique par compte/mode ; mode LIVE interdit dans ce lot. |
+| `refund_reservations` | Une réservation par opération, FK composite vers la même commande/propriétaire et montant ; verrou de commande et contrôle confirmé+réservé+nouveau ≤ paiement pour une décision locale. Libération unique et datée, motif SUCCEEDED/FAILED/CANCELED. |
+| `refund_access_decisions` | Une décision explicite d’accès pour une opération externe confirmée, acteur/motif et allocations ; aucune nouvelle transaction financière. |
+| `refund_access_blocks` | Une ligne de commande bloquée une fois, reliée à une opération SUCCEEDED de cette même commande ; empêche la recréation ultérieure d’une origine remboursée. |
+| `refund_origin_revocations` | Un grant révoqué une fois, relié à une opération SUCCEEDED de sa propre commande ; origine indépendante conservée séparément. |
+| `refund_audit` | Journal append-only : acteur nullable pour un fait fournisseur, commande, demande/opération éventuelles, action/résultat/motif/date ; pas de production privée. |
+| `refund_idempotency_keys` | Clé UUID unique par acteur/type d’action, empreinte SHA256 du corps et références de résultat ; append-only, pas de clé nouvelle implicite après timeout. |
+| `refund_reconciliation_jobs` | Une tâche durable par commande, PENDING/PROCESSING/WAITING/RETRY/DEAD, erreurs consécutives, prochaine date, bail et code nettoyé. Le worker ne fait que des lectures fournisseur. |
+
+`orders` ajoute `refund_confirmed_minor`, `refund_review_required`, `refund_full` et `refund_reconciled_at`. Le paiement PAID, sa date et le snapshot ne régressent pas ; `refund_full` est monotone. Les anciens marqueurs `payment_refunded=true` sont conservés et signalés pour rapprochement, sans inventer une décision historique. `checkout_operations.payment_intent_id`, une fois renseigné, est immuable. L’outbox admet `REFUND_UPDATED` ; permissions apprenant et rôle de référence REFUND_OPERATOR sont ajoutés sans utilisateur.
+
+Les FK des demandes/opérations vérifient commande/propriétaire ; l’opération locale doit reprendre la décision approuvée, son montant, sa devise et ses allocations. Les triggers protègent demandes décidées, paramètres fournisseur et `confirmed_at` déjà connu. CALLING exige un bail ; SUCCEEDED exige une date de confirmation. Un incident ultérieur garde cette date, sans faire passer l’opération pour un nouveau remboursement. Les tables de décisions, blocs, révocations, audit et clés refusent UPDATE/DELETE ; aucune cascade de remboursement n’atteint les tables personnelles.
+
+Les montants sont en `BIGINT`, devise EUR/USD/GBP de la commande et plafond applicatif de `99_999_999` unités mineures. La somme des allocations, l’unicité des lignes et leur appartenance sont vérifiées par le service ; le montant cumulé est contrôlé sous verrou de commande et lors de la réservation. Zéro est possible sur une ligne d’un remboursement intégral qui retire toutes ses origines ; aucun prix individuel de pack n’est déduit. Une allocation partielle nulle ne permet pas de retirer une ligne. Le contexte expose un payé et un disponible nuls hors PAID. À SUCCEEDED, la réservation est close mais le montant confirmé reste consommé ; UNKNOWN/PENDING ne le libèrent pas. Le calcul conserve toute opération dont `confirmed_at IS NOT NULL`, même devenue NEEDS_REVIEW après contradiction : ni le budget ni les origines retirées ne sont restaurés automatiquement.
+
+Les effets d’accès surviennent après confirmation, par `order_resource_id` puis grant exact. Un remboursement intégral découvert dans le Dashboard retire les seules origines de cette commande ; sa liste d’allocations peut rester vide lorsque la ventilation monétaire est inconnue. Un partiel externe sans décision connue reste à examiner. Les copies personnelles, notes, productions, tentatives et preuves conservent leurs FK et leur contenu. Une notification ancienne de paiement ne supprime ni bloc ni révocation ; l’accès effectif peut demeurer ouvert grâce à un autre achat indépendant.
 
 ## Types, concurrence et suppression
 
@@ -351,16 +376,16 @@ La recette distincte de vrai Checkout Stripe TEST réussit 1/1 dans une base iso
 
 ## État des relations et lots suivants
 
-Les lignes P12 récapitulent les relations réalisées. Les suivantes expriment les clés et règles à concrétiser par migrations avec leur fonctionnalité et ses tests, sans CRUD anticipé.
+Les lignes P12 et P13 récapitulent les relations validées localement ; P14 conserve les clés et règles à concrétiser avec sa fonctionnalité, sans CRUD anticipé.
 
 | Lot | Relations/contraintes à introduire | Conservation obligatoire |
 | --- | --- | --- |
 | P12 paiements | V013/V014 validées localement ; suite contrôlée 8/8 et vrai Checkout TEST 1/1 ; incident historique au suivi P17/P19 | Réception durable et effet métier uniques séparément ; paiement confirmé et activation en attente restent distincts |
 | P12 attribution de droits | Origines V012 attribuées après confirmation, FK vers les lignes et périodes/langues ; accès privé et absence de double attribution observés en Stripe TEST | Unicité par origine et ressource, jamais seulement `(user, course)` ; chaque achat individuel et pack garde son origine |
-| P13 remboursements | Remboursement → paiement, allocations de lignes et décision d’accès explicite ; réservation des montants en cours et idempotence | Réussite financière distincte de demande ; retrait des seules origines concernées après confirmation, jamais des productions/progrès |
+| P13 remboursements | V015 validée localement : demandes/décisions/opérations liées au paiement, allocations, réservations, rapprochements et audit ; [preuves et limites](evidence/P13.md) | Réussite financière distincte de demande ; retrait des seules origines concernées après confirmation, jamais des productions/progrès |
 | P14 attestations | Attestation → utilisateur, version pédagogique et références exactes de preuves/révisions émises | Une nouvelle version ne réécrit pas l’attestation ; aucune certification ou correction humaine déduite d’une autoévaluation |
 
-V012 définit les FK d’origine et l’exclusivité ORDER_LINE/MANUAL_TEST ; P12 utilise cette intégrité et conserve la révocation, P13 complétera le retrait selon décision de remboursement. Une ancienne notification ne réactive pas une origine déjà révoquée. Si A a été acheté seul puis dans A+B, le remboursement du pack devra retirer uniquement ses origines ; A restera couvert par l’achat individuel.
+V012 définit les FK d’origine et l’exclusivité ORDER_LINE/MANUAL_TEST ; P12 utilise cette intégrité et conserve la révocation, P13 ajoute le retrait selon décision de remboursement et les blocs d’origine persistants. Une ancienne notification ne réactive pas une origine déjà révoquée. Si A a été acheté seul puis dans A+B, le remboursement intégral du pack retire uniquement ses origines ; A reste couvert par l’achat individuel. Cette règle est vérifiée localement, y compris pour la lecture privée FR/EN, dans [la preuve P13](evidence/P13.md).
 
 Les suppressions physiques et opérations financières nécessiteront des cas d’utilisation explicites. Aucun remboursement ne déclenchera une cascade vers notes, projets, méthodes, tentatives ou attestations.
 

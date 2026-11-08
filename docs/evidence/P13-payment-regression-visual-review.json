@@ -1,0 +1,60 @@
+{
+  "phase": "P13",
+  "reviewedRegression": "P12",
+  "runId": "2026-11-08T19-50-07-259Z-655ae00c-b8b2-4ce2-9fed-871281f5a18a",
+  "captureDirectory": "docs/evidence/P12-browser/2026-11-08T19-50-07-259Z-655ae00c-b8b2-4ce2-9fed-871281f5a18a",
+  "reviewMethod": "Les vingt-sept PNG ont été réellement ouverts avec view_image en résolution originale. Les dimensions ont été lues dans les en-têtes PNG.",
+  "reviewResult": "Aucune régression matérielle d'affichage observée dans les captures examinées.",
+  "imageCount": 27,
+  "images": [
+    { "file": "en-1440-deferred-payment-processing.png", "width": 1440, "height": 1000 },
+    { "file": "en-1440-deferred-payment-ready.png", "width": 1440, "height": 1239 },
+    { "file": "en-320-checkout-consent.png", "width": 320, "height": 2489 },
+    { "file": "en-320-deferred-payment-ready.png", "width": 320, "height": 1806 },
+    { "file": "en-390-confirmed-expired.png", "width": 390, "height": 1279 },
+    { "file": "en-390-deferred-payment-processing.png", "width": 390, "height": 1211 },
+    { "file": "en-390-deferred-payment-ready.png", "width": 390, "height": 1610 },
+    { "file": "en-390-owned-offer-after-payment.png", "width": 390, "height": 1987 },
+    { "file": "en-390-payment-api-recovered.png", "width": 390, "height": 1525 },
+    { "file": "en-390-payment-api-unavailable.png", "width": 390, "height": 1406 },
+    { "file": "en-390-premium-content-after-payment.png", "width": 390, "height": 4061 },
+    { "file": "fr-1024-payment-ready-after-worker-restart.png", "width": 1024, "height": 1282 },
+    { "file": "fr-1440-durable-event-before-worker.png", "width": 1440, "height": 1195 },
+    { "file": "fr-1440-paid-activation-delayed.png", "width": 1440, "height": 1000 },
+    { "file": "fr-1440-payment-ready-after-worker-restart.png", "width": 1440, "height": 1239 },
+    { "file": "fr-320-payment-ready-after-worker-restart.png", "width": 320, "height": 1902 },
+    { "file": "fr-390-checkout-consent.png", "width": 390, "height": 2434 },
+    { "file": "fr-390-checkout-offer-change-review.png", "width": 390, "height": 2495 },
+    { "file": "fr-390-confirmed-failed.png", "width": 390, "height": 1406 },
+    { "file": "fr-390-duplicates-remain-one-activation.png", "width": 390, "height": 1629 },
+    { "file": "fr-390-email-incident-access-still-ready.png", "width": 390, "height": 1607 },
+    { "file": "fr-390-email-retried-access-unchanged.png", "width": 390, "height": 1629 },
+    { "file": "fr-390-forged-success-without-payment.png", "width": 390, "height": 1632 },
+    { "file": "fr-390-other-owner-payment-refused.png", "width": 390, "height": 1000 },
+    { "file": "fr-390-payment-ready-after-worker-restart.png", "width": 390, "height": 1760 },
+    { "file": "fr-390-premium-content-after-payment.png", "width": 390, "height": 4216 },
+    { "file": "fr-768-payment-ready-after-worker-restart.png", "width": 768, "height": 1262 }
+  ],
+  "observations": [
+    "Aucun chevauchement ou débordement essentiel observé aux largeurs capturées de 320, 390, 768, 1024 et 1440 pixels. Les textes, références, consentements et actions restent lisibles dans les vues examinées.",
+    "E08 distingue visiblement paiement attendu, paiement différé en traitement, paiement confirmé avec activation retardée, puis accès activés. Le retour success sans paiement reste non confirmé.",
+    "Le panneau P13 de remboursement conserve une présentation FR/EN cohérente dans les états P12, avec les montants nuls de ces commandes non remboursées et les liens vers le suivi et les origines.",
+    "La panne API montre un seul message d'erreur de service. L'accès actuel est explicitement non confirmé et aucune reprise pédagogique n'est proposée ; après récupération, l'état prêt et le lien de reprise réapparaissent.",
+    "L'échéance de session est visible sur le Checkout ouvert et absente dans les captures READY, paiement échoué ou préparation expirée examinées.",
+    "Le changement d'offre retire l'action de paiement et le consentement précédents au profit d'une revue explicite ; les montants et conditions conservés restent lisibles.",
+    "Les incidents et reprises d'email restent séparés du paiement et des accès déjà activés, sans annoncer une réception dans la messagerie.",
+    "La fiche d'offre achetée indique les ressources déjà accessibles ; la vue d'une commande d'autrui reste un refus sans détail financier privé.",
+    "Les activités privées FR/EN sont rendues lisiblement avec objectif, exercice, quiz, notes initialement vides, historique et navigation. Aucun lecteur vidéo ou résultat pédagogique fictif n'est affiché dans ces captures."
+  ],
+  "sessionRecordRead": {
+    "file": "session.json",
+    "result": "passed",
+    "cleanupConfirmed": true
+  },
+  "limits": [
+    "La revue est statique et limitée aux vingt-sept captures listées. Elle ne remplace pas les assertions fonctionnelles, d'autorisation, de données ou de navigation exécutées par la recette.",
+    "Les captures ont été ouvertes en taille originale, y compris les deux leçons de plus de 4000 pixels de hauteur. Aucune mesure exhaustive de contraste ou validation globale WCAG n'a été effectuée par cette revue.",
+    "Cette preuve P13 documente une régression locale contrôlée P12. Elle ne remplace aucune preuve historique P12 et ne constitue pas une nouvelle recette Stripe externe, une opération LIVE ou un déploiement de production.",
+    "Aucune source applicative n'a été modifiée et aucun navigateur ou test supplémentaire n'a été lancé pour produire cette revue ; seule la présente preuve a été ajoutée après consultation des images et du session.json existants."
+  ]
+}

@@ -1,0 +1,239 @@
+{
+  "verifiedAt": "2026-11-08T19:26:24.494Z",
+  "command": ".\\scripts\\courses.cmd run build:api",
+  "exitCode": 0,
+  "scope": "Global P00–P13 before the final lease-budget validation adjustment; later targeted checks reported separately.",
+  "tests": 199,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "suites": [
+    {
+      "name": "com.chatgptcourses.AccessPolicyTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.456
+    },
+    {
+      "name": "com.chatgptcourses.assets.config.AssetStorageConfigurationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.011
+    },
+    {
+      "name": "com.chatgptcourses.AssetServiceIntegrationTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 50.902
+    },
+    {
+      "name": "com.chatgptcourses.CheckoutIntegrationTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 23.286
+    },
+    {
+      "name": "com.chatgptcourses.CommerceHttpIntegrationTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 41.666
+    },
+    {
+      "name": "com.chatgptcourses.EditorialHttpIntegrationTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 17.637
+    },
+    {
+      "name": "com.chatgptcourses.EditorialServiceIntegrationTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 13.714
+    },
+    {
+      "name": "com.chatgptcourses.EntitlementAccessIntegrationTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 18.815
+    },
+    {
+      "name": "com.chatgptcourses.FoundationIntegrationTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 10.269
+    },
+    {
+      "name": "com.chatgptcourses.HTTPAuthIntegrationTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 14.811
+    },
+    {
+      "name": "com.chatgptcourses.IdentityServiceIntegrationTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 13.328
+    },
+    {
+      "name": "com.chatgptcourses.LearningHttpIntegrationTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 29.628
+    },
+    {
+      "name": "com.chatgptcourses.LearningServiceIntegrationTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 20.264
+    },
+    {
+      "name": "com.chatgptcourses.media.VideoHttpIntegrationTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 28.539
+    },
+    {
+      "name": "com.chatgptcourses.MethodServiceIntegrationTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 12.53
+    },
+    {
+      "name": "com.chatgptcourses.notifications.NotificationOutboxIntegrationTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 18.683
+    },
+    {
+      "name": "com.chatgptcourses.OfferServiceIntegrationTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 13.76
+    },
+    {
+      "name": "com.chatgptcourses.payments.config.StripeConfigurationTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.01
+    },
+    {
+      "name": "com.chatgptcourses.payments.inbox.PaymentInboxHttpIntegrationTest",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 48.107
+    },
+    {
+      "name": "com.chatgptcourses.PersonalMethodsHttpIntegrationTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 18.967
+    },
+    {
+      "name": "com.chatgptcourses.ProjectServiceIntegrationTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 17.545
+    },
+    {
+      "name": "com.chatgptcourses.ProjectsHttpIntegrationTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 21.831
+    },
+    {
+      "name": "com.chatgptcourses.PublicCatalogueHttpIntegrationTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 21.086
+    },
+    {
+      "name": "com.chatgptcourses.PublicCatalogueIntegrationTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 12.539
+    },
+    {
+      "name": "com.chatgptcourses.RefundHttpIntegrationTest",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 47.55
+    },
+    {
+      "name": "com.chatgptcourses.SchemaIntegrationTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 17.827
+    },
+    {
+      "name": "com.chatgptcourses.shared.http.HttpContractTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.254
+    },
+    {
+      "name": "com.chatgptcourses.shared.money.MoneyValidationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.012
+    }
+  ],
+  "privatePayloadsExported": false,
+  "localPrivateEnvironmentLoaded": false,
+  "externalStripe": false
+}

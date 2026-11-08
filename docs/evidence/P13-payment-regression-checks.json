@@ -1,0 +1,82 @@
+{
+  "verifiedAt": "2026-11-08T19:54:41.690Z",
+  "command": ".\\scripts\\courses.cmd run verify:payments",
+  "exitCode": 0,
+  "finalRun": "2026-11-08T19-50-07-259Z-655ae00c-b8b2-4ce2-9fed-871281f5a18a",
+  "stats": {
+    "startTime": "2026-11-08T19:50:38.797Z",
+    "duration": 131287.94,
+    "expected": 8,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "cleanupConfirmed": true,
+  "captures": [
+    "en-1440-deferred-payment-processing.png",
+    "en-1440-deferred-payment-ready.png",
+    "en-320-checkout-consent.png",
+    "en-320-deferred-payment-ready.png",
+    "en-390-confirmed-expired.png",
+    "en-390-deferred-payment-processing.png",
+    "en-390-deferred-payment-ready.png",
+    "en-390-owned-offer-after-payment.png",
+    "en-390-payment-api-recovered.png",
+    "en-390-payment-api-unavailable.png",
+    "en-390-premium-content-after-payment.png",
+    "fr-1024-payment-ready-after-worker-restart.png",
+    "fr-1440-durable-event-before-worker.png",
+    "fr-1440-paid-activation-delayed.png",
+    "fr-1440-payment-ready-after-worker-restart.png",
+    "fr-320-payment-ready-after-worker-restart.png",
+    "fr-390-checkout-consent.png",
+    "fr-390-checkout-offer-change-review.png",
+    "fr-390-confirmed-failed.png",
+    "fr-390-duplicates-remain-one-activation.png",
+    "fr-390-email-incident-access-still-ready.png",
+    "fr-390-email-retried-access-unchanged.png",
+    "fr-390-forged-success-without-payment.png",
+    "fr-390-other-owner-payment-refused.png",
+    "fr-390-payment-ready-after-worker-restart.png",
+    "fr-390-premium-content-after-payment.png",
+    "fr-768-payment-ready-after-worker-restart.png"
+  ],
+  "controlledProvider": {
+    "kind": "controlled-stripe-network",
+    "externalStripe": false,
+    "requests": 39,
+    "createCalls": 7,
+    "sessions": 7,
+    "stopped": true
+  },
+  "history": [
+    {
+      "id": "2026-11-08T19-43-23-746Z-775579d8-a62b-4822-b880-22450432a9f4",
+      "stats": {
+        "startTime": "2026-11-08T19:44:01.749Z",
+        "duration": 157624.349,
+        "expected": 6,
+        "skipped": 1,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "result": "failed",
+      "cleanupConfirmed": true
+    },
+    {
+      "id": "2026-11-08T19-50-07-259Z-655ae00c-b8b2-4ce2-9fed-871281f5a18a",
+      "stats": {
+        "startTime": "2026-11-08T19:50:38.797Z",
+        "duration": 131287.94,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "result": "passed",
+      "cleanupConfirmed": true
+    }
+  ],
+  "historicalAccessIncidentClosed": false,
+  "externalStripe": false
+}

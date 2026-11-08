@@ -1,0 +1,1442 @@
+{
+  "verifiedAt": "2026-11-08T19:52:02.714Z",
+  "scope": "Final backend sources including seven-request lease budget and conservative refund totals.",
+  "global": {
+    "command": "scripts/courses.cmd run build:api",
+    "exitCode": 0,
+    "finishedAt": "2026-11-08T20:50:03+01:00",
+    "mavenDuration": "09:46",
+    "totals": {
+      "tests": 203,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "suites": [
+      {
+        "name": "com.chatgptcourses.AccessPolicyTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 0.412,
+        "cases": [
+          {
+            "name": "missingSubjectResourceIdentityOrActionCannotBecomeAnAuthorization",
+            "seconds": 0.22,
+            "result": "PASS"
+          },
+          {
+            "name": "ownershipControlsPersonalDataWithoutDependingOnCourseEntitlements",
+            "seconds": 0.024,
+            "result": "PASS"
+          },
+          {
+            "name": "publicReadRequiresExplicitPublishedTranslationAndNeverAllowsMutation",
+            "seconds": 0.002,
+            "result": "PASS"
+          },
+          {
+            "name": "editorialPermissionCannotAuthorizeFinanceOrUnconfiguredAdministrativeActions",
+            "seconds": 0.003,
+            "result": "PASS"
+          },
+          {
+            "name": "authenticatedDoesNotGrantPremiumContentAndUnknownFactsFailClosed",
+            "seconds": 0,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.assets.config.AssetStorageConfigurationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 0.018,
+        "cases": [
+          {
+            "name": "internalHostCannotBecomeBrowserEndpointAndProductionCannotAdvertiseInsecureStorage",
+            "seconds": 0.016,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.AssetServiceIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 53.877,
+        "cases": [
+          {
+            "name": "projectTextRoundTripsPrivatelyAndSurvivesSourceWithdrawalWithoutSharingOwnership(CapturedOutput)",
+            "seconds": 4.542,
+            "result": "PASS"
+          },
+          {
+            "name": "pendingUploadsAndSignedDownloadsActuallyExpireWithoutIssuingPermanentObjectAccess",
+            "seconds": 6.801,
+            "result": "PASS"
+          },
+          {
+            "name": "upgradeV008PreservesExistingProjectRevisionAndSessionWithoutCreatingFiles",
+            "seconds": 2.684,
+            "result": "PASS"
+          },
+          {
+            "name": "actualObjectValidationRejectsMissingWrongSizeMimeAndInvalidUtf8WithoutPretendingToScan",
+            "seconds": 0.767,
+            "result": "PASS"
+          },
+          {
+            "name": "concurrentConfirmationAndReplayedStagingPutCannotModifyReadyBytes",
+            "seconds": 0.537,
+            "result": "PASS"
+          },
+          {
+            "name": "enrolledEditorialDownloadRechecksWithdrawnParentWhileStandaloneFreeResourceRemainsAvailable",
+            "seconds": 1.417,
+            "result": "PASS"
+          },
+          {
+            "name": "editorialImagesAreDecodedReencodedBoundedAndPublicationControlsEveryPublicLink",
+            "seconds": 1.042,
+            "result": "PASS"
+          },
+          {
+            "name": "projectReservationQuotaIsAtomicForConcurrentUploadIntents",
+            "seconds": 0.486,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.CheckoutIntegrationTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 25.867,
+        "cases": [
+          {
+            "name": "ownershipContextTermsAndExactOrderRevisionAreCheckedBeforeAnyExternalRequest",
+            "seconds": 1.238,
+            "result": "PASS"
+          },
+          {
+            "name": "wrongModeAndUntrustedCheckoutUrlsNeverReachTheBrowserOrCreateAccess",
+            "seconds": 3.218,
+            "result": "PASS"
+          },
+          {
+            "name": "configuredGatewayBlocksZeroBelowMinimumAndNineDigitAmountsWithoutChangingSummaryReadiness",
+            "seconds": 1.175,
+            "result": "PASS"
+          },
+          {
+            "name": "operationIsCommittedBeforeSdkNetworkAndReplaysNeverCreateAnotherSession",
+            "seconds": 1.177,
+            "result": "PASS"
+          },
+          {
+            "name": "aDifferentMerchantAccountIsRejectedBeforeCreatingAnyCheckout",
+            "seconds": 0.02,
+            "result": "PASS"
+          },
+          {
+            "name": "sdkRetrievalAndBoundedSearchReturnCurrentFactsWithoutThemselvesMarkingAnOrderPaid",
+            "seconds": 1.694,
+            "result": "PASS"
+          },
+          {
+            "name": "concurrentKeysShareOneCommittedOperationWhileProviderResponseIsHeld",
+            "seconds": 1.047,
+            "result": "PASS"
+          },
+          {
+            "name": "aPersistedOperationPastItsRecoveryWindowOnlyRequestsReconciliationAndCannotRewriteItsParameters",
+            "seconds": 0.775,
+            "result": "PASS"
+          },
+          {
+            "name": "realSdkReadTimeoutAfterProviderCreationKeepsTheSameParametersAndIdempotencyKey",
+            "seconds": 3.894,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.CommerceHttpIntegrationTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 41.064,
+        "cases": [
+          {
+            "name": "concurrentDifferentKeysForOneIntentionCreateExactlyOnePreparation",
+            "seconds": 4.348,
+            "result": "PASS"
+          },
+          {
+            "name": "realGrantOriginsAndFreeCurriculumDriveAlreadyOwnedAndPartialPackWithoutDiscount",
+            "seconds": 6.83,
+            "result": "PASS"
+          },
+          {
+            "name": "activationUsesFreshRevisionAndWithdrawnPublicationBlocksNewOrders",
+            "seconds": 2.684,
+            "result": "PASS"
+          },
+          {
+            "name": "permissionRevokedWhileAwaitingOfferLockPreventsEvenRememberingANewReplayKey",
+            "seconds": 2.286,
+            "result": "PASS"
+          },
+          {
+            "name": "orderIsAnAuthoritativeSnapshotAndNeverFinancialConfirmation",
+            "seconds": 2.776,
+            "result": "PASS"
+          },
+          {
+            "name": "ordersAreOwnerOnlyAndEditorCannotAdministerCommerce",
+            "seconds": 3.604,
+            "result": "PASS"
+          },
+          {
+            "name": "differentAcceptedRevisionCancelsOnlyThePriorPreparationAndPreservesItsSnapshot",
+            "seconds": 3.055,
+            "result": "PASS"
+          },
+          {
+            "name": "sameKeyReplaysEvenAfterOfferChangesAndDifferentBodyConflicts",
+            "seconds": 3.204,
+            "result": "PASS"
+          },
+          {
+            "name": "incompleteOfferIsPrivateAndCannotBeActivatedOrInventReadiness",
+            "seconds": 1.124,
+            "result": "PASS"
+          },
+          {
+            "name": "expiredPersistedPreparationTransitionsWithoutErasingHistoryOrReusingItsKey",
+            "seconds": 2.707,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.EditorialHttpIntegrationTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 20.518,
+        "cases": [
+          {
+            "name": "translationBecomesStaleWithoutLeakingItsBodyAndFamilyEtagsChange",
+            "seconds": 2.587,
+            "result": "PASS"
+          },
+          {
+            "name": "concurrentWritersKeepWinnerAndFrozenPedagogyRequiresANewVersion",
+            "seconds": 1.547,
+            "result": "PASS"
+          },
+          {
+            "name": "completeLifecyclePublishesOnlyChosenRevisionAndPreservesHistoryOnArchive",
+            "seconds": 1.782,
+            "result": "PASS"
+          },
+          {
+            "name": "p03LegacyTextStaysReadableAndRequiresExplicitStructuredConversion",
+            "seconds": 0.773,
+            "result": "PASS"
+          },
+          {
+            "name": "strictPayloadsRejectInventedAvailabilityAndUnsafeLinksWhilePreviewKeepsTextLiteral",
+            "seconds": 0.99,
+            "result": "PASS"
+          },
+          {
+            "name": "protectedContentNeverExposesDocumentAndUnverifiedPromisedMediaBlocksPublication",
+            "seconds": 1.462,
+            "result": "PASS"
+          },
+          {
+            "name": "csrfAndPrecisePermissionsProtectRealRoutesAndFutureCommerceStaysDenied",
+            "seconds": 1.186,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.EditorialServiceIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 13.569,
+        "cases": [
+          {
+            "name": "readinessBlocksMissingMediaAndPedagogyAndPremiumNeverLeavesThePublicProjection",
+            "seconds": 0.599,
+            "result": "PASS"
+          },
+          {
+            "name": "permissionRevokedWhilePublicationWaitsOnTheResourceLockIsCheckedAgain",
+            "seconds": 0.209,
+            "result": "PASS"
+          },
+          {
+            "name": "boundedStructuredContentRejectsUnsafeLinksAndOversizedPayloadsBeforeInsertion",
+            "seconds": 0.04,
+            "result": "PASS"
+          },
+          {
+            "name": "realLifecycleRetainsImmutablePublishedSnapshotAndSeparatesPublicAnswers",
+            "seconds": 0.514,
+            "result": "PASS"
+          },
+          {
+            "name": "translationsUseTheExactReviewedSourceAndStaleContentHasNoPublicBodyOrLanguageFallback",
+            "seconds": 1.346,
+            "result": "PASS"
+          },
+          {
+            "name": "permissionsAndPreconditionsAreEnforcedByTheServiceAndConcurrentWritersCannotOverwrite",
+            "seconds": 0.159,
+            "result": "PASS"
+          },
+          {
+            "name": "upgradeV003PreservesLegacySnapshotsAndSessionThenRequiresExplicitStructuredConversion",
+            "seconds": 2.148,
+            "result": "PASS"
+          },
+          {
+            "name": "orderedCompositionPublishesBottomUpAndKeepsDependenciesAndStableVersions",
+            "seconds": 0.771,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.EntitlementAccessIntegrationTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 16.927,
+        "cases": [
+          {
+            "name": "actualPrivateHttpRequiresItsOwnerAndThePublicRouteNeverLeaksPaidBodies",
+            "seconds": 2.74,
+            "result": "PASS"
+          },
+          {
+            "name": "freshlyCommittedPostgresTimestampIsReadableInParallelMemberAndLearningTransactions",
+            "seconds": 2.092,
+            "result": "PASS"
+          },
+          {
+            "name": "independentOriginsLanguagesAndPeriodsNeverBecomeOneUserCourseBoolean",
+            "seconds": 1.401,
+            "result": "PASS"
+          },
+          {
+            "name": "protectedLearningAndProjectsWorkAfterARealGrantAndPersonalWorkSurvivesRevocation",
+            "seconds": 1.716,
+            "result": "PASS"
+          },
+          {
+            "name": "pinnedCourseAndUpdateWindowKeepExactDescendantsAndWithdrawnPathsStayClosed",
+            "seconds": 1.502,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.FoundationIntegrationTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 11.623,
+        "cases": [
+          {
+            "name": "healthUsesRealHttpAndPostgresWithoutCreatingAnAnonymousSession",
+            "seconds": 0.034,
+            "result": "PASS"
+          },
+          {
+            "name": "sessionsArePersistedInMigratedPostgresAndDeletingTheSessionCascades",
+            "seconds": 0.041,
+            "result": "PASS"
+          },
+          {
+            "name": "anUnknownPublicSystemRouteIsARealSanitized404",
+            "seconds": 0.023,
+            "result": "PASS"
+          },
+          {
+            "name": "privateRoutesAreDeniedAndCsrfStillProtectsMutations",
+            "seconds": 0.022,
+            "result": "PASS"
+          },
+          {
+            "name": "databaseFailureReturns503ThenRecoversAfterContainerResumes",
+            "seconds": 3.11,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.HTTPAuthIntegrationTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 18.48,
+        "cases": [
+          {
+            "name": "logoutInvalidatesJdbcSessionCookieAndCsrf",
+            "seconds": 1.119,
+            "result": "PASS"
+          },
+          {
+            "name": "expiredRecoveryIsRejectedAndForwardedProtoCannotOverrideLocalCookiePolicy",
+            "seconds": 1.6,
+            "result": "PASS"
+          },
+          {
+            "name": "preferencesUseOwnerAndStrongRevisionAndRevocationAppliesToExistingSession",
+            "seconds": 0.886,
+            "result": "PASS"
+          },
+          {
+            "name": "recoveryUsesTrustedOriginAndHasOneAtomicWinnerAndRevokesOldSessions",
+            "seconds": 2.259,
+            "result": "PASS"
+          },
+          {
+            "name": "registrationValidatesNormalizesAndNeverAcceptsClientPrivilegesOrLogsIn",
+            "seconds": 0.316,
+            "result": "PASS"
+          },
+          {
+            "name": "loginRequiresCsrfRotatesSessionAndStoresOnlyCredentialFreePrincipal",
+            "seconds": 0.869,
+            "result": "PASS"
+          },
+          {
+            "name": "disabledAndExpiredSessionsLoseAccessWithoutAnotherLogin",
+            "seconds": 0.876,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.IdentityServiceIntegrationTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 16.006,
+        "cases": [
+          {
+            "name": "resetRequestQuotaIsAtomicForKnownAndUnknownAccountsWithoutExposingAnAddress",
+            "seconds": 1.246,
+            "result": "PASS"
+          },
+          {
+            "name": "preferencesUseTheActorAndRealRevisionAndRecheckRevokedPermissions",
+            "seconds": 0.504,
+            "result": "PASS"
+          },
+          {
+            "name": "aResetLinkIssuedDuringACredentialChangeWaitsAndUsesTheCommittedEpoch",
+            "seconds": 0.702,
+            "result": "PASS"
+          },
+          {
+            "name": "upgradingV002KeepsExistingAccountPreferencesAndSessionWithEpochZero",
+            "seconds": 1.968,
+            "result": "PASS"
+          },
+          {
+            "name": "simultaneousResetConsumesOnceChangesEpochAndRevokesSessionsWhileExpiredLinksFail",
+            "seconds": 2.042,
+            "result": "PASS"
+          },
+          {
+            "name": "registrationPreservesAddressCharactersAndUnicodeAndNeverSerializesACredential",
+            "seconds": 0.37,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.LearningHttpIntegrationTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 33.486,
+        "cases": [
+          {
+            "name": "enrollmentIsIdempotentAcrossSessionsAndKeepsTheFullPinnedDenominator",
+            "seconds": 2.611,
+            "result": "PASS"
+          },
+          {
+            "name": "ownerCsrfAccountContextAndStrictCommandsProtectAllPrivateLearningObjects",
+            "seconds": 2.971,
+            "result": "PASS"
+          },
+          {
+            "name": "anonymousCheckHasRealCorrectionCsrfAndNoDurableLearningSideEffect",
+            "seconds": 1.301,
+            "result": "PASS"
+          },
+          {
+            "name": "withdrawalOfAModuleBlocksChildActionsWithoutRemovingNotesOrFabricatingAccess",
+            "seconds": 1.944,
+            "result": "PASS"
+          },
+          {
+            "name": "visitsReadCompletionQuizAndProjectAvailabilityRemainDifferentFacts",
+            "seconds": 2.35,
+            "result": "PASS"
+          },
+          {
+            "name": "notesKeepOriginalLanguageAcrossSessionsAndConcurrentEditsAndSourceWithdrawal",
+            "seconds": 4.252,
+            "result": "PASS"
+          },
+          {
+            "name": "quizReplayQuotaAndSnapshotsAreAuthoritativeAcrossLanguagesAndNewVersions",
+            "seconds": 5.339,
+            "result": "PASS"
+          },
+          {
+            "name": "quizPolicyIsValidatedAndFrozenWhileTheSameEffectiveLegacyDefaultCanBeSaved",
+            "seconds": 2.186,
+            "result": "PASS"
+          },
+          {
+            "name": "theSameActivityIdentityAtTwoPinnedVersionsRequiresAnExplicitVersionForEveryRead",
+            "seconds": 2.707,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.LearningServiceIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 21.271,
+        "cases": [
+          {
+            "name": "notesPreserveOriginalLanguageAndTextAcrossConflictsWithdrawalAndOtherOwners",
+            "seconds": 1.565,
+            "result": "PASS"
+          },
+          {
+            "name": "effectiveDefaultPolicyIsCompatibleButNewThresholdOrTranslationMismatchRequiresARealReview",
+            "seconds": 0.38,
+            "result": "PASS"
+          },
+          {
+            "name": "upgradingThePreviousSchemaPreservesSessionPrivateTextAndLegacyQuizPolicy",
+            "seconds": 2.093,
+            "result": "PASS"
+          },
+          {
+            "name": "anonymousFeedbackIsRealButNeverWritesLearningAndAWithdrawnContextCannotMutateProgress",
+            "seconds": 1.348,
+            "result": "PASS"
+          },
+          {
+            "name": "serverGradesBr01AndKeepsLanguageVersionPolicyAndAttemptsWithoutCompletingTheActivity",
+            "seconds": 2.618,
+            "result": "PASS"
+          },
+          {
+            "name": "programmeKeepsTwoExactVersionsOfOneActivityAndNeverUpgradesTheSavedDenominator",
+            "seconds": 1.294,
+            "result": "PASS"
+          },
+          {
+            "name": "quizSubmissionIsIdempotentAndAConcurrentAttemptCannotExceedTheEditorialLimit",
+            "seconds": 1.047,
+            "result": "PASS"
+          },
+          {
+            "name": "concurrentEnrollmentTracksTheCompletePinnedProgrammeWithoutGrantingProtectedBodies",
+            "seconds": 1.112,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.media.VideoHttpIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 32.716,
+        "cases": [
+          {
+            "name": "enrollmentParentsAndProtectedContentUseTheCanonicalAccessPolicy",
+            "seconds": 2.449,
+            "result": "PASS"
+          },
+          {
+            "name": "actualMp4MetadataMatchesFixtureAndMalformedOrPublicStorageFailsClosed",
+            "seconds": 0.737,
+            "result": "PASS"
+          },
+          {
+            "name": "explicitJdbcCliImportsAfterCmsCreationAndReexecutionPreservesTheRegisteredMedia",
+            "seconds": 11.076,
+            "result": "PASS"
+          },
+          {
+            "name": "expiredGrantAndNewRequestAfterWithdrawalAreRefusedButAnIssuedLinkHasItsResidualTtl",
+            "seconds": 3.456,
+            "result": "PASS"
+          },
+          {
+            "name": "positionsAreOwnerOnlyAndStrictlyBoundedByTheMeasuredMediaAndRevision",
+            "seconds": 1.961,
+            "result": "PASS"
+          },
+          {
+            "name": "distinctFrenchAndEnglishMediaNeverTransposeTheirPositions",
+            "seconds": 1.844,
+            "result": "PASS"
+          },
+          {
+            "name": "simultaneousFirstPositionsRecheckTheirEtagUnderTheOwnerLock",
+            "seconds": 1.547,
+            "result": "PASS"
+          },
+          {
+            "name": "anonymousPlaybackRequiresCsrfAndStreamsVerifiedRangesWithoutLeakingTheGrant",
+            "seconds": 1.025,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.MethodServiceIntegrationTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 12.534,
+        "cases": [
+          {
+            "name": "staleAccountContextCannotCreateImportUpdateDuplicateOrDeleteUnderTheNewAccount",
+            "seconds": 0.092,
+            "result": "PASS"
+          },
+          {
+            "name": "optimisticPreconditionsSerializeConcurrentEditsWithoutDiscardingTheWinner",
+            "seconds": 0.072,
+            "result": "PASS"
+          },
+          {
+            "name": "upgradeV005PreservesPublishedLegacyTemplateAndSessionsWithoutInventingADefinition",
+            "seconds": 1.985,
+            "result": "PASS"
+          },
+          {
+            "name": "copiedTextAndSourceSnapshotSurviveRevisionWithdrawalAndDuplicateWithoutSourceRights",
+            "seconds": 1.266,
+            "result": "PASS"
+          },
+          {
+            "name": "missingDefinitionBlocksPublicationAndProtectedSourceIsNeverCopiedEvenByAnEditor",
+            "seconds": 0.679,
+            "result": "PASS"
+          },
+          {
+            "name": "ownerCrudSearchAndDuplicationOperateOnIndependentRowsAndNeverExposeAnotherOwner",
+            "seconds": 0.147,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.notifications.NotificationOutboxIntegrationTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 17.109,
+        "cases": [
+          {
+            "name": "smtpDeliveryHoldsNoDatabaseClaimTransactionAndAnotherBusinessEventCanCommit",
+            "seconds": 0.369,
+            "result": "PASS"
+          },
+          {
+            "name": "realRegistrationAndRecoveryAreLocalizedReceivedByMailpitAndPurgedAfterDelivery",
+            "seconds": 0.912,
+            "result": "PASS"
+          },
+          {
+            "name": "exhaustedTransportIsDeadAndOnlyAnAuthorizedExplicitOperationCanResumeIt",
+            "seconds": 1.546,
+            "result": "PASS"
+          },
+          {
+            "name": "anAbandonedLeaseBecomesIndeterminateWithoutAutomaticResendAndRequiresDuplicateAcknowledgement",
+            "seconds": 0.31,
+            "result": "PASS"
+          },
+          {
+            "name": "aRealConnectionFailureRetriesWithBackoffWithoutBlockingTheBusinessTransaction",
+            "seconds": 1.485,
+            "result": "PASS"
+          },
+          {
+            "name": "encryptionUsesAuthenticatedUniqueNoncesAndThePersistedKeySurvivesANewCipherInstance",
+            "seconds": 0.167,
+            "result": "PASS"
+          },
+          {
+            "name": "anExpiredRecoveryPayloadIsPurgedAndCannotBeRequeued",
+            "seconds": 2.546,
+            "result": "PASS"
+          },
+          {
+            "name": "registrationAndRecoveryEnqueueAtomicallyAndRollbackNeverLeaksAnEmail",
+            "seconds": 0.354,
+            "result": "PASS"
+          },
+          {
+            "name": "concurrentBusinessEventsDeduplicateBeforeSmtpAndBodyChangesConflict",
+            "seconds": 0.366,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.OfferServiceIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 16.926,
+        "cases": [
+          {
+            "name": "editorPermissionsAndClientSuppliedAccountContextNeverAuthorizeCommercialMutations",
+            "seconds": 0.099,
+            "result": "PASS"
+          },
+          {
+            "name": "incompleteConfigurationRemainsReadableButCannotBecomeAnActiveOffer",
+            "seconds": 0.127,
+            "result": "PASS"
+          },
+          {
+            "name": "aConfiguredProtectedCourseHasPublishedExactLanguageMetadataWithoutAnyPremiumBody",
+            "seconds": 1.735,
+            "result": "PASS"
+          },
+          {
+            "name": "requiredMediaAndUnsupportedFiscalOrCurrencyConfigurationFailClosed",
+            "seconds": 0.777,
+            "result": "PASS"
+          },
+          {
+            "name": "competingOfferEditorsMustRecheckTheLockedRevision",
+            "seconds": 0.093,
+            "result": "PASS"
+          },
+          {
+            "name": "removedChildrenAndStaleTranslationsBlockNewSalesWithoutUpgradingPinnedVersions",
+            "seconds": 2.334,
+            "result": "PASS"
+          },
+          {
+            "name": "upgradeV011PreservesExistingIdentityAndSessionAndCreatesNoCommercialData",
+            "seconds": 2.867,
+            "result": "PASS"
+          },
+          {
+            "name": "changingAnOfferPreservesHistoricalFieldsAndRequiresExplicitReactivation",
+            "seconds": 1.173,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.payments.config.StripeConfigurationTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 0.017,
+        "cases": [
+          {
+            "name": "liveModeAndApiOverridesOutsideTheExplicitTestEnvironmentFailClosed",
+            "seconds": 0.005,
+            "result": "PASS"
+          },
+          {
+            "name": "testPaymentsAreUnavailableInProductionButRemainAvailableInStaging",
+            "seconds": 0.002,
+            "result": "PASS"
+          },
+          {
+            "name": "existingLowercaseModeIsAcceptedAndSecretsNeverAppearInSettingsToString",
+            "seconds": 0.003,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.payments.inbox.PaymentInboxHttpIntegrationTest",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 50.229,
+        "cases": [
+          {
+            "name": "emailDeliveryFailureDoesNotRemoveAccessAndCanRecoverIndependently",
+            "seconds": 3.976,
+            "result": "PASS"
+          },
+          {
+            "name": "lostCreateResponseIsRecoveredByDurableMetadataLookupWithoutAnotherCreate",
+            "seconds": 2.966,
+            "result": "PASS"
+          },
+          {
+            "name": "concurrentDuplicateAndDistinctEventsHaveOneGrantAndOneDurableNotification",
+            "seconds": 2.699,
+            "result": "PASS"
+          },
+          {
+            "name": "sdkSignatureRawBodyBoundAndExactCsrfExceptionAreReal",
+            "seconds": 0.141,
+            "result": "PASS"
+          },
+          {
+            "name": "missingSessionWaitsUntilItsPostgresDeadlineThenRemainsAnExplicitRecoverableIncident",
+            "seconds": 2.744,
+            "result": "PASS"
+          },
+          {
+            "name": "crashAfterDurableReceiptAndFulfillmentDatabaseFailurePreservesPaidAndRetriesAtomically",
+            "seconds": 2.512,
+            "result": "PASS"
+          },
+          {
+            "name": "operatorPermissionsAndExplicitRetryOnlyReplanAnExistingWorkItem",
+            "seconds": 2.775,
+            "result": "PASS"
+          },
+          {
+            "name": "reversedOldEventsCannotRestoreRevokedOrKnownRefundedOrigins",
+            "seconds": 2.2,
+            "result": "PASS"
+          },
+          {
+            "name": "checkoutHttpUsesOwnerCsrfRevisionAndContextAndReturnQueryCannotPay",
+            "seconds": 2.71,
+            "result": "PASS"
+          },
+          {
+            "name": "webhookCompletesBeforeCreateAcknowledgementWithoutRegressionToOpen",
+            "seconds": 1.981,
+            "result": "PASS"
+          },
+          {
+            "name": "amountCurrencyProductAndModeMismatchesNeverGrantAndAreOperatorVisible",
+            "seconds": 8.435,
+            "result": "PASS"
+          },
+          {
+            "name": "delayedPaymentWaitsWithoutErrorBudgetAndColdWorkerEventuallyFulfills",
+            "seconds": 2.165,
+            "result": "PASS"
+          },
+          {
+            "name": "permanentCheckoutIncidentWithoutWebhookHasAVisibleDurableJob",
+            "seconds": 2.015,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.payments.refunds.RefundConfigurationTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 0.112,
+        "cases": [
+          {
+            "name": "maximumAllowedNetworkTimeoutsRequireTheirFullLeaseBudget",
+            "seconds": 0.076,
+            "result": "PASS"
+          },
+          {
+            "name": "sevenReadBudgetIsEnforcedEvenWhenTheScheduledWorkerIsOff",
+            "seconds": 0.033,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.PersonalMethodsHttpIntegrationTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 15.823,
+        "cases": [
+          {
+            "name": "premiumDraftAndWrongKindSourcesNeverExposeOrCreateProtectedContent",
+            "seconds": 2.551,
+            "result": "PASS"
+          },
+          {
+            "name": "publishedSourceCorrectionAndArchiveNeverReplacePersonalSnapshotOrNotes",
+            "seconds": 2.111,
+            "result": "PASS"
+          },
+          {
+            "name": "durableCrudSearchAndDuplicateKeepPersonalTextAndLocaleAcrossSessions",
+            "seconds": 0.864,
+            "result": "PASS"
+          },
+          {
+            "name": "otherAccountsCannotReadUpdateDuplicateDeleteOrInspectSource",
+            "seconds": 0.897,
+            "result": "PASS"
+          },
+          {
+            "name": "staleAccountContextAfterLogoutAndLoginNeverImportsPreviousAccountsText",
+            "seconds": 1.026,
+            "result": "PASS"
+          },
+          {
+            "name": "concurrentUpdatesUseStrongPreconditionsAndPersistOnlyOneWinner",
+            "seconds": 0.913,
+            "result": "PASS"
+          },
+          {
+            "name": "csrfAccountContextAndStrictValidationRejectUnconfirmedOrForgedWrites",
+            "seconds": 0.847,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.ProjectServiceIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 14.009,
+        "cases": [
+          {
+            "name": "twoConcurrentEditorsRecheckTheLockedCurrentRevisionWithoutLosingTheWinner",
+            "seconds": 0.543,
+            "result": "PASS"
+          },
+          {
+            "name": "concurrentDuplicateDeclarationsAreOneAppendOnlyProofAndHistoricalReplaysDoNotMoveToNewText",
+            "seconds": 0.526,
+            "result": "PASS"
+          },
+          {
+            "name": "translationsAndNewSourceVersionsNeverRebindThePersonalTextOrItsRubric",
+            "seconds": 0.749,
+            "result": "PASS"
+          },
+          {
+            "name": "creationIsIdempotentAndEveryPersonalRepresentationBelongsToItsOwner",
+            "seconds": 1.877,
+            "result": "PASS"
+          },
+          {
+            "name": "aNewProductionRevisionNeverReusesAnOldScoreAndSourceCorrectionsDoNotOverwritePersonalWork",
+            "seconds": 0.502,
+            "result": "PASS"
+          },
+          {
+            "name": "upgradeFromV007PreservesSessionsMethodsAndActivityNotesWithoutCreatingAProject",
+            "seconds": 1.607,
+            "result": "PASS"
+          },
+          {
+            "name": "voluntaryRevealIsTracedButNeverValidatesAProjectAndSourceAccessIsRecheckedOnEveryDelivery",
+            "seconds": 0.947,
+            "result": "PASS"
+          },
+          {
+            "name": "br01AndBr02UseTheirOwnRubricAndDeclaredThresholdWithoutAnalyzingTheProductionText",
+            "seconds": 0.522,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.ProjectsHttpIntegrationTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 24.458,
+        "cases": [
+          {
+            "name": "explicitRevisionPreconditionsAndRealConcurrentSavesPreventLostProduction",
+            "seconds": 2.046,
+            "result": "PASS"
+          },
+          {
+            "name": "savingNewTextPreservesHistoricalProductionAndAssessmentAndPagesContainOnlySummaries",
+            "seconds": 2.376,
+            "result": "PASS"
+          },
+          {
+            "name": "serverPresetsArePermissionProtectedLocalizedAndContainTwentyRealOnePointCriteria",
+            "seconds": 1.006,
+            "result": "PASS"
+          },
+          {
+            "name": "publicWorkshopHasExactFreePublishedSourceAndNoInitialSolutionOrPrivateSave",
+            "seconds": 1.293,
+            "result": "PASS"
+          },
+          {
+            "name": "actualOwnerCsrfAccountContextAndStrictDtoProtectEveryPrivateProjectRepresentation",
+            "seconds": 3.231,
+            "result": "PASS"
+          },
+          {
+            "name": "creationAndAssessmentAreIdempotentAndServerComputesDeclaredScoreWithoutChangingTextEtag",
+            "seconds": 1.416,
+            "result": "PASS"
+          },
+          {
+            "name": "withdrawnSourceDeniesNewAndReplayedCorrectionButPreservesOwnerProductionAndDeclaredHistory",
+            "seconds": 1.783,
+            "result": "PASS"
+          },
+          {
+            "name": "thresholdBlockingDeclarationsAndBr02AdaptedRubricRemainExplicitAndDeclarative",
+            "seconds": 1.318,
+            "result": "PASS"
+          },
+          {
+            "name": "afterSubmissionCorrectionRequiresTheExactPersonalRevisionAndDoesNotCompleteOrAssessIt",
+            "seconds": 3.283,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.PublicCatalogueHttpIntegrationTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 21.257,
+        "cases": [
+          {
+            "name": "zeroResultsAndRealPostgresOutageAreDifferentAndTheCatalogueRecovers",
+            "seconds": 3.152,
+            "result": "PASS"
+          },
+          {
+            "name": "searchCombinesPublishedFiltersAndPaginatesTiesInStableOrder",
+            "seconds": 3.37,
+            "result": "PASS"
+          },
+          {
+            "name": "metadataPermissionsValidationAndPublicConfidentialityRemainServerEnforced",
+            "seconds": 1.662,
+            "result": "PASS"
+          },
+          {
+            "name": "metadataAndReviewDatesRemainPublishedSnapshotsUntilExplicitPublication",
+            "seconds": 1.726,
+            "result": "PASS"
+          },
+          {
+            "name": "programmePinsEveryChildVersionAndExactActivityNeverResolvesToLatest",
+            "seconds": 2.431,
+            "result": "PASS"
+          },
+          {
+            "name": "languageContextIsExplicitAndReadyDoesNotRepublishAStaleTranslation",
+            "seconds": 2.378,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.PublicCatalogueIntegrationTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 12.049,
+        "cases": [
+          {
+            "name": "publicProjectionExposesOnlyExplicitDescriptionAndNoPremiumOrQuizSolution",
+            "seconds": 0.517,
+            "result": "PASS"
+          },
+          {
+            "name": "upgradeV004PreservesPublishedRevisionLegacyBodyAndSessionWithoutInventingMetadata",
+            "seconds": 1.924,
+            "result": "PASS"
+          },
+          {
+            "name": "curriculumAndActivityReadStayPinnedWhenTheGlobalChildPublishesANewVersionOrIsWithdrawn",
+            "seconds": 0.946,
+            "result": "PASS"
+          },
+          {
+            "name": "metadataIsRevisionOwnedRetainedByCorrectionsAndConcurrentEditsNeverOverwritePublication",
+            "seconds": 0.69,
+            "result": "PASS"
+          },
+          {
+            "name": "combinedSearchUsesPublishedSnapshotsWithStablePagingAndActuallyCoveredFacets",
+            "seconds": 0.691,
+            "result": "PASS"
+          },
+          {
+            "name": "reviewAloneNeverRepublishesAStaleTranslationAndNewVersionsHaveExplicitLanguageAvailability",
+            "seconds": 0.806,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.RefundHttpIntegrationTest",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 61.828,
+        "cases": [
+          {
+            "name": "ambiguousProviderTimeoutKeepsReservationAndRecoversByGetWithoutAnotherFinancialPost",
+            "seconds": 6.105,
+            "result": "PASS"
+          },
+          {
+            "name": "contradictoryFactsAfterConfirmationKeepConsumedMoneyAndOriginsRevoked",
+            "seconds": 7.1,
+            "result": "PASS"
+          },
+          {
+            "name": "partialConfirmationAndDuplicateSignedRefundEventsApplyOnlyTheSelectedOriginOnce",
+            "seconds": 3.054,
+            "result": "PASS"
+          },
+          {
+            "name": "unpaidOrderHasNoRefundableMoneyAndCannotCreateARequest",
+            "seconds": 1.311,
+            "result": "PASS"
+          },
+          {
+            "name": "concurrentExecuteKeysCannotSubmitTheSameCommittedRefundTwice",
+            "seconds": 2.055,
+            "result": "PASS"
+          },
+          {
+            "name": "invalidAllocationsStalePreviewAndConcurrentDecisionsCannotOverReserveTheOrder",
+            "seconds": 3.406,
+            "result": "PASS"
+          },
+          {
+            "name": "revokedOperatorPermissionWhileWaitingForOrderPreventsAnyProviderCall",
+            "seconds": 2.327,
+            "result": "PASS"
+          },
+          {
+            "name": "expiredSubmissionMaintenanceLocksOwnerThenOrderBeforeTouchingTheOperation",
+            "seconds": 2.27,
+            "result": "PASS"
+          },
+          {
+            "name": "requestOwnershipCsrfContextStrictDtosAndDurableIdempotencyAreRealHttpGuards",
+            "seconds": 2.502,
+            "result": "PASS"
+          },
+          {
+            "name": "rejectionAndCancelBeforeSubmissionAreAuditedWithoutCallingStripe",
+            "seconds": 1.88,
+            "result": "PASS"
+          },
+          {
+            "name": "oldSignedCheckoutConfirmationAfterRefundCannotRestoreItsRevokedOrigin",
+            "seconds": 2.631,
+            "result": "PASS"
+          },
+          {
+            "name": "dashboardPartialWaitsForExplicitAccessDecisionAndCumulativeFullRevokesOnlyThatOrder",
+            "seconds": 4.743,
+            "result": "PASS"
+          },
+          {
+            "name": "fullPackRefundKeepsEarlierIndividualOriginAndPersonalWorkButRefusesNewPrivateS3Links",
+            "seconds": 5.955,
+            "result": "PASS"
+          },
+          {
+            "name": "pendingThenFailedPartialKeepRetainsAccessAndReleasesOnlyItsReservation",
+            "seconds": 4.251,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.SchemaIntegrationTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 17.074,
+        "cases": [
+          {
+            "name": "aFreshDatabaseMigratesAndHibernateValidatesWithoutSeedingAccountsOrCommerce",
+            "seconds": 0.115,
+            "result": "PASS"
+          },
+          {
+            "name": "upgradingV001PreservesItsExistingJdbcSessionAndAttribute",
+            "seconds": 2.097,
+            "result": "PASS"
+          },
+          {
+            "name": "identityConstraintsPreserveUtcAndRevokedPermissionOrigins",
+            "seconds": 0.081,
+            "result": "PASS"
+          },
+          {
+            "name": "localizedSlugsAndRevisionPointersCannotCrossTheirIdentityOrLanguage",
+            "seconds": 0.095,
+            "result": "PASS"
+          },
+          {
+            "name": "compositionAndPedagogyAreImmutableAfterBottomUpFreeze",
+            "seconds": 0.076,
+            "result": "PASS"
+          },
+          {
+            "name": "independentJpaTransactionsRejectAStaleRevisionAndNeverSerializeTheCredentialHash",
+            "seconds": 0.053,
+            "result": "PASS"
+          },
+          {
+            "name": "explicitDemoImportIsRepeatableAfterManualChangesAndFreezeAndRejectsUuidCollisions",
+            "seconds": 3.603,
+            "result": "PASS"
+          },
+          {
+            "name": "aCompositionInsertWaitingOnAConcurrentFreezeCannotSlipIntoTheFrozenVersion",
+            "seconds": 0.082,
+            "result": "PASS"
+          },
+          {
+            "name": "databaseExceptionsKeepSqlStateWithoutLeakingFailingRowDetails",
+            "seconds": 0.006,
+            "result": "PASS"
+          },
+          {
+            "name": "upgradingV014PreservesAccountsPermissionsAndSessionsWithoutFinancialOperations",
+            "seconds": 2.077,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.shared.http.HttpContractTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 0.291,
+        "cases": [
+          {
+            "name": "methodParameterValidationAndMalformedBodiesRemainClientErrors",
+            "seconds": 0.182,
+            "result": "PASS"
+          },
+          {
+            "name": "validationReturnsFieldMetadataWithoutSubmittedTextOrConstraintMessages",
+            "seconds": 0.026,
+            "result": "PASS"
+          },
+          {
+            "name": "conflictOptimisticLockAndUnhandledErrorsAreSanitizedAndNeverCached",
+            "seconds": 0.029,
+            "result": "PASS"
+          },
+          {
+            "name": "explicitRevisionIsRequiredAndStrongListsUseOrSemantics",
+            "seconds": 0.028,
+            "result": "PASS"
+          },
+          {
+            "name": "entityTagsDistinguishResourcesAndParserBoundsWorkWithoutBreakingQuotedCommas",
+            "seconds": 0.017,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.shared.money.MoneyValidationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 0.012,
+        "cases": [
+          {
+            "name": "transportAmountsStayExactForJavaAndJavascriptWithoutAssumingCurrencyDecimals",
+            "seconds": 0.01,
+            "result": "PASS"
+          }
+        ]
+      }
+    ]
+  },
+  "targeted": {
+    "command": "mvnw --batch-mode --no-transfer-progress -Dtest=RefundHttpIntegrationTest,RefundConfigurationTest test",
+    "exitCode": 0,
+    "finishedAt": "2026-11-08T20:38:47+01:00",
+    "mavenDuration": "01:51",
+    "totals": {
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "suites": [
+      {
+        "name": "com.chatgptcourses.RefundHttpIntegrationTest",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 80.798,
+        "cases": [
+          {
+            "name": "ambiguousProviderTimeoutKeepsReservationAndRecoversByGetWithoutAnotherFinancialPost",
+            "seconds": 9.468,
+            "result": "PASS"
+          },
+          {
+            "name": "contradictoryFactsAfterConfirmationKeepConsumedMoneyAndOriginsRevoked",
+            "seconds": 6.271,
+            "result": "PASS"
+          },
+          {
+            "name": "partialConfirmationAndDuplicateSignedRefundEventsApplyOnlyTheSelectedOriginOnce",
+            "seconds": 2.76,
+            "result": "PASS"
+          },
+          {
+            "name": "unpaidOrderHasNoRefundableMoneyAndCannotCreateARequest",
+            "seconds": 1.254,
+            "result": "PASS"
+          },
+          {
+            "name": "concurrentExecuteKeysCannotSubmitTheSameCommittedRefundTwice",
+            "seconds": 2.024,
+            "result": "PASS"
+          },
+          {
+            "name": "invalidAllocationsStalePreviewAndConcurrentDecisionsCannotOverReserveTheOrder",
+            "seconds": 3.007,
+            "result": "PASS"
+          },
+          {
+            "name": "revokedOperatorPermissionWhileWaitingForOrderPreventsAnyProviderCall",
+            "seconds": 1.907,
+            "result": "PASS"
+          },
+          {
+            "name": "expiredSubmissionMaintenanceLocksOwnerThenOrderBeforeTouchingTheOperation",
+            "seconds": 2.1,
+            "result": "PASS"
+          },
+          {
+            "name": "requestOwnershipCsrfContextStrictDtosAndDurableIdempotencyAreRealHttpGuards",
+            "seconds": 2.71,
+            "result": "PASS"
+          },
+          {
+            "name": "rejectionAndCancelBeforeSubmissionAreAuditedWithoutCallingStripe",
+            "seconds": 2.161,
+            "result": "PASS"
+          },
+          {
+            "name": "oldSignedCheckoutConfirmationAfterRefundCannotRestoreItsRevokedOrigin",
+            "seconds": 2.877,
+            "result": "PASS"
+          },
+          {
+            "name": "dashboardPartialWaitsForExplicitAccessDecisionAndCumulativeFullRevokesOnlyThatOrder",
+            "seconds": 5.221,
+            "result": "PASS"
+          },
+          {
+            "name": "fullPackRefundKeepsEarlierIndividualOriginAndPersonalWorkButRefusesNewPrivateS3Links",
+            "seconds": 6.433,
+            "result": "PASS"
+          },
+          {
+            "name": "pendingThenFailedPartialKeepRetainsAccessAndReleasesOnlyItsReservation",
+            "seconds": 4.132,
+            "result": "PASS"
+          }
+        ]
+      },
+      {
+        "name": "com.chatgptcourses.payments.refunds.RefundConfigurationTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 1.826,
+        "cases": [
+          {
+            "name": "maximumAllowedNetworkTimeoutsRequireTheirFullLeaseBudget",
+            "seconds": 1.707,
+            "result": "PASS"
+          },
+          {
+            "name": "sevenReadBudgetIsEnforcedEvenWhenTheScheduledWorkerIsOff",
+            "seconds": 0.072,
+            "result": "PASS"
+          }
+        ]
+      }
+    ]
+  },
+  "jarSha256": "e2d93455e1e4079a5cd956ff9879c94a42649f3468ea24d2c1d9e2382d3334ef",
+  "externalStripe": false,
+  "privateConfigurationInjectedIntoMaven": false,
+  "rawSystemPropertiesExported": false,
+  "rawPayloadsExported": false
+}

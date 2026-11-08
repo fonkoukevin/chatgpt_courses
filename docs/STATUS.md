@@ -1,18 +1,16 @@
 # État réel du projet
 
-Dernière mise à jour : **8 novembre 2026**. **P04–P12 validés localement**, dans l’ordre ; intégration Stripe TEST externe observée pour P12. Aucun ancien prototype repris, aucun mode LIVE ni déploiement. P13 n’est pas lancé.
+Dernière mise à jour : **8 novembre 2026**. **P13 validé localement**, après P04–P12 validés localement dans l’ordre et intégration Stripe TEST externe observée pour P12. Aucun ancien prototype repris, aucun mode LIVE ni déploiement.
 
 ## Situation courante
 
-- **P12 clos comme implémentation validée localement**, avec vraie recette Checkout hébergé TEST : réception durable avant worker, reprise PAID/READY, accès privé/public expurgé et deux rejeux fournisseur sans duplication. [Preuves et limites](evidence/P12.md).
-- Git local : branche `main`, socle P12 **`12fc4a9`**, outillage/diagnostic **`50eaba8`**, Windows/synchronisation **`20740db`**, recette externe et accès frais **`4c4724b`** ; aucun remote/push. Fichiers et changements existants conservés, dont le fichier Next généré par le développement de l’utilisateur.
-- Outils : Windows/PowerShell 5.1, Node portable 24.22.2/npm 11.19.1, Temurin 21.0.13+9, Wrapper Maven 3.10.0 ; Docker Linux 29.8.0/Compose 5.5.1. Stripe CLI portable **1.55.8**, archive/manifeste officiels vérifiés par SHA-256.
-- Schéma : **V001–V014**, aucune migration supplémentaire dans la clôture. L’upgrade P12 préserve45tables existantes ; avant/après recette finale, **49tables partagées identiques hors sessions**. Fixtures uniquement dans tmpfs étiqueté ; volumes conservés. [Upgrade](evidence/P12-upgrade-preservation.json), [contrôle final](evidence/P12-external-shared-preservation.json).
-- Vérifications P12 : global Java **182**, puis ciblés **23**, **16** et dernier **5/5** (sans cumul), dont16GET parallèles après droit fraîchement créé ; client84/builds/lint/contrat précédents réussis. Dernier TypeScript navigateur réussi. Suite contrôlée finale **8/8 en152,320s**, puis vraie recette fournisseur **1/1 en100,933s**, sorties0, aucun retry/flaky. **27+3 captures examinées**, nettoyages confirmés. [Index local](evidence/P12-browser-checks.json), [index fournisseur](evidence/P12-stripe-external-checks.json).
-- **Incident historique ouvert** : deux refus après READY non reproduits, cause inconnue, aucun correctif revendiqué. La clôture locale ne ferme pas l’incident ; assertions conservées et critère d’arrêt en P17/P19 avant livraison. [Suivi détaillé](evidence/P12-access-follow-up.md).
-- Développement utilisateur resté démarré : FR/EN et sonde Spring via proxy200, webhook non signé400. Listener de développement temporairement arrêté pour isoler les événements, puis **rétabli en arrière-plan, Ready TEST** vers `http://localhost:3000/api/v1/webhooks/stripe`. Secret/fichier privés conservés. Le lanceur externe refuse désormais les autres écoutes du dépôt avant réseau. [Contrôle final](evidence/P12-final-development-check.json), [commandes](../README.md#configuration-privée-et-stripe-cli--windows-natif).
-- Prochain lot : **`prompts/P13_REMBOURSEMENTS_DROITS.txt`**, non lancé. Prix, fiscalité, durée, conditions, langues, support et médias commerciaux restent à renseigner ; le montant de recette100centimes EUR n’est pas un tarif commercial. Commerce partagé désactivé. Aucun run GitHub, SMTP Internet, moyen différé externe ou déploiement observé.
-- Limite antérieure P09 : un acquittement après PATCH 200 n’a pas été reproduit sur seize répétitions puis la recette finale ; cause inconnue, conservée pour P17/P19. [Détails](evidence/P09.md).
+- **P13 validé localement** : demandes/décisions/exécutions séparées, budgets réservés, rapprochement, retraits par origine et E13/E16 FR/EN. Pack A+B remboursé : A individuel conservé, B refusé ; travail personnel préservé. [Preuves, corrections et limites](evidence/P13.md).
+- Vérifications finales : **203 tests Java**, client **91**, Chromium P13 **6/6**, ciblé privé FR/EN **1/1**, régression P12 **8/8** ; builds, contrat généré, lint et types réussis. **42 captures examinées**. Les compteurs ciblés ne s’ajoutent pas au global. [API](evidence/P13-api-final-checks.json), [navigateur](evidence/P13-browser-checks.json), [régression](evidence/P13-payment-regression-checks.json).
+- Schéma **V001–V015** : upgrade sans seed,49 tables originales comparées et toutes leurs lignes préservées. Aucun volume supprimé ; fixtures dans PostgreSQL/S3/Mailpit temporaires nettoyés. [Migration](evidence/P13-upgrade.json), [préservation](evidence/P13-upgrade-preservation.json).
+- Développement rétabli sur `http://localhost:3000/fr` et `/en`, proxy Spring200 ; listener **Ready TEST**, API2026-10-28.endive, huit événements. Secrets conservés, seul indicateur privé ajouté : `REFUND_WORKER_ENABLED=true` ; fichier Next utilisateur restauré. [HTTP](evidence/P13-final-development-check.json), [restauration](evidence/P13-development-restoration.json).
+- Windows natif ; Node24.22.2/npm11.19.1, Java21.0.13+9/Wrapper3.10.0 et versions convenues conservés. Git local main, code P13 `611ca88` ; preuves dans un commit distinct, aucun remote/push. Aucun remboursement fournisseur externe, mode LIVE, déploiement ou CI GitHub exécuté ; commerce partagé désactivé.
+- P12 reste validé localement avec vrai Checkout TEST. **Deux refus historiques après READY toujours de cause inconnue**, non reproduits, aucun correctif revendiqué : garde P17/P19 avant livraison. [Suivi](evidence/P12-access-follow-up.md). La limite antérieure P09 reste dans sa preuve.
+- Conditions/prix/fiscalité/durée/support, médias et politique commerciale/légale de remboursement restent à renseigner par le porteur. **Prochain lot : P14**, non commencé ; aucun engagement client inventé.
 
 ## Phases
 
@@ -31,7 +29,7 @@ Dernière mise à jour : **8 novembre 2026**. **P04–P12 validés localement**,
 | P10 | Validé localement | Stockage, vidéo locale de test et outbox ; 138 tests Java, 12 scénarios Chromium ; [preuves](evidence/P10.md) |
 | P11 | Validé localement | Offres/snapshots/commandes ; global Java155 puis HTTP10 final, Chromium8/8 ; [preuves](evidence/P11.md) |
 | P12 | Validé localement | Checkout fournisseur TEST1/1, local8/8, accès5/5,30captures examinées ; incident historique suivi P17/P19, aucun LIVE ; [preuves](evidence/P12.md) |
-| P13 | À faire | Remboursements et droits |
+| P13 | Validé localement | Java203, client91, Chromium6/6+ciblé1/1, régression8/8,42captures, upgrade préservé ; [preuves](evidence/P13.md) |
 | P14 | À faire | Compte, aide et attestations |
 | P15 | À faire | Administration d’exploitation |
 | P16 | À faire | FR/EN et SEO |
@@ -47,6 +45,6 @@ Dernière mise à jour : **8 novembre 2026**. **P04–P12 validés localement**,
 
 ## Dernier lot
 
-P12 relie commande, opération Checkout, événement signé, paiement rapproché, origines d’accès et notification. Retour seul, paiement différé, activation retardée et incident email restent distincts. La recette contrôlée et le vrai parcours Stripe TEST ont des preuves séparées ; aucune validation de production n’en découle. La prochaine phase est P13 ; l’incident historique conserve son suivi avant livraison.
+P13 sépare demande, consentement opérateur, résultat financier et effets d’accès. Concurrence, timeout, doublons, remboursements externes à examiner, budgets après contradiction et nouveaux liens privés sont vérifiés localement. La recette de remboursement chez Stripe et la production restent distinctes. Prochaine instruction disponible : `prompts/P14_COMPTE_AIDE_ATTESTATIONS.txt`.
 
 Garder ce suivi court ; détailler les commandes et limites dans `docs/evidence/Pxx.md`. Une reprise part des fichiers et preuves présents, sans supposer l’historique de conversation.

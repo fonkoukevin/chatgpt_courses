@@ -1,0 +1,14 @@
+{
+  "verifiedAt": "2026-11-09T18:16:19.717Z",
+  "httpStatus": 200,
+  "testKeyPrefix": true,
+  "configuredAccountMatchesStripe": true,
+  "requestedApiVersion": "2026-10-28.endive",
+  "externalAccountReadExecuted": true,
+  "paymentCreated": false,
+  "webhookCreated": false,
+  "liveKeyUsed": false,
+  "secretsPrinted": false,
+  "localEnvironmentModified": false,
+  "previousEvidenceOverwritten": false
+}

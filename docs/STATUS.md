@@ -4,7 +4,7 @@ Dernière mise à jour : **9 novembre 2026**. **P20 validé localement**, P21 en
 
 ## Situation courante
 
-- **P21** : SSH dédié vérifié, 12 conteneurs préservés, Node24.22.2 installé sans redémarrage. Ingress partagé adapté avec Caddy2.11.4 sans reload ; Mailpit/S3/CLI préparés et vérifiés hors fournisseur. Seconde CI source `962bb9f` : web réussi, API262tests avec1échec/1erreur S3, e2e non exécuté ; diagnostic borné prêt. DNS des deux sous-domaines vérifiés. L’utilisateur annule Pro et autorise la source publique : dépôt passé en public après audit, protections à configurer ; images toujours privées. Aucun déploiement applicatif. [Faits et reprise](evidence/P21.md).
+- **P21 en cours** : SSH/Node/DNS/protections réels, secrets distincts, 12 conteneurs préservés ; aucun proxy activé ou déploiement. Source publique autorisée, images exigées privées. Web et API **266/266,40suites** passent sur GitHub, ainsi que le smoke PostgreSQL/panne/reprise. Le diagnostic `9214298` confirme **CONTROL_LISTEN/EINVAL avant Playwright**. Correctif IPC/superviseur vérifié Windows63 et Linux4+1, CI complète à observer ; aucune fusion ou garde contournée. [Faits et reprise](evidence/P21.md).
 - **P20** : deux images multi-étapes réellement construites, UID10001, bases par digest ; Compose/Caddy et secrets séparés. API ciblée14/14, scripts22/22, lint/actionlint passent. Intégration isolée15 contrôles : HTTPS, smoke staging12/production10,19 migrations, mêmes images promues sans rebuild, sauvegarde chiffrée et restauration PG/S3, moniteur CLI. [Résultats et limites](evidence/P20.md), [intégration](evidence/P20-integration-checks.json), [runbooks](runbooks/deploy.md). Aucun registre/SSH/GitHub/off-host/alerte externe observé.
 - **P18** : douze leçons FR/EN,18 fichiers Markdown, import CMS durable, corrigés protégés et vrais exports locaux. [Sources](../content/course-client-proposal/README.md), [résultats et limites](evidence/P18.md).
 - **P19** : global API256/256,35 suites ; client124, contrat/sources223/contrastes/lint/types et15 garde-fous CI passent. Configuration production12/12 sur base vide et vraie chaîne HTTP arrêt/reprise. Chromium consolidé4/4, paiement8/8, remboursement6/6 ; huit captures examinées. Stripe TEST réel1/1 : deux Checkout, deux remboursements, quatre rejeux sans double effet, origine individuelle conservée. [Matrice, résultats et limites](evidence/P19.md), [candidate](evidence/P19-release-candidate.json).
@@ -41,7 +41,7 @@ Dernière mise à jour : **9 novembre 2026**. **P20 validé localement**, P21 en
 | P18 | Validé localement | Rédaction et intégration isolée4/4,18 fichiers/4 exports/18 captures ; brouillons partagés importés, acteur désactivé, vente bloquée ; [preuve](evidence/P18.md) |
 | P19 | Validé localement | API256/client124, navigateur4+8+6, fournisseur TEST1/1, CI locale et production12/12 ; commerce bloqué, aucun GitHub/déploiement ; [preuve](evidence/P19.md) |
 | P20 | Validé localement | Images réelles, API14/scripts22, TLS et promotion12+10, migration/restauration/moniteur15 contrôles ; cible/registre/off-host manquants ; [preuve](evidence/P20.md) |
-| P21 | En cours | SSH/Node/DNS réels, source publique autorisée/auditée ; CI source encore2casS3 ouverts, protections et livraison à finaliser ; [suivi](evidence/P21.md) |
+| P21 | En cours | Linux API266/266 et web passent ; défaut IPC confirmé, correctif à valider en E2E ; aucune fusion/publication/livraison ; [suivi](evidence/P21.md) |
 | P22 | À faire | Déploiement de production |
 | P23 | À faire | Exploitation après lancement |
 
@@ -49,6 +49,6 @@ Dernière mise à jour : **9 novembre 2026**. **P20 validé localement**, P21 en
 
 ## Dernier lot
 
-Reprise **`prompts/P21_DEPLOIEMENT_RECETTE.txt`** : publier les diagnostics et préparatifs vérifiés, établir/corriger les deux cas S3 de CI sans changer arbitrairement délais ou permissions, configurer les protections désormais accessibles avec source publique, puis publier/déployer les images identifiées. Raccordement durable au Caddy existant à activer sans interruption de l’autre application. Restent configuration/intégrations TEST, parcours sur cible, restauration complète et alertes. RPO/RTO/rétention non activés ; aucun achat ni déploiement applicatif distant, vente toujours bloquée par les incidents et décisions documentés.
+Reprise **`prompts/P21_DEPLOIEMENT_RECETTE.txt`** : finaliser P21 avant P22. Les266tests API Linux passent ; corriger le lanceur E2E sur preuve observée, puis obtenir CI PR et main verte avant publication/déploiement. Candidats Caddy/Compose et helpers privés prêts, non activés. Restent Stripe TEST distant, parcours HTTPS, restauration complète et alertes. Aucun achat ou déploiement applicatif distant, vente toujours bloquée par les incidents et décisions documentés.
 
 Garder ce suivi court ; détails dans docs/evidence/Pxx.md. Repartir des fichiers et preuves réels lors d’une reprise.

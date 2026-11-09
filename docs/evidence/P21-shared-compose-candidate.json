@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "result": "prepared-not-applied",
+  "sourceSha256": "aa499e86a2babf5c6402b62ce8dce1f4f8531585ca7de380bcb021e9bf195de3",
+  "candidateSha256": "11b4083bdcae32fafa91e7cf567dfed0bd914849317fa81ddd17df553beb69f0",
+  "insertions": 2,
+  "existingBytesAndCommentsUnchanged": true,
+  "fullRenderedComparison": "equal-after-removing-exactly-the-two-approved-network-additions",
+  "serviceCount": 12,
+  "otherServicesImagesPortsEnvironmentCommandsNetworksVolumesUnchanged": true,
+  "sourceContentsInodeAndMtimeUnchanged": true,
+  "preexistingDirtyTrackedCount": 5,
+  "preexistingUntrackedCount": 2,
+  "preexistingGitStateUnchanged": true,
+  "caddyAdmin": {
+    "configurationSource": "adapted-existing-file",
+    "disabled": false,
+    "listen": "localhost:2019",
+    "listenWasExplicit": false,
+    "reloadTested": false
+  },
+  "composeOriginalWritten": false,
+  "networkCreateInvoked": false,
+  "networkConnectInvoked": false,
+  "composeUpInvoked": false,
+  "caddyReloadInvoked": false,
+  "oldProjectCommitted": false,
+  "secretOrConfigurationBodiesPrinted": false
+}

@@ -18,12 +18,20 @@ function noLinks(path) {
 export function validateSharedIngressNetwork(facts) {
   requireRelease(facts?.name === 'courses-staging-ingress' && facts.internal === true && facts.driver === 'bridge', 'RELEASE_SHARED_INGRESS_NETWORK_INVALID');
 }
+export function deploymentComposeFiles(release, validated, request) {
+  requireRelease(typeof request.stagingPaymentTest === 'boolean' && request.stagingPaymentTest === validated.stagingPaymentTest, 'RELEASE_PAYMENT_TEST_TARGET_MISMATCH');
+  requireRelease(!request.stagingPaymentTest || validated.environment === 'staging' && validated.ingressMode === 'shared' && validated.stagingIntegrations === 'mailpit-s3', 'RELEASE_PAYMENT_TEST_STAGING_ONLY');
+  return ['compose.deployment.yml', ...(validated.environment === 'staging' ? ['compose.staging.yml'] : []),
+    ...(validated.ingressMode === 'shared' ? ['compose.shared-ingress.yml'] : []),
+    ...(validated.stagingIntegrations === 'mailpit-s3' ? ['compose.staging-integrations.yml'] : []),
+    ...(request.stagingPaymentTest ? ['compose.staging-payment-test.yml'] : [])].map(file => join(release, 'infra/compose', file));
+}
 function main() {
   requireRelease(process.platform === 'linux' && process.versions.node === '24.22.2', 'RELEASE_REMOTE_LINUX_NODE_24_22_2_REQUIRED');
   const args = argumentsOf(process.argv.slice(2)), release = join(args.directory, 'releases', args.hash);
   noLinks(release); requireRelease(realpathSync(dirname(fileURLToPath(import.meta.url))) === join(release, 'scripts/deployment'), 'RELEASE_REMOTE_LOCATION_INVALID');
   const request = JSON.parse(readFileSync(join(release, 'release-request.json'), 'utf8'));
-  requireRelease(request.manifestSha256 === args.hash && ['deploy', 'rollback'].includes(request.operation) && ['staging', 'production'].includes(request.environment), 'RELEASE_REMOTE_REQUEST_INVALID');
+  requireRelease(request.manifestSha256 === args.hash && ['deploy', 'rollback'].includes(request.operation) && ['staging', 'production'].includes(request.environment) && typeof request.stagingPaymentTest === 'boolean' && (!request.stagingPaymentTest || request.environment === 'staging'), 'RELEASE_REMOTE_REQUEST_INVALID');
   const manifest = parseManifest(readFileSync(join(release, 'release-manifest.json'), 'utf8'), request.imageRepository, args.hash);
   const project = `courses-${request.environment}`, config = join(args.directory, 'config/deployment.env'), images = join(release, 'release.env');
   noLinks(config); requireRelease(lstatSync(config).isFile() && (lstatSync(config).mode & 0o007) === 0, 'RELEASE_REMOTE_CONFIG_MUST_BE_PRIVATE');
@@ -39,7 +47,7 @@ function main() {
   try {
     if (args.action === 'activate') {
       const previous = JSON.parse(readFileSync(receiptPath, 'utf8'));
-      requireRelease(previous.result === 'awaiting-external-smoke' && previous.manifestSha256 === args.hash, 'RELEASE_REMOTE_APPLY_MUST_SUCCEED_FIRST');
+      requireRelease(previous.result === 'awaiting-external-smoke' && previous.manifestSha256 === args.hash && previous.stagingPaymentTest === request.stagingPaymentTest, 'RELEASE_REMOTE_APPLY_MUST_SUCCEED_FIRST');
       const pointer = join(args.directory, 'current'), next = join(args.directory, `current-${args.hash}`);
       requireRelease(!existsSync(next) && (!existsSync(pointer) || lstatSync(pointer).isSymbolicLink()), 'RELEASE_ACTIVE_POINTER_REFUSED');
       symlinkSync(`releases/${args.hash}`, next); renameSync(next, pointer);
@@ -52,7 +60,7 @@ function main() {
     requireRelease(validated.environment === request.environment && validated.project === project && configuration.APP_PUBLIC_ORIGIN === request.expectedPublicOrigin, 'RELEASE_REMOTE_TARGET_CONFIG_MISMATCH');
     const sharedIngress = validated.ingressMode === 'shared';
     const stagingIntegrations = validated.stagingIntegrations === 'mailpit-s3';
-    const compose = ['compose', '--project-name', project, '--env-file', config, '--env-file', images, '-f', join(release, 'infra/compose/compose.deployment.yml'), ...(request.environment === 'staging' ? ['-f', join(release, 'infra/compose/compose.staging.yml')] : []), ...(sharedIngress ? ['-f', join(release, 'infra/compose/compose.shared-ingress.yml')] : []), ...(stagingIntegrations ? ['-f', join(release, 'infra/compose/compose.staging-integrations.yml')] : [])];
+    const compose = ['compose', '--project-name', project, '--env-file', config, '--env-file', images, ...deploymentComposeFiles(release, validated, request).flatMap(file => ['-f', file])];
     run('docker', [...compose, 'config', '--quiet']);
     if (sharedIngress) {
       const facts = run('docker', ['network', 'inspect', '--format', '{"name":{{json .Name}},"internal":{{json .Internal}},"driver":{{json .Driver}}}', validated.ingressNetwork], true).stdout;
@@ -96,7 +104,7 @@ function main() {
       run('docker', [...compose, 'run', '--rm', '--no-deps', 'api', 'storage-bootstrap']);
     }
     run('docker', [...compose, 'up', '--no-build', '--no-deps', '-d', '--wait', '--wait-timeout', '180', 'api', 'web', ...(sharedIngress ? [] : ['caddy'])]);
-    writeFileSync(receiptPath, JSON.stringify({ result: 'awaiting-external-smoke', manifestSha256: args.hash, sourceCommit: manifest.sourceCommit, environment: request.environment, operation: request.operation, completedAt: new Date().toISOString(), imageBuildInvoked: false, migrationInvoked: request.operation === 'deploy', observedSchemaVersionBefore: facts.version, firstInstallEmptyDatabaseObserved: request.firstInstallEmptyDatabase === true, rollbackSchemaReviewRequired: request.operation === 'rollback', backupReceiptSha256: request.migrationBackupReceiptSha256, offHostBackupIsOperatorAttestation: request.offHostBackupAttested === true, dataRestored: false, ingressMode: validated.ingressMode, ingressNetwork: validated.ingressNetwork, sharedIngressNetworkValidated: sharedIngress, dedicatedCaddyRequested: !sharedIngress, stagingIntegrations: validated.stagingIntegrations }) + '\n', { mode: 0o600 });
+    writeFileSync(receiptPath, JSON.stringify({ result: 'awaiting-external-smoke', manifestSha256: args.hash, sourceCommit: manifest.sourceCommit, environment: request.environment, operation: request.operation, completedAt: new Date().toISOString(), imageBuildInvoked: false, migrationInvoked: request.operation === 'deploy', observedSchemaVersionBefore: facts.version, firstInstallEmptyDatabaseObserved: request.firstInstallEmptyDatabase === true, rollbackSchemaReviewRequired: request.operation === 'rollback', backupReceiptSha256: request.migrationBackupReceiptSha256, offHostBackupIsOperatorAttestation: request.offHostBackupAttested === true, dataRestored: false, ingressMode: validated.ingressMode, ingressNetwork: validated.ingressNetwork, sharedIngressNetworkValidated: sharedIngress, dedicatedCaddyRequested: !sharedIngress, stagingIntegrations: validated.stagingIntegrations, stagingPaymentTest: validated.stagingPaymentTest }) + '\n', { mode: 0o600 });
   } finally { closeSync(handle); }
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

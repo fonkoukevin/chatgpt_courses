@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-09",
+  "node": "24.22.2",
+  "linuxImageId": "sha256:dd130120a19c8c8cfbd0fab5ff2d0e407909ccc545f9b60b336d1d2b41ff9953",
+  "originalLongSocketReproduction": { "pathBytes": 141, "errorCode": "EINVAL", "network": "none", "applicationStarted": false },
+  "nativeWindows": { "ipcTestsPassed": 2, "scriptChecksPassed": 63, "failed": 0, "skipped": 0 },
+  "linux": {
+    "ipcTestsPassed": 4,
+    "supervisorTestsPassed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "cleanupConfirmed": true,
+    "network": "none",
+    "sourcesMountedReadOnly": true,
+    "temporaryWorkInContainerTmpfs": true,
+    "applicationStarted": false,
+    "providerUsed": false,
+    "ownershipGuardUnchanged": true,
+    "titleChangeReproduced": true,
+    "supervisedProcessGroupReallyStopped": true
+  },
+  "sources": [
+    { "path": "scripts/lib/browser-control-endpoint.mjs", "sha256": "ee082f3b374126e8a67a35c0b73ec0db1a877985d7eaee376e48ffabcd034a32" },
+    { "path": "scripts/lib/browser-web-process.mjs", "sha256": "4b126391bab74640d0d1a6b1a1a7190341f1d9ea8f0a28c5f97bccdc8b894938" },
+    { "path": "scripts/lib/runtime.mjs", "sha256": "96d81b3c0e3b2f102266373d07d336d87d0c095d9bcaac19e4c61819bb669e8b" }
+  ],
+  "limits": [
+    "The title-changing Next executable in the supervisor test is synthetic; actual Next integration remains a separate CI check.",
+    "A local reproduction does not attribute an earlier GitHub failure whose errno was not collected.",
+    "No remote Courses application deployment or HTTPS browser recipe was performed by these unit checks."
+  ]
+}

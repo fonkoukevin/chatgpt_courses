@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { MAX_BACKUP_RECEIPT_BYTES, repository, validateSourceRepository, ghcrConfiguration, ghcrRemoteScript, requireGhcrAnonymousReadDenied, requireGhcrPrivatePackage, validateManifest, manifestBytes, sha256, parseManifest, protectedEnvironment, targetConfiguration, validateBackupReceipt, validateSchemaFacts } from '../../scripts/deployment/release.mjs';
+import { MAX_BACKUP_RECEIPT_BYTES, repository, validateSourceRepository, ghcrConfiguration, ghcrRemoteScript, requireGhcrAnonymousReadDenied, requireGhcrPrivatePackage, validateManifest, manifestBytes, sha256, parseManifest, protectedEnvironment, targetConfiguration, stagingPaymentTestFlag, validateBackupReceipt, validateSchemaFacts } from '../../scripts/deployment/release.mjs';
 
 const prefix='registry.invalid/team/courses';
 const candidate=()=>({schemaVersion:1,sourceCommit:'a'.repeat(40),web:{repository:prefix+'/web',digest:'sha256:'+'b'.repeat(64)},api:{repository:prefix+'/api',digest:'sha256:'+'c'.repeat(64)},schema:{min:19,max:19}});
@@ -38,6 +38,14 @@ test('SSH and HTTPS destinations come only from strict authorized environment co
  const env={TARGET_ENVIRONMENT:'staging',DEPLOY_TARGET_AUTHORIZED:'true',DEPLOY_HOST:'host.example.com',DEPLOY_USER:'courses',DEPLOY_PORT:'22',DEPLOY_DIRECTORY:'/srv/courses/staging',DEPLOY_PUBLIC_ORIGIN:'https://courses.example.com'};
  assert.equal(targetConfiguration(env).directory,'/srv/courses/staging');
  for(const bad of [{DEPLOY_TARGET_AUTHORIZED:'false'},{DEPLOY_HOST:'-oProxyCommand=bad'},{DEPLOY_USER:'courses;command'},{DEPLOY_PORT:'22\nCOMMAND'},{DEPLOY_DIRECTORY:'/srv/courses/../other'},{DEPLOY_DIRECTORY:'/'},{DEPLOY_PUBLIC_ORIGIN:'https://user:password@courses.example.com'},{DEPLOY_PUBLIC_ORIGIN:'http://courses.example.com'},{DEPLOY_PUBLIC_ORIGIN:'https://courses.example.com/?secret=x'}])assert.throws(()=>targetConfiguration({...env,...bad}));
+});
+test('a manual payment TEST flag is false unless explicitly enabled for staging and is carried to the target',()=>{
+ const env={TARGET_ENVIRONMENT:'staging',DEPLOY_TARGET_AUTHORIZED:'true',DEPLOY_HOST:'host.example.com',DEPLOY_USER:'courses',DEPLOY_PORT:'22',DEPLOY_DIRECTORY:'/srv/courses/staging',DEPLOY_PUBLIC_ORIGIN:'https://staging.example.com'};
+ for(const value of [undefined,'','false'])assert.equal(stagingPaymentTestFlag({...env,STAGING_PAYMENT_TEST:value}),false);
+ assert.equal(targetConfiguration({...env,STAGING_PAYMENT_TEST:'true'}).stagingPaymentTest,true);
+ assert.equal(targetConfiguration({...env,TARGET_ENVIRONMENT:'production',STAGING_PAYMENT_TEST:'false'}).stagingPaymentTest,false);
+ for(const value of ['TRUE','1','yes','false\ntrue',true,false,null])assert.throws(()=>stagingPaymentTestFlag({...env,STAGING_PAYMENT_TEST:value}),/PAYMENT_TEST_INVALID/);
+ assert.throws(()=>targetConfiguration({...env,TARGET_ENVIRONMENT:'production',STAGING_PAYMENT_TEST:'true'}),/PAYMENT_TEST_STAGING_ONLY/);
 });
 test('the remote Node executable accepts an explicit user installation without accepting shell text or path traversal',()=>{
  const env={TARGET_ENVIRONMENT:'staging',DEPLOY_TARGET_AUTHORIZED:'true',DEPLOY_HOST:'host.example.com',DEPLOY_USER:'plumora',DEPLOY_PORT:'22',DEPLOY_DIRECTORY:'/home/plumora/courses/staging',DEPLOY_PUBLIC_ORIGIN:'https://courses.example.com'};

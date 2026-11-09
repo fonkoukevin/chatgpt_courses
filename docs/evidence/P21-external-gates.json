@@ -1,5 +1,5 @@
 {
-  "verifiedAt": "2026-11-09T17:43:45.230Z",
+  "verifiedAt": "2026-11-09T17:51:16.231Z",
   "dns": [
     {
       "name": "staging.chatgpt-courses.com",
@@ -17,12 +17,12 @@
     }
   ],
   "github": {
-    "private": true,
-    "mainProtected": false,
-    "protectionStatus": 403,
-    "upgradeRequired": true,
-    "stagingEnvironmentStatus": 404,
-    "stagingProtectedBranches": null
+    "private": false,
+    "mainProtected": true,
+    "protectionStatus": 200,
+    "upgradeRequired": false,
+    "stagingEnvironmentStatus": 200,
+    "stagingProtectedBranches": true
   },
   "remoteMutationPerformed": false,
   "secretsPrinted": false

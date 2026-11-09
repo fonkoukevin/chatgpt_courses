@@ -4,9 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static com.chatgptcourses.assets.service.AssetTypes.*;
 import static com.chatgptcourses.editorial.service.ContentTypes.*;
+import com.chatgptcourses.assets.config.AssetStorageProperties;
+import com.chatgptcourses.assets.service.AssetAccessPolicy;
 import com.chatgptcourses.assets.service.AssetService;
 import com.chatgptcourses.assets.service.AssetStagingCleanup;
 import com.chatgptcourses.assets.storage.ObjectStorage;
+import com.chatgptcourses.assets.validation.AssetContentValidator;
 import com.chatgptcourses.catalog.model.ResourceKind;
 import com.chatgptcourses.editorial.model.EditorialState;
 import com.chatgptcourses.editorial.service.EditorialService;
@@ -50,6 +53,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.images.builder.Transferable;
@@ -82,12 +87,13 @@ class AssetServiceIntegrationTest {
         r.add("courses.assets.access-key",()->ACCESS);r.add("courses.assets.secret-key",()->SECRET);r.add("courses.assets.editorial-bucket",()->"editorial-test");r.add("courses.assets.private-bucket",()->"private-test");
         r.add("courses.assets.region",()->"us-east-1");r.add("courses.assets.path-style",()->true);
         r.add("courses.assets.max-file-bytes",()->4096);r.add("courses.assets.max-image-bytes",()->65536);r.add("courses.assets.max-files-per-project",()->2);r.add("courses.assets.max-bytes-per-project",()->6000);
-        r.add("courses.assets.upload-ttl-seconds",()->3);r.add("courses.assets.download-ttl-seconds",()->2);
+        r.add("courses.assets.upload-ttl-seconds",()->300);r.add("courses.assets.download-ttl-seconds",()->2);
         r.add("courses.assets.staging-cleanup-grace-seconds",()->0);
         r.add("courses.assets.staging-cleanup-worker-enabled",()->false);
     }
     @BeforeAll static void buckets(){try(var client=s3Client()){for(String bucket:List.of("editorial-test","private-test")){client.createBucket(b->b.bucket(bucket));client.putBucketCors(b->b.bucket(bucket).corsConfiguration(c->c.corsRules(rule->rule.allowedOrigins("http://127.0.0.1:3000").allowedMethods("GET","PUT","HEAD").allowedHeaders("Content-Type").exposeHeaders("ETag").maxAgeSeconds(0))));}}}
     @Autowired AssetService assets;@Autowired AssetStagingCleanup cleanup;@Autowired ObjectStorage storage;@Autowired EditorialService editorial;@Autowired ProjectService projects;@Autowired LearningService learning;@Autowired JdbcTemplate jdbc;@Autowired ObjectMapper mapper;
+    @Autowired AssetStorageProperties storageProperties;@Autowired AssetAccessPolicy assetPolicy;@Autowired AssetContentValidator contentValidator;@Autowired PlatformTransactionManager transactionManager;
 
     @Test void projectTextRoundTripsPrivatelyAndSurvivesSourceWithdrawalWithoutSharingOwnership(CapturedOutput output){
         UUID editor=actor(true),owner=actor(false),other=actor(false);var source=publish(editor,source(editor));var project=project(owner,source);byte[] bytes="A personal production.\nA second line. é".getBytes(StandardCharsets.UTF_8);
@@ -130,7 +136,7 @@ class AssetServiceIntegrationTest {
             long limit=System.nanoTime()+TimeUnit.SECONDS.toNanos(8);boolean waiting=false;
             while(!waiting&&System.nanoTime()<limit){waiting=Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE datname=current_database() AND wait_event_type='Lock' AND query LIKE 'SELECT id,owner_id FROM projects WHERE id=%')",Boolean.class));if(!waiting)Thread.sleep(20);}
             var releasedAt=jdbc.queryForObject("SELECT clock_timestamp()",java.sql.Timestamp.class).toInstant();lock.commit();assertThat(waiting).isTrue();var issued=pending.get(15,TimeUnit.SECONDS);
-            assertThat(!issued.asset().createdAt().isBefore(releasedAt)).isTrue();assertThat(issued.expiresAt().isAfter(releasedAt.plusSeconds(2))).isTrue();
+            assertThat(!issued.asset().createdAt().isBefore(releasedAt)).isTrue();assertThat(issued.expiresAt().isAfter(releasedAt.plusSeconds(299))).isTrue();
         }
         var start=new CountDownLatch(1);
         try(var pool=Executors.newFixedThreadPool(3)){var futures=java.util.stream.IntStream.range(0,3).mapToObj(i->pool.submit(()->{start.await();return attempt(()->assets.createProjectIntent(owner,owner,project.id(),new UploadRequest("file-"+i+".txt","text/plain",1)));})).toList();start.countDown();var outcomes=new java.util.ArrayList<String>();for(var future:futures)outcomes.add(future.get(15,TimeUnit.SECONDS));assertThat(outcomes).containsExactlyInAnyOrder("OK","OK","ASSET_QUOTA_EXCEEDED");}
@@ -167,15 +173,19 @@ class AssetServiceIntegrationTest {
     }
 
     @Test void pendingUploadsAndSignedDownloadsActuallyExpireWithoutIssuingPermanentObjectAccess()throws Exception{
-        UUID editor=actor(true),owner=actor(false);var project=project(owner,publish(editor,source(editor)));var pending=assets.createProjectIntent(owner,owner,project.id(),new UploadRequest("expires.txt","text/plain",1));
+        // Short deadlines belong only to this expiry test, not ordinary uploads.
+        var p=storageProperties;
+        var shortPolicy=new AssetStorageProperties(p.enabled(),p.internalEndpoint(),p.externalEndpoint(),p.region(),p.accessKey(),p.secretKey(),p.editorialBucket(),p.privateBucket(),p.pathStyle(),p.maxFileBytes(),p.maxImageBytes(),p.maxFilesPerProject(),p.maxBytesPerProject(),3,2,p.maxImagePixels(),p.maxImageDimension(),p.stagingCleanupGraceSeconds());
+        var expiring=new AssetService(jdbc,assetPolicy,storage,shortPolicy,contentValidator,projects);var transaction=new TransactionTemplate(transactionManager);
+        UUID editor=actor(true),owner=actor(false);var project=project(owner,publish(editor,source(editor)));var pending=transaction.execute(status->expiring.createProjectIntent(owner,owner,project.id(),new UploadRequest("expires.txt","text/plain",1)));
         long end=System.nanoTime()+TimeUnit.SECONDS.toNanos(5);while(!databaseExpired(pending.expiresAt())&&System.nanoTime()<end)Thread.sleep(50);assertThat(databaseExpired(pending.expiresAt())).isTrue();
-        assertThat(assets.confirmProject(owner,owner,project.id(),pending.asset().id()).state()).isEqualTo("EXPIRED");
-        var intent=assets.createProjectIntent(owner,owner,project.id(),new UploadRequest("download.txt","text/plain",1));put(intent,new byte[]{65});var ready=assets.confirmProject(owner,owner,project.id(),intent.asset().id());var link=assets.download(owner,owner,ready.id(),null);assertThat(http("GET",link.url(),null,Map.of()).statusCode()).isEqualTo(200);
+        assertThat(transaction.execute(status->expiring.confirmProject(owner,owner,project.id(),pending.asset().id())).state()).isEqualTo("EXPIRED");
+        var intent=transaction.execute(status->expiring.createProjectIntent(owner,owner,project.id(),new UploadRequest("download.txt","text/plain",1)));put(intent,new byte[]{65});var ready=transaction.execute(status->expiring.confirmProject(owner,owner,project.id(),intent.asset().id()));var link=transaction.execute(status->expiring.download(owner,owner,ready.id(),null));assertThat(http("GET",link.url(),null,Map.of()).statusCode()).isEqualTo(200);
         end=System.nanoTime()+TimeUnit.SECONDS.toNanos(6);int status=200;while(status==200&&System.nanoTime()<end){Thread.sleep(150);status=http("GET",link.url(),null,Map.of()).statusCode();}assertThat(status).isEqualTo(403);
-        assertThat(http("GET",assets.download(owner,owner,ready.id(),null).url(),null,Map.of()).statusCode()).isEqualTo(200);
+        assertThat(http("GET",transaction.execute(tx->expiring.download(owner,owner,ready.id(),null)).url(),null,Map.of()).statusCode()).isEqualTo(200);
         end=System.nanoTime()+TimeUnit.SECONDS.toNanos(5);while(!databaseExpired(intent.expiresAt())&&System.nanoTime()<end)Thread.sleep(50);assertThat(databaseExpired(intent.expiresAt())).isTrue();
         var cleanupResult=cleanup.cleanBatch(25);assertThat(cleanupResult.cleaned()>=1&&cleanupResult.failed()==0).isTrue();assertThat(jdbc.queryForObject("SELECT staging_cleaned_at IS NOT NULL FROM assets WHERE id=?",Boolean.class,ready.id())).isTrue();
-        assertThat(http("GET",assets.download(owner,owner,ready.id(),null).url(),null,Map.of()).statusCode()).isEqualTo(200);assertThat(cleanup.cleanBatch(25).cleaned()).isZero();
+        assertThat(http("GET",transaction.execute(tx->expiring.download(owner,owner,ready.id(),null)).url(),null,Map.of()).statusCode()).isEqualTo(200);assertThat(cleanup.cleanBatch(25).cleaned()).isZero();
     }
 
     @Test void enrolledEditorialDownloadRechecksWithdrawnParentWhileStandaloneFreeResourceRemainsAvailable(){

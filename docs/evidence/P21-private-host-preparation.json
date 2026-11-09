@@ -1,0 +1,14 @@
+{
+  "preparedAt": "2026-11-09T17:52:21.754Z",
+  "result": "prepared",
+  "secretFiles": 8,
+  "createdFiles": 9,
+  "existingFilesOverwritten": false,
+  "configurationImagesSuppliedByFutureManifest": true,
+  "completeDeploymentValidated": false,
+  "backupKeyUploaded": false,
+  "applicationStarted": false,
+  "postgresRoleCreated": false,
+  "bucketCreated": false,
+  "secretValuesPrinted": false
+}

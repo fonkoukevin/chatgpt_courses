@@ -24,6 +24,7 @@ Un second relecteur n’est pas imposé à ce projet individuel. Si une règle `
 | --- | --- |
 | `IMAGE_REPOSITORY` | Préfixe réel du registre et des dépôts autorisés, sans protocole, tag, credential ou digest |
 | `EXPECTED_SOURCE_VISIBILITY` | `private` par défaut ; `public` explicitement autorisé pour ce dépôt, contrôlé sur les métadonnées GitHub. Ne modifie pas la visibilité privée exigée des images |
+| `STAGING_PAYMENT_TEST` | `false` par défaut ; `true` uniquement pour la recette Stripe TEST, avec la même valeur dans la configuration privée de la cible. Production refuse cette activation |
 | `DEPLOY_TARGET_AUTHORIZED=true` | Cible et accès effectivement autorisés ; ne pas l’inférer d’une recommandation |
 | `DEPLOY_HOST`, `DEPLOY_PORT`, `DEPLOY_USER` | Hôte, port SSH explicite et compte de déploiement |
 | `DEPLOY_NODE_PATH` | `node` par défaut, ou chemin absolu validé vers Node24.22.2 ; sur OVH `/home/plumora/.local/lib/node-v24.22.2-linux-x64/bin/node` |
@@ -45,6 +46,8 @@ Le login registre de publication reçoit le token par stdin dans un Docker confi
 Sur le VPS partagé, suivre aussi le [raccordement au frontal existant](shared-ingress-staging.md) : réseau interne externe aux deux projets, Caddy Courses désactivé, configuration persistée dans le projet propriétaire du frontal. Les secrets de recette restent distincts de ceux de l’autre application.
 
 Sur chaque cible, préparer `<DEPLOY_DIRECTORY>/config/deployment.env` avec le validateur [config.mjs](../../scripts/deployment/config.mjs) et les fichiers de secrets requis par Compose. Le fichier de configuration n’est pas lisible par les autres utilisateurs ; ne pas utiliser `.env.local` du développeur. Les rôles PostgreSQL `courses_owner` et `courses_app` et les quatre secrets associés restent séparés. Les mots de passe, clé outbox, Basic et éventuelles clés futures ne font partie ni des images, ni du manifeste, ni du bundle de code.
+
+La recette fournisseur P21 dispose d’un opt-in `STAGING_PAYMENT_TEST=true`, réservé à staging partagé avec Mailpit/S3. Il ajoute `compose.staging-payment-test.yml` : Stripe **TEST** vers son API officielle, commerce EUR de fixtures, inbox et worker remboursement. Le fichier privé exige le compte `STRIPE_TEST_ACCOUNT_ID`, puis les fichiers séparés `staging-stripe-secret-key` (`sk_test_…`) et `staging-stripe-webhook-secret` (`whsec_…`) dans `SECRETS_DIR`. Aucun montant/offre n’est créé par l’overlay. Le secret de webhook est celui de cet endpoint distant, pas celui du listener local. Le runner transmet son booléen ; l’hôte compare celui-ci à sa configuration avant pull/migration, et le smoke attend l’état correspondant. Production et migration gardent les paiements désactivés. Cette option est **préparée, non activée ni vérifiée auprès de Stripe** à ce stade.
 
 La sauvegarde avant migration et sa restauration isolée doivent être vérifiées selon les procédures d’exploitation du dépôt. Arrêter les écrivains du projet autorisé **avant** la sauvegarde et les laisser arrêtés jusqu’au déploiement. Le contrôleur vérifie que les conteneurs API/web de ce projet ne tournent plus ; cela ne dispense pas l’opérateur d’arrêter un éventuel autre écrivain extérieur à cette pile.
 

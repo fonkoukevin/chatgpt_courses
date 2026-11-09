@@ -1,0 +1,38 @@
+{
+  "startedAt": "2026-11-09T18:20:57.404Z",
+  "check": "real-local-staging-storage-bootstrap",
+  "name": "courses-p21-bootstrap-e85455c9",
+  "sourceCommit": "a5c15df29dbbbeeae32812505ed71cafdcae3210",
+  "sourceSha256": "8eb21c85ec2df565eb97818c627f73b56b97b5e970d9b082960cb348ca8df03d",
+  "runtimeJars": 186,
+  "provider": "isolated SeaweedFS 4.52",
+  "appImageExercised": false,
+  "externalHttpsProbed": false,
+  "sharedServiceModified": false,
+  "secretValuesPrinted": false,
+  "runs": [
+    {
+      "attempt": 1,
+      "exitCode": 0,
+      "result": "ready",
+      "buckets": 2,
+      "corsVerified": true,
+      "unsignedInternalGetDenied": true,
+      "externalHttpsProbed": false
+    },
+    {
+      "attempt": 2,
+      "exitCode": 0,
+      "result": "ready",
+      "buckets": 2,
+      "corsVerified": true,
+      "unsignedInternalGetDenied": true,
+      "externalHttpsProbed": false
+    }
+  ],
+  "cleanupConfirmed": true,
+  "result": "passed",
+  "cleanupErrors": [],
+  "volumesCreated": 0,
+  "completedAt": "2026-11-09T18:21:24.523Z"
+}

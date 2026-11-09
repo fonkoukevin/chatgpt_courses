@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, symlinkSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { gzipSync, gunzipSync } from 'node:zlib';
-import { sanitizePlaywright, sanitizeSurefire, sanitizeTap, collectSurefire, digest, copyApprovedScreenshots, requireReleaseSuccess, requireJUnitSuccess, inside } from '../../scripts/ci-sanitize.mjs';
+import { sanitizePlaywright, sanitizeBrowserSession, sanitizeSurefire, sanitizeTap, collectSurefire, digest, copyApprovedScreenshots, requireReleaseSuccess, requireJUnitSuccess, inside } from '../../scripts/ci-sanitize.mjs';
 import { packBuild, restoreBuild } from '../../scripts/ci-build.mjs';
 import { isolatedEnvironment } from '../../scripts/ci-run.mjs';
 import { validatePublicReport } from '../../scripts/ci-report.mjs';
@@ -14,6 +14,19 @@ const contamination = 'SYNTHETIC_PRIVATE_ABC_39';
 function passingRelease() { return { suites: [{ specs: ['01', '02', '03', '04'].map(id => ({ title: `P19-${id} ${contamination}`, tests: [{ results: [{ status: 'passed', duration: 15, retry: 0, error: { message: contamination }, stdout: [contamination], attachments: [{ body: contamination }] }] }] })) }], stats: { expected: 4, unexpected: 0, skipped: 0, flaky: 0, duration: 60 } }; }
 function webBuild(directory) { const base = join(directory, 'source'), next = join(base, 'apps/web/.next'); mkdirSync(join(next, 'server/app'), { recursive: true }); mkdirSync(join(next, 'static/chunks'), { recursive: true }); mkdirSync(join(next, 'cache'), { recursive: true }); writeFileSync(join(next, 'BUILD_ID'), 'synthetic-build'); writeFileSync(join(next, 'server/app/page.js'), 'module.exports = 1;'); writeFileSync(join(next, 'static/chunks/test.js'), 'export const n=1;'); writeFileSync(join(next, 'cache/private.tmp'), contamination); return { base, next }; }
 const commit = 'a'.repeat(40);
+
+test('pre-browser failures expose only finite stage and errno without private session contents', t => {
+  const raw = { result: 'failed', cleanupConfirmed: true, stage: 'CONTROL_LISTEN', failureCode: 'EINVAL', playwrightStarted: false,
+    message: contamination, path: contamination, processes: [{ args: contamination }], token: contamination };
+  const result = sanitizeBrowserSession(raw);
+  assert.deepEqual(result, { format: 'browser-harness-summary-v1', result: 'failed', cleanupConfirmed: true, stage: 'CONTROL_LISTEN', errorCode: 'EINVAL', playwrightStarted: false });
+  assert.equal(JSON.stringify(result).includes(contamination), false);
+  const directory = fixture(t); writeFileSync(join(directory, 'release-harness.json'), JSON.stringify(result));
+  assert.equal(validatePublicReport(directory).length, 1);
+  assert.equal(sanitizeBrowserSession({ ...raw, stage: contamination, failureCode: contamination }).stage, 'UNKNOWN');
+  assert.equal(sanitizeBrowserSession({ ...raw, failureCode: contamination }).errorCode, 'HARNESS_FAILURE');
+  assert.equal(sanitizeBrowserSession({ result: 'passed', failureCode: contamination }).errorCode, 'NONE');
+});
 
 test('report filtering preserves failures and retries while discarding all free-form payloads', () => {
   const raw = passingRelease(); raw.suites[0].specs[1].tests[0].results.push({ status: 'failed', duration: 8, retry: 1, error: contamination }); raw.stats.flaky = 1;

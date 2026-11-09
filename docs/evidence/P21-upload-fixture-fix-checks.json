@@ -1,0 +1,119 @@
+{
+  "phase": "P21",
+  "check": "separated-upload-and-expiry-fixtures",
+  "id": "82ff0315-4fd5-4588-b924-0c0465a41eb1",
+  "baseCommit": "a5c15df29dbbbeeae32812505ed71cafdcae3210",
+  "startedAt": "2026-11-09T18:00:32.974Z",
+  "goals": [
+    "test"
+  ],
+  "selectedSuites": [
+    "com.chatgptcourses.AssetServiceIntegrationTest",
+    "com.chatgptcourses.ContentImportIntegrationTest"
+  ],
+  "mainBefore": {
+    "sha256": "53b24fac8473f035c71c40f40656fab001668335e1713429e4b41b9d69958082",
+    "files": 796
+  },
+  "result": "passed",
+  "remoteMutation": false,
+  "sharedTargetUsed": false,
+  "worktreeCleanupPerformed": false,
+  "copiedTests": [
+    {
+      "path": "apps/api/src/test/java/com/chatgptcourses/AssetServiceIntegrationTest.java",
+      "sha256": "d3574380a0097e83580adb466a773d1f90cb60bff6e201d851a43e456124687f"
+    },
+    {
+      "path": "apps/api/src/test/java/com/chatgptcourses/ContentImportIntegrationTest.java",
+      "sha256": "b9b98d1470b3e6a4a50cb728610520fd75791650d9f5acb0022a166072bde94e"
+    }
+  ],
+  "exitCode": 0,
+  "suites": [
+    {
+      "suite": "com.chatgptcourses.AssetServiceIntegrationTest",
+      "counts": {
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "durationMs": 54702,
+      "failures": []
+    },
+    {
+      "suite": "com.chatgptcourses.ContentImportIntegrationTest",
+      "counts": {
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "durationMs": 37629,
+      "failures": []
+    }
+  ],
+  "counts": {
+    "tests": 19,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "mainAfter": {
+    "sha256": "53b24fac8473f035c71c40f40656fab001668335e1713429e4b41b9d69958082",
+    "files": 796
+  },
+  "mainUnchanged": true,
+  "completedAt": "2026-11-09T18:02:59.949Z",
+  "currentSourceHashes": [
+    {
+      "path": "apps/api/src/test/java/com/chatgptcourses/AssetServiceIntegrationTest.java",
+      "sha256": "d3574380a0097e83580adb466a773d1f90cb60bff6e201d851a43e456124687f",
+      "matchesExecutedCopy": true
+    },
+    {
+      "path": "apps/api/src/test/java/com/chatgptcourses/ContentImportIntegrationTest.java",
+      "sha256": "b9b98d1470b3e6a4a50cb728610520fd75791650d9f5acb0022a166072bde94e",
+      "matchesExecutedCopy": true
+    }
+  ],
+  "mavenCommand": [
+    "apps/api/mvnw.cmd",
+    "--batch-mode",
+    "--no-transfer-progress",
+    "--file",
+    "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\p21-native-fix-82ff0315-4fd5-4588-b924-0c0465a41eb1\\apps\\api\\pom.xml",
+    "-Dtest=AssetServiceIntegrationTest,ContentImportIntegrationTest",
+    "test"
+  ],
+  "mavenExitCodeObserved": 0,
+  "collectorSucceeded": true,
+  "collectorFailureMasked": false,
+  "fixtureScope": {
+    "ordinaryUploadTtlSeconds": 300,
+    "expiryCaseUploadTtlSeconds": 3,
+    "expiryCaseDownloadTtlSeconds": 2,
+    "expiryWaitSeconds": [
+      5,
+      6
+    ],
+    "quotaRemainingLeaseLowerBoundSeconds": 299,
+    "runtimePolicyChanged": false
+  },
+  "worktreeRetainedAtParentRequest": true,
+  "sourceFrozenAt": "2026-11-09T18:04:00.522Z",
+  "executionEnvironment": "Native Windows Java21 with PostgreSQL and SeaweedFS Testcontainers",
+  "sourceByteHashes": "Windows working-copy octets; Git line endings normalized separately",
+  "ordinaryUploadTtlSeconds": 300,
+  "dedicatedExpiryUploadTtlSeconds": 3,
+  "dedicatedExpiryDownloadTtlSeconds": 2,
+  "expiryWaitLimitsSeconds": [
+    5,
+    6
+  ],
+  "applicationLifetimeChanged": false,
+  "assertionsRemoved": false,
+  "retriesAdded": false,
+  "timestampsBackdated": false
+}

@@ -4,20 +4,21 @@
   "step": "scripts",
   "exitCode": 0,
   "result": "passed",
-  "durationMs": 1638,
+  "durationMs": 2005,
   "tap": {
     "format": "tap-summary-v1",
     "counts": {
-      "tests": 55,
+      "tests": 59,
       "suites": 0,
-      "pass": 55,
+      "pass": 59,
       "fail": 0,
       "cancelled": 0,
       "skipped": 0,
       "todo": 0
     },
-    "durationMs": 1441.3758
+    "durationMs": 1863.1099
   },
+  "previousPreparationTests": 55,
   "actionlint": {
     "version": "1.7.12",
     "exitCode": 0,

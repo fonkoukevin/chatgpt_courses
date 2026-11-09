@@ -10,6 +10,15 @@ const states = new Set(['passed', 'failed', 'timedOut', 'skipped', 'interrupted'
 const number = (value, maximum = 86_400_000) => typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= maximum ? value : null;
 const count = value => Number.isSafeInteger(value) && value >= 0 && value <= 1_000_000 ? value : null;
 export const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+export const browserStages = Object.freeze(['DATABASE', 'SERVICES', 'PAYMENTS', 'CONTROL_LISTEN', 'START_SERVERS', 'BROWSER', 'FIXTURE_GUARDS', 'COMPLETE']);
+export const browserErrorCodes = Object.freeze(['EINVAL', 'ENAMETOOLONG', 'EADDRINUSE', 'EACCES', 'EPERM', 'ENOENT', 'ECONNREFUSED', 'ETIMEDOUT']);
+// Never publish exception messages, process arguments, socket paths or session data.
+export function sanitizeBrowserSession(raw) {
+  return { format: 'browser-harness-summary-v1', result: raw?.result === 'passed' ? 'passed' : 'failed', cleanupConfirmed: raw?.cleanupConfirmed === true,
+    stage: browserStages.includes(raw?.stage) ? raw.stage : 'UNKNOWN',
+    errorCode: browserErrorCodes.includes(raw?.failureCode) ? raw.failureCode : raw?.result === 'passed' ? 'NONE' : 'HARNESS_FAILURE',
+    playwrightStarted: raw?.playwrightStarted === true };
+}
 export function inside(root, path) { const child = relative(resolve(root), resolve(path)); return child !== '' && child !== '..' && !child.startsWith(`..${sep}`) && !child.startsWith(sep) && !/^[A-Za-z]:/u.test(child); }
 export function regularOwnedFile(root, file) {
   if (lstatSync(root).isSymbolicLink() || !lstatSync(root).isDirectory()) throw new Error('CI_ROOT_DIRECTORY_REQUIRED');

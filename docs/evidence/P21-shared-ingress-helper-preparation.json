@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "check": "private-shared-ingress-activation-guards",
+  "completedAt": "2026-11-09T18:24:51.184Z",
+  "helperPath": ".runtime/p21-activate-shared-ingress.mjs",
+  "helperSha256": "3fedcdc46f55774ed387f80c45406af24c4205c22abf2641a5b55903e963b9c1",
+  "testPath": ".runtime/p21-activation-guards.test.mjs",
+  "testSha256": "c3eddc3b11c47c28c08db05f3e22e4cc356974581f0849476933fc9f1553748f",
+  "previousReview": ".runtime/p21-activation-guard-review-before-bind-durability.json",
+  "previousHelperSha256": "a806a9e761dc129e4d68c95f37e9bc044ad907b48f5e6eb985a4ea744dbcf2a8",
+  "syntaxPassed": true,
+  "offlineTests": {
+    "tests": 8,
+    "passed": 8,
+    "failed": 0,
+    "foreignOrAmbiguousEndpointVariantsRejected": 18,
+    "bindIdentityOrHashVariantsRejected": 12,
+    "syntheticFilesystemTests": 3
+  },
+  "operationalEntrypointInvoked": false,
+  "sshUsed": false,
+  "dockerCommandsExecuted": false,
+  "remoteTargetsChanged": false,
+  "trackedApplicationSourcesEdited": false,
+  "coverage": [
+    "Exact current Caddy identity and only unambiguous verified courses-staging web/s3 endpoints.",
+    "Backup reload requires both observed live snapshots to remain exactly old or candidate; otherwise manual recovery and lock are retained.",
+    "Host and container-mounted file device/inode/nlink plus SHA must agree before private state writes or network creation/connection. BusyBox stat %d is interpreted as decimal, not %D hexadecimal.",
+    "New directory sync followed by parent sync; real private file write/fsync followed by directory sync; journal/receipt rename followed by destination and distinct source directory sync.",
+    "Synthetic local filesystem verifies entry/byte visibility and synchronization callback ordering; failures propagate."
+  ],
+  "limitations": [
+    "No helper CLI invocation, real Docker/Caddy network change, reload or rollback execution.",
+    "Actual Linux directory fsync, uid/gid 1001 ownership, and live bind identity have not been exercised. Windows local tests use synchronization callbacks for directories while real files are created/written/fsynced/renamed inside .runtime and cleaned within a checked absolute target.",
+    "Canonical live GET comparisons followed by Caddy reload are not an atomic compare-and-swap. An exclusive operator window remains mandatory.",
+    "Durability mechanisms reduce crash exposure but do not implement automatic crash recovery; retained journal/backups/lock require operator review."
+  ]
+}

@@ -1,0 +1,40 @@
+{
+    "schemaVersion":  1,
+    "result":  "prepared-offline",
+    "preparedAt":  "2026-11-09T18:24:47.2859839Z",
+    "harness":  ".runtime/p21-verify-remote-core.mjs",
+    "harnessSha256":  "3bc9b2ff9cbf6bc46160e8a5ef8c5d7eea6b8efd51119a4620f0b8ac0ecfef90",
+    "guards":  ".runtime/p21-remote-core-guards.test.mjs",
+    "guardsSha256":  "8b495ef185134dff3d9ef68e76ffdb94036677209a3cbfee2700f0111d8cf34d",
+    "syntaxExitCode":  0,
+    "guardTestExitCode":  0,
+    "guardTests":  4,
+    "guardPassed":  4,
+    "commands":  [
+                     ".tools/node-v24.22.2-win-x64/node.exe --check .runtime/p21-verify-remote-core.mjs",
+                     ".tools/node-v24.22.2-win-x64/node.exe --test .runtime/p21-remote-core-guards.test.mjs"
+                 ],
+    "networkRequestsMade":  0,
+    "browserLaunched":  false,
+    "basicPasswordRead":  false,
+    "remoteChanges":  0,
+    "appCodeChanged":  false,
+    "executionObserved":  false,
+    "origin":  "https://staging.chatgpt-courses.com",
+    "scope":  [
+                  "Basic on page and API, noindex and real API health before mutations",
+                  "Two synthetic .invalid accounts; owner login and independent personal method",
+                  "Real method persistence and exact If-Match conflict 412",
+                  "Fresh browser session, deep FR/EN reload and original personal text",
+                  "Second-owner 404 and owner-context logout"
+              ],
+    "limits":  [
+                   "No remote execution or rendering observed. Four guard tests do not validate deployment.",
+                   "Deployment identity is the root-supplied private proof; no version endpoint was invented.",
+                   "CMS/projects, pedagogical READY access, SMTP delivery, S3 and Stripe are not configured by this harness.",
+                   "Screenshots are private viewport captures, not an automatic visual review.",
+                   "Synthetic records and private journal are retained; only owned contexts close.",
+                   "Unexpected denials and ambiguous mutation outcomes require review, without automatic retry.",
+                   "POSIX modes enforced where meaningful; private Windows inherited ACL remains an operator prerequisite."
+               ]
+}

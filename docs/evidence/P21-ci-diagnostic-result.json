@@ -1,0 +1,95 @@
+{
+  "phase": "P21",
+  "runId": 42668127505,
+  "sourceCommit": "a5c15df29dbbbeeae32812505ed71cafdcae3210",
+  "attempt": 1,
+  "result": "failure",
+  "jobs": {
+    "web": "success",
+    "api": "failure",
+    "e2e": "skipped"
+  },
+  "artifact": {
+    "id": 13698420230,
+    "name": "api-checks-42668127505-1",
+    "sha256": "9d4290963fa903d080179ffc9e83f1dc7abaab603722bb8fbcbf499fdf399549",
+    "shaVerified": true,
+    "sizeBytes": 11971
+  },
+  "api": {
+    "result": "failed",
+    "exitCode": 1,
+    "durationMs": 291982,
+    "suiteCount": 40,
+    "counts": {
+      "tests": 266,
+      "failures": 1,
+      "errors": 1,
+      "skipped": 0
+    },
+    "failures": [
+      {
+        "name": "REDACTED_TEST",
+        "status": "failed",
+        "durationMs": 6104,
+        "diagnostic": {
+          "kind": "ASSERTION_FAILURE",
+          "file": "AssetServiceIntegrationTest.java",
+          "line": 99,
+          "storageFacts": {
+            "phase": "CONFIRM",
+            "state": "EXPIRED",
+            "rejection": "NONE",
+            "expired": true,
+            "elapsedMs": 6034,
+            "ageMs": 6031,
+            "error": "ASSERTION"
+          }
+        }
+      },
+      {
+        "name": "com.chatgptcourses.ContentImportIntegrationTest#changedSourceAppendsDraftRevisionButKeepsLogicalIdentityAndReadyFileBytes",
+        "status": "error",
+        "durationMs": 6289,
+        "diagnostic": {
+          "kind": "TEST_ERROR",
+          "file": "ContentImportIntegrationTest.java",
+          "line": 136,
+          "storageFacts": {
+            "phase": "FIRST_IMPORT",
+            "state": "EXPIRED",
+            "rejection": "NONE",
+            "expired": true,
+            "elapsedMs": 6267,
+            "ageMs": 6227,
+            "error": "API_ASSET_NOT_READY"
+          }
+        }
+      }
+    ]
+  },
+  "rawLogsRead": false,
+  "otherArtifactsDownloaded": false,
+  "rerunRequested": false,
+  "observedAt": "2026-11-09T17:54:32.4951452Z",
+  "cause": {
+    "code": "UPLOAD_INTENT_EXPIRED_BEFORE_CONFIRMATION",
+    "provenForRunId": 42668127505,
+    "fixtureUploadTtlSeconds": 3,
+    "assetAgeMsAtFailure": 6031,
+    "importAssetAgeMsAtFailure": 6227,
+    "applicationExpiredStateObserved": true,
+    "providerRejectionEstablished": false,
+    "downloadTtlInvolved": false,
+    "latencyBreakdownMeasured": false
+  },
+  "sourceInterpretation": [
+    "AssetService.confirm returns EXPIRED before HEAD/validation when database expiry has passed.",
+    "EditorialImportService.importFile throws ASSET_NOT_READY when the confirmer returns nonREADY.",
+    "The asset test passed its PUT HTTP2xx assertion before failing confirmation readiness; the import reached its nonREADY confirmation branch."
+  ],
+  "limitations": [
+    "These facts establish expiry for this run only, not the exact internal timing cause or retroactive causes of previous runs.",
+    "Time spent in presigning, SDK initialization and PUT was not measured separately. No raw provider logs were read."
+  ]
+}

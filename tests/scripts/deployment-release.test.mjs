@@ -23,10 +23,15 @@ test('duplicate keys or noncanonical input cannot disguise a different displayed
  assert.throws(()=>parseManifest(duplicate,prefix,hash),/CANONICAL/);
  assert.throws(()=>parseManifest('x'.repeat(4097),prefix,hash),/MANIFEST_AND_HASH/);
 });
-test('an auto-created, bypassable or self-approved environment is not a protected target',()=>{
- const approved={can_admins_bypass:false,deployment_branch_policy:{protected_branches:true},protection_rules:[{type:'required_reviewers',prevent_self_review:true,reviewers:[{type:'Team',reviewer:{id:1}}]}]};
- protectedEnvironment(approved);
- for(const value of [{},{...approved,can_admins_bypass:true},{...approved,protection_rules:[]},{...approved,protection_rules:[{...approved.protection_rules[0],prevent_self_review:false}]},{...approved,deployment_branch_policy:null}])assert.throws(()=>protectedEnvironment(value),/PROTECTED_ENVIRONMENT/);
+test('an absent environment or insufficient branch policy is refused without inventing an administrator-bypass API field',()=>{
+ const approved={id:1,name:'staging',created_at:'2026-11-01T00:00:00Z',deployment_branch_policy:{protected_branches:true,custom_branch_policies:false},protection_rules:[]};
+ const workflow={created_at:'2026-11-09T00:00:00Z'},branch={protected:true};
+ const observed=protectedEnvironment(approved,'staging',workflow,branch);assert.equal(observed.reviewersConfigured,false);assert.equal(observed.adminBypassUiObserved,false);
+ for(const value of [{},{...approved,id:0},{...approved,name:'production'},{...approved,deployment_branch_policy:{protected_branches:false,custom_branch_policies:true}},{...approved,deployment_branch_policy:null}])assert.throws(()=>protectedEnvironment(value,'staging',workflow,branch),/PROTECTED_ENVIRONMENT/);
+ for(const value of [{},{protected:false}])assert.throws(()=>protectedEnvironment(approved,'staging',workflow,value),/DEFAULT_BRANCH_MUST_BE_PROTECTED/);
+ assert.throws(()=>protectedEnvironment({...approved,created_at:'2026-11-10T00:00:00Z'},'staging',workflow,branch),/MUST_PREEXIST/);
+ const optionalReview={...approved,protection_rules:[{type:'required_reviewers',prevent_self_review:false,reviewers:[{type:'User',reviewer:{id:1}}]}]};assert.equal(protectedEnvironment(optionalReview,'staging',workflow,branch).preventSelfReview,false);
+ assert.throws(()=>protectedEnvironment({...optionalReview,protection_rules:[{type:'required_reviewers',reviewers:[]}]},'staging',workflow,branch),/REVIEWER_RULE_INVALID/);
 });
 test('SSH and HTTPS destinations come only from strict authorized environment configuration',()=>{
  const env={TARGET_ENVIRONMENT:'staging',DEPLOY_TARGET_AUTHORIZED:'true',DEPLOY_HOST:'host.example.com',DEPLOY_USER:'courses',DEPLOY_PORT:'22',DEPLOY_DIRECTORY:'/srv/courses/staging',DEPLOY_PUBLIC_ORIGIN:'https://courses.example.com'};

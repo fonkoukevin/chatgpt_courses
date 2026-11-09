@@ -30,9 +30,13 @@ export function parseManifest(text, imageRepository, expectedHash) {
   requireRelease(sha256(manifestBytes(value)) === expectedHash, 'RELEASE_MANIFEST_HASH_MISMATCH');
   return value;
 }
-export function protectedEnvironment(value) {
+export function protectedEnvironment(value, expectedName, workflow, branch) {
   const reviewers = value?.protection_rules?.find(rule => rule.type === 'required_reviewers');
-  requireRelease(reviewers && reviewers.prevent_self_review === true && Array.isArray(reviewers.reviewers) && reviewers.reviewers.length > 0 && value.can_admins_bypass === false && (value.deployment_branch_policy?.protected_branches === true || value.deployment_branch_policy?.custom_branch_policies === true), 'RELEASE_PROTECTED_ENVIRONMENT_REQUIRED');
+  requireRelease(Number.isSafeInteger(value?.id) && value.id > 0 && value.name === expectedName && Number.isFinite(Date.parse(value.created_at)) && value.deployment_branch_policy?.protected_branches === true && value.deployment_branch_policy?.custom_branch_policies === false, 'RELEASE_PROTECTED_ENVIRONMENT_REQUIRED');
+  requireRelease(!reviewers || typeof reviewers.prevent_self_review === 'boolean' && Array.isArray(reviewers.reviewers) && reviewers.reviewers.length > 0, 'RELEASE_REVIEWER_RULE_INVALID');
+  requireRelease(Number.isFinite(Date.parse(workflow?.created_at)) && Date.parse(value.created_at) <= Date.parse(workflow.created_at), 'RELEASE_ENVIRONMENT_MUST_PREEXIST');
+  requireRelease(branch?.protected === true, 'RELEASE_DEFAULT_BRANCH_MUST_BE_PROTECTED');
+  return { reviewersConfigured: Boolean(reviewers), preventSelfReview: reviewers?.prevent_self_review ?? null, adminBypassUiObserved: false };
 }
 export function validateBackupReceipt(bytes, expectedHash, target) {
   requireRelease(Buffer.isBuffer(bytes) && bytes.length <= 65536 && shaPattern.test(expectedHash ?? '') && sha256(bytes) === expectedHash, 'RELEASE_BACKUP_RECEIPT_HASH_MISMATCH');
@@ -72,7 +76,11 @@ async function guard() {
   const env = process.env, event = JSON.parse(readFileSync(env.GITHUB_EVENT_PATH, 'utf8'));
   requireRelease(env.GITHUB_EVENT_NAME === 'workflow_dispatch' && event.repository?.fork === false && event.repository.full_name === env.GITHUB_REPOSITORY && env.GITHUB_REF === `refs/heads/${event.repository.default_branch}` && commitPattern.test(env.GITHUB_SHA ?? ''), 'RELEASE_DEFAULT_BRANCH_ONLY');
   requireRelease(['plan', 'publish', 'deploy', 'rollback'].includes(env.RELEASE_OPERATION) && ['staging', 'production'].includes(env.TARGET_ENVIRONMENT), 'RELEASE_OPERATION_INVALID');
-  protectedEnvironment(await github(`environments/${env.TARGET_ENVIRONMENT}`));
+  requireRelease(env.DEPLOY_TARGET_AUTHORIZED === 'true' && /^\d+$/u.test(env.GITHUB_RUN_ID ?? ''), 'RELEASE_AUTHORIZED_TARGET_REQUIRED');
+  const environment = await github(`environments/${env.TARGET_ENVIRONMENT}`);
+  const workflow = await github(`actions/runs/${env.GITHUB_RUN_ID}`);
+  const branch = await github(`branches/${encodeURIComponent(event.repository.default_branch)}`);
+  const protections = protectedEnvironment(environment, env.TARGET_ENVIRONMENT, workflow, branch);
   const imageRepository = repository(env.IMAGE_REPOSITORY);
   if (env.RELEASE_OPERATION === 'publish') requireRelease(env.TARGET_ENVIRONMENT === 'staging', 'RELEASE_PUBLISH_IN_STAGING_ONLY');
   let manifest;
@@ -90,7 +98,7 @@ async function guard() {
     const runs = await github(`actions/workflows/ci.yml/runs?head_sha=${source}&status=success&per_page=100`);
     requireRelease(runs.workflow_runs?.some(run => run.head_sha === source && run.head_branch === event.repository.default_branch && run.head_repository?.full_name === env.GITHUB_REPOSITORY && run.event === 'push' && run.conclusion === 'success'), 'RELEASE_SUCCESSFUL_CI_REQUIRED');
   }
-  publicReceipt('guard.json', { result: 'passed', operation: env.RELEASE_OPERATION, environment: env.TARGET_ENVIRONMENT, sourceCommit: source, protectedEnvironmentChecked: true, defaultBranchOnly: true, registryOrTargetMutationExecuted: false });
+  publicReceipt('guard.json', { result: 'passed', operation: env.RELEASE_OPERATION, environment: env.TARGET_ENVIRONMENT, sourceCommit: source, protectedEnvironmentChecked: true, environmentPreexisting: true, defaultBranchProtected: true, defaultBranchOnly: true, ...protections, registryOrTargetMutationExecuted: false });
 }
 async function publish() {
   await guard(); const env = process.env;
@@ -127,6 +135,12 @@ async function deploy() {
   const host = `${target.user}@${target.host}`, releaseHash = env.EXPECTED_RELEASE_SHA256;
   const ssh = script => execute('ssh', [...options, '-p', target.port, host, 'sh -s'], { input: script });
   try {
+    const smokeArgs = [join(root, 'scripts/deployment/smoke.mjs'), '--origin', env.DEPLOY_PUBLIC_ORIGIN, '--stripe-enabled', 'false'];
+    if (target.environment === 'staging') {
+      requireRelease(/^[A-Za-z0-9._-]{3,80}$/u.test(env.STAGING_BASIC_USERNAME ?? '') && typeof env.STAGING_BASIC_PASSWORD === 'string' && env.STAGING_BASIC_PASSWORD.length >= 24 && env.STAGING_BASIC_PASSWORD.length <= 256 && !/[\r\n\0:]/u.test(env.STAGING_BASIC_PASSWORD), 'RELEASE_STAGING_SMOKE_SECRET_REQUIRED');
+      const basicFile = join(work, 'staging-basic-password'); writeFileSync(basicFile, env.STAGING_BASIC_PASSWORD, { mode: 0o600 });
+      smokeArgs.push('--basic-username', env.STAGING_BASIC_USERNAME, '--basic-password-file', basicFile);
+    }
     for (const path of bundleFiles) {
       const type = execute('git', ['ls-tree', manifest.sourceCommit, '--', path], { stdio: ['pipe', 'pipe', 'pipe'], encoding: 'utf8' }).stdout;
       requireRelease(/^100(?:644|755) blob /u.test(type), 'RELEASE_SOURCE_FILE_NOT_REGULAR');
@@ -142,7 +156,7 @@ async function deploy() {
     execute('scp', [...options, '-P', target.port, archive, `${host}:${upload}`]);
     const releaseDirectory = `${target.directory}/releases/${releaseHash}`;
     ssh(`set -eu\numask 022\ntest "$(sha256sum ${quote(upload)} | cut -d ' ' -f 1)" = ${quote(bundleHash)}\ntest ! -L ${quote(target.directory + '/releases')}\ntest ! -L ${quote(releaseDirectory)}\nmkdir -p ${quote(releaseDirectory)}\ntest "$(realpath ${quote(releaseDirectory)})" = ${quote(releaseDirectory)}\ntest -z "$(find ${quote(releaseDirectory)} -type l -print -quit)"\ntar -xf ${quote(upload)} -C ${quote(releaseDirectory)}\nnode ${quote(releaseDirectory + '/scripts/deployment/release-apply.mjs')} apply --root ${quote(target.directory)} --release ${quote(releaseHash)}\nrm -f ${quote(upload)}\n`);
-    execute(process.execPath, [join(root, 'scripts/deployment/smoke.mjs'), '--origin', env.DEPLOY_PUBLIC_ORIGIN], { env: childEnvironment({ STAGING_BASIC_USERNAME: env.STAGING_BASIC_USERNAME ?? '', STAGING_BASIC_PASSWORD: env.STAGING_BASIC_PASSWORD ?? '' }) });
+    execute(process.execPath, smokeArgs);
     ssh(`set -eu\nnode ${quote(releaseDirectory + '/scripts/deployment/release-apply.mjs')} activate --root ${quote(target.directory)} --release ${quote(releaseHash)}\n`);
     publicReceipt('deployment.json', { result: 'passed', environment: target.environment, operation: env.RELEASE_OPERATION, sourceCommit: manifest.sourceCommit, manifestSha256: releaseHash, bundleSha256: bundleHash, migrationInvoked: env.RELEASE_OPERATION === 'deploy', imageBuildInvoked: false, healthSmokePassed: true, activePointerUpdated: true, dataRestoreInvoked: false });
     console.log(JSON.stringify({ result: 'deployed', environment: target.environment, manifestSha256: releaseHash }));

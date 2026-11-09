@@ -9,6 +9,7 @@ import { createBrowserServices, observeBrowserStorage, setBrowserServicePaused, 
 import { createBrowserPayments } from './lib/browser-payments.mjs';
 import { assertExternalStripeListenerIsolation, createBrowserExternalStripe } from './lib/browser-stripe-external.mjs';
 import { browserErrorCodes } from './ci-sanitize.mjs';
+import { createBrowserControlEndpoint } from './lib/browser-control-endpoint.mjs';
 
 const env = environment();
 const phase = process.argv[2] ?? 'P01';
@@ -64,7 +65,8 @@ mkdirSync(evidence, { recursive: true });
 const recipeJar = needsApi ? join(runDirectory, 'api.jar') : null;
 if (recipeJar) copyFileSync(jar, recipeJar);
 const manifest = join(runDirectory, 'processes.json');
-const ipc = windows ? `\\\\.\\pipe\\courses-browser-${randomUUID()}` : join(runDirectory, 'control.sock');
+let controlEndpoint;
+let ipc;
 const token = randomBytes(32).toString('hex');
 const children = [];
 const sockets = new Set();
@@ -248,14 +250,15 @@ try {
   if (externalRefunds) Object.assign(env, { PAYMENT_INBOX_ENABLED: 'false', REFUND_WORKER_ENABLED: 'false', NOTIFICATION_OUTBOX_ENABLED: 'true' });
   initialRuntimeFlags = runtimeFlags();
   stage = 'CONTROL_LISTEN';
+  controlEndpoint = createBrowserControlEndpoint();
+  ipc = controlEndpoint.path;
   await new Promise((resolveListen, rejectListen) => {
     control.once('error', rejectListen);
     control.listen(ipc, resolveListen);
   });
   if (!windows) chmodSync(ipc, 0o600);
   stage = 'START_SERVERS';
-  web = launch('web', process.execPath, [next, 'start', '--hostname', '127.0.0.1', '--port', String(new URL(env.APP_PUBLIC_ORIGIN).port)],
-    { cwd: join(root, 'apps/web') });
+  web = launch('web', process.execPath, [join(root, 'scripts/lib/browser-web-process.mjs'), String(new URL(env.APP_PUBLIC_ORIGIN).port)]);
   await Promise.race([Promise.all([
     ...(needsApi ? [startApi()] : []),
     ready(web, `${env.APP_PUBLIC_ORIGIN}/fr${phase === 'P02' ? '/dev/public' : phase === 'P01' ? '/dev/foundations' : ''}`),
@@ -285,8 +288,8 @@ try {
     const checks = [];
     for (const appEnvironment of ['staging', 'production']) {
       web = launch(`web-${appEnvironment}`, process.execPath,
-        [next, 'start', '--hostname', '127.0.0.1', '--port', String(new URL(env.APP_PUBLIC_ORIGIN).port)],
-        { cwd: join(root, 'apps/web'), env: { ...env, APP_ENV: appEnvironment, APP_PUBLIC_ORIGIN: 'https://courses.example.invalid' } });
+        [join(root, 'scripts/lib/browser-web-process.mjs'), String(new URL(env.APP_PUBLIC_ORIGIN).port)],
+        { env: { ...env, APP_ENV: appEnvironment, APP_PUBLIC_ORIGIN: 'https://courses.example.invalid' } });
       let started = false;
       for (let attempt = 0; attempt < 100; attempt++) {
         try { const response = await fetch(`${env.APP_PUBLIC_ORIGIN}/fr/dev/public`, { signal: AbortSignal.timeout(1000) });
@@ -342,6 +345,7 @@ try {
     })(),
   ]);
   const cleanupErrors = results.filter((result) => result.status === 'rejected').map((result) => result.reason);
+  try { controlEndpoint?.cleanup(); } catch (error) { cleanupErrors.push(error); }
   if (externalCleanupError) cleanupErrors.push(externalCleanupError);
   if (database && (verificationError || cleanupErrors.length)) {
     try { databaseDiagnostic = observeBrowserDatabase(database); }

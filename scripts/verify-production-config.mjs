@@ -55,7 +55,7 @@ try {
   const java = env.JAVA_HOME ? join(env.JAVA_HOME, 'bin', windows ? 'java.exe' : 'java') : 'java';
   const api = launch('api', java, ['-jar', jar, '--debug=false']);
   const webEnv = { ...env }; for (const key of Object.keys(webEnv)) if (/^(STRIPE_|S3_|MAIL_|POSTGRES_|NOTIFICATION_|PAYMENT_|REFUND_|ASSET_)/u.test(key)) delete webEnv[key];
-  const web = launch('web', process.execPath, [join(root, 'node_modules/next/dist/bin/next'), 'start', '--hostname', '127.0.0.1', '--port', String(webPort)], join(root, 'apps/web'), webEnv);
+  const web = launch('web', process.execPath, [join(root, 'scripts/lib/browser-web-process.mjs'), String(webPort)], root, webEnv);
   await Promise.all([ready(api, apiOrigin + '/api/v1/system/health'), ready(web, origin + '/fr')]);
   const health = await request(origin, '/api/v1/system/health');
   const healthBody = await health.json();
@@ -78,7 +78,12 @@ try {
 } catch (error) { failure = error; report.result = 'failed'; report.errorCode = 'PRODUCTION_CONFIG_NOT_VALIDATED'; }
 finally {
   const cleanup = [];
-  for (const record of children.reverse()) { try { const stopped = record.exited || await terminateOwned(record.child.pid, !windows); if (stopped) await record.exit; cleanup.push({ name: record.name, stopped }); } catch { cleanup.push({ name: record.name, stopped: false }); } }
+  for (const record of children.reverse()) { try {
+    // An exited supervisor does not prove its child process group is gone.
+    // Keep the ownership guard even after the leader's exit was observed.
+    const stopped = Number.isInteger(record.child.pid) ? await terminateOwned(record.child.pid, !windows) : record.exited;
+    if (stopped) await record.exit; cleanup.push({ name: record.name, stopped });
+  } catch { cleanup.push({ name: record.name, stopped: false }); } }
   try { if (database) stopBrowserDatabase(database); } catch { cleanup.push({ name: 'postgres', stopped: false }); }
   report.processes = cleanup; report.databaseStopped = Boolean(database?.stopped); report.cleanupConfirmed = cleanup.every(item => item.stopped) && report.databaseStopped;
   report.completedAt = new Date().toISOString(); report.providerContacted = false; report.seedInvoked = false; report.sharedVolumeChanged = false;

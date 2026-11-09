@@ -6,14 +6,15 @@ import { fileURLToPath } from 'node:url';
 const releaseUrl = new URL('./release.mjs', import.meta.url);
 const releaseLocations = [releaseUrl.href, fileURLToPath(releaseUrl)];
 const releaseLines = readFileSync(releaseUrl, 'utf8').split(/\r?\n/u);
-export const publicationStages = Object.freeze(['GUARD', 'CONFIGURATION', 'CHECK_EXISTING_WEB', 'CHECK_EXISTING_API',
+export const publicationStages = Object.freeze(['GUARD', 'CONFIGURATION', 'APPROVED_TEST_CLEANUP', 'CHECK_EXISTING_WEB', 'CHECK_EXISTING_API',
   'REGISTRY_LOGIN', 'IMAGE_BUILD', 'LABEL_WEB', 'LABEL_API', 'PUSH_WEB', 'PUSH_API', 'DIGEST_WEB', 'DIGEST_API',
   'VERIFY_WEB', 'VERIFY_API', 'MANIFEST', 'COMPLETE']);
 const classes = new Set(['Error', 'TypeError', 'SyntaxError', 'RangeError', 'ReferenceError', 'URIError', 'EvalError', 'AggregateError', 'AbortError', 'TimeoutError']);
 const causeCodes = new Set(['ENOTFOUND', 'EAI_AGAIN', 'ECONNRESET', 'ECONNREFUSED', 'ETIMEDOUT', 'EPIPE',
   'UND_ERR_CONNECT_TIMEOUT', 'UND_ERR_HEADERS_TIMEOUT', 'UND_ERR_BODY_TIMEOUT', 'UND_ERR_SOCKET',
   'ERR_TLS_CERT_ALTNAME_INVALID', 'CERT_HAS_EXPIRED', 'UNABLE_TO_VERIFY_LEAF_SIGNATURE',
-  'SELF_SIGNED_CERT_IN_CHAIN', 'DEPTH_ZERO_SELF_SIGNED_CERT', 'ERR_INVALID_ARG_TYPE', 'ERR_INVALID_STATE']);
+  'SELF_SIGNED_CERT_IN_CHAIN', 'DEPTH_ZERO_SELF_SIGNED_CERT', 'ERR_INVALID_ARG_TYPE', 'ERR_INVALID_STATE',
+  'RELEASE_DIAGNOSTIC_CONFIGURATION_INVALID']);
 const property = (value, key) => { try { return value?.[key]; } catch { return undefined; } };
 
 function sourceLocation(stack) {
@@ -57,10 +58,14 @@ export function safeReleaseFailure(error, stage) {
 
 function validateInput(value, request) {
   const invalid = () => { const error = new Error('RELEASE_DIAGNOSTIC_CONFIGURATION_INVALID'); error.code = 'RELEASE_DIAGNOSTIC_CONFIGURATION_INVALID'; throw error; };
-  if (!value || typeof value !== 'object' || Array.isArray(value) || Object.keys(value).toSorted().join(',') !== 'owner,repositoryName,token') invalid();
+  if (!value || typeof value !== 'object' || Array.isArray(value)
+    || !['owner,repositoryName,token', 'imageRepository,owner,repositoryName,token'].includes(Object.keys(value).toSorted().join(','))) invalid();
   if (typeof value.owner !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9-]{0,38}$/u.test(value.owner)
     || typeof value.repositoryName !== 'string' || !/^[A-Za-z0-9_.-]{1,100}$/u.test(value.repositoryName) || value.repositoryName.includes('..')
-    || typeof value.token !== 'string' || !/^[A-Za-z0-9_]{20,4096}$/u.test(value.token) || typeof request !== 'function') invalid();
+    || (Object.hasOwn(value, 'imageRepository') && value.imageRepository !== `ghcr.io/${value.owner.toLowerCase()}/${value.repositoryName.toLowerCase()}-private`)
+    || typeof value.token !== 'string' || value.token.length < 20 || value.token.length > 4096 || /\s/u.test(value.token)
+    || Array.from(value.token).some(character => character.charCodeAt(0) < 32 || character.charCodeAt(0) === 127)
+    || typeof request !== 'function') invalid();
 }
 
 async function boundedJson(response) {
@@ -91,12 +96,13 @@ async function boundedJson(response) {
 export async function inspectRegistryReadOnly(input, { request = fetch } = {}) {
   validateInput(input, request);
   const { owner, repositoryName, token } = input;
+  const imageRepository = input.imageRepository ?? `ghcr.io/${owner.toLowerCase()}/${repositoryName.toLowerCase()}-private`;
   const expectedRepository = `${owner}/${repositoryName}`;
   const routes = ['USER', 'NAMED_OWNER'].flatMap(routeKind => ['web', 'api'].map(kind => ({ kind, routeKind })));
   return Promise.all(routes.map(async ({ kind, routeKind }) => {
     const row = { kind, routeKind, status: null, visibility: 'UNKNOWN', identityMatches: false, repoMatches: false,
       safeVersionCount: null, redirectSameOrigin: null };
-    const packageName = `${repositoryName.toLowerCase()}/${kind}`;
+    const packageName = `${imageRepository.split('/').slice(2).join('/')}/${kind}`;
     const route = routeKind === 'USER' ? '/user/packages/container/' : `/users/${encodeURIComponent(owner)}/packages/container/`;
     const url = `https://api.github.com${route}${encodeURIComponent(packageName)}`;
     let response;

@@ -76,6 +76,10 @@ Ces choix techniques sont réversibles et validés localement : ciblé combiné 
 
 ## Décisions commerciales encore ouvertes
 
+P14 retient un document **HTML autonome imprimable de participation déclarée**, sans dépendance ni fournisseur supplémentaire. Les critères sont un nom de profil déclaré et au moins une participation persistée sur l’inscription/version exacte : activité déclarée terminée, quiz durable ou autoévaluation de la révision courante. Aucun seuil global d’achèvement n’est décidé ; le seuil BR01 d’une autoévaluation reste propre au projet. L’identité n’est pas vérifiée et aucune revue humaine n’est déduite. Une attestation émise conserve ses preuves et octets.
+
+Les demandes d’export, d’effacement et de fermeture restent traçables en WAITING_POLICY, puis annulables. L’export prêt et tout traitement irréversible sont désactivés jusqu’à validation de la conservation et de leur circuit d’exécution. Aucun justificatif commercial n’est fabriqué : la plateforme signale l’absence de document vérifié publié, sans prétendre vérifier les documents du fournisseur. Horaires/délais d’aide, conservation, identité légale et modalités commerciales restent des décisions du porteur avant activation concernée ou mise en vente.
+
 | Paramètre | État initial | Effet avant décision |
 | --- | --- | --- |
 | Prix, devise, présentation fiscale | À définir par offre | Offre réelle non vendable |

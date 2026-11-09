@@ -1,0 +1,81 @@
+{
+  "verifiedAt": "2026-11-09T00:26:05.619Z",
+  "runId": "2026-11-09T00-17-13-641Z-62e48e5b-7f1d-4ceb-8a73-88e2117890ae",
+  "runDirectory": "docs/evidence/P14-browser/2026-11-09T00-17-13-641Z-62e48e5b-7f1d-4ceb-8a73-88e2117890ae",
+  "imagesReviewed": 8,
+  "method": "Ouverture réelle des huit fichiers avec view_image(detail=original). Dimensions lues dans les PNG ; l’affichage de l’outil peut être redimensionné.",
+  "files": [
+    {
+      "file": "fr-1440-profile.png",
+      "width": 1440,
+      "height": 1345
+    },
+    {
+      "file": "en-1440-profile.png",
+      "width": 1440,
+      "height": 1345
+    },
+    {
+      "file": "fr-1440-support-conversation.png",
+      "width": 1440,
+      "height": 1804
+    },
+    {
+      "file": "en-1440-support-conversation.png",
+      "width": 1440,
+      "height": 1677
+    },
+    {
+      "file": "fr-1440-attestation-snapshot.png",
+      "width": 1440,
+      "height": 1217
+    },
+    {
+      "file": "en-1440-attestation-snapshot.png",
+      "width": 1440,
+      "height": 1217
+    },
+    {
+      "file": "fr-1440-actual-html-document.png",
+      "width": 1440,
+      "height": 1043
+    },
+    {
+      "file": "en-1440-actual-html-document.png",
+      "width": 1440,
+      "height": 1043
+    }
+  ],
+  "observations": [
+    "Compte FR/EN : profil et sécurité lisibles, préférence distincte du contenu personnel, confirmations de sauvegarde réellement visibles.",
+    "Conversation : messages conservés, pièce explicitement choisie et historique lisibles ; langue du texte libre préservée.",
+    "Attestation privée : nature participation, identité déclarée, absence de revue humaine et faits distincts visibles.",
+    "Deux vrais fichiers HTML téléchargés puis ouverts dans Chromium : titres FR/EN, caractères accentués, tableau et modes de preuve lisibles ; aucun média ou élément actif externe."
+  ],
+  "materialDefectsObserved": [],
+  "additionalRuns": [
+    {
+      "runId": "2026-11-09T00-23-23-585Z-19418663-abd7-4f04-a163-0cd040fe17a3",
+      "runDirectory": "docs/evidence/P14-browser/2026-11-09T00-23-23-585Z-19418663-abd7-4f04-a163-0cd040fe17a3",
+      "imagesReviewed": 2,
+      "files": [
+        {
+          "file": "fr-1440-support-conversation.png",
+          "width": 1440,
+          "height": 1832
+        },
+        {
+          "file": "en-1440-support-conversation.png",
+          "width": 1440,
+          "height": 1828
+        }
+      ],
+      "observations": [
+        "Libellés humains et langue FR du contexte visibles dans les deux interfaces.",
+        "Interface EN après retour de connexion : ressource/version/révision FR effectivement conservées, messages et historique lisibles."
+      ],
+      "materialDefectsObserved": []
+    }
+  ],
+  "totalImagesReviewed": 10
+}

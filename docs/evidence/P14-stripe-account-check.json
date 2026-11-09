@@ -1,0 +1,10 @@
+{
+  "verifiedAt": "2026-11-09T00:28:25.747Z",
+  "httpStatus": 200,
+  "testKey": true,
+  "configuredAccountMatchesStripe": true,
+  "requestedApiVersion": "2026-10-28.endive",
+  "externalAccountReadExecuted": true,
+  "paymentCreated": false,
+  "secretValuesPrinted": false
+}

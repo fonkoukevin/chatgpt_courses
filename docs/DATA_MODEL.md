@@ -376,18 +376,28 @@ Les effets d’accès surviennent après confirmation, par `order_resource_id` p
 
 ## État des relations et lots suivants
 
-Les lignes P12 et P13 récapitulent les relations validées localement ; P14 conserve les clés et règles à concrétiser avec sa fonctionnalité, sans CRUD anticipé.
+Les lignes P12–P14 récapitulent les relations implémentées ; leur niveau de validation est suivi dans STATUS et leurs preuves respectives.
 
 | Lot | Relations/contraintes à introduire | Conservation obligatoire |
 | --- | --- | --- |
 | P12 paiements | V013/V014 validées localement ; suite contrôlée 8/8 et vrai Checkout TEST 1/1 ; incident historique au suivi P17/P19 | Réception durable et effet métier uniques séparément ; paiement confirmé et activation en attente restent distincts |
 | P12 attribution de droits | Origines V012 attribuées après confirmation, FK vers les lignes et périodes/langues ; accès privé et absence de double attribution observés en Stripe TEST | Unicité par origine et ressource, jamais seulement `(user, course)` ; chaque achat individuel et pack garde son origine |
 | P13 remboursements | V015 validée localement : demandes/décisions/opérations liées au paiement, allocations, réservations, rapprochements et audit ; [preuves et limites](evidence/P13.md) | Réussite financière distincte de demande ; retrait des seules origines concernées après confirmation, jamais des productions/progrès |
-| P14 attestations | Attestation → utilisateur, version pédagogique et références exactes de preuves/révisions émises | Une nouvelle version ne réécrit pas l’attestation ; aucune certification ou correction humaine déduite d’une autoévaluation |
+| P14 compte, aide et attestations | V016 : huit tables, historique des demandes, fichiers choisis et attestations privées liées à l’inscription propriétaire | Instantané, octets HTML, SHA256 et date immuables ; aucune suppression/export automatique sans politique validée |
 
 V012 définit les FK d’origine et l’exclusivité ORDER_LINE/MANUAL_TEST ; P12 utilise cette intégrité et conserve la révocation, P13 ajoute le retrait selon décision de remboursement et les blocs d’origine persistants. Une ancienne notification ne réactive pas une origine déjà révoquée. Si A a été acheté seul puis dans A+B, le remboursement intégral du pack retire uniquement ses origines ; A reste couvert par l’achat individuel. Cette règle est vérifiée localement, y compris pour la lecture privée FR/EN, dans [la preuve P13](evidence/P13.md).
 
 Les suppressions physiques et opérations financières nécessiteront des cas d’utilisation explicites. Aucun remboursement ne déclenchera une cascade vers notes, projets, méthodes, tentatives ou attestations.
+
+## P14 — participation et demandes persistées
+
+V016 ajoute `support_tickets`, `support_messages`, `support_message_attachments`, `support_ticket_events`, `account_data_requests`, `account_data_request_events`, `participation_attestations` et `account_action_keys`. Les UUID/FK restrictives, propriétaires composites, instants finis et révisions sont contrôlés dans PostgreSQL. Le profil réutilise `user_accounts` et les préférences P04 ; aucun second mécanisme d’identité n’est créé.
+
+Tickets et demandes ont une identité immuable ; seules leurs transitions révisionnées sont permises. Messages, événements, sélections de pièces, clés d’idempotence et attestations sont append-only. Une sélection exige un asset PROJECT_FILE/READY appartenant au demandeur et un message USER ; un opérateur ne peut pas ajouter les fichiers privés de ce compte. Le contexte JSON est validé côté service contre les identités/versions et objets propriétaires existants. Il ne contient ni note ni corps de production.
+
+Une attestation PARTICIPATION référence une inscription et son propriétaire par FK composite. Son instantané contient les identités/version exactes, le nom déclaré, les faits distincts et leurs dates/langues, sans réponses de quiz ni textes personnels. Les derniers quiz et autoévaluations représentatifs de chaque activité sont retenus ; l’autoévaluation doit porter sur la révision courante du projet. Une lecture seule ne suffit pas. L’unicité propriétaire/inscription/type/langue/empreinte rend l’émission idempotente. Les octets HTML UTF8, leur taille et SHA256 sont stockés atomiquement avec l’instantané et l’émission, puis protégés contre UPDATE/DELETE. Le remboursement ou la nouvelle édition du parcours ne les réécrit pas.
+
+Une seule demande WAITING_POLICY par propriétaire/type est autorisée. L’annulation conserve motif et événement. La politique de conservation, l’instruction administrative et tout traitement irréversible restent des décisions/implémentations explicites ultérieures : aucun volume de données commerciales n’est effacé par une demande.
 
 ## Données locales et preuves
 

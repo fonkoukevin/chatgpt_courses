@@ -1,0 +1,16 @@
+{
+  "verifiedAt": "2026-11-09T00:30:29.917Z",
+  "baseCommit": "e624a232bd681c2248b11719a9e5e8604e694b96",
+  "contractSha256": "562cdf8adad01875c082ed15b78797ce72d5ead28ee3c395640a9d970874efd4",
+  "existingPathsCompared": 109,
+  "existingSchemasCompared": 196,
+  "existingContractPreserved": true,
+  "intentionalChanges": [
+    "Authenticated logout account-context precondition",
+    "Preferences PATCH account-context precondition"
+  ],
+  "unexpectedChangedPaths": [],
+  "unexpectedChangedSchemas": [],
+  "newPaths": 23,
+  "newSchemas": 35
+}

@@ -1,0 +1,26 @@
+{
+  "verifiedAt": "2026-11-09T00:30:06.087Z",
+  "finalJar": {
+    "sizeBytes": 94458485,
+    "sha256": "d35cfcf43e449d72cabbb0ad0c7b9688dfd9a3c3009d396274059fc85104533a"
+  },
+  "browserCopies": [
+    {
+      "runId": "2026-11-09T00-17-13-641Z-62e48e5b-7f1d-4ceb-8a73-88e2117890ae",
+      "sha256": "d35cfcf43e449d72cabbb0ad0c7b9688dfd9a3c3009d396274059fc85104533a"
+    },
+    {
+      "runId": "2026-11-09T00-23-23-585Z-19418663-abd7-4f04-a163-0cd040fe17a3",
+      "sha256": "d35cfcf43e449d72cabbb0ad0c7b9688dfd9a3c3009d396274059fc85104533a"
+    }
+  ],
+  "allFinalBrowserCopiesMatch": true,
+  "sourceAndBuiltMigrationsMatch": true,
+  "migrationCount": 16,
+  "lastMigration": "V016__account_support_and_participation_attestations.sql",
+  "applicationClassAndResourceFilesChecked": 675,
+  "privateConfigurationPackaged": false,
+  "privateEntriesAbsent": true,
+  "knownPrivateValuesAbsentFromApplicationClasses": true,
+  "secretsPrinted": false
+}

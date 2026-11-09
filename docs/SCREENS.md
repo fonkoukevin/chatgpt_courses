@@ -25,6 +25,9 @@ Cette carte reprend E01–E16 du cahier fonctionnel V1 et précise les routes in
 | E12 Nouvelle méthode/import explicite | `/fr/espace/methodes/nouvelle`, `?draft={uuid}` facultatif | `/en/my/methods/new`, `?draft={uuid}` facultatif |
 | E12 Détail personnel | `/fr/espace/methodes/{methodId}` | `/en/my/methods/{methodId}` |
 | E13 Compte | `/fr/compte` | `/en/account` |
+| E13 Attestations P14 et détail privé | `/fr/compte/attestations[/{attestationId}]` | `/en/account/attestations[/{attestationId}]` |
+| E13 Aide P14 et conversation privée | `/fr/compte/aide[/{ticketId}]` | `/en/account/help[/{ticketId}]` |
+| E13 Demandes relatives aux données P14 | `/fr/compte/donnees` | `/en/account/data` |
 | E13 Commandes propriétaires, P11 | `/fr/commandes` | `/en/orders` |
 | E13 Suivi des remboursements d’une commande, P13 | `/fr/commandes/{orderId}/remboursements` | `/en/orders/{orderId}/refunds` |
 | E13 Origines et historique des accès, P13 | `/fr/compte/acces` | `/en/account/access` |
@@ -214,7 +217,7 @@ Composants : `PersonalMethodsList`, `PersonalMethodEditor`, `MethodDraftImport`,
 
 ## E13 Compte, achats et aide
 
-Routes : /fr/compte et /en/account ; commandes P11, remboursements et origines d’accès P13 aux chemins du registre. Identité et préférences P04 restent présentes ; compte complet, attestations et aide restent P14. Les vues P13 sont validées localement en FR/EN, avec parcours réels et captures examinées ; les limites fournisseur/production restent dans [la preuve P13](evidence/P13.md).
+Routes : /fr/compte et /en/account ; commandes P11, remboursements et origines d’accès P13 aux chemins du registre. P14 raccorde profil, préférences et sécurité aux services d’identité existants, puis aide, demandes relatives aux données et attestations aux routes privées ci-dessus. Le niveau de vérification reste celui de [STATUS](STATUS.md) et des preuves de chaque lot.
 
 Préférences, langue, commandes, droits, demandes de remboursement, attestations et support. La commande conserve les conditions achetées. Paiement, remboursement et accès sont nommés séparément. La documentation téléchargeable ne se présente pas comme facture légale si ce document n’est pas réellement produit selon la configuration commerciale.
 
@@ -222,7 +225,13 @@ Le récapitulatif et le statut de commande renvoient au suivi privé des rembour
 
 La page des accès expose chaque origine de commande, version, langues, période, état ACTIVE/NOT_STARTED/EXPIRED/REVOKED et raison de retrait connue. Un même parcours peut conserver une autre origine active après le remboursement d’un pack. Elle renvoie à la commande et au suivi sans afficher de corps pédagogique protégé. Les états d’email restent distincts des états financiers ; aucun délai de réception bancaire ou recours légal n’est inventé. Un lien permet de retrouver le travail personnel conservé ; le retrait d’un contenu premium ne supprime pas notes, projets, méthodes ou tentatives.
 
-Une attestation indique parcours/version, date et nature des preuves ; elle reste privée par défaut. Le support contextualisé conserve la version de la leçon sans transmettre automatiquement les notes privées. Les demandes relatives au compte/données ont des états et appliquent une politique définie ; ne pas supprimer aveuglément des pièces conservées pour une obligation documentée.
+P14 propose uniquement une attestation de **participation déclarée**, réellement téléchargeable en HTML autonome imprimable. L’écran distingue nom non vérifié, activités déclarées terminées, quiz automatiques et autoévaluations ; il ne présente ni achèvement global, certification officielle ou revue humaine. L’inscription/version, la langue du document, la date et les faits émis restent immuables. Le choix d’inscription est paginé, y compris pour l’historique. Une simple lecture/vidéo ne rend pas éligible.
+
+L’aide conserve demandes, messages, états et événements. Un contexte de commande, projet, inscription ou ressource/version est choisi explicitement ; les fichiers existants READY du projet sont sélectionnés par l’utilisateur, jamais joints avec ses notes ou productions automatiquement. La prise en charge SMTP d’une réponse est distincte de son enregistrement. Les opérateurs ne reçoivent que les pièces sélectionnées ; leur interface étendue relève de P15.
+
+Le contexte garde sa langue source : le paramètre interne autorisé `contextLocale=fr|en`, accompagné d’une cible, est conservé lors du changement d’interface et du retour d’identification. Une révision FR peut ainsi être signalée depuis l’interface EN. Le contexte affiche des libellés humains et sa langue ; aucun message ou texte personnel n’entre dans cette URL.
+
+Les demandes EXPORT/ERASURE/ACCOUNT_CLOSURE sont enregistrées en WAITING_POLICY et peuvent être annulées avec historique. Il n’existe ni export prêt, ni traitement irréversible activé avant validation de la conservation. Les justificatifs commerciaux affichent une absence explicite tant qu’aucun document vérifié n’est publié ; le récapitulatif de commande ne devient pas une facture.
 
 ## E14 Administration des contenus
 

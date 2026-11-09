@@ -1,0 +1,381 @@
+{
+  "phase": "P14",
+  "runId": "2026-11-09T00-17-13-641Z-62e48e5b-7f1d-4ceb-8a73-88e2117890ae",
+  "runDirectory": "docs/evidence/P14-browser/2026-11-09T00-17-13-641Z-62e48e5b-7f1d-4ceb-8a73-88e2117890ae",
+  "testResult": {
+    "passed": 12,
+    "unexpected": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "durationMs": 98144.513,
+    "cleanupConfirmed": true
+  },
+  "method": "Chaque PNG mobile a été ouvert avec tools.view_image, detail=original, puis transmis à la vision en résolution originale. Dimensions lues dans l’en-tête PNG.",
+  "imagesReviewed": 20,
+  "files": [
+    {
+      "file": "en-320-attestation-snapshot.png",
+      "width": 320,
+      "height": 1747
+    },
+    {
+      "file": "en-320-profile.png",
+      "width": 320,
+      "height": 2758
+    },
+    {
+      "file": "en-390-attestation-criteria.png",
+      "width": 390,
+      "height": 1883
+    },
+    {
+      "file": "en-390-data-cancelled.png",
+      "width": 390,
+      "height": 1207
+    },
+    {
+      "file": "en-390-support-conversation.png",
+      "width": 390,
+      "height": 1825
+    },
+    {
+      "file": "fr-320-attestation-snapshot.png",
+      "width": 320,
+      "height": 1824
+    },
+    {
+      "file": "fr-320-data-cancel-dialog.png",
+      "width": 320,
+      "height": 1597
+    },
+    {
+      "file": "fr-320-profile-account-changed.png",
+      "width": 320,
+      "height": 3024
+    },
+    {
+      "file": "fr-320-profile.png",
+      "width": 320,
+      "height": 2842
+    },
+    {
+      "file": "fr-390-attestation-criteria.png",
+      "width": 390,
+      "height": 1930
+    },
+    {
+      "file": "fr-390-data-late-ack-unsent-text.png",
+      "width": 390,
+      "height": 1551
+    },
+    {
+      "file": "fr-390-data-waiting-policy.png",
+      "width": 390,
+      "height": 1490
+    },
+    {
+      "file": "fr-390-order-documents-unavailable.png",
+      "width": 390,
+      "height": 2628
+    },
+    {
+      "file": "fr-390-profile-revision-conflict.png",
+      "width": 390,
+      "height": 2810
+    },
+    {
+      "file": "fr-390-support-api-unavailable.png",
+      "width": 390,
+      "height": 1792
+    },
+    {
+      "file": "fr-390-support-conversation.png",
+      "width": 390,
+      "height": 2035
+    },
+    {
+      "file": "fr-390-support-email-issue.png",
+      "width": 390,
+      "height": 1881
+    },
+    {
+      "file": "fr-390-support-email-sent.png",
+      "width": 390,
+      "height": 1881
+    },
+    {
+      "file": "fr-390-support-explicit-selection.png",
+      "width": 390,
+      "height": 2149
+    },
+    {
+      "file": "fr-390-support-late-ack-unsent-text.png",
+      "width": 390,
+      "height": 1880
+    }
+  ],
+  "observations": [
+    "Aucun débordement horizontal, chevauchement ou texte essentiel tronqué observé sur les vues mobiles examinées.",
+    "Le bouton de préférence FR revient maintenant sur deux lignes à 320 pixels dans sa carte ; les commandes de profil, de téléchargement HTML et de navigation restent visibles.",
+    "Le changement de compte conserve la saisie locale, affiche le blocage et retire l’email de la vue ; le conflit de profil garde le texte et ne présente pas de succès courant.",
+    "Les deux captures d’accusé retardé montrent la nouvelle saisie non envoyée, son avertissement et l’ancienne demande réellement enregistrée dans une carte distincte.",
+    "Les critères et instantanés d’attestation distinguent participation, quiz et autoévaluation. Le texte exclut certification, diplôme et revue humaine ; le téléchargement est libellé HTML imprimable.",
+    "La sélection de support montre le contexte coché et le fichier choisi. La conversation confirme le fichier joint explicitement, les messages et leur historique, sans pièce automatique annoncée.",
+    "Le modal d’annulation à 320 pixels montre le motif, les deux actions et le focus bleu dans le champ ; la demande en attente puis annulée ne prétend ni effacement ni fermeture.",
+    "La panne API garde le message saisi sans demande confirmée. La vue incident email garde la réponse d’assistance et distingue l’incident de son enregistrement.",
+    "La commande affiche un état explicite sans justificatif commercial disponible et distingue cette absence du récapitulatif et du paiement.",
+    "La capture fr-390-support-email-sent.png montre maintenant la réponse Assistance et le libellé Email transmis au service d’envoi ; réception non confirmée. Le manque visuel du premier run est levé par observation de cette nouvelle image."
+  ],
+  "materialProductDefectsObserved": [],
+  "captureGaps": [],
+  "limits": [
+    "Revue limitée aux vingt PNG mobiles de ce run précis. Les huit captures de bureau, dont deux documents HTML réels, sont examinées séparément par le root.",
+    "Les select natifs fermés peuvent n’afficher qu’une partie d’un intitulé long ; cette revue n’ouvre pas les listes natives.",
+    "Une capture statique ne prouve pas à elle seule les interactions clavier, la persistance, l’idempotence ou l’intégrité du téléchargement ; ces faits relèvent des assertions exécutées séparément.",
+    "Aucune conformité WCAG globale n’est déduite de cette revue. Le premier run ayant échoué avant correction du débordement n’est pas présenté ici comme une preuve finale."
+  ],
+  "applicationSourceModifiedForReview": false,
+  "smtpSentVisuallyConfirmed": true,
+  "previousReview": {
+    "phase": "P14",
+    "runId": "2026-11-09T00-02-14-859Z-ff0b71ac-06ff-42e1-bb29-b6b9a289a6b9",
+    "runDirectory": "docs/evidence/P14-browser/2026-11-09T00-02-14-859Z-ff0b71ac-06ff-42e1-bb29-b6b9a289a6b9",
+    "testResult": {
+      "passed": 12,
+      "unexpected": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "durationMs": 79483.741,
+      "cleanupConfirmed": true
+    },
+    "method": "Chaque PNG mobile a été ouvert avec tools.view_image, detail=original, puis transmis à la vision en résolution originale. Dimensions lues dans l’en-tête PNG.",
+    "imagesReviewed": 20,
+    "files": [
+      {
+        "file": "en-320-attestation-snapshot.png",
+        "width": 320,
+        "height": 1747
+      },
+      {
+        "file": "en-320-profile.png",
+        "width": 320,
+        "height": 2758
+      },
+      {
+        "file": "en-390-attestation-criteria.png",
+        "width": 390,
+        "height": 1883
+      },
+      {
+        "file": "en-390-data-cancelled.png",
+        "width": 390,
+        "height": 1207
+      },
+      {
+        "file": "en-390-support-conversation.png",
+        "width": 390,
+        "height": 1825
+      },
+      {
+        "file": "fr-320-attestation-snapshot.png",
+        "width": 320,
+        "height": 1824
+      },
+      {
+        "file": "fr-320-data-cancel-dialog.png",
+        "width": 320,
+        "height": 1597
+      },
+      {
+        "file": "fr-320-profile-account-changed.png",
+        "width": 320,
+        "height": 3024
+      },
+      {
+        "file": "fr-320-profile.png",
+        "width": 320,
+        "height": 2842
+      },
+      {
+        "file": "fr-390-attestation-criteria.png",
+        "width": 390,
+        "height": 1930
+      },
+      {
+        "file": "fr-390-data-late-ack-unsent-text.png",
+        "width": 390,
+        "height": 1551
+      },
+      {
+        "file": "fr-390-data-waiting-policy.png",
+        "width": 390,
+        "height": 1490
+      },
+      {
+        "file": "fr-390-order-documents-unavailable.png",
+        "width": 390,
+        "height": 2628
+      },
+      {
+        "file": "fr-390-profile-revision-conflict.png",
+        "width": 390,
+        "height": 2810
+      },
+      {
+        "file": "fr-390-support-api-unavailable.png",
+        "width": 390,
+        "height": 1792
+      },
+      {
+        "file": "fr-390-support-conversation.png",
+        "width": 390,
+        "height": 2035
+      },
+      {
+        "file": "fr-390-support-email-issue.png",
+        "width": 390,
+        "height": 1881
+      },
+      {
+        "file": "fr-390-support-email-sent.png",
+        "width": 390,
+        "height": 1368
+      },
+      {
+        "file": "fr-390-support-explicit-selection.png",
+        "width": 390,
+        "height": 2165
+      },
+      {
+        "file": "fr-390-support-late-ack-unsent-text.png",
+        "width": 390,
+        "height": 1880
+      }
+    ],
+    "observations": [
+      "Aucun débordement horizontal, chevauchement ou texte essentiel tronqué observé sur les vues mobiles examinées.",
+      "Le bouton de préférence FR revient maintenant sur deux lignes à 320 pixels dans sa carte ; les commandes de profil, de téléchargement HTML et de navigation restent visibles.",
+      "Le changement de compte conserve la saisie locale, affiche le blocage et retire l’email de la vue ; le conflit de profil garde le texte et ne présente pas de succès courant.",
+      "Les deux captures d’accusé retardé montrent la nouvelle saisie non envoyée, son avertissement et l’ancienne demande réellement enregistrée dans une carte distincte.",
+      "Les critères et instantanés d’attestation distinguent participation, quiz et autoévaluation. Le texte exclut certification, diplôme et revue humaine ; le téléchargement est libellé HTML imprimable.",
+      "La sélection de support montre le contexte coché et le fichier choisi. La conversation confirme le fichier joint explicitement, les messages et leur historique, sans pièce automatique annoncée.",
+      "Le modal d’annulation à 320 pixels montre le motif, les deux actions et le focus bleu dans le champ ; la demande en attente puis annulée ne prétend ni effacement ni fermeture.",
+      "La panne API garde le message saisi sans demande confirmée. La vue incident email garde la réponse d’assistance et distingue l’incident de son enregistrement.",
+      "La commande affiche un état explicite sans justificatif commercial disponible et distingue cette absence du récapitulatif et du paiement."
+    ],
+    "materialProductDefectsObserved": [],
+    "captureGaps": [
+      {
+        "file": "fr-390-support-email-sent.png",
+        "observed": "Les sections Historique des échanges et Historique de la demande affichent encore Chargement… après rechargement. Aucun message d’assistance ni libellé d’email SENT n’est visible sur cette capture.",
+        "consequence": "Cette image ne constitue pas une validation visuelle de l’état email transmis, même si le scénario API/navigateur est passé.",
+        "recommendedFollowUp": "Attendre la présence du message SUPPORT et de son libellé de notification transmis avant une capture ciblée. Aucun défaut produit n’est déduit de cette capture de chargement."
+      }
+    ],
+    "limits": [
+      "Revue limitée aux vingt PNG mobiles de ce run précis. Les huit captures de bureau, dont deux documents HTML réels, sont examinées séparément par le root.",
+      "Les select natifs fermés peuvent n’afficher qu’une partie d’un intitulé long ; cette revue n’ouvre pas les listes natives.",
+      "Une capture statique ne prouve pas à elle seule les interactions clavier, la persistance, l’idempotence ou l’intégrité du téléchargement ; ces faits relèvent des assertions exécutées séparément.",
+      "Aucune conformité WCAG globale n’est déduite de cette revue. Le premier run ayant échoué avant correction du débordement n’est pas présenté ici comme une preuve finale."
+    ],
+    "applicationSourceModifiedForReview": false
+  },
+  "intermediateRuns": [
+    {
+      "runId": "2026-11-09T00-07-27-561Z-15bbb72c-f16d-4541-909f-e78e2887e1cb",
+      "runDirectory": "docs/evidence/P14-browser/2026-11-09T00-07-27-561Z-15bbb72c-f16d-4541-909f-e78e2887e1cb",
+      "result": "failed",
+      "cleanupConfirmed": true,
+      "passed": 4,
+      "failed": 1,
+      "skipped": 7,
+      "reason": "Data request events returned CANCELLED before REQUESTED; no final validation inferred from this failed run.",
+      "mobileImagesActuallyReviewed": [
+        {
+          "file": "en-320-profile.png",
+          "width": 320,
+          "height": 2758
+        },
+        {
+          "file": "en-390-support-conversation.png",
+          "width": 390,
+          "height": 1825
+        },
+        {
+          "file": "fr-320-data-cancel-dialog.png",
+          "width": 320,
+          "height": 1597
+        },
+        {
+          "file": "fr-320-profile.png",
+          "width": 320,
+          "height": 2842
+        },
+        {
+          "file": "fr-390-data-waiting-policy.png",
+          "width": 390,
+          "height": 1490
+        },
+        {
+          "file": "fr-390-support-conversation.png",
+          "width": 390,
+          "height": 2035
+        },
+        {
+          "file": "fr-390-support-explicit-selection.png",
+          "width": 390,
+          "height": 2149
+        }
+      ],
+      "sourceModifiedForThatReview": false
+    }
+  ],
+  "reviewScope": "Full causal run after event chronology correction, plus targeted support FR/EN after contextLocale preservation. Historical failed run and the resolved SMTP capture gap remain preserved.",
+  "additionalRuns": [
+    {
+      "runId": "2026-11-09T00-23-23-585Z-19418663-abd7-4f04-a163-0cd040fe17a3",
+      "runDirectory": "docs/evidence/P14-browser/2026-11-09T00-23-23-585Z-19418663-abd7-4f04-a163-0cd040fe17a3",
+      "scope": "Targeted support FR/EN after contextLocale preservation and real authentication return EN-FR-EN",
+      "testResult": {
+        "passed": 2,
+        "unexpected": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "durationMs": 27740.071,
+        "cleanupConfirmed": true
+      },
+      "imagesReviewed": 3,
+      "files": [
+        {
+          "file": "en-390-support-conversation.png",
+          "width": 390,
+          "height": 1996
+        },
+        {
+          "file": "fr-390-support-conversation.png",
+          "width": 390,
+          "height": 2063
+        },
+        {
+          "file": "fr-390-support-explicit-selection.png",
+          "width": 390,
+          "height": 2177
+        }
+      ],
+      "method": "All three PNGs opened through tools.view_image with detail=original and forwarded to vision at original resolution.",
+      "observations": [
+        "Le formulaire FR montre Langue du contexte : FR, une cible Projet et la pièce explicitement choisie, dans les limites de la carte.",
+        "La conversation FR montre le contexte, le fichier choisi, les deux messages et leur historique, sans débordement observé.",
+        "La conversation sous interface EN montre Context language : FR et les références Resource, Version et Content revision. Le texte personnel français reste intact ; Message recorded est distinct du contexte.",
+        "Aucun chevauchement, débordement horizontal ou texte essentiel tronqué observé dans ces trois vues 390px."
+      ],
+      "materialProductDefectsObserved": [],
+      "limits": [
+        "Le retour authentifié et la cohérence locale/révision sont aussi contrôlés par les assertions du scénario ; la seule image ne les prouve pas.",
+        "Les deux vues de bureau de ce ciblé sont examinées séparément par le root."
+      ],
+      "applicationSourceModifiedForReview": false
+    }
+  ],
+  "totalCurrentMobileImagesReviewed": 23
+}

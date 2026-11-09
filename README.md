@@ -4,13 +4,15 @@ Plateforme de formation pratique à l’IA : choisir une tâche, apprendre, prod
 
 ## État réel
 
-P01 fournit les fondations locales ; P02 ajoute le système visuel et trois structures d’interface. P03 pose le schéma identité/contenu et le contrat généré. P04 raccorde l’identité aux sessions Spring/PostgreSQL. P05 ajoute le CMS et la publication ; P06 raccorde le site public aux publications réelles. P07 ajoute le générateur sans IA et la bibliothèque personnelle ; P08 raccorde apprentissage, quiz et notes. P09 ajoute productions personnelles, autoévaluation et corrigé contrôlé. P10 apporte stockage, vidéo locale de test et notifications durables ; P11 les offres et commandes ; P12 raccorde Checkout et l’attribution des droits ; P13 ajoute les remboursements et leurs effets par origine. Le niveau de validation de chaque lot est dans [STATUS](docs/STATUS.md). Aucun ancien prototype repris ni déploiement externe annoncé.
+P01 fournit les fondations locales ; P02 ajoute le système visuel et trois structures d’interface. P03 pose le schéma identité/contenu et le contrat généré. P04 raccorde l’identité aux sessions Spring/PostgreSQL. P05 ajoute le CMS et la publication ; P06 raccorde le site public aux publications réelles. P07 ajoute le générateur sans IA et la bibliothèque personnelle ; P08 raccorde apprentissage, quiz et notes. P09 ajoute productions personnelles, autoévaluation et corrigé contrôlé. P10 apporte stockage, vidéo locale de test et notifications durables ; P11 les offres et commandes ; P12 raccorde Checkout et l’attribution des droits ; P13 ajoute les remboursements et leurs effets par origine. P14 raccorde le compte, l’aide, les demandes relatives aux données et les attestations privées de participation. Le niveau de validation de chaque lot est dans [STATUS](docs/STATUS.md). Aucun ancien prototype repris ni déploiement externe annoncé.
 
 La validation P01 couvre FR/EN, clavier, formats étroits, erreur 404 et panne/reprise réelle de Spring. P02 ajoute 14 tests et 54 captures examinées pour les interfaces ; les sept scénarios P01 passent à nouveau après ces changements. La validation reste locale, avec le Chromium de test autorisé.
 
 Lire [AGENTS.md](AGENTS.md), puis [docs/STATUS.md](docs/STATUS.md). Vérifications et limites : [P09](docs/evidence/P09.md), [P08](docs/evidence/P08.md), [P07](docs/evidence/P07.md), [P06](docs/evidence/P06.md), [P05](docs/evidence/P05.md), [P04](docs/evidence/P04.md), [P03](docs/evidence/P03.md), [P02](docs/evidence/P02.md), [P01](docs/evidence/P01.md) ; audit initial : [P00](docs/evidence/P00.md).
 
 ## Structure retenue
+
+Preuves récentes : [P14 compte, aide et attestations](docs/evidence/P14.md), [P13 remboursements](docs/evidence/P13.md), [P12 paiement TEST](docs/evidence/P12.md). Les paramètres commerciaux et de conservation encore absents restent des conditions d’activation explicites.
 
 | Chemin | Rôle | État P01 |
 | --- | --- | --- |
@@ -338,7 +340,7 @@ Commandes Windows natives, après installation des dépendances verrouillées :
 
 `storage:setup` prépare uniquement les buckets locaux absents et leur CORS pour l’origine publique locale configurée, puis active le stockage dans `.env.local`. Il préserve les objets et autres paramètres existants. Les endpoints interne/externe sont explicites ; le navigateur reçoit une adresse de boucle locale signée et transfère sans cookie de session. Les limites et formats réels apparaissent avant dépôt. Valeurs par défaut : TXT 5 MiB, image 10 MiB, dix fichiers/20 MiB par projet ; autorisation de transfert 300 s, téléchargement 60 s. Une révocation bloque les nouveaux liens ; un lien déjà émis peut rester valide jusqu’à son expiration. Le nettoyage ne vise que les clés de transfert expirées enregistrées, jamais les objets prêts ni un volume.
 
-La clé `NOTIFICATION_OUTBOX_KEY` est générée localement par `setup:local` sans affichage. Conserver cette clé avec les sauvegardes privées : les redémarrages doivent pouvoir déchiffrer les événements en attente. Les notifications FR/EN passent par une outbox PostgreSQL durable et Mailpit ; les reprises ont un délai borné et les résultats SMTP ambigus exigent un rapprochement explicite. L’écran `/fr/admin/notifications` ou `/en/admin/notifications` exige `notifications.read`, et la reprise `notifications.manage` ; aucun compte opérateur n’est créé automatiquement. Ni destinataire ni contenu d’email n’y sont exposés. Activation d’accès et support disposent de ports métier pour leurs lots suivants.
+La clé `NOTIFICATION_OUTBOX_KEY` est générée localement par `setup:local` sans affichage. Conserver cette clé avec les sauvegardes privées : les redémarrages doivent pouvoir déchiffrer les événements en attente. Les notifications FR/EN passent par une outbox PostgreSQL durable et Mailpit ; les reprises ont un délai borné et les résultats SMTP ambigus exigent un rapprochement explicite. L’écran `/fr/admin/notifications` ou `/en/admin/notifications` exige `notifications.read`, et la reprise `notifications.manage` ; aucun compte opérateur n’est créé automatiquement. Ni destinataire ni contenu d’email n’y sont exposés. Les événements réels d’activation P12 et de réponse d’aide P14 réutilisent ces ports métier ; demande enregistrée et email pris en charge restent distincts.
 
 Le fournisseur vidéo `local-test` reste désactivé par défaut. `VIDEO_LOCAL_ROOT` désigne un répertoire privé absolu, hors des fichiers publics ; `video:import -- chemin/manifest.json` réalise un import local explicite après création du contenu par un éditeur autorisé. Ce mécanisme ne désigne aucun fournisseur de streaming de production ni aucune vidéo de formation déjà produite. En l’absence de média, le texte et les consignes restent utilisables.
 
@@ -495,3 +497,30 @@ Une allocation partielle porte un montant explicite et KEEP/REVOKE pour chaque l
 Pour recevoir les mises à jour dans le développement TEST, régler **`REFUND_WORKER_ENABLED=true`** dans le fichier privé ignoré `.env.local`, puis redémarrer Spring avec `dev`. La session P13 a activé ce seul indicateur dans le fichier privé, sauvegarde locale conservée ; les secrets et autres paramètres restent inchangés. Les exemples gardent false. Valeurs par défaut : `REFUND_POLL_DELAY=2s`, `REFUND_LEASE_DURATION=120s`, `REFUND_RETRY_DELAY=10s`, `REFUND_MAX_ATTEMPTS=5`. Le worker lit les faits courants, avec tentatives bornées et état à examiner ; il ne transmet aucun POST de remboursement. `stripe:listen` écoute les quatre événements Checkout ainsi que `refund.created`, `refund.updated`, `refund.failed`, `charge.refunded`, toujours vers l’unique origine `/api/v1/webhooks/stripe`.
 
 Les nouveaux liens média privés sont refusés lorsque la dernière origine autorisant ce contenu est retirée. Un lien S3 déjà délivré reste valable jusqu’à son expiration configurée (`ASSET_DOWNLOAD_TTL_SECONDS`, défaut60s) ; un fichier déjà téléchargé ne peut pas être rappelé. Aucune politique de délai, d’éligibilité, de frais ou de garantie de remboursement n’est inventée. Les conditions commerciales et légales restent à fournir par le porteur avant lancement.
+
+
+## P14 — compte, aide et attestations
+
+Compte : `/fr/compte` et `/en/account`. Sections privées : `attestations`, `aide`/`help`, `donnees`/`data`, sous ces mêmes racines. Le profil déclaré, la préférence de langue et la sécurité réutilisent l’identité P04. Les commandes et origines d’accès restent les services P11–P13. Un changement de langue d’interface ne traduit ni notes, méthodes, productions ou messages.
+
+Les demandes d’aide enregistrent messages, contexte choisi, pièces existantes READY sélectionnées et historique. Une réponse opérateur réelle utilise l’outbox P10 ; un incident email conserve la conversation et les droits. Aucun horaire ou délai de réponse n’est promis. Le rôle SUPPORT_OPERATOR est livré sans compte assigné ; l’interface d’exploitation étendue reste P15.
+
+L’attestation proposée est un **document HTML autonome imprimable de participation déclarée**. Son émission exige un nom déclaré et des faits serveur sur l’inscription/version exacte : activité déclarée terminée, quiz durable ou autoévaluation de la révision courante. Lecture, vidéo et note seules ne suffisent pas. Les preuves distinguent quiz automatique et autoévaluation ; aucun diplôme, compétence certifiée, identité vérifiée ou examen humain n’est annoncé. Octets, SHA256, date et instantané sont conservés ; une nouvelle édition ou un remboursement ne les réécrit pas. Le téléchargement reste propriétaire et privé.
+
+Les demandes d’export/effacement/fermeture sont réellement traçables en WAITING_POLICY et annulables. Aucun export prêt ou traitement irréversible n’est activé tant que la conservation et le circuit ne sont pas validés. Aucun justificatif commercial vérifié n’est publié à ce stade : le récapitulatif ne devient pas une facture, et la plateforme ne prétend pas avoir interrogé les reçus Stripe.
+
+Préparer les builds avant la recette Chromium isolée :
+
+```powershell
+.\scripts\courses.cmd run api:generate
+.\scripts\courses.cmd run api:check
+.\scripts\courses.cmd run verify:client
+.\scripts\courses.cmd run lint
+.\scripts\courses.cmd run typecheck
+.\scripts\courses.cmd run typecheck:browser
+.\scripts\courses.cmd run build:api
+.\scripts\courses.cmd run build:web
+.\scripts\courses.cmd run verify:account
+```
+
+Arrêter les applications de développement avec `.\scripts\courses.cmd run stop` avant compilation ; les services et volumes Docker sont conservés. `verify:account` réserve les ports3101/8181 et crée PostgreSQL/S3/Mailpit temporaires en boucle locale, sans Stripe, seed de production ou destinataire réel. Il ne prend pas les onglets personnels. Les résultats, captures et limites effectivement observés figurent dans [la preuve P14](docs/evidence/P14.md). Relancer ensuite `.\scripts\courses.cmd run dev`, et le listener TEST existant si nécessaire avec `.\scripts\courses.cmd run stripe:listen` dans un terminal séparé. Le listener n’est pas requis par la recette P14.

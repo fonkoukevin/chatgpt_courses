@@ -1,0 +1,147 @@
+{
+  "phase": "P14",
+  "kind": "P13 refund regression during P14",
+  "runId": "2026-11-08T23-56-57-964Z-03d36f71-ca5b-4fdf-86cf-59c76bd44458",
+  "runDirectory": "docs/evidence/P13-browser/2026-11-08T23-56-57-964Z-03d36f71-ca5b-4fdf-86cf-59c76bd44458",
+  "completedAt": "2026-11-09T00:00:14.988Z",
+  "command": "$env:BROWSER_WEB_PORT = '3102'\n$env:BROWSER_API_PORT = '8182'\n.\\scripts\\courses.cmd run verify:refunds",
+  "execution": {
+    "shell": "PowerShell, process-local environment variables only",
+    "launcher": ".\\scripts\\courses.cmd run verify:refunds",
+    "webPort": 3102,
+    "apiPort": 8182,
+    "portsFreeBeforeStart": true,
+    "exitCode": 0,
+    "passed": 6,
+    "unexpected": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "repeatEach": 1,
+    "durationMs": 133110.213,
+    "log": ".runtime/p14-refund-regression.log"
+  },
+  "verifiedScenarios": [
+    "FR : demande et décision réelles par interface, remboursement du pack A+B, achat individuel A conservé, accès privé A en FR/EN et refus de B",
+    "EN : remboursement partiel PENDING puis FAILED, budget libéré sans retrait des droits",
+    "KEEP et remboursement fournisseur contrôlé partiel : décision explicite sur les origines, sans partage de prix de pack inventé",
+    "Timeout réellement provoqué : UNKNOWN, rapprochement GET, une seule création financière",
+    "Refus de permission/propriété, panne réelle API, motif conservé, reprise explicite",
+    "Incident SMTP local après confirmation : remboursement et droits maintenus, email présenté séparément"
+  ],
+  "cleanup": {
+    "sessionResult": "passed",
+    "cleanupConfirmed": true,
+    "allRecordedProcessesTerminated": true,
+    "postgresTmpfsStopped": true,
+    "s3TmpfsStopped": true,
+    "mailpitTmpfsStopped": true,
+    "controlledProviderStopped": true,
+    "ports3102And8182WithoutListenersAfterExit": true,
+    "developmentServicesStoppedByThisRun": false
+  },
+  "provider": {
+    "kind": "controlled-stripe-network",
+    "externalStripe": false,
+    "refundCreateCalls": 5,
+    "refundStableKeys": 5,
+    "refundAmbiguityCount": 1
+  },
+  "visualReview": {
+    "method": "Ouverture réelle de chacun des quinze PNG avec view_image(detail=original). Dimensions lues dans les fichiers ; l’affichage de l’outil peut être redimensionné.",
+    "imagesReviewed": 15,
+    "files": [
+      {
+        "file": "en-1440-dashboard-partial-needs-review.png",
+        "width": 1440,
+        "height": 1769
+      },
+      {
+        "file": "en-1440-partial-pending.png",
+        "width": 1440,
+        "height": 2126
+      },
+      {
+        "file": "en-320-partial-failed-access-kept.png",
+        "width": 320,
+        "height": 2800
+      },
+      {
+        "file": "en-390-partial-pending.png",
+        "width": 390,
+        "height": 2594
+      },
+      {
+        "file": "fr-1440-operator-preview-pack.png",
+        "width": 1440,
+        "height": 2690
+      },
+      {
+        "file": "fr-1440-origins-pack-refunded.png",
+        "width": 1440,
+        "height": 1231
+      },
+      {
+        "file": "fr-1440-refund-confirmed.png",
+        "width": 1440,
+        "height": 1910
+      },
+      {
+        "file": "fr-320-origins-pack-refunded.png",
+        "width": 320,
+        "height": 2274
+      },
+      {
+        "file": "fr-390-ambiguous-response-not-confirmed.png",
+        "width": 390,
+        "height": 3008
+      },
+      {
+        "file": "fr-390-api-unavailable-preserves-reason.png",
+        "width": 390,
+        "height": 2136
+      },
+      {
+        "file": "fr-390-financial-confirmation.png",
+        "width": 390,
+        "height": 1000
+      },
+      {
+        "file": "fr-390-old-payment-view-refund-aware.png",
+        "width": 390,
+        "height": 1530
+      },
+      {
+        "file": "fr-390-origins-pack-refunded.png",
+        "width": 390,
+        "height": 1872
+      },
+      {
+        "file": "fr-390-partial-keep-no-revocation.png",
+        "width": 390,
+        "height": 3809
+      },
+      {
+        "file": "fr-390-refund-confirmed-email-incident.png",
+        "width": 390,
+        "height": 2969
+      }
+    ],
+    "observations": [
+      "Aucun débordement horizontal, chevauchement ou texte essentiel tronqué observé sur ces vues FR/EN de 320, 390 et 1440 pixels.",
+      "À 320 pixels, badges, liens et références longues reviennent à la ligne dans les cartes d’origines et de remboursement.",
+      "Le modal financier à 390 pixels montre les deux références de ligne, le montant et les effets ; les boutons restent visibles, le focus bleu sur Annuler est visible.",
+      "Le suivi E08 conserve les faits historiques de paiement et présente la situation de remboursement distincte sans lien de reprise aveugle.",
+      "PENDING, FAILED, UNKNOWN, KEEP, retraits par origine, panne API et incident email sont visuellement distincts ; aucun faux succès relevé sur ces captures."
+    ],
+    "materialDefectsObserved": []
+  },
+  "limits": [
+    "Intégration locale avec faits fournisseur contrôlés : aucun remboursement réellement exécuté chez Stripe, aucun mode LIVE ni déploiement.",
+    "Les captures statiques ne valident pas à elles seules les interactions clavier. Le scénario 01 vérifie séparément Tab/Shift+Tab et le focus dans alertdialog.",
+    "Cette régression concerne le build servi pendant ce run. Elle ne remplace pas la recette P14 ni les validations de modifications ultérieures.",
+    "Aucune conformité WCAG globale n’est déduite de cette revue visuelle."
+  ],
+  "existingP13EvidenceOverwritten": false,
+  "applicationSourceModifiedForThisTask": false,
+  "secretsOrPrivateProductionLogged": false
+}

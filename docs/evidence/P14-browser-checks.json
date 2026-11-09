@@ -1,0 +1,203 @@
+{
+  "verifiedAt": "2026-11-09T00:25:49.997Z",
+  "command": ".\\scripts\\courses.cmd run verify:account",
+  "exitCode": 0,
+  "externalStripe": false,
+  "finalRun": "2026-11-09T00-17-13-641Z-62e48e5b-7f1d-4ceb-8a73-88e2117890ae",
+  "finalStats": {
+    "startTime": "2026-11-09T00:17:55.006Z",
+    "duration": 98144.513,
+    "expected": 12,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "cleanupConfirmed": true,
+  "isolatedPostgres": {
+    "image": "postgres:18.6@sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42",
+    "tmpfs": true,
+    "stopped": true
+  },
+  "isolatedServices": [
+    {
+      "kind": "s3",
+      "image": "chrislusf/seaweedfs:4.52@sha256:57877e32bb90073b37dc109b438ba66e84fd5ed9ced5f5c04f56444ef243ce59",
+      "tmpfs": true,
+      "stopped": true,
+      "observation": {
+        "available": true,
+        "configuredVolumeMax": 24,
+        "maxSlots": [
+          24,
+          24
+        ],
+        "freeSlots": [
+          10
+        ],
+        "collectionCount": 2,
+        "noFreeVolumesObserved": false,
+        "noWritableVolumesObserved": false,
+        "logsAvailable": true
+      }
+    },
+    {
+      "kind": "mailpit",
+      "image": "axllent/mailpit:v1.33.0@sha256:9b3a463be15354c0f0eba91697d80e3e0d8a5623ef0e627cacc836bc17fd5231",
+      "tmpfs": true,
+      "stopped": true
+    }
+  ],
+  "captures": [
+    "en-1440-actual-html-document.png",
+    "en-1440-attestation-snapshot.png",
+    "en-1440-profile.png",
+    "en-1440-support-conversation.png",
+    "en-320-attestation-snapshot.png",
+    "en-320-profile.png",
+    "en-390-attestation-criteria.png",
+    "en-390-data-cancelled.png",
+    "en-390-support-conversation.png",
+    "fr-1440-actual-html-document.png",
+    "fr-1440-attestation-snapshot.png",
+    "fr-1440-profile.png",
+    "fr-1440-support-conversation.png",
+    "fr-320-attestation-snapshot.png",
+    "fr-320-data-cancel-dialog.png",
+    "fr-320-profile-account-changed.png",
+    "fr-320-profile.png",
+    "fr-390-attestation-criteria.png",
+    "fr-390-data-late-ack-unsent-text.png",
+    "fr-390-data-waiting-policy.png",
+    "fr-390-order-documents-unavailable.png",
+    "fr-390-profile-revision-conflict.png",
+    "fr-390-support-api-unavailable.png",
+    "fr-390-support-conversation.png",
+    "fr-390-support-email-issue.png",
+    "fr-390-support-email-sent.png",
+    "fr-390-support-explicit-selection.png",
+    "fr-390-support-late-ack-unsent-text.png"
+  ],
+  "visualReview": {
+    "fullRunImagesReviewed": 28,
+    "additionalRuns": [
+      {
+        "runId": "2026-11-09T00-23-23-585Z-19418663-abd7-4f04-a163-0cd040fe17a3",
+        "imagesReviewed": 5
+      }
+    ],
+    "totalP14ImagesReviewed": 33,
+    "mobileProof": "P14-visual-review-mobile.json",
+    "desktopProof": "P14-visual-review-desktop.json",
+    "smtpSentActuallyVisible": true,
+    "materialLayoutDefectsObserved": [],
+    "regressionP13ImagesReviewed": 15,
+    "totalWithP13Regression": 48
+  },
+  "additionalChecks": [
+    {
+      "id": "2026-11-09T00-23-23-585Z-19418663-abd7-4f04-a163-0cd040fe17a3",
+      "selection": {
+        "grep": "conversation",
+        "repeatEach": 1
+      },
+      "stats": {
+        "startTime": "2026-11-09T00:24:04.886Z",
+        "duration": 27740.071,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "result": "passed",
+      "cleanupConfirmed": true
+    }
+  ],
+  "history": [
+    {
+      "id": "2026-11-08T23-56-04-843Z-0b38e6cc-04bb-401d-bff6-a55c363e7334",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "stats": {
+        "startTime": "2026-11-08T23:56:40.402Z",
+        "duration": 27756.809,
+        "expected": 0,
+        "skipped": 11,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "result": "failed",
+      "cleanupConfirmed": true
+    },
+    {
+      "id": "2026-11-09T00-02-14-859Z-ff0b71ac-06ff-42e1-bb29-b6b9a289a6b9",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "stats": {
+        "startTime": "2026-11-09T00:02:46.897Z",
+        "duration": 79483.741,
+        "expected": 12,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "result": "passed",
+      "cleanupConfirmed": true
+    },
+    {
+      "id": "2026-11-09T00-07-27-561Z-15bbb72c-f16d-4541-909f-e78e2887e1cb",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "stats": {
+        "startTime": "2026-11-09T00:07:59.205Z",
+        "duration": 32842.297999999995,
+        "expected": 4,
+        "skipped": 7,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "result": "failed",
+      "cleanupConfirmed": true
+    },
+    {
+      "id": "2026-11-09T00-17-13-641Z-62e48e5b-7f1d-4ceb-8a73-88e2117890ae",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "stats": {
+        "startTime": "2026-11-09T00:17:55.006Z",
+        "duration": 98144.513,
+        "expected": 12,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "result": "passed",
+      "cleanupConfirmed": true
+    },
+    {
+      "id": "2026-11-09T00-23-23-585Z-19418663-abd7-4f04-a163-0cd040fe17a3",
+      "selection": {
+        "grep": "conversation",
+        "repeatEach": 1
+      },
+      "stats": {
+        "startTime": "2026-11-09T00:24:04.886Z",
+        "duration": 27740.071,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "result": "passed",
+      "cleanupConfirmed": true
+    }
+  ],
+  "privatePayloadsExported": false
+}

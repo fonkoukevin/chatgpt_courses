@@ -1,9 +1,10 @@
 # État réel du projet
 
-Dernière mise à jour : **9 novembre 2026**. **P20 validé localement** après P15–P19. Candidate à une recette privée, commerce désactivé. Aucun mode LIVE, push, registre publié ou déploiement distant.
+Dernière mise à jour : **9 novembre 2026**. **P20 validé localement**, préparation P21 commencée avec la cible OVH fournie. Candidate à une recette privée, commerce désactivé. Aucun mode LIVE, push, registre publié ou déploiement distant.
 
 ## Situation courante
 
+- **P21, accès** : cible `vps-a567141b.vps.ovh.net` joignable TCP22 ; dépôt privé `fonkoukevin/chatgpt_courses` accessible, vide. Authentification SSH par clé locale refusée ; compte/moyen d’accès à retrouver. Le domaine fourni pointe ailleurs et le sous-domaine de recette proposé n’existe pas encore. Aucune mutation distante. [Faits et reprise](evidence/P21.md).
 - **P20** : deux images multi-étapes réellement construites, UID10001, bases par digest ; Compose/Caddy et secrets séparés. API ciblée14/14, scripts22/22, lint/actionlint passent. Intégration isolée15 contrôles : HTTPS, smoke staging12/production10,19 migrations, mêmes images promues sans rebuild, sauvegarde chiffrée et restauration PG/S3, moniteur CLI. [Résultats et limites](evidence/P20.md), [intégration](evidence/P20-integration-checks.json), [runbooks](runbooks/deploy.md). Aucun registre/SSH/GitHub/off-host/alerte externe observé.
 - **P18** : douze leçons FR/EN,18 fichiers Markdown, import CMS durable, corrigés protégés et vrais exports locaux. [Sources](../content/course-client-proposal/README.md), [résultats et limites](evidence/P18.md).
 - **P19** : global API256/256,35 suites ; client124, contrat/sources223/contrastes/lint/types et15 garde-fous CI passent. Configuration production12/12 sur base vide et vraie chaîne HTTP arrêt/reprise. Chromium consolidé4/4, paiement8/8, remboursement6/6 ; huit captures examinées. Stripe TEST réel1/1 : deux Checkout, deux remboursements, quatre rejeux sans double effet, origine individuelle conservée. [Matrice, résultats et limites](evidence/P19.md), [candidate](evidence/P19-release-candidate.json).
@@ -40,7 +41,7 @@ Dernière mise à jour : **9 novembre 2026**. **P20 validé localement** après 
 | P18 | Validé localement | Rédaction et intégration isolée4/4,18 fichiers/4 exports/18 captures ; brouillons partagés importés, acteur désactivé, vente bloquée ; [preuve](evidence/P18.md) |
 | P19 | Validé localement | API256/client124, navigateur4+8+6, fournisseur TEST1/1, CI locale et production12/12 ; commerce bloqué, aucun GitHub/déploiement ; [preuve](evidence/P19.md) |
 | P20 | Validé localement | Images réelles, API14/scripts22, TLS et promotion12+10, migration/restauration/moniteur15 contrôles ; cible/registre/off-host manquants ; [preuve](evidence/P20.md) |
-| P21 | À faire | Déploiement de recette |
+| P21 | En cours | Cible OVH/GitHub identifiées, SSH refusé ; aucun déploiement, DNS de recette à préparer ; [suivi](evidence/P21.md) |
 | P22 | À faire | Déploiement de production |
 | P23 | À faire | Exploitation après lancement |
 
@@ -48,6 +49,6 @@ Dernière mise à jour : **9 novembre 2026**. **P20 validé localement** après 
 
 ## Dernier lot
 
-P20 livre les images et procédures vérifiées localement ; développement/listener et données initiaux préservés et rétablis. Prochain prompt : **`prompts/P21_DEPLOIEMENT_RECETTE.txt`**. Il nécessite cible Linux/SSH/clé d’hôte, domaine/DNS, registre et GitHub autorisés, secrets propres à la recette, destination de sauvegarde hors hôte et canal/observateur d’alerte. RPO/RTO/rétention sont des propositions non activées. Aucun achat ou déploiement distant engagé ; vente toujours bloquée par les incidents et décisions documentés.
+P20 livre les images et procédures vérifiées localement ; développement/listener et données initiaux préservés et rétablis. Reprise **`prompts/P21_DEPLOIEMENT_RECETTE.txt`** : VPS, domaine et dépôt fournis, accès GitHub vérifié ; il faut d’abord retrouver l’authentification SSH. Restent ensuite DNS de recette, registre/protections GitHub, secrets de recette et intégrations TEST, destination de sauvegarde hors hôte et canal/observateur d’alerte. RPO/RTO/rétention sont des propositions non activées. Aucun achat ou déploiement distant engagé ; vente toujours bloquée par les incidents et décisions documentés.
 
 Garder ce suivi court ; détails dans docs/evidence/Pxx.md. Repartir des fichiers et preuves réels lors d’une reprise.

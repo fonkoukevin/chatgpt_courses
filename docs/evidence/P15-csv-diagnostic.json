@@ -1,0 +1,17 @@
+{
+  "verifiedAt": "2026-11-09T01:39:03.985Z",
+  "runId": "2026-11-09T01-35-57-917Z-6bff0111-4a49-480d-9005-c3abfa02dedf",
+  "observedResponse": {
+    "status": 200,
+    "contentType": "text/csv;charset=UTF-8",
+    "contentLength": null,
+    "contentEncoding": null,
+    "disposition": "attachment; filename=\"operations-metrics-20261108-20261110.csv\"",
+    "cacheControl": "private, no-store",
+    "digestPresent": true
+  },
+  "observedDecodedBytes": 5447,
+  "diagnosis": "Next16.4.5 send-response strips Content-Length for Route Handlers independently of compression. Client incorrectly required that transport header.",
+  "correction": "Proxy emits verified X-Content-Size; client requires size, <=1MiB, exact bytes and SHA256; no-transform added. Final browser result recorded separately.",
+  "secretOrPrivateTextIncluded": false
+}

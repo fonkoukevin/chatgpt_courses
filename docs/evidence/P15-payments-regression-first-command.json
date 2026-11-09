@@ -1,0 +1,13 @@
+{
+  "verifiedAt": "2026-11-09T02:00:06.271Z",
+  "command": ".\\scripts\\courses.cmd run verify:payments",
+  "testEnvironment": {
+    "BROWSER_WEB_PORT": 3102,
+    "BROWSER_API_PORT": 8182
+  },
+  "exitCode": 1,
+  "durationMs": 171269,
+  "externalStripe": false,
+  "livePayment": false,
+  "logPrivate": true
+}

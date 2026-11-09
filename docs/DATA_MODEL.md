@@ -399,6 +399,16 @@ Une attestation PARTICIPATION référence une inscription et son propriétaire p
 
 Une seule demande WAITING_POLICY par propriétaire/type est autorisée. L’annulation conserve motif et événement. La politique de conservation, l’instruction administrative et tout traitement irréversible restent des décisions/implémentations explicites ultérieures : aucun volume de données commerciales n’est effacé par une demande.
 
+## P15 — exploitation et faits observés
+
+V017 ajoute onze tables : `support_workspaces`, `support_reply_drafts`, `support_internal_notes`, `support_time_entries`, `support_reply_publications`, `editorial_cases`, `editorial_case_events`, `operations_audit`, `operations_action_keys`, `operations_activity_starts` et `operations_personal_revision_events`. Elle ajoute des permissions et rôles de référence sans compte, prix, achat ou droit de démonstration.
+
+L’affectation et le brouillon par ticket/opérateur sont révisionnés. Notes, minutes, publications, événements, audit, clés idempotentes et faits observés sont append-only. L’instant d’une action suit les faits précédents sans réécrire l’historique. Les références source du dossier éditorial restent immuables ; la correction est une autre révision réelle. Aucun dossier ne modifie les méthodes personnelles ou productions.
+
+Le premier début observé est unique par inscription/activité-version et référence l’inscription propriétaire et ses activités exactes. Les sauvegardes sont uniques par type/identifiant/révision de méthode, note ou projet et enregistrées dans la transaction réelle ; leur rollback annule le fait. Le ledger ne stocke aucun texte et conserve un identifiant opaque sans FK vers l’objet personnel supprimable, afin de préserver le comportement de suppression P07. Le propriétaire reste référencé. Aucun historique antérieur à V017 n’est reconstitué.
+
+Les origines de paiement et droits restent les modèles P11–P13. Les projections d’exploitation ne créent pas de deuxième état financier. Les périodes, devises, inconnus, déduplications et limites sont décrits dans [OPERATIONS.md](OPERATIONS.md). Les politiques de conservation/traitement irréversible restent à valider ; la migration ne purge aucune donnée existante.
+
 ## Données locales et preuves
 
 Les migrations structurelles ne contiennent aucune fixture ni prix. Les références de permission V003/V004/V006/V007/V008/V009/V010/V011 sont distinctes des comptes et données de démonstration. Le chargement explicite local et les fixtures Testcontainers sont séparés, identifiés comme fictifs, réexécutables et interdits en production. Le suivi des commandes et résultats réellement exécutés est dans les preuves [P03](evidence/P03.md), [P04](evidence/P04.md), [P05](evidence/P05.md), [P06](evidence/P06.md), [P07](evidence/P07.md), [P08](evidence/P08.md), [P09](evidence/P09.md) et [P10](evidence/P10.md).

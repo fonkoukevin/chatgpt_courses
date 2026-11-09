@@ -1,0 +1,978 @@
+﻿{
+    "verifiedAt":  "2026-11-09T01:53:47.7870371Z",
+    "scope":  "P15 HTTP/security/PostgreSQL, real isolated Mailpit SMTP, actual Stripe SDK/signature with a loopback provider transport; no external provider credentials or commercial transaction.",
+    "command":  "mvnw.cmd --batch-mode --no-transfer-progress -Dtest=NotificationOutboxIntegrationTest,AdminOperationsHttpIntegrationTest,SchemaIntegrationTest test",
+    "result":  "PASS",
+    "exitCode":  0,
+    "finishedAt":  "2026-11-09T02:52:50+01:00",
+    "mavenDuration":  "02:02",
+    "totals":  {
+                   "tests":  33,
+                   "failures":  0,
+                   "errors":  0,
+                   "skipped":  0
+               },
+    "suites":  [
+                   {
+                       "name":  "com.chatgptcourses.AdminOperationsHttpIntegrationTest",
+                       "tests":  11,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  53.991,
+                       "cases":  [
+                                     {
+                                         "name":  "metricsMatchManualMultiCurrencyFactsAndCsvUsesExactlyTheSamePeriodAndCurrency",
+                                         "seconds":  7.192,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "contentReportUsesExactIdentityAndCorrectionDoesNotCopySupportTextOrRewritePersonalMethods",
+                                         "seconds":  2.293,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "auditIsMetadataOnlyAndKeepsActorDateObjectAndFiltersWithoutPrivateTextOrProviderSecrets",
+                                         "seconds":  0.896,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "durableInboxThenOperationalReconciliationAndRealSmtpRecoveryNeverDuplicateRightsOrConfirmation",
+                                         "seconds":  2.992,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "revokedSupportPermissionWhileWaitingOnTicketCannotSaveAHiddenDraft",
+                                         "seconds":  0.798,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "businessFactsAreTransactionalDeduplicatedAndSurviveDeletionWithoutContainingPersonalText",
+                                         "seconds":  1.367,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "internalNotesAssignmentsAndMeasuredZeroRemainDistinctFromPublicReplyAndUnknownTime",
+                                         "seconds":  2.079,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "operationalOrderFiltersReadOnlyTheSnapshotAndUnpayableReconciliationCannotForgeAnAccess",
+                                         "seconds":  1.34,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "draftsArePerOperatorAndOnlyExplicitIdempotentPublicationCreatesVisibleReplyAndRealMail",
+                                         "seconds":  2.344,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "editorAndLearnerCannotReadOrMutateFinanceWhileDashboardHonorsSourcePermissions",
+                                         "seconds":  1.682,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "concurrentDraftsUseRealEtagsAndStaleTicketRevisionDoesNotDiscardTheDraft",
+                                         "seconds":  0.986,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.notifications.NotificationOutboxIntegrationTest",
+                       "tests":  10,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  17.773,
+                       "cases":  [
+                                     {
+                                         "name":  "smtpDeliveryHoldsNoDatabaseClaimTransactionAndAnotherBusinessEventCanCommit",
+                                         "seconds":  0.492,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "realRegistrationAndRecoveryAreLocalizedReceivedByMailpitAndPurgedAfterDelivery",
+                                         "seconds":  0.998,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "exhaustedTransportIsDeadAndOnlyAnAuthorizedExplicitOperationCanResumeIt",
+                                         "seconds":  1.359,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "anAbandonedLeaseBecomesIndeterminateWithoutAutomaticResendAndRequiresDuplicateAcknowledgement",
+                                         "seconds":  0.307,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "aRealConnectionFailureRetriesWithBackoffWithoutBlockingTheBusinessTransaction",
+                                         "seconds":  1.265,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "encryptionUsesAuthenticatedUniqueNoncesAndThePersistedKeySurvivesANewCipherInstance",
+                                         "seconds":  0.16,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "anExpiredRecoveryPayloadIsPurgedAndCannotBeRequeued",
+                                         "seconds":  2.508,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "registrationAndRecoveryEnqueueAtomicallyAndRollbackNeverLeaksAnEmail",
+                                         "seconds":  0.308,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "futurePersistedCreationCannotBreakClaimRetryOrRealSmtpCompletion",
+                                         "seconds":  0.343,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "concurrentBusinessEventsDeduplicateBeforeSmtpAndBodyChangesConflict",
+                                         "seconds":  0.25,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.SchemaIntegrationTest",
+                       "tests":  12,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  21.625,
+                       "cases":  [
+                                     {
+                                         "name":  "aFreshDatabaseMigratesAndHibernateValidatesWithoutSeedingAccountsOrCommerce",
+                                         "seconds":  0.141,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "upgradingV001PreservesItsExistingJdbcSessionAndAttribute",
+                                         "seconds":  2.232,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "identityConstraintsPreserveUtcAndRevokedPermissionOrigins",
+                                         "seconds":  0.066,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "localizedSlugsAndRevisionPointersCannotCrossTheirIdentityOrLanguage",
+                                         "seconds":  0.08,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "compositionAndPedagogyAreImmutableAfterBottomUpFreeze",
+                                         "seconds":  0.066,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "independentJpaTransactionsRejectAStaleRevisionAndNeverSerializeTheCredentialHash",
+                                         "seconds":  0.044,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "explicitDemoImportIsRepeatableAfterManualChangesAndFreezeAndRejectsUuidCollisions",
+                                         "seconds":  3.877,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "aCompositionInsertWaitingOnAConcurrentFreezeCannotSlipIntoTheFrozenVersion",
+                                         "seconds":  0.074,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "databaseExceptionsKeepSqlStateWithoutLeakingFailingRowDetails",
+                                         "seconds":  0.006,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "upgradingV014PreservesAccountsPermissionsAndSessionsWithoutFinancialOperations",
+                                         "seconds":  2.21,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "upgradingV015PreservesEveryExistingRowAndCreatesNoSupportDataOrAttestation",
+                                         "seconds":  2.57,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "upgradingV016PreservesAllExistingHistoryAndDoesNotInventOperationalEvents",
+                                         "seconds":  2.43,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   }
+               ],
+    "log":  ".runtime/p15-api-target-outbox-second.log",
+    "logSha256":  "fa5971b7a6e4eff1349f1310d9b5037506a6209aff937908cf7a1a26100e38a1",
+    "history":  [
+                    {
+                        "run":  1,
+                        "log":  ".runtime/p15-api-target-first.log",
+                        "exitCode":  1,
+                        "stage":  "testCompile",
+                        "mainSourcesCompiled":  195,
+                        "executedTests":  0,
+                        "mavenDuration":  "28.647 s",
+                        "cause":  "A local mixed String/UUID Map.of fixture inferred an intersection value type rather than the required Map\u003cString,Object\u003e. Its declaration was made explicit."
+                    },
+                    {
+                        "run":  2,
+                        "log":  ".runtime/p15-api-target-second.log",
+                        "exitCode":  1,
+                        "stage":  "test",
+                        "tests":  23,
+                        "failures":  1,
+                        "errors":  1,
+                        "skipped":  0,
+                        "mavenDuration":  "02:00",
+                        "observations":  [
+                                             "Schema12 passed. HTTP11 had one assertion failure and one error.",
+                                             "The method fixture supplied ETag prefix method instead of the established personal-method prefix, causing REVISION_CONFLICT before the ledger assertions.",
+                                             "The short EUR window expected zero but included 2500 from another EUR payment. Relative timestamp ordering was not retained or diagnosed. The endpoint inclusivity test now isolates the sole USD payment, preserving from-inclusive and to-exclusive assertions.",
+                                             "Manual full-period EUR3500/refund400/net3100 and USD3000 values, CSV filters/hash, permissions, draft publication, SMTP recovery and idempotent replay had already passed before those fixture corrections."
+                                         ]
+                    },
+                    {
+                        "log":  ".runtime/p15-api-target-outbox.log",
+                        "exitCode":  1,
+                        "tests":  33,
+                        "failures":  1,
+                        "errors":  0,
+                        "skipped":  0,
+                        "mavenDuration":  "02:13",
+                        "finishedAt":  "2026-11-09T02:48:05+01:00",
+                        "suites":  [
+                                       {
+                                           "name":  "com.chatgptcourses.AdminOperationsHttpIntegrationTest",
+                                           "tests":  11,
+                                           "failures":  0,
+                                           "errors":  0,
+                                           "skipped":  0,
+                                           "seconds":  55.412,
+                                           "failedCases":  [
+
+                                                           ]
+                                       },
+                                       {
+                                           "name":  "com.chatgptcourses.notifications.NotificationOutboxIntegrationTest",
+                                           "tests":  10,
+                                           "failures":  1,
+                                           "errors":  0,
+                                           "skipped":  0,
+                                           "seconds":  18.358,
+                                           "failedCases":  [
+                                                               {
+                                                                   "name":  "exhaustedTransportIsDeadAndOnlyAnAuthorizedExplicitOperationCanResumeIt",
+                                                                   "result":  "FAIL"
+                                                               }
+                                                           ]
+                                       },
+                                       {
+                                           "name":  "com.chatgptcourses.SchemaIntegrationTest",
+                                           "tests":  12,
+                                           "failures":  0,
+                                           "errors":  0,
+                                           "skipped":  0,
+                                           "seconds":  24.326,
+                                           "failedCases":  [
+
+                                                           ]
+                                       }
+                                   ],
+                        "observation":  "The pre-existing exhausted-transport test expected DEAD after Thread.sleep(1150) followed by a one-shot drain, but observed RETRY. Detailed persisted attempts/deadline were not retained after cleanup. The new future-predecessor regression passed."
+                    }
+                ],
+    "preExecutionCorrections":  [
+                                    "The order reconciliation receipt now targets kind ORDER/orderId and preserves the actual job state.",
+                                    "Incident idempotency lookup occurs before the filtered incident projection, permitting the same action receipt after its source reaches SENT. Both are asserted through HTTP in the successful run."
+                                ],
+    "manualDataset":  {
+                          "syntheticOnly":  true,
+                          "eurPaidMinor":  [
+                                               "1000",
+                                               "2500"
+                                           ],
+                          "usdPaidMinor":  [
+                                               "3000"
+                                           ],
+                          "unpaidExcludedMinor":  "500",
+                          "eurConfirmedRefundedMinor":  "400",
+                          "eurNetBeforeCostsMinor":  "3100",
+                          "taxesFeesCostsContributionUnknown":  true,
+                          "noCrossCurrencySum":  true
+                      },
+    "preservation":  {
+                         "migration":  "V016 -\u003e V017",
+                         "newTables":  11,
+                         "newReferenceRoles":  [
+                                                   "OPERATIONS_MANAGER",
+                                                   "OPERATIONS_READER"
+                                               ],
+                         "existingRowsCompared":  true,
+                         "noOperationalBackfill":  true,
+                         "noSeededAccountOrGrant":  true
+                     },
+    "boundaries":  [
+                       "Only names, timings and result metadata were extracted from JUnit; system properties/stdout/payloads are excluded.",
+                       "Provider HTTP is an explicit local transport double. PostgreSQL, the pinned SDK/signature, business services, transactions and SMTP/Mailpit are real.",
+                       "This file does not claim browser, external Stripe, production, deployment or GitHub CI validation.",
+                       "The first two failures remain documented; neither is reclassified as a successful execution."
+                   ],
+    "previousSuccessfulTargets":  [
+                                      {
+                                          "command":  "mvnw.cmd --batch-mode --no-transfer-progress -Dtest=AdminOperationsHttpIntegrationTest,SchemaIntegrationTest test",
+                                          "tests":  23,
+                                          "failures":  0,
+                                          "errors":  0,
+                                          "skipped":  0,
+                                          "exitCode":  0,
+                                          "mavenDuration":  "02:06",
+                                          "finishedAt":  "2026-11-09T02:29:55+01:00",
+                                          "log":  ".runtime/p15-api-target-third.log",
+                                          "suites":  [
+                                                         {
+                                                             "name":  "com.chatgptcourses.AdminOperationsHttpIntegrationTest",
+                                                             "tests":  11,
+                                                             "seconds":  64.479
+                                                         },
+                                                         {
+                                                             "name":  "com.chatgptcourses.SchemaIntegrationTest",
+                                                             "tests":  12,
+                                                             "seconds":  37.405
+                                                         }
+                                                     ]
+                                      }
+                                  ],
+    "outboxCorrection":  {
+                             "firstGlobal":  {
+                                                 "command":  "mvnw.cmd --batch-mode --no-transfer-progress test",
+                                                 "log":  ".runtime/p15-api-global-test.log",
+                                                 "exitCode":  1,
+                                                 "mavenResult":  "BUILD_FAILURE",
+                                                 "mavenDuration":  "10:32",
+                                                 "finishedAt":  "2026-11-09T02:41:39+01:00",
+                                                 "totals":  {
+                                                                "tests":  233,
+                                                                "failures":  0,
+                                                                "errors":  1,
+                                                                "skipped":  0
+                                                            },
+                                                 "suites":  [
+                                                                {
+                                                                    "name":  "com.chatgptcourses.AccessPolicyTest",
+                                                                    "tests":  5,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  0.538,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.AccountEvidenceHttpIntegrationTest",
+                                                                    "tests":  16,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  86.565,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.AdminOperationsHttpIntegrationTest",
+                                                                    "tests":  11,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  30.724,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.assets.config.AssetStorageConfigurationTest",
+                                                                    "tests":  1,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  0.012,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.AssetServiceIntegrationTest",
+                                                                    "tests":  8,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  24.88,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.CheckoutIntegrationTest",
+                                                                    "tests":  9,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  17.886,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.CommerceHttpIntegrationTest",
+                                                                    "tests":  10,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  30.484,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.EditorialHttpIntegrationTest",
+                                                                    "tests":  7,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  15.577,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.EditorialServiceIntegrationTest",
+                                                                    "tests":  8,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  12.13,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.EntitlementAccessIntegrationTest",
+                                                                    "tests":  5,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  17.512,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.FoundationIntegrationTest",
+                                                                    "tests":  5,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  10.616,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.HTTPAuthIntegrationTest",
+                                                                    "tests":  8,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  14.515,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.IdentityServiceIntegrationTest",
+                                                                    "tests":  6,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  14.213,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.LearningHttpIntegrationTest",
+                                                                    "tests":  9,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  31.452,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.LearningServiceIntegrationTest",
+                                                                    "tests":  8,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  21.175,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.media.VideoHttpIntegrationTest",
+                                                                    "tests":  8,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  32.001,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.MethodServiceIntegrationTest",
+                                                                    "tests":  6,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  12.699,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.notifications.NotificationOutboxIntegrationTest",
+                                                                    "tests":  9,
+                                                                    "failures":  0,
+                                                                    "errors":  1,
+                                                                    "skipped":  0,
+                                                                    "seconds":  17.042,
+                                                                    "failedCases":  [
+                                                                                        {
+                                                                                            "name":  "smtpDeliveryHoldsNoDatabaseClaimTransactionAndAnotherBusinessEventCanCommit",
+                                                                                            "result":  "ERROR",
+                                                                                            "exceptionType":  "org.springframework.dao.DataIntegrityViolationException"
+                                                                                        }
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.OfferServiceIntegrationTest",
+                                                                    "tests":  8,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  14.565,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.payments.config.StripeConfigurationTest",
+                                                                    "tests":  3,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  0.012,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.payments.inbox.PaymentInboxHttpIntegrationTest",
+                                                                    "tests":  13,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  42.377,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.payments.refunds.RefundConfigurationTest",
+                                                                    "tests":  2,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  0.142,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.PersonalMethodsHttpIntegrationTest",
+                                                                    "tests":  7,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  18.766,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.ProjectServiceIntegrationTest",
+                                                                    "tests":  8,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  17.009,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.ProjectsHttpIntegrationTest",
+                                                                    "tests":  9,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  21.74,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.PublicCatalogueHttpIntegrationTest",
+                                                                    "tests":  6,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  25.563,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.PublicCatalogueIntegrationTest",
+                                                                    "tests":  6,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  15.838,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.RefundHttpIntegrationTest",
+                                                                    "tests":  14,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  54.713,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.SchemaIntegrationTest",
+                                                                    "tests":  12,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  20.755,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.shared.http.HttpContractTest",
+                                                                    "tests":  5,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  0.297,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                },
+                                                                {
+                                                                    "name":  "com.chatgptcourses.shared.money.MoneyValidationTest",
+                                                                    "tests":  1,
+                                                                    "failures":  0,
+                                                                    "errors":  0,
+                                                                    "skipped":  0,
+                                                                    "seconds":  0.013,
+                                                                    "failedCases":  [
+
+                                                                                    ]
+                                                                }
+                                                            ],
+                                                 "observedConstraint":  "notification_outbox_check",
+                                                 "observedPath":  "NotificationWorker.claim updated_at=clock_timestamp",
+                                                 "diagnosis":  "The claim changes only updated_at among the finite/date-order fields of this CHECK. Persisted created_at and expires_at were already valid. The new updated_at was therefore below created_at. The physical clock cause was not diagnosed; the isolated database had been cleaned."
+                                             },
+                             "sourceFiles":  [
+                                                 "notifications/NotificationWorker.java",
+                                                 "notifications/NotificationOperations.java"
+                                             ],
+                             "behavior":  "Persisted updated_at never falls below created_at or previous updated_at. SENT/purged_at/updated_at share one clamped SQL timestamp. Lease, retry schedule and expiry deadlines are unchanged. No DDL or historical row rewrite.",
+                             "regression":  "A valid explicitly inserted future predecessor uses real AES-GCM ciphertext and actual SMTP failure, authorized requeue and Mailpit acceptance; checks immutable creation, bounded timestamps, two attempts and one notification/mail.",
+                             "fixedSleepObservation":  "The first corrected 33-test run observed RETRY after an old fixed1150ms sleep plus one-shot drain. No detailed persisted attempt/deadline survived cleanup; no physical timing cause is claimed.",
+                             "testWait":  "The corrected old recovery and exhaustion tests poll the real worker for at most8seconds, preserving backoff/DEAD/two-attempt/permission assertions. Permanent delay still fails with status, attempts, nextAttempt, database time and due metadata only."
+                         },
+    "subsequentTargetChecks":  [
+                                   {
+                                       "log":  ".runtime/p15-api-role-fixtures-target.log",
+                                       "exitCode":  1,
+                                       "tests":  58,
+                                       "failures":  0,
+                                       "errors":  1,
+                                       "skipped":  0,
+                                       "mavenDuration":  "03:37",
+                                       "finishedAt":  "2026-11-09T03:12:30+01:00",
+                                       "suites":  [
+                                                      {
+                                                          "name":  "com.chatgptcourses.AdminOperationsHttpIntegrationTest",
+                                                          "tests":  11,
+                                                          "failures":  0,
+                                                          "errors":  0,
+                                                          "skipped":  0,
+                                                          "seconds":  61.098,
+                                                          "failedCases":  [
+
+                                                                          ]
+                                                      },
+                                                      {
+                                                          "name":  "com.chatgptcourses.RefundHttpIntegrationTest",
+                                                          "tests":  14,
+                                                          "failures":  0,
+                                                          "errors":  1,
+                                                          "skipped":  0,
+                                                          "seconds":  55.628,
+                                                          "failedCases":  [
+                                                                              {
+                                                                                  "name":  "contradictoryFactsAfterConfirmationKeepConsumedMoneyAndOriginsRevoked",
+                                                                                  "result":  "ERROR"
+                                                                              }
+                                                                          ]
+                                                      },
+                                                      {
+                                                          "name":  "com.chatgptcourses.HTTPAuthIntegrationTest",
+                                                          "tests":  8,
+                                                          "failures":  0,
+                                                          "errors":  0,
+                                                          "skipped":  0,
+                                                          "seconds":  15.585,
+                                                          "failedCases":  [
+
+                                                                          ]
+                                                      },
+                                                      {
+                                                          "name":  "com.chatgptcourses.EditorialHttpIntegrationTest",
+                                                          "tests":  7,
+                                                          "failures":  0,
+                                                          "errors":  0,
+                                                          "skipped":  0,
+                                                          "seconds":  21.122,
+                                                          "failedCases":  [
+
+                                                                          ]
+                                                      },
+                                                      {
+                                                          "name":  "com.chatgptcourses.IdentityServiceIntegrationTest",
+                                                          "tests":  6,
+                                                          "failures":  0,
+                                                          "errors":  0,
+                                                          "skipped":  0,
+                                                          "seconds":  15.015,
+                                                          "failedCases":  [
+
+                                                                          ]
+                                                      },
+                                                      {
+                                                          "name":  "com.chatgptcourses.SchemaIntegrationTest",
+                                                          "tests":  12,
+                                                          "failures":  0,
+                                                          "errors":  0,
+                                                          "skipped":  0,
+                                                          "seconds":  21.556,
+                                                          "failedCases":  [
+
+                                                                          ]
+                                                      }
+                                                  ],
+                                       "observation":  "The deterministic future role-revocation fixture passed. A different existing refund contradiction case encountered stripe_event_inbox_check1 in RefundWorker.failed. Its date-order invariant requires updated_at\u003e=created_at; the initial caught RuntimeException details were not retained. No physical clock cause is claimed."
+                                   },
+                                   {
+                                       "log":  ".runtime/p15-api-target-inbox-final.log",
+                                       "exitCode":  1,
+                                       "tests":  60,
+                                       "failures":  1,
+                                       "errors":  0,
+                                       "skipped":  0,
+                                       "mavenDuration":  "03:41",
+                                       "finishedAt":  "2026-11-09T03:24:20+01:00",
+                                       "suites":  [
+                                                      {
+                                                          "name":  "com.chatgptcourses.AdminOperationsHttpIntegrationTest",
+                                                          "tests":  11,
+                                                          "failures":  0,
+                                                          "errors":  0,
+                                                          "skipped":  0,
+                                                          "seconds":  51.924,
+                                                          "failedCases":  [
+
+                                                                          ]
+                                                      },
+                                                      {
+                                                          "name":  "com.chatgptcourses.notifications.NotificationOutboxIntegrationTest",
+                                                          "tests":  10,
+                                                          "failures":  0,
+                                                          "errors":  0,
+                                                          "skipped":  0,
+                                                          "seconds":  17.336,
+                                                          "failedCases":  [
+
+                                                                          ]
+                                                      },
+                                                      {
+                                                          "name":  "com.chatgptcourses.payments.inbox.PaymentInboxHttpIntegrationTest",
+                                                          "tests":  13,
+                                                          "failures":  0,
+                                                          "errors":  0,
+                                                          "skipped":  0,
+                                                          "seconds":  41.887,
+                                                          "failedCases":  [
+
+                                                                          ]
+                                                      },
+                                                      {
+                                                          "name":  "com.chatgptcourses.RefundHttpIntegrationTest",
+                                                          "tests":  14,
+                                                          "failures":  1,
+                                                          "errors":  0,
+                                                          "skipped":  0,
+                                                          "seconds":  56.663,
+                                                          "failedCases":  [
+                                                                              {
+                                                                                  "name":  "dashboardPartialWaitsForExplicitAccessDecisionAndCumulativeFullRevokesOnlyThatOrder",
+                                                                                  "result":  "FAIL"
+                                                                              }
+                                                                          ]
+                                                      },
+                                                      {
+                                                          "name":  "com.chatgptcourses.SchemaIntegrationTest",
+                                                          "tests":  12,
+                                                          "failures":  0,
+                                                          "errors":  0,
+                                                          "skipped":  0,
+                                                          "seconds":  21.099,
+                                                          "failedCases":  [
+
+                                                                          ]
+                                                      }
+                                                  ],
+                                       "observation":  "Future signed envelope claim/apply/processed and SDK retrieval failure paths passed. The independent foreign purchase ended with covers=false despite operation PREPARED, reserved100 and revoked0 assertions passing. The isolated database was cleaned before diagnosis; no cause or fixture JVM issue is claimed."
+                                   },
+                                   {
+                                       "log":  ".runtime/p15-access-diagnostic-case.log",
+                                       "result":  "PASS",
+                                       "exitCode":  null,
+                                       "exitCodeObservation":  "Original execution session was unavailable after context recovery; BUILD SUCCESS and JUnit one-test/zero-failure results were observed concordantly.",
+                                       "tests":  1,
+                                       "failures":  0,
+                                       "errors":  0,
+                                       "skipped":  0,
+                                       "seconds":  44.955,
+                                       "mavenDuration":  "01:06",
+                                       "finishedAt":  "2026-11-09T03:31:52+01:00",
+                                       "observation":  "The foreign-purchase refusal did not reproduce in the single case; no lazy metadata was collected."
+                                   },
+                                   {
+                                       "log":  ".runtime/p15-access-diagnostic-class.log",
+                                       "exitCode":  1,
+                                       "tests":  14,
+                                       "failures":  1,
+                                       "errors":  0,
+                                       "skipped":  0,
+                                       "seconds":  77.834,
+                                       "finishedAt":  "2026-11-09T03:35:07+01:00",
+                                       "mavenDuration":  "01:25",
+                                       "failedCases":  [
+                                                           "partialConfirmationAndDuplicateSignedRefundEventsApplyOnlyTheSelectedOriginOnce"
+                                                       ],
+                                       "observation":  "The original independent foreign purchase assertion passed without collecting lazy diagnostics. Another expected retained A access returned false at the first covers call in partialConfirmationAndDuplicateSignedRefundEventsApplyOnlyTheSelectedOriginOnce. That assertion had no diagnostic yet; the isolated database was cleaned. Cause unknown; no policy/clock/financial assertion changed and no package or global run followed."
+                                   },
+                                   {
+                                       "log":  ".runtime/p15-access-diagnostic-class-second.log",
+                                       "result":  "PASS",
+                                       "exitCode":  0,
+                                       "tests":  14,
+                                       "failures":  0,
+                                       "errors":  0,
+                                       "skipped":  0,
+                                       "seconds":  78.572,
+                                       "mavenDuration":  "01:40",
+                                       "finishedAt":  "2026-11-09T03:40:08+01:00",
+                                       "observation":  "All seven expected retained-access assertions use one real covers call each. Safe PostgreSQL predicates are collected only after a false result; this run produced none. Both earlier refusals remain unexplained, not corrected by a policy or fixture date change."
+                                   }
+                               ],
+    "latestValidationState":  "GLOBAL_PASS_UNRESOLVED_ACCESS_FOLLOWUP",
+    "inboxClockCorrection":  {
+                                 "sourceFiles":  [
+                                                     "payments/refunds/RefundWorker.java",
+                                                     "payments/inbox/PaymentInboxWorker.java",
+                                                     "payments/inbox/PaymentInboxOperations.java",
+                                                     "payments/inbox/PaymentReconciler.java (V014 job updates only)",
+                                                     "payments/refunds/RefundService.java (V014 job reset only)"
+                                                 ],
+                                 "behavior":  "Metadata updated_at is bounded by immutable created_at and its prior value. Terminal processed_at/updated_at share one PostgreSQL instant. Lease, retry deadlines, states, constraints and V014/V015 migrations are unchanged.",
+                                 "regression":  "An existing refund case verifies actual signed future-persisted envelopes through claim/apply/PROCESSED and real SDK GET-failure/RETRY, preserving financial assertions and duplicate-event idempotence."
+                             },
+    "unresolvedAccessFollowUp":  {
+                                     "status":  "OPEN_CAUSE_UNKNOWN",
+                                     "occurrences":  [
+                                                         {
+                                                             "log":  ".runtime/p15-api-target-inbox-final.log",
+                                                             "case":  "dashboardPartialWaitsForExplicitAccessDecisionAndCumulativeFullRevokesOnlyThatOrder",
+                                                             "fact":  "Independent real Checkout-to-READY purchase returned covers=false after PREPARED/reserved100/revoked0 checks passed. Database cleaned before diagnosis."
+                                                         },
+                                                         {
+                                                             "log":  ".runtime/p15-access-diagnostic-class.log",
+                                                             "case":  "partialConfirmationAndDuplicateSignedRefundEventsApplyOnlyTheSelectedOriginOnce",
+                                                             "fact":  "Expected retained A access returned covers=false after partial refund of B. That assertion lacked the newly added lazy diagnostic at this run; database cleaned before diagnosis."
+                                                         }
+                                                     ],
+                                     "guard":  "No retries of covers, authorization/financial relaxation, grant antedating or asserted clock/JVM cause. Keep the issue for P17/P19 before delivery.",
+                                     "diagnostic":  "All retained-access assertions now collect identifiers-free booleans/counts and PostgreSQL period clocks only after a single false call; pinned course parents are included for activities. Those clocks cannot prove the earlier instant of the original covers query."
+                                 },
+    "latestPackagedJar":  {
+                              "command":  "mvnw.cmd --batch-mode --no-transfer-progress -DskipTests package",
+                              "result":  "PASS",
+                              "exitCode":  0,
+                              "log":  ".runtime/p15-api-package-diagnostic-final.log",
+                              "mavenSeconds":  11.226,
+                              "finishedAt":  "2026-11-09T03:40:37+01:00",
+                              "bytes":  94595453,
+                              "sha256":  "A8BBA5D5F95ACE755DE1E7748810B5F2413DC15AE8C76A8D6E77321AED6C086C",
+                              "testsExecutedByPackage":  0,
+                              "note":  "Browser harness copies this artifact. The subsequent global test command does not repackage it."
+                          },
+    "finalGlobalVerification":  {
+                                    "evidence":  "P15-api-global-checks.json",
+                                    "result":  "PASS",
+                                    "exitCode":  0,
+                                    "tests":  234,
+                                    "failures":  0,
+                                    "errors":  0,
+                                    "skipped":  0,
+                                    "finishedAt":  "2026-11-09T03:51:26+01:00",
+                                    "mavenDuration":  "10:17",
+                                    "diagnosticFilesCreated":  0,
+                                    "unexplainedAccessOccurrencesRemainOpen":  2
+                                }
+}

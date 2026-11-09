@@ -1,0 +1,42 @@
+{
+  "verifiedAt": "2026-11-09T01:46:01.760Z",
+  "node": "v24.22.2",
+  "npm": "11.19.1",
+  "checks": [
+    {
+      "command": ".\\scripts\\courses.cmd run lint",
+      "exitCode": 0,
+      "durationMs": 17712
+    },
+    {
+      "command": ".\\scripts\\courses.cmd run typecheck",
+      "exitCode": 0,
+      "durationMs": 6695
+    },
+    {
+      "command": ".\\scripts\\courses.cmd run typecheck:browser",
+      "exitCode": 0,
+      "durationMs": 7809
+    },
+    {
+      "command": ".\\scripts\\courses.cmd run api:check",
+      "exitCode": 0,
+      "durationMs": 3300
+    },
+    {
+      "command": ".\\scripts\\courses.cmd run verify:client",
+      "exitCode": 0,
+      "durationMs": 8351,
+      "tests": 112
+    },
+    {
+      "command": ".\\scripts\\courses.cmd run build:web",
+      "exitCode": 0,
+      "durationMs": 18817
+    }
+  ],
+  "allPassed": true,
+  "buildUsesExistingLockedDependencies": true,
+  "githubCiExecuted": false,
+  "secretsPrinted": false
+}

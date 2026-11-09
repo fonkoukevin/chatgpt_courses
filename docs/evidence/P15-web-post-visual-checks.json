@@ -1,0 +1,31 @@
+{
+  "verifiedAt": "2026-11-09T01:56:12.184Z",
+  "node": "v24.22.2",
+  "npm": "11.19.1",
+  "checks": [
+    {
+      "command": ".\\scripts\\courses.cmd run lint",
+      "exitCode": 0,
+      "durationMs": 23013
+    },
+    {
+      "command": ".\\scripts\\courses.cmd run typecheck",
+      "exitCode": 0,
+      "durationMs": 10770
+    },
+    {
+      "command": ".\\scripts\\courses.cmd run typecheck:browser",
+      "exitCode": 0,
+      "durationMs": 10714
+    },
+    {
+      "command": ".\\scripts\\courses.cmd run build:web",
+      "exitCode": 0,
+      "durationMs": 24059
+    }
+  ],
+  "allPassed": true,
+  "buildUsesExistingLockedDependencies": true,
+  "githubCiExecuted": false,
+  "secretsPrinted": false
+}

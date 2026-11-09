@@ -1,0 +1,142 @@
+{
+  "runId": "2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab",
+  "completedAt": "2026-11-09T02:45:24.867Z",
+  "selection": {
+    "grep": null,
+    "repeatEach": 1
+  },
+  "result": "passed",
+  "cleanupConfirmed": true,
+  "initialRuntimeFlags": {
+    "stripeEnabled": true,
+    "paymentWorkerEnabled": false,
+    "refundWorkerEnabled": true,
+    "notificationWorkerEnabled": true
+  },
+  "finalRuntimeFlags": {
+    "stripeEnabled": true,
+    "paymentWorkerEnabled": true,
+    "refundWorkerEnabled": true,
+    "notificationWorkerEnabled": true
+  },
+  "isolatedPostgres": {
+    "image": "postgres:18.6@sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42",
+    "tmpfs": true,
+    "stopped": true
+  },
+  "isolatedServices": [
+    {
+      "kind": "s3",
+      "image": "chrislusf/seaweedfs:4.52@sha256:57877e32bb90073b37dc109b438ba66e84fd5ed9ced5f5c04f56444ef243ce59",
+      "tmpfs": true,
+      "stopped": true,
+      "observation": {
+        "available": true,
+        "configuredVolumeMax": 24,
+        "maxSlots": [
+          24,
+          24
+        ],
+        "freeSlots": [
+          17
+        ],
+        "collectionCount": 1,
+        "noFreeVolumesObserved": false,
+        "noWritableVolumesObserved": false,
+        "logsAvailable": true
+      }
+    },
+    {
+      "kind": "mailpit",
+      "image": "axllent/mailpit:v1.33.0@sha256:9b3a463be15354c0f0eba91697d80e3e0d8a5623ef0e627cacc836bc17fd5231",
+      "tmpfs": true,
+      "stopped": true
+    }
+  ],
+  "controlledProvider": {
+    "kind": "controlled-stripe-network",
+    "externalStripe": false,
+    "capabilities": {
+      "checkout": true,
+      "refunds": true
+    },
+    "requests": 86,
+    "createCalls": 7,
+    "sessions": 7,
+    "stopped": true,
+    "requestPaths": [
+      {
+        "method": "GET",
+        "path": "/v1/account",
+        "status": 200,
+        "count": 3
+      },
+      {
+        "method": "POST",
+        "path": "/v1/checkout/sessions",
+        "status": 200,
+        "count": 7
+      },
+      {
+        "method": "GET",
+        "path": "/v1/checkout/sessions/:sessionId",
+        "status": 200,
+        "count": 16
+      },
+      {
+        "method": "GET",
+        "path": "/v1/checkout/sessions/:sessionId/line_items",
+        "status": 200,
+        "count": 16
+      },
+      {
+        "method": "GET",
+        "path": "/v1/payment_intents/:paymentIntentId",
+        "status": 200,
+        "count": 22
+      },
+      {
+        "method": "GET",
+        "path": "/v1/refunds",
+        "status": 200,
+        "count": 22
+      }
+    ],
+    "refunds": {
+      "createCalls": 0,
+      "stableKeys": 0,
+      "localRecords": 0,
+      "records": 0,
+      "successful": 0,
+      "ambiguityCount": 0,
+      "externalStripe": false
+    }
+  },
+  "processes": [
+    {
+      "name": "web",
+      "pid": 121284,
+      "terminated": true
+    },
+    {
+      "name": "api",
+      "pid": 121672,
+      "terminated": true
+    },
+    {
+      "name": "playwright",
+      "pid": 59632,
+      "terminated": true
+    },
+    {
+      "name": "api",
+      "pid": 114756,
+      "terminated": true
+    },
+    {
+      "name": "api",
+      "pid": 122332,
+      "terminated": true
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "verifiedAt": "2026-11-09T02:50:45.115Z",
+  "finalJar": {
+    "sizeBytes": 94595453,
+    "sha256": "a8bba5d5f95ace755de1e7748810b5f2413dc15ae8c76a8d6e77321aed6c086c"
+  },
+  "browserCopies": [
+    {
+      "runId": "2026-11-09T02-41-21-003Z-b1603f2a-5d5c-45a3-abcc-c6273e0c05c9",
+      "sha256": "a8bba5d5f95ace755de1e7748810b5f2413dc15ae8c76a8d6e77321aed6c086c"
+    }
+  ],
+  "allFinalBrowserCopiesMatch": true,
+  "sourceAndBuiltMigrationsMatch": true,
+  "migrationCount": 17,
+  "lastMigration": "V017__operational_workspaces_audit_and_business_facts.sql",
+  "applicationClassAndResourceFilesChecked": 749,
+  "privateConfigurationPackaged": false,
+  "privateEntriesAbsent": true,
+  "knownPrivateValuesAbsentFromApplicationClasses": true,
+  "secretsPrinted": false
+}

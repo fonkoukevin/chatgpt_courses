@@ -1,0 +1,24 @@
+{
+  "verifiedAt": "2026-11-09T01:56:46.642Z",
+  "buildId": "h5wTm_I96qyzTH40RBfND",
+  "checks": [
+    {
+      "file": "apps/web/src/components/operations/offers.tsx",
+      "sourceMatchesBuild": true,
+      "sha256": "445e8a7a95d057909dca1b2c5e204db2bf6ec1fb6ddf680a523a04fcf3a591ca"
+    },
+    {
+      "file": "apps/web/src/lib/api/operations-client.ts",
+      "sourceMatchesBuild": true,
+      "sha256": "99ea6046a8e5de8e3097d05cc70ed7970f4f01bda4310a9a28a6d227a845e570"
+    },
+    {
+      "file": "apps/web/src/app/api/v1/[...path]/route.ts",
+      "sourceMatchesBuild": true,
+      "sha256": "b67f488340a95b809328986b0af3050aaa0e74819fe0f52dfee9da9d495c6e45"
+    }
+  ],
+  "readinessGuardIncluded": true,
+  "verifiedApplicationCsvSizeIncluded": true,
+  "secretsPrinted": false
+}

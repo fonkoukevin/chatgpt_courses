@@ -1,16 +1,17 @@
 # État réel du projet
 
-Dernière mise à jour : **9 novembre 2026**. **P14 validé localement**, après P04–P13 validés dans l’ordre et intégration Stripe TEST externe observée pour P12. Aucun ancien prototype repris, aucun mode LIVE ni déploiement.
+Dernière mise à jour : **9 novembre 2026**. **P15 validé localement**, après P04–P14 validés dans l’ordre et intégration Stripe TEST externe observée pour P12. Aucun ancien prototype repris, aucun mode LIVE ni déploiement.
 
 ## Situation courante
 
-- **P14 validé localement** : compte E13 FR/EN, aide persistée/pièces choisies, demandes de données traçables et vraies attestations HTML privées de participation déclarée. Critères serveur, idempotence, absence de revue humaine et instantanés historiques vérifiés. [Résultat, corrections et limites](evidence/P14.md).
-- **221 tests Java**, client **104**, Chromium P14 **12/12** puis ciblé contexte **2/2**, régression P13 **6/6** ; builds, OpenAPI/types, lint et types réussis. **48 captures examinées**. Ciblés non additionnés au global. [API](evidence/P14-api-final-checks.json), [web](evidence/P14-web-final-checks.json), [navigateur](evidence/P14-browser-checks.json), [régression](evidence/P14-refund-regression-checks.json).
-- Schéma **V001–V016** : migration sans seed, lignes des59 tables originales préservées, aucun volume supprimé. Défaut intermittent de chronologie corrigé sans nouvelle migration ni réécriture d’historique, avec deux régressions PostgreSQL. [Migration](evidence/P14-upgrade.json), [préservation](evidence/P14-upgrade-preservation.json).
-- Développement réellement rétabli sur `http://localhost:3000/fr` et `/en`, proxy Spring200 ; privé anonyme401, webhook non signé400. Listener **Ready TEST**, API2026-10-28.endive, processus vivants. Configuration privée et fichier Next utilisateur préservés. [HTTP](evidence/P14-final-development-check.json), [restauration](evidence/P14-development-restoration.json), [audit](evidence/P14-private-audit.json).
-- Windows natif et versions verrouillées conservés, aucune dépendance ajoutée. Git main local, code P14 `2d14628`, preuves séparées ; aucun push, remboursement Stripe externe, mode LIVE, déploiement ou CI GitHub exécuté. Les justificatifs commerciaux absents ne sont pas fabriqués.
-- P12 reste validé localement avec vrai Checkout TEST. **Deux refus historiques après READY toujours de cause inconnue**, non reproduits, aucun correctif revendiqué : garde P17/P19 avant livraison. [Suivi](evidence/P12-access-follow-up.md). La limite antérieure P09 reste dans sa preuve.
-- Conservation/traitements irréversibles, documents commerciaux, conditions/prix/fiscalité/durée et horaires/délais d’aide restent à valider avant activation concernée ou vente. Demandes WAITING_POLICY persistées, aucun effacement automatique. **Prochain lot : P15**, non commencé.
+- **P15 validé localement** : exploitation FR/EN, commandes/instantanés, reprises autorisées, assistance interne et publication explicite, dossiers éditoriaux, audit expurgé et mesures/CSV multidevise. Aucune note interne ou brouillon envoyé comme réponse. [Résultat, corrections et limites](evidence/P15.md).
+- **234 tests Java**, client **112**, Chromium P15 **6/6** et régression paiement **8/8** ; builds, OpenAPI/types et lint réussis. Les20 captures P15 sont examinées ; sur27 captures de régression, huit sont examinées et19 ne le sont pas. [API](evidence/P15-api-global-checks.json), [web](evidence/P15-web-final-checks.json), [navigateur](evidence/P15-browser-checks.json), [régression](evidence/P15-payments-regression-checks.json). Ciblés non additionnés au global.
+- Schéma **V001–V017** : migration sans seed, lignes des67 tables antérieures préservées, aucun volume supprimé. Corrections ciblées des dates outbox/inbox et fixtures vérifiées sans modifier les migrations antérieures, contraintes ou délais. [Migration](evidence/P15-upgrade.json), [préservation](evidence/P15-upgrade-preservation.json), [artefact commun aux recettes](evidence/P15-artifact-check.json).
+- Applications et listener TEST temporairement arrêtés par contrôle de propriété jusqu’à la fin du batch autorisé ; PostgreSQL/Mailpit partagés et volumes conservés. Configuration privée et fichier Next utilisateur préservés. Audit final :1248 fichiers et54 fichiers de build navigateur sans valeur privée connue. [Audit](evidence/P15-private-audit.json).
+- Windows natif et versions verrouillées conservés, aucune dépendance ajoutée. Git main local, code P15 `32f0334` ; aucun push, remboursement Stripe externe, mode LIVE, déploiement ou CI GitHub exécuté. Les justificatifs commerciaux absents ne sont pas fabriqués.
+- P12 reste validé localement avec vrai Checkout TEST. **Deux refus historiques après READY et deux refus distincts observés en tests P15 restent de cause inconnue** ; les passages ultérieurs réussis ne démontrent aucun correctif de ces causes. Garde P17/P19 avant livraison du parcours commercial : [P12](evidence/P12-access-follow-up.md), [P15](evidence/P15-access-follow-up.md). La limite antérieure P09 reste dans sa preuve.
+- Conservation/traitements irréversibles, documents commerciaux, conditions/prix/fiscalité/durée et horaires/délais d’aide restent à valider avant activation concernée ou vente. Demandes WAITING_POLICY persistées, aucun effacement automatique.
+- **Mandat P15→P19 dans l’ordre ; prochaine phase P16 à faire** : bilingue et SEO, avec les gardes commerciales ci-dessus conservées jusqu’à leur vérification P17/P19.
 
 ## Phases
 
@@ -31,7 +32,7 @@ Dernière mise à jour : **9 novembre 2026**. **P14 validé localement**, après
 | P12 | Validé localement | Checkout fournisseur TEST1/1, local8/8, accès5/5,30captures examinées ; incident historique suivi P17/P19, aucun LIVE ; [preuves](evidence/P12.md) |
 | P13 | Validé localement | Java203, client91, Chromium6/6+ciblé1/1, régression8/8,42captures, upgrade préservé ; [preuves](evidence/P13.md) |
 | P14 | Validé localement | Java221, client104, Chromium12/12+ciblé2/2, régression6/6,48captures, migration/restauration préservées ; [preuve](evidence/P14.md) |
-| P15 | À faire | Administration d’exploitation |
+| P15 | Validé localement | Java234, client112, Chromium6/6/clavier et régression paiement8/8, upgrade préservé ; incidents d’accès ouverts P17/P19 ; [preuve](evidence/P15.md) |
 | P16 | À faire | FR/EN et SEO |
 | P17 | À faire | Qualité transversale |
 | P18 | À faire | Contenus et offre prête |
@@ -45,6 +46,6 @@ Dernière mise à jour : **9 novembre 2026**. **P14 validé localement**, après
 
 ## Dernier lot
 
-P14 raccorde le compte, l’aide et les attestations aux services existants. Propriété, preuves déclaratives, documents réels, conflits/réponses retardées, incidents SMTP et ordre causal des historiques sont vérifiés. Les politiques absentes bloquent leur activation, pas les fonctions déjà contrôlées. Prochaine instruction : `prompts/P15_ADMIN_EXPLOITATION.txt`.
+P15 raccorde les outils d’exploitation aux services réels et à leurs permissions, conserve les instantanés et distingue brouillon, réponse, note interne, mesure connue et inconnue. Global234 et recettes sur le même JAR réussis ; historiques d’échecs conservés et incidents d’accès toujours ouverts avant livraison commerciale. Prochaine instruction : `prompts/P16_BILINGUE_SEO.txt`.
 
 Garder ce suivi court ; détailler les commandes et limites dans `docs/evidence/Pxx.md`. Une reprise part des fichiers et preuves présents, sans supposer l’historique de conversation.

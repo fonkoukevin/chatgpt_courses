@@ -1,0 +1,231 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\scripts\\..\\.tools\\node-v24.22.2-win-x64\\node.exe",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts",
+      "--grep",
+      "fr · tableau"
+    ],
+    "configFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts",
+    "rootDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 1200000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/.runtime/browser-2026-11-09T01-35-57-917Z-6bff0111-4a49-480d-9005-c3abfa02dedf/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/operations.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T01-35-57-917Z-6bff0111-4a49-480d-9005-c3abfa02dedf\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "snapshotDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/operations.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3101",
+          "browserName": "chromium",
+          "headless": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "actionTimeout": 10000,
+          "navigationTimeout": 20000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off",
+          "serviceWorkers": "block"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\docs\\evidence\\P15-browser\\2026-11-09T01-35-57-917Z-6bff0111-4a49-480d-9005-c3abfa02dedf\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "operations.spec.ts",
+      "file": "operations.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "P15 · exploitation réelle, sans action fournisseur externe",
+          "file": "operations.spec.ts",
+          "line": 11,
+          "column": 6,
+          "specs": [
+            {
+              "title": "fr · tableau de bord, filtres et métriques",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\operations.spec.ts",
+                        "line": 11,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 2734,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mNaN\u001b[39m\nReceived: \u001b[31m5447\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mNaN\u001b[39m\nReceived: \u001b[31m5447\u001b[39m\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\operations.spec.ts:35:58",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\operations.spec.ts",
+                          "column": 58,
+                          "line": 35
+                        },
+                        "snippet": " \u001b[90m 33 |\u001b[39m     \u001b[36mawait\u001b[39m test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mattach(\u001b[32m\"csv-http-metadata\"\u001b[39m\u001b[33m,\u001b[39m { body\u001b[33m:\u001b[39m \u001b[33mBuffer\u001b[39m\u001b[33m.\u001b[39mfrom(\u001b[33mJSON\u001b[39m\u001b[33m.\u001b[39mstringify({ status\u001b[33m:\u001b[39m csv\u001b[33m.\u001b[39mstatus()\u001b[33m,\u001b[39m contentType\u001b[33m:\u001b[39m csv\u001b[33m.\u001b[39mheaders()[\u001b[32m\"content-type\"\u001b[39m]\u001b[33m,\u001b[39m contentLength\u001b[33m:\u001b[39m csv\u001b[33m.\u001b[39mheaders()[\u001b[32m\"content-length\"\u001b[39m] \u001b[33m??\u001b[39m \u001b[36mnull\u001b[39m\u001b[33m,\u001b[39m contentEncoding\u001b[33m:\u001b[39m csv\u001b[33m.\u001b[39mheaders()[\u001b[32m\"content-encoding\"\u001b[39m] \u001b[33m??\u001b[39m \u001b[36mnull\u001b[39m\u001b[33m,\u001b[39m disposition\u001b[33m:\u001b[39m csv\u001b[33m.\u001b[39mheaders()[\u001b[32m\"content-disposition\"\u001b[39m]\u001b[33m,\u001b[39m cacheControl\u001b[33m:\u001b[39m csv\u001b[33m.\u001b[39mheaders()[\u001b[32m\"cache-control\"\u001b[39m]\u001b[33m,\u001b[39m digestPresent\u001b[33m:\u001b[39m \u001b[35m/^[a-f0-9]{64}$/\u001b[39m\u001b[33m.\u001b[39mtest(csv\u001b[33m.\u001b[39mheaders()[\u001b[32m\"x-content-sha256\"\u001b[39m] \u001b[33m??\u001b[39m \u001b[32m\"\"\u001b[39m) }))\u001b[33m,\u001b[39m contentType\u001b[33m:\u001b[39m \u001b[32m\"application/json\"\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 34 |\u001b[39m     expect(csv\u001b[33m.\u001b[39mheaders()[\u001b[32m\"cache-control\"\u001b[39m])\u001b[33m.\u001b[39mtoContain(\u001b[32m\"no-store\"\u001b[39m)\u001b[33m;\u001b[39m expect(csv\u001b[33m.\u001b[39mheaders()[\u001b[32m\"content-type\"\u001b[39m])\u001b[33m.\u001b[39mtoContain(\u001b[32m\"text/csv\"\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 35 |\u001b[39m     \u001b[36mconst\u001b[39m bytes \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m csv\u001b[33m.\u001b[39mbody()\u001b[33m;\u001b[39m expect(bytes\u001b[33m.\u001b[39mlength)\u001b[33m.\u001b[39mtoBe(\u001b[33mNumber\u001b[39m(csv\u001b[33m.\u001b[39mheaders()[\u001b[32m\"content-length\"\u001b[39m]))\u001b[33m;\u001b[39m expect(createHash(\u001b[32m\"sha256\"\u001b[39m)\u001b[33m.\u001b[39mupdate(bytes)\u001b[33m.\u001b[39mdigest(\u001b[32m\"hex\"\u001b[39m))\u001b[33m.\u001b[39mtoBe(csv\u001b[33m.\u001b[39mheaders()[\u001b[32m\"x-content-sha256\"\u001b[39m])\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 36 |\u001b[39m     expect(bytes\u001b[33m.\u001b[39mtoString(\u001b[32m\"utf8\"\u001b[39m))\u001b[33m.\u001b[39mnot\u001b[33m.\u001b[39mtoContain(sources\u001b[33m.\u001b[39maccount\u001b[33m.\u001b[39memail)\u001b[33m;\u001b[39m\n \u001b[90m 37 |\u001b[39m     \u001b[36mconst\u001b[39m download \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mwaitForEvent(\u001b[32m\"download\"\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m\"button\"\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39mexportCsv\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m 38 |\u001b[39m     \u001b[36mconst\u001b[39m file \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m download\u001b[33m;\u001b[39m expect(file\u001b[33m.\u001b[39msuggestedFilename())\u001b[33m.\u001b[39mtoMatch(\u001b[35m/^operations-metrics-\\d{8}-\\d{8}\\.csv$/\u001b[39m)\u001b[33m;\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\operations.spec.ts",
+                            "column": 58,
+                            "line": 35
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mNaN\u001b[39m\nReceived: \u001b[31m5447\u001b[39m\n\n  33 |     await test.info().attach(\"csv-http-metadata\", { body: Buffer.from(JSON.stringify({ status: csv.status(), contentType: csv.headers()[\"content-type\"], contentLength: csv.headers()[\"content-length\"] ?? null, contentEncoding: csv.headers()[\"content-encoding\"] ?? null, disposition: csv.headers()[\"content-disposition\"], cacheControl: csv.headers()[\"cache-control\"], digestPresent: /^[a-f0-9]{64}$/.test(csv.headers()[\"x-content-sha256\"] ?? \"\") })), contentType: \"application/json\" });\n  34 |     expect(csv.headers()[\"cache-control\"]).toContain(\"no-store\"); expect(csv.headers()[\"content-type\"]).toContain(\"text/csv\");\n> 35 |     const bytes = await csv.body(); expect(bytes.length).toBe(Number(csv.headers()[\"content-length\"])); expect(createHash(\"sha256\").update(bytes).digest(\"hex\")).toBe(csv.headers()[\"x-content-sha256\"]);\n     |                                                          ^\n  36 |     expect(bytes.toString(\"utf8\")).not.toContain(sources.account.email);\n  37 |     const download = page.waitForEvent(\"download\"); await page.getByRole(\"button\", { name: t.exportCsv, exact: true }).click();\n  38 |     const file = await download; expect(file.suggestedFilename()).toMatch(/^operations-metrics-\\d{8}-\\d{8}\\.csv$/);\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\operations.spec.ts:35:58"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T01:36:40.382Z",
+                      "annotations": [
+                        {
+                          "type": "serial",
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\operations.spec.ts",
+                            "line": 11,
+                            "column": 6
+                          }
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "csv-http-metadata",
+                          "contentType": "application/json",
+                          "body": "eyJzdGF0dXMiOjIwMCwiY29udGVudFR5cGUiOiJ0ZXh0L2NzdjtjaGFyc2V0PVVURi04IiwiY29udGVudExlbmd0aCI6bnVsbCwiY29udGVudEVuY29kaW5nIjpudWxsLCJkaXNwb3NpdGlvbiI6ImF0dGFjaG1lbnQ7IGZpbGVuYW1lPVwib3BlcmF0aW9ucy1tZXRyaWNzLTIwMjYxMTA4LTIwMjYxMTEwLmNzdlwiIiwiY2FjaGVDb250cm9sIjoicHJpdmF0ZSwgbm8tc3RvcmUiLCJkaWdlc3RQcmVzZW50Ijp0cnVlfQ=="
+                        },
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T01-35-57-917Z-6bff0111-4a49-480d-9005-c3abfa02dedf\\results\\operations-P15-·-exploitat-c36ee-e-bord-filtres-et-métriques\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T01-35-57-917Z-6bff0111-4a49-480d-9005-c3abfa02dedf\\results\\operations-P15-·-exploitat-c36ee-e-bord-filtres-et-métriques\\error-context.md"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T01-35-57-917Z-6bff0111-4a49-480d-9005-c3abfa02dedf\\results\\operations-P15-·-exploitat-c36ee-e-bord-filtres-et-métriques\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\operations.spec.ts",
+                        "column": 58,
+                        "line": 35
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "4f8fd72df7d8ab107a64-38f1b7256bb60e2f6233",
+              "file": "operations.spec.ts",
+              "line": 16,
+              "column": 47
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-09T01:36:38.526Z",
+    "duration": 24786.64,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

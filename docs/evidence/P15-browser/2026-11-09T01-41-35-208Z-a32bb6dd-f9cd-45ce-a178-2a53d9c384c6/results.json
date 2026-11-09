@@ -1,0 +1,478 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\scripts\\..\\.tools\\node-v24.22.2-win-x64\\node.exe",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts"
+    ],
+    "configFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts",
+    "rootDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 1200000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/.runtime/browser-2026-11-09T01-41-35-208Z-a32bb6dd-f9cd-45ce-a178-2a53d9c384c6/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/operations.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T01-41-35-208Z-a32bb6dd-f9cd-45ce-a178-2a53d9c384c6\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "snapshotDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/operations.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3101",
+          "browserName": "chromium",
+          "headless": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "actionTimeout": 10000,
+          "navigationTimeout": 20000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off",
+          "serviceWorkers": "block"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\docs\\evidence\\P15-browser\\2026-11-09T01-41-35-208Z-a32bb6dd-f9cd-45ce-a178-2a53d9c384c6\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "operations.spec.ts",
+      "file": "operations.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "P15 · exploitation réelle, sans action fournisseur externe",
+          "file": "operations.spec.ts",
+          "line": 11,
+          "column": 6,
+          "specs": [
+            {
+              "title": "fr · tableau de bord, filtres et métriques",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\operations.spec.ts",
+                        "line": 11,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2071,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T01:42:10.224Z",
+                      "annotations": [
+                        {
+                          "type": "serial",
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\operations.spec.ts",
+                            "line": 11,
+                            "column": 6
+                          }
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "csv-http-metadata",
+                          "contentType": "application/json",
+                          "body": "eyJzdGF0dXMiOjIwMCwiY29udGVudFR5cGUiOiJ0ZXh0L2NzdjtjaGFyc2V0PVVURi04IiwiY29udGVudExlbmd0aCI6bnVsbCwiYXBwbGljYXRpb25TaXplIjoiNTQ0NyIsImNvbnRlbnRFbmNvZGluZyI6bnVsbCwiZGlzcG9zaXRpb24iOiJhdHRhY2htZW50OyBmaWxlbmFtZT1cIm9wZXJhdGlvbnMtbWV0cmljcy0yMDI2MTEwOC0yMDI2MTExMC5jc3ZcIiIsImNhY2hlQ29udHJvbCI6InByaXZhdGUsIG5vLXN0b3JlLCBuby10cmFuc2Zvcm0iLCJkaWdlc3RQcmVzZW50Ijp0cnVlfQ=="
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4f8fd72df7d8ab107a64-38f1b7256bb60e2f6233",
+              "file": "operations.spec.ts",
+              "line": 16,
+              "column": 47
+            },
+            {
+              "title": "en · tableau de bord, filtres et métriques",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\operations.spec.ts",
+                        "line": 11,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2032,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T01:42:28.995Z",
+                      "annotations": [
+                        {
+                          "type": "serial",
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\operations.spec.ts",
+                            "line": 11,
+                            "column": 6
+                          }
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "csv-http-metadata",
+                          "contentType": "application/json",
+                          "body": "eyJzdGF0dXMiOjIwMCwiY29udGVudFR5cGUiOiJ0ZXh0L2NzdjtjaGFyc2V0PVVURi04IiwiY29udGVudExlbmd0aCI6bnVsbCwiYXBwbGljYXRpb25TaXplIjoiNTQ0NyIsImNvbnRlbnRFbmNvZGluZyI6bnVsbCwiZGlzcG9zaXRpb24iOiJhdHRhY2htZW50OyBmaWxlbmFtZT1cIm9wZXJhdGlvbnMtbWV0cmljcy0yMDI2MTEwOC0yMDI2MTExMC5jc3ZcIiIsImNhY2hlQ29udHJvbCI6InByaXZhdGUsIG5vLXN0b3JlLCBuby10cmFuc2Zvcm0iLCJkaWdlc3RQcmVzZW50Ijp0cnVlfQ=="
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4f8fd72df7d8ab107a64-748dd8b0028a8c526a51",
+              "file": "operations.spec.ts",
+              "line": 16,
+              "column": 47
+            },
+            {
+              "title": "FR · brouillon interne, note privée et publication explicite",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\operations.spec.ts",
+                        "line": 11,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2696,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T01:42:31.045Z",
+                      "annotations": [
+                        {
+                          "type": "serial",
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\operations.spec.ts",
+                            "line": 11,
+                            "column": 6
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4f8fd72df7d8ab107a64-fdd539f7e1ae5a329484",
+              "file": "operations.spec.ts",
+              "line": 40,
+              "column": 3
+            },
+            {
+              "title": "EN · offres, listes et permission directe",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\operations.spec.ts",
+                        "line": 11,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 11295,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"INACTIVE\"\u001b[39m\nReceived: \u001b[31m\"DRAFT\"\u001b[39m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"INACTIVE\"\u001b[39m\nReceived: \u001b[31m\"DRAFT\"\u001b[39m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\operations.spec.ts:78:136",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\operations.spec.ts",
+                          "column": 136,
+                          "line": 78
+                        },
+                        "snippet": " \u001b[90m 76 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m\"button\"\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39mactivate\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m }))\u001b[33m.\u001b[39mtoBeDisabled()\u001b[33m;\u001b[39m\n \u001b[90m 77 |\u001b[39m     \u001b[36mconst\u001b[39m edit \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m\"[data-admin-offer-edit]\"\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m edit\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-offer-copy=\"en\"]'\u001b[39m)\u001b[33m.\u001b[39mgetByRole(\u001b[32m\"textbox\"\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m d\u001b[33m.\u001b[39mtitle\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mfill(\u001b[32m\"P15 revised fictional offer\"\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m edit\u001b[33m.\u001b[39mgetByRole(\u001b[32m\"textbox\"\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39mreason\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mfill(\u001b[32m\"Explicit revision while keeping price, tax and conditions absent.\"\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m edit\u001b[33m.\u001b[39mgetByRole(\u001b[32m\"button\"\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39msave\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 78 |\u001b[39m     \u001b[36mawait\u001b[39m expect\u001b[33m.\u001b[39mpoll(\u001b[36masync\u001b[39m () \u001b[33m=>\u001b[39m (\u001b[36mawait\u001b[39m (\u001b[36mawait\u001b[39m context\u001b[33m.\u001b[39mrequest\u001b[33m.\u001b[39mget(\u001b[32m`/api/v1/admin/offers/${created.id}`\u001b[39m))\u001b[33m.\u001b[39mjson() \u001b[36mas\u001b[39m \u001b[33mOfferView\u001b[39m)\u001b[33m.\u001b[39mstate)\u001b[33m.\u001b[39mtoBe(\u001b[32m\"INACTIVE\"\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 79 |\u001b[39m     \u001b[36mconst\u001b[39m revised \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m (\u001b[36mawait\u001b[39m context\u001b[33m.\u001b[39mrequest\u001b[33m.\u001b[39mget(\u001b[32m`/api/v1/admin/offers/${created.id}`\u001b[39m))\u001b[33m.\u001b[39mjson() \u001b[36mas\u001b[39m \u001b[33mOfferView\u001b[39m\u001b[33m;\u001b[39m expect(revised\u001b[33m.\u001b[39mfields\u001b[33m.\u001b[39mprice)\u001b[33m.\u001b[39mtoBeNull()\u001b[33m;\u001b[39m expect(revised\u001b[33m.\u001b[39mfields\u001b[33m.\u001b[39mconditions)\u001b[33m.\u001b[39mtoBeNull()\u001b[33m;\u001b[39m expect(revised\u001b[33m.\u001b[39mfields\u001b[33m.\u001b[39mcopies\u001b[33m.\u001b[39mfind(copy \u001b[33m=>\u001b[39m copy\u001b[33m.\u001b[39mlocale \u001b[33m===\u001b[39m \u001b[32m\"en\"\u001b[39m)\u001b[33m?.\u001b[39mtitle)\u001b[33m.\u001b[39mtoBe(\u001b[32m\"P15 revised fictional offer\"\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 80 |\u001b[39m     \u001b[36mawait\u001b[39m captureAccount(page\u001b[33m,\u001b[39m \u001b[32m\"en-320-offer-incomplete-revision\"\u001b[39m\u001b[33m,\u001b[39m \u001b[35m320\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 81 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(operationsHref(\u001b[32m\"en\"\u001b[39m\u001b[33m,\u001b[39m \u001b[32m\"orders\"\u001b[39m\u001b[33m,\u001b[39m { \u001b[33m...\u001b[39msources\u001b[33m.\u001b[39mperiod\u001b[33m,\u001b[39m page\u001b[33m:\u001b[39m \u001b[35m0\u001b[39m\u001b[33m,\u001b[39m pageSize\u001b[33m:\u001b[39m \u001b[35m1\u001b[39m }))\u001b[33m;\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\operations.spec.ts",
+                            "column": 136,
+                            "line": 78
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"INACTIVE\"\u001b[39m\nReceived: \u001b[31m\"DRAFT\"\u001b[39m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate\n\n  76 |     await expect(page.getByRole(\"button\", { name: t.activate, exact: true })).toBeDisabled();\n  77 |     const edit = page.locator(\"[data-admin-offer-edit]\"); await edit.locator('[data-offer-copy=\"en\"]').getByRole(\"textbox\", { name: d.title, exact: true }).fill(\"P15 revised fictional offer\"); await edit.getByRole(\"textbox\", { name: t.reason, exact: true }).fill(\"Explicit revision while keeping price, tax and conditions absent.\"); await edit.getByRole(\"button\", { name: t.save, exact: true }).click();\n> 78 |     await expect.poll(async () => (await (await context.request.get(`/api/v1/admin/offers/${created.id}`)).json() as OfferView).state).toBe(\"INACTIVE\");\n     |                                                                                                                                        ^\n  79 |     const revised = await (await context.request.get(`/api/v1/admin/offers/${created.id}`)).json() as OfferView; expect(revised.fields.price).toBeNull(); expect(revised.fields.conditions).toBeNull(); expect(revised.fields.copies.find(copy => copy.locale === \"en\")?.title).toBe(\"P15 revised fictional offer\");\n  80 |     await captureAccount(page, \"en-320-offer-incomplete-revision\", 320);\n  81 |     await page.goto(operationsHref(\"en\", \"orders\", { ...sources.period, page: 0, pageSize: 1 }));\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\operations.spec.ts:78:136"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T01:42:33.759Z",
+                      "annotations": [
+                        {
+                          "type": "serial",
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\operations.spec.ts",
+                            "line": 11,
+                            "column": 6
+                          }
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T01-41-35-208Z-a32bb6dd-f9cd-45ce-a178-2a53d9c384c6\\results\\operations-P15-·-exploitat-91204-istes-et-permission-directe\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T01-41-35-208Z-a32bb6dd-f9cd-45ce-a178-2a53d9c384c6\\results\\operations-P15-·-exploitat-91204-istes-et-permission-directe\\error-context.md"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T01-41-35-208Z-a32bb6dd-f9cd-45ce-a178-2a53d9c384c6\\results\\operations-P15-·-exploitat-91204-istes-et-permission-directe\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\operations.spec.ts",
+                        "column": 136,
+                        "line": 78
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "4f8fd72df7d8ab107a64-9530eb49c4b5cd7dcb56",
+              "file": "operations.spec.ts",
+              "line": 67,
+              "column": 3
+            },
+            {
+              "title": "FR · dossier de contenu, pagination et révision reliée au CMS",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\operations.spec.ts",
+                        "line": 11,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T01:42:45.236Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "4f8fd72df7d8ab107a64-0e1f16404439cf417e65",
+              "file": "operations.spec.ts",
+              "line": 88,
+              "column": 3
+            },
+            {
+              "title": "FR · panne réelle API, brouillon conservé et reprise",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\operations.spec.ts",
+                        "line": 11,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T01:42:45.236Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "4f8fd72df7d8ab107a64-efea1964393ab81ab432",
+              "file": "operations.spec.ts",
+              "line": 102,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-09T01:42:08.379Z",
+    "duration": 36892.278,
+    "expected": 3,
+    "skipped": 2,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

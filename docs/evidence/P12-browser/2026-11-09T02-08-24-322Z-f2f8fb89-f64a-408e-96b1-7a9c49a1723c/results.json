@@ -1,0 +1,226 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.tools\\node-v24.22.2-win-x64\\node.exe",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts",
+      "--grep",
+      "01 · fr"
+    ],
+    "configFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts",
+    "rootDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 1200000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/.runtime/browser-2026-11-09T02-08-24-322Z-f2f8fb89-f64a-408e-96b1-7a9c49a1723c/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/payments.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T02-08-24-322Z-f2f8fb89-f64a-408e-96b1-7a9c49a1723c\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "snapshotDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/payments.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3102",
+          "browserName": "chromium",
+          "headless": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "actionTimeout": 10000,
+          "navigationTimeout": 20000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off",
+          "serviceWorkers": "block"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\docs\\evidence\\P12-browser\\2026-11-09T02-08-24-322Z-f2f8fb89-f64a-408e-96b1-7a9c49a1723c\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "payments.spec.ts",
+      "file": "payments.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "P12 · paiement contrôlé, confirmation et droits réels",
+          "file": "payments.spec.ts",
+          "line": 13,
+          "column": 6,
+          "specs": [
+            {
+              "title": "01 · fr : événement durable avant worker, reprise, attribution et contenu privé",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 480000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\payments.spec.ts",
+                        "line": 13,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 66657,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"PAID/\u001b[7mRETRYING\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"PAID/\u001b[7mNEEDS_REVIEW\u001b[27m\"\u001b[39m\n\nCall Log:\n- Timeout 30000ms exceeded while waiting on the predicate",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"PAID/\u001b[7mRETRYING\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"PAID/\u001b[7mNEEDS_REVIEW\u001b[27m\"\u001b[39m\n\nCall Log:\n- Timeout 30000ms exceeded while waiting on the predicate\n    at waitForPayment (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\payments-fixture.ts:60:235)\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\payments.spec.ts:38:13",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\payments-fixture.ts",
+                          "column": 235,
+                          "line": 60
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mpayments-fixture.ts:60\n\n \u001b[90m 58 |\u001b[39m }\n \u001b[90m 59 |\u001b[39m \u001b[36mexport\u001b[39m \u001b[36masync\u001b[39m \u001b[36mfunction\u001b[39m waitForPayment(request\u001b[33m:\u001b[39m \u001b[33mAPIRequestContext\u001b[39m\u001b[33m,\u001b[39m id\u001b[33m:\u001b[39m string\u001b[33m,\u001b[39m payment\u001b[33m:\u001b[39m \u001b[33mOrderPaymentStatus\u001b[39m[\u001b[32m'paymentStatus'\u001b[39m]\u001b[33m,\u001b[39m fulfillment\u001b[33m?\u001b[39m\u001b[33m:\u001b[39m \u001b[33mOrderPaymentStatus\u001b[39m[\u001b[32m'fulfillmentStatus'\u001b[39m]) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 60 |\u001b[39m   \u001b[36mawait\u001b[39m expect\u001b[33m.\u001b[39mpoll(\u001b[36masync\u001b[39m () \u001b[33m=>\u001b[39m { \u001b[36mconst\u001b[39m current \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m paymentStatus(request\u001b[33m,\u001b[39m id)\u001b[33m;\u001b[39m \u001b[36mreturn\u001b[39m \u001b[32m`${current.paymentStatus}/${fulfillment === undefined ? '' : current.fulfillmentStatus}`\u001b[39m\u001b[33m;\u001b[39m }\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m30_000\u001b[39m\u001b[33m,\u001b[39m intervals\u001b[33m:\u001b[39m [\u001b[35m250\u001b[39m\u001b[33m,\u001b[39m \u001b[35m500\u001b[39m\u001b[33m,\u001b[39m \u001b[35m1000\u001b[39m] })\u001b[33m.\u001b[39mtoBe(\u001b[32m`${payment}/${fulfillment ?? ''}`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                                                                                                                                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 61 |\u001b[39m   \u001b[36mreturn\u001b[39m \u001b[36mawait\u001b[39m paymentStatus(request\u001b[33m,\u001b[39m id)\u001b[33m;\u001b[39m\n \u001b[90m 62 |\u001b[39m }\n \u001b[90m 63 |\u001b[39m \u001b[36mexport\u001b[39m \u001b[36masync\u001b[39m \u001b[36mfunction\u001b[39m advancePayment(order\u001b[33m:\u001b[39m string\u001b[33m,\u001b[39m state\u001b[33m:\u001b[39m \u001b[32m'OPEN'\u001b[39m \u001b[33m|\u001b[39m \u001b[32m'PROCESSING'\u001b[39m \u001b[33m|\u001b[39m \u001b[32m'PAID'\u001b[39m \u001b[33m|\u001b[39m \u001b[32m'FAILED'\u001b[39m \u001b[33m|\u001b[39m \u001b[32m'EXPIRED'\u001b[39m \u001b[33m|\u001b[39m \u001b[32m'REFUNDED'\u001b[39m\u001b[33m,\u001b[39m type\u001b[33m:\u001b[39m string\u001b[33m,\u001b[39m replay\u001b[33m?\u001b[39m\u001b[33m:\u001b[39m string) {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\payments-fixture.ts",
+                            "column": 235,
+                            "line": 60
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"PAID/\u001b[7mRETRYING\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"PAID/\u001b[7mNEEDS_REVIEW\u001b[27m\"\u001b[39m\n\nCall Log:\n- Timeout 30000ms exceeded while waiting on the predicate\n\n   at payments-fixture.ts:60\n\n  58 | }\n  59 | export async function waitForPayment(request: APIRequestContext, id: string, payment: OrderPaymentStatus['paymentStatus'], fulfillment?: OrderPaymentStatus['fulfillmentStatus']) {\n> 60 |   await expect.poll(async () => { const current = await paymentStatus(request, id); return `${current.paymentStatus}/${fulfillment === undefined ? '' : current.fulfillmentStatus}`; }, { timeout: 30_000, intervals: [250, 500, 1000] }).toBe(`${payment}/${fulfillment ?? ''}`);\n     |                                                                                                                                                                                                                                           ^\n  61 |   return await paymentStatus(request, id);\n  62 | }\n  63 | export async function advancePayment(order: string, state: 'OPEN' | 'PROCESSING' | 'PAID' | 'FAILED' | 'EXPIRED' | 'REFUNDED', type: string, replay?: string) {\n    at waitForPayment (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\payments-fixture.ts:60:235)\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\payments.spec.ts:38:13"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T02:08:57.679Z",
+                      "annotations": [
+                        {
+                          "type": "serial",
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\payments.spec.ts",
+                            "line": 13,
+                            "column": 6
+                          }
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T02-08-24-322Z-f2f8fb89-f64a-408e-96b1-7a9c49a1723c\\results\\payments-P12-·-paiement-co-4de6d-ttribution-et-contenu-privé\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T02-08-24-322Z-f2f8fb89-f64a-408e-96b1-7a9c49a1723c\\results\\payments-P12-·-paiement-co-4de6d-ttribution-et-contenu-privé\\error-context.md"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T02-08-24-322Z-f2f8fb89-f64a-408e-96b1-7a9c49a1723c\\results\\payments-P12-·-paiement-co-4de6d-ttribution-et-contenu-privé\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\payments-fixture.ts",
+                        "column": 235,
+                        "line": 60
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "bd51122182d9e4115608-5c00fe44d593b4839cb0",
+              "file": "payments.spec.ts",
+              "line": 20,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-09T02:08:56.473Z",
+    "duration": 85272.33,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

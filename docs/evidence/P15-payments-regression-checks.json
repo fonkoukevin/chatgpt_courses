@@ -1,0 +1,179 @@
+{
+  "verifiedAt": "2026-11-09T02:50:37.255Z",
+  "command": ".\\scripts\\courses.cmd run verify:payments",
+  "testEnvironment": {
+    "BROWSER_WEB_PORT": 3102,
+    "BROWSER_API_PORT": 8182
+  },
+  "exitCode": 0,
+  "finalRun": "2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab",
+  "stats": {
+    "startTime": "2026-11-09T02:42:07.179Z",
+    "duration": 174961.159,
+    "expected": 8,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "initialRuntimeFlags": {
+    "stripeEnabled": true,
+    "paymentWorkerEnabled": false,
+    "refundWorkerEnabled": true,
+    "notificationWorkerEnabled": true
+  },
+  "capabilities": {
+    "checkout": true,
+    "refunds": true
+  },
+  "controlledProviderRequestPaths": [
+    {
+      "method": "GET",
+      "path": "/v1/account",
+      "status": 200,
+      "count": 3
+    },
+    {
+      "method": "POST",
+      "path": "/v1/checkout/sessions",
+      "status": 200,
+      "count": 7
+    },
+    {
+      "method": "GET",
+      "path": "/v1/checkout/sessions/:sessionId",
+      "status": 200,
+      "count": 16
+    },
+    {
+      "method": "GET",
+      "path": "/v1/checkout/sessions/:sessionId/line_items",
+      "status": 200,
+      "count": 16
+    },
+    {
+      "method": "GET",
+      "path": "/v1/payment_intents/:paymentIntentId",
+      "status": 200,
+      "count": 22
+    },
+    {
+      "method": "GET",
+      "path": "/v1/refunds",
+      "status": 200,
+      "count": 22
+    }
+  ],
+  "cleanupConfirmed": true,
+  "apiJarSha256": "a8bba5d5f95ace755de1e7748810b5f2413dc15ae8c76a8d6e77321aed6c086c",
+  "sameJarAsP15": true,
+  "externalStripe": false,
+  "livePayment": false,
+  "captures": [
+    "en-1440-deferred-payment-processing.png",
+    "en-1440-deferred-payment-ready.png",
+    "en-320-checkout-consent.png",
+    "en-320-deferred-payment-ready.png",
+    "en-390-confirmed-expired.png",
+    "en-390-deferred-payment-processing.png",
+    "en-390-deferred-payment-ready.png",
+    "en-390-owned-offer-after-payment.png",
+    "en-390-payment-api-recovered.png",
+    "en-390-payment-api-unavailable.png",
+    "en-390-premium-content-after-payment.png",
+    "fr-1024-payment-ready-after-worker-restart.png",
+    "fr-1440-durable-event-before-worker.png",
+    "fr-1440-paid-activation-delayed.png",
+    "fr-1440-payment-ready-after-worker-restart.png",
+    "fr-320-payment-ready-after-worker-restart.png",
+    "fr-390-checkout-consent.png",
+    "fr-390-checkout-offer-change-review.png",
+    "fr-390-confirmed-failed.png",
+    "fr-390-duplicates-remain-one-activation.png",
+    "fr-390-email-incident-access-still-ready.png",
+    "fr-390-email-retried-access-unchanged.png",
+    "fr-390-forged-success-without-payment.png",
+    "fr-390-other-owner-payment-refused.png",
+    "fr-390-payment-ready-after-worker-restart.png",
+    "fr-390-premium-content-after-payment.png",
+    "fr-768-payment-ready-after-worker-restart.png"
+  ],
+  "visualReview": "Separate targeted review; not all captured PNGs are claimed examined.",
+  "history": [
+    {
+      "runId": "2026-11-09T01-57-16-874Z-f5ffa4b6-25bc-4cde-bf0b-9eec62cc1d95",
+      "result": "failed",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "stats": {
+        "startTime": "2026-11-09T01:58:06.556Z",
+        "duration": 96858.483,
+        "expected": 0,
+        "skipped": 7,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "cleanupConfirmed": true,
+      "initialRuntimeFlags": null,
+      "capabilities": null
+    },
+    {
+      "runId": "2026-11-09T02-08-24-322Z-f2f8fb89-f64a-408e-96b1-7a9c49a1723c",
+      "result": "failed",
+      "selection": {
+        "grep": "01 · fr",
+        "repeatEach": 1
+      },
+      "stats": {
+        "startTime": "2026-11-09T02:08:56.473Z",
+        "duration": 85272.33,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "cleanupConfirmed": true,
+      "initialRuntimeFlags": {
+        "stripeEnabled": true,
+        "paymentWorkerEnabled": false,
+        "refundWorkerEnabled": true,
+        "notificationWorkerEnabled": true
+      },
+      "capabilities": {
+        "checkout": true,
+        "refunds": false
+      }
+    },
+    {
+      "runId": "2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab",
+      "result": "passed",
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "stats": {
+        "startTime": "2026-11-09T02:42:07.179Z",
+        "duration": 174961.159,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "cleanupConfirmed": true,
+      "initialRuntimeFlags": {
+        "stripeEnabled": true,
+        "paymentWorkerEnabled": false,
+        "refundWorkerEnabled": true,
+        "notificationWorkerEnabled": true
+      },
+      "capabilities": {
+        "checkout": true,
+        "refunds": true
+      }
+    }
+  ],
+  "historicalPostReadyDenialsResolved": false,
+  "newIndependentCoverageDenialsResolved": false,
+  "secretsPrinted": false
+}

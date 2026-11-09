@@ -1,0 +1,2270 @@
+﻿{
+    "phase":  "P15",
+    "verifiedAt":  "2026-11-09T02:52:19.0806395Z",
+    "command":  "mvnw.cmd --batch-mode --no-transfer-progress test",
+    "result":  "PASS",
+    "exitCode":  0,
+    "mavenDuration":  "10:17",
+    "finishedAt":  "2026-11-09T03:51:26+01:00",
+    "totals":  {
+                   "tests":  234,
+                   "failures":  0,
+                   "errors":  0,
+                   "skipped":  0
+               },
+    "suiteCount":  31,
+    "suites":  [
+                   {
+                       "name":  "com.chatgptcourses.AccessPolicyTest",
+                       "tests":  5,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  0.465,
+                       "cases":  [
+                                     {
+                                         "name":  "missingSubjectResourceIdentityOrActionCannotBecomeAnAuthorization",
+                                         "seconds":  0.242,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "ownershipControlsPersonalDataWithoutDependingOnCourseEntitlements",
+                                         "seconds":  0.031,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "publicReadRequiresExplicitPublishedTranslationAndNeverAllowsMutation",
+                                         "seconds":  0.004,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "editorialPermissionCannotAuthorizeFinanceOrUnconfiguredAdministrativeActions",
+                                         "seconds":  0.002,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "authenticatedDoesNotGrantPremiumContentAndUnknownFactsFailClosed",
+                                         "seconds":  0.005,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.AccountEvidenceHttpIntegrationTest",
+                       "tests":  16,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  99.282,
+                       "cases":  [
+                                     {
+                                         "name":  "languageAndNewCourseVersionKeepOriginalEvidenceAndOldAttestation",
+                                         "seconds":  6.48,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "supportOnlySharesChosenReadyOwnerFilesAndNeverImpersonatesTheRequester",
+                                         "seconds":  7.596,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "supportActionsUseOneStrictTimestampAfterFutureMessagesAndEventsWithoutRewritingHistory",
+                                         "seconds":  1.661,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "realUtf8HtmlIsEscapedHashedPrivateAndImmutableAfterProfileProgressAndSourceChanges",
+                                         "seconds":  2.705,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "withdrawnEnrollmentRemainsListedAndIssuedCertificateDoesNotDependOnCurrentAccess",
+                                         "seconds":  1.825,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "oldProjectRevisionAndAnotherEnrollmentOrOwnerCannotSupplyTheParticipationProof",
+                                         "seconds":  2.384,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "participationRejectsOnlyReadsNotesVisitsAndVideoPositionsAndMissingName",
+                                         "seconds":  1.909,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "eachPersistedParticipationBranchQualifiesWithoutPretendingSuccessOrHumanReview",
+                                         "seconds":  4.528,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "staleEvidenceFingerprintCannotIssueForAChangedProfile",
+                                         "seconds":  1.682,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "issuanceIsConcurrentIdempotentAndReplaysSurviveLaterIneligibility",
+                                         "seconds":  2.409,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "dataRequestLifecycleKeepsCausalHistoryAndClampsNewCancellationAfterFuturePredecessor",
+                                         "seconds":  1.182,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "profileIsRevisionedAndCannotChangeEmailOrAnotherAccountsIdentity",
+                                         "seconds":  1.409,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "supportReplySurvivesActualSmtpFailureAndRecoveryWithoutDuplicatingMessageOrChangingTicketEtag",
+                                         "seconds":  4.219,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "supportConversationHasRealRevisionHistoryAndClosedTicketsRejectUserMessages",
+                                         "seconds":  4.329,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "commercialDocumentsAreExplicitlyUnavailableAndRemainOwnerScoped",
+                                         "seconds":  2.701,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "dataRequestsWaitForPolicyAndCancellationNeverExportsErasesOrClosesTheAccount",
+                                         "seconds":  4.964,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.AdminOperationsHttpIntegrationTest",
+                       "tests":  11,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  46.417,
+                       "cases":  [
+                                     {
+                                         "name":  "metricsMatchManualMultiCurrencyFactsAndCsvUsesExactlyTheSamePeriodAndCurrency",
+                                         "seconds":  6.84,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "contentReportUsesExactIdentityAndCorrectionDoesNotCopySupportTextOrRewritePersonalMethods",
+                                         "seconds":  3.991,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "auditIsMetadataOnlyAndKeepsActorDateObjectAndFiltersWithoutPrivateTextOrProviderSecrets",
+                                         "seconds":  1.235,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "durableInboxThenOperationalReconciliationAndRealSmtpRecoveryNeverDuplicateRightsOrConfirmation",
+                                         "seconds":  3.593,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "revokedSupportPermissionWhileWaitingOnTicketCannotSaveAHiddenDraft",
+                                         "seconds":  1.044,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "businessFactsAreTransactionalDeduplicatedAndSurviveDeletionWithoutContainingPersonalText",
+                                         "seconds":  1.809,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "internalNotesAssignmentsAndMeasuredZeroRemainDistinctFromPublicReplyAndUnknownTime",
+                                         "seconds":  2.572,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "operationalOrderFiltersReadOnlyTheSnapshotAndUnpayableReconciliationCannotForgeAnAccess",
+                                         "seconds":  1.804,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "draftsArePerOperatorAndOnlyExplicitIdempotentPublicationCreatesVisibleReplyAndRealMail",
+                                         "seconds":  3.473,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "editorAndLearnerCannotReadOrMutateFinanceWhileDashboardHonorsSourcePermissions",
+                                         "seconds":  2.147,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "concurrentDraftsUseRealEtagsAndStaleTicketRevisionDoesNotDiscardTheDraft",
+                                         "seconds":  1.199,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.assets.config.AssetStorageConfigurationTest",
+                       "tests":  1,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  0.013,
+                       "cases":  [
+                                     {
+                                         "name":  "internalHostCannotBecomeBrowserEndpointAndProductionCannotAdvertiseInsecureStorage",
+                                         "seconds":  0.009,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.AssetServiceIntegrationTest",
+                       "tests":  8,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  28.197,
+                       "cases":  [
+                                     {
+                                         "name":  "projectTextRoundTripsPrivatelyAndSurvivesSourceWithdrawalWithoutSharingOwnership(CapturedOutput)",
+                                         "seconds":  0.901,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "pendingUploadsAndSignedDownloadsActuallyExpireWithoutIssuingPermanentObjectAccess",
+                                         "seconds":  6.123,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "upgradeV008PreservesExistingProjectRevisionAndSessionWithoutCreatingFiles",
+                                         "seconds":  2.056,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "actualObjectValidationRejectsMissingWrongSizeMimeAndInvalidUtf8WithoutPretendingToScan",
+                                         "seconds":  0.794,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "concurrentConfirmationAndReplayedStagingPutCannotModifyReadyBytes",
+                                         "seconds":  0.506,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "enrolledEditorialDownloadRechecksWithdrawnParentWhileStandaloneFreeResourceRemainsAvailable",
+                                         "seconds":  1.502,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "editorialImagesAreDecodedReencodedBoundedAndPublicationControlsEveryPublicLink",
+                                         "seconds":  1.427,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "projectReservationQuotaIsAtomicForConcurrentUploadIntents",
+                                         "seconds":  0.513,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.CheckoutIntegrationTest",
+                       "tests":  9,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  18.806,
+                       "cases":  [
+                                     {
+                                         "name":  "ownershipContextTermsAndExactOrderRevisionAreCheckedBeforeAnyExternalRequest",
+                                         "seconds":  0.914,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "wrongModeAndUntrustedCheckoutUrlsNeverReachTheBrowserOrCreateAccess",
+                                         "seconds":  1.586,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "configuredGatewayBlocksZeroBelowMinimumAndNineDigitAmountsWithoutChangingSummaryReadiness",
+                                         "seconds":  0.955,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "operationIsCommittedBeforeSdkNetworkAndReplaysNeverCreateAnotherSession",
+                                         "seconds":  0.84,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "aDifferentMerchantAccountIsRejectedBeforeCreatingAnyCheckout",
+                                         "seconds":  0.024,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "sdkRetrievalAndBoundedSearchReturnCurrentFactsWithoutThemselvesMarkingAnOrderPaid",
+                                         "seconds":  0.908,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "concurrentKeysShareOneCommittedOperationWhileProviderResponseIsHeld",
+                                         "seconds":  1.002,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "aPersistedOperationPastItsRecoveryWindowOnlyRequestsReconciliationAndCannotRewriteItsParameters",
+                                         "seconds":  0.696,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "realSdkReadTimeoutAfterProviderCreationKeepsTheSameParametersAndIdempotencyKey",
+                                         "seconds":  3.837,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.CommerceHttpIntegrationTest",
+                       "tests":  10,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  39.401,
+                       "cases":  [
+                                     {
+                                         "name":  "concurrentDifferentKeysForOneIntentionCreateExactlyOnePreparation",
+                                         "seconds":  2.876,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "realGrantOriginsAndFreeCurriculumDriveAlreadyOwnedAndPartialPackWithoutDiscount",
+                                         "seconds":  5.846,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "activationUsesFreshRevisionAndWithdrawnPublicationBlocksNewOrders",
+                                         "seconds":  2.759,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "permissionRevokedWhileAwaitingOfferLockPreventsEvenRememberingANewReplayKey",
+                                         "seconds":  2.512,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "orderIsAnAuthoritativeSnapshotAndNeverFinancialConfirmation",
+                                         "seconds":  3.071,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "ordersAreOwnerOnlyAndEditorCannotAdministerCommerce",
+                                         "seconds":  3.073,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "differentAcceptedRevisionCancelsOnlyThePriorPreparationAndPreservesItsSnapshot",
+                                         "seconds":  2.919,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "sameKeyReplaysEvenAfterOfferChangesAndDifferentBodyConflicts",
+                                         "seconds":  3.009,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "incompleteOfferIsPrivateAndCannotBeActivatedOrInventReadiness",
+                                         "seconds":  1.057,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "expiredPersistedPreparationTransitionsWithoutErasingHistoryOrReusingItsKey",
+                                         "seconds":  2.342,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.EditorialHttpIntegrationTest",
+                       "tests":  7,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  15.585,
+                       "cases":  [
+                                     {
+                                         "name":  "translationBecomesStaleWithoutLeakingItsBodyAndFamilyEtagsChange",
+                                         "seconds":  1.931,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "concurrentWritersKeepWinnerAndFrozenPedagogyRequiresANewVersion",
+                                         "seconds":  1.192,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "completeLifecyclePublishesOnlyChosenRevisionAndPreservesHistoryOnArchive",
+                                         "seconds":  1.212,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "p03LegacyTextStaysReadableAndRequiresExplicitStructuredConversion",
+                                         "seconds":  0.649,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "strictPayloadsRejectInventedAvailabilityAndUnsafeLinksWhilePreviewKeepsTextLiteral",
+                                         "seconds":  0.65,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "protectedContentNeverExposesDocumentAndUnverifiedPromisedMediaBlocksPublication",
+                                         "seconds":  1.254,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "csrfAndPrecisePermissionsProtectRealRoutesAndFutureCommerceStaysDenied",
+                                         "seconds":  1.207,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.EditorialServiceIntegrationTest",
+                       "tests":  8,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  11.801,
+                       "cases":  [
+                                     {
+                                         "name":  "readinessBlocksMissingMediaAndPedagogyAndPremiumNeverLeavesThePublicProjection",
+                                         "seconds":  0.452,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "permissionRevokedWhilePublicationWaitsOnTheResourceLockIsCheckedAgain",
+                                         "seconds":  0.181,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "boundedStructuredContentRejectsUnsafeLinksAndOversizedPayloadsBeforeInsertion",
+                                         "seconds":  0.031,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "realLifecycleRetainsImmutablePublishedSnapshotAndSeparatesPublicAnswers",
+                                         "seconds":  0.469,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "translationsUseTheExactReviewedSourceAndStaleContentHasNoPublicBodyOrLanguageFallback",
+                                         "seconds":  0.958,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "permissionsAndPreconditionsAreEnforcedByTheServiceAndConcurrentWritersCannotOverwrite",
+                                         "seconds":  0.147,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "upgradeV003PreservesLegacySnapshotsAndSessionThenRequiresExplicitStructuredConversion",
+                                         "seconds":  2.087,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "orderedCompositionPublishesBottomUpAndKeepsDependenciesAndStableVersions",
+                                         "seconds":  0.709,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.EntitlementAccessIntegrationTest",
+                       "tests":  5,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  15.324,
+                       "cases":  [
+                                     {
+                                         "name":  "actualPrivateHttpRequiresItsOwnerAndThePublicRouteNeverLeaksPaidBodies",
+                                         "seconds":  2.102,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "freshlyCommittedPostgresTimestampIsReadableInParallelMemberAndLearningTransactions",
+                                         "seconds":  1.948,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "independentOriginsLanguagesAndPeriodsNeverBecomeOneUserCourseBoolean",
+                                         "seconds":  1.364,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "protectedLearningAndProjectsWorkAfterARealGrantAndPersonalWorkSurvivesRevocation",
+                                         "seconds":  1.722,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "pinnedCourseAndUpdateWindowKeepExactDescendantsAndWithdrawnPathsStayClosed",
+                                         "seconds":  1.5,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.FoundationIntegrationTest",
+                       "tests":  5,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  9.788,
+                       "cases":  [
+                                     {
+                                         "name":  "healthUsesRealHttpAndPostgresWithoutCreatingAnAnonymousSession",
+                                         "seconds":  0.021,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "sessionsArePersistedInMigratedPostgresAndDeletingTheSessionCascades",
+                                         "seconds":  0.027,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "anUnknownPublicSystemRouteIsARealSanitized404",
+                                         "seconds":  0.016,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "privateRoutesAreDeniedAndCsrfStillProtectsMutations",
+                                         "seconds":  0.013,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "databaseFailureReturns503ThenRecoversAfterContainerResumes",
+                                         "seconds":  3.133,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.HTTPAuthIntegrationTest",
+                       "tests":  8,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  13.138,
+                       "cases":  [
+                                     {
+                                         "name":  "logoutInvalidatesJdbcSessionCookieAndCsrf",
+                                         "seconds":  0.781,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "expiredRecoveryIsRejectedAndForwardedProtoCannotOverrideLocalCookiePolicy",
+                                         "seconds":  0.487,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "preferencesUseOwnerAndStrongRevisionAndRevocationAppliesToExistingSession",
+                                         "seconds":  0.67,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "recoveryUsesTrustedOriginAndHasOneAtomicWinnerAndRevokesOldSessions",
+                                         "seconds":  1.143,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "preferencesRecheckPermissionAfterWaitingForTheOwnerLock",
+                                         "seconds":  0.438,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "registrationValidatesNormalizesAndNeverAcceptsClientPrivilegesOrLogsIn",
+                                         "seconds":  0.213,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "loginRequiresCsrfRotatesSessionAndStoresOnlyCredentialFreePrincipal",
+                                         "seconds":  0.674,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "disabledAndExpiredSessionsLoseAccessWithoutAnotherLogin",
+                                         "seconds":  0.728,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.IdentityServiceIntegrationTest",
+                       "tests":  6,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  12.347,
+                       "cases":  [
+                                     {
+                                         "name":  "resetRequestQuotaIsAtomicForKnownAndUnknownAccountsWithoutExposingAnAddress",
+                                         "seconds":  1.155,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "preferencesUseTheActorAndRealRevisionAndRecheckRevokedPermissions",
+                                         "seconds":  0.348,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "aResetLinkIssuedDuringACredentialChangeWaitsAndUsesTheCommittedEpoch",
+                                         "seconds":  0.818,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "upgradingV002KeepsExistingAccountPreferencesAndSessionWithEpochZero",
+                                         "seconds":  1.727,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "simultaneousResetConsumesOnceChangesEpochAndRevokesSessionsWhileExpiredLinksFail",
+                                         "seconds":  1.238,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "registrationPreservesAddressCharactersAndUnicodeAndNeverSerializesACredential",
+                                         "seconds":  0.337,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.LearningHttpIntegrationTest",
+                       "tests":  9,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  25.196,
+                       "cases":  [
+                                     {
+                                         "name":  "enrollmentIsIdempotentAcrossSessionsAndKeepsTheFullPinnedDenominator",
+                                         "seconds":  2.044,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "ownerCsrfAccountContextAndStrictCommandsProtectAllPrivateLearningObjects",
+                                         "seconds":  2.417,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "anonymousCheckHasRealCorrectionCsrfAndNoDurableLearningSideEffect",
+                                         "seconds":  1.072,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "withdrawalOfAModuleBlocksChildActionsWithoutRemovingNotesOrFabricatingAccess",
+                                         "seconds":  1.786,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "visitsReadCompletionQuizAndProjectAvailabilityRemainDifferentFacts",
+                                         "seconds":  2.146,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "notesKeepOriginalLanguageAcrossSessionsAndConcurrentEditsAndSourceWithdrawal",
+                                         "seconds":  2.873,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "quizReplayQuotaAndSnapshotsAreAuthoritativeAcrossLanguagesAndNewVersions",
+                                         "seconds":  3.1,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "quizPolicyIsValidatedAndFrozenWhileTheSameEffectiveLegacyDefaultCanBeSaved",
+                                         "seconds":  1.252,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "theSameActivityIdentityAtTwoPinnedVersionsRequiresAnExplicitVersionForEveryRead",
+                                         "seconds":  2.057,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.LearningServiceIntegrationTest",
+                       "tests":  8,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  16.597,
+                       "cases":  [
+                                     {
+                                         "name":  "notesPreserveOriginalLanguageAndTextAcrossConflictsWithdrawalAndOtherOwners",
+                                         "seconds":  1.06,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "effectiveDefaultPolicyIsCompatibleButNewThresholdOrTranslationMismatchRequiresARealReview",
+                                         "seconds":  0.305,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "upgradingThePreviousSchemaPreservesSessionPrivateTextAndLegacyQuizPolicy",
+                                         "seconds":  1.994,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "anonymousFeedbackIsRealButNeverWritesLearningAndAWithdrawnContextCannotMutateProgress",
+                                         "seconds":  1.115,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "serverGradesBr01AndKeepsLanguageVersionPolicyAndAttemptsWithoutCompletingTheActivity",
+                                         "seconds":  1.97,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "programmeKeepsTwoExactVersionsOfOneActivityAndNeverUpgradesTheSavedDenominator",
+                                         "seconds":  1.309,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "quizSubmissionIsIdempotentAndAConcurrentAttemptCannotExceedTheEditorialLimit",
+                                         "seconds":  0.921,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "concurrentEnrollmentTracksTheCompletePinnedProgrammeWithoutGrantingProtectedBodies",
+                                         "seconds":  0.947,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.media.VideoHttpIntegrationTest",
+                       "tests":  8,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  24.844,
+                       "cases":  [
+                                     {
+                                         "name":  "enrollmentParentsAndProtectedContentUseTheCanonicalAccessPolicy",
+                                         "seconds":  2.033,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "actualMp4MetadataMatchesFixtureAndMalformedOrPublicStorageFailsClosed",
+                                         "seconds":  0.529,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "explicitJdbcCliImportsAfterCmsCreationAndReexecutionPreservesTheRegisteredMedia",
+                                         "seconds":  7.704,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "expiredGrantAndNewRequestAfterWithdrawalAreRefusedButAnIssuedLinkHasItsResidualTtl",
+                                         "seconds":  3.154,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "positionsAreOwnerOnlyAndStrictlyBoundedByTheMeasuredMediaAndRevision",
+                                         "seconds":  1.552,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "distinctFrenchAndEnglishMediaNeverTransposeTheirPositions",
+                                         "seconds":  1.105,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "simultaneousFirstPositionsRecheckTheirEtagUnderTheOwnerLock",
+                                         "seconds":  1.073,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "anonymousPlaybackRequiresCsrfAndStreamsVerifiedRangesWithoutLeakingTheGrant",
+                                         "seconds":  0.686,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.MethodServiceIntegrationTest",
+                       "tests":  6,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  10.448,
+                       "cases":  [
+                                     {
+                                         "name":  "staleAccountContextCannotCreateImportUpdateDuplicateOrDeleteUnderTheNewAccount",
+                                         "seconds":  0.073,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "optimisticPreconditionsSerializeConcurrentEditsWithoutDiscardingTheWinner",
+                                         "seconds":  0.063,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "upgradeV005PreservesPublishedLegacyTemplateAndSessionsWithoutInventingADefinition",
+                                         "seconds":  1.819,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "copiedTextAndSourceSnapshotSurviveRevisionWithdrawalAndDuplicateWithoutSourceRights",
+                                         "seconds":  1.137,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "missingDefinitionBlocksPublicationAndProtectedSourceIsNeverCopiedEvenByAnEditor",
+                                         "seconds":  0.487,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "ownerCrudSearchAndDuplicationOperateOnIndependentRowsAndNeverExposeAnotherOwner",
+                                         "seconds":  0.128,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.notifications.NotificationOutboxIntegrationTest",
+                       "tests":  10,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  15.002,
+                       "cases":  [
+                                     {
+                                         "name":  "smtpDeliveryHoldsNoDatabaseClaimTransactionAndAnotherBusinessEventCanCommit",
+                                         "seconds":  0.337,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "realRegistrationAndRecoveryAreLocalizedReceivedByMailpitAndPurgedAfterDelivery",
+                                         "seconds":  0.784,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "exhaustedTransportIsDeadAndOnlyAnAuthorizedExplicitOperationCanResumeIt",
+                                         "seconds":  1.316,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "anAbandonedLeaseBecomesIndeterminateWithoutAutomaticResendAndRequiresDuplicateAcknowledgement",
+                                         "seconds":  0.262,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "aRealConnectionFailureRetriesWithBackoffWithoutBlockingTheBusinessTransaction",
+                                         "seconds":  1.215,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "encryptionUsesAuthenticatedUniqueNoncesAndThePersistedKeySurvivesANewCipherInstance",
+                                         "seconds":  0.147,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "anExpiredRecoveryPayloadIsPurgedAndCannotBeRequeued",
+                                         "seconds":  2.445,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "registrationAndRecoveryEnqueueAtomicallyAndRollbackNeverLeaksAnEmail",
+                                         "seconds":  0.25,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "futurePersistedCreationCannotBreakClaimRetryOrRealSmtpCompletion",
+                                         "seconds":  0.351,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "concurrentBusinessEventsDeduplicateBeforeSmtpAndBodyChangesConflict",
+                                         "seconds":  0.325,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.OfferServiceIntegrationTest",
+                       "tests":  8,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  12.058,
+                       "cases":  [
+                                     {
+                                         "name":  "editorPermissionsAndClientSuppliedAccountContextNeverAuthorizeCommercialMutations",
+                                         "seconds":  0.072,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "incompleteConfigurationRemainsReadableButCannotBecomeAnActiveOffer",
+                                         "seconds":  0.088,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "aConfiguredProtectedCourseHasPublishedExactLanguageMetadataWithoutAnyPremiumBody",
+                                         "seconds":  1.267,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "requiredMediaAndUnsupportedFiscalOrCurrencyConfigurationFailClosed",
+                                         "seconds":  0.563,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "competingOfferEditorsMustRecheckTheLockedRevision",
+                                         "seconds":  0.07,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "removedChildrenAndStaleTranslationsBlockNewSalesWithoutUpgradingPinnedVersions",
+                                         "seconds":  1.403,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "upgradeV011PreservesExistingIdentityAndSessionAndCreatesNoCommercialData",
+                                         "seconds":  1.809,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "changingAnOfferPreservesHistoricalFieldsAndRequiresExplicitReactivation",
+                                         "seconds":  0.695,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.payments.config.StripeConfigurationTest",
+                       "tests":  3,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  0.009,
+                       "cases":  [
+                                     {
+                                         "name":  "liveModeAndApiOverridesOutsideTheExplicitTestEnvironmentFailClosed",
+                                         "seconds":  0.004,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "testPaymentsAreUnavailableInProductionButRemainAvailableInStaging",
+                                         "seconds":  0.002,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "existingLowercaseModeIsAcceptedAndSecretsNeverAppearInSettingsToString",
+                                         "seconds":  0.001,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.payments.inbox.PaymentInboxHttpIntegrationTest",
+                       "tests":  13,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  38.109,
+                       "cases":  [
+                                     {
+                                         "name":  "emailDeliveryFailureDoesNotRemoveAccessAndCanRecoverIndependently",
+                                         "seconds":  2.461,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "lostCreateResponseIsRecoveredByDurableMetadataLookupWithoutAnotherCreate",
+                                         "seconds":  2.074,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "concurrentDuplicateAndDistinctEventsHaveOneGrantAndOneDurableNotification",
+                                         "seconds":  2.073,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "sdkSignatureRawBodyBoundAndExactCsrfExceptionAreReal",
+                                         "seconds":  0.08,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "missingSessionWaitsUntilItsPostgresDeadlineThenRemainsAnExplicitRecoverableIncident",
+                                         "seconds":  2.284,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "crashAfterDurableReceiptAndFulfillmentDatabaseFailurePreservesPaidAndRetriesAtomically",
+                                         "seconds":  2.002,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "operatorPermissionsAndExplicitRetryOnlyReplanAnExistingWorkItem",
+                                         "seconds":  2.231,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "reversedOldEventsCannotRestoreRevokedOrKnownRefundedOrigins",
+                                         "seconds":  2.112,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "checkoutHttpUsesOwnerCsrfRevisionAndContextAndReturnQueryCannotPay",
+                                         "seconds":  2.433,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "webhookCompletesBeforeCreateAcknowledgementWithoutRegressionToOpen",
+                                         "seconds":  1.971,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "amountCurrencyProductAndModeMismatchesNeverGrantAndAreOperatorVisible",
+                                         "seconds":  7.757,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "delayedPaymentWaitsWithoutErrorBudgetAndColdWorkerEventuallyFulfills",
+                                         "seconds":  2.479,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "permanentCheckoutIncidentWithoutWebhookHasAVisibleDurableJob",
+                                         "seconds":  1.931,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.payments.refunds.RefundConfigurationTest",
+                       "tests":  2,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  0.103,
+                       "cases":  [
+                                     {
+                                         "name":  "maximumAllowedNetworkTimeoutsRequireTheirFullLeaseBudget",
+                                         "seconds":  0.07,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "sevenReadBudgetIsEnforcedEvenWhenTheScheduledWorkerIsOff",
+                                         "seconds":  0.032,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.PersonalMethodsHttpIntegrationTest",
+                       "tests":  7,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  14.886,
+                       "cases":  [
+                                     {
+                                         "name":  "premiumDraftAndWrongKindSourcesNeverExposeOrCreateProtectedContent",
+                                         "seconds":  2.432,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "publishedSourceCorrectionAndArchiveNeverReplacePersonalSnapshotOrNotes",
+                                         "seconds":  1.946,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "durableCrudSearchAndDuplicateKeepPersonalTextAndLocaleAcrossSessions",
+                                         "seconds":  0.839,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "otherAccountsCannotReadUpdateDuplicateDeleteOrInspectSource",
+                                         "seconds":  0.857,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "staleAccountContextAfterLogoutAndLoginNeverImportsPreviousAccountsText",
+                                         "seconds":  1.031,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "concurrentUpdatesUseStrongPreconditionsAndPersistOnlyOneWinner",
+                                         "seconds":  0.84,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "csrfAccountContextAndStrictValidationRejectUnconfirmedOrForgedWrites",
+                                         "seconds":  0.871,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.ProjectServiceIntegrationTest",
+                       "tests":  8,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  13.337,
+                       "cases":  [
+                                     {
+                                         "name":  "twoConcurrentEditorsRecheckTheLockedCurrentRevisionWithoutLosingTheWinner",
+                                         "seconds":  0.493,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "concurrentDuplicateDeclarationsAreOneAppendOnlyProofAndHistoricalReplaysDoNotMoveToNewText",
+                                         "seconds":  0.456,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "translationsAndNewSourceVersionsNeverRebindThePersonalTextOrItsRubric",
+                                         "seconds":  0.761,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "creationIsIdempotentAndEveryPersonalRepresentationBelongsToItsOwner",
+                                         "seconds":  1.621,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "aNewProductionRevisionNeverReusesAnOldScoreAndSourceCorrectionsDoNotOverwritePersonalWork",
+                                         "seconds":  0.499,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "upgradeFromV007PreservesSessionsMethodsAndActivityNotesWithoutCreatingAProject",
+                                         "seconds":  1.739,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "voluntaryRevealIsTracedButNeverValidatesAProjectAndSourceAccessIsRecheckedOnEveryDelivery",
+                                         "seconds":  0.904,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "br01AndBr02UseTheirOwnRubricAndDeclaredThresholdWithoutAnalyzingTheProductionText",
+                                         "seconds":  0.46,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.ProjectsHttpIntegrationTest",
+                       "tests":  9,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  17.597,
+                       "cases":  [
+                                     {
+                                         "name":  "explicitRevisionPreconditionsAndRealConcurrentSavesPreventLostProduction",
+                                         "seconds":  1.62,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "savingNewTextPreservesHistoricalProductionAndAssessmentAndPagesContainOnlySummaries",
+                                         "seconds":  1.542,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "serverPresetsArePermissionProtectedLocalizedAndContainTwentyRealOnePointCriteria",
+                                         "seconds":  0.747,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "publicWorkshopHasExactFreePublishedSourceAndNoInitialSolutionOrPrivateSave",
+                                         "seconds":  1.045,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "actualOwnerCsrfAccountContextAndStrictDtoProtectEveryPrivateProjectRepresentation",
+                                         "seconds":  1.804,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "creationAndAssessmentAreIdempotentAndServerComputesDeclaredScoreWithoutChangingTextEtag",
+                                         "seconds":  1.128,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "withdrawnSourceDeniesNewAndReplayedCorrectionButPreservesOwnerProductionAndDeclaredHistory",
+                                         "seconds":  1.495,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "thresholdBlockingDeclarationsAndBr02AdaptedRubricRemainExplicitAndDeclarative",
+                                         "seconds":  1.001,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "afterSubmissionCorrectionRequiresTheExactPersonalRevisionAndDoesNotCompleteOrAssessIt",
+                                         "seconds":  1.285,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.PublicCatalogueHttpIntegrationTest",
+                       "tests":  6,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  20.201,
+                       "cases":  [
+                                     {
+                                         "name":  "zeroResultsAndRealPostgresOutageAreDifferentAndTheCatalogueRecovers",
+                                         "seconds":  3.191,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "searchCombinesPublishedFiltersAndPaginatesTiesInStableOrder",
+                                         "seconds":  2.943,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "metadataPermissionsValidationAndPublicConfidentialityRemainServerEnforced",
+                                         "seconds":  1.486,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "metadataAndReviewDatesRemainPublishedSnapshotsUntilExplicitPublication",
+                                         "seconds":  1.536,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "programmePinsEveryChildVersionAndExactActivityNeverResolvesToLatest",
+                                         "seconds":  2.289,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "languageContextIsExplicitAndReadyDoesNotRepublishAStaleTranslation",
+                                         "seconds":  2.392,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.PublicCatalogueIntegrationTest",
+                       "tests":  6,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  11.504,
+                       "cases":  [
+                                     {
+                                         "name":  "publicProjectionExposesOnlyExplicitDescriptionAndNoPremiumOrQuizSolution",
+                                         "seconds":  0.436,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "upgradeV004PreservesPublishedRevisionLegacyBodyAndSessionWithoutInventingMetadata",
+                                         "seconds":  1.82,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "curriculumAndActivityReadStayPinnedWhenTheGlobalChildPublishesANewVersionOrIsWithdrawn",
+                                         "seconds":  0.752,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "metadataIsRevisionOwnedRetainedByCorrectionsAndConcurrentEditsNeverOverwritePublication",
+                                         "seconds":  0.63,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "combinedSearchUsesPublishedSnapshotsWithStablePagingAndActuallyCoveredFacets",
+                                         "seconds":  0.809,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "reviewAloneNeverRepublishesAStaleTranslationAndNewVersionsHaveExplicitLanguageAvailability",
+                                         "seconds":  0.797,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.RefundHttpIntegrationTest",
+                       "tests":  14,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  58.334,
+                       "cases":  [
+                                     {
+                                         "name":  "ambiguousProviderTimeoutKeepsReservationAndRecoversByGetWithoutAnotherFinancialPost",
+                                         "seconds":  5.486,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "contradictoryFactsAfterConfirmationKeepConsumedMoneyAndOriginsRevoked",
+                                         "seconds":  5.114,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "partialConfirmationAndDuplicateSignedRefundEventsApplyOnlyTheSelectedOriginOnce",
+                                         "seconds":  2.375,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "unpaidOrderHasNoRefundableMoneyAndCannotCreateARequest",
+                                         "seconds":  1.106,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "concurrentExecuteKeysCannotSubmitTheSameCommittedRefundTwice",
+                                         "seconds":  1.803,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "invalidAllocationsStalePreviewAndConcurrentDecisionsCannotOverReserveTheOrder",
+                                         "seconds":  2.576,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "revokedOperatorPermissionWhileWaitingForOrderPreventsAnyProviderCall",
+                                         "seconds":  2.237,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "expiredSubmissionMaintenanceLocksOwnerThenOrderBeforeTouchingTheOperation",
+                                         "seconds":  2.282,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "requestOwnershipCsrfContextStrictDtosAndDurableIdempotencyAreRealHttpGuards",
+                                         "seconds":  3.088,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "rejectionAndCancelBeforeSubmissionAreAuditedWithoutCallingStripe",
+                                         "seconds":  3.026,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "oldSignedCheckoutConfirmationAfterRefundCannotRestoreItsRevokedOrigin",
+                                         "seconds":  2.772,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "dashboardPartialWaitsForExplicitAccessDecisionAndCumulativeFullRevokesOnlyThatOrder",
+                                         "seconds":  4.521,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "fullPackRefundKeepsEarlierIndividualOriginAndPersonalWorkButRefusesNewPrivateS3Links",
+                                         "seconds":  6.983,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "pendingThenFailedPartialKeepRetainsAccessAndReleasesOnlyItsReservation",
+                                         "seconds":  4.913,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.SchemaIntegrationTest",
+                       "tests":  12,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  18.76,
+                       "cases":  [
+                                     {
+                                         "name":  "aFreshDatabaseMigratesAndHibernateValidatesWithoutSeedingAccountsOrCommerce",
+                                         "seconds":  0.113,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "upgradingV001PreservesItsExistingJdbcSessionAndAttribute",
+                                         "seconds":  1.865,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "identityConstraintsPreserveUtcAndRevokedPermissionOrigins",
+                                         "seconds":  0.053,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "localizedSlugsAndRevisionPointersCannotCrossTheirIdentityOrLanguage",
+                                         "seconds":  0.067,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "compositionAndPedagogyAreImmutableAfterBottomUpFreeze",
+                                         "seconds":  0.055,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "independentJpaTransactionsRejectAStaleRevisionAndNeverSerializeTheCredentialHash",
+                                         "seconds":  0.038,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "explicitDemoImportIsRepeatableAfterManualChangesAndFreezeAndRejectsUuidCollisions",
+                                         "seconds":  3.214,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "aCompositionInsertWaitingOnAConcurrentFreezeCannotSlipIntoTheFrozenVersion",
+                                         "seconds":  0.079,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "databaseExceptionsKeepSqlStateWithoutLeakingFailingRowDetails",
+                                         "seconds":  0.003,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "upgradingV014PreservesAccountsPermissionsAndSessionsWithoutFinancialOperations",
+                                         "seconds":  1.879,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "upgradingV015PreservesEveryExistingRowAndCreatesNoSupportDataOrAttestation",
+                                         "seconds":  2.309,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "upgradingV016PreservesAllExistingHistoryAndDoesNotInventOperationalEvents",
+                                         "seconds":  2.232,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.shared.http.HttpContractTest",
+                       "tests":  5,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  0.214,
+                       "cases":  [
+                                     {
+                                         "name":  "methodParameterValidationAndMalformedBodiesRemainClientErrors",
+                                         "seconds":  0.155,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "validationReturnsFieldMetadataWithoutSubmittedTextOrConstraintMessages",
+                                         "seconds":  0.011,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "conflictOptimisticLockAndUnhandledErrorsAreSanitizedAndNeverCached",
+                                         "seconds":  0.019,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "explicitRevisionIsRequiredAndStrongListsUseOrSemantics",
+                                         "seconds":  0.016,
+                                         "result":  "PASS"
+                                     },
+                                     {
+                                         "name":  "entityTagsDistinguishResourcesAndParserBoundsWorkWithoutBreakingQuotedCommas",
+                                         "seconds":  0.009,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   },
+                   {
+                       "name":  "com.chatgptcourses.shared.money.MoneyValidationTest",
+                       "tests":  1,
+                       "failures":  0,
+                       "errors":  0,
+                       "skipped":  0,
+                       "seconds":  0.011,
+                       "cases":  [
+                                     {
+                                         "name":  "transportAmountsStayExactForJavaAndJavascriptWithoutAssumingCurrencyDecimals",
+                                         "seconds":  0.007,
+                                         "result":  "PASS"
+                                     }
+                                 ]
+                   }
+               ],
+    "log":  ".runtime/p15-api-global-diagnostic.log",
+    "logSha256":  "F7785D3612C9D47C764E89587E14224C932C5CC7948E6B65B1EDD01D21C651FA",
+    "executionBoundary":  {
+                              "database":  "Real isolated PostgreSQL 18.6 Testcontainers",
+                              "mail":  "Actual SMTP to owned isolated Mailpit for transport suites",
+                              "stripe":  "Actual pinned SDK and signatures over controlled loopback HTTP transports, plus explicit test doubles in domain tests; no external Stripe payment or real credentials",
+                              "localPrivateEnvironmentLoaded":  false,
+                              "inheritedStripeVariablesRemoved":  true,
+                              "baseline":  "APP_ENV=test; SPRING_PROFILES_ACTIVE=test; STRIPE_ENABLED=false; REFUND_WORKER_ENABLED=false; PAYMENT_INBOX_ENABLED=false; MAIL_MODE=disabled. Individual integration suites supply owned controlled settings.",
+                              "jarRepackagedByThisCommand":  false
+                          },
+    "artifact":  {
+                     "path":  "apps/api/target/chatgpt-courses-api.jar",
+                     "bytes":  94595453,
+                     "sha256AfterGlobal":  "A8BBA5D5F95ACE755DE1E7748810B5F2413DC15AE8C76A8D6E77321AED6C086C",
+                     "sha256BeforeGlobal":  "A8BBA5D5F95ACE755DE1E7748810B5F2413DC15AE8C76A8D6E77321AED6C086C",
+                     "unchanged":  true,
+                     "packageLog":  ".runtime/p15-api-package-diagnostic-final.log"
+                 },
+    "previousGlobalRuns":  [
+                               {
+                                   "command":  "mvnw.cmd --batch-mode --no-transfer-progress test",
+                                   "log":  ".runtime/p15-api-global-test.log",
+                                   "exitCode":  1,
+                                   "mavenResult":  "BUILD_FAILURE",
+                                   "mavenDuration":  "10:32",
+                                   "finishedAt":  "2026-11-09T02:41:39+01:00",
+                                   "totals":  {
+                                                  "tests":  233,
+                                                  "failures":  0,
+                                                  "errors":  1,
+                                                  "skipped":  0
+                                              },
+                                   "suites":  [
+                                                  {
+                                                      "name":  "com.chatgptcourses.AccessPolicyTest",
+                                                      "tests":  5,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  0.538,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.AccountEvidenceHttpIntegrationTest",
+                                                      "tests":  16,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  86.565,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.AdminOperationsHttpIntegrationTest",
+                                                      "tests":  11,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  30.724,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.assets.config.AssetStorageConfigurationTest",
+                                                      "tests":  1,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  0.012,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.AssetServiceIntegrationTest",
+                                                      "tests":  8,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  24.88,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.CheckoutIntegrationTest",
+                                                      "tests":  9,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  17.886,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.CommerceHttpIntegrationTest",
+                                                      "tests":  10,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  30.484,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.EditorialHttpIntegrationTest",
+                                                      "tests":  7,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  15.577,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.EditorialServiceIntegrationTest",
+                                                      "tests":  8,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  12.13,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.EntitlementAccessIntegrationTest",
+                                                      "tests":  5,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  17.512,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.FoundationIntegrationTest",
+                                                      "tests":  5,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  10.616,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.HTTPAuthIntegrationTest",
+                                                      "tests":  8,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  14.515,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.IdentityServiceIntegrationTest",
+                                                      "tests":  6,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  14.213,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.LearningHttpIntegrationTest",
+                                                      "tests":  9,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  31.452,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.LearningServiceIntegrationTest",
+                                                      "tests":  8,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  21.175,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.media.VideoHttpIntegrationTest",
+                                                      "tests":  8,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  32.001,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.MethodServiceIntegrationTest",
+                                                      "tests":  6,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  12.699,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.notifications.NotificationOutboxIntegrationTest",
+                                                      "tests":  9,
+                                                      "failures":  0,
+                                                      "errors":  1,
+                                                      "skipped":  0,
+                                                      "seconds":  17.042,
+                                                      "failedCases":  [
+                                                                          {
+                                                                              "name":  "smtpDeliveryHoldsNoDatabaseClaimTransactionAndAnotherBusinessEventCanCommit",
+                                                                              "result":  "ERROR",
+                                                                              "exceptionType":  "org.springframework.dao.DataIntegrityViolationException"
+                                                                          }
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.OfferServiceIntegrationTest",
+                                                      "tests":  8,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  14.565,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.payments.config.StripeConfigurationTest",
+                                                      "tests":  3,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  0.012,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.payments.inbox.PaymentInboxHttpIntegrationTest",
+                                                      "tests":  13,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  42.377,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.payments.refunds.RefundConfigurationTest",
+                                                      "tests":  2,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  0.142,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.PersonalMethodsHttpIntegrationTest",
+                                                      "tests":  7,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  18.766,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.ProjectServiceIntegrationTest",
+                                                      "tests":  8,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  17.009,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.ProjectsHttpIntegrationTest",
+                                                      "tests":  9,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  21.74,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.PublicCatalogueHttpIntegrationTest",
+                                                      "tests":  6,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  25.563,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.PublicCatalogueIntegrationTest",
+                                                      "tests":  6,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  15.838,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.RefundHttpIntegrationTest",
+                                                      "tests":  14,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  54.713,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.SchemaIntegrationTest",
+                                                      "tests":  12,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  20.755,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.shared.http.HttpContractTest",
+                                                      "tests":  5,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  0.297,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.shared.money.MoneyValidationTest",
+                                                      "tests":  1,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  0.013,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  }
+                                              ],
+                                   "observedConstraint":  "notification_outbox_check",
+                                   "observedPath":  "NotificationWorker.claim updated_at=clock_timestamp",
+                                   "diagnosis":  "The claim changes only updated_at among the finite/date-order fields of this CHECK. Persisted created_at and expires_at were already valid. The new updated_at was therefore below created_at. The physical clock cause was not diagnosed; the isolated database had been cleaned."
+                               },
+                               {
+                                   "command":  "mvnw.cmd --batch-mode --no-transfer-progress test",
+                                   "log":  ".runtime/p15-api-global-final-test.log",
+                                   "exitCode":  1,
+                                   "mavenResult":  "BUILD_FAILURE",
+                                   "mavenDuration":  "11:11",
+                                   "finishedAt":  "2026-11-09T03:05:18+01:00",
+                                   "totals":  {
+                                                  "tests":  234,
+                                                  "failures":  0,
+                                                  "errors":  1,
+                                                  "skipped":  0
+                                              },
+                                   "suites":  [
+                                                  {
+                                                      "name":  "com.chatgptcourses.AccessPolicyTest",
+                                                      "tests":  5,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  0.581,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.AccountEvidenceHttpIntegrationTest",
+                                                      "tests":  16,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  74.312,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.AdminOperationsHttpIntegrationTest",
+                                                      "tests":  11,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  40.828,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.assets.config.AssetStorageConfigurationTest",
+                                                      "tests":  1,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  0.015,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.AssetServiceIntegrationTest",
+                                                      "tests":  8,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  26.633,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.CheckoutIntegrationTest",
+                                                      "tests":  9,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  18.9,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.CommerceHttpIntegrationTest",
+                                                      "tests":  10,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  44.876,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.EditorialHttpIntegrationTest",
+                                                      "tests":  7,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  23.468,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.EditorialServiceIntegrationTest",
+                                                      "tests":  8,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  19.234,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.EntitlementAccessIntegrationTest",
+                                                      "tests":  5,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  26.735,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.FoundationIntegrationTest",
+                                                      "tests":  5,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  14.475,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.HTTPAuthIntegrationTest",
+                                                      "tests":  8,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  18.129,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.IdentityServiceIntegrationTest",
+                                                      "tests":  6,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  14.331,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.LearningHttpIntegrationTest",
+                                                      "tests":  9,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  26.851,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.LearningServiceIntegrationTest",
+                                                      "tests":  8,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  18.027,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.media.VideoHttpIntegrationTest",
+                                                      "tests":  8,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  30.695,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.MethodServiceIntegrationTest",
+                                                      "tests":  6,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  14.604,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.notifications.NotificationOutboxIntegrationTest",
+                                                      "tests":  10,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  19.178,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.OfferServiceIntegrationTest",
+                                                      "tests":  8,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  17.075,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.payments.config.StripeConfigurationTest",
+                                                      "tests":  3,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  0.011,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.payments.inbox.PaymentInboxHttpIntegrationTest",
+                                                      "tests":  13,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  49.401,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.payments.refunds.RefundConfigurationTest",
+                                                      "tests":  2,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  0.129,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.PersonalMethodsHttpIntegrationTest",
+                                                      "tests":  7,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  16.419,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.ProjectServiceIntegrationTest",
+                                                      "tests":  8,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  14.539,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.ProjectsHttpIntegrationTest",
+                                                      "tests":  9,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  19.35,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.PublicCatalogueHttpIntegrationTest",
+                                                      "tests":  6,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  21.38,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.PublicCatalogueIntegrationTest",
+                                                      "tests":  6,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  12.507,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.RefundHttpIntegrationTest",
+                                                      "tests":  14,
+                                                      "failures":  0,
+                                                      "errors":  1,
+                                                      "skipped":  0,
+                                                      "seconds":  58.643,
+                                                      "failedCases":  [
+                                                                          {
+                                                                              "name":  "revokedOperatorPermissionWhileWaitingForOrderPreventsAnyProviderCall",
+                                                                              "result":  "ERROR",
+                                                                              "exceptionType":  "org.springframework.dao.DataIntegrityViolationException"
+                                                                          }
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.SchemaIntegrationTest",
+                                                      "tests":  12,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  19.858,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.shared.http.HttpContractTest",
+                                                      "tests":  5,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  0.243,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  },
+                                                  {
+                                                      "name":  "com.chatgptcourses.shared.money.MoneyValidationTest",
+                                                      "tests":  1,
+                                                      "failures":  0,
+                                                      "errors":  0,
+                                                      "skipped":  0,
+                                                      "seconds":  0.014,
+                                                      "failedCases":  [
+
+                                                                      ]
+                                                  }
+                                              ],
+                                   "observedConstraint":  "user_roles_dates_ck",
+                                   "observedPath":  "RefundHttpIntegrationTest permission-revocation fixture, before the HTTP/provider assertions",
+                                   "diagnosis":  "The test SQL bounded updated_at but used an unbounded clock_timestamp for revoked_at. The CHECK requires revoked_at\u003e=created_at. The physical timing cause was not observed after cleanup; this is a fixture correction, without production or DDL changes."
+                               }
+                           ],
+    "targetedEvidence":  "P15-api-targeted-checks.json",
+    "observedCorrections":  [
+                                "Notification metadata dates now preserve immutable creation and prior update times; terminal timestamps share one PostgreSQL instant. Real future-persisted encrypted payload regression and SMTP transport ran.",
+                                "Legacy test role-revocation fixtures clamp their action timestamps to persisted grant creation/update; checks and required financial/permission assertions remain unchanged.",
+                                "V014 inbox/job metadata transitions now preserve creation/prior update times and share terminal timestamps. Actual signed future-persisted envelope success/failure paths ran. No migration, deadline, lease, retry-state or financial rule was relaxed.",
+                                "A fixed-sleep outbox test now polls bounded real worker/backoff state for at most eight seconds, preserving DEAD/two-attempt and permission expectations. The prior timing failure lacked enough retained deadline data to establish a physical cause."
+                            ],
+    "accessFollowUp":  {
+                           "status":  "OPEN_CAUSE_UNKNOWN",
+                           "occurrenceLogs":  [
+                                                  ".runtime/p15-api-target-inbox-final.log",
+                                                  ".runtime/p15-access-diagnostic-class.log"
+                                              ],
+                           "description":  "Two distinct expected retained-access reads returned false in isolated integration tests. Their databases had been cleaned before predicates were captured. Later single-case, class and global passages did not reproduce either failure; that does not establish a correction or cause.",
+                           "diagnostic":  "Seven expected-positive assertions each perform one original covers call. Only a false result queries identifiers-free predicates for the owner, pinned ancestors, publication/source, grant version/locale/revocation/period and post-refusal PostgreSQL clocks. No pre-query, retry, delay, antedating or policy relaxation.",
+                           "diagnosticFilesCreated":  0,
+                           "requiredFollowUp":  "Retain as a P17/P19 delivery guard; do not describe an established physical clock/JVM/fixture cause."
+                       },
+    "limits":  [
+                   "This verifies local backend integration and migrations, not production or Stripe LIVE.",
+                   "No browser verification is claimed by this report. The root agent owns the copied-JAR UI recipe.",
+                   "A successful global passage does not erase the two unexplained access failures retained above."
+               ]
+}

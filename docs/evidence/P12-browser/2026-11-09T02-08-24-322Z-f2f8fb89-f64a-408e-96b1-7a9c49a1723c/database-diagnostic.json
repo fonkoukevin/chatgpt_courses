@@ -1,0 +1,55 @@
+{
+  "available": true,
+  "readOnly": true,
+  "capturedAt": "2026-11-09T02:10:28.333Z",
+  "aggregates": {
+    "grants": [],
+    "orders": [
+      {
+        "count": "1",
+        "refundFull": false,
+        "orderStatus": "CONFIRMED",
+        "paymentStatus": "PAID",
+        "fulfillmentStatus": "NEEDS_REVIEW",
+        "refundReviewRequired": true
+      }
+    ],
+    "outbox": [
+      {
+        "type": "ACCOUNT_CREATED",
+        "count": "2",
+        "status": "SENT",
+        "lastErrorCode": null
+      }
+    ],
+    "paymentEvents": [
+      {
+        "count": "1",
+        "state": "PROCESSED",
+        "lastErrorCode": null
+      }
+    ],
+    "refundOperations": [],
+    "checkoutOperations": [
+      {
+        "count": "1",
+        "state": "COMPLETE",
+        "lastErrorCode": null
+      }
+    ],
+    "refundReconciliationJobs": [
+      {
+        "count": "1",
+        "state": "DEAD",
+        "lastErrorCode": "PROVIDER_REQUEST_FAILED"
+      }
+    ],
+    "paymentReconciliationJobs": [
+      {
+        "count": "1",
+        "state": "PROCESSED",
+        "lastErrorCode": null
+      }
+    ]
+  }
+}

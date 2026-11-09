@@ -1,0 +1,279 @@
+{
+  "phase": "P15",
+  "scope": "Revue visuelle statique finale uniquement ; ne declare pas la phase globale terminee.",
+  "runId": "2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0",
+  "reviewedAt": "2026-11-09T02:05:47.392Z",
+  "reviewer": "versions_web",
+  "method": {
+    "tool": "view_image",
+    "requestedDetail": "original",
+    "originalPngCount": 20,
+    "derivedCropCount": 3,
+    "browserOrKeyboardRunByReviewer": false,
+    "applicationSourceModified": false
+  },
+  "sessionObserved": {
+    "file": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/session.json",
+    "result": "passed",
+    "cleanupConfirmed": true,
+    "completedAt": "2026-11-09T02:02:30.376Z",
+    "externalStripe": false
+  },
+  "images": [
+    {
+      "file": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/en-1440-audit.png",
+      "width": 1440,
+      "height": 6764,
+      "sha256": "0c74e8b351bb9e5f233a661b0f605dc49022ddc61388e019026d24c6c73a7940",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Journal affiche sous forme de cartes lisibles et pagination presente. L original trop haut a ete relu en trois decoupes sans redimensionnement qui couvrent toute sa hauteur.",
+      "toolRenderedSize": {
+        "width": 1277,
+        "height": 6000
+      },
+      "supplementedByUnscaledCrops": true
+    },
+    {
+      "file": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/en-1440-dashboard.png",
+      "width": 1440,
+      "height": 1193,
+      "sha256": "347e5973668122d396eab9e45e7d9c8bd9fb3262cf619b9ddcba8a53c9b413b9",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Titres, filtres UTC, cartes et libelles FR/EN lisibles aux largeurs 1440 et 320 ; aucune collision visible. La definition des activations distingue la cohorte de paiements de la date du droit."
+    },
+    {
+      "file": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/en-320-dashboard.png",
+      "width": 320,
+      "height": 2042,
+      "sha256": "10eec55ff2e18fd702febcb941cf80e35061e90e0590b08757aa608532ba8014",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Titres, filtres UTC, cartes et libelles FR/EN lisibles aux largeurs 1440 et 320 ; aucune collision visible. La definition des activations distingue la cohorte de paiements de la date du droit."
+    },
+    {
+      "file": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/en-320-offer-incomplete-revision.png",
+      "width": 320,
+      "height": 4320,
+      "sha256": "1eda8bf0a4f2779358332535146d69665dfe77d73cb3e4b2f3453f9fd2d11552",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Offre de recette identifiee ; brouillon incomplet conserve, révision 2 et titre modifie visibles, champs commerciaux non renseignes et activation desactivee. Liste et pagination lisibles."
+    },
+    {
+      "file": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/en-320-orders-paginated.png",
+      "width": 320,
+      "height": 1590,
+      "sha256": "3bdcf0642d7b2b7b5e3546e3a7899e4607f762b28ad9097436ccaa1ef897ef2e",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "La carte commandes 320 est complete et sa pagination visible. Etat vide filtre distinct. Le lien Retour et le bouton Actualiser du détail 390 ont maintenant un espacement. Instantane et origines restent distincts."
+    },
+    {
+      "file": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/en-390-metrics.png",
+      "width": 390,
+      "height": 4316,
+      "sha256": "41acb6206d7685683c6836e89b53d89027bee6d9c46386cd27af06f2fef3e388",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "EUR 10,00 et USD 30,00 sont affiches separement avec leurs formats locaux ; taxes/couts/visites utiles inconnus ne sont pas presentes comme des zeros. Les definitions sont repliees sur ces captures."
+    },
+    {
+      "file": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/en-390-offers-list.png",
+      "width": 390,
+      "height": 1215,
+      "sha256": "dbc19d6fe165f27f0492016b2f04cc7b779669a0806d512d2e64b4e0fc41cb81",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Offre de recette identifiee ; brouillon incomplet conserve, révision 2 et titre modifie visibles, champs commerciaux non renseignes et activation desactivee. Liste et pagination lisibles."
+    },
+    {
+      "file": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/en-390-order-snapshot-origins.png",
+      "width": 390,
+      "height": 2471,
+      "sha256": "5c2a29337f1b0cdca2c24e88c50d7e296af97fe9f84b7dfc4d6be469c2c10396",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "La carte commandes 320 est complete et sa pagination visible. Etat vide filtre distinct. Le lien Retour et le bouton Actualiser du détail 390 ont maintenant un espacement. Instantane et origines restent distincts."
+    },
+    {
+      "file": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/en-390-orders-empty-filter.png",
+      "width": 390,
+      "height": 1145,
+      "sha256": "132c25ae903f08b1c6132d4049b8d4a269be787c7fa661be4b7891c881c5ab03",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "La carte commandes 320 est complete et sa pagination visible. Etat vide filtre distinct. Le lien Retour et le bouton Actualiser du détail 390 ont maintenant un espacement. Instantane et origines restent distincts."
+    },
+    {
+      "file": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/fr-1440-content-case.png",
+      "width": 1440,
+      "height": 1596,
+      "sha256": "1c01d0f9da79d7e69674f49ea12243a0b2533bc850402d2ee647461af1376ce9",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "À 1440, Enregistrer et Lire la version actuelle sont separes ; à 320 ils restent dans la carte sans coupure essentielle. Historique et lien CMS visibles."
+    },
+    {
+      "file": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/fr-1440-dashboard.png",
+      "width": 1440,
+      "height": 1193,
+      "sha256": "da9d44beebfca402bd45cfcc381204002fa4850f31ebbb4c4a19660990facea1",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Titres, filtres UTC, cartes et libelles FR/EN lisibles aux largeurs 1440 et 320 ; aucune collision visible. La definition des activations distingue la cohorte de paiements de la date du droit."
+    },
+    {
+      "file": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/fr-1440-support-draft-note.png",
+      "width": 1440,
+      "height": 3865,
+      "sha256": "d2460d6bc7bb4d98fb0329c4eb151c95c40d042e92ba3becf4628e00e2217d30",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Auteur USER nomme Apprenant, attente de reponse de l apprenant clairement indiquee, Non affectee sans rupture de mot forcee. Brouillon, conversation et note interne restent visuellement distincts."
+    },
+    {
+      "file": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/fr-320-content-case.png",
+      "width": 320,
+      "height": 1918,
+      "sha256": "56e84de2100fc9d57f8d589de671ff02dd9495c591f1b01c27c9338a419b6f3d",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "À 1440, Enregistrer et Lire la version actuelle sont separes ; à 320 ils restent dans la carte sans coupure essentielle. Historique et lien CMS visibles."
+    },
+    {
+      "file": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/fr-320-dashboard.png",
+      "width": 320,
+      "height": 2217,
+      "sha256": "04b4dfe91f8ccff7e21b892720d842d29dce6d8bb0850d4d1d795f8bfadb1d35",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Titres, filtres UTC, cartes et libelles FR/EN lisibles aux largeurs 1440 et 320 ; aucune collision visible. La definition des activations distingue la cohorte de paiements de la date du droit."
+    },
+    {
+      "file": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/fr-320-support-draft-note.png",
+      "width": 320,
+      "height": 4330,
+      "sha256": "f6495641575ca60c68ddc0a9eaf0a592c33472b3f5f104aa261829898b01916c",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Auteur USER nomme Apprenant, attente de reponse de l apprenant clairement indiquee, Non affectee sans rupture de mot forcee. Brouillon, conversation et note interne restent visuellement distincts."
+    },
+    {
+      "file": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/fr-320-support-publication-keyboard-dialog.png",
+      "width": 320,
+      "height": 4330,
+      "sha256": "a59b286299a339d11246a8cb0587895b0a6ef0cd8a721c57fc2fe8df1366adfe",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Dialogue 320 entier et lisible ; contour de focus bleu visible sur Confirmer. Apres publication, accusé de conversation et email en attente sont distincts ; captures de panne/reprise suivantes montrent aussi email transmis au service sans confirmation de reception."
+    },
+    {
+      "file": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/fr-390-api-recovered-draft.png",
+      "width": 390,
+      "height": 4404,
+      "sha256": "a9a313ef34d1ab7c3bedff273c07d0955d89c4a02ec0527889940fbd670abe57",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Saisie du brouillon visible durant erreur rouge puis apres reprise avec accusé de sauvegarde. Aucun succes de sauvegarde affiche dans la capture de panne."
+    },
+    {
+      "file": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/fr-390-metrics.png",
+      "width": 390,
+      "height": 4488,
+      "sha256": "3ff1ed469b86e9d09d3b793e02e661200ca53cb2b6026df9254316202e286741",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "EUR 10,00 et USD 30,00 sont affiches separement avec leurs formats locaux ; taxes/couts/visites utiles inconnus ne sont pas presentes comme des zeros. Les definitions sont repliees sur ces captures."
+    },
+    {
+      "file": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/fr-390-real-api-unavailable.png",
+      "width": 390,
+      "height": 4545,
+      "sha256": "46686e58447953f0b783caedb0162fc20f37a4e9ad4bd7656bfb2c5b5884d4ba",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Saisie du brouillon visible durant erreur rouge puis apres reprise avec accusé de sauvegarde. Aucun succes de sauvegarde affiche dans la capture de panne."
+    },
+    {
+      "file": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/fr-390-support-published.png",
+      "width": 390,
+      "height": 4525,
+      "sha256": "d41651c0c559da2b48a6517757cd5c4a57b77f0e740b3c6cd43b46d406a0a23e",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Dialogue 320 entier et lisible ; contour de focus bleu visible sur Confirmer. Apres publication, accusé de conversation et email en attente sont distincts ; captures de panne/reprise suivantes montrent aussi email transmis au service sans confirmation de reception."
+    }
+  ],
+  "derivedCrops": [
+    {
+      "file": "docs/evidence/P15-visual-crops/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/en-1440-audit-part-1.png",
+      "width": 1440,
+      "height": 2400,
+      "sha256": "fb0bd68d42c9222f10fce6109dc10d34ac2aa04a7222ddd202d7e73aefd13bc8",
+      "source": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/en-1440-audit.png",
+      "sourceRectangle": {
+        "left": 0,
+        "top": 0,
+        "width": 1440,
+        "height": 2400
+      },
+      "viewed": true,
+      "resized": false,
+      "originalPreserved": true
+    },
+    {
+      "file": "docs/evidence/P15-visual-crops/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/en-1440-audit-part-2.png",
+      "width": 1440,
+      "height": 2400,
+      "sha256": "6fc76a531970024afe0c8d6ccfaa66b2fbe1e8552ccec6a836a3ab7c1b66b676",
+      "source": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/en-1440-audit.png",
+      "sourceRectangle": {
+        "left": 0,
+        "top": 2300,
+        "width": 1440,
+        "height": 2400
+      },
+      "viewed": true,
+      "resized": false,
+      "originalPreserved": true
+    },
+    {
+      "file": "docs/evidence/P15-visual-crops/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/en-1440-audit-part-3.png",
+      "width": 1440,
+      "height": 2164,
+      "sha256": "151362faf9364e354ea88774677e50e3601a69303056ccc093743e40580d301b",
+      "source": "docs/evidence/P15-browser/2026-11-09T02-00-27-246Z-4ef6aa89-aec5-4d9b-8e9a-18e2532db2d0/en-1440-audit.png",
+      "sourceRectangle": {
+        "left": 0,
+        "top": 4600,
+        "width": 1440,
+        "height": 2164
+      },
+      "viewed": true,
+      "resized": false,
+      "originalPreserved": true
+    }
+  ],
+  "materialDefectsObserved": [],
+  "limitations": [
+    "Captures statiques : elles ne prouvent pas a elles seules le parcours clavier, les permissions ou le resultat serveur. Les assertions Tab/ShiftTab et publication au clavier appartiennent au spec automatise execute par root.",
+    "Focus visible constate sur le bouton Confirmer du dialogue 320 ; aucune declaration globale de conformite WCAG.",
+    "Le fond assombri du dialogue occupe le viewport original, pas toute la capture pleine page : cela ne constitue pas un debordement observe du dialogue.",
+    "Les controles de date natifs suivent le format du navigateur de recette ; les bornes sont explicitement indiquees UTC.",
+    "Aucun test ni acces fournisseur externe Stripe execute par cette revue. La regression P12 distincte en investigation ne devient pas validee par les captures P15."
+  ],
+  "preliminaryReviews": [
+    {
+      "runId": "2026-11-09T01-41-35-208Z-a32bb6dd-f9cd-45ce-a178-2a53d9c384c6",
+      "imagesViewed": 10,
+      "findings": "Libelles operateur Vous/attente du mauvais destinataire et rupture de Non affectee ; corriges avant ce run final."
+    },
+    {
+      "runId": "2026-11-09T01-49-48-476Z-de3859db-8e2a-4d95-8e69-72147cc1136d",
+      "imagesViewed": 9,
+      "findings": "Actions commande et dossier jointives ; capture commandes 320 terminee au milieu de la carte. Espacements et attente de la vraie liste corriges avant ce run final."
+    }
+  ]
+}

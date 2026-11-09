@@ -12,7 +12,7 @@ Lire [AGENTS.md](AGENTS.md), puis [docs/STATUS.md](docs/STATUS.md). Vérificatio
 
 ## Structure retenue
 
-Preuves récentes : [P14 compte, aide et attestations](docs/evidence/P14.md), [P13 remboursements](docs/evidence/P13.md), [P12 paiement TEST](docs/evidence/P12.md). Les paramètres commerciaux et de conservation encore absents restent des conditions d’activation explicites.
+Preuves récentes : [P14 compte, aide et attestations](docs/evidence/P14.md), [P13 remboursements](docs/evidence/P13.md), [P12 paiement TEST](docs/evidence/P12.md). Les paramètres commerciaux et de conservation encore absents restent des conditions d’activation explicites. L’exploitation P15 et ses définitions sont décrites dans [OPERATIONS](docs/OPERATIONS.md) ; STATUS fait autorité sur son niveau de validation.
 
 | Chemin | Rôle | État P01 |
 | --- | --- | --- |
@@ -524,3 +524,9 @@ Préparer les builds avant la recette Chromium isolée :
 ```
 
 Arrêter les applications de développement avec `.\scripts\courses.cmd run stop` avant compilation ; les services et volumes Docker sont conservés. `verify:account` réserve les ports3101/8181 et crée PostgreSQL/S3/Mailpit temporaires en boucle locale, sans Stripe, seed de production ou destinataire réel. Il ne prend pas les onglets personnels. Les résultats, captures et limites effectivement observés figurent dans [la preuve P14](docs/evidence/P14.md). Relancer ensuite `.\scripts\courses.cmd run dev`, et le listener TEST existant si nécessaire avec `.\scripts\courses.cmd run stripe:listen` dans un terminal séparé. Le listener n’est pas requis par la recette P14.
+
+## P15 — exploitation
+
+L’administration autorisée ouvre `/fr/admin/operations` ou `/en/admin/operations` : commandes et accès, incidents, aide, dossiers de contenu, indicateurs et journal. Les offres P11 se gèrent dans `/{locale}/admin/offers`. Les rôles de référence ne créent aucun compte opérateur. La publication d’une réponse d’aide est une action explicite distincte de la sauvegarde du brouillon ; les notes internes restent privées. Les [définitions des indicateurs et limites financières](docs/OPERATIONS.md) expliquent les chiffres et les valeurs inconnues.
+
+Après les contrôles et builds ci-dessus, `.\scripts\courses.cmd run verify:operations` lance la recette Chromium P15 sur ses propres PostgreSQL, S3 et Mailpit temporaires. Le transport Stripe est contrôlé localement ; cette commande n’est pas une recette du fournisseur externe. Les applications de développement doivent être arrêtées avant compilation. Le niveau réellement observé est conservé dans STATUS et dans la preuve de lot.

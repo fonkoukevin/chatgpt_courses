@@ -473,24 +473,34 @@ Attestations : type PARTICIPATION uniquement. GET eligibility expose les critèr
 
 L’émission `{locale,expectedEvidenceFingerprint}` confirme explicitement les preuves lues ; empreinte dépassée412, critères non atteints409. Même preuve/type/langue retrouve la même attestation même avec une nouvelle clé. Instantané, date, octets HTML UTF8 réels, taille≤256KiB et SHA256 sont persistés atomiquement et immuablement. Le GET document vérifie propriétaire actif et permission à chaque téléchargement sans réévaluer un accès premium ultérieurement retiré. MIME `text/html; charset=UTF-8`, attachment, no-store, nosniff, no-referrer et CSP restrictif ; document autonome imprimable, sans script/URL externe. Une nouvelle édition ou un nouveau nom ne réécrit pas l’ancienne attestation.
 
-## Administration commerciale et exploitation — P11–P14 présents, suites P15 prévues
+## Administration commerciale et exploitation — P15
 
-Les routes `/admin/**` exigent des permissions précises. Les permissions affichées au client facilitent l’interface ; elles ne dispensent pas des contrôles Spring sur chaque opération. Offres/readiness/activation P11, traitements de paiement P12 et remboursements P13 sont implémentés comme décrit ci-dessus ; les autres opérations ci-dessous restent prévues pour leurs lots.
+Les routes `/admin/**` exigent des permissions précises. Les permissions affichées au client facilitent l’interface ; elles ne dispensent pas des contrôles Spring sur chaque opération. P15 raccorde l’exploitation aux offres P11, paiements P12, remboursements P13 et aide P14. Le niveau de validation observé reste celui de STATUS et des preuves de lot.
 
 | Groupe de routes | Opérations |
 | --- | --- |
 | `/admin/offers` et `/{id}/readiness` | P11 implémenté : offres, prix, inclusions, conditions et bloqueurs commerciaux |
 | `/admin/offers/{id}/activate` / `deactivate` | P11 implémenté : offre active distincte de publication ; audit et révision |
 | `/admin/payment-events` et `/{id}/retry` | P12 implémenté : métadonnées STRIPE_EVENT/RECONCILIATION_JOB, reprise de rapprochement sans création de paiement |
-| `/admin/orders/{id}` | P15 prévu : consultation opérationnelle générale ; P13 livre seulement le sous-chemin `/refund-context` |
-| `/admin/orders/{id}/reconciliation-requests` | P15 prévu ; les reprises P12 passent par `/admin/payment-events/{id}/retry` |
+| `/admin/orders/{id}` | Instantané acheté, références de paiement et origines distinctes ; permission `commerce.orders.admin.read` |
+| `/admin/orders/{id}/reconciliation-requests` | Révision commande exacte, clé idempotente et permission `payments.events.retry` ; délégation au traitement P12, aucun paiement forcé |
 | `/admin/refund-requests/{id}/preview` / `decision` | P13 implémenté : aperçu courant puis approbation/refus motivé, sans exécution automatique |
 | `/admin/refunds` et actions `/{id}/…` | P13 implémenté : exécution, annulation avant transmission, rapprochement et décision d’accès externe |
-| `/admin/incidents` et `/{id}/retry` | Emails, événements et traitements échoués, reprise contrôlée |
-| `/admin/support-tickets` | P14 implémenté : demandes/messages/historiques, réponses et transitions motivées, pièces sélectionnées ; interface étendue P15 |
+| `/admin/incidents` et `/{kind}/{id}/retry` | Famille source explicite, permissions source et reprise contrôlée ; aucun travail normalement en attente présenté comme panne |
+| `/admin/support-tickets` | P14 : demandes/messages/historiques, réponses, transitions et pièces sélectionnées ; P15 : affectation, brouillon par opérateur, publication explicite, notes internes et minutes |
 | `/admin/audit` / `/admin/metrics` | Événements minimisés, filtres, définitions et agrégations |
 
-Une réponse de `readiness` contient `{ ready, blockingIssues, warnings, checkedRevision }`. Chaque problème indique un `code`, le champ ou la ressource et une action de correction. Le serveur revérifie les conditions lors de la publication/activation ; la réponse précédente ne vaut pas permission permanente.
+Une réponse de préparation éditoriale contient `{ ready, blockingIssues, warnings, checkedRevision }`. Chaque problème indique un `code`, le champ ou la ressource et une action de correction. Le serveur revérifie les conditions lors de la publication ; la réponse précédente ne vaut pas permission permanente.
+
+Le contrat P11 d’offre reste `OfferReadiness` avec `summaryReady`, `checkoutAvailable`, `blockingIssues`, `warnings`, `checkedRevision` et `checkoutUnavailableReason` ; il ne doit pas être décodé comme un état de préparation éditoriale.
+
+P15 utilise des périodes UTC explicites `[from,to)`, limitées à 366 jours, et des pages0..1000000/taille1..100. GET `/admin/operations/dashboard` exige `operations.read` et masque les compteurs dont la lecture source est interdite. Les listes `/admin/orders`, `/admin/incidents`, `/admin/audit`, `/admin/content-cases` et `/admin/metrics` réappliquent leurs permissions serveur. Le détail commande n’a pas d’ETag composite : `orderRevisionTag` ne représente que la commande imbriquée.
+
+Le support interne ajoute `assignment` (ETag `support-assignment-{ticketId}-r{revision}`), `reply-draft` (ETag `support-draft-{ticketId}-{authorId}-r{revision}`), `reply-draft/publications`, `internal-notes` et `time-entries`. Les remplacements exigent If-Match428/412 ; les ajouts/publications et reprises exigent une clé UUID persistée. Aucun DTO propriétaire P14 n’expose ces notes ou brouillons. Publier utilise le texte serveur de la révision exacte du brouillon et le ticket exact, puis le service Support et l’outbox existants. Sauvegarder un brouillon ne publie rien.
+
+Les dossiers `/admin/content-cases` référencent ressource/version/traduction et éventuelle révision source. Une résolution exige une révision corrigée réellement publiée et disponible de la même identité/langue, différente de la source ; elle n’exécute aucune publication automatique. La permission éditoriale n’accorde aucune lecture financière. Le journal expose seulement auteur/action/objet/date/code de motif/résultat, jamais le texte de la note, du brouillon, de la production ou un lien porteur.
+
+Les indicateurs et le CSV `/admin/metrics/export` ont les mêmes filtres. L’export exige `operations.metrics.read` et `operations.metrics.export`. Il contient des agrégats et définitions, pas un export personnel. Les nombres agrégés et montants sont des chaînes décimales exactes ; chaque devise reste distincte, les frais/taxes/coûts inconnus restent null. Les nouveaux faits de visites autorisées et de révisions personnelles ne sont collectés que depuis V017, sans reconstruction historique et sans texte privé. Les [définitions, limites de couverture et règles de flux](OPERATIONS.md) font partie du contrat fonctionnel.
 
 ## Contrat et tests
 

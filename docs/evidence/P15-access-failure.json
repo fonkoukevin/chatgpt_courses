@@ -1,0 +1,29 @@
+{
+  "verifiedAt": "2026-11-09T02:34:56.745Z",
+  "sourceLogPrivate": ".runtime/p15-api-target-inbox-final.log",
+  "finishedAt": "2026-11-09T03:24:20+01:00",
+  "result": "FAILED",
+  "exitCode": 1,
+  "totals": {
+    "tests": 60,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "failedCase": "RefundHttpIntegrationTest.dashboardPartialWaitsForExplicitAccessDecisionAndCumulativeFullRevokesOnlyThatOrder",
+  "observed": {
+    "independentOrderFixtureReachedReady": true,
+    "independentRefundOperationState": "PREPARED",
+    "reservedMinor": 100,
+    "revokedOrigins": 0,
+    "coverage": false,
+    "grantCount": null,
+    "timePredicates": null,
+    "publicationPredicates": null
+  },
+  "causeEstablished": false,
+  "originalDatabaseAlreadyCleaned": true,
+  "coverageRetryAdded": false,
+  "permissionOrDateRelaxed": false,
+  "privatePayloadsIncluded": false
+}

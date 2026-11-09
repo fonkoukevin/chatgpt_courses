@@ -1,0 +1,35 @@
+{
+  "observedAt": "2026-11-09T02:10:38.043099Z",
+  "command": ".\\.tools\\node-v24.22.2-win-x64\\node.exe .runtime/p15-clock-probe.mjs",
+  "probeSource": ".runtime/P15ClockProbe.java",
+  "scope": "Temporary local JDBC diagnostic against the existing PostgreSQL database",
+  "exitCode": 0,
+  "readOnly": true,
+  "connectionOpenedBeforeSamples": true,
+  "credentialsInjectedInMemory": true,
+  "secretsPrinted": false,
+  "businessDataWritten": false,
+  "systemClockChanged": false,
+  "sampleColumns": ["beforeJvmUtc", "postgresUtc", "afterJvmUtc", "roundTripMicroseconds", "minimumPostgresOffsetMicroseconds"],
+  "samples": [
+    ["2026-11-09T02:10:37.046926400Z", "2026-11-09T02:10:36.033004Z", "2026-11-09T02:10:37.050193400Z", 3326, -1013922],
+    ["2026-11-09T02:10:37.171644600Z", "2026-11-09T02:10:36.165258Z", "2026-11-09T02:10:37.173410100Z", 1954, -1006386],
+    ["2026-11-09T02:10:37.274316100Z", "2026-11-09T02:10:36.274272Z", "2026-11-09T02:10:37.275893400Z", 1960, -1000044],
+    ["2026-11-09T02:10:37.388944700Z", "2026-11-09T02:10:36.396537Z", "2026-11-09T02:10:37.391214Z", 2382, -992407],
+    ["2026-11-09T02:10:37.504060600Z", "2026-11-09T02:10:36.518416Z", "2026-11-09T02:10:37.506472Z", 2480, -985644],
+    ["2026-11-09T02:10:37.608885300Z", "2026-11-09T02:10:36.629994Z", "2026-11-09T02:10:37.610522900Z", 1773, -978891],
+    ["2026-11-09T02:10:37.721903300Z", "2026-11-09T02:10:36.750007Z", "2026-11-09T02:10:37.723069900Z", 1301, -971896],
+    ["2026-11-09T02:10:37.824463400Z", "2026-11-09T02:10:36.859538Z", "2026-11-09T02:10:37.826182700Z", 2052, -964925],
+    ["2026-11-09T02:10:37.937365200Z", "2026-11-09T02:10:36.979443Z", "2026-11-09T02:10:37.939182600Z", 2025, -957922],
+    ["2026-11-09T02:10:38.041239Z", "2026-11-09T02:10:37.090130Z", "2026-11-09T02:10:38.043099Z", 1955, -951109]
+  ],
+  "jvmIntervalsInverted": 0,
+  "postgresOutsideJvmIntervalCount": 10,
+  "limits": [
+    "These measurements describe only this current local observation, not production or historical runs.",
+    "Round-trip durations use System.nanoTime; wall-clock bounds use Instant.now around SELECT clock_timestamp().",
+    "The measurements do not establish why an earlier PostgreSQL timestamp decreased.",
+    "No cause or correction of the two historical P12 access refusals after READY is established.",
+    "Payment grant starts_at and EntitlementAccess comparisons both use PostgreSQL clock_timestamp; a constant host/database offset alone does not create a future grant start."
+  ]
+}

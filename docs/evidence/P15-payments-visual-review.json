@@ -1,0 +1,244 @@
+{
+  "phase": "P15",
+  "scope": "Revue visuelle ciblée de huit captures de la régression P12 exécutée par root ; aucune conclusion de clôture globale P15.",
+  "runId": "2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab",
+  "reviewedAt": "2026-11-09T02:52:06.976Z",
+  "reviewer": "versions_web",
+  "method": {
+    "tool": "view_image",
+    "requestedDetail": "original",
+    "pngInventoryCount": 27,
+    "reviewedImageCount": 8,
+    "unreviewedImageCount": 19,
+    "derivedCropCount": 0,
+    "browserOrKeyboardRunByReviewer": false,
+    "applicationSourceModified": false
+  },
+  "sessionObserved": {
+    "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/session.json",
+    "result": "passed",
+    "cleanupConfirmed": true,
+    "completedAt": "2026-11-09T02:45:24.867Z",
+    "externalStripe": false,
+    "paymentWorkerEnabledAtEnd": true,
+    "refundWorkerEnabledAtEnd": true
+  },
+  "images": [
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/fr-1440-paid-activation-delayed.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "ec254e243f1f9ab18fe35ee3d8a876a51a8616a2ebf07938916b809662e28251",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Paiement confirmé et activation en attente distingués. Aucun accès annoncé prêt ni lien de reprise prématuré. Référence de commande et actions lisibles."
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/fr-320-payment-ready-after-worker-restart.png",
+      "width": 320,
+      "height": 1902,
+      "sha256": "946087799bb332d1f22a1a70c11173bd8dfa9eeb8ca76996abff1060074f032a",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Vue complète à 320 px : accès activé, reprise visible, référence repliée et actions sur plusieurs lignes sans débordement essentiel observé. Aucun délai de session obsolète affiché. Email transmis au service, réception non affirmée."
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/fr-390-email-incident-access-still-ready.png",
+      "width": 390,
+      "height": 1607,
+      "sha256": "140765d92b7f0f90216c78aa0ae738a9d59478db1ffd400fa24c6c0ee64440fb",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Succès d’activation et incident email visuellement séparés. Reprise conservée, sans faire dépendre le droit de l’email. Aucun chevauchement essentiel observé."
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/fr-390-email-retried-access-unchanged.png",
+      "width": 390,
+      "height": 1629,
+      "sha256": "79d3a5ab124130793e10d2e8841f14725e47b479ddfe1f91f9f8fac6dbe8f065",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Accès activé inchangé ; notification transmise au service avec réception non confirmée. Montant remboursé nul, liens d’origines et actions lisibles."
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/en-1440-deferred-payment-processing.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "a465b675268a0025a72f3838d4092688baca200432eaf9a13ac651e8360b6b3e",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Confirmation de paiement encore attendue, traitement en cours et aucun nouvel accès activé clairement indiqués. Aucun faux succès ni lien de reprise. Le retour Checkout ne vaut pas confirmation."
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/en-390-payment-api-unavailable.png",
+      "width": 390,
+      "height": 1360,
+      "sha256": "6bae32122f783ea72ada2ac2101a00552562d4707147f83dcbd1f3a26c868b76",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Indisponibilité du service et impossibilité de confirmer les droits actuels explicites. Les faits financiers historiques restent visibles, mais la promesse d’accès courant et la reprise sont retirées. Panne du contexte remboursement distincte."
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/en-390-payment-api-recovered.png",
+      "width": 390,
+      "height": 1525,
+      "sha256": "66aac3c8aa5556be46a2d191a193b6ce87a5d83a0c13d783ad38abd3ccf488e9",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Accès courant confirmé et reprise de nouveau visible après récupération. Notification sans affirmation de réception bancaire ou en boîte email. Aucun débordement essentiel observé."
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/en-390-premium-content-after-payment.png",
+      "width": 390,
+      "height": 4061,
+      "sha256": "e539fa3ec1f1a959fbc2f5bfad684f1f53b840cb8bf023e6a41ccb2271679bd0",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Contenu privé de fixture affiché dans l’activité EN ; son texte n’est pas reproduit dans cette preuve. Progression non cochée, quiz non répondu et historique vide restent distincts de l’achat. Note vierge correctement annoncée comme non enregistrée, boutons espacés et bas de page lisible à 390 px."
+    }
+  ],
+  "unreviewedImages": [
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/en-1440-deferred-payment-ready.png",
+      "width": 1440,
+      "height": 1239,
+      "sha256": "ec4cef87377a3e9dd630c8846c6c59ac4a011430f6ff8f1268cc1ac85d508939",
+      "viewed": false
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/en-320-checkout-consent.png",
+      "width": 320,
+      "height": 2829,
+      "sha256": "2956a8a15c7e80180d5054610b384d63231c31ec03f114e388687a87d8fe7f76",
+      "viewed": false
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/en-320-deferred-payment-ready.png",
+      "width": 320,
+      "height": 1806,
+      "sha256": "1192ef22db393a7d72c77b5ea02759022400862df929cf0693ececda5fc938ce",
+      "viewed": false
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/en-390-confirmed-expired.png",
+      "width": 390,
+      "height": 1279,
+      "sha256": "c6027990c5bdbd726b38e3d580c79a617e442dbfb4aed099f5cabbd7e1096a10",
+      "viewed": false
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/en-390-deferred-payment-processing.png",
+      "width": 390,
+      "height": 1211,
+      "sha256": "fa63b82bd0e082ffd95b32754756ef13ce5e6633e913a7a46b0e4ba17ef31f8b",
+      "viewed": false
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/en-390-deferred-payment-ready.png",
+      "width": 390,
+      "height": 1610,
+      "sha256": "a958c4dcdcb2f1a2f95a848c17e8417d3be9dcdbc19c4ec6a2321b09c9723821",
+      "viewed": false
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/en-390-owned-offer-after-payment.png",
+      "width": 390,
+      "height": 1987,
+      "sha256": "272219a4f541b6698f86c9c7ef314640e834d520190884e22c63975cf9af6d08",
+      "viewed": false
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/fr-1024-payment-ready-after-worker-restart.png",
+      "width": 1024,
+      "height": 1282,
+      "sha256": "0d1efee5099c13ea4bd8df0b679e3ca767283e119b47915409ce2e92a03897d7",
+      "viewed": false
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/fr-1440-durable-event-before-worker.png",
+      "width": 1440,
+      "height": 1195,
+      "sha256": "535edd3552df67b0f7290116c6575a1f79bfcfb4ef2de678f000929e6717903b",
+      "viewed": false
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/fr-1440-payment-ready-after-worker-restart.png",
+      "width": 1440,
+      "height": 1239,
+      "sha256": "1de76226ca47e72db1c40d93af005a2c9025438ac7756faaf937708cfb4ed00e",
+      "viewed": false
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/fr-390-checkout-consent.png",
+      "width": 390,
+      "height": 2751,
+      "sha256": "23e33ad3b509e889f8fcde3187f94f80ef68386d3277fbf6da2e89a798f0f564",
+      "viewed": false
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/fr-390-checkout-offer-change-review.png",
+      "width": 390,
+      "height": 2813,
+      "sha256": "ad08456be4bf0473b84b151020ac19debe16b6b281a5ffc16d8dea76612ee7c9",
+      "viewed": false
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/fr-390-confirmed-failed.png",
+      "width": 390,
+      "height": 1406,
+      "sha256": "87528df4e9a633b434f8651684896a4e7f31d75b8fdf632e2d0064823999b1b6",
+      "viewed": false
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/fr-390-duplicates-remain-one-activation.png",
+      "width": 390,
+      "height": 1629,
+      "sha256": "fc022037723cb3ac527c0b647a9f6a10d1dcb579645e914e87b61eb9f6783dcb",
+      "viewed": false
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/fr-390-forged-success-without-payment.png",
+      "width": 390,
+      "height": 1632,
+      "sha256": "346dd09364865f7c62c9b1929bf25f11b84dfee2cbe297eb28e8032c1a7bd51c",
+      "viewed": false
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/fr-390-other-owner-payment-refused.png",
+      "width": 390,
+      "height": 1000,
+      "sha256": "1934e37ebbd7307e7e6d5b6a5acf4ab6f4a606dfe1e3665162458f9fe739e867",
+      "viewed": false
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/fr-390-payment-ready-after-worker-restart.png",
+      "width": 390,
+      "height": 1760,
+      "sha256": "662fa9f983907385e20d8ce3e7aea1e9d8ddd5d191a704f262cff1e2644112f0",
+      "viewed": false
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/fr-390-premium-content-after-payment.png",
+      "width": 390,
+      "height": 4216,
+      "sha256": "50a764c71c0d101532544e91d62b778d61c1728842093340d0a29e80a6169f41",
+      "viewed": false
+    },
+    {
+      "file": "docs/evidence/P12-browser/2026-11-09T02-41-21-004Z-80e2a09b-a3ef-4c48-802c-955c088933ab/fr-768-payment-ready-after-worker-restart.png",
+      "width": 768,
+      "height": 1262,
+      "sha256": "c72b6072dae7ab41bf36f0f36ae5cf5ec68eea282b5cf785cea15dcad036debd",
+      "viewed": false
+    }
+  ],
+  "materialDefectsObserved": [],
+  "limitations": [
+    "Revue statique uniquement : pas de nouvelle exécution navigateur, clavier, requête API ou paiement par le relecteur.",
+    "Huit images réellement ouvertes en résolution originale ; les dix-neuf autres PNG sont inventoriées et explicitement non revues dans cette preuve. Aucune image examinée ne dépasse 6000 px de hauteur.",
+    "Les captures ne prouvent pas à elles seules les règles générales d’autorisation, les transitions serveur, le focus ou la conformité WCAG globale.",
+    "Ce run utilise un fournisseur Stripe contrôlé localement, pas un paiement Stripe externe ; les prix et contenus visibles sont des fixtures isolées.",
+    "Les deux refus historiques après READY restent de cause inconnue et suivis en P17/P19. Cette revue et ce passage vert ne constituent pas un correctif démontré de ces incidents.",
+    "La validation globale de P15 et les autres contrôles restent sous la responsabilité du coordinateur ; aucune clôture de phase n’est déclarée ici."
+  ]
+}

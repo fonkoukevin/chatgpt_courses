@@ -5,7 +5,7 @@ import { steps } from './ci-run.mjs';
 import { regularOwnedFile, screenshots, writePublicJson } from './ci-sanitize.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const allowedNames = new Set([...Object.keys(steps), ...Object.keys(steps).map(name => `${name}-collection`), 'scripts', 'browsers', 'smoke', 'scripts-collection', 'http-probe', 'report'].map(name => `${name}.json`));
+const allowedNames = new Set([...Object.keys(steps), ...Object.keys(steps).map(name => `${name}-collection`), 'scripts', 'browsers', 'smoke', 'scripts-collection', 'http-probe', 'release-harness', 'report'].map(name => `${name}.json`));
 export function validatePublicReport(directory) {
   function valueAllowed(value, depth = 0) {
     if (depth > 12) return false;

@@ -8,6 +8,7 @@ import { createBrowserDatabase, observeBrowserDatabase, stopBrowserDatabase } fr
 import { createBrowserServices, observeBrowserStorage, setBrowserServicePaused, stopBrowserService } from './lib/browser-services.mjs';
 import { createBrowserPayments } from './lib/browser-payments.mjs';
 import { assertExternalStripeListenerIsolation, createBrowserExternalStripe } from './lib/browser-stripe-external.mjs';
+import { browserErrorCodes } from './ci-sanitize.mjs';
 
 const env = environment();
 const phase = process.argv[2] ?? 'P01';
@@ -77,6 +78,8 @@ let services = [];
 let payments;
 let initialRuntimeFlags;
 let databaseDiagnostic;
+let stage = 'DATABASE';
+let playwrightStarted = false;
 
 function runtimeFlags() {
   const enabled = (key, fallback) => env[key] === undefined ? fallback : String(env[key]).trim().toLowerCase() === 'true';
@@ -224,6 +227,7 @@ try {
     env.STRIPE_ENABLED = 'false'; delete env.STRIPE_SECRET_KEY; delete env.STRIPE_WEBHOOK_SECRET;
   }
   if (['P10','P12','P12_EXTERNAL','P13','P14','P15','P16','P16_SEO','P17','P18','P19','P19_EXTERNAL'].includes(phase)) {
+    stage = 'SERVICES';
     services = await createBrowserServices(env, runDirectory, runId, (records) => { services = records; save(); });
     if (phase === 'P10' || phase === 'P16') {
       env.VIDEO_ENABLED = 'true'; env.VIDEO_PROVIDER = 'local-test'; env.VIDEO_LOCAL_ROOT = join(runDirectory, 'private-video');
@@ -232,6 +236,7 @@ try {
     }
     save();
   }
+  stage = 'PAYMENTS';
   if (phase === 'P12') { env.API_TIMEOUT_MS = '30000'; payments = await createBrowserPayments(env,{refundsEnabled:true}); env.REFUND_WORKER_ENABLED='true'; }
   if (refundPhase) { env.API_TIMEOUT_MS = '30000'; payments = await createBrowserPayments(env,{refundsEnabled:true}); env.PAYMENT_INBOX_ENABLED='true'; env.REFUND_WORKER_ENABLED='true'; }
   if (phase === 'P15') env.COMMERCE_ALLOWED_CURRENCIES = 'EUR,USD,GBP';
@@ -242,11 +247,13 @@ try {
   if (controlledRelease) { env.API_TIMEOUT_MS = '30000'; payments = await createBrowserPayments(env, { refundsEnabled: true }); Object.assign(env, { COMMERCE_ALLOWED_CURRENCIES: 'EUR', PAYMENT_INBOX_ENABLED: 'true', REFUND_WORKER_ENABLED: 'true', NOTIFICATION_OUTBOX_ENABLED: 'true' }); }
   if (externalRefunds) Object.assign(env, { PAYMENT_INBOX_ENABLED: 'false', REFUND_WORKER_ENABLED: 'false', NOTIFICATION_OUTBOX_ENABLED: 'true' });
   initialRuntimeFlags = runtimeFlags();
+  stage = 'CONTROL_LISTEN';
   await new Promise((resolveListen, rejectListen) => {
     control.once('error', rejectListen);
     control.listen(ipc, resolveListen);
   });
   if (!windows) chmodSync(ipc, 0o600);
+  stage = 'START_SERVERS';
   web = launch('web', process.execPath, [next, 'start', '--hostname', '127.0.0.1', '--port', String(new URL(env.APP_PUBLIC_ORIGIN).port)],
     { cwd: join(root, 'apps/web') });
   await Promise.race([Promise.all([
@@ -258,6 +265,7 @@ try {
     for (const key of Object.keys(browserEnvironment)) if (key.startsWith('STRIPE_')) delete browserEnvironment[key];
   }
   if (externalStripe) browserEnvironment.PLAYWRIGHT_NO_COPY_PROMPT = '1';
+  stage = 'BROWSER';
   const playwright = launch('playwright', process.execPath, [runner, 'test', '--config', join(root, 'playwright.config.ts'), ...diagnosticArgs], {
     stdio: 'inherit',
     env: { ...browserEnvironment, COURSES_BROWSER_PHASE: phase, COURSES_BROWSER_ORIGIN: env.APP_PUBLIC_ORIGIN, COURSES_BROWSER_IPC: ipc,
@@ -267,9 +275,11 @@ try {
       ...(database ? { COURSES_BROWSER_DB_ID: database.id, COURSES_BROWSER_RUN_ID: runId } : {}),
       COURSES_MAILPIT_ORIGIN: `http://127.0.0.1:${port(env.MAIL_HTTP_PORT, 8025)}` },
   });
+  playwrightStarted = Number.isInteger(playwright.child.pid);
   const result = await Promise.race([playwright.exit, interrupted]);
   if (result.code !== 0) throw new Error(`Recette navigateur échouée (code ${result.code}, signal ${result.signal}).`);
   if (phase === 'P02') {
+    stage = 'FIXTURE_GUARDS';
     // The exact same compiled app must reject every fixture route at runtime.
     await terminate(web);
     const checks = [];
@@ -299,6 +309,7 @@ try {
     writeFileSync(join(evidence, 'production-guards.json'), JSON.stringify(checks, null, 2));
     console.log(`${checks.length} routes de vitrine refusées en staging/production par le build local.`);
   }
+  stage = 'COMPLETE';
   console.log(`Recette navigateur terminée. Captures et rapport : docs/evidence/${phase}-browser/${runId}`);
 } catch (error) {
   verificationError = error;
@@ -347,6 +358,8 @@ try {
   try {
     writeFileSync(join(evidence, 'session.json'), JSON.stringify({ runId, completedAt: new Date().toISOString(), selection: selected,
       result: verificationError || cleanupErrors.length ? 'failed' : 'passed', cleanupConfirmed: cleanupErrors.length === 0,
+      stage, playwrightStarted,
+      failureCode: browserErrorCodes.includes(verificationError?.code) ? verificationError.code : verificationError ? 'HARNESS_FAILURE' : 'NONE',
       initialRuntimeFlags, finalRuntimeFlags: runtimeFlags(),
       ...(databaseDiagnostic ? { databaseDiagnostic: { available: databaseDiagnostic.available, file: 'database-diagnostic.json' } } : {}),
       ...(database ? { isolatedPostgres: { image: database.image, tmpfs: true, stopped: database.stopped } } : {}),

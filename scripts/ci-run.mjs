@@ -4,7 +4,7 @@ import { randomBytes } from 'node:crypto';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { command, environment, root, windows } from './lib/runtime.mjs';
-import { sanitizeTap, sanitizePlaywright, collectSurefire, copyApprovedScreenshots, regularOwnedFile, writePublicJson, requireReleaseSuccess, requireJUnitSuccess } from './ci-sanitize.mjs';
+import { sanitizeTap, sanitizePlaywright, sanitizeBrowserSession, collectSurefire, copyApprovedScreenshots, regularOwnedFile, writePublicJson, requireReleaseSuccess, requireJUnitSuccess } from './ci-sanitize.mjs';
 
 export const steps = Object.freeze({ install: ['ci'], contract: ['run', 'api:check'], client: ['run', 'verify:client'], content: ['run', 'verify:content', '--', 'P19'], contrast: ['run', 'verify:contrast', '--', 'P19'], stripeConfig: ['run', 'verify:stripe-config'], lint: ['run', 'lint'], types: ['run', 'typecheck'], browserTypes: ['run', 'typecheck:browser'], web: ['run', 'build:web'], api: ['run', 'verify:api'], release: ['run', 'verify:release'], production: ['run', 'verify:production-config'] });
 const jobs = new Set(['web', 'api', 'e2e']);
@@ -27,7 +27,10 @@ function collectRelease(before, destination) {
   if (runs.length !== 1) throw new Error('CI_EXACTLY_ONE_NEW_RELEASE_RUN_REQUIRED');
   const directory = join(root, 'docs/evidence/P19-browser', runs[0]);
   const read = name => JSON.parse(readFileSync(regularOwnedFile(directory, join(directory, name)), 'utf8'));
-  const result = sanitizePlaywright(read('results.json')), session = read('session.json');
+  const session = read('session.json');
+  // Preserve a finite setup diagnostic even if Playwright never produced results.
+  writePublicJson(join(destination, 'release-harness.json'), sanitizeBrowserSession(session));
+  const result = sanitizePlaywright(read('results.json'));
   const captures = existsSync(join(directory, 'capture-manifest.json')) ? copyApprovedScreenshots(directory, join(destination, 'screenshots'), read('capture-manifest.json')) : [];
   writePublicJson(join(destination, 'release.json'), { ...result, cleanupConfirmed: session.cleanupConfirmed === true, harnessResult: session.result === 'passed' ? 'passed' : 'failed', captures });
   if (session.cleanupConfirmed !== true || session.result !== 'passed' || captures.length !== 8) throw new Error('CI_RELEASE_EVIDENCE_INCOMPLETE');

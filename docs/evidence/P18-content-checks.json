@@ -1,0 +1,1525 @@
+{
+  "phase": "P18",
+  "executedAt": "2026-11-09T04:51:19.716Z",
+  "command": ".\\scripts\\courses.cmd run verify:content",
+  "allPassed": true,
+  "sourceFileCount": 30,
+  "sourceFiles": [
+    {
+      "path": "content/course-client-proposal/v1/fr/m01.json",
+      "locale": "fr",
+      "kind": "MODULE_SOURCE",
+      "bytes": 8263,
+      "sha256": "241cc1610e0deee89d711e94a7bfc1f1a6584761e8d07b3a9082267878b19beb",
+      "opened": true,
+      "usefulWords": 899,
+      "bodyWords": 559
+    },
+    {
+      "path": "content/course-client-proposal/v1/fr/m02.json",
+      "locale": "fr",
+      "kind": "MODULE_SOURCE",
+      "bytes": 7954,
+      "sha256": "26bcd7b031ff6f7509090a88990d1567ddf7c95a22be2ab43eb16b92cc5100ea",
+      "opened": true,
+      "usefulWords": 883,
+      "bodyWords": 556
+    },
+    {
+      "path": "content/course-client-proposal/v1/fr/m03.json",
+      "locale": "fr",
+      "kind": "MODULE_SOURCE",
+      "bytes": 8588,
+      "sha256": "c730b295df5c1b328e69f204565563d15ba71d45d03f929e9a03ecb76746b874",
+      "opened": true,
+      "usefulWords": 896,
+      "bodyWords": 550
+    },
+    {
+      "path": "content/course-client-proposal/v1/fr/m04.json",
+      "locale": "fr",
+      "kind": "MODULE_SOURCE",
+      "bytes": 7887,
+      "sha256": "60fce3bb0658d64895e9e5a48235b72fa5797cfe6413f048b15240027c9829f9",
+      "opened": true,
+      "usefulWords": 885,
+      "bodyWords": 546
+    },
+    {
+      "path": "content/course-client-proposal/v1/fr/m05.json",
+      "locale": "fr",
+      "kind": "MODULE_SOURCE",
+      "bytes": 8605,
+      "sha256": "51ae09f590d137ff68a0332bcf4e2ff836ba522062f5bf1de8b65bc68c697b02",
+      "opened": true,
+      "usefulWords": 885,
+      "bodyWords": 577
+    },
+    {
+      "path": "content/course-client-proposal/v1/fr/m06.json",
+      "locale": "fr",
+      "kind": "MODULE_SOURCE",
+      "bytes": 8299,
+      "sha256": "3357417ceab11fc07280f25d9832f1215a908b02056f693a6086d8c6b07717f2",
+      "opened": true,
+      "usefulWords": 898,
+      "bodyWords": 564
+    },
+    {
+      "path": "content/course-client-proposal/v1/en/m01.json",
+      "locale": "en",
+      "kind": "MODULE_SOURCE",
+      "bytes": 7918,
+      "sha256": "f35c2e07316a42c114ac951510ed1c3b48a1e0391f9d5ee20287eedc1b5826f5",
+      "opened": true,
+      "usefulWords": 898,
+      "bodyWords": 568
+    },
+    {
+      "path": "content/course-client-proposal/v1/en/m02.json",
+      "locale": "en",
+      "kind": "MODULE_SOURCE",
+      "bytes": 7823,
+      "sha256": "482dca793f957f14f3585bc1d9a4eb7ae0593aa684af4ad10e1798fbf1856a92",
+      "opened": true,
+      "usefulWords": 889,
+      "bodyWords": 557
+    },
+    {
+      "path": "content/course-client-proposal/v1/en/m03.json",
+      "locale": "en",
+      "kind": "MODULE_SOURCE",
+      "bytes": 7732,
+      "sha256": "2e4394b1bc1f455056cdeb0fced912d21e8aca05048167cdecea4e6382850b9e",
+      "opened": true,
+      "usefulWords": 830,
+      "bodyWords": 524
+    },
+    {
+      "path": "content/course-client-proposal/v1/en/m04.json",
+      "locale": "en",
+      "kind": "MODULE_SOURCE",
+      "bytes": 7437,
+      "sha256": "a00915fe708195b99fdf66b1204b762d43459e035e8116fc470abbb5e7b56d27",
+      "opened": true,
+      "usefulWords": 852,
+      "bodyWords": 526
+    },
+    {
+      "path": "content/course-client-proposal/v1/en/m05.json",
+      "locale": "en",
+      "kind": "MODULE_SOURCE",
+      "bytes": 8148,
+      "sha256": "c19a91c65ba5dbd47da1d935c22a93c79bccb13db518d70f2125dbcdfb7b9941",
+      "opened": true,
+      "usefulWords": 884,
+      "bodyWords": 582
+    },
+    {
+      "path": "content/course-client-proposal/v1/en/m06.json",
+      "locale": "en",
+      "kind": "MODULE_SOURCE",
+      "bytes": 7750,
+      "sha256": "c299c5eb0472f75eb2405f2a7461ef6f15b43636f30c715db18d249e56ecebaf",
+      "opened": true,
+      "usefulWords": 866,
+      "bodyWords": 549
+    },
+    {
+      "path": "content/course-client-proposal/v1/resources/fr/br01-tr01.md",
+      "locale": "fr",
+      "kind": "RESOURCE_SOURCE",
+      "bytes": 2932,
+      "sha256": "6d1b55e4914544af20e5867aa29f7c2490c15b87ed6d44c132ee72974c53aec4",
+      "opened": true,
+      "words": 408
+    },
+    {
+      "path": "content/course-client-proposal/v1/resources/fr/scoping-table.md",
+      "locale": "fr",
+      "kind": "RESOURCE_SOURCE",
+      "bytes": 3103,
+      "sha256": "8805e4cd2e7b295e3305b80362d89686c916532f79d3989088f9692a590955ef",
+      "opened": true,
+      "words": 404
+    },
+    {
+      "path": "content/course-client-proposal/v1/resources/fr/prompt-method.md",
+      "locale": "fr",
+      "kind": "RESOURCE_SOURCE",
+      "bytes": 3595,
+      "sha256": "24ca92f593b55fa0e05095b06d53a2c46c4e6babffdf48ddf308efc011ee643d",
+      "opened": true,
+      "words": 491
+    },
+    {
+      "path": "content/course-client-proposal/v1/resources/fr/proposal-template.md",
+      "locale": "fr",
+      "kind": "RESOURCE_SOURCE",
+      "bytes": 2356,
+      "sha256": "143795867f87372590223b98fde740aa1c2f4f7a39c9d869ff7b3e2d1115fe22",
+      "opened": true,
+      "words": 320
+    },
+    {
+      "path": "content/course-client-proposal/v1/resources/fr/assessment-grid-br01.md",
+      "locale": "fr",
+      "kind": "RESOURCE_SOURCE",
+      "bytes": 4218,
+      "sha256": "5c8fdbc0077e69b646c589430f628cd16d3e31423586ea3e6523cde62a81b492",
+      "opened": true,
+      "words": 561
+    },
+    {
+      "path": "content/course-client-proposal/v1/resources/fr/commented-solution-br01.md",
+      "locale": "fr",
+      "kind": "SOLUTION_SOURCE",
+      "bytes": 3908,
+      "sha256": "8055fa9504f9b232654a02d50fce7cf15e48e8b905f56a6781212d96baf9bbdb",
+      "opened": true,
+      "words": 548
+    },
+    {
+      "path": "content/course-client-proposal/v1/resources/fr/br02.md",
+      "locale": "fr",
+      "kind": "RESOURCE_SOURCE",
+      "bytes": 2260,
+      "sha256": "351dbfb396d68d123742bcaef2d127e45b267daa5e47e09a17d8005649f6c58d",
+      "opened": true,
+      "words": 326
+    },
+    {
+      "path": "content/course-client-proposal/v1/resources/fr/commented-solution-br02.md",
+      "locale": "fr",
+      "kind": "SOLUTION_SOURCE",
+      "bytes": 3157,
+      "sha256": "53a9a7df6c0698434bd15ec298e7b11c2eba3109a98317d0871d46810ac04759",
+      "opened": true,
+      "words": 467
+    },
+    {
+      "path": "content/course-client-proposal/v1/resources/fr/presentation-emails.md",
+      "locale": "fr",
+      "kind": "RESOURCE_SOURCE",
+      "bytes": 2058,
+      "sha256": "c4fb03bc242a1ec277f207538845486d19a8f5dd5a784b781b3fa143407a1069",
+      "opened": true,
+      "words": 295
+    },
+    {
+      "path": "content/course-client-proposal/v1/resources/en/br01-tr01.md",
+      "locale": "en",
+      "kind": "RESOURCE_SOURCE",
+      "bytes": 2670,
+      "sha256": "006503215e6c3eeb62069f16351679a5007f9c863971578ba7af21c424ad1ff5",
+      "opened": true,
+      "words": 382
+    },
+    {
+      "path": "content/course-client-proposal/v1/resources/en/scoping-table.md",
+      "locale": "en",
+      "kind": "RESOURCE_SOURCE",
+      "bytes": 2711,
+      "sha256": "209ab393358f4d6d0674bf30c6d0e55e0a0aeac6c808cd3f1e66262314d3fef2",
+      "opened": true,
+      "words": 367
+    },
+    {
+      "path": "content/course-client-proposal/v1/resources/en/prompt-method.md",
+      "locale": "en",
+      "kind": "RESOURCE_SOURCE",
+      "bytes": 3196,
+      "sha256": "8cb40088b475c52d662cb285a378c4c2e8c68f5115439e06de522c6eb40adbd8",
+      "opened": true,
+      "words": 447
+    },
+    {
+      "path": "content/course-client-proposal/v1/resources/en/proposal-template.md",
+      "locale": "en",
+      "kind": "RESOURCE_SOURCE",
+      "bytes": 2132,
+      "sha256": "51d2f06c571372b0e496194d2e4073832be54c9ebe20b8052e532a3fa235c5f5",
+      "opened": true,
+      "words": 299
+    },
+    {
+      "path": "content/course-client-proposal/v1/resources/en/assessment-grid-br01.md",
+      "locale": "en",
+      "kind": "RESOURCE_SOURCE",
+      "bytes": 3696,
+      "sha256": "5365a14ebc6b0595bf457a6d09c1f91241d113291355401290259868a97487d1",
+      "opened": true,
+      "words": 504
+    },
+    {
+      "path": "content/course-client-proposal/v1/resources/en/commented-solution-br01.md",
+      "locale": "en",
+      "kind": "SOLUTION_SOURCE",
+      "bytes": 3432,
+      "sha256": "d6680779578d7c03dcb03b3429e5d21bf60b4e5d3f2f037ae231706057f3c884",
+      "opened": true,
+      "words": 507
+    },
+    {
+      "path": "content/course-client-proposal/v1/resources/en/br02.md",
+      "locale": "en",
+      "kind": "RESOURCE_SOURCE",
+      "bytes": 2049,
+      "sha256": "488c229685c8d2598331b860e6e0c961f5917d271cad274b3c1881c39bd4d638",
+      "opened": true,
+      "words": 303
+    },
+    {
+      "path": "content/course-client-proposal/v1/resources/en/commented-solution-br02.md",
+      "locale": "en",
+      "kind": "SOLUTION_SOURCE",
+      "bytes": 2906,
+      "sha256": "5117b4fae3232fd0b0ddcd59be0f03306589cce9ffafaec587970c0410ad17ae",
+      "opened": true,
+      "words": 438
+    },
+    {
+      "path": "content/course-client-proposal/v1/resources/en/presentation-emails.md",
+      "locale": "en",
+      "kind": "RESOURCE_SOURCE",
+      "bytes": 1838,
+      "sha256": "d5ee843caa901bb92f1075f45610c7f43b669159053a545b55183284f82a4d91",
+      "opened": true,
+      "words": 273
+    }
+  ],
+  "canonicalRubricInput": {
+    "path": "apps/api/src/main/resources/editorial/project-presets.json",
+    "sha256": "830e840021dfe8a941716e46b25b7260d504a181b6e635f749a2d7e17c1be4e9"
+  },
+  "arithmetic": [
+    {
+      "locale": "fr",
+      "TR01": {
+        "rows": {
+          "home": 320,
+          "services": 360,
+          "about": 220,
+          "contact": 120,
+          "scoping": 180,
+          "total": 1200
+        },
+        "total": 1200
+      },
+      "BR02": {
+        "rows": {
+          "scoping": 180,
+          "home": 320,
+          "services": 360,
+          "about": 220,
+          "contact": 120,
+          "faq": 200,
+          "integration": null
+        },
+        "full": 1400,
+        "noAboutOption": 1180
+      },
+      "solutionEquations": [
+        {
+          "terms": [
+            180,
+            320,
+            360,
+            220,
+            120
+          ],
+          "calculated": 1200,
+          "stated": 1200
+        },
+        {
+          "terms": [
+            180,
+            320,
+            360,
+            220,
+            120,
+            200
+          ],
+          "calculated": 1400,
+          "stated": 1400
+        },
+        {
+          "terms": [
+            180,
+            320,
+            360,
+            120,
+            200
+          ],
+          "calculated": 1180,
+          "stated": 1180
+        }
+      ]
+    },
+    {
+      "locale": "en",
+      "TR01": {
+        "rows": {
+          "home": 320,
+          "services": 360,
+          "about": 220,
+          "contact": 120,
+          "scoping": 180,
+          "total": 1200
+        },
+        "total": 1200
+      },
+      "BR02": {
+        "rows": {
+          "scoping": 180,
+          "home": 320,
+          "services": 360,
+          "about": 220,
+          "contact": 120,
+          "faq": 200,
+          "integration": null
+        },
+        "full": 1400,
+        "noAboutOption": 1180
+      },
+      "solutionEquations": [
+        {
+          "terms": [
+            180,
+            320,
+            360,
+            220,
+            120
+          ],
+          "calculated": 1200,
+          "stated": 1200
+        },
+        {
+          "terms": [
+            180,
+            320,
+            360,
+            220,
+            120,
+            200
+          ],
+          "calculated": 1400,
+          "stated": 1400
+        },
+        {
+          "terms": [
+            180,
+            320,
+            360,
+            120,
+            200
+          ],
+          "calculated": 1180,
+          "stated": 1180
+        }
+      ]
+    }
+  ],
+  "rubricChecks": [
+    {
+      "locale": "fr",
+      "caseCode": "BR01",
+      "criterionCount": 20,
+      "points": 20,
+      "configuredReferenceThreshold": 16,
+      "blockingKeys": [
+        "invented-claims",
+        "definitive-wrong-total",
+        "unpriced-inclusion",
+        "unsupported-date"
+      ]
+    },
+    {
+      "locale": "fr",
+      "caseCode": "BR02",
+      "criterionCount": 20,
+      "points": 20,
+      "configuredReferenceThreshold": 16,
+      "blockingKeys": [
+        "invented-claims",
+        "definitive-wrong-total",
+        "unpriced-inclusion",
+        "unsupported-date"
+      ]
+    },
+    {
+      "locale": "en",
+      "caseCode": "BR01",
+      "criterionCount": 20,
+      "points": 20,
+      "configuredReferenceThreshold": 16,
+      "blockingKeys": [
+        "invented-claims",
+        "definitive-wrong-total",
+        "unpriced-inclusion",
+        "unsupported-date"
+      ]
+    },
+    {
+      "locale": "en",
+      "caseCode": "BR02",
+      "criterionCount": 20,
+      "points": 20,
+      "configuredReferenceThreshold": 16,
+      "blockingKeys": [
+        "invented-claims",
+        "definitive-wrong-total",
+        "unpriced-inclusion",
+        "unsupported-date"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "content/course-client-proposal/v1/fr/m01.json: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m01.json: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m01.json: exact source shape and identity",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m01.json: editable document source below48KiB",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m01.json: title/summary/objective/result bounds",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m01.json: developed body and bounded blocks",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m01.json: useful prerequisites and exercise",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m01.json: quiz keys, choices, explanations and one-point scoring",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m01.json:500–900 useful words including practice and assessment",
+      "passed": true,
+      "observed": 899
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m02.json: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m02.json: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m02.json: exact source shape and identity",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m02.json: editable document source below48KiB",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m02.json: title/summary/objective/result bounds",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m02.json: developed body and bounded blocks",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m02.json: useful prerequisites and exercise",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m02.json: quiz keys, choices, explanations and one-point scoring",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m02.json:500–900 useful words including practice and assessment",
+      "passed": true,
+      "observed": 883
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m03.json: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m03.json: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m03.json: exact source shape and identity",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m03.json: editable document source below48KiB",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m03.json: title/summary/objective/result bounds",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m03.json: developed body and bounded blocks",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m03.json: useful prerequisites and exercise",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m03.json: quiz keys, choices, explanations and one-point scoring",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m03.json:500–900 useful words including practice and assessment",
+      "passed": true,
+      "observed": 896
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m04.json: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m04.json: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m04.json: exact source shape and identity",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m04.json: editable document source below48KiB",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m04.json: title/summary/objective/result bounds",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m04.json: developed body and bounded blocks",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m04.json: useful prerequisites and exercise",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m04.json: quiz keys, choices, explanations and one-point scoring",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m04.json:500–900 useful words including practice and assessment",
+      "passed": true,
+      "observed": 885
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m05.json: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m05.json: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m05.json: exact source shape and identity",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m05.json: editable document source below48KiB",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m05.json: title/summary/objective/result bounds",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m05.json: developed body and bounded blocks",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m05.json: useful prerequisites and exercise",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m05.json: quiz keys, choices, explanations and one-point scoring",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m05.json:500–900 useful words including practice and assessment",
+      "passed": true,
+      "observed": 885
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m06.json: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m06.json: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m06.json: exact source shape and identity",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m06.json: editable document source below48KiB",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m06.json: title/summary/objective/result bounds",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m06.json: developed body and bounded blocks",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m06.json: useful prerequisites and exercise",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m06.json: quiz keys, choices, explanations and one-point scoring",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/fr/m06.json:500–900 useful words including practice and assessment",
+      "passed": true,
+      "observed": 898
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m01.json: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m01.json: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m01.json: exact source shape and identity",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m01.json: editable document source below48KiB",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m01.json: title/summary/objective/result bounds",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m01.json: developed body and bounded blocks",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m01.json: useful prerequisites and exercise",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m01.json: quiz keys, choices, explanations and one-point scoring",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m01.json:500–900 useful words including practice and assessment",
+      "passed": true,
+      "observed": 898
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m02.json: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m02.json: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m02.json: exact source shape and identity",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m02.json: editable document source below48KiB",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m02.json: title/summary/objective/result bounds",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m02.json: developed body and bounded blocks",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m02.json: useful prerequisites and exercise",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m02.json: quiz keys, choices, explanations and one-point scoring",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m02.json:500–900 useful words including practice and assessment",
+      "passed": true,
+      "observed": 889
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m03.json: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m03.json: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m03.json: exact source shape and identity",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m03.json: editable document source below48KiB",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m03.json: title/summary/objective/result bounds",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m03.json: developed body and bounded blocks",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m03.json: useful prerequisites and exercise",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m03.json: quiz keys, choices, explanations and one-point scoring",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m03.json:500–900 useful words including practice and assessment",
+      "passed": true,
+      "observed": 830
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m04.json: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m04.json: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m04.json: exact source shape and identity",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m04.json: editable document source below48KiB",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m04.json: title/summary/objective/result bounds",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m04.json: developed body and bounded blocks",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m04.json: useful prerequisites and exercise",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m04.json: quiz keys, choices, explanations and one-point scoring",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m04.json:500–900 useful words including practice and assessment",
+      "passed": true,
+      "observed": 852
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m05.json: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m05.json: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m05.json: exact source shape and identity",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m05.json: editable document source below48KiB",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m05.json: title/summary/objective/result bounds",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m05.json: developed body and bounded blocks",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m05.json: useful prerequisites and exercise",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m05.json: quiz keys, choices, explanations and one-point scoring",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m05.json:500–900 useful words including practice and assessment",
+      "passed": true,
+      "observed": 884
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m06.json: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m06.json: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m06.json: exact source shape and identity",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m06.json: editable document source below48KiB",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m06.json: title/summary/objective/result bounds",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m06.json: developed body and bounded blocks",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m06.json: useful prerequisites and exercise",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m06.json: quiz keys, choices, explanations and one-point scoring",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/en/m06.json:500–900 useful words including practice and assessment",
+      "passed": true,
+      "observed": 866
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/br01-tr01.md: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/br01-tr01.md: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/br01-tr01.md: useful editable Markdown source",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/br01-tr01.md: real relative resource or HTTPS reference",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/br01-tr01.md: real relative resource or HTTPS reference",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/scoping-table.md: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/scoping-table.md: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/scoping-table.md: useful editable Markdown source",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/scoping-table.md: real relative resource or HTTPS reference",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/scoping-table.md: real relative resource or HTTPS reference",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/prompt-method.md: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/prompt-method.md: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/prompt-method.md: useful editable Markdown source",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/prompt-method.md: real relative resource or HTTPS reference",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/prompt-method.md: real relative resource or HTTPS reference",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/prompt-method.md: real relative resource or HTTPS reference",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/prompt-method.md: real relative resource or HTTPS reference",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/proposal-template.md: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/proposal-template.md: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/proposal-template.md: useful editable Markdown source",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/assessment-grid-br01.md: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/assessment-grid-br01.md: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/assessment-grid-br01.md: useful editable Markdown source",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/commented-solution-br01.md: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/commented-solution-br01.md: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/commented-solution-br01.md: useful editable Markdown source",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/br02.md: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/br02.md: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/br02.md: useful editable Markdown source",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/commented-solution-br02.md: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/commented-solution-br02.md: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/commented-solution-br02.md: useful editable Markdown source",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/presentation-emails.md: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/presentation-emails.md: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/fr/presentation-emails.md: useful editable Markdown source",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/br01-tr01.md: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/br01-tr01.md: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/br01-tr01.md: useful editable Markdown source",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/br01-tr01.md: real relative resource or HTTPS reference",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/br01-tr01.md: real relative resource or HTTPS reference",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/scoping-table.md: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/scoping-table.md: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/scoping-table.md: useful editable Markdown source",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/scoping-table.md: real relative resource or HTTPS reference",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/scoping-table.md: real relative resource or HTTPS reference",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/prompt-method.md: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/prompt-method.md: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/prompt-method.md: useful editable Markdown source",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/prompt-method.md: real relative resource or HTTPS reference",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/prompt-method.md: real relative resource or HTTPS reference",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/prompt-method.md: real relative resource or HTTPS reference",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/prompt-method.md: real relative resource or HTTPS reference",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/proposal-template.md: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/proposal-template.md: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/proposal-template.md: useful editable Markdown source",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/assessment-grid-br01.md: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/assessment-grid-br01.md: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/assessment-grid-br01.md: useful editable Markdown source",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/commented-solution-br01.md: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/commented-solution-br01.md: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/commented-solution-br01.md: useful editable Markdown source",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/br02.md: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/br02.md: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/br02.md: useful editable Markdown source",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/commented-solution-br02.md: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/commented-solution-br02.md: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/commented-solution-br02.md: useful editable Markdown source",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/presentation-emails.md: UTF-8 without BOM",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/presentation-emails.md: well-formed Unicode without unsupported controls",
+      "passed": true
+    },
+    {
+      "name": "content/course-client-proposal/v1/resources/en/presentation-emails.md: useful editable Markdown source",
+      "passed": true
+    },
+    {
+      "name": "m01: FR/EN assessment identity, order and scoring",
+      "passed": true
+    },
+    {
+      "name": "m02: FR/EN assessment identity, order and scoring",
+      "passed": true
+    },
+    {
+      "name": "m03: FR/EN assessment identity, order and scoring",
+      "passed": true
+    },
+    {
+      "name": "m04: FR/EN assessment identity, order and scoring",
+      "passed": true
+    },
+    {
+      "name": "m05: FR/EN assessment identity, order and scoring",
+      "passed": true
+    },
+    {
+      "name": "m06: FR/EN assessment identity, order and scoring",
+      "passed": true
+    },
+    {
+      "name": "fr: actual TR01 rows reconcile to stated total and reference1200",
+      "passed": true,
+      "observed": {
+        "rows": {
+          "home": 320,
+          "services": 360,
+          "about": 220,
+          "contact": 120,
+          "scoping": 180,
+          "total": 1200
+        },
+        "calculated": 1200
+      }
+    },
+    {
+      "name": "fr: actual BR02 table retains TR01 prices and FAQ200",
+      "passed": true,
+      "observed": {
+        "scoping": 180,
+        "home": 320,
+        "services": 360,
+        "about": 220,
+        "contact": 120,
+        "faq": 200,
+        "integration": null
+      }
+    },
+    {
+      "name": "fr: BR02 full and no-About option calculated independently",
+      "passed": true,
+      "observed": {
+        "full": 1400,
+        "option": 1180,
+        "overallCeiling": 1200,
+        "remaining": 20
+      }
+    },
+    {
+      "name": "fr/commented-solution-br01: independent arithmetic from actual editable solution",
+      "passed": true,
+      "observed": {
+        "terms": [
+          180,
+          320,
+          360,
+          220,
+          120
+        ],
+        "calculated": 1200,
+        "stated": 1200
+      }
+    },
+    {
+      "name": "fr/commented-solution-br02: independent arithmetic from actual editable solution",
+      "passed": true,
+      "observed": {
+        "terms": [
+          180,
+          320,
+          360,
+          220,
+          120,
+          200
+        ],
+        "calculated": 1400,
+        "stated": 1400
+      }
+    },
+    {
+      "name": "fr/commented-solution-br02: independent arithmetic from actual editable solution",
+      "passed": true,
+      "observed": {
+        "terms": [
+          180,
+          320,
+          360,
+          120,
+          200
+        ],
+        "calculated": 1180,
+        "stated": 1180
+      }
+    },
+    {
+      "name": "fr: solutions have real computed equations for both cases",
+      "passed": true
+    },
+    {
+      "name": "fr: selected BR01 quiz answers agree with real table calculation",
+      "passed": true
+    },
+    {
+      "name": "fr: selected BR02 full answer and option amount agree with source rows",
+      "passed": true
+    },
+    {
+      "name": "en: actual TR01 rows reconcile to stated total and reference1200",
+      "passed": true,
+      "observed": {
+        "rows": {
+          "home": 320,
+          "services": 360,
+          "about": 220,
+          "contact": 120,
+          "scoping": 180,
+          "total": 1200
+        },
+        "calculated": 1200
+      }
+    },
+    {
+      "name": "en: actual BR02 table retains TR01 prices and FAQ200",
+      "passed": true,
+      "observed": {
+        "scoping": 180,
+        "home": 320,
+        "services": 360,
+        "about": 220,
+        "contact": 120,
+        "faq": 200,
+        "integration": null
+      }
+    },
+    {
+      "name": "en: BR02 full and no-About option calculated independently",
+      "passed": true,
+      "observed": {
+        "full": 1400,
+        "option": 1180,
+        "overallCeiling": 1200,
+        "remaining": 20
+      }
+    },
+    {
+      "name": "en/commented-solution-br01: independent arithmetic from actual editable solution",
+      "passed": true,
+      "observed": {
+        "terms": [
+          180,
+          320,
+          360,
+          220,
+          120
+        ],
+        "calculated": 1200,
+        "stated": 1200
+      }
+    },
+    {
+      "name": "en/commented-solution-br02: independent arithmetic from actual editable solution",
+      "passed": true,
+      "observed": {
+        "terms": [
+          180,
+          320,
+          360,
+          220,
+          120,
+          200
+        ],
+        "calculated": 1400,
+        "stated": 1400
+      }
+    },
+    {
+      "name": "en/commented-solution-br02: independent arithmetic from actual editable solution",
+      "passed": true,
+      "observed": {
+        "terms": [
+          180,
+          320,
+          360,
+          120,
+          200
+        ],
+        "calculated": 1180,
+        "stated": 1180
+      }
+    },
+    {
+      "name": "en: solutions have real computed equations for both cases",
+      "passed": true
+    },
+    {
+      "name": "en: selected BR01 quiz answers agree with real table calculation",
+      "passed": true
+    },
+    {
+      "name": "en: selected BR02 full answer and option amount agree with source rows",
+      "passed": true
+    },
+    {
+      "name": "fr: twenty editable-grid criteria match canonical BR01 keys and labels",
+      "passed": true
+    },
+    {
+      "name": "fr: twenty M05 criteria match the editable grid and canonical preset",
+      "passed": true
+    },
+    {
+      "name": "fr: canonical BR01 twenty one-point criteria and four categories of blockers",
+      "passed": true
+    },
+    {
+      "name": "fr: score is explicitly declared and not human certification",
+      "passed": true
+    },
+    {
+      "name": "fr: four blocker meanings present in the editable grid",
+      "passed": true
+    },
+    {
+      "name": "fr: BR02 retains twenty one-point checks and independent four-blocker policy",
+      "passed": true
+    },
+    {
+      "name": "fr: BR02 budget rubric agrees with real full-price and FAQ rows",
+      "passed": true
+    },
+    {
+      "name": "fr: BR02 optional no-About rubric agrees with source arithmetic",
+      "passed": true
+    },
+    {
+      "name": "fr: BR02 minimum and requested turnaround remain different",
+      "passed": true
+    },
+    {
+      "name": "fr: BR02 feedback is unconfirmed, not inherited BR01 three-day terms",
+      "passed": true
+    },
+    {
+      "name": "en: twenty editable-grid criteria match canonical BR01 keys and labels",
+      "passed": true
+    },
+    {
+      "name": "en: twenty M05 criteria match the editable grid and canonical preset",
+      "passed": true
+    },
+    {
+      "name": "en: canonical BR01 twenty one-point criteria and four categories of blockers",
+      "passed": true
+    },
+    {
+      "name": "en: score is explicitly declared and not human certification",
+      "passed": true
+    },
+    {
+      "name": "en: four blocker meanings present in the editable grid",
+      "passed": true
+    },
+    {
+      "name": "en: BR02 retains twenty one-point checks and independent four-blocker policy",
+      "passed": true
+    },
+    {
+      "name": "en: BR02 budget rubric agrees with real full-price and FAQ rows",
+      "passed": true
+    },
+    {
+      "name": "en: BR02 optional no-About rubric agrees with source arithmetic",
+      "passed": true
+    },
+    {
+      "name": "en: BR02 minimum and requested turnaround remain different",
+      "passed": true
+    },
+    {
+      "name": "en: BR02 feedback is unconfirmed, not inherited BR01 three-day terms",
+      "passed": true
+    },
+    {
+      "name": "All30 authored module/resource files actually opened",
+      "passed": true
+    }
+  ],
+  "review": {
+    "method": "Agent cross-review of FR/EN authored sources plus executable offline structure/arithmetic/rubric checks.",
+    "humanReview": false,
+    "observed": "M01-M06 FR/EN and all editable resource sources opened; quiz structures compared, calculations taken from actual Markdown price rows and solution equations.",
+    "limits": [
+      "No learner trial, timed learning duration or human pedagogical approval is established.",
+      "Equivalent quiz structure is checked mechanically; language and teaching quality still need human review.",
+      "Markdown source files are real editable resources; no PDF, DOCX, media, narration or external AI response is produced.",
+      "This command does not import or publish CMS content, inspect private configuration, activate an offer or contact a provider.",
+      "Final resource download permissions, draft import and browser rendering have their own integration evidence."
+    ]
+  },
+  "commercialization": {
+    "activatedByThisCommand": false,
+    "readinessEstablished": false,
+    "pendingAuthority": "docs/DECISIONS.md: actual offer price/currency/tax, access, updates, assistance, legal conditions and produced formats must be decided and reviewed separately. Case amounts are never course prices."
+  },
+  "priorObservedCheck": {
+    "report": "P18-content-checks-first.json",
+    "exitCode": 1,
+    "failure": "The first source check required literal English blocker labels. Agent cross-review found equivalent expansions and firm/fixed, known/confirmed wording; the comparator was narrowed to those explicit variants. No source content or canonical preset was changed for that adjustment."
+  }
+}

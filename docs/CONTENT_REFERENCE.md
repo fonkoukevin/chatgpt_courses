@@ -271,3 +271,5 @@ Cette référence contient un jeu de faits et des réponses possibles. Elle ne c
 
 P18 consigne séparément : rédaction terminée, calculs vérifiés, fichiers générés, essais effectués, revue humaine restante, médias disponibles et conditions commerciales renseignées. Les informations absentes restent explicites dans la préparation de publication.
 
+Les sources rédigées du lot se trouvent dans [content/course-client-proposal](../content/course-client-proposal/README.md). Cette référence factuelle demeure le canon des deux cas ; les corrections de rédaction n’en modifient pas silencieusement les contraintes. Le [rapport P18](evidence/P18.md) distingue les contrôles de source, l’intégration locale et les revues ou conditions encore manquantes.
+

@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 1,
+  "phase": "P18",
+  "runId": "2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3",
+  "reviewedAt": "2026-11-09T05:08:41.348Z",
+  "reviewedCount": 9,
+  "method": "Neuf fichiers réellement ouverts avec view_image(detail=\"original\"), sans ouverture d’application ni édition produit.",
+  "maximumHeight": 5394,
+  "nativeCropsUsed": false,
+  "partialImagesReviewed": 7,
+  "fullPageImagesReviewed": 2,
+  "completeLessonsVisuallyReviewed": 0,
+  "verdict": "AUCUN_DEFAUT_VISUEL_CONCRET_CONFIRME_DANS_LES_ZONES_VISIBLES",
+  "findings": [],
+  "images": [
+    {
+      "path": "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/en-1440-m06-lesson.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "ede99aeb4b1fa8e44cc33f14f9d6e92395f1a5bdff8a27bfab1d2e1804d13a57",
+      "opened": true,
+      "requestedDetail": "original",
+      "coverage": "VIEWPORT_PARTIEL",
+      "notes": [
+        "Vue bureau du haut de M06 : titre, résumé, langue, version, objectif et travail attendu lisibles ; colonnes programme/contenu distinctes.",
+        "Le début du développement conserve les quatre pages françaises et les deux montants BR01 ; le reste du développement est hors capture."
+      ]
+    },
+    {
+      "path": "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/en-390-br02-independent-project.png",
+      "width": 390,
+      "height": 3285,
+      "sha256": "3c2fba6d7ab87d68861f09240e9b0a34282bd2433b94bd1695ff65e63608c71b",
+      "opened": true,
+      "requestedDetail": "original",
+      "coverage": "PAGE_COMPLETE",
+      "notes": [
+        "Espace projet BR02 EN : statut prêt pour autoévaluation distinct de la sauvegarde, du quiz et de la revue humaine.",
+        "Langue originale EN explicitée ; les champs visibles distinguent les cinq jours demandés des dix jours minimum requis.",
+        "Montants et option conditionnelle visibles dans la zone budget ; la fin du texte interne au textarea reste hors de sa zone visible.",
+        "Boutons de sauvegarde, préparation, copie et export espacés et non tronqués ; export décrit comme copie locale sans confirmation de sauvegarde ni résultat d’évaluation.",
+        "Mention finale explicite : aucune revue humaine proposée."
+      ]
+    },
+    {
+      "path": "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/en-390-declared-assessment.png",
+      "width": 390,
+      "height": 5394,
+      "sha256": "c75e22adebea2ab35a7bea3d3589d65439d3ecf3e75985b0339c31d3c3232852",
+      "opened": true,
+      "requestedDetail": "original",
+      "coverage": "PAGE_COMPLETE",
+      "notes": [
+        "Les vingt critères sont répartis dans cinq groupes lisibles et les quatre erreurs bloquantes dans un encadré distinct.",
+        "Autoévaluation déclarative explicite : les réponses ne vérifient pas automatiquement le texte.",
+        "Résultat visible 20/20 déclaré, seuil 16/20, révision et date ; aucune certification ou validation humaine prétendue.",
+        "Actions de sauvegarde, nouvelle grille et copie lisibles sans débordement horizontal visible."
+      ]
+    },
+    {
+      "path": "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/en-390-m01-lesson.png",
+      "width": 390,
+      "height": 1000,
+      "sha256": "3921020d4a9cf3c5d01b5796138681fb739b2024340d5f93e44764eadc0e4ef7",
+      "opened": true,
+      "requestedDetail": "original",
+      "coverage": "VIEWPORT_PARTIEL",
+      "notes": [
+        "Haut de M01 EN : accès gratuit, titre, résumé, langue/version, équivalent FR, programme et objectif lisibles.",
+        "Le passage sur les quatre pages françaises ne figure pas dans cette portion de M01 ; aucune vérification visuelle de ce passage n’est revendiquée ici."
+      ]
+    },
+    {
+      "path": "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/en-390-m02-lesson.png",
+      "width": 390,
+      "height": 1000,
+      "sha256": "4c448f2f2bd09123ce1dc395c7f2e6d39a2f228fad1a16c9a5d740bdf47bab50",
+      "opened": true,
+      "requestedDetail": "original",
+      "coverage": "VIEWPORT_PARTIEL",
+      "notes": [
+        "Haut de M02 EN : résumé mentionnant explicitement les quatre pages françaises ; objectif et travail attendu lisibles.",
+        "Pills de langue/version/accès et bouton programme bien séparés ; suite de la leçon hors capture."
+      ]
+    },
+    {
+      "path": "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/en-390-m03-lesson.png",
+      "width": 390,
+      "height": 1000,
+      "sha256": "63c823e3ec7b69d8fa231936b64f2385e94c62eb67a238d29b53d6936c8e6812",
+      "opened": true,
+      "requestedDetail": "original",
+      "coverage": "VIEWPORT_PARTIEL",
+      "notes": [
+        "Haut de M03 EN : titre, résumé, objectif et livrable du prompt lisibles ; aucune réponse IA ou promesse commerciale inventée dans cette portion.",
+        "Liens de langue et bouton programme espacés ; reste de la leçon hors capture."
+      ]
+    },
+    {
+      "path": "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/en-390-m04-lesson.png",
+      "width": 390,
+      "height": 1000,
+      "sha256": "ca1345ff4c26c4d33da88d6fb1f3d73ac87d826476eec7f2a28e5f70cd986763",
+      "opened": true,
+      "requestedDetail": "original",
+      "coverage": "VIEWPORT_PARTIEL",
+      "notes": [
+        "Haut de M04 EN : proposition structurée, résultat attendu limité à deux pages après mise en page, calculs et questions ouvertes explicités.",
+        "Aucun bouton ou titre tronqué par la largeur dans cette portion ; développement et atelier hors capture."
+      ]
+    },
+    {
+      "path": "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/en-390-m05-lesson.png",
+      "width": 390,
+      "height": 1000,
+      "sha256": "51f0c4574aed84788daad038f108be0d591984ff671a447eff40858a33c7ccdc",
+      "opened": true,
+      "requestedDetail": "original",
+      "coverage": "VIEWPORT_PARTIEL",
+      "notes": [
+        "Haut de M05 EN : vingt contrôles, révision précise et score déclaré distinct de la validation.",
+        "Titre, objectifs, livrable et commande de programme lisibles ; grille et suite de leçon hors capture."
+      ]
+    },
+    {
+      "path": "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/en-390-method-saved-exported.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "e69c313fe0447bea52e4bd8e25aad3f3fa0c63abf93e18009c6a489cdd4232b1",
+      "opened": true,
+      "requestedDetail": "original",
+      "coverage": "VIEWPORT_PARTIEL",
+      "notes": [
+        "Malgré son nom saved-exported, l’image 390×844 ne montre que le haut de la méthode : état enregistré, titre, langue originale, catégorie et début du générateur.",
+        "Texte d’aide explicite : changer la langue de navigation ne traduit pas le texte personnel ; une mise à jour de source ne remplace pas la copie.",
+        "Le bas du formulaire et le bouton d’export ne sont pas visibles et ne sont pas validés visuellement par cette image."
+      ]
+    }
+  ],
+  "observations": [
+    "Espacements, titres, badges, boutons et textes d’aide lisibles dans les zones capturées ; aucun débordement horizontal de mise en page repéré.",
+    "Aucun lien de saut parasite repéré. Les images statiques ne prouvent pas un parcours clavier ou les transitions interactives de focus.",
+    "La grille et l’espace BR02 distinguent travail enregistré, état du projet et autoévaluation déclarative ; absence de revue humaine explicitée."
+  ],
+  "limitations": [
+    "Les six leçons EN sont des captures de viewport de 1000 pixels de haut. Elles ne constituent pas une revue visuelle de leurs textes complets ni des douze leçons FR/EN.",
+    "La méthode 390×844 est aussi une vue partielle, contrairement à une qualification de page complète. Aucune extension de son champ visuel n’est possible à partir de ce fichier.",
+    "Les pages BR02 et grille sont entièrement présentes dans les PNG, mais les contrôles natifs peuvent cacher une partie des valeurs longues ou du texte interne aux zones de saisie.",
+    "Aucune image ne dépasse 6000 pixels de haut ; aucun crop natif supplémentaire n’a été nécessaire pour cette lecture.",
+    "Les dates Reviewed on affichées proviennent des transitions READY techniques de la fixture PostgreSQL isolée. Ce ne sont pas des dates de revue humaine du parcours ni de publication dans la base partagée.",
+    "Les assertions structurées, fichiers Markdown et autres vues sont couverts séparément par les contrôles API/navigateur et les autres revues ; leurs résultats ne sont pas inventés à partir de ces PNG.",
+    "Cette revue ne valide ni une revue humaine, ni la commercialisation, ni la production."
+  ]
+}

@@ -1,4 +1,6 @@
-# Modèle relationnel — socles P03 à P13
+# Modèle relationnel et migrations
+
+P18 prépare V019, additive : `assets.content_role` distingue RESOURCE (défaut des lignes historiques) et SOLUTION, sans changement ultérieur de rôle. `editorial_import_resources` conserve namespace/clé logique → identité/version ; `editorial_import_translations` conserve langue/traduction, dernière révision/empreintes et état de complétude ; `editorial_import_files` relie clé/langue/nature/empreinte/tentative à l’asset immuable. Ces liaisons rendent la reprise explicite et n’autorisent aucun écrasement humain ou publication. Les références et l’historique restent conservés. Les résultats de migration et d’intégration sont séparés dans [P18](evidence/P18.md).
 
 Les migrations sont la définition exécutable du schéma. Ce document distingue les tables implémentées des extensions à créer dans les lots métier. V009/V010/V011 sont validées localement en P10 : **138 tests Java globaux**, ciblé identité **6/6 sous `MAIL_MODE=disabled`**, ciblé stockage final **8/8 à 24 slots** et **12/12 scénarios Chromium**. V012 est validée localement en P11 : global **155**, ciblé HTTP final **10/10**, Chromium **8/8** et conservation des trente-six tables existantes. Les ciblés complètent le global sans s’ajouter à son décompte ; la chronologie des correctifs est détaillée dans les preuves.
 

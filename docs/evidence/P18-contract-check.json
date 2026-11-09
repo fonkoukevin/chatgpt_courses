@@ -1,0 +1,17 @@
+{
+  "verifiedAt": "2026-11-09T04:46:04.190Z",
+  "paths": 154,
+  "schemas": 277,
+  "addedPaths": [
+    "/me/projects/{projectId}/solution-reveals/{revealId}/files/{assetId}/download-access"
+  ],
+  "changedSchemas": [
+    "Exercise",
+    "SolutionRevealView",
+    "EditorialAssetUploadRequest"
+  ],
+  "addedSchemas": [
+    "SolutionFile"
+  ],
+  "existingRoutesAndOtherSchemasPreserved": true
+}

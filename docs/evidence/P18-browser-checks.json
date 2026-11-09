@@ -1,0 +1,61 @@
+{
+  "verifiedAt": "2026-11-09T05:09:44.904Z",
+  "command": ".\\scripts\\courses.cmd run verify:course",
+  "automaticRetries": 0,
+  "finalRun": "2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3",
+  "buildId": "hX_-deZsNCevTpDZbakrw",
+  "runs": [
+    {
+      "runId": "2026-11-09T05-00-51-659Z-b1e6f657-5f12-4918-9178-77e28d098f40",
+      "observedSupervisorExitCode": 1,
+      "passed": 1,
+      "failed": 1,
+      "skipped": 2,
+      "flaky": 0,
+      "durationMs": 63373.012,
+      "cleanupConfirmed": true,
+      "jarSha256": "2154f1f3c8e18d073db8b0ab44cec136d9e9df8825e1920702e66a214ba64b6e",
+      "pngCount": 6,
+      "initialRuntimeFlags": {
+        "stripeEnabled": false,
+        "paymentWorkerEnabled": false,
+        "refundWorkerEnabled": false,
+        "notificationWorkerEnabled": true
+      },
+      "result": "P18-browser/2026-11-09T05-00-51-659Z-b1e6f657-5f12-4918-9178-77e28d098f40/results.json",
+      "session": "P18-browser/2026-11-09T05-00-51-659Z-b1e6f657-5f12-4918-9178-77e28d098f40/session.json"
+    },
+    {
+      "runId": "2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3",
+      "observedSupervisorExitCode": 0,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "durationMs": 80148.629,
+      "cleanupConfirmed": true,
+      "jarSha256": "2154f1f3c8e18d073db8b0ab44cec136d9e9df8825e1920702e66a214ba64b6e",
+      "pngCount": 18,
+      "initialRuntimeFlags": {
+        "stripeEnabled": false,
+        "paymentWorkerEnabled": false,
+        "refundWorkerEnabled": false,
+        "notificationWorkerEnabled": false
+      },
+      "result": "P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/results.json",
+      "session": "P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/session.json"
+    }
+  ],
+  "finalPassed": true,
+  "lessonsOpened": 12,
+  "actualResourceDownloads": 18,
+  "privateSolutionDownloadsAfterReveal": 4,
+  "localFormExports": 4,
+  "reviewedPngCount": 18,
+  "lessonAndMethodScreenshotsArePartialViewports": true,
+  "technicalIsolatedPublicationOnly": true,
+  "humanReviewClaimed": false,
+  "sharedPublication": false,
+  "firstFailure": "Test expected201 for a contract200 solution-reveal; fixed to exact200. First run notification worker was actually enabled by service setup and used only isolated Mailpit/example.invalid. P18 clamp moved after services; all four effective worker flags false in final run.",
+  "consoleHistory": "First results/session/diagnostic retained; first console path was reused. Final full console preserved in .runtime/p18-browser-second.log."
+}

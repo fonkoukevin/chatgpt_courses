@@ -1,0 +1,250 @@
+{
+  "preparedFiles": 18,
+  "uniqueActualUiDownloads": 18,
+  "solutionFilesOnlyAfterExplicitReveal": 4,
+  "fileBytesAndSha256Matched": true,
+  "utf8Decoded": true,
+  "personalLocalMarkdownExports": 4,
+  "exportsDidNotImplicitlySave": true,
+  "interfaceLocales": [
+    "fr",
+    "en"
+  ],
+  "lessonsOpened": 12,
+  "accessOrigin": "MANUAL_TEST in owned tmpfs only, no purchase/payment claim",
+  "limits": [
+    "Technical isolated publication does not constitute human editorial review or authorise sale.",
+    "Lesson screenshots are representative viewports; all prepared teaching blocks are separately asserted readable in each real page.",
+    "No video, measured lesson duration, external email, live Stripe or production deployment is claimed."
+  ],
+  "files": [
+    {
+      "key": "br01-tr01",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": "4a79b5ca-0a91-42ec-9284-b103c409cfce",
+      "filename": "br01-tr01-fr-v1.md",
+      "bytes": 2944,
+      "sha256": "40f8e23d199e1809ff3147c14e5f343407451ea2dfbf9e977f5b17fc43ab2f93",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "scoping-table",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": "3aaad15b-8d13-4a6e-8a20-d1a83ce008ba",
+      "filename": "scoping-table-fr-v1.md",
+      "bytes": 3115,
+      "sha256": "bf5629266724b3f810ccaed1d3152a119fb6e887323a1864c2cdea89492aa505",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "prompt-method",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": "725c2cd9-d9fb-470b-9e4c-a5a30edb3440",
+      "filename": "prompt-method-fr-v1.md",
+      "bytes": 3607,
+      "sha256": "f6b83b88e296cf8782be3f828e8260309ffaa4ce548baf2fbe90c867ab0421af",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "proposal-template",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": "bb4d5732-77f2-4b49-b195-354f176cd9d9",
+      "filename": "proposal-template-fr-v1.md",
+      "bytes": 2356,
+      "sha256": "143795867f87372590223b98fde740aa1c2f4f7a39c9d869ff7b3e2d1115fe22",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "commented-solution-br01",
+      "locale": "fr",
+      "purpose": "SOLUTION",
+      "assetId": "6dc2d5ab-50ee-4410-85b7-00bb0c57cb54",
+      "filename": "commented-solution-br01-fr-v1.md",
+      "bytes": 3908,
+      "sha256": "8055fa9504f9b232654a02d50fce7cf15e48e8b905f56a6781212d96baf9bbdb",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "assessment-grid-br01",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": "117023fa-da45-4d25-9019-5e2bec185a67",
+      "filename": "assessment-grid-br01-fr-v1.md",
+      "bytes": 4218,
+      "sha256": "5c8fdbc0077e69b646c589430f628cd16d3e31423586ea3e6523cde62a81b492",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "br02",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": "932debfd-76a1-48f3-a946-5866920053bc",
+      "filename": "br02-fr-v1.md",
+      "bytes": 2260,
+      "sha256": "351dbfb396d68d123742bcaef2d127e45b267daa5e47e09a17d8005649f6c58d",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "presentation-emails",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": "2ab2a57a-a592-494a-9601-211b173f732b",
+      "filename": "presentation-emails-fr-v1.md",
+      "bytes": 2058,
+      "sha256": "c4fb03bc242a1ec277f207538845486d19a8f5dd5a784b781b3fa143407a1069",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "commented-solution-br02",
+      "locale": "fr",
+      "purpose": "SOLUTION",
+      "assetId": "6453facc-82bc-455a-a4a0-18010f54e576",
+      "filename": "commented-solution-br02-fr-v1.md",
+      "bytes": 3157,
+      "sha256": "53a9a7df6c0698434bd15ec298e7b11c2eba3109a98317d0871d46810ac04759",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "br01-tr01",
+      "locale": "en",
+      "purpose": "RESOURCE",
+      "assetId": "82e8214c-e97a-49cd-a38c-192f79fedf8a",
+      "filename": "br01-tr01-en-v1.md",
+      "bytes": 2682,
+      "sha256": "f0535f600ebad3d0814552e3cfb981c8577536a8d3cd8667dc86a44a0b08d757",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "scoping-table",
+      "locale": "en",
+      "purpose": "RESOURCE",
+      "assetId": "0ac861e5-4b1e-430c-adb9-53eae9456b91",
+      "filename": "scoping-table-en-v1.md",
+      "bytes": 2723,
+      "sha256": "1ffbd2490cb098c391b01fe11f402a7382330abc670d65fe7d5834b901950481",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "prompt-method",
+      "locale": "en",
+      "purpose": "RESOURCE",
+      "assetId": "367e227f-ce01-4e08-abfe-fecb187d3d3e",
+      "filename": "prompt-method-en-v1.md",
+      "bytes": 3208,
+      "sha256": "6e9db70f9498fe943619cf76788ad49795f7336637bf61fb12cc0b07dc6ce002",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "proposal-template",
+      "locale": "en",
+      "purpose": "RESOURCE",
+      "assetId": "e67d41a1-4af7-4b17-868d-10f08b8123b5",
+      "filename": "proposal-template-en-v1.md",
+      "bytes": 2132,
+      "sha256": "51d2f06c571372b0e496194d2e4073832be54c9ebe20b8052e532a3fa235c5f5",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "commented-solution-br01",
+      "locale": "en",
+      "purpose": "SOLUTION",
+      "assetId": "b5fb9547-e67f-4167-96e8-59ab80e85590",
+      "filename": "commented-solution-br01-en-v1.md",
+      "bytes": 3432,
+      "sha256": "d6680779578d7c03dcb03b3429e5d21bf60b4e5d3f2f037ae231706057f3c884",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "assessment-grid-br01",
+      "locale": "en",
+      "purpose": "RESOURCE",
+      "assetId": "cd78d98d-d4b5-4086-8e25-969875f4b624",
+      "filename": "assessment-grid-br01-en-v1.md",
+      "bytes": 3696,
+      "sha256": "5365a14ebc6b0595bf457a6d09c1f91241d113291355401290259868a97487d1",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "br02",
+      "locale": "en",
+      "purpose": "RESOURCE",
+      "assetId": "aa7bf454-a238-4834-ae12-3362eb52cdb1",
+      "filename": "br02-en-v1.md",
+      "bytes": 2049,
+      "sha256": "488c229685c8d2598331b860e6e0c961f5917d271cad274b3c1881c39bd4d638",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "presentation-emails",
+      "locale": "en",
+      "purpose": "RESOURCE",
+      "assetId": "b5235580-256d-493e-aa61-7f5f639510b7",
+      "filename": "presentation-emails-en-v1.md",
+      "bytes": 1838,
+      "sha256": "d5ee843caa901bb92f1075f45610c7f43b669159053a545b55183284f82a4d91",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "commented-solution-br02",
+      "locale": "en",
+      "purpose": "SOLUTION",
+      "assetId": "01f8bd4b-e1c4-47a8-ad62-1ad501e972b6",
+      "filename": "commented-solution-br02-en-v1.md",
+      "bytes": 2906,
+      "sha256": "5117b4fae3232fd0b0ddcd59be0f03306589cce9ffafaec587970c0410ad17ae",
+      "utf8": true,
+      "actualUiDownload": true
+    }
+  ],
+  "localExports": [
+    {
+      "kind": "method",
+      "filename": "method-fr.md",
+      "bytes": 3373,
+      "sha256": "8767b342c93a4555a86f7805b6997548e6d4f7aaa4a38818112dd1db75098f4f",
+      "currentInputObserved": true
+    },
+    {
+      "kind": "project",
+      "filename": "project-fr.md",
+      "bytes": 1429,
+      "sha256": "43e93dfb0b535eb3bda5d9c1bc6f2b453e3180a3822b048b93d23e30ade5109c",
+      "currentInputObserved": true
+    },
+    {
+      "kind": "method",
+      "filename": "method-en.md",
+      "bytes": 3013,
+      "sha256": "f3fc42289d2577bc6d9e595c8eebfeb940754b2d1bc23001f33a98e06527c6ac",
+      "currentInputObserved": true
+    },
+    {
+      "kind": "project",
+      "filename": "project-en.md",
+      "bytes": 1301,
+      "sha256": "769a1ffb82476a6b30486d9c437b006cf4fd47be1440f3b8493b09bab2540bba",
+      "currentInputObserved": true
+    }
+  ]
+}

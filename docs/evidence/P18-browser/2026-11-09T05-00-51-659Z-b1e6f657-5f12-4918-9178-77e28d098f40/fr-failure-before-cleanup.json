@@ -1,0 +1,95 @@
+{
+  "recordedBeforeCleanup": true,
+  "authStatus": 200,
+  "observations": [
+    {
+      "kind": "learning-activity",
+      "method": "GET",
+      "status": 200,
+      "decoded": false
+    },
+    {
+      "kind": "learning-activity",
+      "method": "GET",
+      "status": 200,
+      "decoded": false
+    },
+    {
+      "kind": "member-resource",
+      "method": "GET",
+      "status": 200,
+      "availability": "PUBLISHED",
+      "bodyPresent": true
+    },
+    {
+      "kind": "learning-activity",
+      "method": "GET",
+      "status": 200,
+      "accessStatus": "ACTIVE",
+      "availability": "PUBLISHED",
+      "bodyPresent": true
+    },
+    {
+      "kind": "visit",
+      "method": "POST",
+      "status": 200,
+      "bodyPresent": false
+    },
+    {
+      "kind": "member-resource",
+      "method": "GET",
+      "status": 200,
+      "availability": "PUBLISHED",
+      "bodyPresent": true
+    },
+    {
+      "kind": "learning-activity",
+      "method": "GET",
+      "status": 200,
+      "accessStatus": "ACTIVE",
+      "availability": "PUBLISHED",
+      "bodyPresent": true
+    },
+    {
+      "kind": "visit",
+      "method": "POST",
+      "status": 200,
+      "bodyPresent": false
+    },
+    {
+      "kind": "member-resource",
+      "method": "GET",
+      "status": 200,
+      "availability": "PUBLISHED",
+      "bodyPresent": true
+    },
+    {
+      "kind": "learning-activity",
+      "method": "GET",
+      "status": 200,
+      "accessStatus": "ACTIVE",
+      "availability": "PUBLISHED",
+      "bodyPresent": true
+    },
+    {
+      "kind": "visit",
+      "method": "POST",
+      "status": 200,
+      "bodyPresent": false
+    },
+    {
+      "kind": "member-project-template",
+      "method": "GET",
+      "status": 200,
+      "availability": "PUBLISHED",
+      "bodyPresent": true
+    }
+  ],
+  "database": {
+    "grantCount": 1,
+    "activeGrantCount": 1,
+    "manualTestGrantCount": 1
+  },
+  "privacy": "No URL, identity, cookie, header, signature, secret or teaching/personal text recorded.",
+  "automaticRetry": false
+}

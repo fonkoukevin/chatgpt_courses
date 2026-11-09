@@ -1,0 +1,234 @@
+{
+  "technicalFixtureOnly": true,
+  "humanEditorialReview": false,
+  "sharedContentChanged": false,
+  "commercialActivation": false,
+  "reason": "explicit automated technical fixture, not human review",
+  "translations": 28,
+  "items": [
+    {
+      "key": "activity-m01:fr",
+      "resourceId": "8353953a-fa52-462f-a4c8-e3b39401eede",
+      "versionId": "dbe0bce3-c73f-461d-a33e-53270356e460",
+      "translationId": "66969e0d-777b-4a08-a7de-8548baf7033b",
+      "publishedRevisionId": "fc7e0909-45e5-4a7e-bf7a-35f48a7267e5",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "activity-m01:en",
+      "resourceId": "8353953a-fa52-462f-a4c8-e3b39401eede",
+      "versionId": "dbe0bce3-c73f-461d-a33e-53270356e460",
+      "translationId": "f8a30415-0aa3-4e66-ae41-d801732d85d6",
+      "publishedRevisionId": "acace637-d9d1-42cc-9f6b-ac19eba61b11",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "activity-m02:fr",
+      "resourceId": "ca054ad7-84db-419a-8ce7-08f9f5edd856",
+      "versionId": "1cb391c5-5604-49f5-aaf8-ac1015961cc4",
+      "translationId": "d7e656e6-6488-4767-ab8a-fa05d20d0421",
+      "publishedRevisionId": "5d917be0-a835-408f-815c-4e0cfe39a797",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "activity-m02:en",
+      "resourceId": "ca054ad7-84db-419a-8ce7-08f9f5edd856",
+      "versionId": "1cb391c5-5604-49f5-aaf8-ac1015961cc4",
+      "translationId": "6b5709eb-bca8-49cd-bb12-fa1f9b9732fc",
+      "publishedRevisionId": "bc770497-3747-460b-a5ac-202c0b9894c5",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "activity-m03:fr",
+      "resourceId": "a47f3d0a-60c2-4b59-bc67-80d4c5ea7002",
+      "versionId": "7c49bdd0-eda2-4523-9320-e56faf6d7bd9",
+      "translationId": "c418ae48-ee4e-400a-b97d-9548225bbc1f",
+      "publishedRevisionId": "9fa10950-879f-4076-9ca9-98c3a987ad18",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "activity-m03:en",
+      "resourceId": "a47f3d0a-60c2-4b59-bc67-80d4c5ea7002",
+      "versionId": "7c49bdd0-eda2-4523-9320-e56faf6d7bd9",
+      "translationId": "2f9e1c58-8289-40ee-a64b-efb7d9241107",
+      "publishedRevisionId": "681b252b-29c2-4b36-80f5-aaf4cbfaa148",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "activity-m04:fr",
+      "resourceId": "ceb1f976-4300-43b7-bbe1-9fcc1394c8c4",
+      "versionId": "7e66a595-d067-4df1-9eec-2f5377495a36",
+      "translationId": "d4914f36-9760-41ed-a3d8-2c9af5c448ca",
+      "publishedRevisionId": "74c49d84-5d7d-4e85-a1bd-1e280707bc25",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "activity-m04:en",
+      "resourceId": "ceb1f976-4300-43b7-bbe1-9fcc1394c8c4",
+      "versionId": "7e66a595-d067-4df1-9eec-2f5377495a36",
+      "translationId": "2b9768fe-9d56-4adf-84f3-02e89ca04add",
+      "publishedRevisionId": "d3ba5598-4cc4-4faf-a305-412d8d7e6124",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "activity-m05:fr",
+      "resourceId": "fb3a63fd-5a3a-4afb-b3a5-c37b9360ad33",
+      "versionId": "af1a1cc2-b763-4bbb-b5eb-6d9250ce5247",
+      "translationId": "854bcfd4-f27e-4bfd-ad97-e2fac26f3dde",
+      "publishedRevisionId": "d2af150c-0729-4557-bfb1-e2fb72f46f1f",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "activity-m05:en",
+      "resourceId": "fb3a63fd-5a3a-4afb-b3a5-c37b9360ad33",
+      "versionId": "af1a1cc2-b763-4bbb-b5eb-6d9250ce5247",
+      "translationId": "9871f50e-f425-4d4f-bdec-590ff8b15256",
+      "publishedRevisionId": "4c33c5e2-e7f1-4bb2-b126-0f0a071bc234",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "activity-m06:fr",
+      "resourceId": "e53b9f00-e28c-4018-ae4e-22e980f32c97",
+      "versionId": "4c317216-c655-4c22-b05b-78286df458c5",
+      "translationId": "159c3b80-1e48-4b91-97b0-823db050305c",
+      "publishedRevisionId": "9e472f8f-3e55-4e16-9099-3a96238a5819",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "activity-m06:en",
+      "resourceId": "e53b9f00-e28c-4018-ae4e-22e980f32c97",
+      "versionId": "4c317216-c655-4c22-b05b-78286df458c5",
+      "translationId": "137c853d-b76f-4ad7-9fae-e54c2ba32498",
+      "publishedRevisionId": "7e20211c-6f9e-430a-8973-d90b44776b42",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "method-client-proposal:fr",
+      "resourceId": "0ddab72c-3925-45b4-8843-7fe996b8f9b7",
+      "versionId": "5de81401-635d-47de-9409-e3abee8571b9",
+      "translationId": "5bd00416-d406-48b8-925e-039da4d5dd87",
+      "publishedRevisionId": "6e0face1-1f10-463c-93d7-bee7ebb6d738",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "method-client-proposal:en",
+      "resourceId": "0ddab72c-3925-45b4-8843-7fe996b8f9b7",
+      "versionId": "5de81401-635d-47de-9409-e3abee8571b9",
+      "translationId": "c006d810-51f5-40f7-9cd7-c296c1a40197",
+      "publishedRevisionId": "bcbb439d-35e8-4502-b932-0390aa936123",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "module-m01:fr",
+      "resourceId": "252eca30-49fa-4c4f-8c5d-3c889b8a99df",
+      "versionId": "b8ec24a2-33a4-4cee-8030-ea3442b3e47a",
+      "translationId": "12bb056f-6617-4ceb-b2da-d303ff6743e0",
+      "publishedRevisionId": "bf50ce8f-9984-4a43-997e-3149405b6062",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "module-m01:en",
+      "resourceId": "252eca30-49fa-4c4f-8c5d-3c889b8a99df",
+      "versionId": "b8ec24a2-33a4-4cee-8030-ea3442b3e47a",
+      "translationId": "3f6c02d3-36f7-443d-88f4-ca3b5d79409e",
+      "publishedRevisionId": "7d2b26ef-92f8-4859-8974-65a848ff1c46",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "module-m02:fr",
+      "resourceId": "ed5a0734-32e3-4004-bc19-c5a8bf401f17",
+      "versionId": "bd24b869-bfb8-48d8-847f-844e9e6b7021",
+      "translationId": "74036d22-6171-4ccd-a93c-a7606a850392",
+      "publishedRevisionId": "c917df64-173a-4a62-8afc-dcb13c5d7ee4",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "module-m02:en",
+      "resourceId": "ed5a0734-32e3-4004-bc19-c5a8bf401f17",
+      "versionId": "bd24b869-bfb8-48d8-847f-844e9e6b7021",
+      "translationId": "90249655-1328-4ad8-8569-3deb3ec3abad",
+      "publishedRevisionId": "5ec2000b-398b-4681-8626-1b4724d2eeab",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "module-m03:fr",
+      "resourceId": "ab024eeb-dca5-4948-a9c5-c78eb88f0864",
+      "versionId": "12c3c691-2afe-4db2-abb5-c641329c9618",
+      "translationId": "388c0188-0be3-4b44-9902-93eb1f41d1a1",
+      "publishedRevisionId": "73817833-5b6f-4658-ba71-f0dfd451b191",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "module-m03:en",
+      "resourceId": "ab024eeb-dca5-4948-a9c5-c78eb88f0864",
+      "versionId": "12c3c691-2afe-4db2-abb5-c641329c9618",
+      "translationId": "f810e0a6-938b-4ece-bba3-dc7468c8ee31",
+      "publishedRevisionId": "31cdc333-0958-4d6a-a3f2-341446d410ad",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "module-m04:fr",
+      "resourceId": "01f408f5-897c-48b6-bd0d-8ff93b97ad4e",
+      "versionId": "26018189-c40f-42e4-bc6a-3bc0d90235be",
+      "translationId": "317a8ced-b582-4926-a91f-541921193276",
+      "publishedRevisionId": "81e7e307-7207-460a-9e93-58be7398e279",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "module-m04:en",
+      "resourceId": "01f408f5-897c-48b6-bd0d-8ff93b97ad4e",
+      "versionId": "26018189-c40f-42e4-bc6a-3bc0d90235be",
+      "translationId": "062e4f61-d8b8-43d9-8e0b-c6b408733e8d",
+      "publishedRevisionId": "6a8b2f8d-7e15-4086-a18e-34e6f682e167",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "module-m05:fr",
+      "resourceId": "280ad4fb-15fe-49a0-acd5-69ac896033ca",
+      "versionId": "f3f63efe-2caa-404e-935b-7940b161c6cb",
+      "translationId": "8bb85018-6aff-400b-9442-4beadb417aaf",
+      "publishedRevisionId": "4451cc25-da1c-4ab0-aa2f-f7afbc745755",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "module-m05:en",
+      "resourceId": "280ad4fb-15fe-49a0-acd5-69ac896033ca",
+      "versionId": "f3f63efe-2caa-404e-935b-7940b161c6cb",
+      "translationId": "f20e8426-904b-467c-9e75-a64d4a49e7f1",
+      "publishedRevisionId": "681f1398-2b68-4cfd-9184-e64ff5d1ca0c",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "module-m06:fr",
+      "resourceId": "9df59c39-50e2-4d9a-86df-3cacc2b23742",
+      "versionId": "4c0b2c06-80ed-4094-a151-6d2f9ea9de05",
+      "translationId": "b97dff28-a80c-4418-8cbb-7886c34b8dcf",
+      "publishedRevisionId": "3c6d2a27-650c-4d5c-858e-242d6ba7e1c9",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "module-m06:en",
+      "resourceId": "9df59c39-50e2-4d9a-86df-3cacc2b23742",
+      "versionId": "4c0b2c06-80ed-4094-a151-6d2f9ea9de05",
+      "translationId": "170ed66d-aeb9-47a0-8257-13341c40ed3e",
+      "publishedRevisionId": "f8d3cd05-963b-4529-b0d9-c80d4180c665",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "course-client-proposal:fr",
+      "resourceId": "e83864ca-84c3-45a3-a570-d28d20ce7aee",
+      "versionId": "cadc9212-e868-42ce-a04d-966ea4045f44",
+      "translationId": "791bbed5-a77c-4dce-a712-d5f94eb2825d",
+      "publishedRevisionId": "c07397a2-3394-45ae-9c67-d4b29dae3c20",
+      "state": "PUBLISHED"
+    },
+    {
+      "key": "course-client-proposal:en",
+      "resourceId": "e83864ca-84c3-45a3-a570-d28d20ce7aee",
+      "versionId": "cadc9212-e868-42ce-a04d-966ea4045f44",
+      "translationId": "426de32a-9cf8-4706-b5c4-670fd89f1f25",
+      "publishedRevisionId": "19a3888c-5b76-4ca9-8bc8-0c2c716c8422",
+      "state": "PUBLISHED"
+    }
+  ]
+}

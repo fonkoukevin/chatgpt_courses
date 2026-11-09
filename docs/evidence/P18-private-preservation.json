@@ -1,0 +1,11 @@
+{
+  "verifiedAt": "2026-11-09T05:09:44.919Z",
+  "privateConfigurationUnchangedFromP15Start": true,
+  "userNextBaselineRetained": true,
+  "sharedMigration": "V019",
+  "sharedContentImportExecuted": false,
+  "sharedContentImportPending": "No active local editorial operator; user choice requested asynchronously, no role provisioned.",
+  "developmentRestorationDeferredUntilEndOfP19": true,
+  "volumeDeleted": false,
+  "secretsPrinted": false
+}

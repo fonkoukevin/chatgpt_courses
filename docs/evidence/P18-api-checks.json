@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 1,
+  "phase": "P18",
+  "scope": "Local API integration only; not the complete P18 phase",
+  "recordedAt": "2026-11-09T04:59:47.110Z",
+  "checks": [
+    {
+      "command": "apps/api/mvnw.cmd -o -f apps/api/pom.xml -Dtest=ContentImportIntegrationTest,SchemaIntegrationTest,AssetServiceIntegrationTest,ProjectServiceIntegrationTest,EditorialServiceIntegrationTest test",
+      "exitCode": 0,
+      "log": ".runtime/p18-api-target-final.log",
+      "tests": 48,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mavenDuration": "02:38 min",
+      "finishedAt": "2026-11-09T05:55:30+01:00",
+      "suites": [
+        {
+          "name": "com.chatgptcourses.AssetServiceIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "seconds": 43.8
+        },
+        {
+          "name": "com.chatgptcourses.ContentImportIntegrationTest",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "seconds": 32.1
+        },
+        {
+          "name": "com.chatgptcourses.EditorialServiceIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "seconds": 13.72
+        },
+        {
+          "name": "com.chatgptcourses.ProjectServiceIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "seconds": 15.31
+        },
+        {
+          "name": "com.chatgptcourses.SchemaIntegrationTest",
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "seconds": 24.72
+        }
+      ]
+    },
+    {
+      "command": "apps/api/mvnw.cmd -o -f apps/api/pom.xml -Dtest=ContentImportIntegrationTest test",
+      "exitCode": 0,
+      "log": ".runtime/p18-import-final-guard.log",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mavenDuration": "01:46 min",
+      "finishedAt": "2026-11-09T05:58:14+01:00",
+      "suites": [
+        {
+          "name": "com.chatgptcourses.ContentImportIntegrationTest",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "seconds": 74.54
+        }
+      ]
+    }
+  ],
+  "countsAreNotAdditive": true,
+  "package": {
+    "command": "apps/api/mvnw.cmd -o -f apps/api/pom.xml -DskipTests package",
+    "exitCode": 0,
+    "log": ".runtime/p18-api-package.log",
+    "tests": null,
+    "failures": null,
+    "errors": null,
+    "skipped": null,
+    "mavenDuration": "9.651 s",
+    "finishedAt": "2026-11-09T05:59:02+01:00",
+    "suites": [],
+    "testsExecuted": false,
+    "artifact": "apps/api/target/chatgpt-courses-api.jar",
+    "sha256": "2154f1f3c8e18d073db8b0ab44cec136d9e9df8825e1920702e66a214ba64b6e",
+    "sizeBytes": 94678785
+  },
+  "infrastructure": {
+    "postgresql": "18.6, actual isolated Testcontainers databases",
+    "s3": "SeaweedFS 4.52, pinned image, actual signed/private object requests and SDK writes",
+    "volumeSlots": 24,
+    "buckets": "two private isolated test buckets",
+    "externalStripeCalls": false,
+    "externalAiCalls": false,
+    "sharedImportExecuted": false
+  },
+  "import": {
+    "entryPoint": "com.chatgptcourses.editorial.importing.ContentImportMain",
+    "wrapper": "scripts/content-import.mjs",
+    "arguments": "--plan|--apply --actor UUID --manifest PATH",
+    "defaultMode": "PLAN",
+    "environment": [
+      "local",
+      "test"
+    ],
+    "httpServerStarted": false,
+    "migrationsStartedByCli": false,
+    "workersStartedByCli": false,
+    "automaticRolesOrAccounts": false,
+    "automaticReviewOrPublication": false,
+    "state": "DRAFT",
+    "schemaVersion": 1,
+    "manifestMaxBytes": 2097152,
+    "sourceMaxBytes": 65536,
+    "maxItems": 100,
+    "maxFiles": 200,
+    "totalFileBytesLimit": 67108864,
+    "fileLimit": "P10 configured maxFileBytes",
+    "sourcePaths": "real paths confined to manifest root",
+    "json": "unknown properties and trailing tokens rejected explicitly"
+  },
+  "verified": [
+    "read-only plan does not create resources",
+    "FR and EN share stable resource/version identities; FR is source translation",
+    "replay preserves revisions and READY asset identities",
+    "concurrent same import does not duplicate content or file bindings",
+    "interruption simulated after an actual S3 PUT resumes the committed intent",
+    "human revision conflict is preserved; no role provisioning",
+    "source correction appends DRAFT without changing logical identity",
+    "private solution requires recorded owner disclosure and current exact pedagogical access",
+    "generic asset download refuses SOLUTION before and after disclosure",
+    "different owner and changed account context are refused",
+    "withdrawal and grant revocation block new solution links while project/disclosure history remains",
+    "SOLUTION cannot become RESOURCE or be attached as ordinary media",
+    "solution ids freeze with pedagogical version and never occur in PublicDocument",
+    "paths, SHA256 and invalid UTF-8 fail closed",
+    "real Java subprocess plan/apply/replay",
+    "V018-to-V019 preserves all pre-existing columns of a legacy asset row and defaults role to RESOURCE",
+    "fresh schema has no import bindings, accounts or seeded content"
+  ],
+  "migration": {
+    "version": "019",
+    "tables": [
+      "editorial_import_resources",
+      "editorial_import_translations",
+      "editorial_import_files"
+    ],
+    "newAssetColumn": "content_role RESOURCE|SOLUTION, immutable; legacy default RESOURCE",
+    "olderMigrationsEdited": false
+  },
+  "earlierAttempts": [
+    {
+      "log": ".runtime/p18-import-tests-first.log",
+      "tests": 8,
+      "passed": 7,
+      "errors": 1,
+      "cause": "test SQL referred to action instead of editorial_events.event_type"
+    },
+    {
+      "log": ".runtime/p18-import-tests-second.log",
+      "tests": 11,
+      "passed": 9,
+      "failures": 1,
+      "errors": 1,
+      "cause": "test revocation used absent access_grants columns; subprocess fixture omitted required APP_PUBLIC_ORIGIN/SESSION_COOKIE_SECURE"
+    },
+    {
+      "log": ".runtime/p18-cli-diagnostic.log",
+      "tests": 1,
+      "failures": 1,
+      "cause": "safe BindException diagnostic; synthetic environment completed before the passing group"
+    }
+  ],
+  "limits": [
+    "No new full global Java suite claimed in P18 here.",
+    "Browser and complete authored course integration are handled by root separately.",
+    "No shared import, human editorial review, production validation or commercial activation claimed.",
+    "Interruption test uses an injected failure after real S3 PUT, not a physical machine crash.",
+    "PDF/DOCX/ZIP/antivirus/video-production claims are absent.",
+    "Historical P12 and P15 access incidents remain open and are not declared fixed by these successes."
+  ]
+}

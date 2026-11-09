@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "runId": "2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3",
+  "reviewedAt": "2026-11-09T05:08:01.593Z",
+  "scope": "Revue visuelle réelle des neuf PNG français du deuxième passage P18 ; aucune modification de source applicative.",
+  "method": "Les neuf originaux ont été ouverts avec view_image en détail original. Les dimensions et SHA-256 proviennent des octets PNG conservés. Aucun original ne dépasse 6000 px de hauteur. Un agrandissement local du seul titre M06 a confirmé le mot proposition complet ; aucune image produit modifiée.",
+  "reviewedCount": 9,
+  "images": [
+    {
+      "path": "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/fr-1440-m01-lesson.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "4dee6baa35c05b7bde72a0c04f43b9d61a3b9e2c7a4eda988011e12c3aa7ae76",
+      "actuallyOpened": true
+    },
+    {
+      "path": "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/fr-390-br02-independent-project.png",
+      "width": 390,
+      "height": 3344,
+      "sha256": "b2e3a918e6cf6dddc4777529f5233188814e1ce942a1df1db070d4c379411883",
+      "actuallyOpened": true
+    },
+    {
+      "path": "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/fr-390-declared-assessment.png",
+      "width": 390,
+      "height": 5451,
+      "sha256": "97e6a28b534af0f863c52f5f3cefc61ec99ee93b5ece262b13a66b78af92ec64",
+      "actuallyOpened": true
+    },
+    {
+      "path": "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/fr-390-m02-lesson.png",
+      "width": 390,
+      "height": 1000,
+      "sha256": "25811ea8b176a017e46bcc4c984667db9d7ea497d2e5628f18e960763b5c04f6",
+      "actuallyOpened": true
+    },
+    {
+      "path": "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/fr-390-m03-lesson.png",
+      "width": 390,
+      "height": 1000,
+      "sha256": "898f6f3b4b3b9b55abea3a9709786b2cf766ea35bf3327f76c9a7a79ebdb450f",
+      "actuallyOpened": true
+    },
+    {
+      "path": "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/fr-390-m04-lesson.png",
+      "width": 390,
+      "height": 1000,
+      "sha256": "5805f2f8ee284fda2228ce8bd18882ea0bbcf0627235d9c798e7f4c4800580d2",
+      "actuallyOpened": true
+    },
+    {
+      "path": "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/fr-390-m05-lesson.png",
+      "width": 390,
+      "height": 1000,
+      "sha256": "5abb2e6fc63ec384b5949ea744ba77da2c3243574333d4121bbb712994c97291",
+      "actuallyOpened": true
+    },
+    {
+      "path": "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/fr-390-m06-lesson.png",
+      "width": 390,
+      "height": 1000,
+      "sha256": "579f1b56e2d9fef50e043b46872796d7dde351c491ef9845f491566b4f76ecbe",
+      "actuallyOpened": true
+    },
+    {
+      "path": "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/fr-390-method-saved-exported.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "d38c4ea7a511664a797b1f18ca8a2dafdaf24f40946fe368c9123054e94bbb5c",
+      "actuallyOpened": true
+    }
+  ],
+  "observations": [
+    {
+      "files": [
+        "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/fr-1440-m01-lesson.png",
+        "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/fr-390-m02-lesson.png",
+        "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/fr-390-m03-lesson.png",
+        "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/fr-390-m04-lesson.png",
+        "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/fr-390-m05-lesson.png",
+        "docs/evidence/P18-browser/2026-11-09T05-04-23-692Z-6b1988de-b379-4785-8025-a666c40f38c3/fr-390-m06-lesson.png"
+      ],
+      "finding": "Titres, objectifs et résultats attendus visibles lisibles ; colonnes du programme au bureau et bouton du programme mobile correctement disposés. Aucun chevauchement ni débordement horizontal repéré dans ces zones."
+    },
+    {
+      "file": "fr-390-method-saved-exported.png",
+      "finding": "Méthode enregistrée et langue personnelle française visibles. La capture montre le haut du formulaire ; les contrôles export/sauvegarde situés plus bas ne sont pas visibles sur cette image."
+    },
+    {
+      "file": "fr-390-declared-assessment.png",
+      "finding": "Vingt critères répartis en cinq catégories et quatre erreurs bloquantes distinctes sont lisibles. Résultat 20/20 déclaré, seuil16/20 et absence de validation automatique/certification/revue humaine explicitement affichés. Actions et messages sans collision repérée."
+    },
+    {
+      "file": "fr-390-br02-independent-project.png",
+      "finding": "Sept sections, texte externe séparé et état de sauvegarde sont lisibles. Le budget distingue1400 HT avant intégration du plafond global1200, option1180 sans Àpropos conditionnée à accord, et20 ne chiffrant pas l’intégration. Calendrier demandé5 jours et minimum10 jours explicitement distingués. Export annoncé comme copie locale sans sauvegarde ou score."
+    }
+  ],
+  "materialDefects": [],
+  "limits": [
+    "Les six captures de leçons sont des viewports de1000 px de hauteur, pas des revues visuelles intégrales du corps. Les assertions navigateur distinctes vérifient la présence rendue de tous les blocs préparés dans les douze leçons.",
+    "La vue méthode de844 px ne montre pas le bouton export ; le téléchargement réel et l’absence de sauvegarde implicite sont vérifiés dans le scénario, pas déduits de cette image.",
+    "Largeurs françaises revues :390 et1440 px. Aucun320/768/1024 ni texte200% n’est ajouté à la portée P18 par cette revue.",
+    "Une image statique ne démontre pas le parcours clavier ; les assertions Tab/Shift+Tab/Enter de confirmation sont distinctes dans course-content-flow.ts.",
+    "Aucune revue humaine pédagogique, vidéo du cours, vente, paiement ou publication partagée n’est revendiquée."
+  ],
+  "recipe": {
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "retries": 0,
+    "durationMs": 80148.629,
+    "cleanupConfirmed": true,
+    "consoleLog": ".runtime/p18-browser-second.log",
+    "apiJarSha256": "2154f1f3c8e18d073db8b0ab44cec136d9e9df8825e1920702e66a214ba64b6e",
+    "webBuildId": "hX_-deZsNCevTpDZbakrw",
+    "allEffectiveWorkersOff": true,
+    "privateMailpitOnly": true
+  },
+  "previousFailedRun": {
+    "runId": "2026-11-09T05-00-51-659Z-b1e6f657-5f12-4918-9178-77e28d098f40",
+    "diagnostic": "docs/evidence/P18-browser-first-run-diagnostic.json",
+    "historicalResultsPreserved": true,
+    "historicalConsoleLogPreserved": false
+  }
+}

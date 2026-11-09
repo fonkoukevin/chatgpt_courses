@@ -1,0 +1,262 @@
+{
+  "schemaVersion": 1,
+  "sourceDirectory": "content/course-client-proposal/v1",
+  "resourcePreparation": [
+    {
+      "key": "br01-tr01",
+      "locale": "fr",
+      "source": "resources/fr/br01-tr01.md",
+      "sourceSha256": "6d1b55e4914544af20e5867aa29f7c2490c15b87ed6d44c132ee72974c53aec4",
+      "deliveredPath": "resources/br01-tr01-fr-v1.md",
+      "deliveredSha256": "40f8e23d199e1809ff3147c14e5f343407451ea2dfbf9e977f5b17fc43ab2f93",
+      "relativeMarkdownLinksAdjustedToDeliveredFilenames": true
+    },
+    {
+      "key": "scoping-table",
+      "locale": "fr",
+      "source": "resources/fr/scoping-table.md",
+      "sourceSha256": "8805e4cd2e7b295e3305b80362d89686c916532f79d3989088f9692a590955ef",
+      "deliveredPath": "resources/scoping-table-fr-v1.md",
+      "deliveredSha256": "bf5629266724b3f810ccaed1d3152a119fb6e887323a1864c2cdea89492aa505",
+      "relativeMarkdownLinksAdjustedToDeliveredFilenames": true
+    },
+    {
+      "key": "prompt-method",
+      "locale": "fr",
+      "source": "resources/fr/prompt-method.md",
+      "sourceSha256": "24ca92f593b55fa0e05095b06d53a2c46c4e6babffdf48ddf308efc011ee643d",
+      "deliveredPath": "resources/prompt-method-fr-v1.md",
+      "deliveredSha256": "f6b83b88e296cf8782be3f828e8260309ffaa4ce548baf2fbe90c867ab0421af",
+      "relativeMarkdownLinksAdjustedToDeliveredFilenames": true
+    },
+    {
+      "key": "proposal-template",
+      "locale": "fr",
+      "source": "resources/fr/proposal-template.md",
+      "sourceSha256": "143795867f87372590223b98fde740aa1c2f4f7a39c9d869ff7b3e2d1115fe22",
+      "deliveredPath": "resources/proposal-template-fr-v1.md",
+      "deliveredSha256": "143795867f87372590223b98fde740aa1c2f4f7a39c9d869ff7b3e2d1115fe22",
+      "relativeMarkdownLinksAdjustedToDeliveredFilenames": false
+    },
+    {
+      "key": "assessment-grid-br01",
+      "locale": "fr",
+      "source": "resources/fr/assessment-grid-br01.md",
+      "sourceSha256": "5c8fdbc0077e69b646c589430f628cd16d3e31423586ea3e6523cde62a81b492",
+      "deliveredPath": "resources/assessment-grid-br01-fr-v1.md",
+      "deliveredSha256": "5c8fdbc0077e69b646c589430f628cd16d3e31423586ea3e6523cde62a81b492",
+      "relativeMarkdownLinksAdjustedToDeliveredFilenames": false
+    },
+    {
+      "key": "commented-solution-br01",
+      "locale": "fr",
+      "source": "resources/fr/commented-solution-br01.md",
+      "sourceSha256": "8055fa9504f9b232654a02d50fce7cf15e48e8b905f56a6781212d96baf9bbdb",
+      "deliveredPath": "resources/commented-solution-br01-fr-v1.md",
+      "deliveredSha256": "8055fa9504f9b232654a02d50fce7cf15e48e8b905f56a6781212d96baf9bbdb",
+      "relativeMarkdownLinksAdjustedToDeliveredFilenames": false
+    },
+    {
+      "key": "br02",
+      "locale": "fr",
+      "source": "resources/fr/br02.md",
+      "sourceSha256": "351dbfb396d68d123742bcaef2d127e45b267daa5e47e09a17d8005649f6c58d",
+      "deliveredPath": "resources/br02-fr-v1.md",
+      "deliveredSha256": "351dbfb396d68d123742bcaef2d127e45b267daa5e47e09a17d8005649f6c58d",
+      "relativeMarkdownLinksAdjustedToDeliveredFilenames": false
+    },
+    {
+      "key": "commented-solution-br02",
+      "locale": "fr",
+      "source": "resources/fr/commented-solution-br02.md",
+      "sourceSha256": "53a9a7df6c0698434bd15ec298e7b11c2eba3109a98317d0871d46810ac04759",
+      "deliveredPath": "resources/commented-solution-br02-fr-v1.md",
+      "deliveredSha256": "53a9a7df6c0698434bd15ec298e7b11c2eba3109a98317d0871d46810ac04759",
+      "relativeMarkdownLinksAdjustedToDeliveredFilenames": false
+    },
+    {
+      "key": "presentation-emails",
+      "locale": "fr",
+      "source": "resources/fr/presentation-emails.md",
+      "sourceSha256": "c4fb03bc242a1ec277f207538845486d19a8f5dd5a784b781b3fa143407a1069",
+      "deliveredPath": "resources/presentation-emails-fr-v1.md",
+      "deliveredSha256": "c4fb03bc242a1ec277f207538845486d19a8f5dd5a784b781b3fa143407a1069",
+      "relativeMarkdownLinksAdjustedToDeliveredFilenames": false
+    },
+    {
+      "key": "br01-tr01",
+      "locale": "en",
+      "source": "resources/en/br01-tr01.md",
+      "sourceSha256": "006503215e6c3eeb62069f16351679a5007f9c863971578ba7af21c424ad1ff5",
+      "deliveredPath": "resources/br01-tr01-en-v1.md",
+      "deliveredSha256": "f0535f600ebad3d0814552e3cfb981c8577536a8d3cd8667dc86a44a0b08d757",
+      "relativeMarkdownLinksAdjustedToDeliveredFilenames": true
+    },
+    {
+      "key": "scoping-table",
+      "locale": "en",
+      "source": "resources/en/scoping-table.md",
+      "sourceSha256": "209ab393358f4d6d0674bf30c6d0e55e0a0aeac6c808cd3f1e66262314d3fef2",
+      "deliveredPath": "resources/scoping-table-en-v1.md",
+      "deliveredSha256": "1ffbd2490cb098c391b01fe11f402a7382330abc670d65fe7d5834b901950481",
+      "relativeMarkdownLinksAdjustedToDeliveredFilenames": true
+    },
+    {
+      "key": "prompt-method",
+      "locale": "en",
+      "source": "resources/en/prompt-method.md",
+      "sourceSha256": "8cb40088b475c52d662cb285a378c4c2e8c68f5115439e06de522c6eb40adbd8",
+      "deliveredPath": "resources/prompt-method-en-v1.md",
+      "deliveredSha256": "6e9db70f9498fe943619cf76788ad49795f7336637bf61fb12cc0b07dc6ce002",
+      "relativeMarkdownLinksAdjustedToDeliveredFilenames": true
+    },
+    {
+      "key": "proposal-template",
+      "locale": "en",
+      "source": "resources/en/proposal-template.md",
+      "sourceSha256": "51d2f06c571372b0e496194d2e4073832be54c9ebe20b8052e532a3fa235c5f5",
+      "deliveredPath": "resources/proposal-template-en-v1.md",
+      "deliveredSha256": "51d2f06c571372b0e496194d2e4073832be54c9ebe20b8052e532a3fa235c5f5",
+      "relativeMarkdownLinksAdjustedToDeliveredFilenames": false
+    },
+    {
+      "key": "assessment-grid-br01",
+      "locale": "en",
+      "source": "resources/en/assessment-grid-br01.md",
+      "sourceSha256": "5365a14ebc6b0595bf457a6d09c1f91241d113291355401290259868a97487d1",
+      "deliveredPath": "resources/assessment-grid-br01-en-v1.md",
+      "deliveredSha256": "5365a14ebc6b0595bf457a6d09c1f91241d113291355401290259868a97487d1",
+      "relativeMarkdownLinksAdjustedToDeliveredFilenames": false
+    },
+    {
+      "key": "commented-solution-br01",
+      "locale": "en",
+      "source": "resources/en/commented-solution-br01.md",
+      "sourceSha256": "d6680779578d7c03dcb03b3429e5d21bf60b4e5d3f2f037ae231706057f3c884",
+      "deliveredPath": "resources/commented-solution-br01-en-v1.md",
+      "deliveredSha256": "d6680779578d7c03dcb03b3429e5d21bf60b4e5d3f2f037ae231706057f3c884",
+      "relativeMarkdownLinksAdjustedToDeliveredFilenames": false
+    },
+    {
+      "key": "br02",
+      "locale": "en",
+      "source": "resources/en/br02.md",
+      "sourceSha256": "488c229685c8d2598331b860e6e0c961f5917d271cad274b3c1881c39bd4d638",
+      "deliveredPath": "resources/br02-en-v1.md",
+      "deliveredSha256": "488c229685c8d2598331b860e6e0c961f5917d271cad274b3c1881c39bd4d638",
+      "relativeMarkdownLinksAdjustedToDeliveredFilenames": false
+    },
+    {
+      "key": "commented-solution-br02",
+      "locale": "en",
+      "source": "resources/en/commented-solution-br02.md",
+      "sourceSha256": "5117b4fae3232fd0b0ddcd59be0f03306589cce9ffafaec587970c0410ad17ae",
+      "deliveredPath": "resources/commented-solution-br02-en-v1.md",
+      "deliveredSha256": "5117b4fae3232fd0b0ddcd59be0f03306589cce9ffafaec587970c0410ad17ae",
+      "relativeMarkdownLinksAdjustedToDeliveredFilenames": false
+    },
+    {
+      "key": "presentation-emails",
+      "locale": "en",
+      "source": "resources/en/presentation-emails.md",
+      "sourceSha256": "d5ee843caa901bb92f1075f45610c7f43b669159053a545b55183284f82a4d91",
+      "deliveredPath": "resources/presentation-emails-en-v1.md",
+      "deliveredSha256": "d5ee843caa901bb92f1075f45610c7f43b669159053a545b55183284f82a4d91",
+      "relativeMarkdownLinksAdjustedToDeliveredFilenames": false
+    }
+  ],
+  "modules": [
+    {
+      "key": "m01",
+      "locale": "fr",
+      "usefulWords": 899,
+      "utf8Bytes": 7372,
+      "countMethod": "Intl.Segmenter; authored visible text, exercise and quiz, excluding JSON keys"
+    },
+    {
+      "key": "m01",
+      "locale": "en",
+      "usefulWords": 898,
+      "utf8Bytes": 7027,
+      "countMethod": "Intl.Segmenter; authored visible text, exercise and quiz, excluding JSON keys"
+    },
+    {
+      "key": "m02",
+      "locale": "fr",
+      "usefulWords": 883,
+      "utf8Bytes": 7097,
+      "countMethod": "Intl.Segmenter; authored visible text, exercise and quiz, excluding JSON keys"
+    },
+    {
+      "key": "m02",
+      "locale": "en",
+      "usefulWords": 889,
+      "utf8Bytes": 6966,
+      "countMethod": "Intl.Segmenter; authored visible text, exercise and quiz, excluding JSON keys"
+    },
+    {
+      "key": "m03",
+      "locale": "fr",
+      "usefulWords": 896,
+      "utf8Bytes": 7692,
+      "countMethod": "Intl.Segmenter; authored visible text, exercise and quiz, excluding JSON keys"
+    },
+    {
+      "key": "m03",
+      "locale": "en",
+      "usefulWords": 830,
+      "utf8Bytes": 6836,
+      "countMethod": "Intl.Segmenter; authored visible text, exercise and quiz, excluding JSON keys"
+    },
+    {
+      "key": "m04",
+      "locale": "fr",
+      "usefulWords": 885,
+      "utf8Bytes": 7025,
+      "countMethod": "Intl.Segmenter; authored visible text, exercise and quiz, excluding JSON keys"
+    },
+    {
+      "key": "m04",
+      "locale": "en",
+      "usefulWords": 852,
+      "utf8Bytes": 6575,
+      "countMethod": "Intl.Segmenter; authored visible text, exercise and quiz, excluding JSON keys"
+    },
+    {
+      "key": "m05",
+      "locale": "fr",
+      "usefulWords": 885,
+      "utf8Bytes": 7539,
+      "countMethod": "Intl.Segmenter; authored visible text, exercise and quiz, excluding JSON keys"
+    },
+    {
+      "key": "m05",
+      "locale": "en",
+      "usefulWords": 884,
+      "utf8Bytes": 7082,
+      "countMethod": "Intl.Segmenter; authored visible text, exercise and quiz, excluding JSON keys"
+    },
+    {
+      "key": "m06",
+      "locale": "fr",
+      "usefulWords": 898,
+      "utf8Bytes": 7369,
+      "countMethod": "Intl.Segmenter; authored visible text, exercise and quiz, excluding JSON keys"
+    },
+    {
+      "key": "m06",
+      "locale": "en",
+      "usefulWords": 866,
+      "utf8Bytes": 6820,
+      "countMethod": "Intl.Segmenter; authored visible text, exercise and quiz, excluding JSON keys"
+    }
+  ],
+  "comparisonFeedbackInLessonBody": [
+    "m01",
+    "m02",
+    "m03"
+  ],
+  "mediaProduced": [],
+  "humanReviewClaimed": false,
+  "publishedByThisCommand": false
+}

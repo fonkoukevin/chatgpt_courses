@@ -216,6 +216,8 @@ La copie conserve son origine versionnée, son texte et ses notes si la source e
 
 Composants : `PersonalMethodsList`, `PersonalMethodEditor`, `MethodDraftImport`, `MethodGenerator`, notice source, confirmations et état de sauvegarde. Le global **78 tests Java** couvre notamment propriété, seconde session et concurrence ; les **42 tests client** comprennent des doubles réseau/stockage. La recette navigateur finale réussit **7/7 en 46,1 s**, avec **24 captures examinées** ; périmètre observé et limites dans [evidence/P07.md](evidence/P07.md).
 
+P18 ajoute une copie locale Markdown du formulaire en E11/E12. Le bouton précise que texte, paramètres/sections et notes renseignés sont inclus ; le fichier ne contient pas d’évaluation et ne confirme aucune sauvegarde serveur. Les données restent dans leur langue personnelle et sont encadrées comme texte littéral. Le blocage de compte attendu empêche l’export sous un autre contexte ; la copie de secours existante reste distincte. Dans le corrigé E11, les fichiers ne sont proposés qu’après la révélation et chaque téléchargement recontrôle source/propriétaire/droit, sans URL porteuse dans le résultat initial. [Preuves P18](evidence/P18.md).
+
 ## E13 Compte, achats et aide
 
 Routes : /fr/compte et /en/account ; commandes P11, remboursements et origines d’accès P13 aux chemins du registre. P14 raccorde profil, préférences et sécurité aux services d’identité existants, puis aide, demandes relatives aux données et attestations aux routes privées ci-dessus. Le niveau de vérification reste celui de [STATUS](STATUS.md) et des preuves de chaque lot.

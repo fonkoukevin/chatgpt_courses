@@ -537,6 +537,22 @@ Après compilation de l’API et du web, `.\scripts\courses.cmd run verify:bilin
 
 La recette transversale utilise `.\scripts\courses.cmd run verify:quality` après les deux builds. Elle prépare ses services isolés, exécute neuf scénarios et vérifie leur nettoyage. Ne lancez pas Maven ou un build pendant les mesures navigateur. `.\scripts\courses.cmd run verify:contrast -- P17` écrit les mesures de contraste de ce lot. Les [budgets et limites](docs/QUALITY.md) distinguent mesures locales, vérifications visuelles et risques encore ouverts.
 
+Les [sources du premier parcours](content/course-client-proposal/README.md) contiennent les six modules FR/EN et18 ressources Markdown. Préparez le manifeste puis vérifiez les sources :
+
+```powershell
+.\scripts\courses.cmd run content:prepare
+.\scripts\courses.cmd run verify:content
+```
+
+Après build API, migration et stockage local sain, un acteur éditorial local/test actif peut examiner puis appliquer l’import :
+
+```powershell
+.\scripts\courses.cmd run content:import -- --plan --actor <UUID_EDITEUR_LOCAL> --manifest .runtime/content-course-client-proposal/manifest.json
+.\scripts\courses.cmd run content:import -- --apply --actor <UUID_EDITEUR_LOCAL> --manifest .runtime/content-course-client-proposal/manifest.json
+```
+
+L’import crée des brouillons et refuse les divergences humaines ; aucun compte/rôle, publication ou offre active automatique. Les corrigés gardent une révélation explicite et des liens autorisés. Les nouveaux exports E11/E12 sont des copies Markdown du formulaire courant ; ils ne confirment pas sa sauvegarde. Après les builds, `.\scripts\courses.cmd run verify:course` est la recette isolée P18. [Résultats effectifs et limites P18](docs/evidence/P18.md), [conditions commerciales encore ouvertes](content/course-client-proposal/v1/offer-editorial-draft.json).
+
 `APP_PUBLISHED_LOCALES` reste vide par défaut : aucune langue indexable choisie implicitement. En production, une liste `fr`, `en` ou `fr,en` contrôle seulement l’indexation ; la publication des contenus et les langues incluses dans une offre restent des opérations distinctes. `/` utilise une redirection temporaire307 vers `APP_DEFAULT_LOCALE`. Le sitemap ne contient que des URL canoniques publiques ; les recherches, versions historiques et pages privées restent non indexables.
 
 En recette `APP_ENV=staging`, renseigner `STAGING_BASIC_USERNAME` et un `STAGING_BASIC_PASSWORD` privé d’au moins24 caractères dans le dispositif de secrets de cet environnement, jamais dans Git ou un paramètre `NEXT_PUBLIC_*`. Les pages/API/assets refusent l’accès sans ces identifiants ; le POST exact du webhook Stripe exige sa signature Spring. Garder les ports internes hors exposition publique dans l’infrastructure P20. Une sonde locale de ce périmètre ne constitue ni une recette distante, ni un déploiement ou une indexation Google observée.

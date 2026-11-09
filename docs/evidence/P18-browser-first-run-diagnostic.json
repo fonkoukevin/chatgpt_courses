@@ -1,0 +1,24 @@
+{
+  "runId": "2026-11-09T05-00-51-659Z-b1e6f657-5f12-4918-9178-77e28d098f40",
+  "result": "failed",
+  "passed": 1,
+  "failed": 1,
+  "didNotRun": 2,
+  "cleanupConfirmed": true,
+  "cause": "The new browser test expected HTTP 201 for solution reveal; the existing OpenAPI and ProjectController return HTTP 200. The actual response was 200.",
+  "testCorrection": "Expect exactly HTTP 200; retain the real reveal, file identity, ownership and byte checks.",
+  "accessDiagnostic": {
+    "recordedBeforeCleanup": true,
+    "authStatus": 200,
+    "memberResourceStatus": 200,
+    "learningActivityStatus": 200,
+    "accessStatus": "ACTIVE",
+    "bodyPresent": true,
+    "activeManualTestGrantCount": 1,
+    "newAccessRefusalObserved": false
+  },
+  "runtimeObservation": "The first run's notification worker flag was effectively true because isolated service setup overwrote the earlier P18 false setting. That historical session receipt is preserved. P18 now sets the worker false after service setup and before recording effective flags or starting API.",
+  "isolation": "The first run used disposable PostgreSQL/S3/Mailpit only, with synthetic addresses. No external mail, payment or shared-content publication was exercised. The import CLI has no worker process.",
+  "automaticRetries": 0,
+  "applicationSourceChanged": false
+}

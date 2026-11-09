@@ -506,6 +506,16 @@ Les indicateurs et le CSV `/admin/metrics/export` ont les mêmes filtres. L’ex
 
 ## Contrat et tests
 
+### P18 — ressources de corrigé et import local explicite
+
+`Exercise.solutionAssetIds` est privé, borné à10 UUID uniques ; absent dans un ancien document signifie liste vide. Il est gelé avec l’exercice et n’apparaît pas dans `PublicDocument`. `SolutionRevealView.files` fournit seulement `{ assetId, filename, locale }`, sans URL, après la révélation P09 propriétaire de la source/révision/langue exacte.
+
+`POST /me/projects/{projectId}/solution-reveals/{revealId}/files/{assetId}/download-access` exige session, CSRF, compte attendu, propriétaire et permissions `projects.read`/`assets.read`. Le serveur recontrôle la révélation, la référence privée, l’accès pédagogique courant et la chaîne de l’inscription. Réponse `AssetDownloadAccess` P10 vérifiée en octets/SHA côté navigateur ; chaque clic exige une nouvelle autorisation. Aucun score, stade ou droit n’est créé par cette route.
+
+`EditorialAssetUploadRequest.purpose`, optionnel, vaut `RESOURCE` par défaut ou `SOLUTION`. Ce rôle est immuable et le second est réservé aux fichiers texte. Un assetSOLUTION est refusé globalement dans les téléchargements et médias ordinaires, même si un autre guideFREE tente de le référencer. L’aperçu administratif garde la permission `content.read` ; il n’est jamais une route publique. Markdown `.md` est du texte UTF-8 `text/plain` en pièce jointe, pas du HTML rendu ou un PDF validé.
+
+L’import P18 est un CLI local/test, pas une nouvelle route publique : manifeste versionné, clés logiques durables, brouillons, empreintes et révisions contrôlées. Rejeu identique sans écriture ; modification humaine, renommage, composition ou métadonnée divergente produit un conflit explicite. Aucun compte/rôle, READY, publication, prix ou offre active n’est provisionné par ce CLI. Les résultats d’exécution figurent dans [P18](evidence/P18.md).
+
 ### P16 — adresses et équivalents publiés
 
 `PATCH /admin/contents/{id}/slug` reçoit `RenameContentSlug{slug,reason}`, CSRF, `X-Account-Context` et `If-Match`. `content.write` est nécessaire, avec `content.publish` si cette identité/langue a déjà été publiée. Verrou familial et permission recontrôlés avant écriture ; même slug est un no-op. Une ancienne valeur reste réservée à la même identité/type/langue. Collision409 `SLUG_ALREADY_RESERVED`. Le `ContentView` et son ETag familial sont renvoyés ; aucune révision de texte ou pédagogique fabriquée.

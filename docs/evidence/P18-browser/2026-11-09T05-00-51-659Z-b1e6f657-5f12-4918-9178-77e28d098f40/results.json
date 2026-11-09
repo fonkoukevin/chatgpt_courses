@@ -1,0 +1,362 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.tools\\node-v24.22.2-win-x64\\node.exe",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts"
+    ],
+    "configFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts",
+    "rootDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 1200000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/.runtime/browser-2026-11-09T05-00-51-659Z-b1e6f657-5f12-4918-9178-77e28d098f40/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/course-content.spec.ts"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T05-00-51-659Z-b1e6f657-5f12-4918-9178-77e28d098f40\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "snapshotDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/course-content.spec.ts",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3101",
+          "browserName": "chromium",
+          "headless": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "actionTimeout": 10000,
+          "navigationTimeout": 20000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off",
+          "serviceWorkers": "block"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\docs\\evidence\\P18-browser\\2026-11-09T05-00-51-659Z-b1e6f657-5f12-4918-9178-77e28d098f40\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "course-content.spec.ts",
+      "file": "course-content.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "P18 parcours rédactionnel réel FR/EN, import et ressources",
+          "file": "course-content.spec.ts",
+          "line": 10,
+          "column": 6,
+          "specs": [
+            {
+              "title": "01 · plan puis import réel relançable, 28 brouillons et 12 aperçus privés avant publication technique",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\course-content.spec.ts",
+                        "line": 10,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 13224,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T05:01:28.413Z",
+                      "annotations": [
+                        {
+                          "type": "serial",
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\course-content.spec.ts",
+                            "line": 10,
+                            "column": 6
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "22419a55c431f6ce2286-44d6c45b213b2f2505dd",
+              "file": "course-content.spec.ts",
+              "line": 20,
+              "column": 3
+            },
+            {
+              "title": "fr · six leçons, méthode volontaire, atelier, grille déclarative, transfert BR02 et neuf téléchargements",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\course-content.spec.ts",
+                        "line": 10,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 15364,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m201\u001b[39m\nReceived: \u001b[31m200\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m201\u001b[39m\nReceived: \u001b[31m200\u001b[39m\n    at assessAndReveal (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\course-content-flow.ts:124:68)\n    at runCourseJourney (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\course-content-flow.ts:172:5)\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\course-content.spec.ts:51:25",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\course-content-flow.ts",
+                          "column": 68,
+                          "line": 124
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mcourse-content-flow.ts:124\n\n \u001b[90m 122 |\u001b[39m   \u001b[36mconst\u001b[39m revealResponse \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mwaitForResponse(value \u001b[33m=>\u001b[39m value\u001b[33m.\u001b[39mrequest()\u001b[33m.\u001b[39mmethod() \u001b[33m===\u001b[39m \u001b[32m'POST'\u001b[39m \u001b[33m&&\u001b[39m value\u001b[33m.\u001b[39murl()\u001b[33m.\u001b[39mendsWith(\u001b[32m'/solution-reveals'\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m 123 |\u001b[39m   \u001b[36mawait\u001b[39m keyboardConfirmation(page\u001b[33m,\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39mreveal\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m,\u001b[39m t\u001b[33m.\u001b[39mrevealTitle\u001b[33m,\u001b[39m t\u001b[33m.\u001b[39mcancel\u001b[33m,\u001b[39m t\u001b[33m.\u001b[39mreveal)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 124 |\u001b[39m   \u001b[36mconst\u001b[39m response \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m revealResponse\u001b[33m;\u001b[39m expect(response\u001b[33m.\u001b[39mstatus())\u001b[33m.\u001b[39mtoBe(\u001b[35m201\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mconst\u001b[39m reveal \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m response\u001b[33m.\u001b[39mjson() \u001b[36mas\u001b[39m \u001b[33mSolutionRevealView\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                    \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 125 |\u001b[39m   \u001b[36mconst\u001b[39m file \u001b[33m=\u001b[39m preparedFile(fixture\u001b[33m,\u001b[39m key\u001b[33m,\u001b[39m locale)\u001b[33m;\u001b[39m\n \u001b[90m 126 |\u001b[39m   expect(reveal\u001b[33m.\u001b[39mfiles\u001b[33m.\u001b[39msome(value \u001b[33m=>\u001b[39m value\u001b[33m.\u001b[39massetId \u001b[33m===\u001b[39m file\u001b[33m.\u001b[39massetId))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 127 |\u001b[39m   \u001b[36mconst\u001b[39m me \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m context\u001b[33m.\u001b[39mrequest\u001b[33m.\u001b[39mget(\u001b[32m'/api/v1/auth/me'\u001b[39m)\u001b[33m;\u001b[39m expect(me\u001b[33m.\u001b[39mstatus())\u001b[33m.\u001b[39mtoBe(\u001b[35m200\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mconst\u001b[39m actor \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m me\u001b[33m.\u001b[39mjson() \u001b[36mas\u001b[39m { id\u001b[33m:\u001b[39m string }\u001b[33m;\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\course-content-flow.ts",
+                            "column": 68,
+                            "line": 124
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m201\u001b[39m\nReceived: \u001b[31m200\u001b[39m\n\n   at course-content-flow.ts:124\n\n  122 |   const revealResponse = page.waitForResponse(value => value.request().method() === 'POST' && value.url().endsWith('/solution-reveals'));\n  123 |   await keyboardConfirmation(page, page.getByRole('button', { name: t.reveal, exact: true }), t.revealTitle, t.cancel, t.reveal);\n> 124 |   const response = await revealResponse; expect(response.status()).toBe(201); const reveal = await response.json() as SolutionRevealView;\n      |                                                                    ^\n  125 |   const file = preparedFile(fixture, key, locale);\n  126 |   expect(reveal.files.some(value => value.assetId === file.assetId)).toBe(true);\n  127 |   const me = await context.request.get('/api/v1/auth/me'); expect(me.status()).toBe(200); const actor = await me.json() as { id: string };\n    at assessAndReveal (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\course-content-flow.ts:124:68)\n    at runCourseJourney (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\course-content-flow.ts:172:5)\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\course-content.spec.ts:51:25"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T05:02:13.881Z",
+                      "annotations": [
+                        {
+                          "type": "serial",
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\course-content.spec.ts",
+                            "line": 10,
+                            "column": 6
+                          }
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T05-00-51-659Z-b1e6f657-5f12-4918-9178-77e28d098f40\\results\\course-content-P18-parcour-ca173-R02-et-neuf-téléchargements\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T05-00-51-659Z-b1e6f657-5f12-4918-9178-77e28d098f40\\results\\course-content-P18-parcour-ca173-R02-et-neuf-téléchargements\\error-context.md"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T05-00-51-659Z-b1e6f657-5f12-4918-9178-77e28d098f40\\results\\course-content-P18-parcour-ca173-R02-et-neuf-téléchargements\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\course-content-flow.ts",
+                        "column": 68,
+                        "line": 124
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "22419a55c431f6ce2286-cb7fe2ced6bdd5f82af4",
+              "file": "course-content.spec.ts",
+              "line": 34,
+              "column": 47
+            },
+            {
+              "title": "en · six leçons, méthode volontaire, atelier, grille déclarative, transfert BR02 et neuf téléchargements",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\course-content.spec.ts",
+                        "line": 10,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T05:02:29.682Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "22419a55c431f6ce2286-62209eda41cc8fade579",
+              "file": "course-content.spec.ts",
+              "line": 34,
+              "column": 47
+            },
+            {
+              "title": "04 · fichiers de corrigé cloisonnés, corps protégé absent du public et travail personnel propriétaire",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\course-content.spec.ts",
+                        "line": 10,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T05:02:29.683Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "22419a55c431f6ce2286-a107c302f7f13b27e264",
+              "file": "course-content.spec.ts",
+              "line": 67,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-09T05:01:26.358Z",
+    "duration": 63373.012,
+    "expected": 1,
+    "skipped": 2,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

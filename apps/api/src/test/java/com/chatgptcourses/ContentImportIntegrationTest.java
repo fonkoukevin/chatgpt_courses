@@ -92,7 +92,7 @@ class ContentImportIntegrationTest {
         r.add("courses.assets.access-key",()->ACCESS);r.add("courses.assets.secret-key",()->SECRET);r.add("courses.assets.editorial-bucket",()->"editorial-test");r.add("courses.assets.private-bucket",()->"private-test");
         r.add("courses.assets.region",()->"us-east-1");r.add("courses.assets.path-style",()->true);
         r.add("courses.assets.max-file-bytes",()->4096);r.add("courses.assets.max-image-bytes",()->65536);r.add("courses.assets.max-files-per-project",()->2);r.add("courses.assets.max-bytes-per-project",()->6000);
-        r.add("courses.assets.upload-ttl-seconds",()->3);r.add("courses.assets.download-ttl-seconds",()->2);
+        r.add("courses.assets.upload-ttl-seconds",()->300);r.add("courses.assets.download-ttl-seconds",()->2);
         r.add("courses.assets.staging-cleanup-grace-seconds",()->0);
         r.add("courses.assets.staging-cleanup-worker-enabled",()->false);
     }

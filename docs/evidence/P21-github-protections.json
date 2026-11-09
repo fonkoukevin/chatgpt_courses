@@ -1,0 +1,48 @@
+{
+  "observedAt": "2026-11-09T17:49:02.590Z",
+  "repository": "fonkoukevin/chatgpt_courses",
+  "sourceVisibility": "public",
+  "branch": "main",
+  "branchProtected": true,
+  "enforceAdmins": true,
+  "strictRequiredChecks": [
+    {
+      "context": "web",
+      "appId": 15368
+    },
+    {
+      "context": "api",
+      "appId": 15368
+    },
+    {
+      "context": "e2e",
+      "appId": 15368
+    }
+  ],
+  "pullRequestRequired": true,
+  "requiredReviewers": 0,
+  "forcePushAllowed": false,
+  "deletionAllowed": false,
+  "conversationResolutionRequired": true,
+  "stagingEnvironment": {
+    "createdAt": "2026-11-09T17:48:53Z",
+    "protectedBranchesOnly": true,
+    "customBranches": false
+  },
+  "variableNames": [
+    "EXPECTED_SOURCE_VISIBILITY",
+    "IMAGE_REPOSITORY",
+    "DEPLOY_TARGET_AUTHORIZED",
+    "DEPLOY_HOST",
+    "DEPLOY_PORT",
+    "DEPLOY_USER",
+    "DEPLOY_NODE_PATH",
+    "DEPLOY_DIRECTORY",
+    "DEPLOY_PUBLIC_ORIGIN",
+    "STAGING_BASIC_USERNAME"
+  ],
+  "secretsSet": false,
+  "productionEnvironmentChanged": false,
+  "subscriptionPurchased": false,
+  "applicationDeployed": false
+}

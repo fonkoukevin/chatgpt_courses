@@ -1,0 +1,30 @@
+{
+  "runId": 42668666423,
+  "sourceCommit": "a5c15df29dbbbeeae32812505ed71cafdcae3210",
+  "url": "https://github.com/fonkoukevin/chatgpt_courses/actions/runs/42668666423",
+  "result": "success",
+  "startedAt": "2026-11-09T17:51:26Z",
+  "completedAt": "2026-11-09T17:51:50Z",
+  "jobs": { "plan": "success", "publish": "skipped", "deploy": "skipped" },
+  "artifact": {
+    "name": "manual-release-plan-42668666423-1",
+    "bytes": 385,
+    "sha256": "b4af127434fb00952c7affe49eeb5ea4c5a8f894a7b87c8c65f7a9153fe1522c",
+    "shaVerified": true
+  },
+  "guard": {
+    "result": "passed",
+    "sourceVisibility": "public",
+    "protectedEnvironmentChecked": true,
+    "environmentPreexisting": true,
+    "defaultBranchProtected": true,
+    "reviewersConfigured": false,
+    "preventSelfReview": null,
+    "adminBypassUiObserved": false,
+    "registryOrTargetMutationExecuted": false
+  },
+  "successfulCiChecked": false,
+  "ghcrCapabilityProbed": false,
+  "targetProbed": false,
+  "rawLogsRead": false
+}

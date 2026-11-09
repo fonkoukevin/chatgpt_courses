@@ -1,0 +1,27 @@
+{
+  "result": "prepared-not-activated",
+  "defaultPaymentTest": false,
+  "allowedEnvironment": "shared staging with mailpit-s3",
+  "providerMode": "TEST",
+  "providerApi": "https://api.stripe.com",
+  "allowedFixtureCurrency": "EUR",
+  "inlineKeysAllowed": false,
+  "liveKeysAllowed": false,
+  "runnerHostFlagAgreementRequired": true,
+  "nodeTests": { "passed": 27, "failed": 0 },
+  "syntheticComposeRenders": {
+    "passed": 3,
+    "productionPaymentOff": true,
+    "defaultStagingPaymentOff": true,
+    "explicitStagingTestOn": true,
+    "stripeSecretMountCounts": [0, 0, 2],
+    "migrationPaymentOffInAllModes": true
+  },
+  "syntaxAndActionlintPassed": true,
+  "providerCalled": false,
+  "realKeysRead": false,
+  "containersStarted": false,
+  "remoteModified": false,
+  "offerSeeded": false,
+  "limitations": ["Synthetic configuration verification does not validate Stripe credentials, webhook delivery, charges or refunds."]
+}

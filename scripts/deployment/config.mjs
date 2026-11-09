@@ -3,7 +3,7 @@ import {readFileSync,lstatSync} from 'node:fs';
 import {resolve,isAbsolute,relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
 const image=/^[a-z0-9][a-z0-9.:/_-]+@sha256:[a-f0-9]{64}$/;
-const keys=new Set(['COMPOSE_PROJECT_NAME','APP_ENV','PUBLIC_DOMAIN','APP_PUBLIC_ORIGIN','POSTGRES_DB','WEB_IMAGE','API_IMAGE','SECRETS_DIR','APP_DEFAULT_LOCALE','APP_PUBLISHED_LOCALES','HTTP_BIND','HTTP_PORT','HTTPS_PORT','STAGING_BASIC_USERNAME','INGRESS_MODE','INGRESS_NETWORK','STAGING_INTEGRATIONS','FILES_PUBLIC_ORIGIN']);
+const keys=new Set(['COMPOSE_PROJECT_NAME','APP_ENV','PUBLIC_DOMAIN','APP_PUBLIC_ORIGIN','POSTGRES_DB','WEB_IMAGE','API_IMAGE','SECRETS_DIR','APP_DEFAULT_LOCALE','APP_PUBLISHED_LOCALES','HTTP_BIND','HTTP_PORT','HTTPS_PORT','STAGING_BASIC_USERNAME','INGRESS_MODE','INGRESS_NETWORK','STAGING_INTEGRATIONS','FILES_PUBLIC_ORIGIN','STAGING_PAYMENT_TEST','STRIPE_TEST_ACCOUNT_ID']);
 export const secretFiles=['postgres-admin-password','postgres-owner-password','postgres-app-password','outbox-key'];
 export function validateDeployment(env,{isolated=false,checkFiles=true}={}){
  const fail=code=>{throw new Error(code);};
@@ -17,6 +17,12 @@ export function validateDeployment(env,{isolated=false,checkFiles=true}={}){
  if(!['none','mailpit-s3'].includes(stagingIntegrations))fail('DEPLOYMENT_STAGING_INTEGRATIONS_INVALID');
  if(stagingIntegrations!=='none'&&(env.APP_ENV!=='staging'||ingressMode!=='shared'))fail('DEPLOYMENT_STAGING_INTEGRATIONS_REQUIRE_SHARED_STAGING');
  if(stagingIntegrations==='none'&&env.FILES_PUBLIC_ORIGIN!==undefined)fail('DEPLOYMENT_UNEXPECTED_FILES_ORIGIN');
+ const paymentFlag=env.STAGING_PAYMENT_TEST===undefined?'false':env.STAGING_PAYMENT_TEST;
+ if(!['true','false'].includes(paymentFlag))fail('DEPLOYMENT_STAGING_PAYMENT_TEST_INVALID');
+ const stagingPaymentTest=paymentFlag==='true';
+ if(stagingPaymentTest&&(env.APP_ENV!=='staging'||ingressMode!=='shared'||stagingIntegrations!=='mailpit-s3'))fail('DEPLOYMENT_PAYMENT_TEST_REQUIRES_SHARED_STAGING_INTEGRATIONS');
+ if(stagingPaymentTest&&!/^acct_[A-Za-z0-9]{8,64}$/.test(env.STRIPE_TEST_ACCOUNT_ID??''))fail('DEPLOYMENT_STRIPE_TEST_ACCOUNT_REQUIRED');
+ if(!stagingPaymentTest&&env.STRIPE_TEST_ACCOUNT_ID!==undefined)fail('DEPLOYMENT_UNEXPECTED_STRIPE_TEST_ACCOUNT');
  if(!/^courses-(?:staging|production|p20-[a-f0-9-]{8,36})$/.test(env.COMPOSE_PROJECT_NAME??''))fail('DEPLOYMENT_PROJECT_INVALID');
  if(!isolated&&env.COMPOSE_PROJECT_NAME!==`courses-${env.APP_ENV}`)fail('DEPLOYMENT_PROJECT_ENVIRONMENT_MISMATCH');
  for(const name of ['WEB_IMAGE','API_IMAGE'])if(!image.test(env[name]??'')&&!(isolated&&/^sha256:[a-f0-9]{64}$/.test(env[name]??'')))fail(`DEPLOYMENT_${name}_DIGEST_REQUIRED`);
@@ -36,10 +42,12 @@ export function validateDeployment(env,{isolated=false,checkFiles=true}={}){
  if(!isAbsolute(env.SECRETS_DIR??''))fail('DEPLOYMENT_ABSOLUTE_SECRETS_DIRECTORY_REQUIRED');
  if(isolated){const child=relative(resolve('.runtime'),resolve(env.SECRETS_DIR));if(!env.PUBLIC_DOMAIN.endsWith('.localhost')||env.HTTP_BIND!=='127.0.0.1'||!child||child.startsWith('..')||isAbsolute(child))fail('DEPLOYMENT_ISOLATED_SCOPE_INVALID');}
  if(env.APP_ENV==='staging'&&!/^[A-Za-z0-9._-]{3,80}$/.test(env.STAGING_BASIC_USERNAME??''))fail('DEPLOYMENT_STAGING_USERNAME_INVALID');
- if(checkFiles){const directory=lstatSync(env.SECRETS_DIR);if(!directory.isDirectory()||directory.isSymbolicLink()||process.platform==='linux'&&(directory.mode&0o077)!==0)fail('DEPLOYMENT_SECRETS_DIRECTORY_MUST_BE_PRIVATE');for(const name of [...secretFiles,...(env.APP_ENV==='staging'?['staging-basic-password']:[]),...(stagingIntegrations==='mailpit-s3'?['staging-s3-access-key','staging-s3-secret-key']:[])]){
+ if(checkFiles){const directory=lstatSync(env.SECRETS_DIR);if(!directory.isDirectory()||directory.isSymbolicLink()||process.platform==='linux'&&(directory.mode&0o077)!==0)fail('DEPLOYMENT_SECRETS_DIRECTORY_MUST_BE_PRIVATE');for(const name of [...secretFiles,...(env.APP_ENV==='staging'?['staging-basic-password']:[]),...(stagingIntegrations==='mailpit-s3'?['staging-s3-access-key','staging-s3-secret-key']:[]),...(stagingPaymentTest?['staging-stripe-secret-key','staging-stripe-webhook-secret']:[])]){
    const path=resolve(env.SECRETS_DIR,name);let stat,bytes;try{stat=lstatSync(path);bytes=readFileSync(path);}catch{fail('DEPLOYMENT_SECRET_FILE_MISSING');}
    if(!stat.isFile()||stat.isSymbolicLink()||bytes.length<24||bytes.length>512||/[\r\n\0]/.test(bytes.toString('utf8')))fail('DEPLOYMENT_SECRET_FILE_INVALID');
    if(name==='outbox-key'&&Buffer.from(bytes.toString('utf8'),'base64').length!==32)fail('DEPLOYMENT_OUTBOX_KEY_INVALID');
+   if(name==='staging-stripe-secret-key'&&!/^sk_test_[A-Za-z0-9_]+$/.test(bytes.toString('utf8')))fail('DEPLOYMENT_STRIPE_TEST_SECRET_INVALID');
+   if(name==='staging-stripe-webhook-secret'&&!/^whsec_[A-Za-z0-9_]+$/.test(bytes.toString('utf8')))fail('DEPLOYMENT_STRIPE_WEBHOOK_SECRET_INVALID');
   }}
  if(checkFiles&&stagingIntegrations==='mailpit-s3'){
   let stat,bytes,auth;try{const path=resolve(env.SECRETS_DIR,'staging-s3-auth.json');stat=lstatSync(path);bytes=readFileSync(path);auth=JSON.parse(bytes.toString('utf8'));}catch{fail('DEPLOYMENT_S3_AUTH_CONFIGURATION_INVALID');}
@@ -48,7 +56,7 @@ export function validateDeployment(env,{isolated=false,checkFiles=true}={}){
   if(identity?.name!=='courses-staging'||!Array.isArray(credentials)||credentials.length!==1||!Array.isArray(actions)||actions.length!==5||!['Admin','Read','List','Tagging','Write'].every(action=>actions.includes(action)))fail('DEPLOYMENT_S3_AUTH_CONFIGURATION_INVALID');
   if(credentials[0]?.accessKey!==readFileSync(resolve(env.SECRETS_DIR,'staging-s3-access-key'),'utf8')||credentials[0]?.secretKey!==readFileSync(resolve(env.SECRETS_DIR,'staging-s3-secret-key'),'utf8'))fail('DEPLOYMENT_S3_AUTH_CREDENTIAL_MISMATCH');
  }
- return {environment:env.APP_ENV,project:env.COMPOSE_PROJECT_NAME,digestImages:true,httpsOrigin:true,secretsChecked:checkFiles,isolated,commerceEnabled:false,ingressMode,ingressNetwork:ingressMode==='shared'?env.INGRESS_NETWORK:null,stagingIntegrations,filesPublicOrigin:stagingIntegrations==='mailpit-s3'?env.FILES_PUBLIC_ORIGIN:null,videoEnabled:false};
+ return {environment:env.APP_ENV,project:env.COMPOSE_PROJECT_NAME,digestImages:true,httpsOrigin:true,secretsChecked:checkFiles,isolated,commerceEnabled:stagingPaymentTest,stagingPaymentTest,ingressMode,ingressNetwork:ingressMode==='shared'?env.INGRESS_NETWORK:null,stagingIntegrations,filesPublicOrigin:stagingIntegrations==='mailpit-s3'?env.FILES_PUBLIC_ORIGIN:null,videoEnabled:false};
 }
 export function loadDeployment(file,releaseFile){
  const env=parseEnv(readFileSync(file,'utf8'));

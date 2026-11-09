@@ -1,0 +1,25 @@
+# Explicit shared-staging TEST verification only. This file is never selected
+# for production or by the default deployment configuration. No offer is seeded.
+services:
+  api:
+    environment:
+      COMMERCE_ENABLED: "true"
+      COMMERCE_ALLOWED_CURRENCIES: EUR
+      STRIPE_ENABLED: "true"
+      STRIPE_MODE: TEST
+      STRIPE_API_BASE: https://api.stripe.com
+      STRIPE_ACCOUNT_ID: ${STRIPE_TEST_ACCOUNT_ID:?Explicit TEST account identity required}
+      STRIPE_SECRET_KEY_FILE: /run/secrets/STRIPE_SECRET_KEY
+      STRIPE_WEBHOOK_SECRET_FILE: /run/secrets/STRIPE_WEBHOOK_SECRET
+      PAYMENT_INBOX_ENABLED: "true"
+      REFUND_WORKER_ENABLED: "true"
+    secrets:
+      - source: staging_stripe_secret_key
+        target: STRIPE_SECRET_KEY
+      - source: staging_stripe_webhook_secret
+        target: STRIPE_WEBHOOK_SECRET
+secrets:
+  staging_stripe_secret_key:
+    file: ${SECRETS_DIR:?}/staging-stripe-secret-key
+  staging_stripe_webhook_secret:
+    file: ${SECRETS_DIR:?}/staging-stripe-webhook-secret

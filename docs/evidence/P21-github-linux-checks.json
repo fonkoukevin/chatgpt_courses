@@ -1,0 +1,984 @@
+{
+  "schemaVersion": 1,
+  "phase": "P21",
+  "recordedAt": "2026-11-09T19:29:17.537Z",
+  "result": "CI_PASSED_WITH_PRESERVED_HISTORICAL_FAILURES",
+  "githubExecutionObserved": true,
+  "initializationFailures": [
+    {
+      "runId": 42672281748,
+      "event": "push",
+      "attempt": 1,
+      "correlationId": "9e65cc6b-190d-46c9-b94b-789f294f14a4",
+      "sourceCommit": "d4f45fe39c4d92bbd29f8729e2c72581abf3ec75",
+      "conclusion": "failure",
+      "jobs": 0,
+      "artifacts": 0,
+      "annotationCode": "GITHUB_INTERNAL_SERVER_ERROR"
+    },
+    {
+      "runId": 42672302692,
+      "event": "pull_request",
+      "attempt": 1,
+      "correlationId": "5c646c79-5dfa-4008-bce9-32af3909fb3b",
+      "sourceCommit": "d4f45fe39c4d92bbd29f8729e2c72581abf3ec75",
+      "conclusion": "failure",
+      "jobs": 0,
+      "artifacts": 0,
+      "annotationCode": "GITHUB_INTERNAL_SERVER_ERROR"
+    },
+    {
+      "runId": 42672302692,
+      "event": "pull_request",
+      "attempt": 2,
+      "correlationId": "a1301d5f-b42d-4e5a-a362-202f5f88b96d",
+      "sourceCommit": "d4f45fe39c4d92bbd29f8729e2c72581abf3ec75",
+      "conclusion": "failure",
+      "jobs": 0,
+      "artifacts": 0,
+      "annotationCode": "GITHUB_INTERNAL_SERVER_ERROR"
+    }
+  ],
+  "completedRuns": [
+    {
+      "runId": 42676836199,
+      "event": "push",
+      "attempt": 1,
+      "sourceCommit": "d56157eeeedc21eb8fed1e4ac9be3613638d9f53",
+      "conclusion": "failure",
+      "api": {
+        "result": "passed",
+        "exitCode": 0,
+        "durationMs": 328973,
+        "suites": 40,
+        "counts": {
+          "tests": 266,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "web": {
+        "allRequiredStepsPassed": true,
+        "client": {
+          "tests": 124,
+          "suites": 0,
+          "pass": 124,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "scripts": {
+          "tests": 59,
+          "suites": 0,
+          "pass": 59,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "stripeConfig": {
+          "tests": 5,
+          "suites": 0,
+          "pass": 5,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "phaseSpecificEvidence": "P19"
+      },
+      "httpSmoke": {
+        "exitCode": 0,
+        "durationMs": 31955,
+        "result": "passed",
+        "cleanupConfirmed": true,
+        "realPostgreSQL": true,
+        "sharedDatabaseChanged": false
+      },
+      "release": {
+        "exitCode": 1,
+        "durationMs": 25615,
+        "collectionCode": "CI_EVIDENCE_NOT_APPROVED",
+        "harness": null,
+        "scenarioResultsPublished": false,
+        "scenarioPassClaimed": false
+      },
+      "artifacts": [
+        {
+          "id": 13700193655,
+          "name": "api-checks-42676836199-1",
+          "sha256": "556a3b3de9bea2705e122a87426cb64693258b700556b36f20a16517959fa57f",
+          "digestVerified": true,
+          "workflowHeadSha": "d56157eeeedc21eb8fed1e4ac9be3613638d9f53",
+          "headMatchesSourceCommit": true
+        },
+        {
+          "id": 13701155928,
+          "name": "web-checks-42676836199-1",
+          "sha256": "00fde6b4be4f55801756a454a111bff68bdbd7d45291b433f4476022d193acd1",
+          "digestVerified": true,
+          "workflowHeadSha": "d56157eeeedc21eb8fed1e4ac9be3613638d9f53",
+          "headMatchesSourceCommit": true
+        },
+        {
+          "id": 13700807713,
+          "name": "e2e-checks-42676836199-1",
+          "sha256": "5ffffbb1eb5c5dc9f0cb6a92c3ebcdab9bc776515c9e4be0fc1ae0d3f8a7ac20",
+          "digestVerified": true,
+          "workflowHeadSha": "d56157eeeedc21eb8fed1e4ac9be3613638d9f53",
+          "headMatchesSourceCommit": true
+        }
+      ]
+    },
+    {
+      "runId": 42676849170,
+      "event": "pull_request",
+      "attempt": 1,
+      "sourceCommit": "d56157eeeedc21eb8fed1e4ac9be3613638d9f53",
+      "conclusion": "failure",
+      "api": {
+        "result": "passed",
+        "exitCode": 0,
+        "durationMs": 347123,
+        "suites": 40,
+        "counts": {
+          "tests": 266,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "web": {
+        "allRequiredStepsPassed": true,
+        "client": {
+          "tests": 124,
+          "suites": 0,
+          "pass": 124,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "scripts": {
+          "tests": 59,
+          "suites": 0,
+          "pass": 59,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "stripeConfig": {
+          "tests": 5,
+          "suites": 0,
+          "pass": 5,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "phaseSpecificEvidence": "P19"
+      },
+      "httpSmoke": {
+        "exitCode": 0,
+        "durationMs": 30011,
+        "result": "passed",
+        "cleanupConfirmed": true,
+        "realPostgreSQL": true,
+        "sharedDatabaseChanged": false
+      },
+      "release": {
+        "exitCode": 1,
+        "durationMs": 22677,
+        "collectionCode": "CI_EVIDENCE_NOT_APPROVED",
+        "harness": null,
+        "scenarioResultsPublished": false,
+        "scenarioPassClaimed": false
+      },
+      "artifacts": [
+        {
+          "id": 13701361682,
+          "name": "api-checks-42676849170-1",
+          "sha256": "8cd38d222dc70cc2a896839f714ed77b21c1d76beb77f07cdd42f91510bbcb45",
+          "digestVerified": true,
+          "workflowHeadSha": "d56157eeeedc21eb8fed1e4ac9be3613638d9f53",
+          "headMatchesSourceCommit": true
+        },
+        {
+          "id": 13700646752,
+          "name": "web-checks-42676849170-1",
+          "sha256": "aed1f154afb83bcdd2808389561525a33fedb29f3d48d32324151e52714a8097",
+          "digestVerified": true,
+          "workflowHeadSha": "d56157eeeedc21eb8fed1e4ac9be3613638d9f53",
+          "headMatchesSourceCommit": true
+        },
+        {
+          "id": 13702120086,
+          "name": "e2e-checks-42676849170-1",
+          "sha256": "2553e39e0738feee0707a8e4bb96399bd50025e56c9f05b2d00adfbe94d371fc",
+          "digestVerified": true,
+          "workflowHeadSha": "d56157eeeedc21eb8fed1e4ac9be3613638d9f53",
+          "headMatchesSourceCommit": true
+        }
+      ]
+    },
+    {
+      "runId": 42678770145,
+      "event": "push",
+      "attempt": 1,
+      "sourceCommit": "92142980e675b0a5646cbdb39ee3f6442d990296",
+      "conclusion": "failure",
+      "api": {
+        "result": "passed",
+        "exitCode": 0,
+        "durationMs": 333300,
+        "suites": 40,
+        "counts": {
+          "tests": 266,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "web": {
+        "allRequiredStepsPassed": true,
+        "client": {
+          "tests": 124,
+          "suites": 0,
+          "pass": 124,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "scripts": {
+          "tests": 60,
+          "suites": 0,
+          "pass": 60,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "stripeConfig": {
+          "tests": 5,
+          "suites": 0,
+          "pass": 5,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "phaseSpecificEvidence": "P19"
+      },
+      "httpSmoke": {
+        "exitCode": 0,
+        "durationMs": 32766,
+        "result": "passed",
+        "cleanupConfirmed": true,
+        "realPostgreSQL": true,
+        "sharedDatabaseChanged": false
+      },
+      "release": {
+        "exitCode": 1,
+        "durationMs": 23506,
+        "collectionCode": "CI_EVIDENCE_NOT_APPROVED",
+        "harness": {
+          "format": "browser-harness-summary-v1",
+          "result": "failed",
+          "cleanupConfirmed": true,
+          "stage": "CONTROL_LISTEN",
+          "errorCode": "EINVAL",
+          "playwrightStarted": false
+        },
+        "scenarioResultsPublished": false,
+        "scenarioPassClaimed": false
+      },
+      "artifacts": [
+        {
+          "id": 13700659734,
+          "name": "api-checks-42678770145-1",
+          "sha256": "8b3a0d0ec200bc24547ea363eb77e21e124c5f8138a76a115201c8fe7cde96b4",
+          "digestVerified": true,
+          "workflowHeadSha": "92142980e675b0a5646cbdb39ee3f6442d990296",
+          "headMatchesSourceCommit": true
+        },
+        {
+          "id": 13701043193,
+          "name": "web-checks-42678770145-1",
+          "sha256": "1d7600c59d65df2d0ed1e68f8dea1304d6516f73f1839ce53f78fcd7335f74e9",
+          "digestVerified": true,
+          "workflowHeadSha": "92142980e675b0a5646cbdb39ee3f6442d990296",
+          "headMatchesSourceCommit": true
+        },
+        {
+          "id": 13700769781,
+          "name": "e2e-checks-42678770145-1",
+          "sha256": "a9ec6acc3f0885f1fc25d7d58e029cc4c431c0e3674ad86584098e0ceadf706c",
+          "digestVerified": true,
+          "workflowHeadSha": "92142980e675b0a5646cbdb39ee3f6442d990296",
+          "headMatchesSourceCommit": true
+        }
+      ]
+    },
+    {
+      "runId": 42678778366,
+      "event": "pull_request",
+      "attempt": 1,
+      "sourceCommit": "92142980e675b0a5646cbdb39ee3f6442d990296",
+      "conclusion": "cancelled",
+      "api": {
+        "result": "passed",
+        "exitCode": 0,
+        "durationMs": 325835,
+        "suites": 40,
+        "counts": {
+          "tests": 266,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "web": {
+        "allRequiredStepsPassed": true,
+        "client": {
+          "tests": 124,
+          "suites": 0,
+          "pass": 124,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "scripts": {
+          "tests": 60,
+          "suites": 0,
+          "pass": 60,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "stripeConfig": {
+          "tests": 5,
+          "suites": 0,
+          "pass": 5,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "phaseSpecificEvidence": "P19"
+      },
+      "httpSmoke": {
+        "exitCode": 0,
+        "durationMs": 42559,
+        "result": "passed",
+        "cleanupConfirmed": true,
+        "realPostgreSQL": true,
+        "sharedDatabaseChanged": false
+      },
+      "release": {
+        "exitCode": 1,
+        "durationMs": 24338,
+        "collectionCode": "CI_EVIDENCE_NOT_APPROVED",
+        "harness": {
+          "format": "browser-harness-summary-v1",
+          "result": "failed",
+          "cleanupConfirmed": true,
+          "stage": "CONTROL_LISTEN",
+          "errorCode": "EINVAL",
+          "playwrightStarted": false
+        },
+        "scenarioResultsPublished": false,
+        "scenarioPassClaimed": false
+      },
+      "artifacts": [
+        {
+          "id": 13701552751,
+          "name": "api-checks-42678778366-1",
+          "sha256": "6fb9cbe6f52e1c2eb019ae823f88dce820296a3195aaa2dc0a1fa5c64f33ff02",
+          "digestVerified": true,
+          "workflowHeadSha": "92142980e675b0a5646cbdb39ee3f6442d990296",
+          "headMatchesSourceCommit": true
+        },
+        {
+          "id": 13700928525,
+          "name": "web-checks-42678778366-1",
+          "sha256": "b3f0bddc74dcb143bb40f38988dad66c5a48185166c0a00d6f4449aa5bd9a0cb",
+          "digestVerified": true,
+          "workflowHeadSha": "92142980e675b0a5646cbdb39ee3f6442d990296",
+          "headMatchesSourceCommit": true
+        },
+        {
+          "id": 13701668064,
+          "name": "e2e-checks-42678778366-1",
+          "sha256": "800e872705ebeba7630d7528a84e20073746ff3919a01cbf06057f2b01c478ee",
+          "digestVerified": true,
+          "workflowHeadSha": "92142980e675b0a5646cbdb39ee3f6442d990296",
+          "headMatchesSourceCommit": true
+        }
+      ]
+    },
+    {
+      "runId": 42680291749,
+      "event": "pull_request",
+      "attempt": 1,
+      "sourceCommit": "ae04e318786ed02f7f43d6e4d560022445941a5c",
+      "conclusion": "success",
+      "api": {
+        "result": "passed",
+        "exitCode": 0,
+        "durationMs": 300815,
+        "suites": 40,
+        "counts": {
+          "tests": 266,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "web": {
+        "allRequiredStepsPassed": true,
+        "client": {
+          "tests": 124,
+          "suites": 0,
+          "pass": 124,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "scripts": {
+          "tests": 65,
+          "suites": 0,
+          "pass": 65,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "stripeConfig": {
+          "tests": 5,
+          "suites": 0,
+          "pass": 5,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "phaseSpecificEvidence": "P19"
+      },
+      "httpSmoke": {
+        "exitCode": 0,
+        "durationMs": 33442,
+        "result": "passed",
+        "cleanupConfirmed": true,
+        "realPostgreSQL": true,
+        "sharedDatabaseChanged": false
+      },
+      "release": {
+        "counts": {
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0,
+          "flaky": 0
+        },
+        "durationMs": 45047.373,
+        "automaticRetriesObserved": false,
+        "attemptCount": 4,
+        "retryCount": 0,
+        "cleanupConfirmed": true,
+        "harness": {
+          "format": "browser-harness-summary-v1",
+          "result": "passed",
+          "cleanupConfirmed": true,
+          "stage": "COMPLETE",
+          "errorCode": "NONE",
+          "playwrightStarted": true
+        },
+        "captures": [
+          {
+            "scenarioId": "P19-01",
+            "path": "fr-390-catalogue-empty.png",
+            "sha256": "1077eb59c05da571f5ade9bc5a1d64a74ffee3b7bf5c120e93b80b3c1eab66e7",
+            "width": 390,
+            "height": 1000
+          },
+          {
+            "scenarioId": "P19-01",
+            "path": "fr-390-catalogue-unavailable.png",
+            "sha256": "4f5c0d803bdb79208ece538ee671bf905a2f3a10f7b05b0ca5860cbebc81adb6",
+            "width": 390,
+            "height": 1000
+          },
+          {
+            "scenarioId": "P19-02",
+            "path": "fr-390-paid-original-note.png",
+            "sha256": "f193c58527b17faa9f55214d56160282cac5764ec30252f9a19d2c23aa76b395",
+            "width": 390,
+            "height": 1000
+          },
+          {
+            "scenarioId": "P19-02",
+            "path": "en-390-paid-original-note.png",
+            "sha256": "b486e47b97020bfb7ab30d3e8ce3c5fd238e500c7fe763c16baf5dd12ad4a20e",
+            "width": 390,
+            "height": 1000
+          },
+          {
+            "scenarioId": "P19-02",
+            "path": "en-390-paid-french-quiz-history.png",
+            "sha256": "df83d5e68462c50377794c2d58f381f692c58e5ebfb1c37bcdddbc055b948b72",
+            "width": 390,
+            "height": 1000
+          },
+          {
+            "scenarioId": "P19-03",
+            "path": "fr-390-project-conflict.png",
+            "sha256": "f0d165a8ed69591eb53c48e4d22a8176c04a78ea9da37db1309dce236577b80e",
+            "width": 390,
+            "height": 1000
+          },
+          {
+            "scenarioId": "P19-04",
+            "path": "en-390-participation-provenance.png",
+            "sha256": "234f99e41f0053de907c24caaff011caba47ff8c4652cd332d0a08b41a74713b",
+            "width": 390,
+            "height": 1000
+          },
+          {
+            "scenarioId": "P19-04",
+            "path": "en-390-contextual-support.png",
+            "sha256": "af93ed6700147751c6d8f79fcac7edce7027cf44184ab23cf6f0325138e828a2",
+            "width": 390,
+            "height": 1000
+          }
+        ],
+        "visualReviewPerformedByAgent": false
+      },
+      "production": {
+        "result": "passed",
+        "checks": 12,
+        "allPassed": true,
+        "cleanupConfirmed": true,
+        "jarSha256": "39a516d0bc88023a6db90bb070ec04640a22a1b8efec299a8b269677511170ff",
+        "webBuildId": "tf6HmAMTES_XX00FQYKwf",
+        "tlsDeploymentClaimed": false
+      },
+      "artifacts": [
+        {
+          "id": 13702766126,
+          "name": "api-checks-42680291749-1",
+          "sha256": "0c955ee435d984966f9448b158919b19ef4350b9b077f0e73b211ec9299ae398",
+          "digestVerified": true,
+          "workflowHeadSha": "ae04e318786ed02f7f43d6e4d560022445941a5c",
+          "headMatchesSourceCommit": true
+        },
+        {
+          "id": 13703100088,
+          "name": "web-checks-42680291749-1",
+          "sha256": "cf4cc9313843c87588d8e9746ba903279090900ec76c810fb56677b6ee9d8729",
+          "digestVerified": true,
+          "workflowHeadSha": "ae04e318786ed02f7f43d6e4d560022445941a5c",
+          "headMatchesSourceCommit": true
+        },
+        {
+          "id": 13703605621,
+          "name": "e2e-checks-42680291749-1",
+          "sha256": "7b66de86c0bb7e500dc54590e51319ac2ac24678e34054742713b16399fc2346",
+          "digestVerified": true,
+          "workflowHeadSha": "ae04e318786ed02f7f43d6e4d560022445941a5c",
+          "headMatchesSourceCommit": true
+        }
+      ]
+    },
+    {
+      "runId": 42680277800,
+      "event": "push",
+      "attempt": 1,
+      "sourceCommit": "ae04e318786ed02f7f43d6e4d560022445941a5c",
+      "conclusion": "success",
+      "api": {
+        "result": "passed",
+        "exitCode": 0,
+        "durationMs": 340625,
+        "suites": 40,
+        "counts": {
+          "tests": 266,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "web": {
+        "allRequiredStepsPassed": true,
+        "client": {
+          "tests": 124,
+          "suites": 0,
+          "pass": 124,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "scripts": {
+          "tests": 65,
+          "suites": 0,
+          "pass": 65,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "stripeConfig": {
+          "tests": 5,
+          "suites": 0,
+          "pass": 5,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "phaseSpecificEvidence": "P19"
+      },
+      "httpSmoke": {
+        "exitCode": 0,
+        "durationMs": 31879,
+        "result": "passed",
+        "cleanupConfirmed": true,
+        "realPostgreSQL": true,
+        "sharedDatabaseChanged": false
+      },
+      "release": {
+        "counts": {
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0,
+          "flaky": 0
+        },
+        "durationMs": 48031.557,
+        "automaticRetriesObserved": false,
+        "attemptCount": 4,
+        "retryCount": 0,
+        "cleanupConfirmed": true,
+        "harness": {
+          "format": "browser-harness-summary-v1",
+          "result": "passed",
+          "cleanupConfirmed": true,
+          "stage": "COMPLETE",
+          "errorCode": "NONE",
+          "playwrightStarted": true
+        },
+        "captures": [
+          {
+            "scenarioId": "P19-01",
+            "path": "fr-390-catalogue-empty.png",
+            "sha256": "d7fb5c9ab86b5d4ad6e8a8d5217a29f44c685d7d0108885161dd94e9ed4292fd",
+            "width": 390,
+            "height": 1000
+          },
+          {
+            "scenarioId": "P19-01",
+            "path": "fr-390-catalogue-unavailable.png",
+            "sha256": "4f5c0d803bdb79208ece538ee671bf905a2f3a10f7b05b0ca5860cbebc81adb6",
+            "width": 390,
+            "height": 1000
+          },
+          {
+            "scenarioId": "P19-02",
+            "path": "fr-390-paid-original-note.png",
+            "sha256": "d5238549995e120a81b3168d21880ea1d0019f3020a0407d99aa1d4fa8cf2689",
+            "width": 390,
+            "height": 1000
+          },
+          {
+            "scenarioId": "P19-02",
+            "path": "en-390-paid-original-note.png",
+            "sha256": "b7ca3363942b8c8566be915156dfefcabea29f7d13522809c1f28467db23e702",
+            "width": 390,
+            "height": 1000
+          },
+          {
+            "scenarioId": "P19-02",
+            "path": "en-390-paid-french-quiz-history.png",
+            "sha256": "df83d5e68462c50377794c2d58f381f692c58e5ebfb1c37bcdddbc055b948b72",
+            "width": 390,
+            "height": 1000
+          },
+          {
+            "scenarioId": "P19-03",
+            "path": "fr-390-project-conflict.png",
+            "sha256": "7dba5f9caa5ca17e1effa6e3b62a8dc1b178fbfa4f1ca2382aa9cc3923eab657",
+            "width": 390,
+            "height": 1000
+          },
+          {
+            "scenarioId": "P19-04",
+            "path": "en-390-participation-provenance.png",
+            "sha256": "234f99e41f0053de907c24caaff011caba47ff8c4652cd332d0a08b41a74713b",
+            "width": 390,
+            "height": 1000
+          },
+          {
+            "scenarioId": "P19-04",
+            "path": "en-390-contextual-support.png",
+            "sha256": "a4abc5a2dd605630f99c769d6a021edc859c0e6fbd2fb4e982fb2cf2ba67aff8",
+            "width": 390,
+            "height": 1000
+          }
+        ],
+        "visualReviewPerformedByAgent": false
+      },
+      "production": {
+        "result": "passed",
+        "checks": 12,
+        "allPassed": true,
+        "cleanupConfirmed": true,
+        "jarSha256": "39a516d0bc88023a6db90bb070ec04640a22a1b8efec299a8b269677511170ff",
+        "webBuildId": "ipmVWxTktLHxFD1-92Kx-",
+        "tlsDeploymentClaimed": false
+      },
+      "artifacts": [
+        {
+          "id": 13702576642,
+          "name": "api-checks-42680277800-1",
+          "sha256": "bec8e078f52cb2fdaaa8351497c15e1d67cdc0f0306d9dcaeb77b8551bff4012",
+          "digestVerified": true,
+          "workflowHeadSha": "ae04e318786ed02f7f43d6e4d560022445941a5c",
+          "headMatchesSourceCommit": true
+        },
+        {
+          "id": 13702895541,
+          "name": "web-checks-42680277800-1",
+          "sha256": "7987797728c3e1b6147d3aa0401a8e031aa7f8a01b1d5f17762c50f85e2aca7a",
+          "digestVerified": true,
+          "workflowHeadSha": "ae04e318786ed02f7f43d6e4d560022445941a5c",
+          "headMatchesSourceCommit": true
+        },
+        {
+          "id": 13703296359,
+          "name": "e2e-checks-42680277800-1",
+          "sha256": "d85a7ef37d7305abee342f295ea5c4e7e5fcb5dea3d4433b93ffd8efebc95aad",
+          "digestVerified": true,
+          "workflowHeadSha": "ae04e318786ed02f7f43d6e4d560022445941a5c",
+          "headMatchesSourceCommit": true
+        }
+      ]
+    },
+    {
+      "runId": 42681945685,
+      "event": "push",
+      "branch": "main",
+      "attempt": 1,
+      "sourceCommit": "f5cef430da472a0f2eecb9f016deb9a8815ee675",
+      "conclusion": "success",
+      "api": {
+        "result": "passed",
+        "exitCode": 0,
+        "durationMs": 339467,
+        "suites": 40,
+        "counts": {
+          "tests": 266,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "web": {
+        "allRequiredStepsPassed": true,
+        "client": {
+          "tests": 124,
+          "suites": 0,
+          "pass": 124,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "scripts": {
+          "tests": 65,
+          "suites": 0,
+          "pass": 65,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "stripeConfig": {
+          "tests": 5,
+          "suites": 0,
+          "pass": 5,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "phaseSpecificEvidence": "P19"
+      },
+      "httpSmoke": {
+        "exitCode": 0,
+        "durationMs": 36710,
+        "result": "passed",
+        "cleanupConfirmed": true,
+        "realPostgreSQL": true,
+        "sharedDatabaseChanged": false
+      },
+      "release": {
+        "counts": {
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0,
+          "flaky": 0
+        },
+        "durationMs": 53744.436,
+        "automaticRetriesObserved": false,
+        "attemptCount": 4,
+        "retryCount": 0,
+        "cleanupConfirmed": true,
+        "harness": {
+          "format": "browser-harness-summary-v1",
+          "result": "passed",
+          "cleanupConfirmed": true,
+          "stage": "COMPLETE",
+          "errorCode": "NONE",
+          "playwrightStarted": true
+        },
+        "captures": [
+          {
+            "scenarioId": "P19-01",
+            "path": "fr-390-catalogue-empty.png",
+            "sha256": "a9354e10c0eaf1b2694bb1e183d9fb1f9a83182144786b9dfe08bf77b2f2a170",
+            "width": 390,
+            "height": 1000
+          },
+          {
+            "scenarioId": "P19-01",
+            "path": "fr-390-catalogue-unavailable.png",
+            "sha256": "4f5c0d803bdb79208ece538ee671bf905a2f3a10f7b05b0ca5860cbebc81adb6",
+            "width": 390,
+            "height": 1000
+          },
+          {
+            "scenarioId": "P19-02",
+            "path": "fr-390-paid-original-note.png",
+            "sha256": "009f2427b9045a6a0c0ef15f2d02016bf7580efd17f8c5a346c750aea616403f",
+            "width": 390,
+            "height": 1000
+          },
+          {
+            "scenarioId": "P19-02",
+            "path": "en-390-paid-original-note.png",
+            "sha256": "36d46174c138a2d109c27c26620f3a570efab93c82a66a249bfee99e48ea5705",
+            "width": 390,
+            "height": 1000
+          },
+          {
+            "scenarioId": "P19-02",
+            "path": "en-390-paid-french-quiz-history.png",
+            "sha256": "6c631f55808f8e992f653b72fb3b21055a055a2e18e5cac0a8c05318ad89b381",
+            "width": 390,
+            "height": 1000
+          },
+          {
+            "scenarioId": "P19-03",
+            "path": "fr-390-project-conflict.png",
+            "sha256": "f73e1b2516a9b26ebe48ac660094090eef656b6eaedf2c07474d30c1855c85b4",
+            "width": 390,
+            "height": 1000
+          },
+          {
+            "scenarioId": "P19-04",
+            "path": "en-390-participation-provenance.png",
+            "sha256": "629b6ffef20fdc1baa5a7c4f4b1f13e317b039f2e2f7e9cd1b87d0a818acf619",
+            "width": 390,
+            "height": 1000
+          },
+          {
+            "scenarioId": "P19-04",
+            "path": "en-390-contextual-support.png",
+            "sha256": "a59ef0c7250eac88d8bd71ebdfd2aa8c8ea38547c94644b43f2695b5d61bf49a",
+            "width": 390,
+            "height": 1000
+          }
+        ],
+        "visualReviewPerformedByAgent": false
+      },
+      "production": {
+        "result": "passed",
+        "checks": 12,
+        "allPassed": true,
+        "cleanupConfirmed": true,
+        "jarSha256": "39a516d0bc88023a6db90bb070ec04640a22a1b8efec299a8b269677511170ff",
+        "webBuildId": "RYqgozk1SVgJonUyO_Czt",
+        "tlsDeploymentClaimed": false
+      },
+      "artifacts": [
+        {
+          "id": 13704210150,
+          "name": "api-checks-42681945685-1",
+          "sha256": "9f0b35fa7a3f44886befa8f0c178a3b112154220bc79a388c9ec4321d22e5f6b",
+          "digestVerified": true,
+          "workflowHeadSha": "f5cef430da472a0f2eecb9f016deb9a8815ee675",
+          "headMatchesSourceCommit": true
+        },
+        {
+          "id": 13702787413,
+          "name": "web-checks-42681945685-1",
+          "sha256": "4e78d416eab9eef04ded1994ca3a085585cb7d67163d068c428f2265668c2198",
+          "digestVerified": true,
+          "workflowHeadSha": "f5cef430da472a0f2eecb9f016deb9a8815ee675",
+          "headMatchesSourceCommit": true
+        },
+        {
+          "id": 13703233249,
+          "name": "e2e-checks-42681945685-1",
+          "sha256": "97a99d5e8cedf8379420483ea9693d590b2e37fe9c34daebc568f1cbd044f3fc",
+          "digestVerified": true,
+          "workflowHeadSha": "f5cef430da472a0f2eecb9f016deb9a8815ee675",
+          "headMatchesSourceCommit": true
+        }
+      ]
+    }
+  ],
+  "rawLogHandling": {
+    "initialObservationRawLogsRead": false,
+    "rootAuthorizedActionsMemoryScan": true,
+    "memoryScanRunIds": [
+      42676836199,
+      42676849170
+    ],
+    "allowedCodes": [
+      "ENAMETOOLONG",
+      "EADDRINUSE",
+      "EACCES"
+    ],
+    "codesObserved": [],
+    "diagnostic921RawLogsRead": false,
+    "rawLogsPrinted": false,
+    "rawLogsPersisted": false
+  },
+  "followup": {
+    "sourceCommit": "ae04e318786ed02f7f43d6e4d560022445941a5c",
+    "runIds": [
+      42680291749,
+      42680277800
+    ],
+    "result": "PASSED_GITHUB_CHECKS",
+    "includedInCompletedResults": true
+  },
+  "agentRemoteMutations": false,
+  "agentReruns": 0,
+  "applicationDeployed": false,
+  "phaseP22Started": false,
+  "mainGate": {
+    "sourceCommit": "f5cef430da472a0f2eecb9f016deb9a8815ee675",
+    "runId": 42681945685,
+    "event": "push",
+    "branch": "main",
+    "result": "PASSED_GITHUB_CHECKS",
+    "applicationDeploymentClaimed": false
+  }
+}

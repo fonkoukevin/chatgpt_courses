@@ -1,4 +1,7 @@
-# Linux entrypoints must remain executable scripts after a Windows checkout.
+* text=auto
 *.sh text eol=lf
-apps/api/mvnw text eol=lf
+**/mvnw text eol=lf
+*.cmd text eol=crlf
+*.yml text eol=lf
+*.yaml text eol=lf
 Dockerfile text eol=lf

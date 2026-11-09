@@ -90,6 +90,21 @@ function testFailureLocation(body, item, suite, sources) {
   if (!lines.length || lines.some(line => line > source.lineCount) || new Set(lines).size !== 1) return undefined;
   return { file: source.file, line: lines[0] };
 }
+function sourceBoundStorageFacts(body, item, sources, location) {
+  const allowed = {
+    'com.chatgptcourses.AssetServiceIntegrationTest': { method: 'projectTextRoundTripsPrivatelyAndSurvivesSourceWithdrawalWithoutSharingOwnership', phases: ['INTENT', 'PUT', 'CONFIRM', 'AFTER_CONFIRM'] },
+    'com.chatgptcourses.ContentImportIntegrationTest': { method: 'changedSourceAppendsDraftRevisionButKeepsLogicalIdentityAndReadyFileBytes', phases: ['FIRST_IMPORT', 'SOURCE_READ', 'SOURCE_WRITE', 'SECOND_IMPORT', 'ASSERTIONS'] },
+  };
+  const target = allowed[item.classname], source = sources.get(item.classname);
+  if (!location || !target || !source || source.methods.get(item.name) !== target.method || location.file !== source.file) return undefined;
+  const lines = body.split(/\r?\n/u).filter(line => line.includes('P21_S3_DIAG_V1'));
+  // Exactly one stackless test-helper attachment, never log text, a free-form
+  // assertion message, provider data or an unindexed test's imitation.
+  if (lines.length !== 1 || lines[0].length > 512) return undefined;
+  const match = lines[0].match(/^[ \t]*Suppressed: com\.chatgptcourses\.S3CiDiagnostic\$FailureDetails: P21_S3_DIAG_V1 phase=([A-Z_]+) state=(PENDING|READY|REJECTED|EXPIRED|MISSING|UNKNOWN) rejection=(NONE|OTHER|SIZE_MISMATCH|CONTENT_TYPE_MISMATCH|SIZE_EXCEEDED|INVALID_TEXT|INVALID_UTF8|DOCUMENT_VALIDATOR_UNAVAILABLE|FORMAT_NOT_ALLOWED|INVALID_SIGNATURE|INVALID_IMAGE|IMAGE_DIMENSIONS_EXCEEDED) expired=(true|false|unknown) elapsedMs=(0|[1-9][0-9]{0,5}) ageMs=(unknown|0|[1-9][0-9]{0,5}) error=(ASSERTION|API_ASSET_NOT_READY|API_SERVICE_UNAVAILABLE|API_UPLOAD_OBJECT_MISSING|API_OTHER|STORAGE_UNAVAILABLE|IO|OTHER)[ \t]*$/u);
+  if (!match || !target.phases.includes(match[1]) || Number(match[5]) > 120000 || match[6] !== 'unknown' && Number(match[6]) > 120000) return undefined;
+  return { phase: match[1], state: match[2], rejection: match[3], expired: match[4] === 'unknown' ? null : match[4] === 'true', elapsedMs: Number(match[5]), ageMs: match[6] === 'unknown' ? null : Number(match[6]), error: match[7] };
+}
 export function sanitizeSurefire(xml, sources = new Map()) {
   if (typeof xml !== 'string' || xml.length > 40 * 1024 * 1024 || xml.includes('\0') || /<!DOCTYPE|<!ENTITY/iu.test(xml)) throw new Error('CI_JUNIT_SOURCE_REFUSED');
   // A console body can contain text that looks like XML test metadata. Remove
@@ -118,7 +133,8 @@ export function sanitizeSurefire(xml, sources = new Map()) {
     const indexedClass = safeJavaName(item.classname) && item.classname.startsWith('com.chatgptcourses.') && sources.has(item.classname);
     const detail = indexedClass && ['failed', 'error'].includes(status) ? failures[Number(failure)] : undefined;
     const location = detail && testFailureLocation(detail.body, item, data.name, sources);
-    result.tests.push({ name: valid ? `${item.classname}#${item.name}` : 'REDACTED_TEST', status, durationMs: number(Number(item.time) * 1000), ...(location ? { diagnostic: { kind: detail.kind, ...location } } : {}) });
+    const storageFacts = location && sourceBoundStorageFacts(detail.body, item, sources, location);
+    result.tests.push({ name: valid ? `${item.classname}#${item.name}` : 'REDACTED_TEST', status, durationMs: number(Number(item.time) * 1000), ...(location ? { diagnostic: { kind: detail.kind, ...location, ...(storageFacts ? { storageFacts } : {}) } } : {}) });
   }
   return result;
 }

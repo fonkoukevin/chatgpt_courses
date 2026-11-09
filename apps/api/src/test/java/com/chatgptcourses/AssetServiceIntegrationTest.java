@@ -92,8 +92,12 @@ class AssetServiceIntegrationTest {
     @Test void projectTextRoundTripsPrivatelyAndSurvivesSourceWithdrawalWithoutSharingOwnership(CapturedOutput output){
         UUID editor=actor(true),owner=actor(false),other=actor(false);var source=publish(editor,source(editor));var project=project(owner,source);byte[] bytes="A personal production.\nA second line. é".getBytes(StandardCharsets.UTF_8);
         assertThat(assets.projectPolicy(owner,project.id()).formats().stream().filter(f->f.contentType().equals("application/pdf")).allMatch(f->!f.available())).isTrue();
-        var intent=assets.createProjectIntent(owner,owner,project.id(),new UploadRequest("proposition.txt","text/plain",bytes.length));assertThat(URI.create(intent.uploadUrl()).getHost().equals("localhost")).isTrue();put(intent,bytes);
+        var diagnostic=new S3CiDiagnostic.Tracker(jdbc,null,S3CiDiagnostic.Phase.INTENT);
+        try{
+        var intent=assets.createProjectIntent(owner,owner,project.id(),new UploadRequest("proposition.txt","text/plain",bytes.length));diagnostic.asset(intent.asset().id());diagnostic.phase(S3CiDiagnostic.Phase.PUT);assertThat(URI.create(intent.uploadUrl()).getHost().equals("localhost")).isTrue();put(intent,bytes);
+        diagnostic.phase(S3CiDiagnostic.Phase.CONFIRM);
         var ready=assets.confirmProject(owner,owner,project.id(),intent.asset().id());assertThat(ready.state()).isEqualTo("READY");assertThat(ready.validationStatus()).isEqualTo("FORMAT_VERIFIED");
+        diagnostic.phase(S3CiDiagnostic.Phase.AFTER_CONFIRM);
         var link=assets.download(owner,owner,ready.id(),null);assertThat(Arrays.equals(http("GET",link.url(),null,Map.of()).body(),bytes)).isTrue();assertThat(link.disposition()).isEqualTo("attachment");
         assertThat(http("GET",unsigned(link.url()),null,Map.of()).statusCode()).isEqualTo(403);
         expect(ApiError.RESOURCE_NOT_FOUND,()->assets.download(other,other,ready.id(),null));expect(ApiError.RESOURCE_NOT_FOUND,()->assets.listProject(other,project.id(),0,20));
@@ -103,6 +107,7 @@ class AssetServiceIntegrationTest {
         assertThat(Arrays.equals(http("GET",assets.download(owner,owner,ready.id(),null).url(),null,Map.of()).body(),bytes)).isTrue();assertThat(assets.listProject(owner,project.id(),0,20).total()).isEqualTo(1);
         assertThat(catchThrowable(()->assets.preview(editor,editor,ready.id()))).isInstanceOf(ApiException.class);
         String logs=output.getAll();assertThat(!logs.contains(SECRET)&&!logs.contains(ACCESS)&&!logs.contains("X-Amz-Signature")&&!logs.contains(new String(bytes,StandardCharsets.UTF_8))).isTrue();
+        }catch(RuntimeException|AssertionError failure){diagnostic.attach(failure);throw failure;}
     }
 
     @Test void actualObjectValidationRejectsMissingWrongSizeMimeAndInvalidUtf8WithoutPretendingToScan(){

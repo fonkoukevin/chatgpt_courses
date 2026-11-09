@@ -107,6 +107,52 @@ test('a source-declared CapturedOutput case keeps its display name redacted but 
   }
 });
 
+function storageFactsFixture(t, imported = false) {
+  const directory = fixture(t), source = join(directory, 'sources'), reports = join(directory, 'reports'); mkdirSync(source); mkdirSync(reports);
+  const file = imported ? 'ContentImportIntegrationTest.java' : 'AssetServiceIntegrationTest.java', classname = `com.chatgptcourses.${file.replace('.java', '')}`;
+  const method = imported ? 'changedSourceAppendsDraftRevisionButKeepsLogicalIdentityAndReadyFileBytes' : 'projectTextRoundTripsPrivatelyAndSurvivesSourceWithdrawalWithoutSharingOwnership';
+  const sourceLines = ['package com.chatgptcourses;', ...(!imported ? ['import org.springframework.boot.test.system.CapturedOutput;'] : []), `class ${file.replace('.java', '')} {`, `@Test void ${method}(${imported ? '' : 'CapturedOutput output'}) {`, ...Array(15).fill('// synthetic fixture'), '}', '}'];
+  writeFileSync(join(source, file), sourceLines.join('\n'));
+  const marker = `\tSuppressed: com.chatgptcourses.S3CiDiagnostic$FailureDetails: P21_S3_DIAG_V1 phase=${imported ? 'FIRST_IMPORT' : 'CONFIRM'} state=EXPIRED rejection=NONE expired=true elapsedMs=4020 ageMs=3010 error=${imported ? 'API_ASSET_NOT_READY' : 'ASSERTION'}`;
+  const collect = ({ line = marker, caseName = imported ? method : `${method}(CapturedOutput)`, failureMarker = true, frameClass = classname, other = '' } = {}) => {
+    const tag = imported ? 'error' : 'failure';
+    writeFileSync(join(reports, `TEST-${classname}.xml`), `<testsuite name="${classname}" tests="1" failures="${imported ? 0 : 1}" errors="${imported ? 1 : 0}" skipped="0"><testcase classname="${classname}" name="${caseName}"><${tag}><![CDATA[${contamination}\n at ${frameClass}.${method}(${file}:10)\n${failureMarker ? line : ''}]]></${tag}>${other}</testcase></testsuite>`);
+    return collectSurefire(reports, source)[0];
+  };
+  return { directory, marker, method, collect };
+}
+
+test('only the two source-bound S3 cases expose finite storage facts while original failures remain failures', t => {
+  for (const imported of [false, true]) {
+    const fixture = storageFactsFixture(t, imported), result = fixture.collect();
+    assert.deepEqual(result.tests[0].diagnostic.storageFacts, { phase: imported ? 'FIRST_IMPORT' : 'CONFIRM', state: 'EXPIRED', rejection: 'NONE', expired: true, elapsedMs: 4020, ageMs: 3010, error: imported ? 'API_ASSET_NOT_READY' : 'ASSERTION' });
+    assert.equal(result.tests[0].status, imported ? 'error' : 'failed'); assert.equal(JSON.stringify(result).includes(contamination), false);
+    assert.throws(() => requireJUnitSuccess([result], [result.suite]), /WITHOUT_SKIPS/u);
+    const unknown = fixture.collect({ line: fixture.marker.replace('expired=true', 'expired=unknown').replace('ageMs=3010', 'ageMs=unknown') });
+    assert.equal(unknown.tests[0].diagnostic.storageFacts.expired, null); assert.equal(unknown.tests[0].diagnostic.storageFacts.ageMs, null);
+    const published = join(fixture.directory, 'public'); mkdirSync(published); writeFileSync(join(published, 'api.json'), JSON.stringify({ junit: [result, unknown] }));
+    assert.equal(validatePublicReport(published).length, 1);
+  }
+});
+
+test('S3 storage facts reject free-form data, out-of-range numbers, duplicate markers, logs and other source methods', t => {
+  const fixture = storageFactsFixture(t), base = fixture.marker;
+  const rejected = [
+    { line: base.replace('state=EXPIRED', `state=${contamination}`) }, { line: base.replace('rejection=NONE', `rejection=https://${contamination}.invalid`) },
+    { line: base.replace('expired=true', 'expired=yes') }, { line: base.replace('elapsedMs=4020', 'elapsedMs=120001') },
+    { line: base.replace('elapsedMs=4020', 'elapsedMs=04020') }, { line: base.replace('elapsedMs=4020', 'elapsedMs=-1') },
+    { line: base.replace('ageMs=3010', 'ageMs=999999') }, { line: base.replace('error=ASSERTION', `error=${contamination}`) },
+    { line: `${base}\n${base}` }, { line: `${base} ${contamination}` }, { line: base.replace('phase=CONFIRM', 'phase=FIRST_IMPORT') },
+    { line: base.replace('S3CiDiagnostic$FailureDetails', 'OtherHelper$FailureDetails') },
+    { caseName: 'otherSourceMethod' }, { frameClass: 'com.chatgptcourses.OtherTest' },
+    { failureMarker: false, other: `<system-out><![CDATA[${base}]]></system-out><system-err>${contamination}</system-err>` },
+  ];
+  for (const input of rejected) {
+    const result = fixture.collect(input); assert.equal(result.tests[0].status, 'failed');
+    assert.equal(result.tests[0].diagnostic?.storageFacts, undefined); assert.equal(JSON.stringify(result).includes(contamination), false);
+  }
+});
+
 test('private inherited credentials and public bundle variables cannot enter CI child processes', () => {
   const inherited = { PATH: '/usr/bin', HOME: '/home/runner', JAVA_HOME: '/jdk', STRIPE_SECRET_KEY: contamination, POSTGRES_PASSWORD: contamination, GITHUB_TOKEN: contamination, NEXT_PUBLIC_SECRET: contamination, NODE_OPTIONS: contamination, STAGING_BASIC_PASSWORD: contamination, APP_ENV: 'local' };
   const env = isolatedEnvironment(inherited); assert.equal(Object.values(env).includes(contamination), false); assert.equal(env.APP_ENV, 'test'); assert.equal(env.STRIPE_ENABLED, 'false'); assert.equal(env.NODE_ENV, undefined);

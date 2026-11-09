@@ -27,13 +27,14 @@
     "headerOnlyMarkers": "npm documentation"
   },
   "imageExecuted": false,
-  "rawKeyValuesPrinted": false,
   "deletionAuthorized": true,
-  "deletionExecuted": false,
   "replacementImageRepository": "ghcr.io/fonkoukevin/chatgpt_courses-private",
   "limits": [
     "Known literal values and selected patterns only; unknown or encoded credentials are not excluded.",
     "Six exact PEM candidates match published upstream self-test vectors; the exact Debian binary revision was not independently established.",
     "Public package visibility cause remains unknown. Deletion cannot erase previously downloaded copies or third-party caches."
-  ]
+  ],
+  "privateApplicationKeyValuesPrinted": false,
+  "versionDeletionConfirmed": false,
+  "packageDeletionConfirmed": false
 }

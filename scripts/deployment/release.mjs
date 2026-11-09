@@ -5,7 +5,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { safeReleaseFailure, inspectRegistryReadOnly } from './release-diagnostics.mjs';
-import { cleanupApprovedTestVersion } from './approved-test-cleanup.mjs';
+import { cleanupApprovedTestPackage } from './approved-test-cleanup.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const shaPattern = /^[a-f0-9]{64}$/u, commitPattern = /^[a-f0-9]{40}$/u;
@@ -203,7 +203,7 @@ async function publish() {
     requireRelease(['', 'false', 'true'].includes(env.APPROVED_TEST_PACKAGE_CLEANUP ?? ''), 'RELEASE_APPROVED_TEST_CLEANUP_FLAG_INVALID');
     if (env.APPROVED_TEST_PACKAGE_CLEANUP === 'true') {
       stage('APPROVED_TEST_CLEANUP');
-      await cleanupApprovedTestVersion({ approvedTestCleanup: true, environment: env.TARGET_ENVIRONMENT,
+      await cleanupApprovedTestPackage({ approvedTestCleanup: true, environment: env.TARGET_ENVIRONMENT,
         guardPassed: progress.guardPassed, sourceRepository: env.GITHUB_REPOSITORY, imageRepository, token },
       { record: async value => publicReceipt('approved-test-cleanup.json', value) });
     }

@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "runId": 42696587094,
+  "sourceCommit": "467fd31be83d7b2462dc9ffe73f68a22353c953e",
+  "artifactId": 13709687229,
+  "zipSha256": "69233cc73af2b2b7774ac23d055d71fbf9b8611b62cc063d9add4d20626ecf34",
+  "cleanup": {
+    "schemaVersion": 1,
+    "operation": "DELETE_APPROVED_PUBLIC_TEST_VERSION",
+    "result": "failed",
+    "stage": "DELETE",
+    "environment": "staging",
+    "owner": "fonkoukevin",
+    "packageName": "chatgpt_courses/web",
+    "versionId": 1531288133,
+    "tag": "sha-f5cef430da472a0f2eecb9f016deb9a8815ee675-42683545119-1",
+    "digest": "sha256:1ba45a1d85e42c899cae9d8f1926d6e0e77a46dc93c48e6c4c0125c327d938ad",
+    "sourceRepository": "fonkoukevin/chatgpt_courses",
+    "replacementImageRepository": "ghcr.io/fonkoukevin/chatgpt_courses-private",
+    "packageGetStatus": 200,
+    "packageMetadataVerified": true,
+    "versionGetStatus": 200,
+    "versionMetadataVerified": true,
+    "deleteAttempted": true,
+    "deletionMayHaveOccurred": true,
+    "deleteResponseStatus": 400,
+    "deleteAcknowledged": false,
+    "verificationGetStatus": null,
+    "versionDeletionConfirmed": false,
+    "packageDeletionRequested": false,
+    "otherVersionDeletionRequested": false,
+    "residualPackageState": "NOT_INSPECTED",
+    "registryAndCdnCacheState": "NOT_INSPECTED",
+    "failureCode": "APPROVED_TEST_DELETE_UNCONFIRMED"
+  },
+  "publicationProgress": {
+    "schemaVersion": 1,
+    "sourceCommit": "467fd31be83d7b2462dc9ffe73f68a22353c953e",
+    "stage": "APPROVED_TEST_CLEANUP",
+    "guardPassed": true,
+    "images": {
+      "web": {
+        "pushAttempted": false,
+        "pushConfirmed": false,
+        "digestConfirmed": false,
+        "metadataVerified": false
+      },
+      "api": {
+        "pushAttempted": false,
+        "pushConfirmed": false,
+        "digestConfirmed": false,
+        "metadataVerified": false
+      }
+    },
+    "temporaryCredentialsCreated": false,
+    "temporaryCredentialsRemoved": false
+  },
+  "anonymousReadAfterAttempt": {
+    "observedAt": "2026-11-09T20:52:42.062Z",
+    "anonymousOnly": true,
+    "afterRun": 42696587094,
+    "authorizationStatus": 200,
+    "manifestStatus": 200,
+    "expectedManifestStillReadable": true,
+    "rawBodiesPrinted": false
+  },
+  "causeEstablished": false,
+  "newPackageCleanupExecuted": false
+}

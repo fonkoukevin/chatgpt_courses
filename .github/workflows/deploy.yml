@@ -45,7 +45,7 @@ on:
         type: boolean
         default: false
       approved_test_package_cleanup:
-        description: Staging publish only; delete the explicitly approved public web test version 1531288133
+        description: Staging publish only; delete the approved test package if version 1531288133 is its only version
         required: true
         type: boolean
         default: false

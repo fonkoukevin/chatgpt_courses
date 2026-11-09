@@ -4,13 +4,14 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { safeReleaseFailure, inspectRegistryReadOnly } from './release-diagnostics.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const shaPattern = /^[a-f0-9]{64}$/u, commitPattern = /^[a-f0-9]{40}$/u;
 // The backup bundle may describe 100,000 encrypted objects plus its three
 // fixed files. Its pretty-printed receipt can exceed the 16 MiB inventory.
 export const MAX_BACKUP_RECEIPT_BYTES = 32 * 1024 * 1024;
-const bundleFiles = ['infra/compose/compose.deployment.yml', 'infra/compose/compose.staging.yml', 'infra/compose/compose.shared-ingress.yml', 'infra/compose/compose.staging-integrations.yml', 'infra/compose/compose.staging-payment-test.yml', 'infra/caddy/Caddyfile', 'infra/caddy/routes.caddy', 'infra/postgres/init-roles.sh', 'scripts/deployment/config.mjs', 'scripts/deployment/release.mjs', 'scripts/deployment/release-apply.mjs'];
+const bundleFiles = ['infra/compose/compose.deployment.yml', 'infra/compose/compose.staging.yml', 'infra/compose/compose.shared-ingress.yml', 'infra/compose/compose.staging-integrations.yml', 'infra/compose/compose.staging-payment-test.yml', 'infra/caddy/Caddyfile', 'infra/caddy/routes.caddy', 'infra/postgres/init-roles.sh', 'scripts/deployment/config.mjs', 'scripts/deployment/release.mjs', 'scripts/deployment/release-apply.mjs', 'scripts/deployment/release-diagnostics.mjs'];
 export function requireRelease(condition, code) { if (!condition) { const error = new Error(code); error.code = code; throw error; } }
 const exact = (value, keys) => value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).toSorted().join(',') === keys.toSorted().join(',');
 export function repository(value) {
@@ -180,33 +181,64 @@ async function guard() {
   publicReceipt('guard.json', { result: 'passed', operation: env.RELEASE_OPERATION, environment: env.TARGET_ENVIRONMENT, sourceCommit: source, sourceVisibility, stagingPaymentTest, protectedEnvironmentChecked: true, environmentPreexisting: true, defaultBranchProtected: true, defaultBranchOnly: true, ...protections, registryOrTargetMutationExecuted: false });
 }
 async function publish() {
-  await guard(); const env = process.env;
-  requireRelease(env.RELEASE_OPERATION === 'publish' && /^\d+$/u.test(env.GITHUB_RUN_ID ?? '') && /^[1-9]\d*$/u.test(env.GITHUB_RUN_ATTEMPT ?? ''), 'RELEASE_PUBLICATION_CONFIGURATION_REQUIRED');
-  const { imageRepository, registry, username, sourceUrl } = ghcrConfiguration(env), token = jobToken(env);
-  for (const kind of ['web', 'api']) await requireGhcrPrivatePackage(env, kind, { allowMissing: true });
-  const dockerConfig = mkdtempSync(join(tmpdir(), 'courses-release-registry-'));
-  const dockerEnv = childEnvironment({ DOCKER_CONFIG: dockerConfig });
+  const env = process.env;
+  const progress = { schemaVersion: 1, sourceCommit: commitPattern.test(env.GITHUB_SHA ?? '') ? env.GITHUB_SHA : null, stage: 'GUARD', guardPassed: false,
+    images: Object.fromEntries(['web', 'api'].map(kind => [kind, { pushAttempted: false, pushConfirmed: false, digestConfirmed: false, metadataVerified: false }])), temporaryCredentialsCreated: false, temporaryCredentialsRemoved: false };
+  const stage = value => { progress.stage = value; publicReceipt('publication-progress.json', progress); };
+  let registryContext;
   try {
-    execute('docker', ['login', registry, '--username', username, '--password-stdin'], { env: dockerEnv, input: token });
-    execute(process.execPath, [join(root, 'scripts/deployment/images.mjs'), 'build', '--commit', env.GITHUB_SHA, '--source-url', sourceUrl, '--output', join(root, '.runtime/deployment/build.json')], { env: dockerEnv });
-    const manifest = { schemaVersion: 1, sourceCommit: env.GITHUB_SHA, web: null, api: null, schema: { min: 19, max: 19 } };
-    for (const kind of ['web', 'api']) {
-      const tag = `${imageRepository}/${kind}:sha-${env.GITHUB_SHA}-${env.GITHUB_RUN_ID}-${env.GITHUB_RUN_ATTEMPT}`;
-      const label = execute('docker', ['image', 'inspect', '--format', '{{index .Config.Labels "org.opencontainers.image.source"}}', `courses-${kind}:${env.GITHUB_SHA}`], { env: dockerEnv, stdio: ['pipe', 'pipe', 'pipe'], encoding: 'utf8' }).stdout.trim();
-      requireRelease(label === sourceUrl, 'RELEASE_IMAGE_SOURCE_URL_REQUIRED');
-      execute('docker', ['image', 'tag', `courses-${kind}:${env.GITHUB_SHA}`, tag], { env: dockerEnv });
-      execute('docker', ['image', 'push', tag], { env: dockerEnv });
-      const inspect = execute('docker', ['image', 'inspect', '--format', '{{json .RepoDigests}}', tag], { env: dockerEnv, stdio: ['pipe', 'pipe', 'pipe'], encoding: 'utf8' });
-      const matches = JSON.parse(inspect.stdout).filter(value => value.startsWith(`${imageRepository}/${kind}@sha256:`));
-      requireRelease(matches.length === 1, 'RELEASE_PUSHED_DIGEST_NOT_CONFIRMED');
-      manifest[kind] = { repository: `${imageRepository}/${kind}`, digest: matches[0].split('@')[1] };
-      await requireGhcrPrivatePackage(env, kind);
-    }
-    const canonical = validateManifest(manifest, imageRepository), manifestSha256 = sha256(manifestBytes(canonical));
+    stage('GUARD'); await guard(); progress.guardPassed = true; stage('CONFIGURATION');
+    requireRelease(env.RELEASE_OPERATION === 'publish' && /^\d+$/u.test(env.GITHUB_RUN_ID ?? '') && /^[1-9]\d*$/u.test(env.GITHUB_RUN_ATTEMPT ?? ''), 'RELEASE_PUBLICATION_CONFIGURATION_REQUIRED');
+    const { imageRepository, registry, username, sourceUrl } = ghcrConfiguration(env), token = jobToken(env);
+    registryContext = { owner: env.GITHUB_REPOSITORY.split('/')[0], repositoryName: env.GITHUB_REPOSITORY.split('/')[1], token };
+    for (const kind of ['web', 'api']) { stage(`CHECK_EXISTING_${kind.toUpperCase()}`); await requireGhcrPrivatePackage(env, kind, { allowMissing: true }); }
+    const dockerConfig = mkdtempSync(join(tmpdir(), 'courses-release-registry-'));
+    progress.temporaryCredentialsCreated = true;
+    const dockerEnv = childEnvironment({ DOCKER_CONFIG: dockerConfig });
+    let canonical, manifestSha256;
+    try {
+      stage('REGISTRY_LOGIN');
+      execute('docker', ['login', registry, '--username', username, '--password-stdin'], { env: dockerEnv, input: token });
+      stage('IMAGE_BUILD');
+      execute(process.execPath, [join(root, 'scripts/deployment/images.mjs'), 'build', '--commit', env.GITHUB_SHA, '--source-url', sourceUrl, '--output', join(root, '.runtime/deployment/build.json')], { env: dockerEnv });
+      const manifest = { schemaVersion: 1, sourceCommit: env.GITHUB_SHA, web: null, api: null, schema: { min: 19, max: 19 } };
+      for (const kind of ['web', 'api']) {
+        const tag = `${imageRepository}/${kind}:sha-${env.GITHUB_SHA}-${env.GITHUB_RUN_ID}-${env.GITHUB_RUN_ATTEMPT}`;
+        stage(`LABEL_${kind.toUpperCase()}`);
+        const label = execute('docker', ['image', 'inspect', '--format', '{{index .Config.Labels "org.opencontainers.image.source"}}', `courses-${kind}:${env.GITHUB_SHA}`], { env: dockerEnv, stdio: ['pipe', 'pipe', 'pipe'], encoding: 'utf8' }).stdout.trim();
+        requireRelease(label === sourceUrl, 'RELEASE_IMAGE_SOURCE_URL_REQUIRED');
+        execute('docker', ['image', 'tag', `courses-${kind}:${env.GITHUB_SHA}`, tag], { env: dockerEnv });
+        progress.images[kind].pushAttempted = true; stage(`PUSH_${kind.toUpperCase()}`);
+        execute('docker', ['image', 'push', tag], { env: dockerEnv });
+        progress.images[kind].pushConfirmed = true; stage(`DIGEST_${kind.toUpperCase()}`);
+        const inspect = execute('docker', ['image', 'inspect', '--format', '{{json .RepoDigests}}', tag], { env: dockerEnv, stdio: ['pipe', 'pipe', 'pipe'], encoding: 'utf8' });
+        const repoDigests = JSON.parse(inspect.stdout);
+        requireRelease(Array.isArray(repoDigests) && repoDigests.every(value => typeof value === 'string'), 'RELEASE_PUSHED_DIGEST_NOT_CONFIRMED');
+        const matches = repoDigests.filter(value => value.startsWith(`${imageRepository}/${kind}@sha256:`));
+        requireRelease(matches.length === 1, 'RELEASE_PUSHED_DIGEST_NOT_CONFIRMED');
+        manifest[kind] = { repository: `${imageRepository}/${kind}`, digest: matches[0].split('@')[1] };
+        progress.images[kind].digestConfirmed = true; stage(`VERIFY_${kind.toUpperCase()}`);
+        await requireGhcrPrivatePackage(env, kind);
+        progress.images[kind].metadataVerified = true;
+      }
+      stage('MANIFEST');
+      canonical = validateManifest(manifest, imageRepository); manifestSha256 = sha256(manifestBytes(canonical));
+    } finally { requireRelease(dockerConfig.startsWith(join(tmpdir(), 'courses-release-registry-')), 'RELEASE_CREDENTIAL_CLEANUP_REFUSED'); rmSync(dockerConfig, { recursive: true, force: true }); progress.temporaryCredentialsRemoved = true; }
     publicReceipt('release-manifest.json', canonical);
-    publicReceipt('publication.json', { result: 'passed', sourceCommit: env.GITHUB_SHA, manifestSha256, registryPublicationExecuted: true, packageMetadataPrivateVerified: true, packageSourceLinkVerified: true, anonymousPackageReadDenied: true, credentialMode: 'ephemeral-job-token', deployed: false, tagsInformationalOnly: true });
+    publicReceipt('publication.json', { result: 'passed', sourceCommit: env.GITHUB_SHA, manifestSha256, registryPublicationExecuted: true, packageMetadataPrivateVerified: true, packageSourceLinkVerified: true, anonymousPackageReadDenied: true, credentialMode: 'ephemeral-job-token', temporaryCredentialsRemoved: true, deployed: false, tagsInformationalOnly: true });
+    stage('COMPLETE');
     console.log(JSON.stringify({ result: 'published', manifestSha256 }));
-  } finally { requireRelease(dockerConfig.startsWith(join(tmpdir(), 'courses-release-registry-')), 'RELEASE_CREDENTIAL_CLEANUP_REFUSED'); rmSync(dockerConfig, { recursive: true, force: true }); }
+  } catch (error) {
+    publicReceipt('publication-progress.json', progress);
+    publicReceipt('publication-diagnostic.json', { result: 'failed', ...safeReleaseFailure(error, progress.stage) });
+    // Diagnostic GETs only, after the protected source/environment guard passed.
+    // They do not allow a failed publication to continue or follow redirects.
+    if (progress.guardPassed && registryContext) {
+      try { publicReceipt('registry-inspection.json', await inspectRegistryReadOnly(registryContext)); }
+      catch (inspectionError) { publicReceipt('registry-inspection.json', { result: 'unavailable', ...safeReleaseFailure(inspectionError, progress.stage) }); }
+    }
+    throw error;
+  }
 }
 const quote = text => `'${text.replaceAll("'", "'\\''")}'`;
 export function ghcrRemoteScript(env, command) {

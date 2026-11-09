@@ -1,10 +1,12 @@
 import { randomUUID } from 'node:crypto';
+import { writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { expect, test } from '@playwright/test';
 import { getRefundsDictionary, getRefundStateDictionary } from '../../apps/web/src/lib/i18n/refunds';
 import { getCommerceDictionary } from '../../apps/web/src/lib/i18n/commerce';
 import { orderStatusPath } from '../../apps/web/src/lib/commerce/routes';
 import { adminRefundOperationPath, adminRefundsPath, entitlementsPath, orderRefundsPath } from '../../apps/web/src/lib/refunds/routes';
-import { commerceHeaders } from './commerce-fixture';
+import { commerceHeaders, commerceSql, checkedUuid } from './commerce-fixture';
 import { controlApi, controlRefund } from './control';
 import { advancePayment, verifyPaymentContent } from './payments-fixture';
 import { captureRefund, allocations, approveRefund, executeRefund, memberPath, operation, operations, paidRefundOrder, refundContext, refundSources, requestRefund, type RefundSources } from './refunds-fixture';
@@ -118,14 +120,42 @@ test.describe('P13 · demandes, finances et origines distinctes (fournisseur con
     test.setTimeout(240_000);
     const fixture = await paidRefundOrder(context.request, sources), financial = await refundContext(context.request, fixture.order.value.id), request = await requestRefund(context.request, fixture);
     const prepared = await approveRefund(sources, request.value.id, financial.paidAmountMinor, allocations(financial, financial.paidAmountMinor, 'REVOKE'));
+    const observations: unknown[] = [];
+    function leaseSnapshot(phase: string) {
+      const orderId = checkedUuid(fixture.order.value.id), operationId = checkedUuid(prepared.id);
+      const value = JSON.parse(commerceSql(`SELECT jsonb_build_object('jobState',coalesce(j.state,'NONE'),'operationState',p.state,
+        'sameOrder',p.order_id='${orderId}','hasLease',j.lease_until IS NOT NULL,
+        'leaseActive',coalesce(j.lease_until>clock_timestamp(),false),
+        'leaseRemainingMs',coalesce(greatest(0,ceil(extract(epoch FROM(j.lease_until-clock_timestamp()))*1000)),0),
+        'nextAttemptDue',coalesce(j.next_attempt_at<=clock_timestamp(),false),
+        'nextAttemptDelayMs',coalesce(greatest(0,ceil(extract(epoch FROM(j.next_attempt_at-clock_timestamp()))*1000)),0),
+        'operationCount',(SELECT count(*) FROM refund_operations WHERE order_id='${orderId}'))
+        FROM refund_operations p LEFT JOIN refund_reconciliation_jobs j ON j.order_id=p.order_id WHERE p.id='${operationId}';`)) as {
+          jobState: string; operationState: string; sameOrder: boolean; hasLease: boolean; leaseActive: boolean; leaseRemainingMs: number; nextAttemptDue: boolean; nextAttemptDelayMs: number; operationCount: number;
+        };
+      if (!value.sameOrder || !Number.isSafeInteger(value.leaseRemainingMs) || value.leaseRemainingMs < 0 || value.leaseRemainingMs > 600_000) throw new Error('The exact isolated refund lease must be bounded and mapped.');
+      observations.push({ phase, ...value });
+      writeFileSync(join(process.env.COURSES_BROWSER_EVIDENCE!, 'refund-unknown-lease-observations.json'), JSON.stringify({ readOnly: true, noLeaseOrDateModified: true, observations }, null, 2) + '\n', 'utf8');
+      return value;
+    }
+    leaseSnapshot('before-stop');
+    let abandonedLeaseObserved = false;
     await controlApi('stop-refund-worker');
     try {
       await controlRefund('configure-refund', { orderId: fixture.order.value.id, state: 'TIMEOUT' }); await executeRefund(sources, prepared.id);
       expect((await operation(context.request, prepared.id)).state).toBe('UNKNOWN');
+      const stopped = leaseSnapshot('unknown-worker-stopped'); abandonedLeaseObserved = stopped.jobState === 'PROCESSING' && stopped.leaseActive;
       await page.goto(orderRefundsPath('fr', fixture.order.value.id)); await expect(page.locator('[data-refund-financial-state="UNKNOWN"]').getByRole('definition').filter({ hasText: getRefundStateDictionary('fr').operations.UNKNOWN })).toHaveText(getRefundStateDictionary('fr').operations.UNKNOWN); await expect(page.getByText(getRefundsDictionary('fr').confirmed, { exact: true })).toHaveCount(0); await captureRefund(page, 'fr-390-ambiguous-response-not-confirmed');
       expect((await context.request.get(memberPath(sources.a.learning))).status()).toBe(200);
     } finally { await controlApi('start-refund-worker'); }
-    await expect.poll(async () => (await operation(context.request, prepared.id)).state).toBe('SUCCEEDED');
+    const resumed = leaseSnapshot('after-restart');
+    // A process kill deliberately leaves a durable claim intact. Only an
+    // observed abandoned lease extends this assertion: its real remaining
+    // lifetime plus 30s for maintenance/poll and bounded controlled GETs.
+    const waitMs = abandonedLeaseObserved && resumed.jobState === 'PROCESSING' && resumed.leaseActive ? resumed.leaseRemainingMs + 30_000 : 10_000;
+    if (waitMs > 180_000) throw new Error('The observed lease exceeds this scenario budget; no lease is shortened to pass.');
+    try { await expect.poll(async () => (await operation(context.request, prepared.id)).state, { timeout: waitMs }).toBe('SUCCEEDED'); }
+    finally { observations.push({ abandonedLeaseObserved, waitMs }); leaseSnapshot('after-wait'); }
     expect((await context.request.get(memberPath(sources.a.learning))).status()).toBe(403);
     expect((await operations(context.request, fixture.order.value.id)).total).toBe(1);
   });

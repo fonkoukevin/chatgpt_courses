@@ -11,9 +11,11 @@ import { assertExternalStripeListenerIsolation, createBrowserExternalStripe } fr
 
 const env = environment();
 const phase = process.argv[2] ?? 'P01';
-const externalStripe = phase === 'P12_EXTERNAL';
+const externalStripe = phase === 'P12_EXTERNAL' || phase === 'P19_EXTERNAL';
+const externalRefunds = phase === 'P19_EXTERNAL';
 const refundPhase = phase === 'P13' || phase === 'P15';
-const paymentPhase = phase === 'P12' || externalStripe || refundPhase;
+const controlledRelease = phase === 'P19';
+const paymentPhase = phase === 'P12' || externalStripe || refundPhase || controlledRelease;
 const externalStripeConfiguration = externalStripe ? { STRIPE_SECRET_KEY: env.STRIPE_SECRET_KEY, STRIPE_ACCOUNT_ID: env.STRIPE_ACCOUNT_ID,
   STRIPE_MODE: env.STRIPE_MODE ?? 'TEST', STRIPE_API_BASE: env.STRIPE_API_BASE ?? 'https://api.stripe.com' } : null;
 // Optional targeted diagnosis keeps the same isolation and zero automatic retries.
@@ -25,9 +27,10 @@ for (let index = 3; index < process.argv.length; index += 2) {
   else throw new Error('Diagnostic permis : --grep expression et --repeat-each 1..20.');
   diagnosticArgs.push(flag, value);
 }
-if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14', 'P15', 'P16', 'P16_SEO', 'P17', 'P18'].includes(phase)) throw new Error('Phase de recette inconnue.');
+if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14', 'P15', 'P16', 'P16_SEO', 'P17', 'P18', 'P19', 'P19_EXTERNAL'].includes(phase)) throw new Error('Phase de recette inconnue.');
+if (externalRefunds && selected.repeatEach !== 1) throw new Error('External TEST refund recipe runs once; repeated financial scenarios require explicit separate authorization.');
 const needsApi = phase !== 'P02';
-const isolatedDatabase = ['P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14', 'P15', 'P16', 'P16_SEO', 'P17', 'P18'].includes(phase);
+const isolatedDatabase = ['P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14', 'P15', 'P16', 'P16_SEO', 'P17', 'P18', 'P19', 'P19_EXTERNAL'].includes(phase);
 if (!['local', 'test'].includes(env.APP_ENV)) throw new Error('Vérification navigateur réservée à local/test.');
 const port = (value, fallback) => {
   const text = value ?? String(fallback);
@@ -145,7 +148,7 @@ const control = createServer((socket) => {
     handled = true;
     let message;
     try { message = JSON.parse(input.slice(0, input.indexOf('\n'))); } catch { return socket.destroy(); }
-    if (message.token !== token || !['stop-api', 'start-api', 'pause-mailpit', 'resume-mailpit', 'advance-payment', 'start-payment-worker', 'stop-payment-worker', 'replay-external-stripe-event', 'configure-refund', 'advance-refund', 'external-refund', 'start-refund-worker', 'stop-refund-worker'].includes(message.operation)) return socket.destroy();
+    if (message.token !== token || !['stop-api', 'start-api', 'pause-mailpit', 'resume-mailpit', 'advance-payment', 'start-payment-worker', 'stop-payment-worker', 'replay-external-stripe-event', 'inspect-external-stripe-order', 'configure-refund', 'advance-refund', 'external-refund', 'start-refund-worker', 'stop-refund-worker'].includes(message.operation)) return socket.destroy();
     controlQueue = controlQueue.then(async () => {
       if (stopping) throw new Error('Arrêt en cours.');
       if (message.operation === 'stop-api') {
@@ -153,21 +156,25 @@ const control = createServer((socket) => {
         return { webPid: web.child.pid };
       }
       if (message.operation === 'advance-payment') {
-        if (!['P12','P13','P15'].includes(phase) || !payments) throw new Error('Transport contrôlé de paiement absent.');
+        if (!['P12','P13','P15','P19'].includes(phase) || !payments) throw new Error('Transport contrôlé de paiement absent.');
         return { webPid: web.child.pid, ...await payments.advance(message.orderId,message.state,message.type,message.replayId) };
       }
       if (['configure-refund', 'advance-refund', 'external-refund'].includes(message.operation)) {
-        if (!refundPhase || !payments) throw new Error('Transport contrôlé de remboursement absent.');
+        if ((!refundPhase && !controlledRelease) || !payments) throw new Error('Transport contrôlé de remboursement absent.');
         const result = message.operation === 'configure-refund' ? payments.configureRefund(message.orderId,message.state)
           : message.operation === 'advance-refund' ? await payments.advanceRefund(message.orderId,message.operationId,message.state,message.type)
             : await payments.externalRefund(message.orderId,message.amountMinor,message.state);
         return { webPid: web.child.pid, ...result };
       }
       if (['start-refund-worker', 'stop-refund-worker'].includes(message.operation)) {
-        if (!refundPhase || !payments) throw new Error('Worker remboursement absent.');
+        if ((!refundPhase && !controlledRelease && !externalRefunds) || !payments) throw new Error('Worker remboursement absent.');
         const enabled = message.operation === 'start-refund-worker' ? 'true' : 'false';
         if (env.REFUND_WORKER_ENABLED !== enabled) { await terminate(api); env.REFUND_WORKER_ENABLED = enabled; }
         return startApi();
+      }
+      if (message.operation === 'inspect-external-stripe-order') {
+        if (!externalRefunds || !payments) throw new Error('External TEST refund listener absent.');
+        return { webPid: web.child.pid, ...await payments.inspectOrder(message.orderId, message.operationId, message.sessionId) };
       }
       if (message.operation === 'replay-external-stripe-event') {
         if (!externalStripe || !payments) throw new Error('External TEST listener absent.');
@@ -180,7 +187,7 @@ const control = createServer((socket) => {
         return startApi();
       }
       if (['pause-mailpit', 'resume-mailpit'].includes(message.operation)) {
-        if (!['P10','P12','P12_EXTERNAL','P13','P14','P15'].includes(phase)) throw new Error('Contrôle de service réservé à la recette médias/paiements/compte.');
+        if (!['P10','P12','P12_EXTERNAL','P13','P14','P15','P19','P19_EXTERNAL'].includes(phase)) throw new Error('Contrôle de service réservé à la recette médias/paiements/compte.');
         setBrowserServicePaused(services.find(({ kind }) => kind === 'mailpit'), message.operation === 'pause-mailpit'); save();
         return { webPid: web.child.pid, apiPid: api?.child.pid };
       }
@@ -216,7 +223,7 @@ try {
     env.COMMERCE_ENABLED = 'true'; env.COMMERCE_ALLOWED_CURRENCIES = 'EUR';
     env.STRIPE_ENABLED = 'false'; delete env.STRIPE_SECRET_KEY; delete env.STRIPE_WEBHOOK_SECRET;
   }
-  if (['P10','P12','P12_EXTERNAL','P13','P14','P15','P16','P16_SEO','P17','P18'].includes(phase)) {
+  if (['P10','P12','P12_EXTERNAL','P13','P14','P15','P16','P16_SEO','P17','P18','P19','P19_EXTERNAL'].includes(phase)) {
     services = await createBrowserServices(env, runDirectory, runId, (records) => { services = records; save(); });
     if (phase === 'P10' || phase === 'P16') {
       env.VIDEO_ENABLED = 'true'; env.VIDEO_PROVIDER = 'local-test'; env.VIDEO_LOCAL_ROOT = join(runDirectory, 'private-video');
@@ -228,10 +235,12 @@ try {
   if (phase === 'P12') { env.API_TIMEOUT_MS = '30000'; payments = await createBrowserPayments(env,{refundsEnabled:true}); env.REFUND_WORKER_ENABLED='true'; }
   if (refundPhase) { env.API_TIMEOUT_MS = '30000'; payments = await createBrowserPayments(env,{refundsEnabled:true}); env.PAYMENT_INBOX_ENABLED='true'; env.REFUND_WORKER_ENABLED='true'; }
   if (phase === 'P15') env.COMMERCE_ALLOWED_CURRENCIES = 'EUR,USD,GBP';
-  if (externalStripe) { Object.assign(env, externalStripeConfiguration); payments = await createBrowserExternalStripe(env); }
+  if (externalStripe) { Object.assign(env, externalStripeConfiguration); payments = await createBrowserExternalStripe(env, { refunds: externalRefunds }); }
   // Service setup enables its outbox by default; this recipe explicitly keeps
   // the effective worker off after setup, before recording flags or starting API.
   if (phase === 'P18') env.NOTIFICATION_OUTBOX_ENABLED = 'false';
+  if (controlledRelease) { env.API_TIMEOUT_MS = '30000'; payments = await createBrowserPayments(env, { refundsEnabled: true }); Object.assign(env, { COMMERCE_ALLOWED_CURRENCIES: 'EUR', PAYMENT_INBOX_ENABLED: 'true', REFUND_WORKER_ENABLED: 'true', NOTIFICATION_OUTBOX_ENABLED: 'true' }); }
+  if (externalRefunds) Object.assign(env, { PAYMENT_INBOX_ENABLED: 'false', REFUND_WORKER_ENABLED: 'false', NOTIFICATION_OUTBOX_ENABLED: 'true' });
   initialRuntimeFlags = runtimeFlags();
   await new Promise((resolveListen, rejectListen) => {
     control.once('error', rejectListen);
@@ -245,16 +254,16 @@ try {
     ready(web, `${env.APP_PUBLIC_ORIGIN}/fr${phase === 'P02' ? '/dev/public' : phase === 'P01' ? '/dev/foundations' : ''}`),
   ]), interrupted]);
   const browserEnvironment = { ...env };
-  if (externalStripe) {
+  if (externalStripe || controlledRelease) {
     for (const key of Object.keys(browserEnvironment)) if (key.startsWith('STRIPE_')) delete browserEnvironment[key];
-    browserEnvironment.PLAYWRIGHT_NO_COPY_PROMPT = '1';
   }
+  if (externalStripe) browserEnvironment.PLAYWRIGHT_NO_COPY_PROMPT = '1';
   const playwright = launch('playwright', process.execPath, [runner, 'test', '--config', join(root, 'playwright.config.ts'), ...diagnosticArgs], {
     stdio: 'inherit',
     env: { ...browserEnvironment, COURSES_BROWSER_PHASE: phase, COURSES_BROWSER_ORIGIN: env.APP_PUBLIC_ORIGIN, COURSES_BROWSER_IPC: ipc,
       COURSES_BROWSER_TOKEN: token, COURSES_BROWSER_EVIDENCE: evidence, COURSES_BROWSER_RESULTS: join(runDirectory, 'results'),
       COURSES_BROWSER_LOGS: runDirectory,
-      ...(phase === 'P18' ? { COURSES_BROWSER_API_JAR: recipeJar } : {}),
+      ...(['P18','P19'].includes(phase) ? { COURSES_BROWSER_API_JAR: recipeJar } : {}),
       ...(database ? { COURSES_BROWSER_DB_ID: database.id, COURSES_BROWSER_RUN_ID: runId } : {}),
       COURSES_MAILPIT_ORIGIN: `http://127.0.0.1:${port(env.MAIL_HTTP_PORT, 8025)}` },
   });
@@ -301,7 +310,15 @@ try {
     try {
       const cleanup = await payments.expireUnused(JSON.parse(readFileSync(join(evidence, 'stripe-test-proof.json'), 'utf8')));
       writeFileSync(join(evidence, 'provider-session-cleanup.json'), JSON.stringify({ verifiedAt: new Date().toISOString(), ...cleanup, secretsPrinted: false }, null, 2) + '\n');
-    } catch (error) { externalCleanupError = error; }
+    } catch (error) {
+      externalCleanupError = new Error('External TEST session cleanup remains unconfirmed.');
+      const facts = error?.cleanupFacts;
+      const safeFacts = facts && Number.isInteger(facts.attempted) && facts.attempted >= 0 && facts.attempted <= 2
+        && Number.isInteger(facts.failed) && facts.failed >= 0 && facts.failed <= facts.attempted && typeof facts.unknownLookup === 'boolean'
+        ? { attempted: facts.attempted, failed: facts.failed, unknownLookup: facts.unknownLookup } : { diagnosticAvailable: false };
+      try { writeFileSync(join(evidence, 'provider-session-cleanup.json'), JSON.stringify({ verifiedAt: new Date().toISOString(), testMode: true, cleanupConfirmed: false, ...safeFacts, secretsPrinted: false }, null, 2) + '\n'); }
+      catch { /* All owned process and service stops still run below. */ }
+    }
   }
   for (const socket of sockets) socket.destroy();
   const results = await Promise.allSettled([

@@ -1,12 +1,15 @@
 import { randomUUID } from 'node:crypto';
 import { join } from 'node:path';
 import { writeFileSync } from 'node:fs';
-import { expect, test, type Page, type Locator, type Frame } from '@playwright/test';
+import { expect, test } from '@playwright/test';
+import { fillHostedTestCard } from './stripe-hosted-test';
+import { closeExternalPage, externalFailure, protectExternalArtifacts } from './stripe-privacy';
 import { getPaymentDictionary } from '../../apps/web/src/lib/i18n/payments';
 import { commerceHeaders, commerceSql, checkedUuid } from './commerce-fixture';
 import { controlApi, replayExternalStripeEvent } from './control';
 import { createStripeExternalFixture } from './stripe-external-fixture';
 import { paymentCount, paymentStatus, waitForPayment } from './payments-fixture';
+test.afterEach(async ({ page }, info) => { await protectExternalArtifacts(page, info); });
 
 // Actual hosted Checkout TEST. No request interception, test transport or synthetic event.
 test('P12 · achat Stripe TEST réel, événement durable, reprise et rejeu sans duplication', async ({ playwright, page, context }) => {
@@ -110,70 +113,7 @@ test('P12 · achat Stripe TEST réel, événement durable, reprise et rejeu sans
     }
     report.result = 'failed'; report.failedAt = new Date().toISOString(); save();
     // Do not let Playwright report a bearer Checkout URL, customer/card fields or provider payload.
-    throw new Error(`External Stripe TEST recipe not validated at stage ${String(report.stage)}. See redacted proof; raw error discarded.`);
+    await closeExternalPage(page);
+    throw externalFailure('EXTERNAL_STRIPE_TEST_NOT_VALIDATED');
   } finally { await editor.dispose(); }
 });
-
-async function fillHostedTestCard(page: Page, stage: (value: string) => void, diagnostics: (value: unknown) => void) {
-  // Only the provider's hosted TEST form receives the official fictitious card.
-  if (new URL(page.url()).origin !== 'https://checkout.stripe.com') throw new Error('Hosted TEST origin required.');
-  stage('hosted-email');
-  await (await hostedField(page, frame => frame.getByRole('textbox', { name: /e-?mail/i }))).fill('p12-checkout-test@example.com');
-  stage('hosted-card-selection');
-  let cardSelected = false;
-  const steps: unknown[] = [];
-  // Use normal keyboard focus from the email field. No force click or injected
-  // DOM event can bypass a provider overlay or human verification challenge.
-  for (let attempt = 0; attempt < 16 && !cardSelected; attempt++) {
-    await page.keyboard.press('Tab');
-    steps.push(await page.evaluate(() => ({ tag: document.activeElement?.tagName, role: document.activeElement?.getAttribute('role') ?? null, type: document.activeElement?.getAttribute('type') ?? null })));
-    diagnostics(steps);
-    for (const frame of page.frames()) {
-      const candidates = frame.getByRole('radio', { name: /carte|card/i }).or(frame.getByRole('button', { name: /payer par carte|pay (?:with|by) card|^carte(?:\s|$)|^card(?:\s|$)/i }));
-      for (let index = 0; index < await candidates.count(); index++) {
-        const candidate = candidates.nth(index);
-        if (await candidate.evaluate(node => node === node.ownerDocument.activeElement)) {
-          await page.keyboard.press('Space'); cardSelected = true; break;
-        }
-      }
-      if (cardSelected) break;
-    }
-  }
-  if (!cardSelected) {
-    await page.screenshot({ path: join(process.env.COURSES_BROWSER_LOGS!, 'stripe-hosted-before-card.png') });
-    throw new Error('Hosted card payment option unavailable.');
-  }
-  const number = await hostedField(page, frame => frame.locator('input#cardNumber,input[name="cardNumber"],input[name="number"],input[autocomplete="cc-number"]').or(frame.getByRole('textbox', { name: /numéro de carte|card number/i })));
-  // No card data has been entered: a private screenshot helps inspect provider
-  // layout changes without copying hosted URLs or card details into evidence.
-  await page.screenshot({ path: join(process.env.COURSES_BROWSER_LOGS!, 'stripe-hosted-before-card.png') });
-  stage('hosted-card-number');
-  await number.fill('4242' + '4242' + '4242' + '4242');
-  stage('hosted-card-expiry');
-  await (await hostedField(page, frame => frame.locator('input#cardExpiry,input[name="cardExpiry"],input[name="expiry"],input[autocomplete="cc-exp"]'))).fill('12 / 34');
-  stage('hosted-card-cvc');
-  await (await hostedField(page, frame => frame.locator('input#cardCvc,input[name="cardCvc"],input[name="cvc"],input[autocomplete="cc-csc"]'))).fill('123');
-  stage('hosted-billing-name');
-  await (await hostedField(page, frame => frame.locator('input#billingName,input[name="billingName"],input[autocomplete="cc-name"]'))).fill('Recette Stripe TEST P12');
-  for (const frame of page.frames()) {
-    const country = frame.locator('select[name="billingCountry"]');
-    if (await country.count() && await country.isVisible()) await country.selectOption('FR');
-    const postal = frame.locator('input[name="billingPostalCode"]');
-    if (await postal.count() && await postal.isVisible()) await postal.fill('75001');
-  }
-}
-
-async function hostedField(page: Page, locate: (frame: Frame) => Locator): Promise<Locator> {
-  const until = Date.now() + 20000;
-  while (Date.now() < until) {
-    for (const frame of page.frames()) {
-      const candidates = locate(frame);
-      for (let index = 0; index < await candidates.count(); index++) {
-        const locator = candidates.nth(index);
-        if (await locator.isVisible() && await locator.isEnabled() && await locator.evaluate(node => node.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true }))) return locator;
-      }
-    }
-    await page.waitForTimeout(100);
-  }
-  throw new Error('Hosted TEST field unavailable; no payment confirmation simulated.');
-}

@@ -1,7 +1,12 @@
 import { connect } from 'node:net';
 
 type Result = { ok: boolean; webPid: number; apiPid?: number; error?: string; eventId?: string; status?: number; received?: boolean; externalReplayRequested?: boolean;
-  sessionId?: string; paymentIntentId?: string | null; eventType?: string; sourceEventApiVersion?: string | null; amountMinor?: number; currency?: string; metadataOrderMatches?: boolean; replayHttpAcknowledged?: boolean };
+  sessionId?: string; refundId?:string; chargeId?:string; paymentIntentId?: string | null; eventType?: string; sourceEventApiVersion?: string | null; amountMinor?: number; currency?: string; metadataOrderMatches?: boolean; replayHttpAcknowledged?: boolean };
+export type ExternalStripeFacts = Result & {orderId:string;operationId:string;sessionId:string;testMode:boolean;sessionStatus:string;paymentStatus:string;paymentIntentStatus?:string;refundCount:number;refundedMinor:number;refunds?:{refundId:string;amountMinor:number;status:string;operationId:string|null;metadataOrderMatches:boolean}[]};
+
+export async function inspectExternalStripeOrder(orderId:string,operationId:string,sessionId:string):Promise<ExternalStripeFacts>{
+  return await sendControl('inspect-external-stripe-order',{orderId,operationId,sessionId}) as ExternalStripeFacts;
+}
 
 export function replayExternalStripeEvent(eventId: string, orderId: string): Promise<Result> {
   return sendControl('replay-external-stripe-event', { eventId, orderId });
@@ -29,7 +34,7 @@ function sendControl(operation: string, data: Record<string, string|number> = {}
     let input = '';
     let settled = false;
     const fail = (error: Error) => { settled = true; socket.destroy(); rejectCommand(error); };
-    socket.setTimeout(process.env.COURSES_BROWSER_PHASE?.startsWith('P12') || ['P13', 'P15'].includes(process.env.COURSES_BROWSER_PHASE ?? '') ? 360_000 : 90_000, () => fail(new Error('Commande IPC expirée.')));
+    socket.setTimeout(process.env.COURSES_BROWSER_PHASE?.startsWith('P12') || ['P13', 'P15','P19','P19_EXTERNAL'].includes(process.env.COURSES_BROWSER_PHASE ?? '') ? 360_000 : 90_000, () => fail(new Error('Commande IPC expirée.')));
     socket.once('error', () => fail(new Error('Connexion au superviseur interrompue.')));
     socket.once('connect', () => socket.write(`${JSON.stringify({ token, operation, ...data })}\n`));
     socket.on('data', (chunk) => {

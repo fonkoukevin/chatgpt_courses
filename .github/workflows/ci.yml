@@ -1,93 +1,206 @@
-name: Local foundations
-
+name: Release checks
 on:
   push:
   pull_request:
   workflow_dispatch:
-
 permissions:
   contents: read
-
 concurrency:
-  group: foundations-${{ github.workflow }}-${{ github.ref }}
+  group: release-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+env:
+  CI: "true"
+  APP_ENV: test
+  NEXT_TELEMETRY_DISABLED: "1"
 
 jobs:
-  verify:
+  web:
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
-    env:
-      CI: true
-      NEXT_TELEMETRY_DISABLED: 1
-      APP_ENV: test
-      APP_PUBLIC_ORIGIN: http://localhost:3000
-      APP_DEFAULT_LOCALE: fr
-      API_INTERNAL_URL: http://127.0.0.1:8080
-      API_PORT: 8080
-      SPRING_PROFILES_ACTIVE: test
-      SESSION_COOKIE_SECURE: "false"
-      POSTGRES_HOST: 127.0.0.1
-      POSTGRES_PORT: 5432
-      POSTGRES_DB: courses_ci
-      POSTGRES_USER: courses_ci
-      COMMERCE_ENABLED: false
-      STRIPE_ENABLED: false
-      STORAGE_ENABLED: false
-      VIDEO_ENABLED: false
-      MAIL_MODE: disabled
+    timeout-minutes: 25
+    outputs:
+      sha256: ${{ steps.build.outputs.sha256 }}
     steps:
-      - name: Check out source
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - name: Set up Node
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24.22.2
           cache: npm
           cache-dependency-path: package-lock.json
-      - name: Set up Java
-        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
+      - name: Assert pinned toolchain
+        run: |
+          test "$(node --version)" = "v24.22.2"
+          test "$(npm --version)" = "11.19.1"
+      - name: Install locked dependencies without private environment
+        run: node scripts/ci-run.mjs web install
+      - name: Test CI sanitizers and build transfer
+        run: node scripts/ci-run.mjs web scripts
+      - name: Verify OpenAPI and generated client
+        run: node scripts/ci-run.mjs web contract
+      - name: Verify client contracts
+        run: node scripts/ci-run.mjs web client
+      - name: Verify course sources and language parity
+        run: node scripts/ci-run.mjs web content
+      - name: Verify contrast
+        run: node scripts/ci-run.mjs web contrast
+      - name: Verify Stripe configuration helpers with synthetic fixtures
+        run: node scripts/ci-run.mjs web stripeConfig
+      - name: Lint
+        run: node scripts/ci-run.mjs web lint
+      - name: Typecheck app
+        run: node scripts/ci-run.mjs web types
+      - name: Typecheck browser scenarios
+        run: node scripts/ci-run.mjs web browserTypes
+      - name: Build web with production gates and no fixtures or secrets
+        run: node scripts/ci-run.mjs web web
+      - name: Package identified web build
+        id: build
+        run: node scripts/ci-build.mjs pack web
+      - name: Transfer required web build only
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: web-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            .runtime/ci-builds/web.ci-build.gz
+            .runtime/ci-builds/web.ci-build.gz.json
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 3
+          overwrite: false
+      - name: Validate public report even after failed checks
+        if: always()
+        id: reports
+        run: node scripts/ci-report.mjs web
+      - name: Publish filtered web counters only
+        if: ${{ always() && steps.reports.outcome == 'success' }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: web-checks-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/ci-public/web/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 3
+          overwrite: false
+
+  api:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    outputs:
+      sha256: ${{ steps.build.outputs.sha256 }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.22.2
+      - uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
         with:
           distribution: temurin
           java-version: 21.0.13+9
           cache: maven
           cache-dependency-path: apps/api/pom.xml
-      - name: Verify npm and install locked dependencies
-        shell: bash
+      - name: Assert pinned toolchain
         run: |
+          test "$(node --version)" = "v24.22.2"
           test "$(npm --version)" = "11.19.1"
-          npm ci
-      - name: Lint, typecheck and build the web application
-        run: |
-          npm run api:check
-          npm run verify:client
-          npm run lint
-          npm run typecheck
-          npm run typecheck:browser
-          npm run build
-      - name: Verify the API with PostgreSQL Testcontainers
-        working-directory: apps/api
-        run: sh ./mvnw --batch-mode --no-transfer-progress verify
-      - name: Start isolated PostgreSQL for the HTTP smoke
-        shell: bash
-        run: |
-          umask 077
-          mkdir -p .runtime
-          P01_DB_PASSWORD=$(openssl rand -hex 32)
-          echo "::add-mask::$P01_DB_PASSWORD"
-          printf 'POSTGRES_PASSWORD=%s\n' "$P01_DB_PASSWORD" >> "$GITHUB_ENV"
-          P10_OUTBOX_KEY=$(openssl rand -base64 32)
-          echo "::add-mask::$P10_OUTBOX_KEY"
-          printf 'NOTIFICATION_OUTBOX_KEY=%s\n' "$P10_OUTBOX_KEY" >> "$GITHUB_ENV"
-          printf 'POSTGRES_PASSWORD=%s\n' "$P01_DB_PASSWORD" > .runtime/ci-db.env
-          docker compose --project-name chatgpt-courses-ci --env-file .runtime/ci-db.env -f infra/compose/compose.local.yml up -d --wait postgres
-      - name: Smoke test the real API through the web proxy
-        run: npm run verify:http
-      - name: Stop the smoke database without removing volumes
+          java -version 2>&1 | grep -F '21.0.13+9'
+          docker info >/dev/null
+      - name: Verify every API suite with real PostgreSQL and controlled transports
+        run: node scripts/ci-run.mjs api api
+      - name: Package tested API build
+        id: build
+        run: node scripts/ci-build.mjs pack api
+      - name: Transfer tested API build only
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: api-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            .runtime/ci-builds/api.ci-build.gz
+            .runtime/ci-builds/api.ci-build.gz.json
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 3
+          overwrite: false
+      - name: Validate public report even after failed checks
         if: always()
-        shell: bash
+        id: reports
+        run: node scripts/ci-report.mjs api
+      - name: Publish filtered API metadata only
+        if: ${{ always() && steps.reports.outcome == 'success' }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: api-checks-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/ci-public/api/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 3
+          overwrite: false
+
+  e2e:
+    needs: [web, api]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.22.2
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
+        with:
+          distribution: temurin
+          java-version: 21.0.13+9
+      - name: Assert pinned toolchain
         run: |
-          if test -f .runtime/ci-db.env; then
-            docker compose --project-name chatgpt-courses-ci --env-file .runtime/ci-db.env -f infra/compose/compose.local.yml stop postgres
-          fi
+          test "$(node --version)" = "v24.22.2"
+          test "$(npm --version)" = "11.19.1"
+          java -version 2>&1 | grep -F '21.0.13+9'
+          docker info >/dev/null
+      - name: Install locked dependencies
+        run: node scripts/ci-run.mjs e2e install
+      - name: Retrieve exact web build from this workflow attempt
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: web-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/ci-builds/
+          digest-mismatch: error
+      - name: Retrieve exact API build from this workflow attempt
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: api-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/ci-builds/
+          digest-mismatch: error
+      - name: Verify hashes and restore builds without rebuilding
+        env:
+          WEB_ARCHIVE_SHA256: ${{ needs.web.outputs.sha256 }}
+          API_ARCHIVE_SHA256: ${{ needs.api.outputs.sha256 }}
+        run: |
+          node scripts/ci-build.mjs restore web "$WEB_ARCHIVE_SHA256"
+          node scripts/ci-build.mjs restore api "$API_ARCHIVE_SHA256"
+      - name: Install locked Chromium and Linux dependencies
+        run: node scripts/ci-run.mjs e2e browsers
+      - name: Verify real HTTP proxy including API outage and recovery
+        run: node scripts/ci-run.mjs e2e smoke
+      - name: Verify four controlled release scenarios without retries
+        run: node scripts/ci-run.mjs e2e release
+      - name: Verify production configuration on an empty owned database
+        run: node scripts/ci-run.mjs e2e production
+      - name: Validate public metadata and synthetic app screenshots
+        if: always()
+        id: reports
+        run: node scripts/ci-report.mjs e2e
+      - name: Publish filtered E2E evidence only
+        if: ${{ always() && steps.reports.outcome == 'success' }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: e2e-checks-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/ci-public/e2e/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 3
+          overwrite: false

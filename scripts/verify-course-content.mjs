@@ -5,6 +5,8 @@ import { createHash } from 'node:crypto';
 
 // Offline source checks: no private configuration, database, AI call or publication.
 const repository = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const phase = process.argv[2] ?? 'P18';
+if (process.argv.length > 3 || !/^P\d{2}$/.test(phase)) throw new Error('Phase de preuve attendue : P suivi de deux chiffres.');
 const directory = 'content/course-client-proposal/v1';
 const locales = ['fr', 'en'];
 const keys = ['m01', 'm02', 'm03', 'm04', 'm05', 'm06'];
@@ -149,7 +151,7 @@ for (const locale of locales) {
 
 check('All30 authored module/resource files actually opened', files.length === 30 && files.every(file => file.opened));
 const report = {
-  phase: 'P18', executedAt: new Date().toISOString(), command: '.\\scripts\\courses.cmd run verify:content',
+  phase, executedAt: new Date().toISOString(), command: `.\\scripts\\courses.cmd run verify:content${phase === 'P18' ? '' : ` -- ${phase}`}`,
   allPassed: checks.every(item => item.passed), sourceFileCount: files.length, sourceFiles: files,
   canonicalRubricInput: { path: presetPath, sha256: sha(presetBytes) }, arithmetic, rubricChecks, checks,
   review: { method: 'Agent cross-review of FR/EN authored sources plus executable offline structure/arithmetic/rubric checks.', humanReview: false,
@@ -159,6 +161,6 @@ const report = {
     pendingAuthority: 'docs/DECISIONS.md: actual offer price/currency/tax, access, updates, assistance, legal conditions and produced formats must be decided and reviewed separately. Case amounts are never course prices.' },
   priorObservedCheck: { report: 'P18-content-checks-first.json', exitCode: 1, failure: 'The first source check required literal English blocker labels. Agent cross-review found equivalent expansions and firm/fixed, known/confirmed wording; the comparator was narrowed to those explicit variants. No source content or canonical preset was changed for that adjustment.' },
 };
-writeFileSync(join(repository, 'docs/evidence/P18-content-checks.json'), JSON.stringify(report, null, 2) + '\n', 'utf8');
+writeFileSync(join(repository, `docs/evidence/${phase}-content-checks.json`), JSON.stringify(report, null, 2) + '\n', 'utf8');
 console.log(JSON.stringify({ phase: report.phase, allPassed: report.allPassed, openedFiles: files.length, checks: checks.length, failures: checks.filter(item => !item.passed), wordCounts: files.filter(file => file.kind === 'MODULE_SOURCE').map(({ path, usefulWords, bodyWords }) => ({ path, usefulWords, bodyWords })) }, null, 2));
 if (!report.allPassed) process.exitCode = 1;

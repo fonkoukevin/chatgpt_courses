@@ -3,7 +3,7 @@ import type { ResourceCard } from "../api/generated/types.gen";
 import type { CatalogueQuery } from "../api/public-client";
 import { catalogueQueryString } from "../api/public-client";
 
-export type LanguageLinks = Record<Locale, { href: string; available: boolean }>;
+export type LanguageLinks = Record<Locale, { href: string; available: boolean; reason?: "COURSE_CONTEXT_UNAVAILABLE"; alternativeHref?: string }>;
 export const publicCatalogueHref = (locale: Locale) => locale === "fr" ? "/fr/catalogue" : "/en/catalog";
 export function catalogueHref(locale: Locale, query?: CatalogueQuery): string {
   return `${publicCatalogueHref(locale)}${query ? `?${catalogueQueryString(query)}` : ""}`;

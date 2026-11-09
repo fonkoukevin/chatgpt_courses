@@ -5,6 +5,8 @@ import type { AuthResult } from "./auth-client";
 import { isProblem } from "./client";
 import type { ResourceCard, SearchCatalogueData } from "./generated/types.gen";
 import { isCataloguePage, isCatalogueFacets, isResourceDetail } from "./public-validation";
+import { isPublicActivityContext, isPublicPublicationPage } from "./public-routes-validation";
+import { matchingResource } from "./resource-http";
 
 export type CatalogueQuery = SearchCatalogueData["query"];
 type PublicKind = ResourceCard["kind"];
@@ -42,4 +44,10 @@ export function readResourceVersion(resourceId: string, versionId: string, local
 }
 export function readResourceBySlug(kind: PublicKind, slug: string, locale: Locale) {
   return read(`/catalog/by-slug/${kind}/${encodeURIComponent(slug)}?locale=${locale}`, isResourceDetail);
+}
+export function readPublications(locale: Locale, page = 0, pageSize = 100) {
+  return read(`/catalog/publications?${new URLSearchParams({ locale, page: String(page), pageSize: String(pageSize) })}`, matchingResource(isPublicPublicationPage, value => value.page === page && value.pageSize === pageSize && value.items.every(item => item.locale === locale)));
+}
+export function readPublicActivityContext(courseId: string, courseVersionId: string, activityId: string, activityVersionId: string, locale: Locale) {
+  return read(`/catalog/resources/${encodeURIComponent(courseId)}/versions/${encodeURIComponent(courseVersionId)}/activities/${encodeURIComponent(activityId)}/versions/${encodeURIComponent(activityVersionId)}?locale=${locale}`, matchingResource(isPublicActivityContext, value => value.courseResourceId === courseId && value.courseVersionId === courseVersionId && value.activityResourceId === activityId && value.activityVersionId === activityVersionId && value.locale === locale));
 }

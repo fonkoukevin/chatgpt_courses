@@ -10,14 +10,16 @@ import { cmsPath } from "@/lib/cms/routes";
 import { getCmsMetadataDictionary } from "@/lib/i18n/cms-metadata";
 import type { Locale } from "@/lib/i18n/locales";
 import { CmsError } from "./parts";
+import { SlugEditor } from "./slug-editor";
 
-type Props = { locale: Locale; content: ContentView; etag: string; disabled?: boolean; onSaved: (value: ContentView, etag: string) => void; onDirtyChange?: (dirty: boolean) => void };
+type Props = { locale: Locale; expectedAccountId: string; content: ContentView; etag: string; disabled?: boolean; onSaved: (value: ContentView, etag: string) => void; onDirtyChange?: (dirty: boolean) => void };
 const clone = (value: PublicMetadata) => structuredClone(value);
 const same = (left: PublicMetadata, right: PublicMetadata) => JSON.stringify(left) === JSON.stringify(right);
 
-export function MetadataEditor({ locale, content, etag, disabled, onSaved, onDirtyChange }: Props) {
+export function MetadataEditor({ locale, expectedAccountId, content, etag, disabled, onSaved, onDirtyChange }: Props) {
   const text = getCmsMetadataDictionary(locale), id = useId();
   const [open, setOpen] = useState(false), [busy, setBusy] = useState(false);
+  const [slugDirty, setSlugDirty] = useState(false);
   const [value, setValue] = useState(() => clone(content.metadata)), [baseline, setBaseline] = useState(() => clone(content.metadata));
   const [baseEtag, setBaseEtag] = useState(etag), [reason, setReason] = useState("");
   const [rebased, setRebased] = useState(false), [error, setError] = useState<ApiError | null>(null);
@@ -29,21 +31,22 @@ export function MetadataEditor({ locale, content, etag, disabled, onSaved, onDir
   const dirty = rebased || reason !== "" || !same(value, baseline);
   useEffect(() => { dirtyCallback.current = onDirtyChange; }, [onDirtyChange]);
   useEffect(() => () => { sequence.current++; dirtyCallback.current?.(false); }, []);
+  useEffect(() => { dirtyCallback.current?.(dirty || slugDirty || busy); }, [dirty, slugDirty, busy]);
   function announce(next: PublicMetadata, nextReason = reason, nextBaseline = baseline, adopted = rebased) {
-    onDirtyChange?.(adopted || nextReason !== "" || !same(next, nextBaseline));
+    onDirtyChange?.(slugDirty || adopted || nextReason !== "" || !same(next, nextBaseline));
   }
   function change<K extends keyof PublicMetadata>(key: K, next: PublicMetadata[K]) {
     const updated = { ...value, [key]: next }; setValue(updated); setSaved(false); announce(updated);
   }
   function openPanel(next: boolean) {
-    if (lock.current) return;
+    if (lock.current || next && slugDirty) return;
     if (next && !dirty) { setValue(clone(content.metadata)); setBaseline(clone(content.metadata)); setBaseEtag(etag); setReason(""); setRebased(false); setError(null); setValidation(null); setConflict(null); setKnownServer(null); }
     setOpen(next);
   }
   function acceptServer(server: ContentView, tag: string) {
     sequence.current++; setValue(clone(server.metadata)); setBaseline(clone(server.metadata)); setBaseEtag(tag);
     setReason(""); setRebased(false); setConflict(null); setKnownServer(null); setError(null); setValidation(null); setSaved(false);
-    onDirtyChange?.(false); onSaved(server, tag);
+    onDirtyChange?.(slugDirty); onSaved(server, tag);
   }
   function discard() {
     if (lock.current) return;
@@ -59,7 +62,7 @@ export function MetadataEditor({ locale, content, etag, disabled, onSaved, onDir
     catch { setCopyState("error"); }
   }
   async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault(); if (lock.current || disabled || conflict) return;
+    event.preventDefault(); if (lock.current || disabled || slugDirty || conflict) return;
     const invalid = Array.from(form.current?.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("input[required],textarea[required]") ?? []).find((input) => !input.value.trim());
     if (invalid) { setValidation(text.required); invalid.focus(); return; }
     const normalized = { ...value, audience: value.audience.filter((line) => line.trim()) };
@@ -76,9 +79,10 @@ export function MetadataEditor({ locale, content, etag, disabled, onSaved, onDir
   const discardButton = <ConfirmationDialog title={text.discard} description={text.discardHelp} confirmLabel={text.confirm} cancelLabel={text.cancel}
     trigger={<Button variant="ghost" disabled={busy} className="max-w-full whitespace-normal">{text.discard}</Button>} onConfirm={discard} />;
   return <section className="space-y-4">
+    <SlugEditor locale={locale} expectedAccountId={expectedAccountId} content={content} etag={etag} disabled={disabled || dirty || busy} onSaved={acceptServer} onDirtyChange={setSlugDirty} />
     {dirty && !open && <StatusMessage tone="warning"><p>{text.dirty}</p><div className="mt-3">{discardButton}</div></StatusMessage>}
     <Dialog open={open} onOpenChange={openPanel} title={text.title} description={text.help} closeLabel={text.close} className="max-w-3xl"
-      trigger={<Button variant="secondary" disabled={disabled && !dirty}>{text.open}</Button>}>
+      trigger={<Button variant="secondary" disabled={slugDirty || disabled && !dirty}>{text.open}</Button>}>
       <form ref={form} noValidate aria-busy={busy} onSubmit={(event) => void submit(event)} className="space-y-7">
         {disabled && <StatusMessage tone="warning">{text.busyParent}</StatusMessage>}
         {(error || validation || saved) && <div ref={feedback} tabIndex={-1}>{error && <CmsError error={error} locale={locale} returnTo={cmsPath(locale, content.id)} />}{validation && <StatusMessage tone="danger">{validation}</StatusMessage>}{saved && <StatusMessage tone="success">{text.saved}</StatusMessage>}</div>}

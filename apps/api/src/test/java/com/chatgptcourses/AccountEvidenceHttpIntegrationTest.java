@@ -221,10 +221,24 @@ class AccountEvidenceHttpIntegrationTest {
         assertThat(tree(en).path("summary").path("locale").asText()).isEqualTo("en"); assertThat(tree(en).path("evidence").path("quizzes").get(0).path("locale").asText()).isEqualTo("fr");
         assertThat(tree(en).path("evidence").path("quizzes").get(0).path("attemptId").asText()).isEqualTo(attempt.id().toString());
         byte[] original = downloadAttestation(f.owner(), attestationId(fr)).body();
+        byte[] englishOriginal = downloadAttestation(f.owner(), attestationId(en)).body();
+        String englishHtml = new String(englishOriginal, StandardCharsets.UTF_8);
+        assertThat(englishHtml).contains("<html lang=\"en\">", "<span lang=\"fr\">" + f.course().title() + "</span>", "<span lang=\"fr\">" + f.activity().title() + "</span>");
+        assertThat(tree(en).path("evidence").path("enrolledLocale").asText()).isEqualTo("fr");
+        assertThat(MessageDigest.isEqual(jdbc.queryForObject("SELECT document_bytes FROM participation_attestations WHERE id=?", byte[].class, attestationId(en)), englishOriginal)).isTrue();
+        String englishHash = sha(englishOriginal);
+        assertThat(tree(en).path("summary").path("document").path("sha256").asText()).isEqualTo(englishHash);
         var c = editorial.get(f.editor().id(), f.course().id()); var next = editorial.newVersion(f.editor().id(), c.id(), contentTag(c), new NewVersion("New pedagogical objective", "New declared assessment", "Parcours fictif P14 version 2", "Explicit new teaching version", c.document(), List.of(f.module().versionId()), "New version fixture")); next = publish(f.editor().id(), next);
         var enrollment = learning.enroll(f.owner().id(), f.owner().id(), new EnrollCourse(next.resourceId(), next.versionId(), "fr")).value();
         var newer = get(f.owner(), "/api/v1/me/enrollments/" + enrollment.summary().id() + "/attestation-eligibility?locale=fr"); assertThat(tree(newer).path("eligible").asBoolean()).isFalse();
+        saveName(f.owner(), "Another declared participant name");
+        var newEnglish = issue(f, eligibility(f, "en"), "en", key()); assertThat(newEnglish.statusCode()).isEqualTo(201);
+        assertThat(attestationId(newEnglish)).isNotEqualTo(attestationId(en));
+        assertThat(new String(downloadAttestation(f.owner(), attestationId(newEnglish)).body(), StandardCharsets.UTF_8)).contains("<html lang=\"en\">", "<span lang=\"fr\">" + f.course().title() + "</span>");
         assertThat(MessageDigest.isEqual(downloadAttestation(f.owner(), attestationId(fr)).body(), original)).isTrue();
+        assertThat(MessageDigest.isEqual(downloadAttestation(f.owner(), attestationId(en)).body(), englishOriginal)).isTrue();
+        assertThat(sha(downloadAttestation(f.owner(), attestationId(en)).body())).isEqualTo(englishHash);
+        assertThat(get(f.owner(), "/api/v1/me/attestations/" + attestationId(en)).body()).contains("Participant bilingue");
     }
 
     @Test void withdrawnEnrollmentRemainsListedAndIssuedCertificateDoesNotDependOnCurrentAccess() throws Exception {

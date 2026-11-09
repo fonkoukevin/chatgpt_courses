@@ -26,6 +26,8 @@ Depuis P06, ces contrôles techniques ouvrent `/{locale}/dev/foundations` ; l’
 | P10 fichiers, médias et emails | `run verify:media` | PostgreSQL, SeaweedFS S3 et Mailpit isolés en tmpfs ; fichiers synthétiques et MP4 technique CC0 |
 | P12 Checkout et attribution | `run verify:payments` | PostgreSQL/S3/Mailpit propres, SDK/signatures réels avec transport Stripe contrôlé ; aucun appel Stripe externe |
 | P15 exploitation | `run verify:operations` | PostgreSQL/S3/Mailpit propres, comptes et données synthétiques, transport Stripe contrôlé ; aucun appel Stripe externe |
+| P16 langues | `run verify:bilingual` | PostgreSQL/S3/Mailpit propres, publications et historiques FR/EN, clips CC0 locaux explicitement techniques |
+| P16 SEO | `run verify:seo` | Même build Next servi avec configurations production/recette sur3111/3112 en boucle locale ; API et données TEST, aucune publication distante |
 
 P09 a réussi ses huit scénarios finaux ; P10 ses douze scénarios complets. Les résultats et limites restent dans [P09](../../docs/evidence/P09.md) et [P10](../../docs/evidence/P10.md), sans validation de stockage, de courrier ou de fournisseur vidéo en production.
 

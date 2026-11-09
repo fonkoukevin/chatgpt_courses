@@ -1,4 +1,5 @@
 "use client";
+import { useUnsavedInput } from "@/components/learning/unsaved";
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { Badge, Button, FormField, Input, Link, Pagination, Select, StatusMessage, TextArea } from "@/components/ui";
 import type { AuthResult } from "@/lib/api/auth-client";
@@ -9,7 +10,7 @@ import { isUuid } from "@/lib/api/cms-validation";
 import { accountIntent, type AccountIntent } from "@/lib/account/intent";
 import { cmsPath } from "@/lib/cms/routes";
 import { getOperationsDictionary } from "@/lib/i18n/operations";
-import type { Locale } from "@/lib/i18n/locales";
+import { unsavedChangesMessage, type Locale } from "@/lib/i18n/locales";
 import { useLearningAccount } from "@/lib/learning/account";
 import { operationsHref, operationsPath } from "@/lib/operations/routes";
 import type { ContentCaseQuery } from "@/lib/operations/query";
@@ -26,6 +27,7 @@ export function AdminContentCases({ locale, expectedAccountId, permissions, init
   const load = useCallback(() => listContentCases(query), [query]), list = useAccountResource(account, boundary, load, initial);
   const [resourceId, setResource] = useState(""), [versionId, setVersion] = useState(""), [revisionId, setRevision] = useState(""), [ticketId, setTicket] = useState(""), [language, setLanguage] = useState<Locale>(locale), [reason, setReason] = useState(""), [pending, setPending] = useState(false), [error, setError] = useState<ApiError | null>(null), [invalid, setInvalid] = useState(false), [saved, setSaved] = useState(false);
   const intent = useRef<AccountIntent | null>(null), lock = useRef(false), life = useRef(0), edits = useRef(0); useEffect(() => () => { life.current++; }, []);
+  useUnsavedInput(pending || !saved && Boolean(resourceId || versionId || revisionId || ticketId || reason || language !== locale), unsavedChangesMessage(locale), boundary);
   function edit(set: (v: string) => void, value: string) { edits.current++; set(value); setSaved(false); }
   async function create(event: FormEvent) {
     event.preventDefault(); const valid = isUuid(resourceId) && isUuid(versionId) && (!revisionId || isUuid(revisionId)) && (!ticketId || isUuid(ticketId)) && Boolean(reason.trim()) && [...reason].length <= 2000;
@@ -47,6 +49,8 @@ export function AdminContentCase({ locale, expectedAccountId, permissions, id, i
   const load = useCallback(() => getContentCase(id), [id]), item = useAccountResource(account, boundary, load, initial), loadEvents = useCallback(() => getContentCaseEvents(id, eventPage, 20), [id, eventPage]), events = useAccountResource(account, boundary, loadEvents);
   const [state, setState] = useState<UpdateContentCase["state"]>(initial.ok ? initial.data.state : "OPEN"), [assignee, setAssignee] = useState(initial.ok ? initial.data.assigneeId ?? "" : ""), [correction, setCorrection] = useState(initial.ok ? initial.data.correctedRevisionId ?? "" : ""), [reason, setReason] = useState(""), [pending, setPending] = useState(false), [error, setError] = useState<ApiError | null>(null), [invalid, setInvalid] = useState(false), [saved, setSaved] = useState(false);
   const intent = useRef<AccountIntent | null>(null), lock = useRef(false), life = useRef(0), edits = useRef(0); useEffect(() => () => { life.current++; }, []);
+  const original = item.result?.ok ? item.result.data : initial.ok ? initial.data : null;
+  useUnsavedInput(pending || !saved && Boolean(reason || state !== (original?.state ?? "OPEN") || assignee !== (original?.assigneeId ?? "") || correction !== (original?.correctedRevisionId ?? "")), unsavedChangesMessage(locale), boundary);
   async function save(event: FormEvent) {
     event.preventDefault(); const valid = (!assignee || isUuid(assignee)) && (!correction || isUuid(correction)) && (state !== "RESOLVED" || isUuid(correction)) && Boolean(reason.trim()) && [...reason].length <= 2000; setInvalid(!valid);
     if (!valid || lock.current || account.status !== "active" || !account.accountId || !item.result?.ok || !item.result.etag) return;

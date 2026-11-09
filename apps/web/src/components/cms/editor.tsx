@@ -1,7 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
+import { useCallback, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import { useUnsavedInput } from "@/components/learning/unsaved";
+import { useLearningAccount } from "@/lib/learning/account";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { AdminLayout } from "@/components/layouts";
 import { Badge, Button, ConfirmationDialog, FormField, Input, Link, Pagination, StatusMessage, TextArea } from "@/components/ui";
@@ -25,7 +27,7 @@ import { QuizPolicyFields } from "./quiz-policy-fields";
 import { ProjectPolicyFields } from "./project-policy-fields";
 import { EditorialImageUpload } from "./editorial-image-upload";
 
-type Props = { locale: Locale; initial: AuthResult<ContentView>; initialReadiness: AuthResult<Readiness>; initialDependencies: AuthResult<Dependencies>; permissions: string[] };
+type Props = { locale: Locale; expectedAccountId: string; initial: AuthResult<ContentView>; initialReadiness: AuthResult<Readiness>; initialDependencies: AuthResult<Dependencies>; permissions: string[] };
 const editable = (content: ContentView): LocalContent => ({ title: content.title, summary: content.summary, document: content.document ?? emptyDocument(), reason: "" });
 const editSession = (content: ContentView, etag: string) => ({ ...createEditSession(editable(content), etag), phase: content.document ? "saved" as const : "modified" as const });
 
@@ -36,8 +38,9 @@ export function ContentEditor(props: Props) {
   return <EditorReady key={props.initial.data.id} {...props} initial={props.initial.data} initialEtag={props.initial.etag} />;
 }
 
-function EditorReady({ locale, initial, initialEtag, initialReadiness, initialDependencies, permissions }: Omit<Props, "initial"> & { initial: ContentView; initialEtag: string }) {
+function EditorReady({ locale, expectedAccountId, initial, initialEtag, initialReadiness, initialDependencies, permissions }: Omit<Props, "initial"> & { initial: ContentView; initialEtag: string }) {
   const text = getCmsDictionary(locale); const router = useRouter();
+  const { boundary } = useLearningAccount(cmsPath(locale, initial.id), expectedAccountId);
   const [content, setContent] = useState(initial);
   const [session, setSession] = useState<EditSession<LocalContent>>(() => editSession(initial, initialEtag));
   const [childrenDraft, setChildrenDraft] = useState(initial.childVersionIds);
@@ -59,20 +62,7 @@ function EditorReady({ locale, initial, initialEtag, initialReadiness, initialDe
     setChildLabels((previous) => Object.entries(labels).some(([id, label]) => previous[id] !== label) ? { ...previous, ...labels } : previous);
   }, []);
 
-  useEffect(() => {
-    if (!dirty) return;
-    const unload = (event: BeforeUnloadEvent) => { event.preventDefault(); };
-    const navigate = (event: MouseEvent) => {
-      if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
-      const anchor = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a[href]") : null;
-      if (!anchor || anchor.target === "_blank" || anchor.hasAttribute("download")) return;
-      const target = new URL(anchor.href, location.href);
-      if (target.pathname === location.pathname && target.search === location.search) return;
-      if (!window.confirm(text.unsavedLeave)) event.preventDefault();
-    };
-    window.addEventListener("beforeunload", unload); document.addEventListener("click", navigate, true);
-    return () => { window.removeEventListener("beforeunload", unload); document.removeEventListener("click", navigate, true); };
-  }, [dirty, text.unsavedLeave]);
+  useUnsavedInput(dirty, text.unsavedLeave, boundary);
 
   function update<K extends keyof LocalContent>(key: K, value: LocalContent[K]) { setSession((state) => changeEditSession(state, { ...state.value, [key]: value })); }
   async function loadConflict() {
@@ -189,7 +179,7 @@ function EditorReady({ locale, initial, initialEtag, initialReadiness, initialDe
         {canWrite && !content.frozenAt && <div className="flex flex-wrap gap-3"><Button variant="secondary" onClick={() => setChildrenDraft((items) => [...items, ""])} disabled={childrenDraft.length >= 100}>{text.addChild}</Button>{action("composition", !compositionDirty)}</div>}
       </section>}
       </fieldset>
-      {canWrite && <MetadataEditor key={content.id} locale={locale} content={content} etag={session.etag} disabled={bodyDirty || saving || legacyPending} onDirtyChange={setMetadataDirty} onSaved={(value, etag) => applyOperation(value, etag, "metadata")} />}
+      {canWrite && <MetadataEditor key={content.id} locale={locale} expectedAccountId={expectedAccountId} content={content} etag={session.etag} disabled={bodyDirty || saving || legacyPending} onDirtyChange={setMetadataDirty} onSaved={(value, etag) => applyOperation(value, etag, "metadata")} />}
       <section className="space-y-3 rounded-panel border border-border p-4 sm:p-6"><h2 className="text-xl font-semibold">{text.translations}</h2><ul className="space-y-3">{content.translations.map((translation) => <li key={translation.id} className="flex flex-wrap items-center gap-3"><Link prefetch={false} href={cmsPath(locale, translation.id)}>{translation.locale.toUpperCase()}</Link><Badge>{text.state[translation.state]}</Badge></li>)}</ul>{content.sourceTranslationId && <p><Link prefetch={false} href={cmsPath(locale, content.sourceTranslationId, "preview")} target="_blank" rel="noreferrer">{text.source}</Link></p>}{content.state === "STALE" && content.sourceTranslationId && <StatusMessage tone="warning">{text.sourceChanged}</StatusMessage>}</section>
       <ReadinessPanel locale={locale} value={readiness} content={content} dirty={dirty} current={readinessEtag === session.etag} pending={checking} refresh={() => void check()} />
       <section className="flex flex-wrap gap-3" aria-label={text.status}>

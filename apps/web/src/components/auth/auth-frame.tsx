@@ -11,7 +11,7 @@ export function AuthFrame({ locale, screen, title, description, returnTo, resetT
   return <div className="min-h-dvh bg-background text-foreground">
     <header className="border-b border-border bg-surface"><div className="mx-auto flex min-h-18 max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
       <NextLink href={`/${locale}`} prefetch={false} className="inline-flex min-h-11 items-center rounded-input font-semibold tracking-tight text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus">ChatGPT Courses<span aria-hidden="true" className="text-brand">.</span></NextLink>
-      <nav aria-label={text.languageNavigation} className="flex gap-1 text-sm">{(["fr", "en"] as const).map((language) => <NextLink key={language} lang={language} hrefLang={language} prefetch={false}
+      <nav aria-label={text.languageNavigation} className="flex gap-1 text-sm">{(["fr", "en"] as const).map((language) => <NextLink key={language} data-language-switch={language} lang={language} hrefLang={language} prefetch={false}
         href={`${authHref(language, screen, translateReturnTo(returnTo, language))}${screen === "reset" && resetToken && language !== locale ? `#token=${resetToken}` : ""}`}
         aria-current={locale === language ? "page" : undefined} className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-input px-3 text-link aria-[current=page]:bg-brand-soft aria-[current=page]:font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus">{language === "fr" ? "Français" : "English"}</NextLink>)}</nav>
     </div></header>

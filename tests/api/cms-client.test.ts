@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
 import { afterEach, test } from "node:test";
 import { clearCsrfToken } from "../../apps/web/src/lib/api/auth-client";
-import { saveContentRevision } from "../../apps/web/src/lib/api/cms-client";
+import { renameContentSlug, saveContentRevision } from "../../apps/web/src/lib/api/cms-client";
 import { decodeCmsResponse } from "../../apps/web/src/lib/api/cms-response";
 import { isContentDocument, isContentView, safeContentLink } from "../../apps/web/src/lib/api/cms-validation";
 import type { ContentDocument, ContentView } from "../../apps/web/src/lib/api/generated/types.gen";
@@ -52,5 +52,52 @@ test("une révision CMS utilise CSRF et If-Match, et un conflit ne déclenche au
   };
   const result = await saveContentRevision(value.id, etag, { title: "Revised unit test", summary: "", document, reason: "Unit-test correction." });
   assert.equal(result.ok, false); if (!result.ok) assert.equal(result.error.status, 412);
+  assert.equal(mutations, 1);
+});
+
+test("un renommage refuse un compte, un tag ou une proposition invalide avant tout HTTP", async () => {
+  const value = content(), actor = randomUUID(), tag = `"content-${value.id}-r2"`;
+  let calls = 0;
+  globalThis.fetch = async () => { calls++; throw new Error("Unexpected transport call."); };
+  for (const [etag, slug, reason, account] of [
+    [tag, "valid-name", "Unit-test change", "invalid-account"],
+    [`W/${tag}`, "valid-name", "Unit-test change", actor],
+    [`"content-${randomUUID()}-r2"`, "valid-name", "Unit-test change", actor],
+    [tag, "invalid/name", "Unit-test change", actor],
+    [tag, "valid-name", " ", actor],
+  ]) await assert.rejects(() => renameContentSlug(value.id, etag, { slug, reason }, account));
+  assert.equal(calls, 0);
+});
+
+test("le renommage lie compte et révision, accepte le no-op et refuse un mauvais acquittement", async () => {
+  const initial = content(), account = randomUUID(), tag = `"content-${initial.id}-r2"`;
+  let returned: ContentView = { ...initial, revision: 3, slug: "renamed-unit" }, mutations = 0;
+  globalThis.fetch = async (path, init) => {
+    if (path === "/api/v1/auth/csrf") return Response.json({ token: "unit-csrf", headerName: "X-CSRF-TOKEN", parameterName: "_csrf" });
+    mutations++; assert.equal(path, `/api/v1/admin/contents/${initial.id}/slug`);
+    assert.equal(init?.method, "PATCH"); assert.equal(init?.cache, "no-store");
+    const headers = new Headers(init?.headers);
+    assert.equal(headers.get("X-Account-Context"), account); assert.equal(headers.get("If-Match"), tag); assert.equal(headers.get("X-CSRF-TOKEN"), "unit-csrf");
+    assert.deepEqual(JSON.parse(String(init?.body)), { slug: "renamed-unit", reason: "Unit-test rename" });
+    return Response.json(returned, { headers: { ETag: `"content-${returned.id}-r${returned.revision}"` } });
+  };
+  const rename = () => renameContentSlug(initial.id, tag, { slug: "renamed-unit", reason: "Unit-test rename" }, account);
+  assert.equal((await rename()).ok, true);
+  returned = { ...returned, revision: 2 }; assert.equal((await rename()).ok, true);
+  for (const invalid of [{ ...returned, slug: "another-name" }, { ...returned, revision: 1 }, { ...returned, id: randomUUID() }]) {
+    returned = invalid; const result = await rename(); assert.equal(result.ok, false); if (!result.ok) assert.equal(result.error.kind, "invalid-response");
+  }
+  assert.equal(mutations, 5);
+});
+
+test("un conflit de renommage conserve une seule mutation et son problème explicite", async () => {
+  const value = content(); let mutations = 0;
+  globalThis.fetch = async (path) => {
+    if (path === "/api/v1/auth/csrf") return Response.json({ token: "unit-csrf", headerName: "X-CSRF-TOKEN", parameterName: "_csrf" });
+    mutations++;
+    return Response.json({ type: "about:blank", title: "Conflict", status: 409, detail: "Unit-test reservation conflict.", instance: `/api/v1/admin/contents/${value.id}/slug`, code: "SLUG_ALREADY_RESERVED", traceId: randomUUID() }, { status: 409, headers: { "Content-Type": "application/problem+json" } });
+  };
+  const result = await renameContentSlug(value.id, `"content-${value.id}-r0"`, { slug: "reserved-unit", reason: "Unit-test rename" }, randomUUID());
+  assert.equal(result.ok, false); if (!result.ok) { assert.equal(result.error.status, 409); assert.equal(result.error.kind, "http"); if (result.error.kind === "http") assert.equal(result.error.problem?.code, "SLUG_ALREADY_RESERVED"); }
   assert.equal(mutations, 1);
 });

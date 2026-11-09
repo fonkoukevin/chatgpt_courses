@@ -149,12 +149,14 @@ class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/v1/admin/notifications/*/retry").hasAuthority("notifications.manage")
                         .requestMatchers(HttpMethod.GET, "/api/v1/admin/project-presets/*").hasAuthority("content.read")
                         .requestMatchers(HttpMethod.GET, "/api/v1/contents/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/catalog/publications", "/api/v1/catalog/resources/*/versions/*/activities/*/versions/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/catalog", "/api/v1/catalog/facets", "/api/v1/catalog/resources/*",
                                 "/api/v1/catalog/by-slug/*/*", "/api/v1/catalog/resources/*/versions/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/admin/contents", "/api/v1/admin/contents/**")
                             .hasAuthority("content.read")
                         .requestMatchers(HttpMethod.POST, "/api/v1/admin/contents/*/publish").hasAuthority("content.publish")
                         .requestMatchers(HttpMethod.POST, "/api/v1/admin/contents/*/archive").hasAuthority("content.archive")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/admin/contents/*/slug").hasAuthority("content.write")
                         // READY needs review permission; other transitions need write. The service checks the target.
                         .requestMatchers(HttpMethod.POST, "/api/v1/admin/contents/*/transition")
                             .hasAnyAuthority("content.write", "content.review")

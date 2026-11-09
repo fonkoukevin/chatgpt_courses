@@ -77,9 +77,9 @@ export async function EditorPage({ params }: CmsPageProps) {
   if (!user.ok) return <StatusPage locale={locale}><CmsError error={user.error} locale={locale} returnTo={destination} /><Link href={destination} prefetch={false}>{getCmsPageDictionary(locale).retry}</Link></StatusPage>;
   if (!user.data.permissions.includes("content.read")) return <StatusPage locale={locale}><StatusMessage tone="danger">{getCmsDictionary(locale).forbidden}</StatusMessage></StatusPage>;
   const initial = await readContent(route.id);
-  if (!initial.ok) return <ContentEditor locale={locale} initial={initial} initialReadiness={initial} initialDependencies={initial} permissions={user.data.permissions} />;
+  if (!initial.ok) return <ContentEditor locale={locale} expectedAccountId={user.data.id} initial={initial} initialReadiness={initial} initialDependencies={initial} permissions={user.data.permissions} />;
   const [initialReadiness, initialDependencies] = await Promise.all([readContentReadiness(route.id), readContentDependencies(route.id)]);
-  return <ContentEditor key={route.id} locale={locale} initial={initial} initialReadiness={initialReadiness} initialDependencies={initialDependencies} permissions={user.data.permissions} />;
+  return <ContentEditor key={route.id} locale={locale} expectedAccountId={user.data.id} initial={initial} initialReadiness={initialReadiness} initialDependencies={initialDependencies} permissions={user.data.permissions} />;
 }
 export async function PreviewPage({ params }: CmsPageProps) {
   const route = await params, locale = pageLocale(route.locale);

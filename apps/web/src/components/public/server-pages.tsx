@@ -1,11 +1,14 @@
 import "server-only";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import type { AuthResult } from "@/lib/api/auth-client";
 import type { CurriculumNode, ResourceCard, ResourceDetail } from "@/lib/api/generated/types.gen";
 import { isUuid } from "@/lib/api/cms-validation";
-import { readCatalogue, readCatalogueFacets, readResourceBySlug, readResourceVersion } from "@/lib/api/public-server";
+import { readCatalogue, readCatalogueFacets, readPublicActivityContext, readResourceBySlug, readResourceVersion } from "@/lib/api/public-server";
 import { getServerConfig } from "@/lib/config/server";
+import { publicMetadata } from "@/lib/public/seo";
+import { absolutePublicUrl, localeIsIndexable, publicResourcePath } from "@/lib/public/seo-policy";
+import type { BreadcrumbTrail } from "./breadcrumbs";
 import { isLocale, type Locale } from "@/lib/i18n/locales";
 import { getPublicPageDictionary } from "@/lib/i18n/public-pages";
 import { parseCatalogueQuery, safeCatalogueReturnTo, singleParameter, type PublicParameters } from "@/lib/public/query";
@@ -16,6 +19,7 @@ import { PublicCourse } from "./course";
 import { PublicGuide } from "./guide";
 import { PublicActivity } from "./activity";
 import { PublicUnavailable } from "./unavailable";
+import { PublicContextUnavailable } from "./context-unavailable";
 import { PublicMethodSource } from "@/components/methods/source";
 import { readLearningDashboard, readSavedLearningActivity } from "@/lib/api/learning-server";
 
@@ -52,14 +56,7 @@ function programmeLinks(locale: Locale, course: ResourceDetail, returnTo: string
   return Object.fromEntries(nodesOf(course.curriculum).filter((node) => node.kind === "ACTIVITY" && node.availability === "PUBLISHED" && node.slug)
     .map((node) => [node.versionId, courseActivityHref(locale, course.slug!, node.slug!, node.resourceId, node.versionId, course.versionId, returnTo)]));
 }
-function seo(locale: Locale, title: string, description: string, path: string, languages?: LanguageLinks): Metadata {
-  const config = getServerConfig();
-  const canonical = new URL(path, config.publicOrigin).toString();
-  const equivalents = languages ? Object.fromEntries(Object.entries(languages).filter(([, link]) => link.available).map(([language, link]) => { const target = new URL(link.href, config.publicOrigin); target.searchParams.delete("returnTo"); return [language, target.toString()]; })) : undefined;
-  return { title: `${title} | ChatGPT Courses`, description, metadataBase: new URL(config.publicOrigin),
-    alternates: { canonical, ...(equivalents ? { languages: equivalents } : {}) },
-    robots: { index: false, follow: false }, openGraph: { type: "website", title, description, url: canonical, siteName: "ChatGPT Courses" } };
-}
+const seo = publicMetadata;
 
 export async function PublicHomePage({ params }: PublicPageProps) {
   const locale = localeFrom((await params).locale);
@@ -102,15 +99,19 @@ export async function catalogueMetadata({ params, searchParams }: PublicPageProp
     if (result.ok && result.data.title) {
       const canonical = new URL(activityDiscoveryHref(locale, selected, version), "https://courses.invalid");
       if (query && query.locale !== locale) canonical.searchParams.set("locale", query.locale);
-      return seo(locale, result.data.title, result.data.summary ?? copy.catalogueDescription, canonical.pathname + canonical.search);
+      return seo(locale, result.data.title, result.data.summary ?? copy.catalogueDescription, canonical.pathname + canonical.search, undefined, false);
     }
   }
-  return seo(locale, copy.catalogueTitle, copy.catalogueDescription, query ? catalogueHref(locale, query) : publicCatalogueHref(locale), defaultLanguages(query ?? { locale }));
+  const unfiltered = Object.keys(input).length === 0;
+  return seo(locale, copy.catalogueTitle, copy.catalogueDescription, publicCatalogueHref(locale), {
+    fr: { href: publicCatalogueHref("fr"), available: true }, en: { href: publicCatalogueHref("en"), available: true },
+  }, unfiltered);
 }
 
 async function resourcePageData(props: PublicPageProps, kind: Exclude<ResourceCard["kind"], "ACTIVITY">) {
   const route = await props.params, locale = localeFrom(route.locale), slug = slugFrom(route.slug), input = await props.searchParams;
   let result = apiNotFound(await readResourceBySlug(kind, slug, locale));
+  const latestVersion = result.ok ? result.data.versionId : undefined;
   const version = singleParameter(input.version);
   if (version !== undefined) {
     if (!isUuid(version)) notFound();
@@ -118,7 +119,25 @@ async function resourcePageData(props: PublicPageProps, kind: Exclude<ResourceCa
   }
   if (result.ok && result.data.kind !== kind) notFound();
   const returnTo = safeCatalogueReturnTo(singleParameter(input.returnTo), locale);
-  return { locale, slug, result, returnTo, languageLinks: result.ok ? resourceLanguages(result.data, returnTo) : defaultLanguages({ locale, type: kind }) };
+  if (result.ok && result.data.slug && result.data.slug !== slug) {
+    const target = new URL(publicResourcePath(kind, locale, result.data.slug), "https://courses.invalid");
+    if (isUuid(version)) target.searchParams.set("version", version);
+    if (input.returnTo !== undefined) target.searchParams.set("returnTo", returnTo);
+    permanentRedirect(target.pathname + target.search);
+  }
+  const published = result.ok && result.data.availability === "PUBLISHED" && Boolean(result.data.slug);
+  const canonical = publicResourcePath(kind, locale, result.ok && result.data.slug ? result.data.slug : slug);
+  const historical = result.ok && latestVersion !== result.data.versionId;
+  const config = getServerConfig(), copy = getPublicPageDictionary(locale);
+  const breadcrumbs: BreadcrumbTrail | undefined = published && result.ok ? {
+    label: locale === "fr" ? "Fil d’Ariane" : "Breadcrumb",
+    items: [{ label: locale === "fr" ? "Accueil" : "Home", href: absolutePublicUrl(`/${locale}`, config.publicOrigin) },
+      { label: copy.catalogueTitle, href: absolutePublicUrl(publicCatalogueHref(locale), config.publicOrigin) },
+      { label: result.data.title!, href: absolutePublicUrl(canonical + (historical ? `?version=${result.data.versionId}` : ""), config.publicOrigin) }],
+    structured: !historical && localeIsIndexable(config, locale),
+  } : undefined;
+  return { locale, slug, result, returnTo, breadcrumbs, historical, canonical,
+    languageLinks: result.ok ? resourceLanguages(result.data, returnTo) : defaultLanguages({ locale, type: kind }) };
 }
 export async function PublicCoursePage(props: PublicPageProps) {
   const data = await resourcePageData(props, "COURSE");
@@ -130,10 +149,13 @@ export function detailMetadata(kind: Exclude<ResourceCard["kind"], "ACTIVITY">) 
   return async function generateMetadata(props: PublicPageProps): Promise<Metadata> {
     const data = await resourcePageData(props, kind), copy = getPublicPageDictionary(data.locale);
     const value = data.result.ok ? data.result.data : null;
-    const segment = kind === "COURSE" ? data.locale === "fr" ? "parcours" : "courses" : kind === "GUIDE" ? "guides" : data.locale === "fr" ? "methodes" : "methods";
-    const version = singleParameter((await props.searchParams).version);
+    const languages = value ? Object.fromEntries(Object.entries(data.languageLinks).map(([language, link]) => {
+      const target = new URL(link.href, "https://courses.invalid"); target.search = "";
+      return [language, { ...link, href: target.pathname }];
+    })) as LanguageLinks : undefined;
     return seo(data.locale, value?.title ?? copy.unavailableTitle, value?.summary ?? copy.unavailableDescription,
-      `/${data.locale}/${segment}/${data.slug}${isUuid(version) ? `?version=${version}` : ""}`, data.languageLinks);
+      data.canonical + (data.historical && value ? `?version=${value.versionId}` : ""), languages,
+      value?.availability === "PUBLISHED" && !data.historical);
   };
 }
 
@@ -162,8 +184,28 @@ async function activityData(props: PublicPageProps) {
     return { locale, result: saved ?? course, languageLinks: saved?.ok ? resourceLanguages(saved.data, catalogueReturnTo, true) : resourceLanguages(course.data, catalogueReturnTo), returnTo: catalogueReturnTo,
       canonical: `/${locale}/${locale === "fr" ? "apprendre" : "learn"}/${courseSlug}/${activitySlug}?courseVersion=${course.data.versionId}` };
   }
-  const child = nodesOf(course.data.curriculum).find((node) => node.kind === "ACTIVITY" && (resource ? node.resourceId === resource && node.versionId === version && (!node.slug || node.slug === activitySlug) : node.slug === activitySlug));
+  let child = nodesOf(course.data.curriculum).find((node) => node.kind === "ACTIVITY" && (resource ? node.resourceId === resource && node.versionId === version : node.slug === activitySlug));
+  if (!child && !resource) {
+    const alias = await readResourceBySlug("ACTIVITY", activitySlug, locale);
+    if (alias.ok) child = nodesOf(course.data.curriculum).find(node => node.kind === "ACTIVITY" && node.resourceId === alias.data.resourceId);
+    else if (alias.error.status !== 404) return { locale, result: alias, languageLinks: defaultLanguages({ locale, type: "ACTIVITY" }), returnTo: catalogueReturnTo, canonical: publicCatalogueHref(locale) };
+  }
   if (!child) {
+    if (isUuid(resource) && isUuid(version)) {
+      const context = await readPublicActivityContext(course.data.resourceId, course.data.versionId, resource, version, locale);
+      if (!context.ok && context.error.status !== 404) return { locale, result: context, languageLinks: defaultLanguages({ locale, type: "ACTIVITY" }), returnTo: catalogueReturnTo, canonical: publicCatalogueHref(locale) };
+      if (context.ok && context.data.availability !== "PUBLISHED") {
+        const standalone = await readResourceVersion(resource, version, locale);
+        const links = standalone.ok ? resourceLanguages(standalone.data, catalogueReturnTo, true) : defaultLanguages({ locale, type: "ACTIVITY" });
+        for (const target of ["fr", "en"] as const) {
+          const equivalent = context.data.languages.find(item => item.locale === target), alternative = links[target];
+          links[target] = equivalent?.availability === "PUBLISHED" && equivalent.courseSlug && equivalent.activitySlug
+            ? { available: true, href: courseActivityHref(target, equivalent.courseSlug, equivalent.activitySlug, resource, version, course.data.versionId, catalogueReturnTo) }
+            : { available: false, href: catalogueHref(target, { locale: target, type: "ACTIVITY" }), reason: "COURSE_CONTEXT_UNAVAILABLE", ...(standalone.ok && alternative.available ? { alternativeHref: alternative.href } : {}) };
+        }
+        return { locale, result: standalone, languageLinks: links, returnTo: catalogueReturnTo, contextUnavailable: true, canonical: courseActivityHref(locale, courseSlug, activitySlug, resource, version, course.data.versionId) };
+      }
+    }
     const saved = isUuid(resource) && isUuid(version) ? await retainedActivity(course.data, resource, version, locale) : null;
     if (!saved) notFound();
     return { locale, result: saved, languageLinks: saved.ok ? resourceLanguages(saved.data, catalogueReturnTo, true) : defaultLanguages({ locale, type: "ACTIVITY" }), returnTo: catalogueReturnTo,
@@ -173,15 +215,33 @@ async function activityData(props: PublicPageProps) {
   if (result.ok && result.data.kind !== "ACTIVITY") notFound();
   const back = `/${locale}/${locale === "fr" ? "parcours" : "courses"}/${courseSlug}?${new URLSearchParams({ version: course.data.versionId, returnTo: catalogueReturnTo })}`;
   const languageLinks = result.ok ? resourceLanguages(result.data, catalogueReturnTo, true) : defaultLanguages({ locale, type: "ACTIVITY" });
-  if (result.ok) for (const target of ["fr", "en"] as const) {
-    const parentLanguage = course.data.languages.find((item) => item.locale === target), childLanguage = result.data.languages.find((item) => item.locale === target);
-    if (parentLanguage?.status === "PUBLISHED" && parentLanguage.slug && childLanguage?.status === "PUBLISHED" && childLanguage.slug) languageLinks[target] = { available: true, href: courseActivityHref(target, parentLanguage.slug, childLanguage.slug, child.resourceId, child.versionId, course.data.versionId, catalogueReturnTo) };
+  let contextUnavailable = false;
+  if (result.ok) {
+    const context = await readPublicActivityContext(course.data.resourceId, course.data.versionId, child.resourceId, child.versionId, locale);
+    if (!context.ok) return { locale, result: context, languageLinks: defaultLanguages({ locale, type: "ACTIVITY" }), returnTo: back, canonical: publicCatalogueHref(locale) };
+    contextUnavailable = context.data.availability !== "PUBLISHED";
+    if (!contextUnavailable && context.data.courseSlug && context.data.activitySlug && (context.data.courseSlug !== courseSlug || context.data.activitySlug !== activitySlug)) {
+      permanentRedirect(courseActivityHref(locale, context.data.courseSlug, context.data.activitySlug, child.resourceId, child.versionId, course.data.versionId, input.returnTo === undefined ? undefined : catalogueReturnTo));
+    }
+    for (const target of ["fr", "en"] as const) {
+      const equivalent = context.ok ? context.data.languages.find(item => item.locale === target) : undefined;
+      const standalone = languageLinks[target];
+      if (equivalent?.availability === "PUBLISHED" && equivalent.courseSlug && equivalent.activitySlug) {
+        languageLinks[target] = { available: true, href: courseActivityHref(target, equivalent.courseSlug, equivalent.activitySlug, child.resourceId, child.versionId, course.data.versionId, catalogueReturnTo) };
+      } else {
+        languageLinks[target] = { available: false, href: catalogueHref(target, { locale: target, type: "ACTIVITY" }), reason: "COURSE_CONTEXT_UNAVAILABLE",
+          ...(standalone.available ? { alternativeHref: standalone.href } : {}) };
+      }
+    }
   }
-  return { locale, result, languageLinks, returnTo: back, programme: { course: course.data, activityHrefs: programmeLinks(locale, course.data, catalogueReturnTo) }, canonical: courseActivityHref(locale, courseSlug, activitySlug, child.resourceId, child.versionId, course.data.versionId) };
+  return { locale, result, languageLinks, returnTo: back, contextUnavailable, programme: { course: course.data, activityHrefs: programmeLinks(locale, course.data, catalogueReturnTo) }, canonical: courseActivityHref(locale, courseSlug, activitySlug, child.resourceId, child.versionId, course.data.versionId) };
 }
-export async function PublicActivityPage(props: PublicPageProps) { return <PublicActivity {...await activityData(props)} />; }
+export async function PublicActivityPage(props: PublicPageProps) {
+  const data = await activityData(props);
+  return data.contextUnavailable ? <PublicContextUnavailable locale={data.locale} languageLinks={data.languageLinks} returnTo={data.returnTo} /> : <PublicActivity {...data} />;
+}
 export async function activityMetadata(props: PublicPageProps): Promise<Metadata> {
   const data = await activityData(props), copy = getPublicPageDictionary(data.locale), value = data.result.ok ? data.result.data : null;
   return seo(data.locale, value?.title ?? copy.unavailableTitle, value?.summary ?? copy.unavailableDescription,
-    data.canonical, data.languageLinks);
+    data.canonical, undefined, false);
 }

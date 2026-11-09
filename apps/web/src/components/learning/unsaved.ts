@@ -5,12 +5,12 @@ import type { LearningAccountBoundary } from "@/lib/learning/account";
 
 const checkedNavigations = new WeakSet<Event>();
 
-export function useUnsavedLearningInput(dirty: boolean, boundary: LearningAccountBoundary, message: string) {
+export function useUnsavedInput(dirty: boolean, message: string, boundary?: Pick<LearningAccountBoundary, "isPrivacyExit">) {
   useEffect(() => {
     if (!dirty) return;
-    const unload = (event: BeforeUnloadEvent) => { if (boundary.isPrivacyExit()) return; event.preventDefault(); };
+    const unload = (event: BeforeUnloadEvent) => { if (boundary?.isPrivacyExit()) return; event.preventDefault(); };
     const navigate = (event: MouseEvent) => {
-      if (boundary.isPrivacyExit() || checkedNavigations.has(event) || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      if (boundary?.isPrivacyExit() || checkedNavigations.has(event) || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       const anchor = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a[href]") : null;
       if (!anchor || anchor.target === "_blank" || anchor.hasAttribute("download")) return;
       const destination = new URL(anchor.href, location.href);
@@ -21,4 +21,8 @@ export function useUnsavedLearningInput(dirty: boolean, boundary: LearningAccoun
     window.addEventListener("beforeunload", unload); document.addEventListener("click", navigate, true);
     return () => { window.removeEventListener("beforeunload", unload); document.removeEventListener("click", navigate, true); };
   }, [dirty, boundary, message]);
+}
+
+export function useUnsavedLearningInput(dirty: boolean, boundary: LearningAccountBoundary, message: string) {
+  useUnsavedInput(dirty, message, boundary);
 }

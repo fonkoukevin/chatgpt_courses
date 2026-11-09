@@ -18,6 +18,7 @@ public enum ApiError {
     ACCESS_DENIED(HttpStatus.FORBIDDEN, "Cette action n’est pas autorisée."),
     RATE_LIMITED(HttpStatus.TOO_MANY_REQUESTS, "Trop de demandes. Réessayez plus tard."),
     CONTENT_NOT_READY(HttpStatus.CONFLICT, "Le contenu présente encore des éléments à vérifier avant cette action."),
+    SLUG_ALREADY_RESERVED(HttpStatus.CONFLICT, "Cet identifiant est déjà réservé à un autre contenu."),
     INVALID_CONTENT_TRANSITION(HttpStatus.CONFLICT, "Cette transition éditoriale n’est pas disponible dans l’état courant."),
     NEW_PEDAGOGICAL_VERSION_REQUIRED(HttpStatus.CONFLICT, "Cette modification nécessite une nouvelle version pédagogique."),
     ACTIVITY_NOTE_EXISTS(HttpStatus.CONFLICT, "Une note existe déjà pour cette version d’activité. Ouvrez-la avant de la modifier."),

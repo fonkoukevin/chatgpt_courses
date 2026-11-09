@@ -102,7 +102,7 @@ public class PublicCatalogueService {
     public ResourceDetail bySlug(ResourceKind kind,String slug,String locale) {
         locale(locale);check(kind!=null&&CARD_KINDS.contains(kind));
         check(slug!=null&&slug.length()<=180&&slug.matches("[a-z0-9]+(-[a-z0-9]+)*"));
-        var resources=jdbc.query("SELECT resource_id FROM resource_slugs WHERE resource_kind=? AND locale=? AND slug=?",(rs,n)->uuid(rs,"resource_id"),kind.name(),locale,slug);
+        var resources=jdbc.query("SELECT resource_id FROM resource_slug_reservations WHERE resource_kind=? AND locale=? AND slug=?",(rs,n)->uuid(rs,"resource_id"),kind.name(),locale,slug);
         if(resources.isEmpty())throw notFound();return detail(resources.getFirst(),locale);
     }
 

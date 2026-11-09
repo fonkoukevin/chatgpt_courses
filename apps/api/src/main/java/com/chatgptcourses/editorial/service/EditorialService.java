@@ -50,6 +50,21 @@ public class EditorialService {
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
     public ContentView get(UUID actor,UUID id) {require(actor,"content.read");return view(row(id));}
 
+    @Transactional
+    public ContentView renameSlug(UUID actor,UUID accountContext,UUID id,String ifMatch,RenameContentSlug command) {
+        require(actor,"content.write");accountContext(actor,accountContext);check(command!=null);slug(command.slug());text(command.reason(),1,1000);
+        var current=locked(id,ifMatch);require(actor,"content.write");accountContext(actor,accountContext);
+        boolean published=Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM content_translations t JOIN pedagogical_versions v ON v.id=t.pedagogical_version_id WHERE v.resource_id=? AND t.locale=? AND t.published_revision_id IS NOT NULL)",Boolean.class,current.resourceId(),current.locale()));
+        if(published)require(actor,"content.publish");
+        if(command.slug().equals(current.slug()))return view(current);
+        reserveSlug(current.resourceId(),current.kind(),current.locale(),command.slug());
+        var stamp=jdbc.queryForObject("SELECT greatest(clock_timestamp(),s.updated_at+interval '1 microsecond',s.created_at,coalesce((SELECT max(t.updated_at)+interval '1 microsecond' FROM content_translations t JOIN pedagogical_versions v ON v.id=t.pedagogical_version_id WHERE v.resource_id=s.resource_id),s.created_at)) FROM resource_slugs s WHERE s.resource_id=? AND s.locale=?",Timestamp.class,current.resourceId(),current.locale());
+        jdbc.update("UPDATE resource_slugs SET slug=?,revision=revision+1,updated_at=? WHERE resource_id=? AND locale=?",command.slug(),stamp,current.resourceId(),current.locale());
+        jdbc.update("INSERT INTO resource_slug_changes(id,resource_id,resource_kind,locale,previous_slug,next_slug,actor_id,reason,change_number,created_at) SELECT ?,?,?,?,?,?,?,?,coalesce(max(change_number),0)+1,? FROM resource_slug_changes WHERE resource_id=? AND locale=?",UUID.randomUUID(),current.resourceId(),current.kind().name(),current.locale(),current.slug(),command.slug(),actor,command.reason(),stamp,current.resourceId(),current.locale());
+        jdbc.update("UPDATE content_translations SET revision=revision+1,updated_at=greatest(created_at,updated_at,?) WHERE pedagogical_version_id IN(SELECT id FROM pedagogical_versions WHERE resource_id=?)",stamp,current.resourceId());
+        return view(row(id));
+    }
+
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
     public Page<ContentSummary> list(UUID actor,ContentQuery query) {
         require(actor,"content.read");check(query!=null);page(query.page(),query.size());
@@ -279,8 +294,15 @@ public class EditorialService {
     private void putSlug(UUID resource,ResourceKind kind,String locale,String value) {
         var found=jdbc.query("SELECT slug FROM resource_slugs WHERE resource_id=? AND locale=?",(rs,n)->rs.getString(1),resource,locale);
         if(!found.isEmpty()){if(!found.getFirst().equals(value))throw new ApiException(ApiError.CONFLICT);return;}
+        reserveSlug(resource,kind,locale,value);
         jdbc.update("INSERT INTO resource_slugs(id,resource_id,resource_kind,locale,slug) VALUES(?,?,?,?,?)",UUID.randomUUID(),resource,kind.name(),locale,value);
     }
+    private void reserveSlug(UUID resource,ResourceKind kind,String locale,String value) {
+        jdbc.update("INSERT INTO resource_slug_reservations(resource_kind,locale,slug,resource_id) VALUES(?,?,?,?) ON CONFLICT DO NOTHING",kind.name(),locale,value,resource);
+        UUID owner=jdbc.queryForObject("SELECT resource_id FROM resource_slug_reservations WHERE resource_kind=? AND locale=? AND slug=?",UUID.class,kind.name(),locale,value);
+        if(!resource.equals(owner))throw new ApiException(ApiError.SLUG_ALREADY_RESERVED);
+    }
+    private static void accountContext(UUID actor,UUID expected){if(expected==null)throw new ApiException(ApiError.ACCOUNT_CONTEXT_REQUIRED);if(!expected.equals(actor))throw new ApiException(ApiError.ACCOUNT_CONTEXT_CHANGED);}
     private UUID append(UUID id,String title,String summary,ContentDocument d,UUID actor,String reason,UUID replaces) {
         return append(id,title,summary,d,actor,reason,replaces,null);
     }

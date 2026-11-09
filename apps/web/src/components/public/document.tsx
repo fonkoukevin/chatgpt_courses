@@ -7,11 +7,12 @@ import { Copy, Flag } from "lucide-react";
 import { Button, Dialog, FormField, Link, StatusMessage, TextArea } from "@/components/ui";
 import type { PublicDocument, ResourceDetail } from "@/lib/api/generated/types.gen";
 import { getPublicDictionary } from "@/lib/i18n/public";
-import type { Locale } from "@/lib/i18n/locales";
+import { unsavedChangesMessage, type Locale } from "@/lib/i18n/locales";
+import { useUnsavedInput } from "@/components/learning/unsaved";
 
-export function PublicDocumentBody({ locale, document, prefix = "resource", showMedia = true }: { locale: Locale; document: PublicDocument; prefix?: string; showMedia?: boolean }) {
+export function PublicDocumentBody({ locale, contentLocale, document, prefix = "resource", showMedia = true }: { locale: Locale; contentLocale?: Locale; document: PublicDocument; prefix?: string; showMedia?: boolean }) {
   const t = getPublicDictionary(locale);
-  return <div className="min-w-0 space-y-5">{document.blocks.map((block, index) => {
+  return <div lang={contentLocale} className="min-w-0 space-y-5">{document.blocks.map((block, index) => {
     const id = `${prefix}-section-${index}`;
     switch (block.type) {
       case "HEADING": return <h2 key={index} id={id} className="scroll-mt-6 break-words pt-3 text-2xl font-semibold tracking-tight">{block.text}</h2>;
@@ -21,13 +22,14 @@ export function PublicDocumentBody({ locale, document, prefix = "resource", show
       case "CALLOUT": return <StatusMessage key={index}>{block.text}</StatusMessage>;
       default: return <p key={index} className="whitespace-pre-wrap break-words leading-relaxed">{block.text}</p>;
     }
-  })}{showMedia && document.media.length > 0 && <ul className="space-y-3">{document.media.map((media) => <li key={media.assetId} className="rounded-input border border-border bg-surface-subtle p-4"><p className="font-medium">{media.label}</p><p className="mt-1 text-sm text-muted-foreground">{t.mediaUnavailable}</p></li>)}</ul>}</div>;
+  })}{showMedia && document.media.length > 0 && <ul className="space-y-3">{document.media.map((media) => <li key={media.assetId} className="rounded-input border border-border bg-surface-subtle p-4"><p className="font-medium">{media.label}</p><p lang={locale} className="mt-1 text-sm text-muted-foreground">{t.mediaUnavailable}</p></li>)}</ul>}</div>;
 }
 export function ResourceTools({ locale, resource }: { locale: Locale; resource: ResourceDetail }) {
   const t = getPublicDictionary(locale), id = useId();
   const [copyState, setCopyState] = useState<"busy" | "copied" | "error" | null>(null);
   const [reportState, setReportState] = useState<"busy" | "copied" | "error" | null>(null);
   const [message, setMessage] = useState("");
+  useUnsavedInput(Boolean(message) && reportState !== "copied", unsavedChangesMessage(locale));
   const context = `${resource.title ?? ""}\nResource: ${resource.resourceId}\nVersion: ${resource.versionId}\nRevision: ${resource.revisionId ?? "—"}\nLocale: ${resource.locale}`;
   const text = [resource.title, resource.summary, resource.document?.objective, resource.document?.expectedResult, ...(resource.document?.blocks.map((block) => block.text) ?? []), resource.document?.exerciseInstructions].filter(Boolean).join("\n\n");
   async function copy(value: string, report = false) {

@@ -12,6 +12,7 @@ import com.chatgptcourses.projects.service.ProjectTypes.ProjectPolicy;
 
 /** Explicit editorial contracts; no persistence entity is exposed through HTTP. */
 public final class ContentTypes {
+    public record RenameContentSlug(String slug,String reason) { }
     private ContentTypes() { }
     public record ContentDocument(String objective, String expectedResult, List<String> prerequisites,
         List<ContentBlock> blocks, Integer estimatedMinutes, Exercise exercise, List<QuizQuestion> quiz,

@@ -25,9 +25,9 @@ for (let index = 3; index < process.argv.length; index += 2) {
   else throw new Error('Diagnostic permis : --grep expression et --repeat-each 1..20.');
   diagnosticArgs.push(flag, value);
 }
-if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14', 'P15'].includes(phase)) throw new Error('Phase de recette inconnue.');
+if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14', 'P15', 'P16', 'P16_SEO'].includes(phase)) throw new Error('Phase de recette inconnue.');
 const needsApi = phase !== 'P02';
-const isolatedDatabase = ['P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14', 'P15'].includes(phase);
+const isolatedDatabase = ['P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14', 'P15', 'P16', 'P16_SEO'].includes(phase);
 if (!['local', 'test'].includes(env.APP_ENV)) throw new Error('Vérification navigateur réservée à local/test.');
 const port = (value, fallback) => {
   const text = value ?? String(fallback);
@@ -206,13 +206,19 @@ try {
     // no Checkout, provider secret or financial operation is enabled.
     env.COMMERCE_ENABLED = 'true'; env.COMMERCE_ALLOWED_CURRENCIES = 'EUR';
   }
+  if (phase === 'P16' || phase === 'P16_SEO') {
+    for (const key of Object.keys(env)) if (key.startsWith('STRIPE_')) delete env[key];
+    env.STRIPE_ENABLED = 'false'; env.PAYMENT_INBOX_ENABLED = 'false'; env.REFUND_WORKER_ENABLED = 'false';
+    env.COMMERCE_ENABLED = 'false'; env.APP_PUBLISHED_LOCALES = '';
+    env.VIDEO_ENABLED = 'false';
+  }
   if (phase === 'P11') {
     env.COMMERCE_ENABLED = 'true'; env.COMMERCE_ALLOWED_CURRENCIES = 'EUR';
     env.STRIPE_ENABLED = 'false'; delete env.STRIPE_SECRET_KEY; delete env.STRIPE_WEBHOOK_SECRET;
   }
-  if (['P10','P12','P12_EXTERNAL','P13','P14','P15'].includes(phase)) {
+  if (['P10','P12','P12_EXTERNAL','P13','P14','P15','P16','P16_SEO'].includes(phase)) {
     services = await createBrowserServices(env, runDirectory, runId, (records) => { services = records; save(); });
-    if (phase === 'P10') {
+    if (phase === 'P10' || phase === 'P16') {
       env.VIDEO_ENABLED = 'true'; env.VIDEO_PROVIDER = 'local-test'; env.VIDEO_LOCAL_ROOT = join(runDirectory, 'private-video');
       mkdirSync(env.VIDEO_LOCAL_ROOT, { recursive: true, mode: 0o700 });
       env.COURSES_BROWSER_PRIVATE_DIRECTORY = runDirectory;

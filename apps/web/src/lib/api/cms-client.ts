@@ -1,11 +1,11 @@
 import { clearCsrfToken, getCsrfToken, type AuthResult } from "./auth-client";
 import { isContentPage, isContentView, isDependencies, isReadiness, isRevisionPage, isUuid } from "./cms-validation";
 import { decodeCmsResponse } from "./cms-response";
-import type { ArchiveContent, ContentView, CreateContent, CreateTranslation, DuplicateContent, ListContentsData, NewVersion, PublishContent, ReplaceComposition, SaveMetadata, SaveRevision, TransitionContent } from "./generated/types.gen";
+import type { ArchiveContent, ContentView, CreateContent, CreateTranslation, DuplicateContent, ListContentsData, NewVersion, PublishContent, RenameContentSlug, ReplaceComposition, SaveMetadata, SaveRevision, TransitionContent } from "./generated/types.gen";
 
 export type ContentQuery = NonNullable<ListContentsData["query"]>;
 export function contentPath(id: string, action = ""): string {
-  if (!isUuid(id) || !["", "/revisions", "/versions", "/duplicate", "/translations", "/transition", "/publish", "/archive", "/composition", "/metadata", "/readiness", "/preview", "/dependencies"].includes(action)) throw new Error("Invalid content path.");
+  if (!isUuid(id) || !["", "/revisions", "/versions", "/duplicate", "/translations", "/transition", "/publish", "/archive", "/composition", "/metadata", "/slug", "/readiness", "/preview", "/dependencies"].includes(action)) throw new Error("Invalid content path.");
   return `/admin/contents/${id}${action}`;
 }
 export function contentQueryString(query: ContentQuery): string {
@@ -26,11 +26,11 @@ async function request<T>(path: string, decode: (value: unknown) => value is T, 
   } catch { return { ok: false, error: { kind: "unavailable" } }; }
   finally { clearTimeout(timeout); }
 }
-async function mutate(path: string, body: unknown, etag?: string, status = 200, method = "POST"): Promise<AuthResult<ContentView>> {
+async function mutate(path: string, body: unknown, etag?: string, status = 200, method = "POST", accountContext?: string): Promise<AuthResult<ContentView>> {
   const token = await getCsrfToken();
   if (!token.ok) return token;
   const result = await request(path, isContentView, { method, body: JSON.stringify(body), headers: {
-    "Content-Type": "application/json", [token.data.headerName]: token.data.token, ...(etag ? { "If-Match": etag } : {}),
+    "Content-Type": "application/json", [token.data.headerName]: token.data.token, ...(etag ? { "If-Match": etag } : {}), ...(accountContext ? { "X-Account-Context": accountContext } : {}),
   } }, status);
   if (!result.ok && [401, 403].includes(result.error.status ?? 0)) { clearCsrfToken(); await getCsrfToken(); }
   return result;
@@ -40,6 +40,15 @@ export function getContent(id: string) { return request(contentPath(id), isConte
 export function createContent(body: CreateContent) { return mutate("/admin/contents", body, undefined, 201); }
 export function saveContentRevision(id: string, etag: string, body: SaveRevision) { return mutate(contentPath(id, "/revisions"), body, etag); }
 export function saveContentMetadata(id: string, etag: string, body: SaveMetadata) { return mutate(contentPath(id, "/metadata"), body, etag, 200, "PUT"); }
+export async function renameContentSlug(id: string, etag: string, body: RenameContentSlug, accountContext: string): Promise<AuthResult<ContentView>> {
+  if (!isUuid(id) || !isUuid(accountContext) || !new RegExp(`^"content-${id}-r(0|[1-9][0-9]*)"$`).test(etag)
+    || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(body.slug) || body.slug.length > 180 || !body.reason.trim() || [...body.reason].length > 1000) throw new Error("Invalid public address change.");
+  const revision = Number(etag.match(/-r([0-9]+)"$/)![1]);
+  if (!Number.isSafeInteger(revision)) throw new Error("Invalid content revision.");
+  const result = await mutate(contentPath(id, "/slug"), body, etag, 200, "PATCH", accountContext);
+  if (result.ok && (result.data.id !== id || result.data.slug !== body.slug || result.data.revision < revision)) return { ok: false, error: { kind: "invalid-response", status: result.status } };
+  return result;
+}
 export function createContentVersion(id: string, etag: string, body: NewVersion) { return mutate(contentPath(id, "/versions"), body, etag, 201); }
 export function duplicateContent(id: string, etag: string, body: DuplicateContent) { return mutate(contentPath(id, "/duplicate"), body, etag, 201); }
 export function createContentTranslation(id: string, etag: string, body: CreateTranslation) { return mutate(contentPath(id, "/translations"), body, etag, 201); }

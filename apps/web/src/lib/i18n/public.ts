@@ -1,6 +1,8 @@
 import type { Locale } from "./locales";
 
 const fr = {
+  courseContextUnavailable: "Le parcours complet n’est pas disponible dans cette langue pour cette version. Vous pouvez rester dans le parcours actuel ou choisir explicitement cette activité seule, sans le contexte du parcours.",
+  openStandaloneActivity: "Consulter cette activité seule",
   backCourse: "Revenir au parcours",
   goalLabels: { "understand-brief": "Comprendre un brief", "define-scope": "Définir une prestation", "prepare-prompt": "Préparer une demande", "build-proposal": "Construire une proposition", "check-output": "Contrôler un résultat", "reuse-method": "Réutiliser une méthode" },
   languageNames: { fr: "Français", en: "English" },
@@ -12,6 +14,8 @@ const fr = {
   contents: "Sommaire", read: "Lire la ressource", sources: "Sources", related: "Pour continuer", copy: "Copier le texte", copied: "Texte copié.", copyFailed: "La copie n’a pas abouti. Sélectionnez le texte et copiez-le manuellement.", copyPending: "Copie…", report: "Préparer un signalement", reportTitle: "Préparer un signalement contextualisé", reportDescription: "Ces informations restent sur cette page. Aucun message n’est envoyé. Vous pouvez les copier pour les conserver.", reportMessage: "Ce que vous souhaitez signaler", reportContext: "Contexte de la ressource", reportCopy: "Copier le signalement", reportPlaceholder: "Décrivez le passage et le problème observé, sans information personnelle.", mediaUnavailable: "Ce média n’est pas disponible à la consultation sur cette page.", exercise: "À vous de produire", checklist: "Vérifier votre résultat", checklistNotice: "Cette liste est locale à la page. Elle ne valide aucun projet et n’enregistre aucune progression.", activityNotice: "Vous consultez une activité en accès public. Aucun résultat ni progression n’est enregistré ici.", reflection: "Questions pour réfléchir", reflectionNotice: "Réfléchissez aux propositions. Cette lecture ne calcule aucun score et ne révèle pas les réponses.", noExercise: "Aucun exercice n’est disponible dans cette publication.", linkedLanguage: "Autres langues de cette version", alternative: "Voir les ressources dans cette langue", section: "Section", activeFilters: "Filtres actifs", removeFilter: "Retirer ce filtre",
 };
 const en: typeof fr = {
+  courseContextUnavailable: "The complete course is not available in this language for this version. You can stay in the current course or explicitly choose this standalone activity without its course context.",
+  openStandaloneActivity: "View this standalone activity",
   backCourse: "Back to course",
   goalLabels: { "understand-brief": "Understand a brief", "define-scope": "Define the scope", "prepare-prompt": "Prepare a prompt", "build-proposal": "Build a proposal", "check-output": "Check an output", "reuse-method": "Reuse a method" },
   languageNames: { fr: "Français", en: "English" },

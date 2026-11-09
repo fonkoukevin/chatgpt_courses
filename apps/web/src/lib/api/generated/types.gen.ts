@@ -2915,6 +2915,62 @@ export type ContentCaseEventPage = {
     total: number;
 };
 
+export type RenameContentSlug = {
+    slug: string;
+    reason: string;
+};
+
+export type PublishedLanguage = {
+    locale: Locale;
+    slug: string;
+};
+
+/**
+ * Métadonnées de la dernière version globalement publiée, dans une langue encore PUBLISHED. publishedAt est la date du PUBLISH de cette révision exacte, nullable pour un historique inconnu ; jamais la date de build/revue. Aucun corps privé. Équivalents réciproques de même identité/version, auto-inclusion.
+ */
+export type PublicPublication = {
+    resourceId: Uuid;
+    kind: 'COURSE' | 'GUIDE' | 'METHOD_TEMPLATE';
+    versionId: Uuid;
+    versionNumber: number;
+    revisionId: Uuid;
+    locale: Locale;
+    slug: string;
+    title: string;
+    summary: string;
+    publishedAt: UtcInstant | null;
+    languages: Array<PublishedLanguage>;
+};
+
+export type PublicPublicationPage = {
+    items: Array<PublicPublication>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+export type ActivityContextLanguage = {
+    locale: Locale;
+    availability: 'PUBLISHED' | 'MISSING_TRANSLATION' | 'STALE' | 'WITHDRAWN';
+    courseSlug: string | null;
+    activitySlug: string | null;
+};
+
+/**
+ * Chaîne exacte COURSE→MODULE→ACTIVITY, versions épinglées et disponibilité par langue. Une chaîne entièrement publiée suffit en cas de réutilisation ; sinon WITHDRAWN, STALE puis MISSING_TRANSLATION. Aucun droit, document ou progrès. Un contexte inexistant produit404.
+ */
+export type PublicActivityContext = {
+    courseResourceId: Uuid;
+    courseVersionId: Uuid;
+    activityResourceId: Uuid;
+    activityVersionId: Uuid;
+    locale: Locale;
+    availability: 'PUBLISHED' | 'MISSING_TRANSLATION' | 'STALE' | 'WITHDRAWN';
+    courseSlug: string | null;
+    activitySlug: string | null;
+    languages: Array<ActivityContextLanguage>;
+};
+
 export type RegisterRequestWritable = {
     email: string;
     /**
@@ -12124,3 +12180,105 @@ export type ExportOperationsMetricsResponses = {
 };
 
 export type ExportOperationsMetricsResponse = ExportOperationsMetricsResponses[keyof ExportOperationsMetricsResponses];
+
+export type RenameContentSlugData = {
+    body: RenameContentSlug;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/contents/{id}/slug';
+};
+
+export type RenameContentSlugErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type RenameContentSlugError = RenameContentSlugErrors[keyof RenameContentSlugErrors];
+
+export type RenameContentSlugResponses = {
+    /**
+     * Représentation réelle.
+     */
+    200: ContentView;
+};
+
+export type RenameContentSlugResponse = RenameContentSlugResponses[keyof RenameContentSlugResponses];
+
+export type ListPublicPublicationsData = {
+    body?: never;
+    path?: never;
+    query: {
+        locale: Locale;
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/catalog/publications';
+};
+
+export type ListPublicPublicationsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListPublicPublicationsError = ListPublicPublicationsErrors[keyof ListPublicPublicationsErrors];
+
+export type ListPublicPublicationsResponses = {
+    /**
+     * Représentation réelle.
+     */
+    200: PublicPublicationPage;
+};
+
+export type ListPublicPublicationsResponse = ListPublicPublicationsResponses[keyof ListPublicPublicationsResponses];
+
+export type GetPublicActivityContextData = {
+    body?: never;
+    path: {
+        courseId: Uuid;
+        courseVersionId: Uuid;
+        activityId: Uuid;
+        activityVersionId: Uuid;
+    };
+    query: {
+        locale: Locale;
+    };
+    url: '/catalog/resources/{courseId}/versions/{courseVersionId}/activities/{activityId}/versions/{activityVersionId}';
+};
+
+export type GetPublicActivityContextErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetPublicActivityContextError = GetPublicActivityContextErrors[keyof GetPublicActivityContextErrors];
+
+export type GetPublicActivityContextResponses = {
+    /**
+     * Représentation réelle.
+     */
+    200: PublicActivityContext;
+};
+
+export type GetPublicActivityContextResponse = GetPublicActivityContextResponses[keyof GetPublicActivityContextResponses];

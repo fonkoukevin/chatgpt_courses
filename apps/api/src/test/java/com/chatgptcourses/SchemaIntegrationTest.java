@@ -66,7 +66,7 @@ class SchemaIntegrationTest {
 
     @Test @Order(1)
     void aFreshDatabaseMigratesAndHibernateValidatesWithoutSeedingAccountsOrCommerce() {
-        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016", "017");
+        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016", "017", "018");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_accounts", Integer.class)).isZero();
         assertThat(jdbc.queryForList("SELECT code FROM roles ORDER BY code", String.class)).containsExactly("COMMERCE_MANAGER", "EDITOR", "LEARNER", "OPERATIONS_MANAGER", "OPERATIONS_READER", "PAYMENTS_OPERATOR", "REFUND_OPERATOR", "SUPPORT_OPERATOR");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_roles", Integer.class)).isZero();
@@ -88,6 +88,7 @@ class SchemaIntegrationTest {
             assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM " + table, Integer.class)).isZero();
         }
         for (String table : operationTables()) assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM " + table, Integer.class)).isZero();
+        for(String table:new String[]{"resource_slug_reservations","resource_slug_changes"})assertThat(jdbc.queryForObject("SELECT count(*) FROM "+table,Integer.class)).isZero();
         assertThat(jdbc.queryForObject("""
                 SELECT COUNT(*) FROM pg_constraint c JOIN pg_class t ON c.conrelid = t.oid
                 WHERE c.contype = 'f' AND t.relnamespace = 'public'::regnamespace
@@ -114,7 +115,7 @@ class SchemaIntegrationTest {
             var database = new JdbcTemplate(new SingleConnectionDataSourceAdapter(connection));
             assertThat(database.queryForObject("SELECT session_id FROM spring_session WHERE primary_id = ?", String.class, primaryId)).isEqualTo(sessionId);
             assertThat(database.queryForObject("SELECT encode(attribute_bytes, 'hex') FROM spring_session_attributes WHERE session_primary_id = ?", String.class, primaryId)).isEqualTo("010203");
-            assertThat(database.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016", "017");
+            assertThat(database.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016", "017", "018");
         }
     }
 
@@ -416,6 +417,32 @@ class SchemaIntegrationTest {
             assertThat(database.queryForObject("SELECT count(*) FROM user_accounts",Integer.class)).isEqualTo(1);
             assertThat(database.queryForObject("SELECT count(*) FROM user_roles",Integer.class)).isEqualTo(1);
             assertThat(database.queryForObject("SELECT count(*) FROM roles WHERE code IN('OPERATIONS_MANAGER','OPERATIONS_READER')",Integer.class)).isEqualTo(2);
+        }
+    }
+
+    @Test @Order(13)
+    void upgradingV017ReservesExistingSlugsWithoutChangingLegacyRowsOrSessions() throws Exception {
+        String schema="upgrade_v017";migrate(schema,"17");
+        try(var connection=connection(schema)){
+            var database=new JdbcTemplate(new org.springframework.jdbc.datasource.SingleConnectionDataSource(connection,true));
+            UUID resource=UUID.randomUUID(),slug=UUID.randomUUID();String session=UUID.randomUUID().toString();
+            database.update("INSERT INTO learning_resources(id,kind) VALUES(?,'GUIDE')",resource);
+            database.update("INSERT INTO resource_slugs(id,resource_id,resource_kind,locale,slug) VALUES(?,?,'GUIDE','fr','legacy-p16-source')",slug,resource);
+            UUID actor=UUID.randomUUID(),version=UUID.randomUUID(),translation=UUID.randomUUID(),revision=UUID.randomUUID();
+            database.update("INSERT INTO user_accounts(id,normalized_email,password_hash,status) VALUES(?,?,'unusable-test-hash','ACTIVE')",actor,actor+"@fixture.invalid");
+            database.update("INSERT INTO pedagogical_versions(id,resource_id,version_number,objectives,evaluation_definition,frozen_at) VALUES(?,?,1,'Legacy objective','Legacy evaluation',clock_timestamp())",version,resource);
+            database.update("INSERT INTO content_translations(id,pedagogical_version_id,locale,editorial_state) VALUES(?,?,'fr','DRAFT')",translation,version);
+            database.update("INSERT INTO editorial_revisions(id,translation_id,revision_number,title,summary,body,document_json,reason) VALUES(?,?,1,'Legacy published title','Legacy summary','Legacy body','{\"access\":\"PROTECTED\",\"objective\":\"Legacy objective\"}'::jsonb,'Preserved publication without a PUBLISH event')",revision,translation);
+            database.update("UPDATE content_translations SET current_revision_id=?,published_revision_id=?,editorial_state='PUBLISHED',revision=revision+1,updated_at=greatest(created_at,updated_at,clock_timestamp()) WHERE id=?",revision,revision,translation);
+            database.update("INSERT INTO spring_session(primary_id,session_id,creation_time,last_access_time,max_inactive_interval,expiry_time) VALUES(?,?,1,1,1800,9999999999999)",session,session);
+            database.update("INSERT INTO spring_session_attributes(session_primary_id,attribute_name,attribute_bytes) VALUES(?,'before-v018',?)",session,"P16 preserved session".getBytes(StandardCharsets.UTF_8));
+            var before=allRows(database,schema);migrate(schema,null);var after=allRows(database,schema);
+            for(var entry:before.entrySet())assertThat(after.get(entry.getKey())).as("V018 preserves %s",entry.getKey()).containsExactlyElementsOf(entry.getValue());
+            assertThat(database.queryForObject("SELECT resource_id FROM resource_slug_reservations WHERE resource_kind='GUIDE' AND locale='fr' AND slug='legacy-p16-source'",UUID.class)).isEqualTo(resource);
+            assertThat(database.queryForObject("SELECT count(*) FROM resource_slug_changes",Integer.class)).isZero();
+            assertThat(database.queryForObject("SELECT count(*) FROM user_accounts",Integer.class)).isEqualTo(1);
+            var publicRows=new com.chatgptcourses.catalog.service.PublicRouteService(database).publications("fr",0,100);
+            assertThat(publicRows.items()).hasSize(1);assertThat(publicRows.items().getFirst().publishedAt()).isNull();assertThat(publicRows.items().getFirst().revisionId()).isEqualTo(revision);
         }
     }
 

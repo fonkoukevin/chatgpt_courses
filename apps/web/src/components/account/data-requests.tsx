@@ -1,4 +1,5 @@
 "use client";
+import { useUnsavedInput } from "@/components/learning/unsaved";
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { Badge, Button, ConfirmationDialog, FormField, Pagination, Select, StatusMessage, TextArea } from "@/components/ui";
 import type { AuthResult } from "@/lib/api/auth-client";
@@ -8,7 +9,7 @@ import type { CreateDataRequest, DataRequestPage, DataRequestView } from "@/lib/
 import { accountIntent, type AccountIntent } from "@/lib/account/intent";
 import { dataRequestsHref, type AccountListQuery } from "@/lib/account/routes";
 import { getAccountDictionary, getAccountStateDictionary } from "@/lib/i18n/account";
-import type { Locale } from "@/lib/i18n/locales";
+import { unsavedChangesMessage, type Locale } from "@/lib/i18n/locales";
 import { useLearningAccount, type LearningAccountBoundary, type LearningAccountState } from "@/lib/learning/account";
 import { AccountError, AccountNotice, AccountTextCopy, accountDate } from "./parts";
 import { AccountShell } from "./shell";
@@ -18,6 +19,7 @@ function DataRequestCard({ locale, item, account, boundary, onChanged }: { local
   const t = getAccountDictionary(locale), s = getAccountStateDictionary(locale), [reason, setReason] = useState(""), [pending, setPending] = useState(false), [error, setError] = useState<ApiError | null>(null), [open, setOpen] = useState(false), [eventPage, setEventPage] = useState(0), [showHistory, setShowHistory] = useState(false);
   const intent = useRef<AccountIntent | null>(null), lock = useRef(false), life = useRef(0);
   useEffect(() => () => { life.current++; }, []);
+  useUnsavedInput(pending || Boolean(reason), unsavedChangesMessage(locale), boundary);
   const loadEvents = useCallback(() => getDataRequestEvents(item.id, eventPage, 10), [item.id, eventPage]), events = useAccountResource(account, boundary, showHistory ? loadEvents : null);
   async function cancel() {
     if (lock.current || account.status !== "active" || !account.accountId || !reason.trim() || [...reason].length > 2000) return;
@@ -31,8 +33,8 @@ function DataRequestCard({ locale, item, account, boundary, onChanged }: { local
     } finally { lock.current = false; if (own === life.current) setPending(false); }
   }
   const names = { EXPORT: t.exportRequest, ERASURE: t.erasureRequest, ACCOUNT_CLOSURE: t.closureRequest };
-  return <li data-data-request={item.id} className="min-w-0 space-y-4 rounded-panel border border-border bg-surface p-4 sm:p-6"><h2 className="text-xl font-semibold">{names[item.type]}</h2><Badge tone={item.state === "CANCELLED" ? "neutral" : "warning"}>{item.state === "CANCELLED" ? t.requestCanceled : t.waitingPolicy}</Badge><p className="whitespace-pre-wrap break-words">{item.reason}</p><p className="text-sm text-muted-foreground">{t.createdAt} : {accountDate(item.createdAt, locale)}</p>{item.state === "WAITING_POLICY" && <><p className="text-sm text-muted-foreground">{t.waitingPolicyHelp}</p><ConfirmationDialog open={open} onOpenChange={value => { if (!lock.current) setOpen(value); }} title={t.cancelDataTitle} description={t.cancelDataHelp} confirmLabel={t.cancelDataRequest} cancelLabel={t.close} busy={pending} trigger={<Button variant="secondary" className="max-w-full whitespace-normal">{t.cancelDataRequest}</Button>} onConfirm={event => { event.preventDefault(); void cancel(); }}><FormField id={`cancel-${item.id}`} label={t.dataReason} required><TextArea value={reason} maxLength={4000} onChange={event => setReason(event.target.value)} disabled={pending || account.status !== "active"} /></FormField>{error && <AccountError locale={locale} error={error} />}</ConfirmationDialog></>}
-    <Button variant="ghost" onClick={() => setShowHistory(value => !value)} aria-expanded={showHistory}>{t.events}</Button>{showHistory && (events.result?.ok ? <><ol className="space-y-3">{events.result.data.items.map(event => <li key={event.id} className="space-y-1 border-l-2 border-border pl-3"><p className="font-medium">{s.events[event.type]}</p><p className="whitespace-pre-wrap break-words text-sm">{event.reason}</p><p className="text-xs text-muted-foreground">{accountDate(event.createdAt, locale)}</p></li>)}</ol>{events.result.data.total > 10 && <Pagination label={t.pagination} page={eventPage + 1} totalPages={Math.ceil(events.result.data.total / 10)} previousLabel={t.previous} nextLabel={t.next} onPageChange={page => setEventPage(page - 1)} />}</> : events.result ? <AccountError locale={locale} error={events.result.error} retry={events.reload} /> : <p role="status">{t.loading}</p>)}
+  return <li data-data-request={item.id} className="min-w-0 space-y-4 rounded-panel border border-border bg-surface p-4 sm:p-6"><h2 className="text-xl font-semibold">{names[item.type]}</h2><Badge tone={item.state === "CANCELLED" ? "neutral" : "warning"}>{item.state === "CANCELLED" ? t.requestCanceled : t.waitingPolicy}</Badge><p lang="" className="whitespace-pre-wrap break-words">{item.reason}</p><p className="text-sm text-muted-foreground">{t.createdAt} : {accountDate(item.createdAt, locale)}</p>{item.state === "WAITING_POLICY" && <><p className="text-sm text-muted-foreground">{t.waitingPolicyHelp}</p><ConfirmationDialog open={open} onOpenChange={value => { if (!lock.current) setOpen(value); }} title={t.cancelDataTitle} description={t.cancelDataHelp} confirmLabel={t.cancelDataRequest} cancelLabel={t.close} busy={pending} trigger={<Button variant="secondary" className="max-w-full whitespace-normal">{t.cancelDataRequest}</Button>} onConfirm={event => { event.preventDefault(); void cancel(); }}><FormField id={`cancel-${item.id}`} label={t.dataReason} required><TextArea value={reason} maxLength={4000} onChange={event => setReason(event.target.value)} disabled={pending || account.status !== "active"} /></FormField>{error && <AccountError locale={locale} error={error} />}</ConfirmationDialog></>}
+    <Button variant="ghost" onClick={() => setShowHistory(value => !value)} aria-expanded={showHistory}>{t.events}</Button>{showHistory && (events.result?.ok ? <><ol className="space-y-3">{events.result.data.items.map(event => <li key={event.id} className="space-y-1 border-l-2 border-border pl-3"><p className="font-medium">{s.events[event.type]}</p><p lang="" className="whitespace-pre-wrap break-words text-sm">{event.reason}</p><p className="text-xs text-muted-foreground">{accountDate(event.createdAt, locale)}</p></li>)}</ol>{events.result.data.total > 10 && <Pagination label={t.pagination} page={eventPage + 1} totalPages={Math.ceil(events.result.data.total / 10)} previousLabel={t.previous} nextLabel={t.next} onPageChange={page => setEventPage(page - 1)} />}</> : events.result ? <AccountError locale={locale} error={events.result.error} retry={events.reload} /> : <p role="status">{t.loading}</p>)}
   </li>;
 }
 export function PersonalDataRequests({ locale, expectedAccountId, initial, query = {} }: { locale: Locale; expectedAccountId: string; initial: AuthResult<DataRequestPage>; query?: AccountListQuery }) {
@@ -40,6 +42,7 @@ export function PersonalDataRequests({ locale, expectedAccountId, initial, query
   const load = useCallback(() => listDataRequests(query.page ?? 0, query.pageSize ?? 20), [query.page, query.pageSize]), list = useAccountResource(account, boundary, load, initial);
   const [type, setType] = useState<CreateDataRequest["type"]>("EXPORT"), [reason, setReason] = useState(""), [pending, setPending] = useState(false), [saved, setSaved] = useState(false), [olderAcknowledged, setOlderAcknowledged] = useState(false), [error, setError] = useState<ApiError | null>(null), [submitted, setSubmitted] = useState(false), lock = useRef(false), life = useRef(0), changes = useRef(0), intent = useRef<AccountIntent | null>(null);
   useEffect(() => () => { life.current++; }, []);
+  useUnsavedInput(pending || !saved && Boolean(reason || type !== "EXPORT"), unsavedChangesMessage(locale), boundary);
   const valid = Boolean(reason.trim()) && [...reason].length <= 2000;
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setSubmitted(true); if (lock.current || account.status !== "active" || !account.accountId || !valid) return;

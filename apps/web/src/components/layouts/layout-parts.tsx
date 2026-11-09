@@ -5,7 +5,7 @@ import { Menu } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { Button, Sheet } from "@/components/ui";
 import { getShowcaseDictionary } from "@/lib/i18n/showcase";
-import type { Locale } from "@/lib/i18n/locales";
+import { localeName, type Locale } from "@/lib/i18n/locales";
 
 export type DemoSpace = "public" | "learning" | "admin";
 
@@ -16,10 +16,10 @@ export function Brand({ locale }: { locale: Locale }) {
 export function LayoutLanguageSwitch({ locale, space }: { locale: Locale; space: DemoSpace }) {
   const text = getShowcaseDictionary(locale).common;
   return <nav aria-label={text.language} className="flex shrink-0 items-center gap-1 text-sm">
-    {(["fr", "en"] as const).map((language) => <NextLink key={language} href={`/${language}/dev/${space}`} hrefLang={language} lang={language}
+    {(["fr", "en"] as const).map((language) => <NextLink key={language} data-language-switch={language} href={`/${language}/dev/${space}`} hrefLang={language} lang={language}
       aria-current={locale === language ? "page" : undefined}
       className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-input px-2 font-medium no-underline ${locale === language ? "bg-brand-soft text-brand" : "text-muted-foreground hover:bg-surface-hover"}`}>
-      {language.toUpperCase()}
+      {localeName(language)}
     </NextLink>)}
   </nav>;
 }

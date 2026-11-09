@@ -3,7 +3,7 @@ info:
   title: ChatGPT Courses API
   version: 0.1.0
   description: >-
-    Contrat jusqu’à P14 : identité, apprentissage et travail privé, commandes/Checkout TEST,
+    Contrat jusqu’à P16 : identité, apprentissage et travail privé, commandes/Checkout TEST,
     demandes, décisions et opérations de remboursement, droits par origine. Recettes locales,
     intégrations fournisseur TEST et production sont distinguées.
 servers:
@@ -8727,6 +8727,132 @@ paths:
             text/csv:
               schema:
                 type: string
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/contents/{id}/slug:
+    patch:
+      operationId: renameContentSlug
+      tags:
+        - Editorial
+      summary: Renommer explicitement le slug sans changer l’identité pédagogique.
+      description: >-
+        content.write et content.publish si une publication existe historiquement pour cette
+        identité/langue. CSRF, contexte et If-Match après verrou. Anciennes valeurs réservées
+        durablement ; collision409 SLUG_ALREADY_RESERVED. No-op identique sans journal ni révision.
+        Renvoie le ContentView familial et son ETag.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RenameContentSlug'
+      responses:
+        '200':
+          description: Représentation réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentView'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /catalog/publications:
+    get:
+      operationId: listPublicPublications
+      tags:
+        - Catalogue
+      summary: Lister les métadonnées publiques courantes pour les URL canoniques.
+      parameters:
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+      responses:
+        '200':
+          description: Représentation réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicPublicationPage'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /catalog/resources/{courseId}/versions/{courseVersionId}/activities/{activityId}/versions/{activityVersionId}:
+    get:
+      operationId: getPublicActivityContext
+      tags:
+        - Catalogue
+      summary: Résoudre les équivalents publiés du contexte pédagogique exact.
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: courseVersionId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: activityId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: activityVersionId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+      responses:
+        '200':
+          description: Représentation réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicActivityContext'
         default:
           $ref: '#/components/responses/ProblemResponse'
 components:
@@ -17946,6 +18072,209 @@ components:
           type: integer
           minimum: 0
           maximum: 9007199254740991
+    RenameContentSlug:
+      type: object
+      additionalProperties: false
+      required:
+        - slug
+        - reason
+      properties:
+        slug:
+          type: string
+          minLength: 1
+          maxLength: 180
+          pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
+    PublishedLanguage:
+      type: object
+      additionalProperties: false
+      required:
+        - locale
+        - slug
+      properties:
+        locale:
+          $ref: '#/components/schemas/Locale'
+        slug:
+          type: string
+          minLength: 1
+          maxLength: 180
+          pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+    PublicPublication:
+      type: object
+      additionalProperties: false
+      required:
+        - resourceId
+        - kind
+        - versionId
+        - versionNumber
+        - revisionId
+        - locale
+        - slug
+        - title
+        - summary
+        - publishedAt
+        - languages
+      properties:
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        kind:
+          type: string
+          enum:
+            - COURSE
+            - GUIDE
+            - METHOD_TEMPLATE
+        versionId:
+          $ref: '#/components/schemas/UUID'
+        versionNumber:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        revisionId:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        slug:
+          type: string
+          minLength: 1
+          maxLength: 180
+          pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        summary:
+          type: string
+          minLength: 0
+          maxLength: 4000
+        publishedAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+        languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublishedLanguage'
+          maxItems: 2
+      description: >-
+        Métadonnées de la dernière version globalement publiée, dans une langue encore PUBLISHED.
+        publishedAt est la date du PUBLISH de cette révision exacte, nullable pour un historique inconnu
+        ; jamais la date de build/revue. Aucun corps privé. Équivalents réciproques de même
+        identité/version, auto-inclusion.
+    PublicPublicationPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicPublication'
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    ActivityContextLanguage:
+      type: object
+      additionalProperties: false
+      required:
+        - locale
+        - availability
+        - courseSlug
+        - activitySlug
+      properties:
+        locale:
+          $ref: '#/components/schemas/Locale'
+        availability:
+          type: string
+          enum:
+            - PUBLISHED
+            - MISSING_TRANSLATION
+            - STALE
+            - WITHDRAWN
+        courseSlug:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 180
+              pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+            - type: 'null'
+        activitySlug:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 180
+              pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+            - type: 'null'
+    PublicActivityContext:
+      type: object
+      additionalProperties: false
+      required:
+        - courseResourceId
+        - courseVersionId
+        - activityResourceId
+        - activityVersionId
+        - locale
+        - availability
+        - courseSlug
+        - activitySlug
+        - languages
+      properties:
+        courseResourceId:
+          $ref: '#/components/schemas/UUID'
+        courseVersionId:
+          $ref: '#/components/schemas/UUID'
+        activityResourceId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        availability:
+          type: string
+          enum:
+            - PUBLISHED
+            - MISSING_TRANSLATION
+            - STALE
+            - WITHDRAWN
+        courseSlug:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 180
+              pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+            - type: 'null'
+        activitySlug:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 180
+              pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+            - type: 'null'
+        languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActivityContextLanguage'
+          maxItems: 2
+      description: >-
+        Chaîne exacte COURSE→MODULE→ACTIVITY, versions épinglées et disponibilité par langue. Une chaîne
+        entièrement publiée suffit en cas de réutilisation ; sinon WITHDRAWN, STALE puis
+        MISSING_TRANSLATION. Aucun droit, document ou progrès. Un contexte inexistant produit404.
   headers:
     NoStore:
       description: Réponse non stockable ; les erreurs sont également privées.

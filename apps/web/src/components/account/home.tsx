@@ -13,7 +13,8 @@ import { learningPath } from "@/lib/learning/routes";
 import { getAccountDictionary } from "@/lib/i18n/account";
 import { getOperationsDictionary } from "@/lib/i18n/operations";
 import { operationsNavigation } from "@/lib/operations/navigation";
-import type { Locale } from "@/lib/i18n/locales";
+import { unsavedChangesMessage, type Locale } from "@/lib/i18n/locales";
+import { useUnsavedInput } from "@/components/learning/unsaved";
 import { useLearningAccount, type LearningAccountBoundary, type LearningAccountState } from "@/lib/learning/account";
 import { AccountError, AccountNotice, AccountTextCopy } from "./parts";
 import { AccountShell } from "./shell";
@@ -35,6 +36,7 @@ function ProfileForm({ locale, initial, expectedAccountId, account, boundary }: 
     finally { lock.current = false; if (own === lifetime.current) setPending(false); }
   }
   const allowed = account.status === "active", dirty = !record.ok || name !== (record.data.displayName ?? "");
+  useUnsavedInput(pending || (record.ok ? dirty : Boolean(name)), unsavedChangesMessage(locale), boundary);
   return <section className="space-y-5 rounded-panel border border-border bg-surface p-4 sm:p-6"><h2 className="text-xl font-semibold">{t.profile}</h2>{record.ok && allowed && <div><p className="text-sm text-muted-foreground">{t.email}</p><p className="mt-1 break-words">{record.data.email}</p><p className="mt-2 text-sm text-muted-foreground">{t.emailReadOnly}</p></div>}
     <form data-account-profile onSubmit={event => void save(event)} aria-busy={pending} className="space-y-4"><FormField id="profile-name" label={t.displayName} hint={t.displayNameHelp} error={[...name].length > 120 ? t.tooLong : undefined}><Input name="displayName" value={name} autoComplete="name" disabled={!allowed} onChange={event => { changes.current++; setName(event.target.value); setSaved(false); }} /></FormField><div className="flex flex-wrap gap-3"><Button type="submit" busy={pending} aria-disabled={!allowed || pending || !record.ok || [...name].length > 120} loadingLabel={t.saving}>{t.saveProfile}</Button><Button variant="secondary" disabled={!allowed || pending} onClick={() => void readCurrent()}>{t.reload}</Button></div>{saved && allowed ? <StatusMessage tone="success">{t.saved}</StatusMessage> : dirty && <p role="status" className="text-sm text-muted-foreground">{t.modified}</p>}</form>
     {error && <AccountError locale={locale} error={error} />}{!record.ok && !error && <AccountError locale={locale} error={record.error} />}

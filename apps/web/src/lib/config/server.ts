@@ -8,6 +8,7 @@ type ServerConfig = {
   environment: Environment;
   publicOrigin: string;
   defaultLocale: Locale;
+  publishedLocales: Locale[];
   apiInternalOrigin: string;
   apiTimeoutMs: number;
 };
@@ -65,6 +66,14 @@ export function getServerConfig(): ServerConfig {
   if (!isLocale(defaultLocale)) {
     configurationError("APP_DEFAULT_LOCALE", "choose fr or en");
   }
+  const published = (process.env.APP_PUBLISHED_LOCALES ?? "").trim();
+  const publishedLocales = published ? published.split(",").map((value) => value.trim()) : [];
+  if (publishedLocales.some((value) => !isLocale(value)) || new Set(publishedLocales).size !== publishedLocales.length) {
+    configurationError("APP_PUBLISHED_LOCALES", "use distinct fr/en values separated by commas, or leave empty");
+  }
+  if (environment === "production" && publishedLocales.length && !publishedLocales.includes(defaultLocale)) {
+    configurationError("APP_DEFAULT_LOCALE", "the production default must belong to APP_PUBLISHED_LOCALES");
+  }
   const timeout = process.env.API_TIMEOUT_MS ?? "30000";
   if (!/^\d+$/.test(timeout) || Number(timeout) < 100 || Number(timeout) > 30000) {
     configurationError("API_TIMEOUT_MS", "use an integer between 100 and 30000");
@@ -73,6 +82,7 @@ export function getServerConfig(): ServerConfig {
     environment,
     publicOrigin: publicOrigin.origin,
     defaultLocale,
+    publishedLocales: publishedLocales as Locale[],
     apiInternalOrigin: apiOrigin.origin,
     apiTimeoutMs: Number(timeout),
   };

@@ -8,7 +8,8 @@ import { validNewPassword } from "@/lib/api/auth-validation";
 import type { ApiError } from "@/lib/api/client";
 import { authHref, type AuthScreen } from "@/lib/auth/routes";
 import { getAuthDictionary, type AuthDictionary } from "@/lib/i18n/auth";
-import type { Locale } from "@/lib/i18n/locales";
+import { unsavedChangesMessage, type Locale } from "@/lib/i18n/locales";
+import { useUnsavedInput } from "@/components/learning/unsaved";
 import { AuthFrame } from "./auth-frame";
 import { useAuthMemory } from "./auth-memory";
 import { ResumeContext } from "./resume-context";
@@ -63,6 +64,7 @@ export function AuthForm({ locale, mode, returnTo, notice }: { locale: Locale; m
   const text = getAuthDictionary(locale);
   const router = useRouter();
   const memory = useAuthMemory();
+  const [initialIdentity] = useState({ email: memory.email, displayName: memory.displayName });
   const reset = useResetToken();
   const [password, setPassword] = useState("");
   const [confirmation, setConfirmation] = useState("");
@@ -71,6 +73,7 @@ export function AuthForm({ locale, mode, returnTo, notice }: { locale: Locale; m
   const [pending, setPending] = useState(false);
   const [sent, setSent] = useState(false);
   const lock = useRef(false);
+  const leaving = useRef(false);
   const form = useRef<HTMLFormElement>(null);
   const errorBox = useRef<HTMLDivElement>(null);
   const passwordMode = mode !== "recover";
@@ -78,6 +81,7 @@ export function AuthForm({ locale, mode, returnTo, notice }: { locale: Locale; m
   const title = mode === "sign-in" ? text.signIn : mode === "sign-up" ? text.signUp : mode === "recover" ? text.recover : text.reset;
   const description = mode === "sign-in" ? text.intro : mode === "sign-up" ? text.registerIntro : mode === "recover" ? text.recoverIntro : text.resetIntro;
   const noticeCopy = notice === "registered" ? text.registered : notice === "reset" ? text.resetDone : notice === "logged-out" ? text.loggedOut : notice === "required" ? text.sessionRequired : null;
+  useUnsavedInput(pending || !sent && Boolean(password || confirmation || memory.email !== initialIdentity.email || memory.displayName !== initialIdentity.displayName), unsavedChangesMessage(locale), { isPrivacyExit: () => leaving.current });
 
   function focusField(errors: Fields) {
     const first = (["email", "displayName", "password", "confirmation"] as const).find((key) => errors[key]);
@@ -116,8 +120,9 @@ export function AuthForm({ locale, mode, returnTo, notice }: { locale: Locale; m
         else requestAnimationFrame(() => errorBox.current?.focus());
         return;
       }
-      if (mode === "sign-in") { window.location.assign(returnTo); return; }
+      if (mode === "sign-in") { leaving.current = true; window.location.assign(returnTo); return; }
       if (mode === "sign-up" || mode === "reset") {
+        leaving.current = true;
         setPassword(""); setConfirmation("");
         if (mode === "reset") reset.clear();
         router.replace(authHref(locale, "sign-in", returnTo, mode === "sign-up" ? "registered" : "reset"));
@@ -134,7 +139,7 @@ export function AuthForm({ locale, mode, returnTo, notice }: { locale: Locale; m
       : <form ref={form} onSubmit={(event) => void submit(event)} noValidate aria-busy={pending} className="space-y-5 rounded-panel border border-border bg-surface p-4 sm:p-6">
         {error && <div ref={errorBox} tabIndex={-1} className="rounded-input focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus"><StatusMessage tone="danger" title={text.formError}>{authErrorCopy(error, text)}{error.kind === "http" && error.problem?.code === "INVALID_RESET_TOKEN" && <p className="mt-2"><Link href={authHref(locale, "recover", returnTo)} prefetch={false}>{text.requestNew}</Link></p>}</StatusMessage></div>}
         {sent && <StatusMessage tone="success">{text.neutralSent}</StatusMessage>}
-        {mode !== "reset" && <FormField id="auth-email" label={text.email} error={fields.email} required><Input id="auth-email" name="email" type="email" autoComplete="email" inputMode="email" value={memory.email} onChange={(event) => memory.setEmail(event.target.value)} readOnly={pending} maxLength={320} /></FormField>}
+        {mode !== "reset" && <FormField id="auth-email" label={text.email} error={fields.email} required><Input id="auth-email" name="email" type="email" autoComplete="email" inputMode="email" value={memory.email} onChange={(event) => { memory.setEmail(event.target.value); setSent(false); }} readOnly={pending} maxLength={320} /></FormField>}
         {mode === "sign-up" && <FormField id="auth-display-name" label={text.displayName} error={fields.displayName}><Input id="auth-display-name" name="displayName" autoComplete="nickname" value={memory.displayName} onChange={(event) => memory.setDisplayName(event.target.value)} readOnly={pending} /></FormField>}
         {passwordMode && <FormField id="auth-password" label={newPassword ? text.newPassword : text.password} hint={newPassword ? text.passwordHint : undefined} error={fields.password} required><PasswordInput id="auth-password" name="password" text={text} autoComplete={newPassword ? "new-password" : "current-password"} value={password} onChange={(event) => setPassword(event.target.value)} readOnly={pending} /></FormField>}
         {newPassword && <FormField id="auth-confirmation" label={text.confirmPassword} error={fields.confirmation} required><PasswordInput id="auth-confirmation" name="confirmation" text={text} autoComplete="new-password" value={confirmation} onChange={(event) => setConfirmation(event.target.value)} readOnly={pending} /></FormField>}

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "result": "passed",
+  "composeExitCode": 0,
+  "containersStarted": false,
+  "remoteMutation": false,
+  "privateEnvironmentRead": false,
+  "serviceCount": 6,
+  "assertions": {
+    "noDedicatedCaddy": true,
+    "noPublishedPorts": true,
+    "commerceStripeVideoRemainOff": true,
+    "mailpitTransportOnly": true,
+    "outboxEnabled": true,
+    "storageEndpoints": true,
+    "privateBuckets": true,
+    "ingressExact": true,
+    "internalDependencyNetworks": true,
+    "s3IngressAlias": true,
+    "onlyWebAndS3JoinIngress": true,
+    "credentialsNotOnWeb": true,
+    "providerRawLogsDisabled": true,
+    "imagePins": true,
+    "boundedVolumeSlots": true
+  },
+  "storageBootstrapExecuted": false,
+  "bucketsCreated": false,
+  "corsVerified": false,
+  "videoProviderConfigured": false
+}

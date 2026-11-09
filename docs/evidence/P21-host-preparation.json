@@ -1,0 +1,56 @@
+{
+  "observedAt": "2026-11-09T15:43:15.007Z",
+  "target": "vps-a567141b.vps.ovh.net",
+  "authenticated": true,
+  "account": "plumora",
+  "os": {
+    "PRETTY_NAME": "Ubuntu 24.04.4 LTS",
+    "VERSION_ID": "24.04",
+    "ID": "ubuntu"
+  },
+  "architecture": "x86_64",
+  "logicalCPUs": 4,
+  "memoryBytes": 8127725568,
+  "disk": {
+    "size": 76887154688,
+    "available": 56435052544
+  },
+  "docker": "29.6.2",
+  "compose": "5.3.1",
+  "containerInventoryComplete": true,
+  "existingContainers": 12,
+  "runningContainers": 11,
+  "sharedIngress": {
+    "caddyVersion": "v2.11.4 h1:XKxkMTgNSizEvKG6QHue6cAsFOteU2qA61w2tKkCWi0=",
+    "ports80And443Occupied": true,
+    "caddyConfigurationWritable": true,
+    "existingCaddyConfigurationSha256": "99496204ef7d09b568759d6b880e2b73722e37de5528ea8d2360bd80a34713c8",
+    "sharedContainerRecreated": false,
+    "existingConfigurationModified": false
+  },
+  "sudoNonInteractive": false,
+  "rebootRequired": true,
+  "sshDedicated": {
+    "installedByUserCommand": true,
+    "verifiedByIndependentSSH": true,
+    "publicFingerprint": "SHA256:MD2YZvoEQJ+8/QtMQJ41rdlzaQFHslWi+g+uD44YT9w",
+    "otherAuthorizedKeysPreserved": true,
+    "globalSSHConfigurationChanged": false
+  },
+  "node": {
+    "checkedAt": "2026-11-09T17:23:08.151Z",
+    "result": "installed",
+    "runId": "dc2ec154-62cb-43b0-ab71-9e660109ecb2",
+    "version": "v24.22.2",
+    "executable": "/home/plumora/.local/lib/node-v24.22.2-linux-x64/bin/node",
+    "archiveSha256": "48cc0e21e048790e54c0cf5749c2725005313d652651c40b7a21feb9697aaf75",
+    "binarySha256": "904a6d3484241d466989f9df9ba3aab822b1496191bdb28230eb491a55c32a52",
+    "archiveBytes": 32039312,
+    "globalPathChanged": false,
+    "sudoUsed": false,
+    "servicesRestarted": false
+  },
+  "applicationDeploymentPerformed": false,
+  "privateHostConfigurationOrUserDataPublished": false,
+  "secretsPrinted": false
+}

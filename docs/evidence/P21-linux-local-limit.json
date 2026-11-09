@@ -1,0 +1,101 @@
+{
+  "phase": "P21",
+  "check": "linux-docker-s3-reproduction-preflight",
+  "result": "blocked-before-java",
+  "completedAt": "2026-11-09T15:41:40.195Z",
+  "apiSuitesExecuted": 0,
+  "targetOrMavenCacheVolumesCreated": 0,
+  "sharedServicesTouched": false,
+  "hostSettingsChanged": false,
+  "ttlOrStoragePolicyChanged": false,
+  "sourceEdited": false,
+  "definitiveRun": {
+    "runId": "d6c0cece-3d92-4fc6-b7f0-219ced136cfe",
+    "stateFile": ".runtime/courses-p21-linux-d6c0cece/state.json",
+    "hostSideReadiness": {
+      "status": 200,
+      "markerMatches": true,
+      "elapsedMs": 37,
+      "boundedDeadlineMs": 7000
+    },
+    "probes": [
+      {
+        "host": "127.0.0.1",
+        "exitCode": 7,
+        "markerMatches": false
+      },
+      {
+        "host": "localhost",
+        "exitCode": 7,
+        "markerMatches": false
+      },
+      {
+        "host": "host.docker.internal",
+        "exitCode": 0,
+        "markerMatches": true
+      }
+    ],
+    "containerCleanupConfirmed": true,
+    "toolchainCleanup": {
+      "ownedImageTagRemoved": true,
+      "forced": false,
+      "sharedBaseImagesOrBuildCachePruned": false
+    }
+  },
+  "previousAttempts": [
+    {
+      "runId": "0838b6b5-8762-421d-a2f8-5070e7f2a6d2",
+      "result": "helper preparation failed before any test",
+      "cause": "literal plus signs in generated helper Dockerfile; corrected only in ignored helper",
+      "resourcesCreated": 0
+    },
+    {
+      "runId": "50ff5928-e9be-4afd-84f4-b3d915023ef0",
+      "result": "loopback connection refused but readiness was not yet independently established",
+      "causeEstablished": false,
+      "cleanupConfirmed": true
+    }
+  ],
+  "sourceSnapshot": [
+    {
+      "path": "apps/api/src/test/java/com/chatgptcourses/AssetServiceIntegrationTest.java",
+      "sha256": "fd13c21a21471c3451ed3fbb12c6b4c5854ffe0997f4e15ff65d54ed5e04edce"
+    },
+    {
+      "path": "apps/api/src/test/java/com/chatgptcourses/ContentImportIntegrationTest.java",
+      "sha256": "49293df6ec47ff7af6c50a6196954217e678ad3571f203680042d79631f97583"
+    },
+    {
+      "path": "apps/api/src/test/java/com/chatgptcourses/IdentityServiceIntegrationTest.java",
+      "sha256": "9e99688c90a4d144385b1d4675b6d1b77b48192bd7eef5166ba14ad1e203eaae"
+    },
+    {
+      "path": "apps/api/src/test/java/com/chatgptcourses/HTTPAuthIntegrationTest.java",
+      "sha256": "137a8934314062597272a8ba6634b3a3164f4c367826f5f98c87ca35abd5662e"
+    }
+  ],
+  "fixtureConstraints": {
+    "httpEndpoints": [
+      "127.0.0.1",
+      "localhost"
+    ],
+    "uploadTtlSeconds": 3,
+    "downloadTtlSeconds": 2,
+    "policyAllowsHostDockerInternalHttp": false
+  },
+  "observations": [
+    "The synthetic endpoint returned HTTP200 and the exact expected marker from Windows before runner probes.",
+    "Independent runner probes to the same published port failed at 127.0.0.1 and localhost, while host.docker.internal returned the expected marker.",
+    "No Java or Maven suite was launched because the unmodified S3 fixtures require loopback URLs. No global Docker Desktop networking change was made."
+  ],
+  "limitations": [
+    "This establishes a local runner networking obstacle, not the cause of either original S3 CI failure.",
+    "No claim that Docker Desktop is generally unsupported or that its global host-network setting was inspected.",
+    "No TTL hypothesis, provider signature failure or three-suite Linux correction validation was established."
+  ],
+  "nextAction": "Collect bounded diagnostic facts for the two failing S3 cases on Linux CI; validate the three frozen test-only fixes there. Do not relax storage policy or increase TTL without evidence.",
+  "references": [
+    "https://java.testcontainers.org/supported_docker_environment/continuous_integration/dind_patterns/",
+    "https://docs.docker.com/engine/network/drivers/host/"
+  ]
+}

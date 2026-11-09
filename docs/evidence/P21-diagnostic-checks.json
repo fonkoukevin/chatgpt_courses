@@ -1,0 +1,35 @@
+{
+  "startedAt": "2026-11-09T17:35:19.423Z",
+  "completedAt": "2026-11-09T17:35:49.324Z",
+  "result": "passed",
+  "goals": [
+    "compiler:testCompile",
+    "surefire:test"
+  ],
+  "selectedTest": "S3CiDiagnosticTest",
+  "exitCode": 0,
+  "mainBefore": {
+    "sha256": "53b24fac8473f035c71c40f40656fab001668335e1713429e4b41b9d69958082",
+    "files": 796
+  },
+  "mainAfter": {
+    "sha256": "53b24fac8473f035c71c40f40656fab001668335e1713429e4b41b9d69958082",
+    "files": 796
+  },
+  "mainUnchanged": true,
+  "unit": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "sanitizerPrivacy": {
+    "tests": 14,
+    "passed": 14,
+    "failed": 0
+  },
+  "integrationSuitesRerun": false,
+  "ttlOrPolicyChanged": false,
+  "originalAssertionsPreserved": true,
+  "remoteMutation": false
+}

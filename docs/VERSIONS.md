@@ -2,6 +2,12 @@
 
 Vérifications réalisées les **7 et 8 novembre 2026**, dans les documentations officielles et les registres officiels. P00 a proposé les versions ci-dessous ; P01 les a installées et verrouillées pour les fondations effectivement présentes. P02 ajoute les primitives et utilitaires du système visuel. Preuves : `evidence/P01.md` et `evidence/P02.md`.
 
+## Cible réellement inspectée en P21 — 9 novembre 2026
+
+VPS existant : Ubuntu **24.04.4 LTS**, Docker **29.6.2**, Compose **5.3.1**, x86_64. Frontal partagé Caddy **2.11.4** déjà actif pour une autre application ; son image n’est ni mise à jour ni recréée par Courses. Le mode dédié P20 conserve son image2.11.9 verrouillée. Ces versions observées ne sont pas déclarées derniers correctifs disponibles ; la maintenance de l’hôte reste à planifier avant production.
+
+Node **24.22.2** installé dans le seul compte de déploiement, archive Linux x64 vérifiée contre les [sommes officielles](https://nodejs.org/dist/v24.22.2/SHASUMS256.txt), SHA256 `48cc0e21e048790e54c0cf5749c2725005313d652651c40b7a21feb9697aaf75`. Aucun remplacement des outils Windows locaux ni ajout de dépendance applicative. [État réel](evidence/P21-host-preparation.json).
+
 ## Images verrouillées et vérifiées en P20 — 9 novembre 2026
 
 La stack applicative P19 reste inchangée. Les [Dockerfiles web](../apps/web/Dockerfile) et [API](../apps/api/Dockerfile) et le [Compose de déploiement](../infra/compose/compose.deployment.yml) épinglent les références suivantes ; les digests sont ceux des manifestes/index OCI, distincts des IDs locaux des images applicatives construites.

@@ -1,6 +1,6 @@
 # Publier et déployer une release identifiée
 
-**Procédure préparée en P20 ; aucun registre, SSH, GitHub Environment ou déploiement distant n’a été exercé par sa rédaction.** La cible, le domaine et le registre ne sont pas connus. Le verdict [P19](../evidence/P19.md) autorise la préparation d’une recette privée, commerce désactivé ; il n’autorise ni vente ni mode Stripe LIVE. Ce workflow garde ces limites et ne choisit aucun fournisseur payant.
+**Procédure préparée en P20, adaptée en P21 ; aucune publication d’image ni livraison distante exécutée.** La cible OVH, le domaine et le dépôt sont fournis ; SSH dédié et Node sont vérifiés. Le propriétaire autorise finalement la source publique pour utiliser les protections sans Pro. Les images GHCR restent privées, liées au même dépôt. Le verdict [P19](../evidence/P19.md) autorise la recette privée, commerce désactivé ; aucune vente ou activation LIVE. L’état réellement observé est dans [P21](../evidence/P21.md).
 
 ## Identité à conserver
 
@@ -23,8 +23,10 @@ Un second relecteur n’est pas imposé à ce projet individuel. Si une règle `
 | Variable d’environnement GitHub | Usage |
 | --- | --- |
 | `IMAGE_REPOSITORY` | Préfixe réel du registre et des dépôts autorisés, sans protocole, tag, credential ou digest |
+| `EXPECTED_SOURCE_VISIBILITY` | `private` par défaut ; `public` explicitement autorisé pour ce dépôt, contrôlé sur les métadonnées GitHub. Ne modifie pas la visibilité privée exigée des images |
 | `DEPLOY_TARGET_AUTHORIZED=true` | Cible et accès effectivement autorisés ; ne pas l’inférer d’une recommandation |
 | `DEPLOY_HOST`, `DEPLOY_PORT`, `DEPLOY_USER` | Hôte, port SSH explicite et compte de déploiement |
+| `DEPLOY_NODE_PATH` | `node` par défaut, ou chemin absolu validé vers Node24.22.2 ; sur OVH `/home/plumora/.local/lib/node-v24.22.2-linux-x64/bin/node` |
 | `DEPLOY_DIRECTORY` | Chemin Linux absolu réservé au projet, par exemple une arborescence opérateur sous `/srv` ; staging et production sont distincts |
 | `DEPLOY_PUBLIC_ORIGIN` | Origine HTTPS exacte, sans slash terminal, identifiant, query ou fragment ; identique à la configuration de l’hôte |
 | `STAGING_BASIC_USERNAME` | Identifiant du garde de recette, identique à la configuration déployée |
@@ -33,11 +35,14 @@ Un second relecteur n’est pas imposé à ce projet individuel. Si une règle `
 
 | Secret de l’environnement GitHub | Usage limité |
 | --- | --- |
-| `REGISTRY_USERNAME`, `REGISTRY_TOKEN` | Publication dans staging seulement ; aucun secret SSH n’est transmis à cette étape |
 | `DEPLOY_SSH_PRIVATE_KEY`, `DEPLOY_SSH_KNOWN_HOSTS` | Déploiement seulement ; clé et empreintes d’hôte vérifiées par un canal indépendant |
 | `STAGING_BASIC_PASSWORD` | Sonde HTTPS de recette ; même secret que le fichier monté dans le service web |
 
-Le SSH utilise `StrictHostKeyChecking=yes`, sans agent transféré ni `ssh-keyscan` considéré comme une preuve de confiance. Le login registre de publication reçoit le token par stdin ; son `DOCKER_CONFIG` temporaire est supprimé en fin de commande. Le serveur doit déjà posséder son credential store de **lecture seule** pour tirer les images privées : le workflow ne lui copie pas la clé de publication.
+Le SSH utilise `StrictHostKeyChecking=yes`, sans agent transféré ni `ssh-keyscan` considéré comme preuve de confiance. P21 sépare les jobs : plan sans permission Packages, publication `packages:write`, déploiement `packages:read`. Chaque job utilise son `GITHUB_TOKEN` éphémère ; aucun PAT durable requis. `IMAGE_REPOSITORY` vaut `ghcr.io/fonkoukevin/chatgpt_courses`, avec images `/web` et `/api`, label OCI source du dépôt, visibilité privée positivement vérifiée et déni anonyme structuré. Un refus403générique ou une métadonnée inconnue ne prouve pas le caractère privé. `EXPECTED_SOURCE_VISIBILITY=public` correspond à la décision utilisateur actuelle ; les packages restent privés. Une capacité API non disponible avec le jeton du job est un blocage, sans remplacement automatique par PAT large.
+
+Le login registre de publication reçoit le token par stdin dans un Docker config temporaire. Pour le pull distant, le token de **lecture** du job passe par stdin SSH ; le Docker config est créé sur `/dev/shm` vérifié tmpfs, puis logout/effacement avant smoke et activation. Le credential store Docker existant du VPS n’est ni lu ni remplacé. Une interruption non récupérable peut laisser ce fichier en RAM jusqu’au nettoyage opérateur ou au redémarrage ; le token expire avec le job. Les traps ne constituent pas une garantie après SIGKILL ou perte de l’hôte.
+
+Sur le VPS partagé, suivre aussi le [raccordement au frontal existant](shared-ingress-staging.md) : réseau interne externe aux deux projets, Caddy Courses désactivé, configuration persistée dans le projet propriétaire du frontal. Les secrets de recette restent distincts de ceux de l’autre application.
 
 Sur chaque cible, préparer `<DEPLOY_DIRECTORY>/config/deployment.env` avec le validateur [config.mjs](../../scripts/deployment/config.mjs) et les fichiers de secrets requis par Compose. Le fichier de configuration n’est pas lisible par les autres utilisateurs ; ne pas utiliser `.env.local` du développeur. Les rôles PostgreSQL `courses_owner` et `courses_app` et les quatre secrets associés restent séparés. Les mots de passe, clé outbox, Basic et éventuelles clés futures ne font partie ni des images, ni du manifeste, ni du bundle de code.
 

@@ -1,0 +1,15 @@
+{
+  "observedAt": "2026-11-09T17:45:01.281Z",
+  "repository": "fonkoukevin/chatgpt_courses",
+  "userAuthorized": true,
+  "decision": "Public repository authorized instead of GitHub Pro",
+  "before": "private",
+  "after": "public",
+  "applicationSecretsPublished": false,
+  "auditHead": "81c1e0e0828abefd16fee1bfd46de38e0c6ba56c",
+  "auditKnownMatches": 0,
+  "auditProviderCandidates": 0,
+  "accountPurchase": false,
+  "branchProtectionConfigured": false,
+  "registryPackageVisibilityChanged": false
+}

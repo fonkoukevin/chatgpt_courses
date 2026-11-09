@@ -1,0 +1,49 @@
+{
+  "observedBy": "GitHub Actions and authenticated filtered artifact",
+  "sourceCommit": "9c3fb79735970a65ae63701f9d247de2b95cb477",
+  "runId": 42640074371,
+  "url": "https://github.com/fonkoukevin/chatgpt_courses/actions/runs/42640074371",
+  "result": "failed",
+  "jobs": {
+    "web": "success",
+    "api": "failure",
+    "e2e": "skipped"
+  },
+  "api": {
+    "suites": 38,
+    "tests": 262,
+    "failures": 6,
+    "errors": 2,
+    "skipped": 0
+  },
+  "artifact": {
+    "name": "api-checks-42640074371-1",
+    "id": 13686335431,
+    "sha256": "ba2ed50b81902eb2ebefc6871593fb624adf085f11b5d4ebbe6bbfdeec0f5e4b",
+    "digestVerified": true,
+    "rawLogsPublished": false
+  },
+  "followUp": {
+    "sourceCommit": "962bb9f7dce34a90667e196421cff293996f6322",
+    "runId": 42663087276,
+    "result": "failed",
+    "changedCases": [
+      "OS-specific test JVM executable",
+      "explicit controlled outbox worker in two identity fixtures",
+      "source-bound sanitized failure location"
+    ],
+    "jobs": {
+      "web": "success",
+      "api": "failure",
+      "e2e": "skipped"
+    },
+    "api": {
+      "tests": 262,
+      "failures": 1,
+      "errors": 1,
+      "skipped": 0
+    }
+  },
+  "externalProviderCalled": false,
+  "secretsPrinted": false
+}

@@ -1,10 +1,10 @@
 # État réel du projet
 
-Dernière mise à jour : **9 novembre 2026**. **P20 validé localement**, préparation P21 commencée avec la cible OVH fournie. Candidate à une recette privée, commerce désactivé. Aucun mode LIVE, push, registre publié ou déploiement distant.
+Dernière mise à jour : **9 novembre 2026**. **P20 validé localement**, P21 en préparation sur la cible OVH fournie. Premier push privé et première CI GitHub observés ; aucun registre publié, déploiement distant ou mode LIVE. Commerce désactivé.
 
 ## Situation courante
 
-- **P21, accès** : cible `vps-a567141b.vps.ovh.net` joignable TCP22 ; dépôt privé `fonkoukevin/chatgpt_courses` accessible, vide. Authentification SSH par clé locale refusée ; compte/moyen d’accès à retrouver. Le domaine fourni pointe ailleurs et le sous-domaine de recette proposé n’existe pas encore. Aucune mutation distante. [Faits et reprise](evidence/P21.md).
+- **P21** : SSH dédié vérifié, 12 conteneurs préservés, Node24.22.2 installé sans redémarrage. Ingress partagé adapté avec Caddy2.11.4 sans reload ; Mailpit/S3/CLI préparés et vérifiés hors fournisseur. Seconde CI source `962bb9f` : web réussi, API262tests avec1échec/1erreur S3, e2e non exécuté ; diagnostic borné prêt. DNS des deux sous-domaines vérifiés. L’utilisateur annule Pro et autorise la source publique : dépôt passé en public après audit, protections à configurer ; images toujours privées. Aucun déploiement applicatif. [Faits et reprise](evidence/P21.md).
 - **P20** : deux images multi-étapes réellement construites, UID10001, bases par digest ; Compose/Caddy et secrets séparés. API ciblée14/14, scripts22/22, lint/actionlint passent. Intégration isolée15 contrôles : HTTPS, smoke staging12/production10,19 migrations, mêmes images promues sans rebuild, sauvegarde chiffrée et restauration PG/S3, moniteur CLI. [Résultats et limites](evidence/P20.md), [intégration](evidence/P20-integration-checks.json), [runbooks](runbooks/deploy.md). Aucun registre/SSH/GitHub/off-host/alerte externe observé.
 - **P18** : douze leçons FR/EN,18 fichiers Markdown, import CMS durable, corrigés protégés et vrais exports locaux. [Sources](../content/course-client-proposal/README.md), [résultats et limites](evidence/P18.md).
 - **P19** : global API256/256,35 suites ; client124, contrat/sources223/contrastes/lint/types et15 garde-fous CI passent. Configuration production12/12 sur base vide et vraie chaîne HTTP arrêt/reprise. Chromium consolidé4/4, paiement8/8, remboursement6/6 ; huit captures examinées. Stripe TEST réel1/1 : deux Checkout, deux remboursements, quatre rejeux sans double effet, origine individuelle conservée. [Matrice, résultats et limites](evidence/P19.md), [candidate](evidence/P19-release-candidate.json).
@@ -14,7 +14,7 @@ Dernière mise à jour : **9 novembre 2026**. **P20 validé localement**, prépa
 - **Deux refus historiques P12 et deux refus distincts P15 restent ouverts, causes inconnues.** Les succès ultérieurs ne prouvent pas un correctif. Toute récidive impose arrêt du parcours et diagnostic avant nettoyage ; garde avant livraison commerciale maintenue pourP19. [P12](evidence/P12-access-follow-up.md), [P15](evidence/P15-access-follow-up.md).
 - Deux erreurs de synchronisation de recette P19 sont conservées ; le premier timeout UNKNOWN de remboursement reste non attribué. Dernier6/6 sans bail actif, attente10s inchangée : la branche prolongée n’est pas exécutée. Ces limites restent dans le verdict avant livraison commerciale.
 - Fiche d’offre de préparation seulement, sans offre backend/prix réel. Revue humaine FR/EN, vidéos, format vendu, langues de lancement, fiscalité/accès/support/légal/conservation restent à décider avant activation concernée. Aucun remplacement silencieux d’une promesse vidéo. Les demandes WAITING_POLICY sont conservées.
-- Windows natif et versions applicatives verrouillées maintenus, aucune dépendance applicative ajoutée P20. CI et workflow manuel vérifiés localement, aucun run GitHub ; [procédure](CI.md). Git main local ; images P20 issues de **a28d8d2**, IDs OCI et contrôleur infra identifiés dans les preuves. Seul le fichier Next utilisateur reste hors des commits.
+- Windows natif et versions applicatives verrouillées maintenus, aucune dépendance applicative ajoutée P20/P21. Deux CI GitHub P21 observées, dernière encore en échec ; [procédure](CI.md). Images P20 issues de **a28d8d2**, IDs OCI identifiés ; source `962bb9f` publiée en privé, ciblés Windows25/25 sans modification des classes de l’API locale. Fichier Next utilisateur préservé hors staging.
 
 ## Phases
 
@@ -41,7 +41,7 @@ Dernière mise à jour : **9 novembre 2026**. **P20 validé localement**, prépa
 | P18 | Validé localement | Rédaction et intégration isolée4/4,18 fichiers/4 exports/18 captures ; brouillons partagés importés, acteur désactivé, vente bloquée ; [preuve](evidence/P18.md) |
 | P19 | Validé localement | API256/client124, navigateur4+8+6, fournisseur TEST1/1, CI locale et production12/12 ; commerce bloqué, aucun GitHub/déploiement ; [preuve](evidence/P19.md) |
 | P20 | Validé localement | Images réelles, API14/scripts22, TLS et promotion12+10, migration/restauration/moniteur15 contrôles ; cible/registre/off-host manquants ; [preuve](evidence/P20.md) |
-| P21 | En cours | Cible OVH/GitHub identifiées, SSH refusé ; aucun déploiement, DNS de recette à préparer ; [suivi](evidence/P21.md) |
+| P21 | En cours | SSH/Node/DNS réels, source publique autorisée/auditée ; CI source encore2casS3 ouverts, protections et livraison à finaliser ; [suivi](evidence/P21.md) |
 | P22 | À faire | Déploiement de production |
 | P23 | À faire | Exploitation après lancement |
 
@@ -49,6 +49,6 @@ Dernière mise à jour : **9 novembre 2026**. **P20 validé localement**, prépa
 
 ## Dernier lot
 
-P20 livre les images et procédures vérifiées localement ; développement/listener et données initiaux préservés et rétablis. Reprise **`prompts/P21_DEPLOIEMENT_RECETTE.txt`** : VPS, domaine et dépôt fournis, accès GitHub vérifié ; il faut d’abord retrouver l’authentification SSH. Restent ensuite DNS de recette, registre/protections GitHub, secrets de recette et intégrations TEST, destination de sauvegarde hors hôte et canal/observateur d’alerte. RPO/RTO/rétention sont des propositions non activées. Aucun achat ou déploiement distant engagé ; vente toujours bloquée par les incidents et décisions documentés.
+Reprise **`prompts/P21_DEPLOIEMENT_RECETTE.txt`** : publier les diagnostics et préparatifs vérifiés, établir/corriger les deux cas S3 de CI sans changer arbitrairement délais ou permissions, configurer les protections désormais accessibles avec source publique, puis publier/déployer les images identifiées. Raccordement durable au Caddy existant à activer sans interruption de l’autre application. Restent configuration/intégrations TEST, parcours sur cible, restauration complète et alertes. RPO/RTO/rétention non activés ; aucun achat ni déploiement applicatif distant, vente toujours bloquée par les incidents et décisions documentés.
 
 Garder ce suivi court ; détails dans docs/evidence/Pxx.md. Repartir des fichiers et preuves réels lors d’une reprise.

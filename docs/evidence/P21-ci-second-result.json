@@ -1,0 +1,108 @@
+{
+  "phase": "P21",
+  "runId": 42663087276,
+  "sourceCommit": "962bb9f7dce34a90667e196421cff293996f6322",
+  "attempt": 1,
+  "result": "failure",
+  "jobs": {
+    "web": "success",
+    "api": "failure",
+    "e2e": "skipped"
+  },
+  "artifact": {
+    "id": 13694624202,
+    "name": "api-checks-42663087276-1",
+    "sizeBytes": 11720,
+    "sha256": "49534e9570b43f40fcc616f24f7bc458f9e26608c7692ac510fd391fda754183",
+    "shaVerified": true,
+    "entries": [
+      "api-collection.json",
+      "api.json",
+      "report.json"
+    ]
+  },
+  "api": {
+    "result": "failed",
+    "exitCode": 1,
+    "durationMs": 431796,
+    "suiteCount": 38,
+    "counts": {
+      "tests": 262,
+      "failures": 1,
+      "errors": 1,
+      "skipped": 0
+    },
+    "failures": [
+      {
+        "name": "REDACTED_TEST",
+        "status": "failed",
+        "durationMs": 4596,
+        "diagnostic": {
+          "kind": "ASSERTION_FAILURE",
+          "file": "AssetServiceIntegrationTest.java",
+          "line": 96
+        }
+      },
+      {
+        "name": "com.chatgptcourses.ContentImportIntegrationTest#changedSourceAppendsDraftRevisionButKeepsLogicalIdentityAndReadyFileBytes",
+        "status": "error",
+        "durationMs": 5019,
+        "diagnostic": {
+          "kind": "TEST_ERROR",
+          "file": "ContentImportIntegrationTest.java",
+          "line": 134
+        }
+      }
+    ],
+    "selectedSuites": [
+      {
+        "suite": "com.chatgptcourses.AssetServiceIntegrationTest",
+        "counts": {
+          "tests": 8,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      {
+        "suite": "com.chatgptcourses.ContentImportIntegrationTest",
+        "counts": {
+          "tests": 11,
+          "failures": 0,
+          "errors": 1,
+          "skipped": 0
+        }
+      },
+      {
+        "suite": "com.chatgptcourses.HTTPAuthIntegrationTest",
+        "counts": {
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      {
+        "suite": "com.chatgptcourses.IdentityServiceIntegrationTest",
+        "counts": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      }
+    ]
+  },
+  "rawLogsRead": false,
+  "otherArtifactsDownloaded": false,
+  "rerunRequested": false,
+  "safeSourceObservations": [
+    "Asset line95 includes PUT and its HTTP2xx check; line96 concerns confirmation, READY and FORMAT_VERIFIED assertions. Returned values are absent.",
+    "Content import line134 contains first import then source-file read/rewrite, before second import/comparison on line135."
+  ],
+  "limitations": [
+    "Filtered metadata does not expose exception messages, provider status/body or stack.",
+    "No cause, TTL failure or correction of the S3 cases is established."
+  ],
+  "observedAt": "2026-11-09T17:28:46.7868534Z"
+}

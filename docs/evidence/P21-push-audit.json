@@ -1,0 +1,117 @@
+{
+  "phase": "P21",
+  "check": "local-git-publication-audit",
+  "startedAt": "2026-11-09T17:47:10.546Z",
+  "completedAt": "2026-11-09T17:47:35.382Z",
+  "head": "a5c31a21c676c7760007a0a812126a9eec5ec1dd",
+  "headAfter": "a5c31a21c676c7760007a0a812126a9eec5ec1dd",
+  "headStable": true,
+  "mutation": {
+    "gitWrites": false,
+    "remoteChanged": false,
+    "networkUsed": false,
+    "pushed": false,
+    "trackedFilesWritten": false
+  },
+  "refs": {
+    "count": 4,
+    "localBranches": 1,
+    "remoteTrackingRefs": 1,
+    "tags": 0
+  },
+  "objects": {
+    "allLocal": 5413,
+    "byType": {
+      "commit": 64,
+      "tree": 1547,
+      "blob": 3802,
+      "tag": 0
+    },
+    "reachableFromRefs": 5220,
+    "unreachableLocal": 193,
+    "rawBlobBytesAllLocal": 176557592,
+    "rawBlobBytesReachable": 175247650,
+    "disk": {
+      "count": 5413,
+      "size": 138157,
+      "in-pack": 0,
+      "packs": 0,
+      "size-pack": 0,
+      "prune-packable": 0,
+      "garbage": 0,
+      "size-garbage": 0
+    }
+  },
+  "paths": {
+    "trackedNow": 3488,
+    "uniqueChangedPathsAcrossReachableHistory": 3473,
+    "suspiciousCurrent": [],
+    "suspiciousHistorical": [],
+    "envLocalCurrentTracked": false,
+    "envLocalHistoricalChanges": 0,
+    "envLocalIgnored": true,
+    "stagedPathCount": 22,
+    "nextEnvStaged": false,
+    "nextEnvWorkingTreeSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc"
+  },
+  "scan": {
+    "knownSensitiveValuesParsedInMemory": 5,
+    "knownValuesComparedToAllBlobCommitTagBytes": true,
+    "providerRules": [
+      "STRIPE_SECRET_OR_RESTRICTED_KEY",
+      "STRIPE_WEBHOOK_SECRET",
+      "STRIPE_PUBLISHABLE_KEY_PUBLIC",
+      "GITHUB_CLASSIC_TOKEN",
+      "GITHUB_FINE_GRAINED_TOKEN",
+      "AWS_ACCESS_KEY_ID",
+      "GOOGLE_API_KEY",
+      "SLACK_TOKEN",
+      "NPM_TOKEN",
+      "DOCKER_TOKEN",
+      "PRIVATE_KEY_PEM"
+    ],
+    "providerRulesAppliedToUtf8NonNulTextOnly": true,
+    "counts": {
+      "blobs": 3802,
+      "commits": 64,
+      "tags": 0,
+      "bytes": 176578894,
+      "textBlobs": 2415,
+      "binaryOrNonUtf8Blobs": 1387
+    },
+    "knownMatchCount": 0,
+    "knownFindings": [],
+    "providerCandidateCount": 0,
+    "providerCandidates": []
+  },
+  "filesAbove100MiB": [],
+  "largestReachableBlobs": [
+    {
+      "bytes": 1128375,
+      "path": "tests/fixtures/media/flower.mp4"
+    },
+    {
+      "bytes": 540209,
+      "path": "docs/evidence/P10-browser/2026-11-08T06-45-33-546Z-337ccd1c-9815-4a7e-96ee-9bf0061ed09e/fr-1440-video-resumed.png"
+    },
+    {
+      "bytes": 539073,
+      "path": "docs/api/openapi.yaml"
+    },
+    {
+      "bytes": 538016,
+      "path": "docs/evidence/P10-browser/2026-11-08T06-54-01-726Z-399a161f-8080-477d-8239-b0160a0a79bc/fr-1440-video-resumed.png"
+    },
+    {
+      "bytes": 538005,
+      "path": "docs/evidence/P10-browser/2026-11-08T07-17-36-808Z-82d7173a-f544-41b4-8ddc-766faa0c6a61/fr-1440-video-resumed.png"
+    }
+  ],
+  "limitations": [
+    "Known-value checks do not prove absence of unknown secrets, transformed values or private non-secret data.",
+    "Provider-pattern checks are heuristic and may flag deliberate synthetic examples; candidates are not silently discarded.",
+    "Compressed archives/binary provider patterns are not decompressed; known-value bytes were still checked in binary objects.",
+    "Normal Git push sends reachable objects, not every unreachable local object; all locally available blob/commit/tag objects were nevertheless scanned.",
+    "No remote/GitHub policy, branch protection, Actions execution, LFS remote or registry verification was performed by this audit."
+  ]
+}

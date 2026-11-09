@@ -1,0 +1,17 @@
+{
+  "verifiedAt": "2026-11-09T17:41:40.182Z",
+  "result": "prepared",
+  "originalSha256": "99496204ef7d09b568759d6b880e2b73722e37de5528ea8d2360bd80a34713c8",
+  "candidateSha256": "8333128e21a8e3876e4b30bd5b210a5b193caa93c5919b650b4f08c5d72a3b9e",
+  "existingHostRoutesPreserved": 4,
+  "candidateHostRoutes": 6,
+  "namedAccessAndRuntimeFilters": true,
+  "defaultDuplicateLoggingExcluded": true,
+  "additionalDuplicateLoggingExcluded": true,
+  "syntaxAdapted": true,
+  "provisionValidateExecuted": false,
+  "originalWritten": false,
+  "proxyReloaded": false,
+  "networkChanged": false,
+  "deployed": false
+}

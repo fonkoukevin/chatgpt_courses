@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "job": "web",
+  "step": "scripts",
+  "exitCode": 0,
+  "result": "passed",
+  "durationMs": 1638,
+  "tap": {
+    "format": "tap-summary-v1",
+    "counts": {
+      "tests": 55,
+      "suites": 0,
+      "pass": 55,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "durationMs": 1441.3758
+  },
+  "actionlint": {
+    "version": "1.7.12",
+    "exitCode": 0,
+    "workflows": [
+      "ci.yml",
+      "deploy.yml"
+    ],
+    "shellcheckExecuted": false
+  },
+  "sharedProxyReloaded": false,
+  "registryPublished": false,
+  "applicationDeploymentPerformed": false
+}

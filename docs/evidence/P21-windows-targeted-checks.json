@@ -1,0 +1,214 @@
+{
+  "schemaVersion": 1,
+  "command": [
+    "mvnw.cmd",
+    "--batch-mode",
+    "--no-transfer-progress",
+    "-Dtest=ContentImportIntegrationTest,IdentityServiceIntegrationTest,HTTPAuthIntegrationTest",
+    "-Dsurefire.reportsDirectory=<owned-runtime>/surefire",
+    "compiler:testCompile",
+    "surefire:test"
+  ],
+  "platform": "win32",
+  "localEnvironmentLoaded": false,
+  "externalStripe": false,
+  "globalOutboxWorkerEnabled": false,
+  "fixtureOutboxOverride": true,
+  "exitCode": 0,
+  "spawnError": null,
+  "durationMs": 139870,
+  "mainClassesBefore": {
+    "sha256": "3dca53c4c0b4516e54ca1accc25a93f0c48001918b4bb52798de47eaff8f5b41",
+    "files": 796
+  },
+  "mainClassesAfter": {
+    "sha256": "3dca53c4c0b4516e54ca1accc25a93f0c48001918b4bb52798de47eaff8f5b41",
+    "files": 796
+  },
+  "mainClassesUnchanged": true,
+  "suiteCount": 3,
+  "counts": {
+    "tests": 25,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "junit": [
+    {
+      "format": "junit-summary-v1",
+      "suite": "com.chatgptcourses.ContentImportIntegrationTest",
+      "counts": {
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "durationMs": 74330,
+      "tests": [
+        {
+          "name": "com.chatgptcourses.ContentImportIntegrationTest#changedSourceAppendsDraftRevisionButKeepsLogicalIdentityAndReadyFileBytes",
+          "status": "passed",
+          "durationMs": 3120
+        },
+        {
+          "name": "com.chatgptcourses.ContentImportIntegrationTest#solutionClassificationIsImmutableCannotBePublishedAsOrdinaryFileAndFreezesWithPedagogy",
+          "status": "passed",
+          "durationMs": 833
+        },
+        {
+          "name": "com.chatgptcourses.ContentImportIntegrationTest#humanRevisionIsNeverOverwrittenAndImporterCannotReviewPublishOrProvisionRoles",
+          "status": "passed",
+          "durationMs": 600
+        },
+        {
+          "name": "com.chatgptcourses.ContentImportIntegrationTest#revokedPaidOriginBlocksNewSolutionLinksWhilePersonalWorkAndDisclosureHistoryRemain",
+          "status": "passed",
+          "durationMs": 1449
+        },
+        {
+          "name": "com.chatgptcourses.ContentImportIntegrationTest#additiveUpgradeKeepsLegacyAssetAndEditorialRowsAndDefaultsTheirRoleToResource",
+          "status": "passed",
+          "durationMs": 2500
+        },
+        {
+          "name": "com.chatgptcourses.ContentImportIntegrationTest#planAndReplayKeepStableBilingualIdentitiesAndOnlyCreateDrafts",
+          "status": "passed",
+          "durationMs": 1041
+        },
+        {
+          "name": "com.chatgptcourses.ContentImportIntegrationTest#invalidPathsHashesAndUtf8FailClosedWithoutInventingAReadyDocument",
+          "status": "passed",
+          "durationMs": 230
+        },
+        {
+          "name": "com.chatgptcourses.ContentImportIntegrationTest#realCommandLinePlanApplyAndReplayUseOnlyTheExplicitTestActorAndNeverStartTheApplication",
+          "status": "passed",
+          "durationMs": 14492
+        },
+        {
+          "name": "com.chatgptcourses.ContentImportIntegrationTest#privateSolutionFilesRequireOwnerDisclosureAndCurrentPedagogicalAccess",
+          "status": "passed",
+          "durationMs": 1101
+        },
+        {
+          "name": "com.chatgptcourses.ContentImportIntegrationTest#concurrentImportSerializesBindingsWithoutDuplicatingContentOrFiles",
+          "status": "passed",
+          "durationMs": 533
+        },
+        {
+          "name": "com.chatgptcourses.ContentImportIntegrationTest#interruptedRemotePutResumesCommittedIntentWithoutCreatingAnotherAsset",
+          "status": "passed",
+          "durationMs": 500
+        }
+      ],
+      "droppedMetadata": 0
+    },
+    {
+      "format": "junit-summary-v1",
+      "suite": "com.chatgptcourses.HTTPAuthIntegrationTest",
+      "counts": {
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "durationMs": 19402,
+      "tests": [
+        {
+          "name": "REDACTED_TEST",
+          "status": "passed",
+          "durationMs": 2575
+        },
+        {
+          "name": "REDACTED_TEST",
+          "status": "passed",
+          "durationMs": 1149
+        },
+        {
+          "name": "com.chatgptcourses.HTTPAuthIntegrationTest#preferencesUseOwnerAndStrongRevisionAndRevocationAppliesToExistingSession",
+          "status": "passed",
+          "durationMs": 786
+        },
+        {
+          "name": "com.chatgptcourses.HTTPAuthIntegrationTest#recoveryUsesTrustedOriginAndHasOneAtomicWinnerAndRevokesOldSessions",
+          "status": "passed",
+          "durationMs": 2028
+        },
+        {
+          "name": "com.chatgptcourses.HTTPAuthIntegrationTest#preferencesRecheckPermissionAfterWaitingForTheOwnerLock",
+          "status": "passed",
+          "durationMs": 530
+        },
+        {
+          "name": "com.chatgptcourses.HTTPAuthIntegrationTest#registrationValidatesNormalizesAndNeverAcceptsClientPrivilegesOrLogsIn",
+          "status": "passed",
+          "durationMs": 240
+        },
+        {
+          "name": "com.chatgptcourses.HTTPAuthIntegrationTest#loginRequiresCsrfRotatesSessionAndStoresOnlyCredentialFreePrincipal",
+          "status": "passed",
+          "durationMs": 724
+        },
+        {
+          "name": "com.chatgptcourses.HTTPAuthIntegrationTest#disabledAndExpiredSessionsLoseAccessWithoutAnotherLogin",
+          "status": "passed",
+          "durationMs": 1028
+        }
+      ],
+      "droppedMetadata": 2
+    },
+    {
+      "format": "junit-summary-v1",
+      "suite": "com.chatgptcourses.IdentityServiceIntegrationTest",
+      "counts": {
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "durationMs": 15324,
+      "tests": [
+        {
+          "name": "com.chatgptcourses.IdentityServiceIntegrationTest#resetRequestQuotaIsAtomicForKnownAndUnknownAccountsWithoutExposingAnAddress",
+          "status": "passed",
+          "durationMs": 1162
+        },
+        {
+          "name": "com.chatgptcourses.IdentityServiceIntegrationTest#preferencesUseTheActorAndRealRevisionAndRecheckRevokedPermissions",
+          "status": "passed",
+          "durationMs": 366
+        },
+        {
+          "name": "com.chatgptcourses.IdentityServiceIntegrationTest#aResetLinkIssuedDuringACredentialChangeWaitsAndUsesTheCommittedEpoch",
+          "status": "passed",
+          "durationMs": 810
+        },
+        {
+          "name": "com.chatgptcourses.IdentityServiceIntegrationTest#upgradingV002KeepsExistingAccountPreferencesAndSessionWithEpochZero",
+          "status": "passed",
+          "durationMs": 2154
+        },
+        {
+          "name": "com.chatgptcourses.IdentityServiceIntegrationTest#simultaneousResetConsumesOnceChangesEpochAndRevokesSessionsWhileExpiredLinksFail",
+          "status": "passed",
+          "durationMs": 1863
+        },
+        {
+          "name": "com.chatgptcourses.IdentityServiceIntegrationTest#registrationPreservesAddressCharactersAndUnicodeAndNeverSerializesACredential",
+          "status": "passed",
+          "durationMs": 341
+        }
+      ],
+      "droppedMetadata": 0
+    }
+  ],
+  "result": "passed",
+  "collection": {
+    "initialRunnerExitCode": 1,
+    "initialIssue": "SUREFIRE_REPORTS_DIRECTORY_PROPERTY_IGNORED",
+    "recoveredWithoutRerun": true,
+    "actualSource": "apps/api/target/surefire-reports",
+    "reportsBelongToCurrentRun": true,
+    "exitCode": 0
+  }
+}

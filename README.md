@@ -610,4 +610,12 @@ node scripts/deployment/smoke.mjs --origin https://DOMAINE_REEL --basic-username
 
 Ces deux commandes de cible sont **préparées**, pas exécutées sur un serveur distant. Le domaine et les chemins sont à remplacer. Le validateur exige des images de registre par digest et refuse les secrets inline et les mauvais projets/origines. La sonde exige un certificat TLS valide ; aucune désactivation de TLS n’est prévue.
 
-Procédures : [déploiement et publication manuels](docs/runbooks/deploy.md), [sauvegarde/restauration](docs/runbooks/backup-restore.md), [incident et surveillance](docs/runbooks/incident-monitoring.md), [retour d’images](docs/runbooks/rollback.md). Le [workflow manuel](.github/workflows/deploy.yml) conserve les contrôles CI et emploie les secrets de l’environnement choisi. Il n’a pas été exécuté sur GitHub. Aucun registre, hôte, DNS, sauvegarde hors hôte ou canal d’alerte n’est actuellement raccordé. P21 requiert ces accès et la cible de recette autorisée ; commerce et Stripe restent fermés dans les piles préparées.
+Procédures : [déploiement et publication manuels](docs/runbooks/deploy.md), [sauvegarde/restauration](docs/runbooks/backup-restore.md), [incident et surveillance](docs/runbooks/incident-monitoring.md), [retour d’images](docs/runbooks/rollback.md). Le [workflow manuel](.github/workflows/deploy.yml) conserve les contrôles CI et emploie les secrets de l’environnement choisi. Il n’a pas encore publié ou déployé d’images. Commerce et Stripe restent fermés dans les piles préparées.
+
+## P21 — préparation de la recette OVH
+
+La cible existante est accessible par SSH dédié. Node24.22.2 est installé dans le compte `plumora`, sans sudo ou redémarrage. Les douze conteneurs préexistants sont préservés. Le [raccordement au Caddy partagé](docs/runbooks/shared-ingress-staging.md) prépare `staging.chatgpt-courses.com` et `files-staging.chatgpt-courses.com` ; aucun second frontal ne doit occuper80/443. Le candidat Caddy est adapté sur l’hôte, sans reload.
+
+Le [workflow](.github/workflows/deploy.yml) prépare des images GHCR privées avec jetons éphémères distincts de publication/lecture, chemin Node explicite et déploiement des digests. Aucun PAT de registre durable requis. Le propriétaire a finalement autorisé le dépôt source public pour utiliser les protections sans GitHub Pro ; celles-ci restent obligatoires avant livraison. La visibilité publique de la source doit être explicitement configurée, sans rendre les images publiques.
+
+La dernière CI observée conserve deux cas API S3 en échec ; aucune recette distante ou activation de vente annoncée. L’état exact des DNS, protections et vérifications est dans [P21](docs/evidence/P21.md). Reprendre ce lot avant P22.

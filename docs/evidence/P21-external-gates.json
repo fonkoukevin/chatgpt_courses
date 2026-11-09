@@ -1,0 +1,29 @@
+{
+  "verifiedAt": "2026-11-09T17:43:45.230Z",
+  "dns": [
+    {
+      "name": "staging.chatgpt-courses.com",
+      "a": [
+        "54.37.159.97"
+      ],
+      "aaaa": "ENODATA"
+    },
+    {
+      "name": "files-staging.chatgpt-courses.com",
+      "a": [
+        "54.37.159.97"
+      ],
+      "aaaa": "ENODATA"
+    }
+  ],
+  "github": {
+    "private": true,
+    "mainProtected": false,
+    "protectionStatus": 403,
+    "upgradeRequired": true,
+    "stagingEnvironmentStatus": 404,
+    "stagingProtectedBranches": null
+  },
+  "remoteMutationPerformed": false,
+  "secretsPrinted": false
+}

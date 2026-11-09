@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "result": "passed",
+  "javac": {
+    "exitCode": 0,
+    "release": 21,
+    "compiledTo": ".runtime/p21-staging-bootstrap-classes",
+    "sdkVersion": "2.57.11"
+  },
+  "offlineChecks": {
+    "passed": 3,
+    "failed": 0,
+    "runner": "Standalone invocation of the three operation unit-test methods",
+    "junitEngineExecuted": false,
+    "providerPortControlled": true,
+    "providerNetworkUsed": false
+  },
+  "nodeConfigurationTests": {
+    "passed": 9,
+    "failed": 0,
+    "skipped": 0,
+    "exitCode": 0
+  },
+  "composeRendering": {
+    "exitCode": 0,
+    "checks": ".runtime/p21-staging-integrations-compose-check.json"
+  },
+  "entrypointShellSyntax": {
+    "schemaVersion": 1,
+    "syntaxOnly": true,
+    "exitCode": 0,
+    "containerNetwork": "none",
+    "serviceStarted": false,
+    "imagePulled": false,
+    "remoteMutation": false
+  },
+  "mainClassesUnchanged": true,
+  "mainClassesBefore": {
+    "sha256": "3dca53c4c0b4516e54ca1accc25a93f0c48001918b4bb52798de47eaff8f5b41",
+    "files": 796
+  },
+  "mainClassesAfter": {
+    "sha256": "3dca53c4c0b4516e54ca1accc25a93f0c48001918b4bb52798de47eaff8f5b41",
+    "files": 796
+  },
+  "storageBootstrapExecuted": false,
+  "bucketsCreated": false,
+  "realCorsVerified": false,
+  "unsignedProviderAccessObserved": false,
+  "remoteMutation": false,
+  "commerceEnabled": false,
+  "videoEnabled": false,
+  "history": [
+    {
+      "stage": "test-source-javac",
+      "result": "failed",
+      "attempts": 2,
+      "code": "SDK_EXCEPTION_BUILDER_RETURNS_SUPERTYPE",
+      "checksExecuted": 0,
+      "corrected": true
+    },
+    {
+      "stage": "offline-unit-port",
+      "result": "failed",
+      "code": "CONTROLLED_PROXY_INVOKED_TYPED_SDK_DEFAULT_STUB",
+      "corrected": true
+    }
+  ],
+  "sourceSha256": {
+    "apps/api/src/main/java/com/chatgptcourses/operations/StagingStorageBootstrapMain.java": "f6f0f493d3a0907c9d241405fdd26cf0fe9791ea1f3f839af2d5fa5e1a8a60e6",
+    "apps/api/src/test/java/com/chatgptcourses/operations/StagingStorageBootstrapTest.java": "30da4dcbfea224b195e811bb86772082148a24a737d268a51e105c4599cfa5e5",
+    "scripts/container/api-entrypoint.sh": "a60775a58885ca2269e1cc3eb71d6f4c9d3563e2399786bd7686f15df17e75de",
+    "scripts/deployment/config.mjs": "aa879d75ed2ea0cf01e7199ff73430c95a654be0c5c870be9ff0c8fc9d9e168b",
+    "scripts/deployment/release-apply.mjs": "553d154ab8ae10bc7b547b7bab8ad15fa3d91436805684cff75a5bd0d9b73179",
+    "infra/compose/compose.staging-integrations.yml": "36fa85c8a098d9eb352e7d333e77cb312bb344584016d554468263b5cf670f12",
+    "infra/compose/staging.env.example": "f171fa5e675fa97665fda16da04699405b0e57d7745dd18396c67b8d3339e438",
+    "tests/scripts/deployment-config.test.mjs": "2431d4c910cd60ac7e330518da5c170d56d5ba25157a92833c77dc1b8881221e"
+  }
+}

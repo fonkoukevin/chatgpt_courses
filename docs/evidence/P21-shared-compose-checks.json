@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "result": "passed",
+  "composeExitCode": 0,
+  "containersStarted": false,
+  "remoteMutation": false,
+  "localEnvironmentLoaded": false,
+  "dedicatedDefaultEqualsExplicit": true,
+  "dedicatedCaddyPorts": 2,
+  "defaultSharedServices": [
+    "api",
+    "migrate",
+    "postgres",
+    "web"
+  ],
+  "caddyDisabledByDefault": true,
+  "caddyProfile": [
+    "dedicated-ingress"
+  ],
+  "caddyPortsEvenIfProfileSelected": [],
+  "webPorts": [],
+  "ingress": {
+    "name": "courses-staging-ingress",
+    "ipam": {},
+    "external": true
+  },
+  "joinedServices": [
+    "web"
+  ],
+  "webAliases": [
+    "courses-staging-web"
+  ],
+  "history": [
+    {
+      "result": "failed",
+      "code": "PROBE_ASSUMED_DISABLED_PROFILE_SERVICE_WAS_PRESENT",
+      "composeExitCode": 0,
+      "productChangeRequired": false
+    }
+  ]
+}

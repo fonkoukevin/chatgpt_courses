@@ -69,6 +69,8 @@ public class AssetService implements EditorialMediaRegistry {
     public AssetView getEditorial(UUID actor,UUID assetId){policy.require(actor,"content.read");var asset=load(assetId,false);if(!"EDITORIAL".equals(asset.scope()))throw notFound();return view(asset);}
     @Transactional(readOnly=true)
     public DownloadAccess preview(UUID actor,UUID accountContext,UUID assetId){policy.mutation(actor,accountContext,"content.read");var asset=load(assetId,false);if(!"EDITORIAL".equals(asset.scope()))throw notFound();return access(asset);}
+    @Transactional(readOnly=true)
+    public DownloadAccess supportDownload(UUID actor,UUID accountContext,UUID ticketId,UUID assetId,boolean admin){policy.selectedSupportAttachment(actor,accountContext,ticketId,assetId,admin);var asset=load(assetId,false);if(!"PROJECT_FILE".equals(asset.scope()))throw notFound();return access(asset);}
     @Transactional(isolation=Isolation.READ_COMMITTED)
     public DownloadAccess download(UUID actor,UUID accountContext,UUID assetId,AssetAccessContext context){
         policy.accountContext(actor,accountContext);

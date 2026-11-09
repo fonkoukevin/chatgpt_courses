@@ -32,7 +32,8 @@ class SmtpNotificationSender implements NotificationSender {
             case REFUND_UPDATED->{subject=en?"Your refund case was updated":"Votre dossier de remboursement a été actualisé";body=en?"Your refund case has been updated. Consult your account for the financial status and access effects. This message does not confirm receipt by your bank.":"Votre dossier de remboursement a été actualisé. Consultez votre compte pour le statut financier et les effets sur vos accès. Ce message ne confirme pas la réception par votre banque.";}
             default->throw new IllegalStateException("Unsupported notification type");
         }
-        String link=runtime.publicOrigin().toASCIIString()+(en?"/en/account":"/fr/compte");
+        if(type==Type.SUPPORT_REPLY&&payload.ticketId()==null)throw new IllegalStateException("Support notification context unavailable");
+        String link=runtime.publicOrigin().toASCIIString()+(type==Type.SUPPORT_REPLY?(en?"/en/account/help/":"/fr/compte/aide/")+payload.ticketId():(en?"/en/account":"/fr/compte"));
         var message=new SimpleMailMessage();message.setFrom(from);message.setTo(payload.recipient());message.setSubject(subject);message.setText(body+"\n\n"+link);mail.send(message);
     }
 }

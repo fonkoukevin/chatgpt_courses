@@ -5,6 +5,7 @@ import { safeProjectsDestination, translateProjectsDestination } from "../projec
 import { safeNotificationsDestination, translateNotificationsDestination } from "../notifications/routes";
 import { safeCommerceDestination, translateCommerceDestination } from "../commerce/routes";
 import { safeRefundsDestination, translateRefundsDestination } from "../refunds/routes";
+import { safeAccountDestination, translateAccountDestination } from "../account/routes";
 
 export type AuthScreen = "sign-in" | "sign-up" | "recover" | "reset" | "account";
 const paths = {
@@ -17,6 +18,8 @@ export function authPath(locale: Locale, screen: AuthScreen): string {
 }
 
 export function safeReturnTo(value: unknown, locale: Locale): string {
+  const account = safeAccountDestination(value, locale);
+  if (account) return account;
   const refunds = safeRefundsDestination(value, locale);
   if (refunds) return refunds;
   const commerce = safeCommerceDestination(value, locale);
@@ -40,6 +43,8 @@ export function safeReturnTo(value: unknown, locale: Locale): string {
 }
 
 export function translateReturnTo(value: unknown, locale: Locale): string {
+  const account = translateAccountDestination(value, locale);
+  if (account) return account;
   const refunds = translateRefundsDestination(value, locale);
   if (refunds) return refunds;
   const commerce = translateCommerceDestination(value, locale);

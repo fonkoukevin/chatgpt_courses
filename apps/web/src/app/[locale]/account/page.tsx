@@ -1,5 +1,5 @@
-import { accountPage, authMetadata } from "@/components/auth/pages";
+import { accountHomePage, accountMetadata } from "@/components/account/server-pages";
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
-export const metadata = authMetadata("en", "account");
-export default accountPage("en");
+export const metadata = accountMetadata("en");
+export default accountHomePage("en");

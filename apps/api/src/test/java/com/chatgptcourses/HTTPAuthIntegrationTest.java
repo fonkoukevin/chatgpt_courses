@@ -119,9 +119,9 @@ class HTTPAuthIntegrationTest {
         }
         var preferences = get(browser, "/api/v1/me/preferences");
         String etag = preferences.headers().firstValue("ETag").orElseThrow();
-        assertProblem(json(browser, "PATCH", "/api/v1/me/preferences", Map.of("locale", "en"), csrf, etag), 403, "CSRF_INVALID");
+        assertProblem(json(browser, "PATCH", "/api/v1/me/preferences", Map.of("locale", "en"), csrf, etag, owner), 403, "CSRF_INVALID");
         var freshCsrf = csrf(browser);
-        assertThat(json(browser, "PATCH", "/api/v1/me/preferences", Map.of("locale", "en"), freshCsrf, etag).statusCode()).isEqualTo(200);
+        assertThat(json(browser, "PATCH", "/api/v1/me/preferences", Map.of("locale", "en"), freshCsrf, etag, owner).statusCode()).isEqualTo(200);
         // A fresh HTTP client carrying the opaque cookie reads the same persisted identity.
         var secondClient = new Browser(HttpClient.newBuilder().cookieHandler(browser.cookies()).build(), browser.cookies());
         assertThat(tree(get(secondClient, "/api/v1/auth/me")).path("id").asText()).isEqualTo(owner);
@@ -136,18 +136,49 @@ class HTTPAuthIntegrationTest {
         var csrf = csrf(browser);
         var original = get(browser, "/api/v1/me/preferences");
         String etag = original.headers().firstValue("ETag").orElseThrow();
-        assertProblem(json(browser, "PATCH", "/api/v1/me/preferences", Map.of("locale", "en"), csrf, null), 428, "PRECONDITION_REQUIRED");
-        assertProblem(json(browser, "PATCH", "/api/v1/me/preferences", Map.of("locale", "en", "userId", UUID.randomUUID().toString()), csrf, etag), 400, "INVALID_REQUEST");
-        var changed = json(browser, "PATCH", "/api/v1/me/preferences", Map.of("locale", "en"), csrf, etag);
+        assertProblem(json(browser, "PATCH", "/api/v1/me/preferences", Map.of("locale", "en"), csrf, etag), 428, "ACCOUNT_CONTEXT_REQUIRED");
+        assertProblem(json(browser, "PATCH", "/api/v1/me/preferences", Map.of("locale", "en"), csrf, etag, UUID.randomUUID().toString()), 409, "ACCOUNT_CONTEXT_CHANGED");
+        assertThat(tree(get(browser, "/api/v1/me/preferences")).path("locale").asText()).isEqualTo("fr");
+        assertProblem(json(browser, "PATCH", "/api/v1/me/preferences", Map.of("locale", "en"), csrf, null, owner), 428, "PRECONDITION_REQUIRED");
+        assertProblem(json(browser, "PATCH", "/api/v1/me/preferences", Map.of("locale", "en", "userId", UUID.randomUUID().toString()), csrf, etag, owner), 400, "INVALID_REQUEST");
+        var changed = json(browser, "PATCH", "/api/v1/me/preferences", Map.of("locale", "en"), csrf, etag, owner);
         assertThat(changed.statusCode()).isEqualTo(200);
         assertThat(tree(changed).path("id").asText()).isEqualTo(tree(original).path("id").asText());
         assertThat(tree(changed).path("revision").asLong()).isEqualTo(tree(original).path("revision").asLong() + 1);
-        assertProblem(json(browser, "PATCH", "/api/v1/me/preferences", Map.of("locale", "fr"), csrf, etag), 412, "REVISION_CONFLICT");
+        assertProblem(json(browser, "PATCH", "/api/v1/me/preferences", Map.of("locale", "fr"), csrf, etag, owner), 412, "REVISION_CONFLICT");
         jdbc.update("UPDATE user_roles SET revoked_at=current_timestamp,updated_at=current_timestamp WHERE user_id=? AND revoked_at IS NULL", UUID.fromString(owner));
         assertProblem(json(browser, "PATCH", "/api/v1/me/preferences", Map.of("locale", "fr"), csrf,
-                changed.headers().firstValue("ETag").orElseThrow()), 403, "ACCESS_DENIED");
+                changed.headers().firstValue("ETag").orElseThrow(), owner), 403, "ACCESS_DENIED");
         assertThat(get(browser, "/api/v1/me/preferences").statusCode()).isEqualTo(200);
         assertThat(tree(get(browser, "/api/v1/auth/me")).path("permissions").isEmpty()).isTrue();
+    }
+
+    @Test
+    void preferencesRecheckPermissionAfterWaitingForTheOwnerLock() throws Exception {
+        var browser = browser(); String email = email();
+        String owner = tree(register(browser, email, csrf(browser))).path("id").asText();
+        assertThat(login(browser, email, PASSWORD, csrf(browser)).statusCode()).isEqualTo(200);
+        var token = csrf(browser); var original = get(browser, "/api/v1/me/preferences"); String etag = original.headers().firstValue("ETag").orElseThrow();
+        try (var connection = POSTGRES.createConnection("")) {
+            connection.setAutoCommit(false);
+            try (var statement = connection.prepareStatement("SELECT id FROM user_accounts WHERE id=? FOR NO KEY UPDATE")) { statement.setObject(1, UUID.fromString(owner)); statement.executeQuery(); }
+            try (var pool = Executors.newSingleThreadExecutor()) {
+                var pending = pool.submit(() -> json(browser, "PATCH", "/api/v1/me/preferences", Map.of("locale", "en"), token, etag, owner));
+                try {
+                    long deadline = System.nanoTime() + java.util.concurrent.TimeUnit.SECONDS.toNanos(5); boolean waiting = false;
+                    while (System.nanoTime() < deadline) {
+                        waiting = Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE datname=current_database() AND wait_event_type='Lock' AND query ILIKE '%user_accounts%')", Boolean.class));
+                        if (waiting) break; Thread.sleep(25);
+                    }
+                    assertThat(waiting).as("preferences waits for canonical owner lock").isTrue();
+                    assertThat(jdbc.update("UPDATE user_roles SET revoked_at=greatest(created_at,clock_timestamp()),updated_at=greatest(created_at,updated_at,clock_timestamp()),revision=revision+1 WHERE user_id=? AND revoked_at IS NULL", UUID.fromString(owner))).isPositive();
+                } finally { connection.commit(); }
+                assertProblem(pending.get(20, java.util.concurrent.TimeUnit.SECONDS), 403, "ACCESS_DENIED");
+            }
+        }
+        var preserved = get(browser, "/api/v1/me/preferences"); assertThat(preserved.statusCode()).isEqualTo(200);
+        assertThat(tree(preserved).path("locale").asText()).isEqualTo(tree(original).path("locale").asText());
+        assertThat(preserved.headers().firstValue("ETag")).contains(etag);
     }
 
     @Test
@@ -178,13 +209,18 @@ class HTTPAuthIntegrationTest {
         assertThat(login(browser, email, PASSWORD, csrf(browser)).statusCode()).isEqualTo(200);
         var csrf = csrf(browser);
         assertProblem(json(browser, "POST", "/api/v1/auth/logout", null, null, null), 403, "CSRF_INVALID");
-        var response = json(browser, "POST", "/api/v1/auth/logout", null, csrf, null);
+        assertProblem(json(browser, "POST", "/api/v1/auth/logout", null, csrf, null), 428, "ACCOUNT_CONTEXT_REQUIRED");
+        assertProblem(json(browser, "POST", "/api/v1/auth/logout", null, csrf, null, UUID.randomUUID().toString()), 409, "ACCOUNT_CONTEXT_CHANGED");
+        assertThat(tree(get(browser, "/api/v1/auth/me")).path("id").asText()).isEqualTo(owner);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM spring_session WHERE principal_name=?", Integer.class, owner)).isEqualTo(1);
+        var response = json(browser, "POST", "/api/v1/auth/logout", null, csrf, null, owner);
         assertThat(response.statusCode()).isEqualTo(204);
         assertThat(response.headers().allValues("Set-Cookie").stream().anyMatch(value -> value.startsWith("SESSION=") && value.contains("Max-Age=0")))
                 .as("logout expires the actual session cookie").isTrue();
         assertThat(jdbc.queryForObject("SELECT count(*) FROM spring_session WHERE principal_name=?", Integer.class, owner)).isZero();
         assertProblem(get(browser, "/api/v1/auth/me"), 401, "AUTHENTICATION_REQUIRED");
         assertProblem(login(browser, email, PASSWORD, csrf), 403, "CSRF_INVALID");
+        assertThat(json(browser, "POST", "/api/v1/auth/logout", null, csrf(browser), null).statusCode()).isEqualTo(204);
         assertThat(login(browser, email, PASSWORD, csrf(browser)).statusCode()).isEqualTo(200);
     }
 
@@ -298,10 +334,14 @@ class HTTPAuthIntegrationTest {
         return browser.http().send(request.build(), HttpResponse.BodyHandlers.ofString());
     }
     private HttpResponse<String> json(Browser browser, String method, String path, Object body, Csrf csrf, String etag) throws Exception {
+        return json(browser, method, path, body, csrf, etag, null);
+    }
+    private HttpResponse<String> json(Browser browser, String method, String path, Object body, Csrf csrf, String etag, String accountContext) throws Exception {
         var request = HttpRequest.newBuilder(uri(path)).timeout(Duration.ofSeconds(15)).header("Content-Type", "application/json")
                 .method(method, body == null ? HttpRequest.BodyPublishers.noBody() : HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(body)));
         if (csrf != null) request.header(csrf.headerName(), csrf.token());
         if (etag != null) request.header("If-Match", etag);
+        if (accountContext != null) request.header("X-Account-Context", accountContext);
         return browser.http().send(request.build(), HttpResponse.BodyHandlers.ofString());
     }
     private HttpResponse<String> get(Browser browser, String path) throws Exception {

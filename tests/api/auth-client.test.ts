@@ -101,9 +101,10 @@ test("une préférence exige l'ETag confirmé et conserve un conflit sans répé
     if (path === "/api/v1/auth/csrf") return Response.json(securityToken());
     assert.equal(init?.method, "PATCH");
     assert.equal(new Headers(init?.headers).get("If-Match"), etag);
+    assert.equal(new Headers(init?.headers).get("X-Account-Context"), user.id);
     patches++; return failure(412, "REVISION_CONFLICT");
   };
-  const result = await updatePreferences("en", etag);
+  const result = await updatePreferences("en", etag, user.id);
   assert.equal(result.ok, false);
   if (!result.ok) assert.equal(result.error.status, 412);
   assert.equal(patches, 1);
@@ -114,4 +115,17 @@ test("le mot de passe est borné en points Unicode et octets, sans compter les p
   assert.equal(validNewPassword("😀".repeat(128)), true);
   assert.equal(validNewPassword("😀".repeat(129)), false);
   assert.equal(validNewPassword("short"), false);
+});
+
+test("une préférence confirme son identité propre et la langue demandée, avec no-op ou unique incrément", async () => {
+  const preferenceId = randomUUID(), tag = `"preferences-${preferenceId}-r7"`;
+  let writes = 0;
+  for (const value of [{ id: randomUUID(), locale: "en", revision: 8 }, { id: preferenceId, locale: "fr", revision: 8 }, { id: preferenceId, locale: "en", revision: 6 }, { id: preferenceId, locale: "en", revision: 9 }]) {
+    clearCsrfToken(); globalThis.fetch = async (path, init) => { if (path === "/api/v1/auth/csrf") return Response.json(securityToken()); writes++; assert.equal(new Headers(init?.headers).get("X-Account-Context"), user.id); return Response.json(value, { headers: { ETag: `"preferences-${value.id}-r${value.revision}"` } }); };
+    const result = await updatePreferences("en", tag, user.id); assert.equal(result.ok, false); if (!result.ok) assert.equal(result.error.kind, "invalid-response");
+  }
+  for (const revision of [7, 8]) { globalThis.fetch = async () => Response.json({ id: preferenceId, locale: "en", revision }, { headers: { ETag: `"preferences-${preferenceId}-r${revision}"` } }); assert.equal((await updatePreferences("en", tag, user.id)).ok, true); }
+  const previous = writes; globalThis.fetch = async () => { writes++; throw new Error("Invalid input must not reach HTTP"); };
+  for (const invalid of ["*", `W/${tag}`, `${tag},${tag}`, `"preferences-${preferenceId}-r9007199254740992"`, `"preferences-bad-r7"`]) assert.throws(() => updatePreferences("en", invalid, user.id));
+  assert.equal(writes, previous);
 });

@@ -25,9 +25,9 @@ for (let index = 3; index < process.argv.length; index += 2) {
   else throw new Error('Diagnostic permis : --grep expression et --repeat-each 1..20.');
   diagnosticArgs.push(flag, value);
 }
-if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13'].includes(phase)) throw new Error('Phase de recette inconnue.');
+if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14'].includes(phase)) throw new Error('Phase de recette inconnue.');
 const needsApi = phase !== 'P02';
-const isolatedDatabase = ['P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13'].includes(phase);
+const isolatedDatabase = ['P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14'].includes(phase);
 if (!['local', 'test'].includes(env.APP_ENV)) throw new Error('Vérification navigateur réservée à local/test.');
 const port = (value, fallback) => {
   const text = value ?? String(fallback);
@@ -172,7 +172,7 @@ const control = createServer((socket) => {
         return startApi();
       }
       if (['pause-mailpit', 'resume-mailpit'].includes(message.operation)) {
-        if (!['P10','P12','P12_EXTERNAL','P13'].includes(phase)) throw new Error('Contrôle de service réservé à la recette médias/paiements.');
+        if (!['P10','P12','P12_EXTERNAL','P13','P14'].includes(phase)) throw new Error('Contrôle de service réservé à la recette médias/paiements/compte.');
         setBrowserServicePaused(services.find(({ kind }) => kind === 'mailpit'), message.operation === 'pause-mailpit'); save();
         return { webPid: web.child.pid, apiPid: api?.child.pid };
       }
@@ -191,11 +191,18 @@ const interrupted = new Promise((_, reject) => {
 interrupted.catch(() => {}); // Also handle interruption during IPC initialization.
 try {
   if (isolatedDatabase) { database = await createBrowserDatabase(env, runDirectory, runId, (record) => { database = record; save(); }); save(); }
+  if (phase === 'P14') {
+    for (const key of Object.keys(env)) if (key.startsWith('STRIPE_')) delete env[key];
+    env.STRIPE_ENABLED = 'false'; env.PAYMENT_INBOX_ENABLED = 'false'; env.REFUND_WORKER_ENABLED = 'false';
+    // Disposable offers/orders exercise the existing account purchase views;
+    // no Checkout, provider secret or financial operation is enabled.
+    env.COMMERCE_ENABLED = 'true'; env.COMMERCE_ALLOWED_CURRENCIES = 'EUR';
+  }
   if (phase === 'P11') {
     env.COMMERCE_ENABLED = 'true'; env.COMMERCE_ALLOWED_CURRENCIES = 'EUR';
     env.STRIPE_ENABLED = 'false'; delete env.STRIPE_SECRET_KEY; delete env.STRIPE_WEBHOOK_SECRET;
   }
-  if (['P10','P12','P12_EXTERNAL','P13'].includes(phase)) {
+  if (['P10','P12','P12_EXTERNAL','P13','P14'].includes(phase)) {
     services = await createBrowserServices(env, runDirectory, runId, (records) => { services = records; save(); });
     if (phase === 'P10') {
       env.VIDEO_ENABLED = 'true'; env.VIDEO_PROVIDER = 'local-test'; env.VIDEO_LOCAL_ROOT = join(runDirectory, 'private-video');

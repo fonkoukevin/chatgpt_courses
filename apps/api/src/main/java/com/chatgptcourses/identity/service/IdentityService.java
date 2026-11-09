@@ -88,6 +88,33 @@ public class IdentityService {
     public Optional<SessionUserSnapshot> loadSessionUser(UUID id) { return accounts.findById(id).flatMap(this::snapshot); }
 
     @Transactional(readOnly = true)
+    public com.chatgptcourses.account.service.AccountTypes.ProfileView profile(UUID owner) {
+        requireActive(owner);
+        if(!permissions(owner).contains("identity.profile.read"))throw new AccessDeniedException("Action unavailable");
+        return profileRow(owner);
+    }
+
+    @Transactional
+    public com.chatgptcourses.account.service.AccountTypes.ProfileView updateProfile(UUID owner,UUID context,String ifMatch,String displayName) {
+        requireAccountContext(owner,context);
+        if(displayName!=null&&(displayName.length()>120||displayName.indexOf('\0')>=0))throw new ApiException(ApiError.VALIDATION_FAILED);
+        jdbc.query("SELECT id FROM user_accounts WHERE id=? FOR NO KEY UPDATE",(r,n)->r.getObject(1,UUID.class),owner);
+        if(!Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM user_accounts WHERE id=? AND status='ACTIVE')",Boolean.class,owner)))throw new ApiException(ApiError.ACCOUNT_UNAVAILABLE);
+        if(!permissions(owner).contains("identity.profile.write"))throw new AccessDeniedException("Action unavailable");
+        var current=profileRow(owner);
+        RevisionPreconditions.requireMatch(ifMatch,EntityTags.forRevision("profile",owner,current.revision()));
+        String name=displayName==null||displayName.isBlank()?null:displayName.strip();
+        if(!java.util.Objects.equals(name,current.displayName()))jdbc.update("UPDATE user_accounts SET display_name=?,revision=revision+1,updated_at=greatest(created_at,updated_at,clock_timestamp()) WHERE id=?",name,owner);
+        return profileRow(owner);
+    }
+
+    private com.chatgptcourses.account.service.AccountTypes.ProfileView profileRow(UUID owner) {
+        return jdbc.queryForObject("SELECT normalized_email,display_name,revision FROM user_accounts WHERE id=?",(r,n)->{String name=r.getString(2);return new com.chatgptcourses.account.service.AccountTypes.ProfileView(owner,r.getString(1),name==null||name.isBlank()?null:name,r.getLong(3));},owner);
+    }
+
+    private static void requireAccountContext(UUID owner,UUID context){if(context==null)throw new ApiException(ApiError.ACCOUNT_CONTEXT_REQUIRED);if(!owner.equals(context))throw new ApiException(ApiError.ACCOUNT_CONTEXT_CHANGED);}
+
+    @Transactional(readOnly = true)
     public PreferencesView getPreferences(UUID owner) {
         requireActive(owner);
         return view(preferences.findByUserId(owner).orElseThrow(() -> new ApiException(ApiError.RESOURCE_NOT_FOUND)));
@@ -95,7 +122,8 @@ public class IdentityService {
 
     @Transactional
     public PreferencesView updatePreferences(UUID owner, String ifMatch, String locale) {
-        requireActive(owner);
+        jdbc.query("SELECT id FROM user_accounts WHERE id=? FOR NO KEY UPDATE",(r,n)->r.getObject(1,UUID.class),owner);
+        if(!Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM user_accounts WHERE id=? AND status='ACTIVE')",Boolean.class,owner)))throw new ApiException(ApiError.ACCOUNT_UNAVAILABLE);
         if (!permissions(owner).contains("identity.preferences.write")) throw new AccessDeniedException("Action unavailable");
         if (locale == null || !Set.of("fr", "en").contains(locale)) throw new ApiException(ApiError.VALIDATION_FAILED);
         var preference = preferences.findByUserId(owner).orElseThrow(() -> new ApiException(ApiError.RESOURCE_NOT_FOUND));
@@ -104,6 +132,9 @@ public class IdentityService {
         preferences.flush();
         return view(preference);
     }
+
+    @Transactional
+    public PreferencesView updatePreferences(UUID owner,UUID context,String ifMatch,String locale){requireAccountContext(owner,context);return updatePreferences(owner,ifMatch,locale);}
 
     /** Always completes neutrally for unknown, disabled and throttled email addresses. */
     @Transactional

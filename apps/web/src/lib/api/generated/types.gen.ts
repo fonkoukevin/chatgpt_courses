@@ -2267,6 +2267,323 @@ export type EntitlementPage = {
     total: number;
 };
 
+export type ProfileView = {
+    id: Uuid;
+    email: string;
+    displayName: string | null;
+    revision: Revision;
+};
+
+export type SaveProfile = {
+    displayName: string | null;
+};
+
+export type CommercialDocument = {
+    id: Uuid;
+    kind: 'PAYMENT_RECEIPT' | 'INVOICE' | 'OTHER';
+    filename: string;
+    contentType: string;
+};
+
+/**
+ * Aucun document vérifié publié dans la plateforme. Cela ne prétend pas interroger Stripe ou déterminer la présence d’un reçu chez le fournisseur. Aucun téléchargement fictif.
+ */
+export type CommercialDocuments = {
+    orderId: Uuid;
+    state: 'NONE_AVAILABLE';
+    documents: Array<CommercialDocument>;
+    unavailableReason: 'NO_VERIFIED_COMMERCIAL_DOCUMENT';
+};
+
+export type CreateDataRequest = {
+    type: 'EXPORT' | 'ERASURE' | 'ACCOUNT_CLOSURE';
+    reason: string;
+};
+
+export type CancelDataRequest = {
+    reason: string;
+};
+
+/**
+ * Demande traçable, sans export prêt, effacement ou clôture automatique. Une politique de conservation validée et une implémentation ultérieure sont nécessaires avant exécution irréversible.
+ */
+export type DataRequestView = {
+    id: Uuid;
+    revision: Revision;
+    type: 'EXPORT' | 'ERASURE' | 'ACCOUNT_CLOSURE';
+    reason: string;
+    state: 'WAITING_POLICY' | 'CANCELLED';
+    processingUnavailableReason: 'RETENTION_POLICY_UNCONFIGURED' | null;
+    createdAt: UtcInstant;
+    updatedAt: UtcInstant;
+    cancelledAt: UtcInstant | null;
+};
+
+export type DataRequestEvent = {
+    id: Uuid;
+    requestId: Uuid;
+    type: 'REQUESTED' | 'CANCELLED';
+    reason: string;
+    createdAt: UtcInstant;
+};
+
+/**
+ * Au moins une cible choisie explicitement ; resourceId/versionId ensemble et révision exacte de cette version/langue. Les commandes, projets et inscriptions appartiennent à l’acteur. Aucune note ou production jointe automatiquement.
+ */
+export type SupportContext = {
+    locale: Locale;
+    resourceId: Uuid | null;
+    versionId: Uuid | null;
+    revisionId: Uuid | null;
+    orderId: Uuid | null;
+    projectId: Uuid | null;
+    enrollmentId: Uuid | null;
+};
+
+export type CreateSupportTicket = {
+    category: 'TECHNICAL' | 'CONTENT' | 'ACCESS' | 'ORDER' | 'ACCOUNT' | 'OTHER';
+    subject: string;
+    message: string;
+    locale: Locale;
+    context: SupportContext | null;
+    attachmentIds: Array<Uuid>;
+};
+
+export type AddSupportMessage = {
+    message: string;
+    attachmentIds: Array<Uuid>;
+};
+
+export type ChangeSupportState = {
+    state: 'OPEN' | 'IN_PROGRESS' | 'WAITING_FOR_USER' | 'RESOLVED' | 'CLOSED';
+    reason: string;
+};
+
+export type SupportTicketView = {
+    id: Uuid;
+    revision: Revision;
+    category: 'TECHNICAL' | 'CONTENT' | 'ACCESS' | 'ORDER' | 'ACCOUNT' | 'OTHER';
+    subject: string;
+    locale: Locale;
+    state: 'OPEN' | 'IN_PROGRESS' | 'WAITING_FOR_USER' | 'RESOLVED' | 'CLOSED';
+    context: SupportContext | null;
+    createdAt: UtcInstant;
+    updatedAt: UtcInstant;
+};
+
+export type SupportAttachment = {
+    assetId: Uuid;
+    filename: string;
+    contentType: string;
+    sizeBytes: number;
+    sha256: string;
+};
+
+/**
+ * Message réellement persisté ; statut email calculé depuis l’outbox P10 pour les réponses SUPPORT. La création d’une demande n’annonce aucun email envoyé ni réponse en préparation.
+ */
+export type SupportMessageView = {
+    id: Uuid;
+    ticketId: Uuid;
+    authorKind: 'USER' | 'SUPPORT';
+    message: string;
+    attachments: Array<SupportAttachment>;
+    createdAt: UtcInstant;
+    notificationStatus: 'NOT_REQUIRED' | 'PENDING' | 'SENT' | 'ISSUE';
+};
+
+export type SupportTicketEvent = {
+    id: Uuid;
+    ticketId: Uuid;
+    type: 'CREATED' | 'USER_MESSAGE' | 'SUPPORT_REPLY' | 'STATE_CHANGED';
+    fromState: 'OPEN' | 'IN_PROGRESS' | 'WAITING_FOR_USER' | 'RESOLVED' | 'CLOSED' | null;
+    toState: 'OPEN' | 'IN_PROGRESS' | 'WAITING_FOR_USER' | 'RESOLVED' | 'CLOSED' | null;
+    authorKind: 'USER' | 'SUPPORT';
+    reason: string | null;
+    createdAt: UtcInstant;
+};
+
+export type SupportConversationUpdate = {
+    ticket: SupportTicketView;
+    message: SupportMessageView;
+};
+
+export type ParticipationActivity = {
+    activityId: Uuid;
+    activityVersionId: Uuid;
+    position: number;
+    title: string;
+    readAt: UtcInstant | null;
+    declaredCompletedAt: UtcInstant | null;
+};
+
+export type ParticipationQuiz = {
+    attemptId: Uuid;
+    activityId: Uuid;
+    activityVersionId: Uuid;
+    sourceRevisionId: Uuid;
+    locale: Locale;
+    attemptNumber: number;
+    scorePoints: number;
+    maxPoints: number;
+    passed: boolean;
+    passPercent: number;
+    submittedAt: UtcInstant;
+};
+
+export type ParticipationAssessment = {
+    assessmentId: Uuid;
+    projectId: Uuid;
+    projectRevisionId: Uuid;
+    rubricVersionId: Uuid;
+    activityId: Uuid;
+    activityVersionId: Uuid;
+    locale: Locale;
+    scorePoints: number;
+    maxPoints: number;
+    passPoints: number;
+    thresholdMet: boolean;
+    needsRevision: boolean;
+    evaluatedAt: UtcInstant;
+    declaredByUser: true;
+};
+
+/**
+ * Instantané sans réponses, corrigés, notes ou productions privées. Identité déclarée non vérifiée ; quiz automatique et autoévaluation distincts. Une autoévaluation ne qualifie que la révision courante du projet. Aucun examen humain, seuil global d’achèvement ou certification.
+ */
+export type ParticipationEvidence = {
+    enrollmentId: Uuid;
+    courseResourceId: Uuid;
+    courseVersionId: Uuid;
+    courseVersionNumber: number;
+    courseTitle: string;
+    enrolledLocale: Locale;
+    profileRevision: Revision;
+    participantName: string | null;
+    identityVerified: false;
+    humanReview: false;
+    activities: Array<ParticipationActivity>;
+    quizzes: Array<ParticipationQuiz>;
+    selfAssessments: Array<ParticipationAssessment>;
+};
+
+export type AttestationCriterion = {
+    code: 'PROFILE_NAME_PRESENT' | 'PERSISTED_PARTICIPATION_PRESENT';
+    met: boolean;
+};
+
+/**
+ * Participation : nom de profil déclaré et au moins une activité déclarée terminée, un quiz durable ou une autoévaluation de la révision courante sur les identités exactes de l’inscription. Lecture, visite, vidéo ou note seules insuffisantes. Empreinte à confirmer explicitement avant émission.
+ */
+export type AttestationEligibility = {
+    enrollmentId: Uuid;
+    type: 'PARTICIPATION';
+    locale: Locale;
+    eligible: boolean;
+    blockingCodes: Array<'PROFILE_NAME_PRESENT' | 'PERSISTED_PARTICIPATION_PRESENT'>;
+    criteria: [
+        AttestationCriterion,
+        AttestationCriterion
+    ];
+    evidenceFingerprint: string;
+    evidence: ParticipationEvidence;
+};
+
+export type IssueAttestation = {
+    locale: Locale;
+    expectedEvidenceFingerprint: string;
+};
+
+export type AttestationDocument = {
+    format: 'HTML';
+    contentType: 'text/html; charset=UTF-8';
+    filename: string;
+    sizeBytes: number;
+    sha256: string;
+};
+
+export type AttestationSummary = {
+    id: Uuid;
+    enrollmentId: Uuid;
+    type: 'PARTICIPATION';
+    locale: Locale;
+    courseResourceId: Uuid;
+    courseVersionId: Uuid;
+    courseVersionNumber: number;
+    courseTitle: string;
+    participantName: string;
+    issuedAt: UtcInstant;
+    document: AttestationDocument;
+};
+
+/**
+ * Instantané immuable et document réel conservé. Idempotence par propriétaire/inscription/type/langue/empreinte et par clé. Une nouvelle édition, un remboursement ou un changement de profil ne réécrit pas les octets émis.
+ */
+export type AttestationView = {
+    summary: AttestationSummary;
+    evidenceFingerprint: string;
+    evidence: ParticipationEvidence;
+};
+
+export type AttestationEnrollment = {
+    enrollmentId: Uuid;
+    courseResourceId: Uuid;
+    courseVersionId: Uuid;
+    courseVersionNumber: number;
+    courseTitle: string;
+    enrolledLocale: Locale;
+    createdAt: UtcInstant;
+};
+
+export type DataRequestPage = {
+    items: Array<DataRequestView>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+export type DataRequestEventPage = {
+    items: Array<DataRequestEvent>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+export type SupportTicketPage = {
+    items: Array<SupportTicketView>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+export type SupportMessagePage = {
+    items: Array<SupportMessageView>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+export type SupportEventPage = {
+    items: Array<SupportTicketEvent>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+export type AttestationPage = {
+    items: Array<AttestationSummary>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+export type AttestationEnrollmentPage = {
+    items: Array<AttestationEnrollment>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
 export type RegisterRequestWritable = {
     email: string;
     /**
@@ -2458,6 +2775,10 @@ export type LogoutData = {
     body?: never;
     headers: {
         /**
+         * Obligatoire pour une session authentifiée (428 absent, 409 compte changé). Une session anonyme peut être invalidée avec CSRF seul.
+         */
+        'X-Account-Context'?: Uuid;
+        /**
          * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
          */
         'X-CSRF-TOKEN': string;
@@ -2634,6 +2955,10 @@ export type GetPreferencesResponse = GetPreferencesResponses[keyof GetPreference
 export type UpdatePreferencesData = {
     body: PreferencesPatch;
     headers: {
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
         /**
          * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
          */
@@ -9678,3 +10003,945 @@ export type DecideExternalRefundAccessResponses = {
 };
 
 export type DecideExternalRefundAccessResponse = DecideExternalRefundAccessResponses[keyof DecideExternalRefundAccessResponses];
+
+export type GetAccountProfileData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/me/profile';
+};
+
+export type GetAccountProfileErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetAccountProfileError = GetAccountProfileErrors[keyof GetAccountProfileErrors];
+
+export type GetAccountProfileResponses = {
+    /**
+     * Réponse privée réelle.
+     */
+    200: ProfileView;
+};
+
+export type GetAccountProfileResponse = GetAccountProfileResponses[keyof GetAccountProfileResponses];
+
+export type UpdateAccountProfileData = {
+    body: SaveProfile;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path?: never;
+    query?: never;
+    url: '/me/profile';
+};
+
+export type UpdateAccountProfileErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type UpdateAccountProfileError = UpdateAccountProfileErrors[keyof UpdateAccountProfileErrors];
+
+export type UpdateAccountProfileResponses = {
+    /**
+     * Réponse privée réelle.
+     */
+    200: ProfileView;
+};
+
+export type UpdateAccountProfileResponse = UpdateAccountProfileResponses[keyof UpdateAccountProfileResponses];
+
+export type GetOrderDocumentsData = {
+    body?: never;
+    path: {
+        orderId: Uuid;
+    };
+    query?: never;
+    url: '/me/orders/{orderId}/documents';
+};
+
+export type GetOrderDocumentsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetOrderDocumentsError = GetOrderDocumentsErrors[keyof GetOrderDocumentsErrors];
+
+export type GetOrderDocumentsResponses = {
+    /**
+     * Réponse privée réelle.
+     */
+    200: CommercialDocuments;
+};
+
+export type GetOrderDocumentsResponse = GetOrderDocumentsResponses[keyof GetOrderDocumentsResponses];
+
+export type ListDataRequestsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/me/data-requests';
+};
+
+export type ListDataRequestsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListDataRequestsError = ListDataRequestsErrors[keyof ListDataRequestsErrors];
+
+export type ListDataRequestsResponses = {
+    /**
+     * Réponse privée réelle.
+     */
+    200: DataRequestPage;
+};
+
+export type ListDataRequestsResponse = ListDataRequestsResponses[keyof ListDataRequestsResponses];
+
+export type CreateDataRequestData = {
+    body: CreateDataRequest;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path?: never;
+    query?: never;
+    url: '/me/data-requests';
+};
+
+export type CreateDataRequestErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type CreateDataRequestError = CreateDataRequestErrors[keyof CreateDataRequestErrors];
+
+export type CreateDataRequestResponses = {
+    /**
+     * Résultat retrouvé après rejeu idempotent.
+     */
+    200: DataRequestView;
+    /**
+     * Création persistée.
+     */
+    201: DataRequestView;
+};
+
+export type CreateDataRequestResponse = CreateDataRequestResponses[keyof CreateDataRequestResponses];
+
+export type GetDataRequestData = {
+    body?: never;
+    path: {
+        requestId: Uuid;
+    };
+    query?: never;
+    url: '/me/data-requests/{requestId}';
+};
+
+export type GetDataRequestErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetDataRequestError = GetDataRequestErrors[keyof GetDataRequestErrors];
+
+export type GetDataRequestResponses = {
+    /**
+     * Réponse privée réelle.
+     */
+    200: DataRequestView;
+};
+
+export type GetDataRequestResponse = GetDataRequestResponses[keyof GetDataRequestResponses];
+
+export type ListDataRequestEventsData = {
+    body?: never;
+    path: {
+        requestId: Uuid;
+    };
+    query?: {
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/me/data-requests/{requestId}/events';
+};
+
+export type ListDataRequestEventsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListDataRequestEventsError = ListDataRequestEventsErrors[keyof ListDataRequestEventsErrors];
+
+export type ListDataRequestEventsResponses = {
+    /**
+     * Réponse privée réelle.
+     */
+    200: DataRequestEventPage;
+};
+
+export type ListDataRequestEventsResponse = ListDataRequestEventsResponses[keyof ListDataRequestEventsResponses];
+
+export type CancelDataRequestData = {
+    body: CancelDataRequest;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path: {
+        requestId: Uuid;
+    };
+    query?: never;
+    url: '/me/data-requests/{requestId}/cancellations';
+};
+
+export type CancelDataRequestErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type CancelDataRequestError = CancelDataRequestErrors[keyof CancelDataRequestErrors];
+
+export type CancelDataRequestResponses = {
+    /**
+     * Réponse privée réelle.
+     */
+    200: DataRequestView;
+};
+
+export type CancelDataRequestResponse = CancelDataRequestResponses[keyof CancelDataRequestResponses];
+
+export type ListPersonalSupportTicketsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        state?: 'OPEN' | 'IN_PROGRESS' | 'WAITING_FOR_USER' | 'RESOLVED' | 'CLOSED';
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/me/support-tickets';
+};
+
+export type ListPersonalSupportTicketsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListPersonalSupportTicketsError = ListPersonalSupportTicketsErrors[keyof ListPersonalSupportTicketsErrors];
+
+export type ListPersonalSupportTicketsResponses = {
+    /**
+     * Réponse privée réelle.
+     */
+    200: SupportTicketPage;
+};
+
+export type ListPersonalSupportTicketsResponse = ListPersonalSupportTicketsResponses[keyof ListPersonalSupportTicketsResponses];
+
+export type CreateSupportTicketData = {
+    body: CreateSupportTicket;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path?: never;
+    query?: never;
+    url: '/me/support-tickets';
+};
+
+export type CreateSupportTicketErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type CreateSupportTicketError = CreateSupportTicketErrors[keyof CreateSupportTicketErrors];
+
+export type CreateSupportTicketResponses = {
+    /**
+     * Résultat retrouvé après rejeu idempotent.
+     */
+    200: SupportTicketView;
+    /**
+     * Création persistée.
+     */
+    201: SupportTicketView;
+};
+
+export type CreateSupportTicketResponse = CreateSupportTicketResponses[keyof CreateSupportTicketResponses];
+
+export type GetPersonalSupportTicketData = {
+    body?: never;
+    path: {
+        ticketId: Uuid;
+    };
+    query?: never;
+    url: '/me/support-tickets/{ticketId}';
+};
+
+export type GetPersonalSupportTicketErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetPersonalSupportTicketError = GetPersonalSupportTicketErrors[keyof GetPersonalSupportTicketErrors];
+
+export type GetPersonalSupportTicketResponses = {
+    /**
+     * Réponse privée réelle.
+     */
+    200: SupportTicketView;
+};
+
+export type GetPersonalSupportTicketResponse = GetPersonalSupportTicketResponses[keyof GetPersonalSupportTicketResponses];
+
+export type ListPersonalSupportMessagesData = {
+    body?: never;
+    path: {
+        ticketId: Uuid;
+    };
+    query?: {
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/me/support-tickets/{ticketId}/messages';
+};
+
+export type ListPersonalSupportMessagesErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListPersonalSupportMessagesError = ListPersonalSupportMessagesErrors[keyof ListPersonalSupportMessagesErrors];
+
+export type ListPersonalSupportMessagesResponses = {
+    /**
+     * Réponse privée réelle.
+     */
+    200: SupportMessagePage;
+};
+
+export type ListPersonalSupportMessagesResponse = ListPersonalSupportMessagesResponses[keyof ListPersonalSupportMessagesResponses];
+
+export type AddPersonalSupportMessageData = {
+    body: AddSupportMessage;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path: {
+        ticketId: Uuid;
+    };
+    query?: never;
+    url: '/me/support-tickets/{ticketId}/messages';
+};
+
+export type AddPersonalSupportMessageErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type AddPersonalSupportMessageError = AddPersonalSupportMessageErrors[keyof AddPersonalSupportMessageErrors];
+
+export type AddPersonalSupportMessageResponses = {
+    /**
+     * Résultat retrouvé après rejeu idempotent.
+     */
+    200: SupportConversationUpdate;
+    /**
+     * Création persistée.
+     */
+    201: SupportConversationUpdate;
+};
+
+export type AddPersonalSupportMessageResponse = AddPersonalSupportMessageResponses[keyof AddPersonalSupportMessageResponses];
+
+export type ListPersonalSupportEventsData = {
+    body?: never;
+    path: {
+        ticketId: Uuid;
+    };
+    query?: {
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/me/support-tickets/{ticketId}/events';
+};
+
+export type ListPersonalSupportEventsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListPersonalSupportEventsError = ListPersonalSupportEventsErrors[keyof ListPersonalSupportEventsErrors];
+
+export type ListPersonalSupportEventsResponses = {
+    /**
+     * Réponse privée réelle.
+     */
+    200: SupportEventPage;
+};
+
+export type ListPersonalSupportEventsResponse = ListPersonalSupportEventsResponses[keyof ListPersonalSupportEventsResponses];
+
+export type CreatePersonalSupportAttachmentAccessData = {
+    body?: never;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+    };
+    path: {
+        ticketId: Uuid;
+        assetId: Uuid;
+    };
+    query?: never;
+    url: '/me/support-tickets/{ticketId}/attachments/{assetId}/download-access';
+};
+
+export type CreatePersonalSupportAttachmentAccessErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type CreatePersonalSupportAttachmentAccessError = CreatePersonalSupportAttachmentAccessErrors[keyof CreatePersonalSupportAttachmentAccessErrors];
+
+export type CreatePersonalSupportAttachmentAccessResponses = {
+    /**
+     * Réponse privée réelle.
+     */
+    200: AssetDownloadAccess;
+};
+
+export type CreatePersonalSupportAttachmentAccessResponse = CreatePersonalSupportAttachmentAccessResponses[keyof CreatePersonalSupportAttachmentAccessResponses];
+
+export type ListAdminSupportTicketsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        state?: 'OPEN' | 'IN_PROGRESS' | 'WAITING_FOR_USER' | 'RESOLVED' | 'CLOSED';
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/admin/support-tickets';
+};
+
+export type ListAdminSupportTicketsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListAdminSupportTicketsError = ListAdminSupportTicketsErrors[keyof ListAdminSupportTicketsErrors];
+
+export type ListAdminSupportTicketsResponses = {
+    /**
+     * Réponse privée réelle.
+     */
+    200: SupportTicketPage;
+};
+
+export type ListAdminSupportTicketsResponse = ListAdminSupportTicketsResponses[keyof ListAdminSupportTicketsResponses];
+
+export type GetAdminSupportTicketData = {
+    body?: never;
+    path: {
+        ticketId: Uuid;
+    };
+    query?: never;
+    url: '/admin/support-tickets/{ticketId}';
+};
+
+export type GetAdminSupportTicketErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetAdminSupportTicketError = GetAdminSupportTicketErrors[keyof GetAdminSupportTicketErrors];
+
+export type GetAdminSupportTicketResponses = {
+    /**
+     * Réponse privée réelle.
+     */
+    200: SupportTicketView;
+};
+
+export type GetAdminSupportTicketResponse = GetAdminSupportTicketResponses[keyof GetAdminSupportTicketResponses];
+
+export type ListAdminSupportMessagesData = {
+    body?: never;
+    path: {
+        ticketId: Uuid;
+    };
+    query?: {
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/admin/support-tickets/{ticketId}/messages';
+};
+
+export type ListAdminSupportMessagesErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListAdminSupportMessagesError = ListAdminSupportMessagesErrors[keyof ListAdminSupportMessagesErrors];
+
+export type ListAdminSupportMessagesResponses = {
+    /**
+     * Réponse privée réelle.
+     */
+    200: SupportMessagePage;
+};
+
+export type ListAdminSupportMessagesResponse = ListAdminSupportMessagesResponses[keyof ListAdminSupportMessagesResponses];
+
+export type AddAdminSupportMessageData = {
+    body: AddSupportMessage;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path: {
+        ticketId: Uuid;
+    };
+    query?: never;
+    url: '/admin/support-tickets/{ticketId}/messages';
+};
+
+export type AddAdminSupportMessageErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type AddAdminSupportMessageError = AddAdminSupportMessageErrors[keyof AddAdminSupportMessageErrors];
+
+export type AddAdminSupportMessageResponses = {
+    /**
+     * Résultat retrouvé après rejeu idempotent.
+     */
+    200: SupportConversationUpdate;
+    /**
+     * Création persistée.
+     */
+    201: SupportConversationUpdate;
+};
+
+export type AddAdminSupportMessageResponse = AddAdminSupportMessageResponses[keyof AddAdminSupportMessageResponses];
+
+export type ListAdminSupportEventsData = {
+    body?: never;
+    path: {
+        ticketId: Uuid;
+    };
+    query?: {
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/admin/support-tickets/{ticketId}/events';
+};
+
+export type ListAdminSupportEventsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListAdminSupportEventsError = ListAdminSupportEventsErrors[keyof ListAdminSupportEventsErrors];
+
+export type ListAdminSupportEventsResponses = {
+    /**
+     * Réponse privée réelle.
+     */
+    200: SupportEventPage;
+};
+
+export type ListAdminSupportEventsResponse = ListAdminSupportEventsResponses[keyof ListAdminSupportEventsResponses];
+
+export type CreateAdminSupportAttachmentAccessData = {
+    body?: never;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+    };
+    path: {
+        ticketId: Uuid;
+        assetId: Uuid;
+    };
+    query?: never;
+    url: '/admin/support-tickets/{ticketId}/attachments/{assetId}/download-access';
+};
+
+export type CreateAdminSupportAttachmentAccessErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type CreateAdminSupportAttachmentAccessError = CreateAdminSupportAttachmentAccessErrors[keyof CreateAdminSupportAttachmentAccessErrors];
+
+export type CreateAdminSupportAttachmentAccessResponses = {
+    /**
+     * Réponse privée réelle.
+     */
+    200: AssetDownloadAccess;
+};
+
+export type CreateAdminSupportAttachmentAccessResponse = CreateAdminSupportAttachmentAccessResponses[keyof CreateAdminSupportAttachmentAccessResponses];
+
+export type ChangeSupportStateData = {
+    body: ChangeSupportState;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path: {
+        ticketId: Uuid;
+    };
+    query?: never;
+    url: '/admin/support-tickets/{ticketId}/state-changes';
+};
+
+export type ChangeSupportStateErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ChangeSupportStateError = ChangeSupportStateErrors[keyof ChangeSupportStateErrors];
+
+export type ChangeSupportStateResponses = {
+    /**
+     * Réponse privée réelle.
+     */
+    200: SupportTicketView;
+};
+
+export type ChangeSupportStateResponse = ChangeSupportStateResponses[keyof ChangeSupportStateResponses];
+
+export type ListAttestationEnrollmentsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/me/attestation-enrollments';
+};
+
+export type ListAttestationEnrollmentsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListAttestationEnrollmentsError = ListAttestationEnrollmentsErrors[keyof ListAttestationEnrollmentsErrors];
+
+export type ListAttestationEnrollmentsResponses = {
+    /**
+     * Réponse privée réelle.
+     */
+    200: AttestationEnrollmentPage;
+};
+
+export type ListAttestationEnrollmentsResponse = ListAttestationEnrollmentsResponses[keyof ListAttestationEnrollmentsResponses];
+
+export type GetAttestationEligibilityData = {
+    body?: never;
+    path: {
+        enrollmentId: Uuid;
+    };
+    query: {
+        locale: Locale;
+    };
+    url: '/me/enrollments/{enrollmentId}/attestation-eligibility';
+};
+
+export type GetAttestationEligibilityErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetAttestationEligibilityError = GetAttestationEligibilityErrors[keyof GetAttestationEligibilityErrors];
+
+export type GetAttestationEligibilityResponses = {
+    /**
+     * Réponse privée réelle.
+     */
+    200: AttestationEligibility;
+};
+
+export type GetAttestationEligibilityResponse = GetAttestationEligibilityResponses[keyof GetAttestationEligibilityResponses];
+
+export type IssueParticipationAttestationData = {
+    body: IssueAttestation;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path: {
+        enrollmentId: Uuid;
+    };
+    query?: never;
+    url: '/me/enrollments/{enrollmentId}/attestations';
+};
+
+export type IssueParticipationAttestationErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type IssueParticipationAttestationError = IssueParticipationAttestationErrors[keyof IssueParticipationAttestationErrors];
+
+export type IssueParticipationAttestationResponses = {
+    /**
+     * Résultat retrouvé après rejeu idempotent.
+     */
+    200: AttestationView;
+    /**
+     * Création persistée.
+     */
+    201: AttestationView;
+};
+
+export type IssueParticipationAttestationResponse = IssueParticipationAttestationResponses[keyof IssueParticipationAttestationResponses];
+
+export type ListAttestationsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/me/attestations';
+};
+
+export type ListAttestationsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListAttestationsError = ListAttestationsErrors[keyof ListAttestationsErrors];
+
+export type ListAttestationsResponses = {
+    /**
+     * Réponse privée réelle.
+     */
+    200: AttestationPage;
+};
+
+export type ListAttestationsResponse = ListAttestationsResponses[keyof ListAttestationsResponses];
+
+export type GetAttestationData = {
+    body?: never;
+    path: {
+        attestationId: Uuid;
+    };
+    query?: never;
+    url: '/me/attestations/{attestationId}';
+};
+
+export type GetAttestationErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetAttestationError = GetAttestationErrors[keyof GetAttestationErrors];
+
+export type GetAttestationResponses = {
+    /**
+     * Réponse privée réelle.
+     */
+    200: AttestationView;
+};
+
+export type GetAttestationResponse = GetAttestationResponses[keyof GetAttestationResponses];
+
+export type DownloadAttestationDocumentData = {
+    body?: never;
+    path: {
+        attestationId: Uuid;
+    };
+    query?: never;
+    url: '/me/attestations/{attestationId}/document';
+};
+
+export type DownloadAttestationDocumentErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type DownloadAttestationDocumentError = DownloadAttestationDocumentErrors[keyof DownloadAttestationDocumentErrors];
+
+export type DownloadAttestationDocumentResponses = {
+    /**
+     * Document réel HTML UTF8 en pièce jointe, sans script ni ressource externe.
+     */
+    200: string;
+};
+
+export type DownloadAttestationDocumentResponse = DownloadAttestationDocumentResponses[keyof DownloadAttestationDocumentResponses];

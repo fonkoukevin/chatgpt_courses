@@ -1,4 +1,6 @@
 "use client";
+import { helpHref } from "@/lib/account/routes";
+import { getAccountDictionary } from "@/lib/i18n/account";
 
 import { useId, useState } from "react";
 import { Copy, Flag } from "lucide-react";
@@ -34,6 +36,6 @@ export function ResourceTools({ locale, resource }: { locale: Locale; resource: 
   }
   return <div className="space-y-3"><div className="flex flex-wrap gap-3">{resource.document && <Button variant="secondary" busy={copyState === "busy"} loadingLabel={t.copyPending} onClick={() => void copy(text)}><Copy size={17} aria-hidden="true" />{t.copy}</Button>}
     <Dialog title={t.reportTitle} description={t.reportDescription} closeLabel={t.close} trigger={<Button variant="ghost" className="max-w-full whitespace-normal"><Flag size={17} aria-hidden="true" />{t.report}</Button>}>
-      <div className="space-y-5"><FormField id={`${id}-context`} label={t.reportContext}><TextArea readOnly rows={5} value={context} /></FormField><FormField id={`${id}-message`} label={t.reportMessage}><TextArea rows={5} maxLength={4000} value={message} onChange={(event) => { setMessage(event.target.value); setReportState(null); }} placeholder={t.reportPlaceholder} /></FormField><Button busy={reportState === "busy"} loadingLabel={t.copyPending} onClick={() => void copy(`${context}\n\n${message}`, true)}>{t.reportCopy}</Button>{reportState && reportState !== "busy" && <StatusMessage tone={reportState === "copied" ? "success" : "danger"}>{reportState === "copied" ? t.copied : t.copyFailed}</StatusMessage>}</div>
+      <div className="space-y-5"><Link href={helpHref(locale, { resourceId: resource.resourceId, versionId: resource.versionId, contextLocale: resource.locale, ...(resource.revisionId ? { revisionId: resource.revisionId } : {}) })} prefetch={false} className="inline-flex min-h-11 items-center">{getAccountDictionary(locale).help}</Link><FormField id={`${id}-context`} label={t.reportContext}><TextArea readOnly rows={5} value={context} /></FormField><FormField id={`${id}-message`} label={t.reportMessage}><TextArea rows={5} maxLength={4000} value={message} onChange={(event) => { setMessage(event.target.value); setReportState(null); }} placeholder={t.reportPlaceholder} /></FormField><Button busy={reportState === "busy"} loadingLabel={t.copyPending} onClick={() => void copy(`${context}\n\n${message}`, true)}>{t.reportCopy}</Button>{reportState && reportState !== "busy" && <StatusMessage tone={reportState === "copied" ? "success" : "danger"}>{reportState === "copied" ? t.copied : t.copyFailed}</StatusMessage>}</div>
     </Dialog></div>{copyState && copyState !== "busy" && <StatusMessage tone={copyState === "copied" ? "success" : "danger"}>{copyState === "copied" ? t.copied : t.copyFailed}</StatusMessage>}</div>;
 }

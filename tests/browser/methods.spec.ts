@@ -164,7 +164,7 @@ test.describe('P07 real methods', () => {
       const marker = `P07-account-switch-${randomUUID()}`;
       await page.getByRole('textbox', { name: t.title, exact: true }).fill(marker);await page.getByLabel(t.output, { exact: true }).fill(marker);
       // No browser event is broadcast here: the mutation itself must carry the old account precondition.
-      await context.request.post('/api/v1/auth/logout', { headers: await csrfHeaders(context.request) });
+      expect((await context.request.post('/api/v1/auth/logout', { headers: { ...await csrfHeaders(context.request), 'X-Account-Context': a.id } })).status()).toBe(204);
       await loginMethodAccount(context.request, b);
       const rejected = page.waitForResponse((response) => response.request().method() === 'POST' && response.url().endsWith('/api/v1/me/methods'));
       await page.getByRole('button', { name: t.save, exact: true }).click();

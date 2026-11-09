@@ -208,7 +208,9 @@ test('essai temporaire, retour validé et refus des mutations de proxy non confo
   expect(await page.evaluate((key) => JSON.parse(sessionStorage.getItem(key)!).expiresAt > Date.now(), anonymousDraftKey)).toBe(true);
   await capture(page, 'fr-temporary-trial-restored');
   headers = await csrf(context.request);
-  expect((await context.request.post('/api/v1/auth/logout', { headers })).status()).toBe(204);
+  const current = await context.request.get('/api/v1/auth/me'); expect(current.status()).toBe(200);
+  const actor = (await current.json() as {id:string}).id;
+  expect((await context.request.post('/api/v1/auth/logout', { headers: { ...headers, 'X-Account-Context': actor } })).status()).toBe(204);
   await page.goto('/fr/connexion?returnTo=https%3A%2F%2Fevil.example.invalid');
   await fillSignIn(page, locale, address, secret);
   await expect(page).toHaveURL(/\/fr\/compte$/);

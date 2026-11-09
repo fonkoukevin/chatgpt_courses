@@ -3,7 +3,7 @@ info:
   title: ChatGPT Courses API
   version: 0.1.0
   description: >-
-    Contrat jusqu’à P13 : identité, apprentissage et travail privé, commandes/Checkout TEST,
+    Contrat jusqu’à P14 : identité, apprentissage et travail privé, commandes/Checkout TEST,
     demandes, décisions et opérations de remboursement, droits par origine. Recettes locales,
     intégrations fournisseur TEST et production sont distinguées.
 servers:
@@ -43,6 +43,12 @@ tags:
       financière.
   - name: Refunds
     description: Demandes, décisions, opérations TEST et accès par origine, sans politique légale implicite.
+  - name: Account
+    description: Demandes relatives au compte et aux données, sans exécution irréversible non validée.
+  - name: Support
+    description: Assistance persistée et pièces choisies ; notification email indépendante.
+  - name: Attestations
+    description: Participation déclarée, preuves et documents HTML immuables du propriétaire.
 paths:
   /system/health:
     get:
@@ -167,6 +173,12 @@ paths:
       summary: Invalider réellement la session courante.
       security: []
       parameters:
+        - name: X-Account-Context
+          in: header
+          required: false
+          description: Obligatoire pour une session authentifiée (428 absent, 409 compte changé). Une session anonyme peut être invalidée avec CSRF seul.
+          schema:
+            $ref: '#/components/schemas/UUID'
         - $ref: '#/components/parameters/CsrfHeader'
       responses:
         '204':
@@ -290,6 +302,7 @@ paths:
       security:
         - SessionCookie: []
       parameters:
+        - $ref: '#/components/parameters/AccountContext'
         - $ref: '#/components/parameters/CsrfHeader'
         - $ref: '#/components/parameters/IfMatch'
       requestBody:
@@ -6522,6 +6535,1076 @@ paths:
           $ref: '#/components/responses/ProblemResponse'
         '503':
           $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/profile:
+    get:
+      operationId: getAccountProfile
+      tags:
+        - Identity
+      summary: Lire son profil déclaré.
+      description: ''
+      security:
+        - SessionCookie: []
+      responses:
+        '200':
+          description: Réponse privée réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileView'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    patch:
+      operationId: updateAccountProfile
+      tags:
+        - Identity
+      summary: Modifier le nom déclaré de son profil.
+      description: >-
+        Email en lecture seule. Aucun changement d’authentification ou vérification d’identité
+        parallèle. Une ancienne interface ne peut modifier le nouveau compte connecté.
+      security:
+        - SessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveProfile'
+      responses:
+        '200':
+          description: Réponse privée réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileView'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/orders/{orderId}/documents:
+    get:
+      operationId: getOrderDocuments
+      tags:
+        - Commerce
+      summary: Lire la disponibilité des documents commerciaux vérifiés.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Réponse privée réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommercialDocuments'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/data-requests:
+    get:
+      operationId: listDataRequests
+      tags:
+        - Account
+      summary: Lister ses demandes relatives au compte et aux données.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Réponse privée réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataRequestPage'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    post:
+      operationId: createDataRequest
+      tags:
+        - Account
+      summary: Enregistrer une demande traçable sans traitement irréversible.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDataRequest'
+      responses:
+        '200':
+          description: Résultat retrouvé après rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataRequestView'
+        '201':
+          description: Création persistée.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataRequestView'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/data-requests/{requestId}:
+    get:
+      operationId: getDataRequest
+      tags:
+        - Account
+      summary: Lire sa demande et sa révision.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: requestId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Réponse privée réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataRequestView'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/data-requests/{requestId}/events:
+    get:
+      operationId: listDataRequestEvents
+      tags:
+        - Account
+      summary: Lire l’historique de sa demande.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: requestId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Réponse privée réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataRequestEventPage'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/data-requests/{requestId}/cancellations:
+    post:
+      operationId: cancelDataRequest
+      tags:
+        - Account
+      summary: Annuler sa demande en conservant son historique.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: requestId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelDataRequest'
+      responses:
+        '200':
+          description: Réponse privée réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataRequestView'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/support-tickets:
+    get:
+      operationId: listPersonalSupportTickets
+      tags:
+        - Support
+      summary: Lister ses demandes d’aide.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: state
+          in: query
+          schema:
+            type: string
+            enum:
+              - OPEN
+              - IN_PROGRESS
+              - WAITING_FOR_USER
+              - RESOLVED
+              - CLOSED
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Réponse privée réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportTicketPage'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    post:
+      operationId: createSupportTicket
+      tags:
+        - Support
+      summary: Enregistrer sa demande et les pièces explicitement choisies.
+      description: >-
+        Création atomique du ticket, du premier message et de l’historique. Pièces PROJECT_FILE/READY
+        du propriétaire uniquement, ≤5 ; commande ≤48KiB UTF8. Aucune information privée
+        automatiquement jointe.
+      security:
+        - SessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSupportTicket'
+      responses:
+        '200':
+          description: Résultat retrouvé après rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportTicketView'
+        '201':
+          description: Création persistée.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportTicketView'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/support-tickets/{ticketId}:
+    get:
+      operationId: getPersonalSupportTicket
+      tags:
+        - Support
+      summary: Lire une demande autorisée.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Réponse privée réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportTicketView'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/support-tickets/{ticketId}/messages:
+    get:
+      operationId: listPersonalSupportMessages
+      tags:
+        - Support
+      summary: Lire les messages réellement enregistrés.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Réponse privée réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportMessagePage'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    post:
+      operationId: addPersonalSupportMessage
+      tags:
+        - Support
+      summary: Ajouter un message à sa demande.
+      description: >-
+        Pièces choisies par le propriétaire uniquement. Retour OPEN, sauf ticket CLOSED refusé409. Ne
+        jamais rejouer automatiquement après 412.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddSupportMessage'
+      responses:
+        '200':
+          description: Résultat retrouvé après rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportConversationUpdate'
+        '201':
+          description: Création persistée.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportConversationUpdate'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/support-tickets/{ticketId}/events:
+    get:
+      operationId: listPersonalSupportEvents
+      tags:
+        - Support
+      summary: Lire l’historique de la demande.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Réponse privée réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportEventPage'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/support-tickets/{ticketId}/attachments/{assetId}/download-access:
+    post:
+      operationId: createPersonalSupportAttachmentAccess
+      tags:
+        - Support
+      summary: Autoriser temporairement une pièce choisie dans la demande.
+      description: >-
+        Le serveur vérifie compte, permission, ticket et association sélectionnée. L’opérateur ne
+        reçoit aucun autre fichier du projet. Objet réel vérifié par le service P10 ; aucun
+        propriétaire simulé.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+      responses:
+        '200':
+          description: Réponse privée réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetDownloadAccess'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/support-tickets:
+    get:
+      operationId: listAdminSupportTickets
+      tags:
+        - Support
+      summary: Lister les demandes avec permission opérateur.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: state
+          in: query
+          schema:
+            type: string
+            enum:
+              - OPEN
+              - IN_PROGRESS
+              - WAITING_FOR_USER
+              - RESOLVED
+              - CLOSED
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Réponse privée réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportTicketPage'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/support-tickets/{ticketId}:
+    get:
+      operationId: getAdminSupportTicket
+      tags:
+        - Support
+      summary: Lire une demande autorisée.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Réponse privée réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportTicketView'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/support-tickets/{ticketId}/messages:
+    get:
+      operationId: listAdminSupportMessages
+      tags:
+        - Support
+      summary: Lire les messages réellement enregistrés.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Réponse privée réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportMessagePage'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    post:
+      operationId: addAdminSupportMessage
+      tags:
+        - Support
+      summary: Répondre réellement à la demande et préparer l’email via l’outbox.
+      description: >-
+        Permission support.reply ; attachmentIds obligatoirement vide. Message et outbox atomiques ;
+        un incident email ne supprime ni message ni droit.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddSupportMessage'
+      responses:
+        '200':
+          description: Résultat retrouvé après rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportConversationUpdate'
+        '201':
+          description: Création persistée.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportConversationUpdate'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/support-tickets/{ticketId}/events:
+    get:
+      operationId: listAdminSupportEvents
+      tags:
+        - Support
+      summary: Lire l’historique de la demande.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Réponse privée réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportEventPage'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/support-tickets/{ticketId}/attachments/{assetId}/download-access:
+    post:
+      operationId: createAdminSupportAttachmentAccess
+      tags:
+        - Support
+      summary: Autoriser temporairement une pièce choisie dans la demande.
+      description: >-
+        Le serveur vérifie compte, permission, ticket et association sélectionnée. L’opérateur ne
+        reçoit aucun autre fichier du projet. Objet réel vérifié par le service P10 ; aucun
+        propriétaire simulé.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+      responses:
+        '200':
+          description: Réponse privée réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetDownloadAccess'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/support-tickets/{ticketId}/state-changes:
+    post:
+      operationId: changeSupportState
+      tags:
+        - Support
+      summary: Modifier avec motif l’état réel d’une demande.
+      description: Permission support.manage ; transition et événement atomiques, aucun délai de réponse promis.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeSupportState'
+      responses:
+        '200':
+          description: Réponse privée réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportTicketView'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/attestation-enrollments:
+    get:
+      operationId: listAttestationEnrollments
+      tags:
+        - Attestations
+      summary: Lister ses inscriptions historiques pour choisir une attestation.
+      description: >-
+        Liste propriétaire paginée ; aucun accès pédagogique actif requis pour retrouver une
+        inscription historique.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Réponse privée réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttestationEnrollmentPage'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/enrollments/{enrollmentId}/attestation-eligibility:
+    get:
+      operationId: getAttestationEligibility
+      tags:
+        - Attestations
+      summary: Lire les critères et faits de participation serveur.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: enrollmentId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: locale
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+      responses:
+        '200':
+          description: Réponse privée réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttestationEligibility'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/enrollments/{enrollmentId}/attestations:
+    post:
+      operationId: issueParticipationAttestation
+      tags:
+        - Attestations
+      summary: Émettre une attestation HTML de participation déclarée.
+      description: >-
+        Confirmation de l’empreinte courante requise ; preuve dépassée412, critères non atteints409.
+        Même preuve/langue retrouve le document, même avec une nouvelle clé. HTML réel UTF8 autonome,
+        ≤256KiB, instantané immuable. Aucune certification officielle ou revue humaine.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: enrollmentId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueAttestation'
+      responses:
+        '200':
+          description: Résultat retrouvé après rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttestationView'
+        '201':
+          description: Création persistée.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttestationView'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/attestations:
+    get:
+      operationId: listAttestations
+      tags:
+        - Attestations
+      summary: Lister ses attestations émises.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Réponse privée réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttestationPage'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/attestations/{attestationId}:
+    get:
+      operationId: getAttestation
+      tags:
+        - Attestations
+      summary: Lire son attestation et ses preuves conservées.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: attestationId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Réponse privée réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttestationView'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /me/attestations/{attestationId}/document:
+    get:
+      operationId: downloadAttestationDocument
+      tags:
+        - Attestations
+      summary: Télécharger les octets HTML immuables de son attestation.
+      description: >-
+        Propriétaire actif et permission vérifiés à chaque demande, même après remboursement ou
+        nouvelle édition. Aucun annuaire public. Document autonome imprimable, textes échappés,
+        identité non vérifiée, participation et modes déclarés explicites.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: attestationId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Document réel HTML UTF8 en pièce jointe, sans script ni ressource externe.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            Content-Disposition:
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 200
+            Content-Length:
+              schema:
+                type: integer
+                minimum: 1
+                maximum: 262144
+            Content-Security-Policy:
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 1000
+            X-Content-Type-Options:
+              schema:
+                type: string
+                enum:
+                  - nosniff
+          content:
+            text/html:
+              schema:
+                type: string
         default:
           $ref: '#/components/responses/ProblemResponse'
 components:
@@ -13466,6 +14549,1102 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntitlementSummary'
+          minItems: 0
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    ProfileView:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - email
+        - displayName
+        - revision
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        email:
+          type: string
+          format: email
+          maxLength: 320
+        displayName:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 120
+            - type: 'null'
+        revision:
+          $ref: '#/components/schemas/Revision'
+    SaveProfile:
+      type: object
+      additionalProperties: false
+      required:
+        - displayName
+      properties:
+        displayName:
+          anyOf:
+            - type: string
+              minLength: 0
+              maxLength: 120
+            - type: 'null'
+    CommercialDocument:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - kind
+        - filename
+        - contentType
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        kind:
+          type: string
+          enum:
+            - PAYMENT_RECEIPT
+            - INVOICE
+            - OTHER
+        filename:
+          type: string
+          minLength: 1
+          maxLength: 240
+        contentType:
+          type: string
+          minLength: 1
+          maxLength: 100
+    CommercialDocuments:
+      type: object
+      additionalProperties: false
+      required:
+        - orderId
+        - state
+        - documents
+        - unavailableReason
+      properties:
+        orderId:
+          $ref: '#/components/schemas/UUID'
+        state:
+          type: string
+          enum:
+            - NONE_AVAILABLE
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommercialDocument'
+          minItems: 0
+          maxItems: 0
+        unavailableReason:
+          type: string
+          enum:
+            - NO_VERIFIED_COMMERCIAL_DOCUMENT
+      description: >-
+        Aucun document vérifié publié dans la plateforme. Cela ne prétend pas interroger Stripe ou
+        déterminer la présence d’un reçu chez le fournisseur. Aucun téléchargement fictif.
+    CreateDataRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - type
+        - reason
+      properties:
+        type:
+          type: string
+          enum:
+            - EXPORT
+            - ERASURE
+            - ACCOUNT_CLOSURE
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    CancelDataRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    DataRequestView:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - revision
+        - type
+        - reason
+        - state
+        - processingUnavailableReason
+        - createdAt
+        - updatedAt
+        - cancelledAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        revision:
+          $ref: '#/components/schemas/Revision'
+        type:
+          type: string
+          enum:
+            - EXPORT
+            - ERASURE
+            - ACCOUNT_CLOSURE
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        state:
+          type: string
+          enum:
+            - WAITING_POLICY
+            - CANCELLED
+        processingUnavailableReason:
+          anyOf:
+            - type: string
+              enum:
+                - RETENTION_POLICY_UNCONFIGURED
+            - type: 'null'
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+        updatedAt:
+          $ref: '#/components/schemas/UtcInstant'
+        cancelledAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+      description: >-
+        Demande traçable, sans export prêt, effacement ou clôture automatique. Une politique de
+        conservation validée et une implémentation ultérieure sont nécessaires avant exécution
+        irréversible.
+    DataRequestEvent:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - requestId
+        - type
+        - reason
+        - createdAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        requestId:
+          $ref: '#/components/schemas/UUID'
+        type:
+          type: string
+          enum:
+            - REQUESTED
+            - CANCELLED
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+    SupportContext:
+      type: object
+      additionalProperties: false
+      required:
+        - locale
+        - resourceId
+        - versionId
+        - revisionId
+        - orderId
+        - projectId
+        - enrollmentId
+      properties:
+        locale:
+          $ref: '#/components/schemas/Locale'
+        resourceId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        versionId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        revisionId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        orderId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        projectId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        enrollmentId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+      description: >-
+        Au moins une cible choisie explicitement ; resourceId/versionId ensemble et révision exacte de
+        cette version/langue. Les commandes, projets et inscriptions appartiennent à l’acteur. Aucune
+        note ou production jointe automatiquement.
+    CreateSupportTicket:
+      type: object
+      additionalProperties: false
+      required:
+        - category
+        - subject
+        - message
+        - locale
+        - context
+        - attachmentIds
+      properties:
+        category:
+          type: string
+          enum:
+            - TECHNICAL
+            - CONTENT
+            - ACCESS
+            - ORDER
+            - ACCOUNT
+            - OTHER
+        subject:
+          type: string
+          minLength: 1
+          maxLength: 160
+        message:
+          type: string
+          minLength: 1
+          maxLength: 8000
+        locale:
+          $ref: '#/components/schemas/Locale'
+        context:
+          anyOf:
+            - $ref: '#/components/schemas/SupportContext'
+            - type: 'null'
+        attachmentIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/UUID'
+          minItems: 0
+          maxItems: 5
+          uniqueItems: true
+    AddSupportMessage:
+      type: object
+      additionalProperties: false
+      required:
+        - message
+        - attachmentIds
+      properties:
+        message:
+          type: string
+          minLength: 1
+          maxLength: 8000
+        attachmentIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/UUID'
+          minItems: 0
+          maxItems: 5
+          uniqueItems: true
+    ChangeSupportState:
+      type: object
+      additionalProperties: false
+      required:
+        - state
+        - reason
+      properties:
+        state:
+          type: string
+          enum:
+            - OPEN
+            - IN_PROGRESS
+            - WAITING_FOR_USER
+            - RESOLVED
+            - CLOSED
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    SupportTicketView:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - revision
+        - category
+        - subject
+        - locale
+        - state
+        - context
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        revision:
+          $ref: '#/components/schemas/Revision'
+        category:
+          type: string
+          enum:
+            - TECHNICAL
+            - CONTENT
+            - ACCESS
+            - ORDER
+            - ACCOUNT
+            - OTHER
+        subject:
+          type: string
+          minLength: 1
+          maxLength: 160
+        locale:
+          $ref: '#/components/schemas/Locale'
+        state:
+          type: string
+          enum:
+            - OPEN
+            - IN_PROGRESS
+            - WAITING_FOR_USER
+            - RESOLVED
+            - CLOSED
+        context:
+          anyOf:
+            - $ref: '#/components/schemas/SupportContext'
+            - type: 'null'
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+        updatedAt:
+          $ref: '#/components/schemas/UtcInstant'
+    SupportAttachment:
+      type: object
+      additionalProperties: false
+      required:
+        - assetId
+        - filename
+        - contentType
+        - sizeBytes
+        - sha256
+      properties:
+        assetId:
+          $ref: '#/components/schemas/UUID'
+        filename:
+          type: string
+          minLength: 1
+          maxLength: 240
+        contentType:
+          type: string
+          minLength: 1
+          maxLength: 100
+        sizeBytes:
+          type: integer
+          minimum: 1
+          maximum: 9007199254740991
+        sha256:
+          type: string
+          pattern: ^[a-f0-9]{64}$
+          minLength: 64
+          maxLength: 64
+    SupportMessageView:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - ticketId
+        - authorKind
+        - message
+        - attachments
+        - createdAt
+        - notificationStatus
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        ticketId:
+          $ref: '#/components/schemas/UUID'
+        authorKind:
+          type: string
+          enum:
+            - USER
+            - SUPPORT
+        message:
+          type: string
+          minLength: 1
+          maxLength: 8000
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupportAttachment'
+          minItems: 0
+          maxItems: 5
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+        notificationStatus:
+          type: string
+          enum:
+            - NOT_REQUIRED
+            - PENDING
+            - SENT
+            - ISSUE
+      description: >-
+        Message réellement persisté ; statut email calculé depuis l’outbox P10 pour les réponses
+        SUPPORT. La création d’une demande n’annonce aucun email envoyé ni réponse en préparation.
+    SupportTicketEvent:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - ticketId
+        - type
+        - fromState
+        - toState
+        - authorKind
+        - reason
+        - createdAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        ticketId:
+          $ref: '#/components/schemas/UUID'
+        type:
+          type: string
+          enum:
+            - CREATED
+            - USER_MESSAGE
+            - SUPPORT_REPLY
+            - STATE_CHANGED
+        fromState:
+          anyOf:
+            - type: string
+              enum:
+                - OPEN
+                - IN_PROGRESS
+                - WAITING_FOR_USER
+                - RESOLVED
+                - CLOSED
+            - type: 'null'
+        toState:
+          anyOf:
+            - type: string
+              enum:
+                - OPEN
+                - IN_PROGRESS
+                - WAITING_FOR_USER
+                - RESOLVED
+                - CLOSED
+            - type: 'null'
+        authorKind:
+          type: string
+          enum:
+            - USER
+            - SUPPORT
+        reason:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 2000
+            - type: 'null'
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+    SupportConversationUpdate:
+      type: object
+      additionalProperties: false
+      required:
+        - ticket
+        - message
+      properties:
+        ticket:
+          $ref: '#/components/schemas/SupportTicketView'
+        message:
+          $ref: '#/components/schemas/SupportMessageView'
+    ParticipationActivity:
+      type: object
+      additionalProperties: false
+      required:
+        - activityId
+        - activityVersionId
+        - position
+        - title
+        - readAt
+        - declaredCompletedAt
+      properties:
+        activityId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        position:
+          type: integer
+          minimum: 1
+          maximum: 10000
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        readAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+        declaredCompletedAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+    ParticipationQuiz:
+      type: object
+      additionalProperties: false
+      required:
+        - attemptId
+        - activityId
+        - activityVersionId
+        - sourceRevisionId
+        - locale
+        - attemptNumber
+        - scorePoints
+        - maxPoints
+        - passed
+        - passPercent
+        - submittedAt
+      properties:
+        attemptId:
+          $ref: '#/components/schemas/UUID'
+        activityId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        sourceRevisionId:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        attemptNumber:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        scorePoints:
+          type: integer
+          minimum: 0
+          maximum: 2147483647
+        maxPoints:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        passed:
+          type: boolean
+        passPercent:
+          type: integer
+          minimum: 1
+          maximum: 100
+        submittedAt:
+          $ref: '#/components/schemas/UtcInstant'
+    ParticipationAssessment:
+      type: object
+      additionalProperties: false
+      required:
+        - assessmentId
+        - projectId
+        - projectRevisionId
+        - rubricVersionId
+        - activityId
+        - activityVersionId
+        - locale
+        - scorePoints
+        - maxPoints
+        - passPoints
+        - thresholdMet
+        - needsRevision
+        - evaluatedAt
+        - declaredByUser
+      properties:
+        assessmentId:
+          $ref: '#/components/schemas/UUID'
+        projectId:
+          $ref: '#/components/schemas/UUID'
+        projectRevisionId:
+          $ref: '#/components/schemas/UUID'
+        rubricVersionId:
+          $ref: '#/components/schemas/UUID'
+        activityId:
+          $ref: '#/components/schemas/UUID'
+        activityVersionId:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        scorePoints:
+          type: integer
+          minimum: 0
+          maximum: 20
+        maxPoints:
+          type: integer
+          minimum: 20
+          maximum: 20
+        passPoints:
+          type: integer
+          minimum: 1
+          maximum: 20
+        thresholdMet:
+          type: boolean
+        needsRevision:
+          type: boolean
+        evaluatedAt:
+          $ref: '#/components/schemas/UtcInstant'
+        declaredByUser:
+          type: boolean
+          const: true
+    ParticipationEvidence:
+      type: object
+      additionalProperties: false
+      required:
+        - enrollmentId
+        - courseResourceId
+        - courseVersionId
+        - courseVersionNumber
+        - courseTitle
+        - enrolledLocale
+        - profileRevision
+        - participantName
+        - identityVerified
+        - humanReview
+        - activities
+        - quizzes
+        - selfAssessments
+      properties:
+        enrollmentId:
+          $ref: '#/components/schemas/UUID'
+        courseResourceId:
+          $ref: '#/components/schemas/UUID'
+        courseVersionId:
+          $ref: '#/components/schemas/UUID'
+        courseVersionNumber:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        courseTitle:
+          type: string
+          minLength: 1
+          maxLength: 240
+        enrolledLocale:
+          $ref: '#/components/schemas/Locale'
+        profileRevision:
+          $ref: '#/components/schemas/Revision'
+        participantName:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 120
+            - type: 'null'
+        identityVerified:
+          type: boolean
+          const: false
+        humanReview:
+          type: boolean
+          const: false
+        activities:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParticipationActivity'
+          minItems: 0
+          maxItems: 10000
+        quizzes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParticipationQuiz'
+          minItems: 0
+          maxItems: 10000
+        selfAssessments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParticipationAssessment'
+          minItems: 0
+          maxItems: 10000
+      description: >-
+        Instantané sans réponses, corrigés, notes ou productions privées. Identité déclarée non vérifiée
+        ; quiz automatique et autoévaluation distincts. Une autoévaluation ne qualifie que la révision
+        courante du projet. Aucun examen humain, seuil global d’achèvement ou certification.
+    AttestationCriterion:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - met
+      properties:
+        code:
+          type: string
+          enum:
+            - PROFILE_NAME_PRESENT
+            - PERSISTED_PARTICIPATION_PRESENT
+        met:
+          type: boolean
+    AttestationEligibility:
+      type: object
+      additionalProperties: false
+      required:
+        - enrollmentId
+        - type
+        - locale
+        - eligible
+        - blockingCodes
+        - criteria
+        - evidenceFingerprint
+        - evidence
+      properties:
+        enrollmentId:
+          $ref: '#/components/schemas/UUID'
+        type:
+          type: string
+          enum:
+            - PARTICIPATION
+        locale:
+          $ref: '#/components/schemas/Locale'
+        eligible:
+          type: boolean
+        blockingCodes:
+          type: array
+          items:
+            type: string
+            enum:
+              - PROFILE_NAME_PRESENT
+              - PERSISTED_PARTICIPATION_PRESENT
+          minItems: 0
+          maxItems: 2
+        criteria:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttestationCriterion'
+          minItems: 2
+          maxItems: 2
+        evidenceFingerprint:
+          type: string
+          pattern: ^[a-f0-9]{64}$
+          minLength: 64
+          maxLength: 64
+        evidence:
+          $ref: '#/components/schemas/ParticipationEvidence'
+      description: >-
+        Participation : nom de profil déclaré et au moins une activité déclarée terminée, un quiz
+        durable ou une autoévaluation de la révision courante sur les identités exactes de
+        l’inscription. Lecture, visite, vidéo ou note seules insuffisantes. Empreinte à confirmer
+        explicitement avant émission.
+    IssueAttestation:
+      type: object
+      additionalProperties: false
+      required:
+        - locale
+        - expectedEvidenceFingerprint
+      properties:
+        locale:
+          $ref: '#/components/schemas/Locale'
+        expectedEvidenceFingerprint:
+          type: string
+          pattern: ^[a-f0-9]{64}$
+          minLength: 64
+          maxLength: 64
+    AttestationDocument:
+      type: object
+      additionalProperties: false
+      required:
+        - format
+        - contentType
+        - filename
+        - sizeBytes
+        - sha256
+      properties:
+        format:
+          type: string
+          enum:
+            - HTML
+        contentType:
+          type: string
+          enum:
+            - text/html; charset=UTF-8
+        filename:
+          type: string
+          minLength: 1
+          maxLength: 100
+        sizeBytes:
+          type: integer
+          minimum: 1
+          maximum: 262144
+        sha256:
+          type: string
+          pattern: ^[a-f0-9]{64}$
+          minLength: 64
+          maxLength: 64
+    AttestationSummary:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - enrollmentId
+        - type
+        - locale
+        - courseResourceId
+        - courseVersionId
+        - courseVersionNumber
+        - courseTitle
+        - participantName
+        - issuedAt
+        - document
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        enrollmentId:
+          $ref: '#/components/schemas/UUID'
+        type:
+          type: string
+          enum:
+            - PARTICIPATION
+        locale:
+          $ref: '#/components/schemas/Locale'
+        courseResourceId:
+          $ref: '#/components/schemas/UUID'
+        courseVersionId:
+          $ref: '#/components/schemas/UUID'
+        courseVersionNumber:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        courseTitle:
+          type: string
+          minLength: 1
+          maxLength: 240
+        participantName:
+          type: string
+          minLength: 1
+          maxLength: 120
+        issuedAt:
+          $ref: '#/components/schemas/UtcInstant'
+        document:
+          $ref: '#/components/schemas/AttestationDocument'
+    AttestationView:
+      type: object
+      additionalProperties: false
+      required:
+        - summary
+        - evidenceFingerprint
+        - evidence
+      properties:
+        summary:
+          $ref: '#/components/schemas/AttestationSummary'
+        evidenceFingerprint:
+          type: string
+          pattern: ^[a-f0-9]{64}$
+          minLength: 64
+          maxLength: 64
+        evidence:
+          $ref: '#/components/schemas/ParticipationEvidence'
+      description: >-
+        Instantané immuable et document réel conservé. Idempotence par
+        propriétaire/inscription/type/langue/empreinte et par clé. Une nouvelle édition, un
+        remboursement ou un changement de profil ne réécrit pas les octets émis.
+    AttestationEnrollment:
+      type: object
+      additionalProperties: false
+      required:
+        - enrollmentId
+        - courseResourceId
+        - courseVersionId
+        - courseVersionNumber
+        - courseTitle
+        - enrolledLocale
+        - createdAt
+      properties:
+        enrollmentId:
+          $ref: '#/components/schemas/UUID'
+        courseResourceId:
+          $ref: '#/components/schemas/UUID'
+        courseVersionId:
+          $ref: '#/components/schemas/UUID'
+        courseVersionNumber:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        courseTitle:
+          type: string
+          minLength: 1
+          maxLength: 240
+        enrolledLocale:
+          $ref: '#/components/schemas/Locale'
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+    DataRequestPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataRequestView'
+          minItems: 0
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    DataRequestEventPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataRequestEvent'
+          minItems: 0
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    SupportTicketPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupportTicketView'
+          minItems: 0
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    SupportMessagePage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupportMessageView'
+          minItems: 0
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    SupportEventPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupportTicketEvent'
+          minItems: 0
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    AttestationPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttestationSummary'
+          minItems: 0
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    AttestationEnrollmentPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttestationEnrollment'
           minItems: 0
           maxItems: 100
         page:

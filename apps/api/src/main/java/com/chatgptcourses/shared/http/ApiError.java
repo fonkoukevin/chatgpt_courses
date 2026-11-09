@@ -52,6 +52,12 @@ public enum ApiError {
     REFUND_REQUEST_EXISTS(HttpStatus.CONFLICT,"Une demande est déjà ouverte pour cette commande."),
     REFUND_OPERATION_NOT_EXECUTABLE(HttpStatus.CONFLICT,"Cette opération ne permet pas une nouvelle exécution financière."),
     INVALID_REFUND_ALLOCATION(HttpStatus.BAD_REQUEST,"Les allocations et les effets sur les lignes sont invalides."),
+    SUPPORT_TICKET_CLOSED(HttpStatus.CONFLICT,"Cette demande d’aide est fermée. Conservez votre message et ouvrez une nouvelle demande."),
+    SUPPORT_ATTACHMENT_INVALID(HttpStatus.CONFLICT,"Ce fichier ne peut pas être joint à cette demande."),
+    DATA_REQUEST_EXISTS(HttpStatus.CONFLICT,"Une demande de ce type est déjà en attente pour votre compte."),
+    DATA_REQUEST_NOT_CANCELLABLE(HttpStatus.CONFLICT,"Cette demande ne peut plus être annulée dans son état actuel."),
+    ATTESTATION_NOT_ELIGIBLE(HttpStatus.CONFLICT,"Les critères de participation ne sont pas remplis pour cette attestation."),
+    ATTESTATION_DOCUMENT_TOO_LARGE(HttpStatus.CONFLICT,"Les preuves dépassent la taille disponible pour ce document."),
     REQUEST_TOO_LARGE(HttpStatus.PAYLOAD_TOO_LARGE, "La requête dépasse la taille autorisée."),
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "La requête n’a pas pu être traitée.");
 

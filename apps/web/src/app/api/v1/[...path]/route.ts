@@ -1,3 +1,4 @@
+import { isAttestationContentType } from "@/lib/api/attestations-validation";
 import { randomUUID } from "node:crypto";
 import { getServerConfig } from "@/lib/config/server";
 
@@ -80,8 +81,10 @@ async function proxy(request: Request, context: RouteContext): Promise<Response>
   url.search = new URL(request.url).search;
   const mediaStream = ["GET", "HEAD"].includes(request.method) && path.length === 3 && path[0] === "media"
     && /^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/.test(path[1]) && path[2] === "stream";
+  const attestationDocument = request.method === "GET" && path.length === 4 && path[0] === "me" && path[1] === "attestations"
+    && /^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/.test(path[2]) && path[3] === "document";
   const stripeWebhook = request.method === "POST" && path.length === 2 && path[0] === "webhooks" && path[1] === "stripe";
-  const headers = new Headers({ Accept: mediaStream ? "video/mp4, application/problem+json" : "application/json, application/problem+json" });
+  const headers = new Headers({ Accept: mediaStream ? "video/mp4, application/problem+json" : attestationDocument ? "text/html, application/problem+json" : "application/json, application/problem+json" });
   if (mediaStream && request.headers.has("range")) headers.set("Range", request.headers.get("range")!);
   const mutation = !["GET", "HEAD", "OPTIONS"].includes(request.method);
   if (mutation && ((request.headers.has("origin") && request.headers.get("origin") !== config.publicOrigin)
@@ -122,6 +125,23 @@ async function proxy(request: Request, context: RouteContext): Promise<Response>
     }
     for (const cookie of upstream.headers.getSetCookie()) {
       if (cookie.startsWith("SESSION=")) responseHeaders.append("Set-Cookie", cookie);
+    }
+    if (attestationDocument && upstream.ok) {
+      const length = upstream.headers.get("content-length"), disposition = upstream.headers.get("content-disposition"), sha256 = upstream.headers.get("x-content-sha256");
+      if (upstream.status !== 200 || !isAttestationContentType(upstream.headers.get("content-type"))
+        || !length || !/^\d+$/.test(length) || Number(length) < 1 || Number(length) > 262144 || !upstream.body
+        || disposition !== `attachment; filename="attestation-${path[2]}.html"` || !sha256 || !/^[a-f0-9]{64}$/.test(sha256)) {
+        await upstream.body?.cancel(); return problem(502, "API_INVALID_RESPONSE", instance);
+      }
+      // Bound the streamed bytes before returning any successful download headers.
+      const reader = upstream.body.getReader(), chunks: Uint8Array[] = []; let size = 0;
+      try { for (;;) { const next = await reader.read(); if (next.done) break; size += next.value.byteLength; if (size > Number(length)) { await reader.cancel(); return problem(502, "API_INVALID_RESPONSE", instance); } chunks.push(next.value); } }
+      finally { reader.releaseLock(); }
+      if (size !== Number(length)) return problem(502, "API_INVALID_RESPONSE", instance);
+      const bytes = new Uint8Array(size); let offset = 0; for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+      responseHeaders.set("Content-Length", length); responseHeaders.set("Content-Disposition", disposition); responseHeaders.set("X-Content-SHA256", sha256);
+      responseHeaders.set("Content-Security-Policy", "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; sandbox");
+      return new Response(bytes, { status: 200, headers: responseHeaders });
     }
     if (mediaStream) {
       for (const name of ["accept-ranges", "content-range", "content-disposition"]) {

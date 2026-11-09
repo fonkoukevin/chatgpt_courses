@@ -66,9 +66,9 @@ class SchemaIntegrationTest {
 
     @Test @Order(1)
     void aFreshDatabaseMigratesAndHibernateValidatesWithoutSeedingAccountsOrCommerce() {
-        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015");
+        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_accounts", Integer.class)).isZero();
-        assertThat(jdbc.queryForList("SELECT code FROM roles ORDER BY code", String.class)).containsExactly("COMMERCE_MANAGER", "EDITOR", "LEARNER", "PAYMENTS_OPERATOR", "REFUND_OPERATOR");
+        assertThat(jdbc.queryForList("SELECT code FROM roles ORDER BY code", String.class)).containsExactly("COMMERCE_MANAGER", "EDITOR", "LEARNER", "PAYMENTS_OPERATOR", "REFUND_OPERATOR", "SUPPORT_OPERATOR");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_roles", Integer.class)).isZero();
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM learning_resources", Integer.class)).isZero();
         assertThat(jdbc.queryForObject("SELECT current_setting('TimeZone')", String.class)).isEqualTo("UTC");
@@ -84,6 +84,9 @@ class SchemaIntegrationTest {
         }
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM learning_activity_notes", Integer.class)).isZero();
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM learning_quiz_attempts", Integer.class)).isZero();
+        for (String table : new String[] {"support_tickets", "support_messages", "support_message_attachments", "support_ticket_events", "account_data_requests", "account_data_request_events", "participation_attestations", "account_action_keys"}) {
+            assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM " + table, Integer.class)).isZero();
+        }
         assertThat(jdbc.queryForObject("""
                 SELECT COUNT(*) FROM pg_constraint c JOIN pg_class t ON c.conrelid = t.oid
                 WHERE c.contype = 'f' AND t.relnamespace = 'public'::regnamespace
@@ -110,7 +113,7 @@ class SchemaIntegrationTest {
             var database = new JdbcTemplate(new SingleConnectionDataSourceAdapter(connection));
             assertThat(database.queryForObject("SELECT session_id FROM spring_session WHERE primary_id = ?", String.class, primaryId)).isEqualTo(sessionId);
             assertThat(database.queryForObject("SELECT encode(attribute_bytes, 'hex') FROM spring_session_attributes WHERE session_primary_id = ?", String.class, primaryId)).isEqualTo("010203");
-            assertThat(database.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015");
+            assertThat(database.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016");
         }
     }
 
@@ -348,6 +351,45 @@ class SchemaIntegrationTest {
             assertThat(database.queryForObject("SELECT count(*) FROM user_roles", Integer.class)).isZero();
             assertThat(database.queryForObject("SELECT count(*) FROM roles WHERE code='REFUND_OPERATOR'", Integer.class)).isEqualTo(1);
         }
+    }
+
+    @Test @Order(11)
+    void upgradingV015PreservesEveryExistingRowAndCreatesNoSupportDataOrAttestation() throws Exception {
+        String schema = "upgrade_v015_p14"; migrate(schema, "15");
+        UUID owner = UUID.randomUUID(), method = UUID.randomUUID(); String session = UUID.randomUUID().toString();
+        java.util.Map<String, java.util.List<String>> before;
+        try (var connection = connection(schema)) {
+            var database = new JdbcTemplate(new SingleConnectionDataSourceAdapter(connection));
+            database.update("INSERT INTO user_accounts(id,normalized_email,password_hash,display_name,status) VALUES(?,?,'unusable-synthetic-upgrade-hash',?,'ACTIVE')", owner, "upgrade.p14@example.invalid", "  Ancienne identité Élodie  ");
+            database.update("INSERT INTO user_preferences(id,user_id,locale,time_zone) VALUES(?,?,'en','Europe/Paris')", UUID.randomUUID(), owner);
+            database.update("INSERT INTO user_roles(id,user_id,role_id) SELECT ?,?,id FROM roles WHERE code='LEARNER'", UUID.randomUUID(), owner);
+            database.update("INSERT INTO personal_methods(id,owner_id,title,locale,body,parameters,notes) VALUES(?,?,'Méthode historique','fr','Texte personnel fictif avant P14','{\"objective\":\"Ancien objectif\",\"context\":\"\",\"availableData\":\"\",\"recipient\":\"\",\"format\":\"\",\"constraints\":\"\",\"clarifications\":\"\"}'::jsonb,'Notes fictives conservées')", method, owner);
+            database.update("INSERT INTO spring_session(primary_id,session_id,creation_time,last_access_time,max_inactive_interval,expiry_time) VALUES(?,?,1,2,1800,1800002)", session, session);
+            database.update("INSERT INTO spring_session_attributes(session_primary_id,attribute_name,attribute_bytes) VALUES(?,'fixture-before-v016',?)", session, "Synthetic preserved session attribute".getBytes(StandardCharsets.UTF_8));
+            before = allRows(database, schema);
+        }
+        assertThat(migrate(schema, null).validateWithResult().validationSuccessful).isTrue();
+        try (var connection = connection(schema)) {
+            var database = new JdbcTemplate(new SingleConnectionDataSourceAdapter(connection));
+            var after = allRows(database, schema);
+            for (var entry : before.entrySet()) {
+                if (java.util.Set.of("roles", "permissions", "role_permissions").contains(entry.getKey())) assertThat(after.get(entry.getKey())).as("Existing reference rows: %s", entry.getKey()).containsAll(entry.getValue());
+                else assertThat(after.get(entry.getKey())).as("Preserved rows: %s", entry.getKey()).containsExactlyElementsOf(entry.getValue());
+            }
+            for (String table : new String[] {"support_tickets", "support_messages", "support_message_attachments", "support_ticket_events", "account_data_requests", "account_data_request_events", "participation_attestations", "account_action_keys"}) assertThat(after.get(table)).isEmpty();
+            assertThat(database.queryForObject("SELECT count(*) FROM user_accounts", Integer.class)).isEqualTo(1);
+            assertThat(database.queryForObject("SELECT count(*) FROM user_roles", Integer.class)).isEqualTo(1);
+            assertThat(database.queryForObject("SELECT count(*) FROM roles WHERE code='SUPPORT_OPERATOR'", Integer.class)).isEqualTo(1);
+        }
+    }
+
+    private static java.util.Map<String, java.util.List<String>> allRows(JdbcTemplate database, String schema) {
+        var rows = new java.util.TreeMap<String, java.util.List<String>>();
+        for (String table : database.queryForList("SELECT table_name FROM information_schema.tables WHERE table_schema=? AND table_type='BASE TABLE' AND table_name<>'flyway_schema_history' ORDER BY table_name", String.class, schema)) {
+            if (!table.matches("[a-z][a-z0-9_]*")) throw new IllegalStateException("Unexpected schema fixture identifier");
+            rows.put(table, database.queryForList("SELECT row_to_json(t)::text FROM " + table + " t ORDER BY row_to_json(t)::text", String.class));
+        }
+        return rows;
     }
 
     private Flyway migrate(String schema, String target) {

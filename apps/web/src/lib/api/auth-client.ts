@@ -3,6 +3,7 @@ import { isAuthUser, isCsrfToken, isPreferences, preferencesEtagMatches } from "
 import type { AuthUser, CsrfToken, Preferences, GetCsrfTokenData, RegisterData, LoginData, LogoutData, GetCurrentUserData, RequestPasswordResetData, ResetPasswordData, GetPreferencesData, UpdatePreferencesData } from "./generated/types.gen";
 import { purgePersonalBrowserCaches } from "../auth/anonymous-draft";
 import { publishAccountEvent } from "../auth/account-events";
+import { isUuid } from "./cms-validation";
 
 export type { AuthUser, Preferences } from "./generated/types.gen";
 export type AuthResult<T> = { ok: true; data: T; status: number; etag?: string } | { ok: false; error: ApiError };
@@ -78,8 +79,9 @@ export async function signIn(email: string, password: string): Promise<AuthResul
   if (result.ok) { await renewCsrf(); publishAccountEvent("signed-in"); }
   return result;
 }
-export async function signOut(): Promise<AuthResult<void>> {
-  const result = await mutate<void>("/auth/logout", "POST", undefined, undefined, 204, null);
+export async function signOut(expectedAccountId: string): Promise<AuthResult<void>> {
+  if (!isUuid(expectedAccountId)) throw new Error("An expected account is required for sign-out.");
+  const result = await mutate<void>("/auth/logout", "POST", undefined, undefined, 204, null, { "X-Account-Context": expectedAccountId });
   if (result.ok) { await purgePersonalBrowserCaches(); await renewCsrf(); publishAccountEvent("signed-out"); }
   return result;
 }
@@ -96,6 +98,14 @@ export async function getCurrentUser(): Promise<AuthResult<AuthUser>> {
   if (!result.ok && [401, 403].includes(result.error.status ?? 0)) await renewCsrf();
   return result;
 }
-export function updatePreferences(locale: Preferences["locale"], etag: string): Promise<AuthResult<Preferences>> {
-  return mutate("/me/preferences", "PATCH", JSON.stringify({ locale }), "application/json", 200, isPreferences, { "If-Match": etag });
+export function getPreferences(): Promise<AuthResult<Preferences>> { return send("/me/preferences", { method: "GET" }, 200, isPreferences); }
+export function updatePreferences(locale: Preferences["locale"], etag: string, expectedAccountId: string): Promise<AuthResult<Preferences>> {
+  if (!isUuid(expectedAccountId)) throw new Error("An expected account is required for a preference change.");
+  const match = /^"preferences-([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})-r(0|[1-9][0-9]*)"$/i.exec(etag);
+  const revision = match ? Number(match[2]) : NaN;
+  if (!match || !Number.isSafeInteger(revision) || locale !== "fr" && locale !== "en") throw new Error("A strong preference revision and supported locale are required.");
+  // A preference has its own identity, distinct from the account in the header.
+  const acknowledges = (value: unknown): value is Preferences => isPreferences(value) && value.id === match[1]
+    && value.locale === locale && (value.revision === revision || value.revision === revision + 1);
+  return mutate("/me/preferences", "PATCH", JSON.stringify({ locale }), "application/json", 200, acknowledges, { "If-Match": etag, "X-Account-Context": expectedAccountId });
 }

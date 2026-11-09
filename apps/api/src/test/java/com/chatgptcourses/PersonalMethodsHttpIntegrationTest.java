@@ -139,7 +139,7 @@ class PersonalMethodsHttpIntegrationTest {
     @Test
     void staleAccountContextAfterLogoutAndLoginNeverImportsPreviousAccountsText() throws Exception {
         var previous = account(false); var current = account(false); var b = previous.browser();
-        assertThat(send(b, "POST", "/api/v1/auth/logout", null, csrf(b), null, null).statusCode()).isEqualTo(204);
+        assertThat(send(b, "POST", "/api/v1/auth/logout", null, csrf(b), previous.id().toString(), null).statusCode()).isEqualTo(204);
         login(b, current.email(), current.password());
         var command = Map.of("fields", fields("Previous draft", PRIVATE_TEXT, ""));
         assertProblem(mutate(b, "POST", METHODS, command, previous.id(), null), 409, "ACCOUNT_CONTEXT_CHANGED");

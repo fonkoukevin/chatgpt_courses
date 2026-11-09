@@ -32,9 +32,10 @@ class PreferencesController {
 
     @PatchMapping
     ResponseEntity<PreferencesResponse> update(@AuthenticationPrincipal IdentityUserDetails principal,
+                                               @RequestHeader(value = "X-Account-Context", required = false) String accountContext,
                                                @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
                                                @Valid @RequestBody PreferencesPatch request) {
-        return response(identities.updatePreferences(requirePrincipal(principal).getUserId(), ifMatch, request.locale()));
+        return response(identities.updatePreferences(requirePrincipal(principal).getUserId(),com.chatgptcourses.account.service.AccountOperations.context(accountContext),ifMatch,request.locale()));
     }
 
     private static ResponseEntity<PreferencesResponse> response(PreferencesView preferences) {

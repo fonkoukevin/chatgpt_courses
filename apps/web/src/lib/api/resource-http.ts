@@ -8,7 +8,7 @@ export async function readResourceJson<T>(path: string, decode: (value: unknown)
   catch { return { ok: false, error: { kind: "unavailable" } }; }
   finally { clearTimeout(timer); }
 }
-export async function mutateResourceJson<T>(path: string, body: unknown, accountContext: string | undefined, decode: (value: unknown) => value is T, statuses = [200], options: { method?: "POST" | "PUT"; etag?: string; idempotencyKey?: string } = {}): Promise<AuthResult<T>> {
+export async function mutateResourceJson<T>(path: string, body: unknown, accountContext: string | undefined, decode: (value: unknown) => value is T, statuses = [200], options: { method?: "POST" | "PUT" | "PATCH"; etag?: string; idempotencyKey?: string } = {}): Promise<AuthResult<T>> {
   if (accountContext !== undefined && !isUuid(accountContext)) throw new Error("Invalid expected account identifier.");
   if (options.idempotencyKey !== undefined && !isUuid(options.idempotencyKey)) throw new Error("Invalid idempotency key.");
   const csrf = await getCsrfToken(); if (!csrf.ok) return csrf;

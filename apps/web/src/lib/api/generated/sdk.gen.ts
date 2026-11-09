@@ -2,7 +2,7 @@
 
 import { type Client, type ClientMeta, type Options as Options2, type RequestResult, type TDataShape, urlSearchParamsBodySerializer } from './client';
 import { client } from './client.gen';
-import type { ActivateOfferData, ActivateOfferErrors, ActivateOfferResponses, ArchiveContentData, ArchiveContentErrors, ArchiveContentResponses, CancelPreparedRefundData, CancelPreparedRefundErrors, CancelPreparedRefundResponses, CheckQuizData, CheckQuizErrors, CheckQuizResponses, ConfirmEditorialUploadData, ConfirmEditorialUploadErrors, ConfirmEditorialUploadResponses, ConfirmProjectUploadData, ConfirmProjectUploadErrors, ConfirmProjectUploadResponses, CreateActivityNoteData, CreateActivityNoteErrors, CreateActivityNoteResponses, CreateCheckoutData, CreateCheckoutErrors, CreateCheckoutResponses, CreateContentData, CreateContentErrors, CreateContentResponses, CreateContentTranslationData, CreateContentTranslationErrors, CreateContentTranslationResponses, CreateContentVersionData, CreateContentVersionErrors, CreateContentVersionResponses, CreateEditorialUploadData, CreateEditorialUploadErrors, CreateEditorialUploadResponses, CreateMethodData, CreateMethodErrors, CreateMethodFromTemplateData, CreateMethodFromTemplateErrors, CreateMethodFromTemplateResponses, CreateMethodResponses, CreateOfferData, CreateOfferErrors, CreateOfferResponses, CreateOrderData, CreateOrderErrors, CreateOrderResponses, CreateProjectData, CreateProjectErrors, CreateProjectResponses, CreateProjectUploadData, CreateProjectUploadErrors, CreateProjectUploadResponses, CreateRefundRequestData, CreateRefundRequestErrors, CreateRefundRequestResponses, DeactivateOfferData, DeactivateOfferErrors, DeactivateOfferResponses, DecideExternalRefundAccessData, DecideExternalRefundAccessErrors, DecideExternalRefundAccessResponses, DecideRefundRequestData, DecideRefundRequestErrors, DecideRefundRequestResponses, DeleteMethodData, DeleteMethodErrors, DeleteMethodResponses, DuplicateContentData, DuplicateContentErrors, DuplicateContentResponses, DuplicateMethodData, DuplicateMethodErrors, DuplicateMethodResponses, EnrollCourseData, EnrollCourseErrors, EnrollCourseResponses, ExecuteRefundData, ExecuteRefundErrors, ExecuteRefundResponses, FindActivityNoteData, FindActivityNoteErrors, FindActivityNoteResponses, GetActivityNoteData, GetActivityNoteErrors, GetActivityNoteResponses, GetActivityProgressData, GetActivityProgressErrors, GetActivityProgressResponses, GetAdminOfferData, GetAdminOfferErrors, GetAdminOfferResponses, GetAdminRefundContextData, GetAdminRefundContextErrors, GetAdminRefundContextResponses, GetAdminRefundData, GetAdminRefundErrors, GetAdminRefundRequestData, GetAdminRefundRequestErrors, GetAdminRefundRequestResponses, GetAdminRefundResponses, GetAssetDownloadData, GetAssetDownloadErrors, GetAssetDownloadResponses, GetCatalogueFacetsData, GetCatalogueFacetsErrors, GetCatalogueFacetsResponses, GetCatalogueResourceBySlugData, GetCatalogueResourceBySlugErrors, GetCatalogueResourceBySlugResponses, GetCatalogueResourceData, GetCatalogueResourceErrors, GetCatalogueResourceResponses, GetCatalogueResourceVersionData, GetCatalogueResourceVersionErrors, GetCatalogueResourceVersionResponses, GetContentData, GetContentDependenciesData, GetContentDependenciesErrors, GetContentDependenciesResponses, GetContentErrors, GetContentReadinessData, GetContentReadinessErrors, GetContentReadinessResponses, GetContentResponses, GetCsrfTokenData, GetCsrfTokenErrors, GetCsrfTokenResponses, GetCurrentUserData, GetCurrentUserErrors, GetCurrentUserResponses, GetEditorialAssetData, GetEditorialAssetErrors, GetEditorialAssetPreviewData, GetEditorialAssetPreviewErrors, GetEditorialAssetPreviewResponses, GetEditorialAssetResponses, GetEditorialUploadPolicyData, GetEditorialUploadPolicyErrors, GetEditorialUploadPolicyResponses, GetEnrollmentData, GetEnrollmentErrors, GetEnrollmentResponses, GetLearningActivityData, GetLearningActivityErrors, GetLearningActivityResponses, GetLearningDashboardData, GetLearningDashboardErrors, GetLearningDashboardResponses, GetMediaProgressData, GetMediaProgressErrors, GetMediaProgressResponses, GetMemberProjectTemplateData, GetMemberProjectTemplateErrors, GetMemberProjectTemplateResponses, GetMemberResourceData, GetMemberResourceErrors, GetMemberResourceResponses, GetMethodData, GetMethodErrors, GetMethodResponses, GetMethodSourceUpdateData, GetMethodSourceUpdateErrors, GetMethodSourceUpdateResponses, GetMethodTemplateData, GetMethodTemplateErrors, GetMethodTemplateResponses, GetMyRefundContextData, GetMyRefundContextErrors, GetMyRefundContextResponses, GetMyRefundData, GetMyRefundErrors, GetMyRefundRequestData, GetMyRefundRequestErrors, GetMyRefundRequestResponses, GetMyRefundResponses, GetOfferReadinessData, GetOfferReadinessErrors, GetOfferReadinessResponses, GetOrderData, GetOrderErrors, GetOrderPaymentStatusData, GetOrderPaymentStatusErrors, GetOrderPaymentStatusResponses, GetOrderResponses, GetPreferencesData, GetPreferencesErrors, GetPreferencesResponses, GetProjectContextData, GetProjectContextErrors, GetProjectContextResponses, GetProjectData, GetProjectErrors, GetProjectFilePolicyData, GetProjectFilePolicyErrors, GetProjectFilePolicyResponses, GetProjectPresetData, GetProjectPresetErrors, GetProjectPresetResponses, GetProjectResponses, GetProjectRevisionData, GetProjectRevisionErrors, GetProjectRevisionResponses, GetProjectStatusData, GetProjectStatusErrors, GetProjectStatusResponses, GetProjectTemplateData, GetProjectTemplateErrors, GetProjectTemplateResponses, GetPublicContentData, GetPublicContentErrors, GetPublicContentResponses, GetPublicOfferData, GetPublicOfferErrors, GetPublicOfferResponses, GetPurchaseContextData, GetPurchaseContextErrors, GetPurchaseContextResponses, GetQuizAttemptData, GetQuizAttemptErrors, GetQuizAttemptResponses, GetSelfAssessmentData, GetSelfAssessmentErrors, GetSelfAssessmentResponses, GetSystemHealthData, GetSystemHealthErrors, GetSystemHealthResponses, GetVideoMediaData, GetVideoMediaErrors, GetVideoMediaResponses, GetVideoPlaybackData, GetVideoPlaybackErrors, GetVideoPlaybackResponses, GetVideoStreamData, GetVideoStreamErrors, GetVideoStreamResponses, HeadVideoStreamData, HeadVideoStreamErrors, HeadVideoStreamResponses, ListAdminOffersData, ListAdminOffersErrors, ListAdminOffersResponses, ListAdminRefundRequestsData, ListAdminRefundRequestsErrors, ListAdminRefundRequestsResponses, ListAdminRefundsData, ListAdminRefundsErrors, ListAdminRefundsResponses, ListContentRevisionsData, ListContentRevisionsErrors, ListContentRevisionsResponses, ListContentsData, ListContentsErrors, ListContentsResponses, ListMethodsData, ListMethodsErrors, ListMethodsResponses, ListMyEntitlementsData, ListMyEntitlementsErrors, ListMyEntitlementsResponses, ListMyRefundRequestsData, ListMyRefundRequestsErrors, ListMyRefundRequestsResponses, ListMyRefundsData, ListMyRefundsErrors, ListMyRefundsResponses, ListNotificationsData, ListNotificationsErrors, ListNotificationsResponses, ListOrdersData, ListOrdersErrors, ListOrdersResponses, ListPaymentEventsData, ListPaymentEventsErrors, ListPaymentEventsResponses, ListProjectFilesData, ListProjectFilesErrors, ListProjectFilesResponses, ListProjectRevisionsData, ListProjectRevisionsErrors, ListProjectRevisionsResponses, ListProjectsData, ListProjectsErrors, ListProjectsResponses, ListPublicOffersData, ListPublicOffersErrors, ListPublicOffersResponses, ListQuizAttemptsData, ListQuizAttemptsErrors, ListQuizAttemptsResponses, ListSelfAssessmentsData, ListSelfAssessmentsErrors, ListSelfAssessmentsResponses, LoginData, LoginErrors, LoginResponses, LogoutData, LogoutErrors, LogoutResponses, PreviewContentData, PreviewContentErrors, PreviewContentResponses, PreviewRefundData, PreviewRefundErrors, PreviewRefundResponses, PublishContentData, PublishContentErrors, PublishContentResponses, ReceiveStripeWebhookData, ReceiveStripeWebhookErrors, ReceiveStripeWebhookResponses, ReconcileRefundData, ReconcileRefundErrors, ReconcileRefundResponses, RegisterData, RegisterErrors, RegisterResponses, ReplaceContentCompositionData, ReplaceContentCompositionErrors, ReplaceContentCompositionResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, RetryNotificationData, RetryNotificationErrors, RetryNotificationResponses, RetryPaymentEventData, RetryPaymentEventErrors, RetryPaymentEventResponses, RevealSolutionData, RevealSolutionErrors, RevealSolutionResponses, SaveContentMetadataData, SaveContentMetadataErrors, SaveContentMetadataResponses, SaveContentRevisionData, SaveContentRevisionErrors, SaveContentRevisionResponses, SaveOfferData, SaveOfferErrors, SaveOfferResponses, SaveProjectData, SaveProjectErrors, SaveProjectResponses, SearchCatalogueData, SearchCatalogueErrors, SearchCatalogueResponses, SetActivityProgressData, SetActivityProgressErrors, SetActivityProgressResponses, SetMediaProgressData, SetMediaProgressErrors, SetMediaProgressResponses, SubmitQuizData, SubmitQuizErrors, SubmitQuizResponses, SubmitSelfAssessmentData, SubmitSelfAssessmentErrors, SubmitSelfAssessmentResponses, TransitionContentData, TransitionContentErrors, TransitionContentResponses, UpdateActivityNoteData, UpdateActivityNoteErrors, UpdateActivityNoteResponses, UpdateMethodData, UpdateMethodErrors, UpdateMethodResponses, UpdatePreferencesData, UpdatePreferencesErrors, UpdatePreferencesResponses, VisitActivityData, VisitActivityErrors, VisitActivityResponses } from './types.gen';
+import type { ActivateOfferData, ActivateOfferErrors, ActivateOfferResponses, AddAdminSupportMessageData, AddAdminSupportMessageErrors, AddAdminSupportMessageResponses, AddPersonalSupportMessageData, AddPersonalSupportMessageErrors, AddPersonalSupportMessageResponses, ArchiveContentData, ArchiveContentErrors, ArchiveContentResponses, CancelDataRequestData, CancelDataRequestErrors, CancelDataRequestResponses, CancelPreparedRefundData, CancelPreparedRefundErrors, CancelPreparedRefundResponses, ChangeSupportStateData, ChangeSupportStateErrors, ChangeSupportStateResponses, CheckQuizData, CheckQuizErrors, CheckQuizResponses, ConfirmEditorialUploadData, ConfirmEditorialUploadErrors, ConfirmEditorialUploadResponses, ConfirmProjectUploadData, ConfirmProjectUploadErrors, ConfirmProjectUploadResponses, CreateActivityNoteData, CreateActivityNoteErrors, CreateActivityNoteResponses, CreateAdminSupportAttachmentAccessData, CreateAdminSupportAttachmentAccessErrors, CreateAdminSupportAttachmentAccessResponses, CreateCheckoutData, CreateCheckoutErrors, CreateCheckoutResponses, CreateContentData, CreateContentErrors, CreateContentResponses, CreateContentTranslationData, CreateContentTranslationErrors, CreateContentTranslationResponses, CreateContentVersionData, CreateContentVersionErrors, CreateContentVersionResponses, CreateDataRequestData, CreateDataRequestErrors, CreateDataRequestResponses, CreateEditorialUploadData, CreateEditorialUploadErrors, CreateEditorialUploadResponses, CreateMethodData, CreateMethodErrors, CreateMethodFromTemplateData, CreateMethodFromTemplateErrors, CreateMethodFromTemplateResponses, CreateMethodResponses, CreateOfferData, CreateOfferErrors, CreateOfferResponses, CreateOrderData, CreateOrderErrors, CreateOrderResponses, CreatePersonalSupportAttachmentAccessData, CreatePersonalSupportAttachmentAccessErrors, CreatePersonalSupportAttachmentAccessResponses, CreateProjectData, CreateProjectErrors, CreateProjectResponses, CreateProjectUploadData, CreateProjectUploadErrors, CreateProjectUploadResponses, CreateRefundRequestData, CreateRefundRequestErrors, CreateRefundRequestResponses, CreateSupportTicketData, CreateSupportTicketErrors, CreateSupportTicketResponses, DeactivateOfferData, DeactivateOfferErrors, DeactivateOfferResponses, DecideExternalRefundAccessData, DecideExternalRefundAccessErrors, DecideExternalRefundAccessResponses, DecideRefundRequestData, DecideRefundRequestErrors, DecideRefundRequestResponses, DeleteMethodData, DeleteMethodErrors, DeleteMethodResponses, DownloadAttestationDocumentData, DownloadAttestationDocumentErrors, DownloadAttestationDocumentResponses, DuplicateContentData, DuplicateContentErrors, DuplicateContentResponses, DuplicateMethodData, DuplicateMethodErrors, DuplicateMethodResponses, EnrollCourseData, EnrollCourseErrors, EnrollCourseResponses, ExecuteRefundData, ExecuteRefundErrors, ExecuteRefundResponses, FindActivityNoteData, FindActivityNoteErrors, FindActivityNoteResponses, GetAccountProfileData, GetAccountProfileErrors, GetAccountProfileResponses, GetActivityNoteData, GetActivityNoteErrors, GetActivityNoteResponses, GetActivityProgressData, GetActivityProgressErrors, GetActivityProgressResponses, GetAdminOfferData, GetAdminOfferErrors, GetAdminOfferResponses, GetAdminRefundContextData, GetAdminRefundContextErrors, GetAdminRefundContextResponses, GetAdminRefundData, GetAdminRefundErrors, GetAdminRefundRequestData, GetAdminRefundRequestErrors, GetAdminRefundRequestResponses, GetAdminRefundResponses, GetAdminSupportTicketData, GetAdminSupportTicketErrors, GetAdminSupportTicketResponses, GetAssetDownloadData, GetAssetDownloadErrors, GetAssetDownloadResponses, GetAttestationData, GetAttestationEligibilityData, GetAttestationEligibilityErrors, GetAttestationEligibilityResponses, GetAttestationErrors, GetAttestationResponses, GetCatalogueFacetsData, GetCatalogueFacetsErrors, GetCatalogueFacetsResponses, GetCatalogueResourceBySlugData, GetCatalogueResourceBySlugErrors, GetCatalogueResourceBySlugResponses, GetCatalogueResourceData, GetCatalogueResourceErrors, GetCatalogueResourceResponses, GetCatalogueResourceVersionData, GetCatalogueResourceVersionErrors, GetCatalogueResourceVersionResponses, GetContentData, GetContentDependenciesData, GetContentDependenciesErrors, GetContentDependenciesResponses, GetContentErrors, GetContentReadinessData, GetContentReadinessErrors, GetContentReadinessResponses, GetContentResponses, GetCsrfTokenData, GetCsrfTokenErrors, GetCsrfTokenResponses, GetCurrentUserData, GetCurrentUserErrors, GetCurrentUserResponses, GetDataRequestData, GetDataRequestErrors, GetDataRequestResponses, GetEditorialAssetData, GetEditorialAssetErrors, GetEditorialAssetPreviewData, GetEditorialAssetPreviewErrors, GetEditorialAssetPreviewResponses, GetEditorialAssetResponses, GetEditorialUploadPolicyData, GetEditorialUploadPolicyErrors, GetEditorialUploadPolicyResponses, GetEnrollmentData, GetEnrollmentErrors, GetEnrollmentResponses, GetLearningActivityData, GetLearningActivityErrors, GetLearningActivityResponses, GetLearningDashboardData, GetLearningDashboardErrors, GetLearningDashboardResponses, GetMediaProgressData, GetMediaProgressErrors, GetMediaProgressResponses, GetMemberProjectTemplateData, GetMemberProjectTemplateErrors, GetMemberProjectTemplateResponses, GetMemberResourceData, GetMemberResourceErrors, GetMemberResourceResponses, GetMethodData, GetMethodErrors, GetMethodResponses, GetMethodSourceUpdateData, GetMethodSourceUpdateErrors, GetMethodSourceUpdateResponses, GetMethodTemplateData, GetMethodTemplateErrors, GetMethodTemplateResponses, GetMyRefundContextData, GetMyRefundContextErrors, GetMyRefundContextResponses, GetMyRefundData, GetMyRefundErrors, GetMyRefundRequestData, GetMyRefundRequestErrors, GetMyRefundRequestResponses, GetMyRefundResponses, GetOfferReadinessData, GetOfferReadinessErrors, GetOfferReadinessResponses, GetOrderData, GetOrderDocumentsData, GetOrderDocumentsErrors, GetOrderDocumentsResponses, GetOrderErrors, GetOrderPaymentStatusData, GetOrderPaymentStatusErrors, GetOrderPaymentStatusResponses, GetOrderResponses, GetPersonalSupportTicketData, GetPersonalSupportTicketErrors, GetPersonalSupportTicketResponses, GetPreferencesData, GetPreferencesErrors, GetPreferencesResponses, GetProjectContextData, GetProjectContextErrors, GetProjectContextResponses, GetProjectData, GetProjectErrors, GetProjectFilePolicyData, GetProjectFilePolicyErrors, GetProjectFilePolicyResponses, GetProjectPresetData, GetProjectPresetErrors, GetProjectPresetResponses, GetProjectResponses, GetProjectRevisionData, GetProjectRevisionErrors, GetProjectRevisionResponses, GetProjectStatusData, GetProjectStatusErrors, GetProjectStatusResponses, GetProjectTemplateData, GetProjectTemplateErrors, GetProjectTemplateResponses, GetPublicContentData, GetPublicContentErrors, GetPublicContentResponses, GetPublicOfferData, GetPublicOfferErrors, GetPublicOfferResponses, GetPurchaseContextData, GetPurchaseContextErrors, GetPurchaseContextResponses, GetQuizAttemptData, GetQuizAttemptErrors, GetQuizAttemptResponses, GetSelfAssessmentData, GetSelfAssessmentErrors, GetSelfAssessmentResponses, GetSystemHealthData, GetSystemHealthErrors, GetSystemHealthResponses, GetVideoMediaData, GetVideoMediaErrors, GetVideoMediaResponses, GetVideoPlaybackData, GetVideoPlaybackErrors, GetVideoPlaybackResponses, GetVideoStreamData, GetVideoStreamErrors, GetVideoStreamResponses, HeadVideoStreamData, HeadVideoStreamErrors, HeadVideoStreamResponses, IssueParticipationAttestationData, IssueParticipationAttestationErrors, IssueParticipationAttestationResponses, ListAdminOffersData, ListAdminOffersErrors, ListAdminOffersResponses, ListAdminRefundRequestsData, ListAdminRefundRequestsErrors, ListAdminRefundRequestsResponses, ListAdminRefundsData, ListAdminRefundsErrors, ListAdminRefundsResponses, ListAdminSupportEventsData, ListAdminSupportEventsErrors, ListAdminSupportEventsResponses, ListAdminSupportMessagesData, ListAdminSupportMessagesErrors, ListAdminSupportMessagesResponses, ListAdminSupportTicketsData, ListAdminSupportTicketsErrors, ListAdminSupportTicketsResponses, ListAttestationEnrollmentsData, ListAttestationEnrollmentsErrors, ListAttestationEnrollmentsResponses, ListAttestationsData, ListAttestationsErrors, ListAttestationsResponses, ListContentRevisionsData, ListContentRevisionsErrors, ListContentRevisionsResponses, ListContentsData, ListContentsErrors, ListContentsResponses, ListDataRequestEventsData, ListDataRequestEventsErrors, ListDataRequestEventsResponses, ListDataRequestsData, ListDataRequestsErrors, ListDataRequestsResponses, ListMethodsData, ListMethodsErrors, ListMethodsResponses, ListMyEntitlementsData, ListMyEntitlementsErrors, ListMyEntitlementsResponses, ListMyRefundRequestsData, ListMyRefundRequestsErrors, ListMyRefundRequestsResponses, ListMyRefundsData, ListMyRefundsErrors, ListMyRefundsResponses, ListNotificationsData, ListNotificationsErrors, ListNotificationsResponses, ListOrdersData, ListOrdersErrors, ListOrdersResponses, ListPaymentEventsData, ListPaymentEventsErrors, ListPaymentEventsResponses, ListPersonalSupportEventsData, ListPersonalSupportEventsErrors, ListPersonalSupportEventsResponses, ListPersonalSupportMessagesData, ListPersonalSupportMessagesErrors, ListPersonalSupportMessagesResponses, ListPersonalSupportTicketsData, ListPersonalSupportTicketsErrors, ListPersonalSupportTicketsResponses, ListProjectFilesData, ListProjectFilesErrors, ListProjectFilesResponses, ListProjectRevisionsData, ListProjectRevisionsErrors, ListProjectRevisionsResponses, ListProjectsData, ListProjectsErrors, ListProjectsResponses, ListPublicOffersData, ListPublicOffersErrors, ListPublicOffersResponses, ListQuizAttemptsData, ListQuizAttemptsErrors, ListQuizAttemptsResponses, ListSelfAssessmentsData, ListSelfAssessmentsErrors, ListSelfAssessmentsResponses, LoginData, LoginErrors, LoginResponses, LogoutData, LogoutErrors, LogoutResponses, PreviewContentData, PreviewContentErrors, PreviewContentResponses, PreviewRefundData, PreviewRefundErrors, PreviewRefundResponses, PublishContentData, PublishContentErrors, PublishContentResponses, ReceiveStripeWebhookData, ReceiveStripeWebhookErrors, ReceiveStripeWebhookResponses, ReconcileRefundData, ReconcileRefundErrors, ReconcileRefundResponses, RegisterData, RegisterErrors, RegisterResponses, ReplaceContentCompositionData, ReplaceContentCompositionErrors, ReplaceContentCompositionResponses, RequestPasswordResetData, RequestPasswordResetErrors, RequestPasswordResetResponses, ResetPasswordData, ResetPasswordErrors, ResetPasswordResponses, RetryNotificationData, RetryNotificationErrors, RetryNotificationResponses, RetryPaymentEventData, RetryPaymentEventErrors, RetryPaymentEventResponses, RevealSolutionData, RevealSolutionErrors, RevealSolutionResponses, SaveContentMetadataData, SaveContentMetadataErrors, SaveContentMetadataResponses, SaveContentRevisionData, SaveContentRevisionErrors, SaveContentRevisionResponses, SaveOfferData, SaveOfferErrors, SaveOfferResponses, SaveProjectData, SaveProjectErrors, SaveProjectResponses, SearchCatalogueData, SearchCatalogueErrors, SearchCatalogueResponses, SetActivityProgressData, SetActivityProgressErrors, SetActivityProgressResponses, SetMediaProgressData, SetMediaProgressErrors, SetMediaProgressResponses, SubmitQuizData, SubmitQuizErrors, SubmitQuizResponses, SubmitSelfAssessmentData, SubmitSelfAssessmentErrors, SubmitSelfAssessmentResponses, TransitionContentData, TransitionContentErrors, TransitionContentResponses, UpdateAccountProfileData, UpdateAccountProfileErrors, UpdateAccountProfileResponses, UpdateActivityNoteData, UpdateActivityNoteErrors, UpdateActivityNoteResponses, UpdateMethodData, UpdateMethodErrors, UpdateMethodResponses, UpdatePreferencesData, UpdatePreferencesErrors, UpdatePreferencesResponses, VisitActivityData, VisitActivityErrors, VisitActivityResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -1855,4 +1855,420 @@ export const decideExternalRefundAccess = <ThrowOnError extends boolean = false>
         'Content-Type': 'application/json',
         ...options.headers
     }
+});
+
+/**
+ * Lire son profil déclaré.
+ */
+export const getAccountProfile = <ThrowOnError extends boolean = false>(options?: Options<GetAccountProfileData, ThrowOnError>): RequestResult<GetAccountProfileResponses, GetAccountProfileErrors, ThrowOnError> => (options?.client ?? client).get<GetAccountProfileResponses, GetAccountProfileErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/profile',
+    ...options
+});
+
+/**
+ * Modifier le nom déclaré de son profil.
+ *
+ * Email en lecture seule. Aucun changement d’authentification ou vérification d’identité parallèle. Une ancienne interface ne peut modifier le nouveau compte connecté.
+ */
+export const updateAccountProfile = <ThrowOnError extends boolean = false>(options: Options<UpdateAccountProfileData, ThrowOnError>): RequestResult<UpdateAccountProfileResponses, UpdateAccountProfileErrors, ThrowOnError> => (options.client ?? client).patch<UpdateAccountProfileResponses, UpdateAccountProfileErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/profile',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Lire la disponibilité des documents commerciaux vérifiés.
+ */
+export const getOrderDocuments = <ThrowOnError extends boolean = false>(options: Options<GetOrderDocumentsData, ThrowOnError>): RequestResult<GetOrderDocumentsResponses, GetOrderDocumentsErrors, ThrowOnError> => (options.client ?? client).get<GetOrderDocumentsResponses, GetOrderDocumentsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/orders/{orderId}/documents',
+    ...options
+});
+
+/**
+ * Lister ses demandes relatives au compte et aux données.
+ */
+export const listDataRequests = <ThrowOnError extends boolean = false>(options?: Options<ListDataRequestsData, ThrowOnError>): RequestResult<ListDataRequestsResponses, ListDataRequestsErrors, ThrowOnError> => (options?.client ?? client).get<ListDataRequestsResponses, ListDataRequestsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/data-requests',
+    ...options
+});
+
+/**
+ * Enregistrer une demande traçable sans traitement irréversible.
+ */
+export const createDataRequest = <ThrowOnError extends boolean = false>(options: Options<CreateDataRequestData, ThrowOnError>): RequestResult<CreateDataRequestResponses, CreateDataRequestErrors, ThrowOnError> => (options.client ?? client).post<CreateDataRequestResponses, CreateDataRequestErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/data-requests',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Lire sa demande et sa révision.
+ */
+export const getDataRequest = <ThrowOnError extends boolean = false>(options: Options<GetDataRequestData, ThrowOnError>): RequestResult<GetDataRequestResponses, GetDataRequestErrors, ThrowOnError> => (options.client ?? client).get<GetDataRequestResponses, GetDataRequestErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/data-requests/{requestId}',
+    ...options
+});
+
+/**
+ * Lire l’historique de sa demande.
+ */
+export const listDataRequestEvents = <ThrowOnError extends boolean = false>(options: Options<ListDataRequestEventsData, ThrowOnError>): RequestResult<ListDataRequestEventsResponses, ListDataRequestEventsErrors, ThrowOnError> => (options.client ?? client).get<ListDataRequestEventsResponses, ListDataRequestEventsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/data-requests/{requestId}/events',
+    ...options
+});
+
+/**
+ * Annuler sa demande en conservant son historique.
+ */
+export const cancelDataRequest = <ThrowOnError extends boolean = false>(options: Options<CancelDataRequestData, ThrowOnError>): RequestResult<CancelDataRequestResponses, CancelDataRequestErrors, ThrowOnError> => (options.client ?? client).post<CancelDataRequestResponses, CancelDataRequestErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/data-requests/{requestId}/cancellations',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Lister ses demandes d’aide.
+ */
+export const listPersonalSupportTickets = <ThrowOnError extends boolean = false>(options?: Options<ListPersonalSupportTicketsData, ThrowOnError>): RequestResult<ListPersonalSupportTicketsResponses, ListPersonalSupportTicketsErrors, ThrowOnError> => (options?.client ?? client).get<ListPersonalSupportTicketsResponses, ListPersonalSupportTicketsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/support-tickets',
+    ...options
+});
+
+/**
+ * Enregistrer sa demande et les pièces explicitement choisies.
+ *
+ * Création atomique du ticket, du premier message et de l’historique. Pièces PROJECT_FILE/READY du propriétaire uniquement, ≤5 ; commande ≤48KiB UTF8. Aucune information privée automatiquement jointe.
+ */
+export const createSupportTicket = <ThrowOnError extends boolean = false>(options: Options<CreateSupportTicketData, ThrowOnError>): RequestResult<CreateSupportTicketResponses, CreateSupportTicketErrors, ThrowOnError> => (options.client ?? client).post<CreateSupportTicketResponses, CreateSupportTicketErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/support-tickets',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Lire une demande autorisée.
+ */
+export const getPersonalSupportTicket = <ThrowOnError extends boolean = false>(options: Options<GetPersonalSupportTicketData, ThrowOnError>): RequestResult<GetPersonalSupportTicketResponses, GetPersonalSupportTicketErrors, ThrowOnError> => (options.client ?? client).get<GetPersonalSupportTicketResponses, GetPersonalSupportTicketErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/support-tickets/{ticketId}',
+    ...options
+});
+
+/**
+ * Lire les messages réellement enregistrés.
+ */
+export const listPersonalSupportMessages = <ThrowOnError extends boolean = false>(options: Options<ListPersonalSupportMessagesData, ThrowOnError>): RequestResult<ListPersonalSupportMessagesResponses, ListPersonalSupportMessagesErrors, ThrowOnError> => (options.client ?? client).get<ListPersonalSupportMessagesResponses, ListPersonalSupportMessagesErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/support-tickets/{ticketId}/messages',
+    ...options
+});
+
+/**
+ * Ajouter un message à sa demande.
+ *
+ * Pièces choisies par le propriétaire uniquement. Retour OPEN, sauf ticket CLOSED refusé409. Ne jamais rejouer automatiquement après 412.
+ */
+export const addPersonalSupportMessage = <ThrowOnError extends boolean = false>(options: Options<AddPersonalSupportMessageData, ThrowOnError>): RequestResult<AddPersonalSupportMessageResponses, AddPersonalSupportMessageErrors, ThrowOnError> => (options.client ?? client).post<AddPersonalSupportMessageResponses, AddPersonalSupportMessageErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/support-tickets/{ticketId}/messages',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Lire l’historique de la demande.
+ */
+export const listPersonalSupportEvents = <ThrowOnError extends boolean = false>(options: Options<ListPersonalSupportEventsData, ThrowOnError>): RequestResult<ListPersonalSupportEventsResponses, ListPersonalSupportEventsErrors, ThrowOnError> => (options.client ?? client).get<ListPersonalSupportEventsResponses, ListPersonalSupportEventsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/support-tickets/{ticketId}/events',
+    ...options
+});
+
+/**
+ * Autoriser temporairement une pièce choisie dans la demande.
+ *
+ * Le serveur vérifie compte, permission, ticket et association sélectionnée. L’opérateur ne reçoit aucun autre fichier du projet. Objet réel vérifié par le service P10 ; aucun propriétaire simulé.
+ */
+export const createPersonalSupportAttachmentAccess = <ThrowOnError extends boolean = false>(options: Options<CreatePersonalSupportAttachmentAccessData, ThrowOnError>): RequestResult<CreatePersonalSupportAttachmentAccessResponses, CreatePersonalSupportAttachmentAccessErrors, ThrowOnError> => (options.client ?? client).post<CreatePersonalSupportAttachmentAccessResponses, CreatePersonalSupportAttachmentAccessErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/support-tickets/{ticketId}/attachments/{assetId}/download-access',
+    ...options
+});
+
+/**
+ * Lister les demandes avec permission opérateur.
+ */
+export const listAdminSupportTickets = <ThrowOnError extends boolean = false>(options?: Options<ListAdminSupportTicketsData, ThrowOnError>): RequestResult<ListAdminSupportTicketsResponses, ListAdminSupportTicketsErrors, ThrowOnError> => (options?.client ?? client).get<ListAdminSupportTicketsResponses, ListAdminSupportTicketsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/support-tickets',
+    ...options
+});
+
+/**
+ * Lire une demande autorisée.
+ */
+export const getAdminSupportTicket = <ThrowOnError extends boolean = false>(options: Options<GetAdminSupportTicketData, ThrowOnError>): RequestResult<GetAdminSupportTicketResponses, GetAdminSupportTicketErrors, ThrowOnError> => (options.client ?? client).get<GetAdminSupportTicketResponses, GetAdminSupportTicketErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/support-tickets/{ticketId}',
+    ...options
+});
+
+/**
+ * Lire les messages réellement enregistrés.
+ */
+export const listAdminSupportMessages = <ThrowOnError extends boolean = false>(options: Options<ListAdminSupportMessagesData, ThrowOnError>): RequestResult<ListAdminSupportMessagesResponses, ListAdminSupportMessagesErrors, ThrowOnError> => (options.client ?? client).get<ListAdminSupportMessagesResponses, ListAdminSupportMessagesErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/support-tickets/{ticketId}/messages',
+    ...options
+});
+
+/**
+ * Répondre réellement à la demande et préparer l’email via l’outbox.
+ *
+ * Permission support.reply ; attachmentIds obligatoirement vide. Message et outbox atomiques ; un incident email ne supprime ni message ni droit.
+ */
+export const addAdminSupportMessage = <ThrowOnError extends boolean = false>(options: Options<AddAdminSupportMessageData, ThrowOnError>): RequestResult<AddAdminSupportMessageResponses, AddAdminSupportMessageErrors, ThrowOnError> => (options.client ?? client).post<AddAdminSupportMessageResponses, AddAdminSupportMessageErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/support-tickets/{ticketId}/messages',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Lire l’historique de la demande.
+ */
+export const listAdminSupportEvents = <ThrowOnError extends boolean = false>(options: Options<ListAdminSupportEventsData, ThrowOnError>): RequestResult<ListAdminSupportEventsResponses, ListAdminSupportEventsErrors, ThrowOnError> => (options.client ?? client).get<ListAdminSupportEventsResponses, ListAdminSupportEventsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/support-tickets/{ticketId}/events',
+    ...options
+});
+
+/**
+ * Autoriser temporairement une pièce choisie dans la demande.
+ *
+ * Le serveur vérifie compte, permission, ticket et association sélectionnée. L’opérateur ne reçoit aucun autre fichier du projet. Objet réel vérifié par le service P10 ; aucun propriétaire simulé.
+ */
+export const createAdminSupportAttachmentAccess = <ThrowOnError extends boolean = false>(options: Options<CreateAdminSupportAttachmentAccessData, ThrowOnError>): RequestResult<CreateAdminSupportAttachmentAccessResponses, CreateAdminSupportAttachmentAccessErrors, ThrowOnError> => (options.client ?? client).post<CreateAdminSupportAttachmentAccessResponses, CreateAdminSupportAttachmentAccessErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/support-tickets/{ticketId}/attachments/{assetId}/download-access',
+    ...options
+});
+
+/**
+ * Modifier avec motif l’état réel d’une demande.
+ *
+ * Permission support.manage ; transition et événement atomiques, aucun délai de réponse promis.
+ */
+export const changeSupportState = <ThrowOnError extends boolean = false>(options: Options<ChangeSupportStateData, ThrowOnError>): RequestResult<ChangeSupportStateResponses, ChangeSupportStateErrors, ThrowOnError> => (options.client ?? client).post<ChangeSupportStateResponses, ChangeSupportStateErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/admin/support-tickets/{ticketId}/state-changes',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Lister ses inscriptions historiques pour choisir une attestation.
+ *
+ * Liste propriétaire paginée ; aucun accès pédagogique actif requis pour retrouver une inscription historique.
+ */
+export const listAttestationEnrollments = <ThrowOnError extends boolean = false>(options?: Options<ListAttestationEnrollmentsData, ThrowOnError>): RequestResult<ListAttestationEnrollmentsResponses, ListAttestationEnrollmentsErrors, ThrowOnError> => (options?.client ?? client).get<ListAttestationEnrollmentsResponses, ListAttestationEnrollmentsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/attestation-enrollments',
+    ...options
+});
+
+/**
+ * Lire les critères et faits de participation serveur.
+ */
+export const getAttestationEligibility = <ThrowOnError extends boolean = false>(options: Options<GetAttestationEligibilityData, ThrowOnError>): RequestResult<GetAttestationEligibilityResponses, GetAttestationEligibilityErrors, ThrowOnError> => (options.client ?? client).get<GetAttestationEligibilityResponses, GetAttestationEligibilityErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/enrollments/{enrollmentId}/attestation-eligibility',
+    ...options
+});
+
+/**
+ * Émettre une attestation HTML de participation déclarée.
+ *
+ * Confirmation de l’empreinte courante requise ; preuve dépassée412, critères non atteints409. Même preuve/langue retrouve le document, même avec une nouvelle clé. HTML réel UTF8 autonome, ≤256KiB, instantané immuable. Aucune certification officielle ou revue humaine.
+ */
+export const issueParticipationAttestation = <ThrowOnError extends boolean = false>(options: Options<IssueParticipationAttestationData, ThrowOnError>): RequestResult<IssueParticipationAttestationResponses, IssueParticipationAttestationErrors, ThrowOnError> => (options.client ?? client).post<IssueParticipationAttestationResponses, IssueParticipationAttestationErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/enrollments/{enrollmentId}/attestations',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Lister ses attestations émises.
+ */
+export const listAttestations = <ThrowOnError extends boolean = false>(options?: Options<ListAttestationsData, ThrowOnError>): RequestResult<ListAttestationsResponses, ListAttestationsErrors, ThrowOnError> => (options?.client ?? client).get<ListAttestationsResponses, ListAttestationsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/attestations',
+    ...options
+});
+
+/**
+ * Lire son attestation et ses preuves conservées.
+ */
+export const getAttestation = <ThrowOnError extends boolean = false>(options: Options<GetAttestationData, ThrowOnError>): RequestResult<GetAttestationResponses, GetAttestationErrors, ThrowOnError> => (options.client ?? client).get<GetAttestationResponses, GetAttestationErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/attestations/{attestationId}',
+    ...options
+});
+
+/**
+ * Télécharger les octets HTML immuables de son attestation.
+ *
+ * Propriétaire actif et permission vérifiés à chaque demande, même après remboursement ou nouvelle édition. Aucun annuaire public. Document autonome imprimable, textes échappés, identité non vérifiée, participation et modes déclarés explicites.
+ */
+export const downloadAttestationDocument = <ThrowOnError extends boolean = false>(options: Options<DownloadAttestationDocumentData, ThrowOnError>): RequestResult<DownloadAttestationDocumentResponses, DownloadAttestationDocumentErrors, ThrowOnError> => (options.client ?? client).get<DownloadAttestationDocumentResponses, DownloadAttestationDocumentErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'SESSION',
+            type: 'apiKey'
+        }],
+    url: '/me/attestations/{attestationId}/document',
+    ...options
 });

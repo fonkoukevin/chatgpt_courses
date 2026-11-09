@@ -25,6 +25,12 @@ public final class AssetAccessPolicy {
     }
     public void mutation(UUID actor,UUID context,String permission){require(actor,permission);if(context==null)throw new ApiException(ApiError.ACCOUNT_CONTEXT_REQUIRED);if(!actor.equals(context))throw new ApiException(ApiError.ACCOUNT_CONTEXT_CHANGED);}
     public void accountContext(UUID actor,UUID context){if(actor==null){check(context==null);return;}if(context==null)throw new ApiException(ApiError.ACCOUNT_CONTEXT_REQUIRED);if(!actor.equals(context))throw new ApiException(ApiError.ACCOUNT_CONTEXT_CHANGED);}
+    public void selectedSupportAttachment(UUID actor,UUID context,UUID ticket,UUID asset,boolean admin){
+        mutation(actor,context,admin?"support.admin.read":"support.read");
+        var rows=jdbc.query("SELECT t.owner_id FROM support_tickets t JOIN support_message_attachments s ON s.ticket_id=t.id AND s.owner_id=t.owner_id JOIN assets a ON a.id=s.asset_id AND a.owner_id=t.owner_id WHERE t.id=? AND a.id=? AND a.scope='PROJECT_FILE' AND a.state='READY'"+(admin?"":" AND t.owner_id=?"),(r,n)->r.getObject(1,UUID.class),admin?new Object[]{ticket,asset}:new Object[]{ticket,asset,actor});
+        if(rows.isEmpty())throw notFound();
+        if(!admin&&!access.decide(subject(actor),new AccessResource.PersonalResource(asset,rows.getFirst()),AccessPolicy.Action.READ).allowed())throw notFound();
+    }
     public void project(UUID actor,UUID project,String permission,boolean lock){
         require(actor,permission);if(project==null)throw notFound();var rows=jdbc.query("SELECT id,owner_id FROM projects WHERE id=? AND owner_id=?"+(lock?" FOR NO KEY UPDATE":""),(rs,n)->new AccessResource.PersonalResource(rs.getObject(1,UUID.class),rs.getObject(2,UUID.class)),project,actor);if(rows.isEmpty())throw notFound();require(actor,permission);
         if(!access.decide(subject(actor),rows.getFirst(),permission.endsWith(".read")?AccessPolicy.Action.READ:AccessPolicy.Action.UPDATE).allowed())throw notFound();

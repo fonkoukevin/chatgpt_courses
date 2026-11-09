@@ -13,6 +13,8 @@ import { learningLanguages, learningPath } from "@/lib/learning/routes";
 import { activityDiscoveryHref } from "@/lib/public/routes";
 import { AccountNotice, LearningError } from "./parts";
 import { LearningShell } from "./shell";
+import { attestationsHref } from "@/lib/account/routes";
+import { getAccountDictionary } from "@/lib/i18n/account";
 
 export function LearningEnrollment({ locale, initial, expectedAccountId }: { locale: Locale; initial: AuthResult<EnrollmentView>; expectedAccountId: string }) {
   const t = getLearningDictionary(locale), publicCopy = getPublicDictionary(locale), router = useRouter(), [pending, startTransition] = useTransition();
@@ -23,7 +25,7 @@ export function LearningEnrollment({ locale, initial, expectedAccountId }: { loc
   if (!initial.ok) return <LearningShell {...frame}><LearningError locale={locale} error={initial.error} retry={() => startTransition(() => router.refresh())} />{pending && <p role="status">{t.loading}</p>}</LearningShell>;
   const { summary, activities } = initial.data;
   return <LearningShell {...frame}><div className="space-y-8"><Link href={learningPath(locale)} prefetch={false} className="inline-flex min-h-11 items-center text-sm">← {t.backLearning}</Link>
-    <section className="space-y-4"><h2 className="break-words text-2xl font-semibold">{summary.title}</h2><div className="flex flex-wrap gap-2"><Badge>{t.version} {summary.courseVersionNumber}</Badge><Badge tone={summary.accessStatus === "ACTIVE" ? "success" : "warning"}>{summary.accessStatus === "ACTIVE" ? t.active : summary.accessStatus === "PROTECTED" ? t.protected : t.contentUnavailable}</Badge></div>{summary.availability !== "PUBLISHED" && <StatusMessage tone="warning">{publicCopy[summary.availability]}</StatusMessage>}<p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">{t.snapshotNotice}</p></section>
+    <Link href={attestationsHref(locale, { enrollmentId: summary.id })} prefetch={false} className="inline-flex min-h-11 items-center">{getAccountDictionary(locale).attestations}</Link><section className="space-y-4"><h2 className="break-words text-2xl font-semibold">{summary.title}</h2><div className="flex flex-wrap gap-2"><Badge>{t.version} {summary.courseVersionNumber}</Badge><Badge tone={summary.accessStatus === "ACTIVE" ? "success" : "warning"}>{summary.accessStatus === "ACTIVE" ? t.active : summary.accessStatus === "PROTECTED" ? t.protected : t.contentUnavailable}</Badge></div>{summary.availability !== "PUBLISHED" && <StatusMessage tone="warning">{publicCopy[summary.availability]}</StatusMessage>}<p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">{t.snapshotNotice}</p></section>
     <section className="space-y-4 rounded-panel border border-border p-4 sm:p-6" data-learning-progress="summary"><h2 className="text-xl font-semibold">{t.progressSummary}</h2><p className="text-sm text-muted-foreground">{summary.progress.totalActivities} {t.denominator}</p><dl className="space-y-3 text-sm">{[
       { label: t.read, count: summary.progress.readActivities }, { label: t.completed, count: summary.progress.completedActivities }, { label: t.quizPassed, count: summary.progress.quizPassedActivities },
     ].map(({ label, count }) => <div key={label} className="flex flex-wrap justify-between gap-x-4 gap-y-1"><dt>{label}</dt><dd className="font-medium tabular-nums">{count} / {summary.progress.totalActivities}</dd></div>)}</dl><p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">{t.distinctEvidence}</p></section>

@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync, lstatSync, realpathSync, mkdirSync, writeFileSync, copyFileSync } from 'node:fs';
 import { join, resolve, relative, sep } from 'node:path';
 import { createHash } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
 
 export const scenarioNames = Object.freeze({ 'P19-01': 'catalogue-search', 'P19-02': 'paid-bilingual-learning', 'P19-03': 'retained-personal-work', 'P19-04': 'account-and-permissions' });
 export const screenshots = Object.freeze(['fr-390-catalogue-empty.png', 'fr-390-catalogue-unavailable.png', 'fr-390-paid-original-note.png', 'en-390-paid-original-note.png', 'en-390-paid-french-quiz-history.png', 'fr-390-project-conflict.png', 'en-390-participation-provenance.png', 'en-390-contextual-support.png']);
@@ -54,14 +55,57 @@ export function requireJUnitSuccess(suites, expected) {
 
 const safeJavaName = value => typeof value === 'string' && /^[A-Za-z_$][A-Za-z0-9_$.]{0,199}$/u.test(value) && !/(?:whsec_|(?:sk|pk)_(?:test|live)_|bearer|cookie|authorization)/iu.test(value);
 const attributes = text => Object.fromEntries([...text.matchAll(/([A-Za-z][A-Za-z0-9_-]*)="([^"<>]*)"/gu)].map(match => [match[1], match[2]]));
-export function sanitizeSurefire(xml) {
-  if (typeof xml !== 'string' || xml.length > 40 * 1024 * 1024 || /<!DOCTYPE|<!ENTITY/iu.test(xml)) throw new Error('CI_JUNIT_SOURCE_REFUSED');
+const defaultJavaTestDirectory = fileURLToPath(new URL('../apps/api/src/test/java/', import.meta.url));
+function sourceTestMethods(source) {
+  const methods = new Map(), capturedOutputImported = /^import\s+org\.springframework\.boot\.test\.system\.CapturedOutput\s*;/mu.test(source);
+  for (const match of source.matchAll(/@Test\b\s+(?:public\s+)?void\s+([A-Za-z_$][A-Za-z0-9_$]*)\s*\(([^()]*)\)/gu)) {
+    const [, method, parameters] = match;
+    if (!parameters.trim()) methods.set(method, method);
+    else if (capturedOutputImported && /^\s*CapturedOutput\s+[A-Za-z_$][A-Za-z0-9_$]*\s*$/u.test(parameters)) methods.set(`${method}(CapturedOutput)`, method);
+  }
+  return methods;
+}
+function sourceTestIndex(directory) {
+  const index = new Map();
+  for (const name of readdirSync(directory, { recursive: true }).filter(name => /Test\.java$/u.test(name))) {
+    const source = readFileSync(regularOwnedFile(directory, join(directory, name)), 'utf8');
+    const packageName = source.match(/^package\s+([A-Za-z0-9_.]+);/mu)?.[1], file = name.split(/[\\/]/u).at(-1);
+    const classname = `${packageName}.${file.replace(/\.java$/u, '')}`;
+    if (!packageName || !safeJavaName(classname) || !classname.startsWith('com.chatgptcourses.') || index.has(classname)) throw new Error('CI_JUNIT_SOURCE_INDEX_REFUSED');
+    index.set(classname, { file, lineCount: source.split(/\r?\n/u).length, methods: sourceTestMethods(source) });
+  }
+  return index;
+}
+function testFailureLocation(body, item, suite, sources) {
+  const source = sources.get(item.classname);
+  if (item.classname !== suite || !source || source.file !== `${item.classname.split('.').at(-1)}.java` || !Number.isSafeInteger(source.lineCount) || source.lineCount < 1) return undefined;
+  // Surefire displays the injected parameter type, whereas Java frames contain
+  // only the method name. Accept that one known display form only when its
+  // exact Spring type and @Test signature exist in the indexed source.
+  const method = source.methods.get(item.name);
+  if (!method) return undefined;
+  const escape = value => value.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
+  const frame = new RegExp(`^[ \\t]*at[ \\t]+${escape(item.classname)}\\.${escape(method)}\\(${escape(source.file)}:([1-9][0-9]{0,6})\\)[ \\t]*\\r?$`, 'gmu');
+  const lines = [...body.matchAll(frame)].map(match => Number(match[1]));
+  if (!lines.length || lines.some(line => line > source.lineCount) || new Set(lines).size !== 1) return undefined;
+  return { file: source.file, line: lines[0] };
+}
+export function sanitizeSurefire(xml, sources = new Map()) {
+  if (typeof xml !== 'string' || xml.length > 40 * 1024 * 1024 || xml.includes('\0') || /<!DOCTYPE|<!ENTITY/iu.test(xml)) throw new Error('CI_JUNIT_SOURCE_REFUSED');
   // A console body can contain text that looks like XML test metadata. Remove
   // these payload regions before inspecting any tags; never promote their text
   // into a published test name or a second testcase.
-  const metadata = xml.replace(/<!--[\s\S]*?-->/gu, '').replace(/<!\[CDATA\[[\s\S]*?\]\]>/gu, '')
+  // Opaque NUL-delimited placeholders also keep CDATA within a failure private
+  // until its exact source frame is inspected; they cannot originate in XML.
+  const cdata = [], failures = [];
+  const metadata = xml.replace(/<!--[\s\S]*?-->/gu, '').replace(/<!\[CDATA\[([\s\S]*?)\]\]>/gu, (_match, body) => `\0CDATA${cdata.push(body) - 1}\0`)
     .replace(/<(properties|system-out|system-err)\b[^>]*>[\s\S]*?<\/\1>/gu, '')
-    .replace(/<(failure|error|skipped)\b[^>]*(?:\/>|>[\s\S]*?<\/\1>)/gu, (_match, name) => `<${name}/>`);
+    .replace(/<(failure|error|skipped)\b[^>]*(?:\/>|>([\s\S]*?)<\/\1>)/gu, (_match, name, body = '') => {
+      if (name === 'skipped') return '<skipped/>';
+      const content = body.replace(/\0CDATA([0-9]+)\0/gu, (_placeholder, index) => cdata[Number(index)]);
+      const id = failures.push({ kind: name === 'failure' ? 'ASSERTION_FAILURE' : 'TEST_ERROR', body: content }) - 1;
+      return `<${name} diagnostic="${id}"/>`;
+    }).replace(/\0CDATA[0-9]+\0/gu, '');
   const root = metadata.match(/<testsuite\s+([^>]+)>/u); if (!root) throw new Error('CI_JUNIT_SUITE_REQUIRED');
   const data = attributes(root[1]);
   const result = { format: 'junit-summary-v1', suite: safeJavaName(data.name) ? data.name : 'REDACTED_SUITE', counts: { tests: count(Number(data.tests)), failures: count(Number(data.failures)), errors: count(Number(data.errors)), skipped: count(Number(data.skipped)) }, durationMs: number(Number(data.time) * 1000), tests: [], droppedMetadata: 0 };
@@ -69,7 +113,12 @@ export function sanitizeSurefire(xml) {
     const item = attributes(match[1]), content = match[2] ?? '';
     const valid = safeJavaName(item.classname) && item.classname.startsWith('com.chatgptcourses.') && safeJavaName(item.name);
     if (!valid) result.droppedMetadata++;
-    result.tests.push({ name: valid ? `${item.classname}#${item.name}` : 'REDACTED_TEST', status: /<error\b/u.test(content) ? 'error' : /<failure\b/u.test(content) ? 'failed' : /<skipped\b/u.test(content) ? 'skipped' : 'passed', durationMs: number(Number(item.time) * 1000) });
+    const status = /<error\b/u.test(content) ? 'error' : /<failure\b/u.test(content) ? 'failed' : /<skipped\b/u.test(content) ? 'skipped' : 'passed';
+    const failure = content.match(new RegExp(`<${status === 'error' ? 'error' : 'failure'} diagnostic="([0-9]+)"/>`, 'u'))?.[1];
+    const indexedClass = safeJavaName(item.classname) && item.classname.startsWith('com.chatgptcourses.') && sources.has(item.classname);
+    const detail = indexedClass && ['failed', 'error'].includes(status) ? failures[Number(failure)] : undefined;
+    const location = detail && testFailureLocation(detail.body, item, data.name, sources);
+    result.tests.push({ name: valid ? `${item.classname}#${item.name}` : 'REDACTED_TEST', status, durationMs: number(Number(item.time) * 1000), ...(location ? { diagnostic: { kind: detail.kind, ...location } } : {}) });
   }
   return result;
 }
@@ -98,8 +147,9 @@ export function copyApprovedScreenshots(evidence, destination, manifest) {
   return copied;
 }
 
-export function collectSurefire(directory) {
-  return readdirSync(directory).filter(name => /^TEST-[A-Za-z0-9_$.]+\.xml$/u.test(name)).toSorted().map(name => sanitizeSurefire(readFileSync(regularOwnedFile(directory, join(directory, name)), 'utf8')));
+export function collectSurefire(directory, javaTestDirectory = defaultJavaTestDirectory) {
+  const sources = sourceTestIndex(javaTestDirectory);
+  return readdirSync(directory).filter(name => /^TEST-[A-Za-z0-9_$.]+\.xml$/u.test(name)).toSorted().map(name => sanitizeSurefire(readFileSync(regularOwnedFile(directory, join(directory, name)), 'utf8'), sources));
 }
 export function writePublicJson(path, value) { mkdirSync(dirnameOf(path), { recursive: true }); writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`, { encoding: 'utf8', mode: 0o600 }); }
 function dirnameOf(path) { return resolve(path, '..'); }

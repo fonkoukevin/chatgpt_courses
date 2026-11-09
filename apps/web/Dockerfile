@@ -14,6 +14,7 @@ FROM dependencies AS builder
 # Explicit inputs exclude host .env, native node_modules/.next and the user's
 # generated next-env.d.ts. Next generates its own declarations in this stage.
 COPY apps/web/src ./apps/web/src
+COPY references/design-tokens.css ./references/design-tokens.css
 COPY apps/web/next.config.ts apps/web/postcss.config.mjs apps/web/tsconfig.json ./apps/web/
 # There are currently no public/ assets. Keep an empty deployment directory;
 # local static imports are emitted into .next/static by Next itself.

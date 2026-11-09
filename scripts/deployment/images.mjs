@@ -3,7 +3,7 @@ const root=resolve(fileURLToPath(new URL('../..',import.meta.url)));
 function git(args){return execFileSync('git',args,{cwd:root,encoding:'utf8',windowsHide:true}).trim();}
 export async function buildImages({commit,output,platform='linux/amd64'}){
  if(!/^[a-f0-9]{40}$/.test(commit)||git(['rev-parse','HEAD'])!==commit||!['linux/amd64','linux/arm64'].includes(platform))throw new Error('IMAGE_SOURCE_OR_PLATFORM_INVALID');
- const inputs=['apps/api/src/main','apps/api/Dockerfile','apps/api/pom.xml','apps/api/.mvn','apps/api/mvnw','apps/web/src','apps/web/Dockerfile','apps/web/next.config.ts','apps/web/package.json','apps/web/postcss.config.mjs','apps/web/tsconfig.json','scripts/container','package.json','package-lock.json','.npmrc','.dockerignore'];
+ const inputs=['apps/api/src/main','apps/api/Dockerfile','apps/api/pom.xml','apps/api/.mvn','apps/api/mvnw','apps/web/src','apps/web/Dockerfile','apps/web/next.config.ts','apps/web/package.json','apps/web/postcss.config.mjs','apps/web/tsconfig.json','references/design-tokens.css','scripts/container','package.json','package-lock.json','.npmrc','.dockerignore'];
  if(git(['status','--porcelain','--',...inputs]))throw new Error('IMAGE_INPUTS_MUST_BE_COMMITTED');
  const directory=join(root,'.runtime','image-build-'+randomUUID());mkdirSync(directory,{recursive:true,mode:0o700});
  const report={sourceCommit:commit,platform,images:{},registryPublished:false,startedAt:new Date().toISOString()};

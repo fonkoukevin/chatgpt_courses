@@ -13,7 +13,7 @@ COPY apps/api/src/main/ src/main/
 COPY scripts/container/HealthProbe.java /build/probe/HealthProbe.java
 # The checked-in wrapper verifies its pinned Maven 3.10.0 distribution checksum.
 # PostgreSQL integration tests run in the release checks, outside the image build.
-RUN chmod 0555 mvnw \
+RUN --mount=type=cache,target=/root/.m2,sharing=locked chmod 0555 mvnw \
     && ./mvnw --batch-mode --no-transfer-progress -Dmaven.test.skip=true package \
     && javac --release 21 -d /build/probe/classes /build/probe/HealthProbe.java
 

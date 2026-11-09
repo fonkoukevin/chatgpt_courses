@@ -1,5 +1,5 @@
 import {createCipheriv,createDecipheriv,createHash,randomBytes,randomUUID} from 'node:crypto';
-import {createReadStream,createWriteStream,readFileSync,writeFileSync,existsSync,lstatSync,openSync,readSync,closeSync,appendFileSync,renameSync,unlinkSync} from 'node:fs';
+import {createReadStream,createWriteStream,readFileSync,writeFileSync,existsSync,lstatSync,openSync,readSync,closeSync,appendFileSync,linkSync,unlinkSync} from 'node:fs';
 import {resolve,dirname} from 'node:path';
 import {pipeline} from 'node:stream/promises';
 import {Readable} from 'node:stream';
@@ -8,16 +8,16 @@ import {fileURLToPath} from 'node:url';
 const magic=Buffer.from('COURSES-BACKUP-1\n');
 export function readBackupKey(path){const text=readFileSync(path,'utf8').trim();const key=Buffer.from(text,'base64');if(key.length!==32||key.toString('base64')!==text)throw new Error('BACKUP_KEY_INVALID');return key;}
 export async function hashFile(path){const hash=createHash('sha256');for await(const bytes of createReadStream(path))hash.update(bytes);return hash.digest('hex');}
-function inputFile(path){const s=lstatSync(path);if(!s.isFile()||s.isSymbolicLink()||s.size>16*1024**3)throw new Error('BACKUP_INPUT_INVALID');return s;}
+function inputFile(path,overhead=0){const s=lstatSync(path);if(!s.isFile()||s.isSymbolicLink()||s.size>16*1024**3+overhead)throw new Error('BACKUP_INPUT_INVALID');return s;}
 function destination(path){path=resolve(path);if(existsSync(path)||!lstatSync(dirname(path)).isDirectory())throw new Error('BACKUP_DESTINATION_MUST_BE_NEW');return path;}
 export async function sealFile(input,output,key){inputFile(input);output=destination(output);const partial=output+'.partial-'+randomUUID(),nonce=randomBytes(12),cipher=createCipheriv('aes-256-gcm',key,nonce);cipher.setAAD(magic);
- try{writeFileSync(partial,Buffer.concat([magic,nonce]),{flag:'wx',mode:0o600});await pipeline(createReadStream(input),cipher,createWriteStream(partial,{flags:'a',mode:0o600}));appendFileSync(partial,cipher.getAuthTag());renameSync(partial,output);return {bytes:lstatSync(output).size,sha256:await hashFile(output),format:'aes-256-gcm-v1'};}
+ try{writeFileSync(partial,Buffer.concat([magic,nonce]),{flag:'wx',mode:0o600});await pipeline(createReadStream(input),cipher,createWriteStream(partial,{flags:'a',mode:0o600}));appendFileSync(partial,cipher.getAuthTag());linkSync(partial,output);unlinkSync(partial);return {bytes:lstatSync(output).size,sha256:await hashFile(output),format:'aes-256-gcm-v1'};}
  catch{if(existsSync(partial))unlinkSync(partial);throw new Error('BACKUP_ENCRYPTION_FAILED');}}
-export async function openFile(input,output,key){const stat=inputFile(input);output=destination(output);const header=Buffer.alloc(magic.length+12),tag=Buffer.alloc(16),fd=openSync(input,'r');
+export async function openFile(input,output,key){const stat=inputFile(input,magic.length+12+16);output=destination(output);const header=Buffer.alloc(magic.length+12),tag=Buffer.alloc(16),fd=openSync(input,'r');
  try{if(stat.size<header.length+16)throw new Error();readSync(fd,header,0,header.length,0);readSync(fd,tag,0,16,stat.size-16);}finally{closeSync(fd);}
  if(!header.subarray(0,magic.length).equals(magic))throw new Error('BACKUP_FORMAT_INVALID');
  const partial=output+'.partial-'+randomUUID(),decipher=createDecipheriv('aes-256-gcm',key,header.subarray(magic.length));decipher.setAAD(magic);decipher.setAuthTag(tag);
- try{const source=stat.size===header.length+16?Readable.from([]):createReadStream(input,{start:header.length,end:stat.size-17});await pipeline(source,decipher,createWriteStream(partial,{flags:'wx',mode:0o600}));renameSync(partial,output);return {authenticated:true,bytes:lstatSync(output).size,sha256:await hashFile(output)};}
+ try{const source=stat.size===header.length+16?Readable.from([]):createReadStream(input,{start:header.length,end:stat.size-17});await pipeline(source,decipher,createWriteStream(partial,{flags:'wx',mode:0o600}));linkSync(partial,output);unlinkSync(partial);return {authenticated:true,bytes:lstatSync(output).size,sha256:await hashFile(output)};}
  catch{if(existsSync(partial))unlinkSync(partial);throw new Error('BACKUP_AUTHENTICATION_FAILED');}}
 function docker(args,options={}){const r=spawnSync('docker',args,{encoding:'utf8',windowsHide:true,timeout:20000,maxBuffer:1024*1024,...options});if(r.status!==0)throw new Error('BACKUP_DOCKER_OPERATION_FAILED');return r.stdout.trim();}
 function databaseTarget(container,project,database){if(!/^[a-f0-9]{64}$/.test(container)||!/^courses-[a-z0-9-]{4,80}$/.test(project)||!/^courses_[a-z0-9_]{1,55}$/.test(database))throw new Error('BACKUP_TARGET_INVALID');const labels=JSON.parse(docker(['inspect','--format','{{json .Config.Labels}}',container]));if(labels['com.docker.compose.project']!==project)throw new Error('BACKUP_TARGET_OWNERSHIP_MISMATCH');}

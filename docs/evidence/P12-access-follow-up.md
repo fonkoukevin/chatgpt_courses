@@ -20,6 +20,8 @@ Les [preuves P12](P12.md) et l’[index des essais](P12-browser-checks.json) con
 
 Aucun refus n’est reproduit dans ces passages. Ce résultat renforce la validation locale ; il ne démontre pas que la cause historique a été corrigée.
 
+**P17,9novembre** : [ciblé API37/37 puis frontières12/12](P17-api-checks.json), incluant Refund14 et Entitlement5 ; dernier cas de fraîcheur réexécuté1/1 avec16GET après raffinement du diagnostic. Aucun refus inattendu observé. Le CTE canonique reste identique pour les lectures unitaires et groupées, sans marge temporelle. La chaîne d’écriture `clock_timestamp → Instant → Timestamp → starts_at` a été relue, sans cause établie. Ces résultats ne ferment pas les deux occurrences P12 ni les deux P15. La dernière recette navigateur P17 porte sur robustesse/propriété, pas sur un nouveau paiement externe.
+
 ## Suivi obligatoire P17/P19 avant livraison
 
 Conserver les assertions propriétaire/version/langue, les lectures privées et les observations réseau, **sans retry remplaçant un refus par un succès**. Si un 403 ou un état `PROTECTED` inattendu réapparaît après `READY` avec un droit attendu actif, arrêter la validation du parcours et suspendre sa livraison. Avant nettoyage, recueillir les statuts/codes et les faits expurgés de session, origine, dates et chaîne publiée ; aucun secret, lien porteur ni production privée dans les traces. Exploiter cette occurrence avant de requalifier le résultat. L’incident reste ouvert pour P17/P19.

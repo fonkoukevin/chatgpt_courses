@@ -1,0 +1,327 @@
+{
+  "phase": "P17",
+  "runId": "2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d",
+  "reviewedAt": "2026-11-09T04:30:58.808Z",
+  "reviewer": "versions_web",
+  "stage": "Complete successful run, reviewed before the subsequently approved project action gap correction.",
+  "method": {
+    "tool": "view_image",
+    "requestedDetail": "original",
+    "originalImagesViewed": 24,
+    "derivedCrops": 0,
+    "longestImageHeight": 3370,
+    "newBrowserRunDuringReview": false,
+    "keyboardOrScreenReaderClaimFromPixels": false
+  },
+  "commandObserved": {
+    "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/command-check.json",
+    "exitCode": 0,
+    "cleanupConfirmed": true,
+    "stats": {
+      "startTime": "2026-11-09T04:27:15.441Z",
+      "duration": 53366.89,
+      "expected": 9,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "artifacts": {
+      "apiJarSha256": "1D8EB1451FD14944E0B38F64DF128FB92E5ED625E822ED4B42AF3E884826197A",
+      "webBuildId": "aW_vqIxLneAmITN4litA5"
+    }
+  },
+  "images": [
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/en-1024-catalogue.png",
+      "width": 1024,
+      "height": 1333,
+      "sha256": "fff86841ab91a73fe470023da15eb85d2206229413249dd652ed9914168b6941",
+      "viewed": true,
+      "textScale": 1,
+      "observation": "Catalogue lisible, cartes réelles et filtres adaptés à la largeur, durée/niveau absents honnêtement indiqués, pagination et pied de page complets ; aucun débordement ou coupure essentielle observé.",
+      "findings": []
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/en-1024-workshop.png",
+      "width": 1024,
+      "height": 2934,
+      "sha256": "63989d95e83960dfd4b8b7af97e0cadc007f6efeb310cd583f00684d2f0b34b4",
+      "viewed": true,
+      "textScale": 1,
+      "observation": "Atelier lisible, champs et onglets se replient aux petites largeurs, état enregistré visible. Défaut commun observé : les liens retour bibliothèque et aide se touchent sans espace. À1440 le dossier possède son propre défilement ; les longs champs natifs conservent leur défilement interne.",
+      "findings": [
+        "PROJECT_ACTION_LINKS_TOUCHING"
+      ]
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/en-1440-catalogue.png",
+      "width": 1440,
+      "height": 1333,
+      "sha256": "9231c8c349aca65b0037e752b08ff8e2f51530b445ed8b8ab3147b5fcb28d573",
+      "viewed": true,
+      "textScale": 1,
+      "observation": "Catalogue lisible, cartes réelles et filtres adaptés à la largeur, durée/niveau absents honnêtement indiqués, pagination et pied de page complets ; aucun débordement ou coupure essentielle observé.",
+      "findings": []
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/en-1440-workshop.png",
+      "width": 1440,
+      "height": 2240,
+      "sha256": "3fe4afa2d4115afd598914bc84e47341e0bcfd4f671f46e36c05e47c62a8b197",
+      "viewed": true,
+      "textScale": 1,
+      "observation": "Atelier lisible, champs et onglets se replient aux petites largeurs, état enregistré visible. Défaut commun observé : les liens retour bibliothèque et aide se touchent sans espace. À1440 le dossier possède son propre défilement ; les longs champs natifs conservent leur défilement interne.",
+      "findings": [
+        "PROJECT_ACTION_LINKS_TOUCHING"
+      ]
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/en-320-catalogue.png",
+      "width": 320,
+      "height": 1707,
+      "sha256": "50b287787d5aa3ff575ab7f031290c93352f0d56115ed5102d55286e15605787",
+      "viewed": true,
+      "textScale": 1,
+      "observation": "Catalogue lisible, cartes réelles et filtres adaptés à la largeur, durée/niveau absents honnêtement indiqués, pagination et pied de page complets ; aucun débordement ou coupure essentielle observé.",
+      "findings": []
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/en-320-workshop.png",
+      "width": 320,
+      "height": 3252,
+      "sha256": "64a6ca6d8e141a41d20806d00b5f409c2dbabd77975af09b97b03dc512229de2",
+      "viewed": true,
+      "textScale": 1,
+      "observation": "Atelier lisible, champs et onglets se replient aux petites largeurs, état enregistré visible. Défaut commun observé : les liens retour bibliothèque et aide se touchent sans espace. À1440 le dossier possède son propre défilement ; les longs champs natifs conservent leur défilement interne.",
+      "findings": [
+        "PROJECT_ACTION_LINKS_TOUCHING"
+      ]
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/en-390-catalogue-text-200-percent-viewport.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "97871c85e3db1aa0140ef407182d5d80ffc0c876eedcea76ad3bf55977b2c8b8",
+      "viewed": true,
+      "textScale": 2,
+      "observation": "Viewport390 à texte doublé : recherche, bouton focalisé, nombre réel et filtres lisibles sans chevauchement ; capture après défilement, l’en-tête et le bas de page ne sont pas montrés.",
+      "findings": []
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/en-390-catalogue.png",
+      "width": 390,
+      "height": 1494,
+      "sha256": "8b3b943affb1ae6428e43be998f4c53b5f547909af20ea879e16b8e3346ee895",
+      "viewed": true,
+      "textScale": 1,
+      "observation": "Catalogue lisible, cartes réelles et filtres adaptés à la largeur, durée/niveau absents honnêtement indiqués, pagination et pied de page complets ; aucun débordement ou coupure essentielle observé.",
+      "findings": []
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/en-390-workshop-text-200-percent-viewport.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "76f2f47772f6ad80ef5561cdc3d76d7905f07bc0db87da09392560182500c897",
+      "viewed": true,
+      "textScale": 2,
+      "observation": "Viewport390 à texte doublé : boutons de sauvegarde/préparation/copie repliés et focus bleu lisibles, état enregistré distinct du brouillon. Capture après défilement, pas une page complète ; bord supérieur/inférieur volontairement hors cadre.",
+      "findings": []
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/en-390-workshop.png",
+      "width": 390,
+      "height": 3141,
+      "sha256": "07fad020b9847b8a5e60f053a65f415469bd02ad5f0b41688b48cf6734742bfb",
+      "viewed": true,
+      "textScale": 1,
+      "observation": "Atelier lisible, champs et onglets se replient aux petites largeurs, état enregistré visible. Défaut commun observé : les liens retour bibliothèque et aide se touchent sans espace. À1440 le dossier possède son propre défilement ; les longs champs natifs conservent leur défilement interne.",
+      "findings": [
+        "PROJECT_ACTION_LINKS_TOUCHING"
+      ]
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/en-768-catalogue.png",
+      "width": 768,
+      "height": 1050,
+      "sha256": "ca24ba754b295b5952764252aa2b0c36c613f4127b4fc6f5c81bab0c9862343b",
+      "viewed": true,
+      "textScale": 1,
+      "observation": "Catalogue lisible, cartes réelles et filtres adaptés à la largeur, durée/niveau absents honnêtement indiqués, pagination et pied de page complets ; aucun débordement ou coupure essentielle observé.",
+      "findings": []
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/en-768-workshop.png",
+      "width": 768,
+      "height": 2934,
+      "sha256": "13471df085dcff3a2b846fba1c9b2de4ea9915e6acfe772a84257e84ba32505f",
+      "viewed": true,
+      "textScale": 1,
+      "observation": "Atelier lisible, champs et onglets se replient aux petites largeurs, état enregistré visible. Défaut commun observé : les liens retour bibliothèque et aide se touchent sans espace. À1440 le dossier possède son propre défilement ; les longs champs natifs conservent leur défilement interne.",
+      "findings": [
+        "PROJECT_ACTION_LINKS_TOUCHING"
+      ]
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/fr-1024-catalogue.png",
+      "width": 1024,
+      "height": 1333,
+      "sha256": "82490dea6edc61db8a02fd75687628070b191b3ff0144a40a49de02cf56d3098",
+      "viewed": true,
+      "textScale": 1,
+      "observation": "Catalogue lisible, cartes réelles et filtres adaptés à la largeur, durée/niveau absents honnêtement indiqués, pagination et pied de page complets ; aucun débordement ou coupure essentielle observé.",
+      "findings": []
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/fr-1024-workshop.png",
+      "width": 1024,
+      "height": 2934,
+      "sha256": "5a6bedf83c9c72b400f2e64c51491c207676bbf99b786c7070d888a676d53a36",
+      "viewed": true,
+      "textScale": 1,
+      "observation": "Atelier lisible, champs et onglets se replient aux petites largeurs, état enregistré visible. Défaut commun observé : les liens retour bibliothèque et aide se touchent sans espace. À1440 le dossier possède son propre défilement ; les longs champs natifs conservent leur défilement interne.",
+      "findings": [
+        "PROJECT_ACTION_LINKS_TOUCHING"
+      ]
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/fr-1440-catalogue.png",
+      "width": 1440,
+      "height": 1333,
+      "sha256": "d3e5f218947a6764e03c88ea703e52a23280c2faedc4069cb7e7e65d7e62747a",
+      "viewed": true,
+      "textScale": 1,
+      "observation": "Catalogue lisible, cartes réelles et filtres adaptés à la largeur, durée/niveau absents honnêtement indiqués, pagination et pied de page complets ; aucun débordement ou coupure essentielle observé.",
+      "findings": []
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/fr-1440-workshop.png",
+      "width": 1440,
+      "height": 2266,
+      "sha256": "25745e2848eb86960f24b2eed34a01b705fd5595f8f80d92004c850b54f03957",
+      "viewed": true,
+      "textScale": 1,
+      "observation": "Atelier lisible, champs et onglets se replient aux petites largeurs, état enregistré visible. Défaut commun observé : les liens retour bibliothèque et aide se touchent sans espace. À1440 le dossier possède son propre défilement ; les longs champs natifs conservent leur défilement interne.",
+      "findings": [
+        "PROJECT_ACTION_LINKS_TOUCHING"
+      ]
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/fr-320-catalogue.png",
+      "width": 320,
+      "height": 1727,
+      "sha256": "0dd9ceca661439f29839d3babda55f4bdf8f3a3f95ad636ef573dd5997ddcd08",
+      "viewed": true,
+      "textScale": 1,
+      "observation": "Catalogue lisible, cartes réelles et filtres adaptés à la largeur, durée/niveau absents honnêtement indiqués, pagination et pied de page complets ; aucun débordement ou coupure essentielle observé.",
+      "findings": []
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/fr-320-workshop.png",
+      "width": 320,
+      "height": 3370,
+      "sha256": "d8c432aa9763d5f1d82333ca47ee4d5ccd8d3607b4dcf9c6ce1c7e16b442ea7a",
+      "viewed": true,
+      "textScale": 1,
+      "observation": "Atelier lisible, champs et onglets se replient aux petites largeurs, état enregistré visible. Défaut commun observé : les liens retour bibliothèque et aide se touchent sans espace. À1440 le dossier possède son propre défilement ; les longs champs natifs conservent leur défilement interne.",
+      "findings": [
+        "PROJECT_ACTION_LINKS_TOUCHING"
+      ]
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/fr-390-catalogue-text-200-percent-viewport.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "27384c84903da794142a68e9f8ba026bda174b9aff31ffd0143a3c31bcadb040",
+      "viewed": true,
+      "textScale": 2,
+      "observation": "Viewport390 à texte doublé : recherche, bouton focalisé, nombre réel et filtres lisibles sans chevauchement ; capture après défilement, l’en-tête et le bas de page ne sont pas montrés.",
+      "findings": []
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/fr-390-catalogue.png",
+      "width": 390,
+      "height": 1546,
+      "sha256": "ba6c64b5948742fecc141ab908a5bd8fe5daeb901d8e4bf9abf69de6c8f64f14",
+      "viewed": true,
+      "textScale": 1,
+      "observation": "Catalogue lisible, cartes réelles et filtres adaptés à la largeur, durée/niveau absents honnêtement indiqués, pagination et pied de page complets ; aucun débordement ou coupure essentielle observé.",
+      "findings": []
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/fr-390-workshop-text-200-percent-viewport.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "1d9bcc5cc1fb5f4adb7dc6a1720b7ff8e328d36a915b9c60d2c9b699edfafdd2",
+      "viewed": true,
+      "textScale": 2,
+      "observation": "Viewport390 à texte doublé : boutons de sauvegarde/préparation/copie repliés et focus bleu lisibles, état enregistré distinct du brouillon. Capture après défilement, pas une page complète ; bord supérieur/inférieur volontairement hors cadre.",
+      "findings": []
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/fr-390-workshop.png",
+      "width": 390,
+      "height": 3177,
+      "sha256": "05c86402ed0c4ea81c391eb16aff36a0216e665632a2ac71ac7d7b4113a13e99",
+      "viewed": true,
+      "textScale": 1,
+      "observation": "Atelier lisible, champs et onglets se replient aux petites largeurs, état enregistré visible. Défaut commun observé : les liens retour bibliothèque et aide se touchent sans espace. À1440 le dossier possède son propre défilement ; les longs champs natifs conservent leur défilement interne.",
+      "findings": [
+        "PROJECT_ACTION_LINKS_TOUCHING"
+      ]
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/fr-768-catalogue.png",
+      "width": 768,
+      "height": 1050,
+      "sha256": "096a95033cd87812d2cb14acd30e86d679a7eaccf89b9d15eadaaecb80ec7c6f",
+      "viewed": true,
+      "textScale": 1,
+      "observation": "Catalogue lisible, cartes réelles et filtres adaptés à la largeur, durée/niveau absents honnêtement indiqués, pagination et pied de page complets ; aucun débordement ou coupure essentielle observé.",
+      "findings": []
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/fr-768-workshop.png",
+      "width": 768,
+      "height": 2934,
+      "sha256": "305f39542946eb65e699303035276bc1e5ccf628078dfe61b9d91223a5af6f8d",
+      "viewed": true,
+      "textScale": 1,
+      "observation": "Atelier lisible, champs et onglets se replient aux petites largeurs, état enregistré visible. Défaut commun observé : les liens retour bibliothèque et aide se touchent sans espace. À1440 le dossier possède son propre défilement ; les longs champs natifs conservent leur défilement interne.",
+      "findings": [
+        "PROJECT_ACTION_LINKS_TOUCHING"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "code": "PROJECT_ACTION_LINKS_TOUCHING",
+      "severity": "readability",
+      "scope": "Ten normal-scale FR/EN workshop images, widths1440/1024/768/390/320",
+      "observed": "The return-to-projects and help links visually concatenate. Both remain available; no claim of lost data or an inaccessible action.",
+      "agreedCorrection": "Wrap the two existing links only in flex flex-wrap gap-3.",
+      "statusAtReview": "Correction applied after these captures; a separate rebuilt targeted run must confirm the result."
+    }
+  ],
+  "coverage": {
+    "locales": [
+      "fr",
+      "en"
+    ],
+    "widths": [
+      1440,
+      1024,
+      768,
+      390,
+      320
+    ],
+    "fullPages": 20,
+    "text200Viewports": 4
+  },
+  "limitations": [
+    "Images do not prove keyboard order, focus trapping, ownership or save persistence; those assertions are in the specs and execution receipt.",
+    "Text200 is a documented doubled root-font experiment with actual control font16→32px; it is not native browser zoom or a complete WCAG audit.",
+    "No crop was required: all original heights are below6000px. Four text200 images deliberately show a useful viewport after real scrolling, not the entire enlarged page.",
+    "The header correction is supported by earlier before/after DOM bounds and this run’s global overflow assertions; the scrolled text200 screenshots do not themselves show the header.",
+    "No production traffic, external Stripe, unpublished media, all historical content or historical access incident is validated by this visual review."
+  ]
+}

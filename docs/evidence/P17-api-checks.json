@@ -1,0 +1,224 @@
+{
+  "verifiedAt": "2026-11-09T04:08:30.026Z",
+  "phaseStatusClaimed": false,
+  "principalTarget": {
+    "command": ".\\apps\\api\\mvnw.cmd -o -f .\\apps\\api\\pom.xml -Dtest=SqlReadBudgetIntegrationTest,IdentityRequestLimitIntegrationTest,EntitlementAccessIntegrationTest,RefundHttpIntegrationTest,LearningServiceIntegrationTest,PublicRoutingIntegrationTest test",
+    "log": ".runtime/p17-api-target-first.log",
+    "exitCode": 0,
+    "success": true,
+    "mavenDuration": "04:14 min",
+    "finishedAt": "2026-11-09T05:02:42+01:00",
+    "suites": [
+      {
+        "suite": "com.chatgptcourses.EntitlementAccessIntegrationTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 36.06
+      },
+      {
+        "suite": "com.chatgptcourses.IdentityRequestLimitIntegrationTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 14.32
+      },
+      {
+        "suite": "com.chatgptcourses.LearningServiceIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 16.27
+      },
+      {
+        "suite": "com.chatgptcourses.PublicRoutingIntegrationTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 12.1
+      },
+      {
+        "suite": "com.chatgptcourses.RefundHttpIntegrationTest",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 63.84
+      },
+      {
+        "suite": "com.chatgptcourses.SqlReadBudgetIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 82.47
+      }
+    ]
+  },
+  "boundaryTarget": {
+    "command": ".\\apps\\api\\mvnw.cmd -o -f .\\apps\\api\\pom.xml -Dtest=HTTPAuthIntegrationTest,IdentityServiceIntegrationTest#resetRequestQuotaIsAtomicForKnownAndUnknownAccountsWithoutExposingAnAddress,PublicCatalogueHttpIntegrationTest#searchCombinesPublishedFiltersAndPaginatesTiesInStableOrder,AssetServiceIntegrationTest#projectReservationQuotaIsAtomicForConcurrentUploadIntents+actualObjectValidationRejectsMissingWrongSizeMimeAndInvalidUtf8WithoutPretendingToScan test",
+    "log": ".runtime/p17-api-boundaries.log",
+    "exitCode": 0,
+    "success": true,
+    "mavenDuration": "01:38 min",
+    "finishedAt": "2026-11-09T05:05:18+01:00",
+    "suites": [
+      {
+        "suite": "com.chatgptcourses.AssetServiceIntegrationTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 35.83
+      },
+      {
+        "suite": "com.chatgptcourses.HTTPAuthIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 19
+      },
+      {
+        "suite": "com.chatgptcourses.IdentityServiceIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 9.452
+      },
+      {
+        "suite": "com.chatgptcourses.PublicCatalogueHttpIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 13.61
+      }
+    ]
+  },
+  "freshDiagnosticTarget": {
+    "command": ".\\apps\\api\\mvnw.cmd -o -f .\\apps\\api\\pom.xml -Dtest=EntitlementAccessIntegrationTest#freshlyCommittedPostgresTimestampIsReadableInParallelMemberAndLearningTransactions test",
+    "log": ".runtime/p17-api-fresh-diagnostic-final.log",
+    "exitCode": 0,
+    "success": true,
+    "mavenDuration": "59.845 s",
+    "finishedAt": "2026-11-09T05:06:41+01:00",
+    "suites": [
+      {
+        "suite": "com.chatgptcourses.EntitlementAccessIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 34.68
+      }
+    ]
+  },
+  "package": {
+    "command": ".\\apps\\api\\mvnw.cmd -o -f .\\apps\\api\\pom.xml -DskipTests package",
+    "log": ".runtime/p17-api-package.log",
+    "exitCode": 0,
+    "success": true,
+    "mavenDuration": "9.246 s",
+    "finishedAt": "2026-11-09T05:07:30+01:00",
+    "suites": [],
+    "jarSha256": "1D8EB1451FD14944E0B38F64DF128FB92E5ED625E822ED4B42AF3E884826197A"
+  },
+  "baseline": {
+    "command": ".\\apps\\api\\mvnw.cmd -o -f .\\apps\\api\\pom.xml -Dtest=SqlReadBudgetIntegrationTest -Dp17.sql.phase=before test",
+    "log": ".runtime/p17-sql-before-second.log",
+    "exitCode": 0,
+    "success": true,
+    "mavenDuration": "02:02 min",
+    "finishedAt": "2026-11-09T04:54:28+01:00",
+    "suites": [
+      {
+        "suite": "com.chatgptcourses.SqlReadBudgetIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 100.3
+      }
+    ]
+  },
+  "intermediateFailure": {
+    "log": ".runtime/p17-sql-before.log",
+    "exitCode": 1,
+    "tests": 1,
+    "failures": 0,
+    "errors": 1,
+    "cause": "The new measurement ACTIVITY fixture omitted its mandatory exercise/rubric; publication correctly rejected it with CONTENT_NOT_READY. Fixture completed, no production validation or assertion weakened."
+  },
+  "inputLimits": {
+    "login": {
+      "limit": 20,
+      "windowSeconds": 300
+    },
+    "registration": {
+      "limit": 5,
+      "windowSeconds": 900
+    },
+    "scope": "SHA-256(namespace + existing CSRF session ID); no raw session ID, email or IP stored as key",
+    "transaction": "Independent REQUIRES_NEW counter transaction commits before authentication/password hashing. Failed authentication and duplicate registration still consume a counted attempt.",
+    "filter": "After CsrfFilter; invalid CSRF remains403 without consuming quota.",
+    "response": "429 RATE_LIMITED, private/no-store, integer Retry-After >=1; separate session and expired window allow normal resumption.",
+    "limits": [
+      "A new session starts a new quota; this is not a global anti-bot, distributed rate-limiting or account-lockout guarantee.",
+      "Existing neutral password reset email limit remains unchanged.",
+      "No new data retention policy, operational deletion job or new schema is introduced."
+    ]
+  },
+  "reusedBoundaries": {
+    "search": "Parameterized query, q <=240 characters, pageSize <=100, deterministic pagination; existing actual HTTP test rerun.",
+    "email": "Existing atomic known/unknown account password-reset quota test rerun, with neutral HTTP flow covered by HTTPAuthIntegrationTest.",
+    "uploads": "Existing real S3/PostgreSQL concurrent reservation quota and size/MIME/UTF-8 validation tests rerun; no antivirus or PDF validation claimed."
+  },
+  "accessFollowUp": {
+    "p12HistoricalStatus": "OPEN_UNKNOWN_NOT_REPRODUCED",
+    "p15HistoricalStatus": "OPEN_UNKNOWN_NOT_REPRODUCED",
+    "causeFixedClaimed": false,
+    "refusalObservedInTheseTargets": false,
+    "policy": "The same canonical CTE is used for single and batched entitlement checks; owner/locale/version/origin/period and full published ancestry predicates are retained.",
+    "diagnostics": "Seven existing refund positive expectations keep one covers read followed by failure-only minimized facts. Fresh origin test keeps negative pre-grant controls and16 parallel member/activity FR/EN GETs after a PG -> Instant -> Timestamp commit; no grant date margin/retry. Failure-only facts now include unexpected status, access state or absent private document. Diagnostic failure cannot replace the original assertion.",
+    "boundary": "A successful selected run does not establish a cause or close the historical incidents. Any unexpected refusal stops the path; collect facts before cleanup, suspend delivery and investigate."
+  },
+  "schemaChanged": false,
+  "dependenciesChanged": false,
+  "sharedBusinessDataWritten": false,
+  "secretsPrinted": false,
+  "fullGlobalSuiteRun": false,
+  "limits": [
+    "Targeted passes are separate executions; the repeated fresh-origin case is not an additional distinct test.",
+    "No browser, accessibility certification, external Stripe, deployment or overall phase validation is claimed by this API report.",
+    "Only the first3 page sizes and1/10/100-activity local fixtures were measured; timings are observations, not visitor percentiles or a full-scale capacity test."
+  ],
+  "proofEncoding": [
+    {
+      "file": "P17-api-checks.json",
+      "utf8NoBom": true,
+      "jsonParseOk": true
+    },
+    {
+      "file": "P17-api-sql-before.json",
+      "utf8NoBom": true,
+      "jsonParseOk": true
+    },
+    {
+      "file": "P17-api-sql-after.json",
+      "utf8NoBom": true,
+      "jsonParseOk": true
+    },
+    {
+      "file": "P17-api-sql-comparison.json",
+      "utf8NoBom": true,
+      "jsonParseOk": true
+    }
+  ],
+  "serviceMeasurementScope": "Real service JdbcTemplate executions and elapsed call time only; HTTP authentication/session repository, fixture setup and serialization are not counted. Response JSON bytes measured separately; equal sizes do not establish content identity."
+}

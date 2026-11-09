@@ -1,0 +1,634 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\scripts\\..\\.tools\\node-v24.22.2-win-x64\\node.exe",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts"
+    ],
+    "configFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts",
+    "rootDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 600000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/.runtime/browser-2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/quality.spec.ts",
+          "**/quality-performance.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "snapshotDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/quality.spec.ts",
+          "**/quality-performance.spec.ts"
+        ],
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3101",
+          "browserName": "chromium",
+          "headless": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "actionTimeout": 10000,
+          "navigationTimeout": 20000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off",
+          "serviceWorkers": "block"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\docs\\evidence\\P17-browser\\2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "quality-performance.spec.ts",
+      "file": "quality-performance.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "P17 mesures locales et reflow du catalogue et de l’atelier",
+          "file": "quality-performance.spec.ts",
+          "line": 88,
+          "column": 6,
+          "specs": [
+            {
+              "title": "fr · catalogue : trois chargements froids, cinq largeurs et texte 200 %",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 13437,
+                      "error": {
+                        "message": "TimeoutError: locator.focus: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Filtres', exact: true })\u001b[22m\n",
+                        "stack": "TimeoutError: locator.focus: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Filtres', exact: true })\u001b[22m\n\n    at checkDialogKeyboard (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\performance-fixture.ts:140:17)\n    at publicKeyboard (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\quality-performance.spec.ts:61:9)\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\quality-performance.spec.ts:100:28",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\performance-fixture.ts",
+                          "column": 17,
+                          "line": 140
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mperformance-fixture.ts:140\n\n \u001b[90m 138 |\u001b[39m\n \u001b[90m 139 |\u001b[39m \u001b[36mexport\u001b[39m \u001b[36masync\u001b[39m \u001b[36mfunction\u001b[39m checkDialogKeyboard(page\u001b[33m:\u001b[39m \u001b[33mPage\u001b[39m\u001b[33m,\u001b[39m trigger\u001b[33m:\u001b[39m \u001b[33mLocator\u001b[39m\u001b[33m,\u001b[39m title\u001b[33m:\u001b[39m string) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 140 |\u001b[39m   \u001b[36mawait\u001b[39m trigger\u001b[33m.\u001b[39mfocus()\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mkeyboard\u001b[33m.\u001b[39mpress(\u001b[32m'Enter'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 141 |\u001b[39m   \u001b[36mconst\u001b[39m dialog \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'dialog'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m title\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m expect(dialog)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 142 |\u001b[39m   expect(\u001b[36mawait\u001b[39m dialog\u001b[33m.\u001b[39mevaluate((node) \u001b[33m=>\u001b[39m node\u001b[33m.\u001b[39mcontains(document\u001b[33m.\u001b[39mactiveElement)))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 143 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mkeyboard\u001b[33m.\u001b[39mpress(\u001b[32m'Shift+Tab'\u001b[39m)\u001b[33m;\u001b[39m expect(\u001b[36mawait\u001b[39m dialog\u001b[33m.\u001b[39mevaluate((node) \u001b[33m=>\u001b[39m node\u001b[33m.\u001b[39mcontains(document\u001b[33m.\u001b[39mactiveElement)))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\u001b[33m;\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\performance-fixture.ts",
+                            "column": 17,
+                            "line": 140
+                          },
+                          "message": "TimeoutError: locator.focus: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Filtres', exact: true })\u001b[22m\n\n\n   at performance-fixture.ts:140\n\n  138 |\n  139 | export async function checkDialogKeyboard(page: Page, trigger: Locator, title: string) {\n> 140 |   await trigger.focus(); await page.keyboard.press('Enter');\n      |                 ^\n  141 |   const dialog = page.getByRole('dialog', { name: title, exact: true }); await expect(dialog).toBeVisible();\n  142 |   expect(await dialog.evaluate((node) => node.contains(document.activeElement))).toBe(true);\n  143 |   await page.keyboard.press('Shift+Tab'); expect(await dialog.evaluate((node) => node.contains(document.activeElement))).toBe(true);\n    at checkDialogKeyboard (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\performance-fixture.ts:140:17)\n    at publicKeyboard (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\quality-performance.spec.ts:61:9)\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\quality-performance.spec.ts:100:28"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T04:09:10.888Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348\\results\\quality-performance-P17-me-5c61f-cinq-largeurs-et-texte-200-\\test-failed-1.png"
+                        },
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348\\results\\quality-performance-P17-me-5c61f-cinq-largeurs-et-texte-200-\\test-failed-1.png"
+                        },
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348\\results\\quality-performance-P17-me-5c61f-cinq-largeurs-et-texte-200-\\test-failed-2.png"
+                        },
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348\\results\\quality-performance-P17-me-5c61f-cinq-largeurs-et-texte-200-\\test-failed-3.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348\\results\\quality-performance-P17-me-5c61f-cinq-largeurs-et-texte-200-\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\performance-fixture.ts",
+                        "column": 17,
+                        "line": 140
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c4d47e4134bad37ed243-a626369706d68ac4eab0",
+              "file": "quality-performance.spec.ts",
+              "line": 95,
+              "column": 5
+            },
+            {
+              "title": "fr · atelier : trois chargements froids, cinq largeurs et texte 200 %",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7028,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T04:09:30.087Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c4d47e4134bad37ed243-006e2e65a78ab66abb65",
+              "file": "quality-performance.spec.ts",
+              "line": 114,
+              "column": 5
+            },
+            {
+              "title": "en · catalogue : trois chargements froids, cinq largeurs et texte 200 %",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 12653,
+                      "error": {
+                        "message": "TimeoutError: locator.focus: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Filters', exact: true })\u001b[22m\n",
+                        "stack": "TimeoutError: locator.focus: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Filters', exact: true })\u001b[22m\n\n    at checkDialogKeyboard (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\performance-fixture.ts:140:17)\n    at publicKeyboard (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\quality-performance.spec.ts:61:9)\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\quality-performance.spec.ts:100:28",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\performance-fixture.ts",
+                          "column": 17,
+                          "line": 140
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mperformance-fixture.ts:140\n\n \u001b[90m 138 |\u001b[39m\n \u001b[90m 139 |\u001b[39m \u001b[36mexport\u001b[39m \u001b[36masync\u001b[39m \u001b[36mfunction\u001b[39m checkDialogKeyboard(page\u001b[33m:\u001b[39m \u001b[33mPage\u001b[39m\u001b[33m,\u001b[39m trigger\u001b[33m:\u001b[39m \u001b[33mLocator\u001b[39m\u001b[33m,\u001b[39m title\u001b[33m:\u001b[39m string) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 140 |\u001b[39m   \u001b[36mawait\u001b[39m trigger\u001b[33m.\u001b[39mfocus()\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mkeyboard\u001b[33m.\u001b[39mpress(\u001b[32m'Enter'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 141 |\u001b[39m   \u001b[36mconst\u001b[39m dialog \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'dialog'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m title\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m expect(dialog)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 142 |\u001b[39m   expect(\u001b[36mawait\u001b[39m dialog\u001b[33m.\u001b[39mevaluate((node) \u001b[33m=>\u001b[39m node\u001b[33m.\u001b[39mcontains(document\u001b[33m.\u001b[39mactiveElement)))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 143 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mkeyboard\u001b[33m.\u001b[39mpress(\u001b[32m'Shift+Tab'\u001b[39m)\u001b[33m;\u001b[39m expect(\u001b[36mawait\u001b[39m dialog\u001b[33m.\u001b[39mevaluate((node) \u001b[33m=>\u001b[39m node\u001b[33m.\u001b[39mcontains(document\u001b[33m.\u001b[39mactiveElement)))\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\u001b[33m;\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\performance-fixture.ts",
+                            "column": 17,
+                            "line": 140
+                          },
+                          "message": "TimeoutError: locator.focus: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Filters', exact: true })\u001b[22m\n\n\n   at performance-fixture.ts:140\n\n  138 |\n  139 | export async function checkDialogKeyboard(page: Page, trigger: Locator, title: string) {\n> 140 |   await trigger.focus(); await page.keyboard.press('Enter');\n      |                 ^\n  141 |   const dialog = page.getByRole('dialog', { name: title, exact: true }); await expect(dialog).toBeVisible();\n  142 |   expect(await dialog.evaluate((node) => node.contains(document.activeElement))).toBe(true);\n  143 |   await page.keyboard.press('Shift+Tab'); expect(await dialog.evaluate((node) => node.contains(document.activeElement))).toBe(true);\n    at checkDialogKeyboard (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\performance-fixture.ts:140:17)\n    at publicKeyboard (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\quality-performance.spec.ts:61:9)\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\quality-performance.spec.ts:100:28"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T04:09:41.740Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348\\results\\quality-performance-P17-me-cdc99-cinq-largeurs-et-texte-200-\\test-failed-1.png"
+                        },
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348\\results\\quality-performance-P17-me-cdc99-cinq-largeurs-et-texte-200-\\test-failed-2.png"
+                        },
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348\\results\\quality-performance-P17-me-cdc99-cinq-largeurs-et-texte-200-\\test-failed-3.png"
+                        },
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348\\results\\quality-performance-P17-me-cdc99-cinq-largeurs-et-texte-200-\\test-failed-4.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348\\results\\quality-performance-P17-me-cdc99-cinq-largeurs-et-texte-200-\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\performance-fixture.ts",
+                        "column": 17,
+                        "line": 140
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c4d47e4134bad37ed243-cd93eba70c35427a8bec",
+              "file": "quality-performance.spec.ts",
+              "line": 95,
+              "column": 5
+            },
+            {
+              "title": "en · atelier : trois chargements froids, cinq largeurs et texte 200 %",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6350,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T04:09:55.848Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c4d47e4134bad37ed243-4bd9a206365a2d33eb2d",
+              "file": "quality-performance.spec.ts",
+              "line": 114,
+              "column": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "quality.spec.ts",
+      "file": "quality.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "P17 qualité transversale avec services réels",
+          "file": "quality.spec.ts",
+          "line": 48,
+          "column": 6,
+          "specs": [
+            {
+              "title": "01 · clavier CMS, erreur associée et deux dialogues sans mutation implicite",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2816,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T04:10:06.188Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f46baca133b10bf87db1-7b32912e64087b46499c",
+              "file": "quality.spec.ts",
+              "line": 49,
+              "column": 3
+            },
+            {
+              "title": "02 · hors ligne réel et accusé serveur tardif conservent les retouches",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2469,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T04:10:09.034Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f46baca133b10bf87db1-e7ad8ad25f6fd8f7b680",
+              "file": "quality.spec.ts",
+              "line": 84,
+              "column": 3
+            },
+            {
+              "title": "03 · conflit PostgreSQL et expiration réelle de session sans perte de saisie",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 2742,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m401\u001b[39m\nReceived: \u001b[31m200\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m401\u001b[39m\nReceived: \u001b[31m200\u001b[39m\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\quality.spec.ts:138:71",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\quality.spec.ts",
+                          "column": 71,
+                          "line": 138
+                        },
+                        "snippet": " \u001b[90m 136 |\u001b[39m       \u001b[36mconst\u001b[39m expired \u001b[33m=\u001b[39m commerceSql(\u001b[32m`WITH expired AS (UPDATE spring_session SET expiry_time=(extract(epoch FROM clock_timestamp())*1000)::bigint-1 WHERE principal_name='${checkedUuid(own.account.id)}' RETURNING 1) SELECT count(*) FROM expired;`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 137 |\u001b[39m       expect(\u001b[33mNumber\u001b[39m(expired) \u001b[33m>=\u001b[39m \u001b[35m2\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[36mtrue\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 138 |\u001b[39m       expect((\u001b[36mawait\u001b[39m context\u001b[33m.\u001b[39mrequest\u001b[33m.\u001b[39mget(\u001b[32m'/api/v1/auth/me'\u001b[39m))\u001b[33m.\u001b[39mstatus())\u001b[33m.\u001b[39mtoBe(\u001b[35m401\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 139 |\u001b[39m       \u001b[36mconst\u001b[39m refused \u001b[33m=\u001b[39m projectResponse(page\u001b[33m,\u001b[39m own\u001b[33m.\u001b[39mproject\u001b[33m.\u001b[39mid)\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m saveButton(page)\u001b[33m.\u001b[39mpress(\u001b[32m'Enter'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 140 |\u001b[39m       \u001b[90m// Spring's CSRF filter can reject the expired session before the authentication entry point.\u001b[39m\n \u001b[90m 141 |\u001b[39m       expect([\u001b[35m401\u001b[39m\u001b[33m,\u001b[39m \u001b[35m403\u001b[39m])\u001b[33m.\u001b[39mtoContain((\u001b[36mawait\u001b[39m refused)\u001b[33m.\u001b[39mstatus())\u001b[33m;\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\quality.spec.ts",
+                            "column": 71,
+                            "line": 138
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m401\u001b[39m\nReceived: \u001b[31m200\u001b[39m\n\n  136 |       const expired = commerceSql(`WITH expired AS (UPDATE spring_session SET expiry_time=(extract(epoch FROM clock_timestamp())*1000)::bigint-1 WHERE principal_name='${checkedUuid(own.account.id)}' RETURNING 1) SELECT count(*) FROM expired;`);\n  137 |       expect(Number(expired) >= 2).toBe(true);\n> 138 |       expect((await context.request.get('/api/v1/auth/me')).status()).toBe(401);\n      |                                                                       ^\n  139 |       const refused = projectResponse(page, own.project.id); await saveButton(page).press('Enter');\n  140 |       // Spring's CSRF filter can reject the expired session before the authentication entry point.\n  141 |       expect([401, 403]).toContain((await refused).status());\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\quality.spec.ts:138:71"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T04:10:11.517Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348\\results\\quality-P17-qualité-transv-468f1-ession-sans-perte-de-saisie\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348\\results\\quality-P17-qualité-transv-468f1-ession-sans-perte-de-saisie\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\quality.spec.ts",
+                        "column": 71,
+                        "line": 138
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "f46baca133b10bf87db1-7ac85fcda9e7d5ca4427",
+              "file": "quality.spec.ts",
+              "line": 120,
+              "column": 3
+            },
+            {
+              "title": "04 · propriété, liens S3, permissions financières et préconditions de compte",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 6113,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m200\u001b[39m\nReceived: \u001b[31m404\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m200\u001b[39m\nReceived: \u001b[31m404\u001b[39m\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\quality.spec.ts:160:36",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\quality.spec.ts",
+                          "column": 36,
+                          "line": 160
+                        },
+                        "snippet": " \u001b[90m 158 |\u001b[39m       expect((\u001b[36mawait\u001b[39m other\u001b[33m.\u001b[39mrequest\u001b[33m.\u001b[39mpost(\u001b[32m`/api/v1/assets/${uploaded.asset.id}/download-access`\u001b[39m\u001b[33m,\u001b[39m { headers\u001b[33m:\u001b[39m \u001b[36mawait\u001b[39m accountHeaders(other\u001b[33m.\u001b[39mrequest\u001b[33m,\u001b[39m foreign\u001b[33m.\u001b[39mid)\u001b[33m,\u001b[39m data\u001b[33m:\u001b[39m \u001b[36mnull\u001b[39m }))\u001b[33m.\u001b[39mstatus())\u001b[33m.\u001b[39mtoBe(\u001b[35m404\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 159 |\u001b[39m       \u001b[36mconst\u001b[39m foreignPage \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m other\u001b[33m.\u001b[39mnewPage()\u001b[33m,\u001b[39m navigation \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m foreignPage\u001b[33m.\u001b[39mgoto(projectsPath(\u001b[32m'fr'\u001b[39m\u001b[33m,\u001b[39m own\u001b[33m.\u001b[39mproject\u001b[33m.\u001b[39mid))\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 160 |\u001b[39m       expect(navigation\u001b[33m?.\u001b[39mstatus())\u001b[33m.\u001b[39mtoBe(\u001b[35m200\u001b[39m)\u001b[33m;\u001b[39m expect(navigation\u001b[33m?.\u001b[39mheaders()[\u001b[32m'cache-control'\u001b[39m])\u001b[33m.\u001b[39mtoContain(\u001b[32m'no-store'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                    \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 161 |\u001b[39m       expect((\u001b[36mawait\u001b[39m foreignPage\u001b[33m.\u001b[39mcontent())\u001b[33m.\u001b[39mincludes(own\u001b[33m.\u001b[39mmarker))\u001b[33m.\u001b[39mtoBe(\u001b[36mfalse\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 162 |\u001b[39m       \u001b[36mawait\u001b[39m expect(foreignPage\u001b[33m.\u001b[39mgetByText(t\u001b[33m.\u001b[39mnotFound\u001b[33m,\u001b[39m { exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mfirst())\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m qualityCapture(foreignPage\u001b[33m,\u001b[39m \u001b[32m'fr-390-other-owner-no-private-content'\u001b[39m\u001b[33m,\u001b[39m \u001b[35m390\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 163 |\u001b[39m       \u001b[36mawait\u001b[39m loginEditor(editorContext)\u001b[33m;\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\quality.spec.ts",
+                            "column": 36,
+                            "line": 160
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m200\u001b[39m\nReceived: \u001b[31m404\u001b[39m\n\n  158 |       expect((await other.request.post(`/api/v1/assets/${uploaded.asset.id}/download-access`, { headers: await accountHeaders(other.request, foreign.id), data: null })).status()).toBe(404);\n  159 |       const foreignPage = await other.newPage(), navigation = await foreignPage.goto(projectsPath('fr', own.project.id));\n> 160 |       expect(navigation?.status()).toBe(200); expect(navigation?.headers()['cache-control']).toContain('no-store');\n      |                                    ^\n  161 |       expect((await foreignPage.content()).includes(own.marker)).toBe(false);\n  162 |       await expect(foreignPage.getByText(t.notFound, { exact: true }).first()).toBeVisible(); await qualityCapture(foreignPage, 'fr-390-other-owner-no-private-content', 390);\n  163 |       await loginEditor(editorContext);\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\quality.spec.ts:160:36"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T04:10:15.785Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348\\results\\quality-P17-qualité-transv-95046--et-préconditions-de-compte\\test-failed-1.png"
+                        },
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348\\results\\quality-P17-qualité-transv-95046--et-préconditions-de-compte\\test-failed-2.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348\\results\\quality-P17-qualité-transv-95046--et-préconditions-de-compte\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\quality.spec.ts",
+                        "column": 36,
+                        "line": 160
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "f46baca133b10bf87db1-7cda3f7ea4d195ba9771",
+              "file": "quality.spec.ts",
+              "line": 150,
+              "column": 3
+            },
+            {
+              "title": "05 · texte éditorial échappé, origine et retour contrôlés, iframe réellement bloquée",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7712,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T04:10:23.520Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f46baca133b10bf87db1-3a8a3a483441b0601110",
+              "file": "quality.spec.ts",
+              "line": 179,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-09T04:09:08.756Z",
+    "duration": 82791.41,
+    "expected": 5,
+    "skipped": 0,
+    "unexpected": 4,
+    "flaky": 0
+  }
+}

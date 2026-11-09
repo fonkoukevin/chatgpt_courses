@@ -1,0 +1,257 @@
+{
+  "phase": "P17",
+  "locale": "en",
+  "page": "catalogue",
+  "measuredAt": "2026-11-09T04:09:43.716Z",
+  "environment": {
+    "platform": "win32",
+    "release": "10.0.26200",
+    "architecture": "x64",
+    "cpuModel": "AMD Ryzen 7 5700U with Radeon Graphics         ",
+    "logicalProcessors": 16,
+    "totalMemoryBytes": 16455815168,
+    "freeMemoryBytesAtReport": 1137537024,
+    "browserVersion": "158.0.8127.18",
+    "nodeVersion": "v24.22.2"
+  },
+  "protocol": {
+    "network": "unthrottled HTTP loopback",
+    "cpuRate": 1,
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "coldBrowserNavigations": 3,
+    "browserCacheDisabled": true,
+    "browserCacheClearedBeforeEachNavigation": true,
+    "serviceWorkersBypassed": true,
+    "serverCache": "Running API and Next production server; fixture preparation warms the backend. This is not a cold machine/server benchmark.",
+    "boundaries": "Page readiness is the observed ready UI, not networkidle. LCP is a snapshot at readiness; interaction durations are local laboratory actions, not field INP. CDP heap sizes are bytes; ScriptDuration/LayoutDuration/RecalcStyleDuration/TaskDuration are seconds.",
+    "privacy": "No URLs, query strings, headers, identities, cookies, form contents or response bodies are written to this measurement."
+  },
+  "budgets": {
+    "status": "not-set-before-measurements",
+    "note": "Choose any regression budget after inspecting these measurements and their variance; no universal visitor claim."
+  },
+  "samples": [
+    {
+      "sample": 1,
+      "readyMs": 390.9400999999998,
+      "navigation": {
+        "ttfbMs": 75.39999997615814,
+        "domContentLoadedMs": 107.19999998807907,
+        "loadMs": 273.69999998807907,
+        "responseEndMs": 78.5,
+        "transferBytes": 7694,
+        "encodedBytes": 7394,
+        "decodedBytes": 43719
+      },
+      "paints": {
+        "first-paint": 216,
+        "first-contentful-paint": 216
+      },
+      "largestContentfulPaintAtReadinessMs": 216,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 2,
+        "totalMs": 136,
+        "maxMs": 78
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 8733,
+          "encodedBytes": 8433,
+          "decodedBytes": 40547,
+          "totalDurationMs": 9.5
+        },
+        "javascript": {
+          "count": 16,
+          "transferBytes": 328587,
+          "encodedBytes": 323787,
+          "decodedBytes": 1069432,
+          "totalDurationMs": 870.0999999642372
+        },
+        "data": {
+          "count": 4,
+          "transferBytes": 2108,
+          "encodedBytes": 908,
+          "decodedBytes": 1306,
+          "totalDurationMs": 122.30000001192093
+        }
+      },
+      "totalResources": 21,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 268,
+      "cdp": {
+        "Documents": 4,
+        "Nodes": 525,
+        "LayoutDuration": 0.069369,
+        "RecalcStyleDuration": 0.009363,
+        "ScriptDuration": 0.078254,
+        "TaskDuration": 0.29446,
+        "JSHeapUsedSize": 6370912,
+        "JSHeapTotalSize": 9244672
+      },
+      "transport": {
+        "transferredBytes": 355681,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 26
+        },
+        "typeCounts": {
+          "Document": 1,
+          "Stylesheet": 1,
+          "Script": 16,
+          "Fetch": 8
+        }
+      }
+    },
+    {
+      "sample": 2,
+      "readyMs": 338.4454000000005,
+      "navigation": {
+        "ttfbMs": 48.30000001192093,
+        "domContentLoadedMs": 149.9000000357628,
+        "loadMs": 204.4000000357628,
+        "responseEndMs": 50,
+        "transferBytes": 7694,
+        "encodedBytes": 7394,
+        "decodedBytes": 43719
+      },
+      "paints": {
+        "first-paint": 156,
+        "first-contentful-paint": 156
+      },
+      "largestContentfulPaintAtReadinessMs": 156,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 8733,
+          "encodedBytes": 8433,
+          "decodedBytes": 40547,
+          "totalDurationMs": 9.800000011920929
+        },
+        "javascript": {
+          "count": 16,
+          "transferBytes": 328587,
+          "encodedBytes": 323787,
+          "decodedBytes": 1069432,
+          "totalDurationMs": 639.2000001072884
+        }
+      },
+      "totalResources": 17,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 268,
+      "cdp": {
+        "Documents": 4,
+        "Nodes": 525,
+        "LayoutDuration": 0.055515,
+        "RecalcStyleDuration": 0.006349,
+        "ScriptDuration": 0.090681,
+        "TaskDuration": 0.278998,
+        "JSHeapUsedSize": 6087280,
+        "JSHeapTotalSize": 8982528
+      },
+      "transport": {
+        "transferredBytes": 352113,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 20
+        },
+        "typeCounts": {
+          "Document": 1,
+          "Stylesheet": 1,
+          "Script": 16,
+          "Fetch": 2
+        }
+      }
+    },
+    {
+      "sample": 3,
+      "readyMs": 287.60149999999885,
+      "navigation": {
+        "ttfbMs": 46.39999997615814,
+        "domContentLoadedMs": 71.10000002384186,
+        "loadMs": 188.19999998807907,
+        "responseEndMs": 48.10000002384186,
+        "transferBytes": 7694,
+        "encodedBytes": 7394,
+        "decodedBytes": 43719
+      },
+      "paints": {
+        "first-paint": 148,
+        "first-contentful-paint": 148
+      },
+      "largestContentfulPaintAtReadinessMs": 148,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 1,
+        "totalMs": 53,
+        "maxMs": 53
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 8733,
+          "encodedBytes": 8433,
+          "decodedBytes": 40547,
+          "totalDurationMs": 9.100000023841858
+        },
+        "javascript": {
+          "count": 16,
+          "transferBytes": 328587,
+          "encodedBytes": 323787,
+          "decodedBytes": 1069432,
+          "totalDurationMs": 597.8999999761581
+        },
+        "data": {
+          "count": 8,
+          "transferBytes": 6889,
+          "encodedBytes": 4489,
+          "decodedBytes": 9208,
+          "totalDurationMs": 175.69999998807907
+        }
+      },
+      "totalResources": 25,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 268,
+      "cdp": {
+        "Documents": 4,
+        "Nodes": 525,
+        "LayoutDuration": 0.047916,
+        "RecalcStyleDuration": 0.0059,
+        "ScriptDuration": 0.060235,
+        "TaskDuration": 0.228493,
+        "JSHeapUsedSize": 5546584,
+        "JSHeapTotalSize": 9768960
+      },
+      "transport": {
+        "transferredBytes": 361978,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 28
+        },
+        "typeCounts": {
+          "Document": 1,
+          "Stylesheet": 1,
+          "Script": 16,
+          "Fetch": 10
+        }
+      }
+    }
+  ],
+  "matrixCompleted": false
+}

@@ -1,0 +1,175 @@
+{
+  "verifiedAt": "2026-11-09T04:08:30.022Z",
+  "environment": {
+    "os": "Windows 11",
+    "java": "21.0.13",
+    "logicalCpus": 16,
+    "postgresql": "postgres@sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42",
+    "network": "Loopback JDBC to isolated Docker PostgreSQL; no emulated latency"
+  },
+  "measurements": [
+    {
+      "operation": "publications",
+      "size": 1,
+      "beforeSql": 3,
+      "afterSql": 3,
+      "beforeElapsedMs": 48.7979,
+      "afterElapsedMs": 27.5608,
+      "responseBytesBefore": 556,
+      "responseBytesAfter": 556,
+      "responseSizeUnchanged": true
+    },
+    {
+      "operation": "catalogue",
+      "size": 1,
+      "beforeSql": 2,
+      "afterSql": 2,
+      "beforeElapsedMs": 34.8736,
+      "afterElapsedMs": 24.7523,
+      "responseBytesBefore": 548,
+      "responseBytesAfter": 548,
+      "responseSizeUnchanged": true
+    },
+    {
+      "operation": "publications",
+      "size": 10,
+      "beforeSql": 12,
+      "afterSql": 3,
+      "beforeElapsedMs": 62.9084,
+      "afterElapsedMs": 27.0233,
+      "responseBytesBefore": 5156,
+      "responseBytesAfter": 5156,
+      "responseSizeUnchanged": true
+    },
+    {
+      "operation": "catalogue",
+      "size": 10,
+      "beforeSql": 2,
+      "afterSql": 2,
+      "beforeElapsedMs": 30.9561,
+      "afterElapsedMs": 22.2443,
+      "responseBytesBefore": 5076,
+      "responseBytesAfter": 5076,
+      "responseSizeUnchanged": true
+    },
+    {
+      "operation": "publications",
+      "size": 100,
+      "beforeSql": 102,
+      "afterSql": 3,
+      "beforeElapsedMs": 246.9389,
+      "afterElapsedMs": 32.5854,
+      "responseBytesBefore": 51147,
+      "responseBytesAfter": 51147,
+      "responseSizeUnchanged": true
+    },
+    {
+      "operation": "catalogue",
+      "size": 100,
+      "beforeSql": 2,
+      "afterSql": 2,
+      "beforeElapsedMs": 32.189,
+      "afterElapsedMs": 23.4137,
+      "responseBytesBefore": 50347,
+      "responseBytesAfter": 50347,
+      "responseSizeUnchanged": true
+    },
+    {
+      "operation": "enrollment",
+      "size": 1,
+      "beforeSql": 12,
+      "afterSql": 11,
+      "beforeElapsedMs": 52.2961,
+      "afterElapsedMs": 44.012,
+      "responseBytesBefore": 2000,
+      "responseBytesAfter": 2000,
+      "responseSizeUnchanged": true
+    },
+    {
+      "operation": "courseDetail",
+      "size": 1,
+      "beforeSql": 5,
+      "afterSql": 5,
+      "beforeElapsedMs": 20.0688,
+      "afterElapsedMs": 22.1474,
+      "responseBytesBefore": 2106,
+      "responseBytesAfter": 2106,
+      "responseSizeUnchanged": true
+    },
+    {
+      "operation": "enrollment",
+      "size": 10,
+      "beforeSql": 21,
+      "afterSql": 11,
+      "beforeElapsedMs": 58.6974,
+      "afterElapsedMs": 68.6222,
+      "responseBytesBefore": 11011,
+      "responseBytesAfter": 11011,
+      "responseSizeUnchanged": true
+    },
+    {
+      "operation": "courseDetail",
+      "size": 10,
+      "beforeSql": 5,
+      "afterSql": 5,
+      "beforeElapsedMs": 19.8026,
+      "afterElapsedMs": 33.2615,
+      "responseBytesBefore": 5778,
+      "responseBytesAfter": 5778,
+      "responseSizeUnchanged": true
+    },
+    {
+      "operation": "enrollment",
+      "size": 100,
+      "beforeSql": 111,
+      "afterSql": 11,
+      "beforeElapsedMs": 295.7285,
+      "afterElapsedMs": 40.2663,
+      "responseBytesBefore": 101193,
+      "responseBytesAfter": 101193,
+      "responseSizeUnchanged": true
+    },
+    {
+      "operation": "courseDetail",
+      "size": 100,
+      "beforeSql": 5,
+      "afterSql": 5,
+      "beforeElapsedMs": 21.434,
+      "afterElapsedMs": 18.0421,
+      "responseBytesBefore": 42498,
+      "responseBytesAfter": 42498,
+      "responseSizeUnchanged": true
+    },
+    {
+      "operation": "dashboard",
+      "size": 3,
+      "beforeSql": 144,
+      "afterSql": 31,
+      "beforeElapsedMs": 385.9044,
+      "afterElapsedMs": 90.5493,
+      "responseBytesBefore": 2204,
+      "responseBytesAfter": 2204,
+      "responseSizeUnchanged": true
+    },
+    {
+      "operation": "secondOwnerDashboard",
+      "size": 0,
+      "beforeSql": 6,
+      "afterSql": 6,
+      "beforeElapsedMs": 20.7873,
+      "afterElapsedMs": 17.8245,
+      "responseBytesBefore": 91,
+      "responseBytesAfter": 91,
+      "responseSizeUnchanged": true
+    }
+  ],
+  "method": "Mockito spy on real JdbcTemplate terminal query(PreparedStatementCreator,PreparedStatementSetter,ResultSetExtractor) and query(String,ResultSetExtractor); no result stubs, overloads not counted twice",
+  "limits": [
+    "Single local warm process and isolated PostgreSQL; elapsed times are observations, not visitor percentiles or performance guarantees.",
+    "Fixtures, authentication setup and serialization are outside SQL/elapsed count; responseBytes is measured separately after the service call.",
+    "No private body, identifier, SQL parameter, credential or query text is exported."
+  ],
+  "sharedCacheAdded": false,
+  "newIndexAdded": false,
+  "newMigrationAdded": false
+}

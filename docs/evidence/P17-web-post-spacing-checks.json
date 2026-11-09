@@ -1,0 +1,20 @@
+{
+  "verifiedAt": "2026-11-09T04:31:02.797Z",
+  "checks": [
+    {
+      "command": ".\\scripts\\courses.cmd run lint",
+      "exitCode": 0,
+      "durationMs": 20917
+    },
+    {
+      "command": ".\\scripts\\courses.cmd run build:web",
+      "exitCode": 0,
+      "durationMs": 20147
+    }
+  ],
+  "allPassed": true,
+  "buildId": "gZWlPEzIFLlqAGtBo6GCX",
+  "dependenciesUnchanged": true,
+  "githubCiExecuted": false,
+  "secretsPrinted": false
+}

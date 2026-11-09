@@ -26,6 +26,8 @@ Les sept attentes positives de la classe utilisent maintenant une assertion comm
 
 La [régression navigateur paiement P15](P15-payments-regression-checks.json) passe aussi8/8 avec le même JAR et un fournisseur contrôlé. Ces succès ne démontrent pas qu’une cause historique a été corrigée.
 
+**P17,9novembre** : Refund14 et Entitlement5 passent dans le ciblé37/37, puis le cas de fraîcheur16GET repasse1/1 après ajout du diagnostic négatif avant nettoyage, y compris absence inattendue de corps privé surHTTP200. [Rapport](P17-api-checks.json). Aucun des deux refus P15 n’est reproduit, aucun fait causal n’est donc collecté. Les lectures groupées utilisent le même CTE et un ensemble local au seul appel, sans cache privé partagé ; aucune règle de période ou d’origine n’est modifiée. Ce passage ne constitue pas un correctif démontré des deux incidents.
+
 ## Garde P17/P19 avant livraison
 
 P15 est validé localement sur les contrôles documentés ; **ce suivi reste ouvert**. Toute récidive doit arrêter la validation du parcours et être analysée avec les faits capturés, avant nettoyage et sans remplacer le refus par un retry réussi. Suspendre la livraison du parcours commercial concerné tant que cette garde n’est pas levée sur des preuves suffisantes. Aucun succès ultérieur, corrigé temporel d’un autre module ou transport de test réparé ne ferme ces occurrences de cause inconnue.

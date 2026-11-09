@@ -1,0 +1,17 @@
+{
+  "verifiedAt": "2026-11-09T04:04:23.721Z",
+  "command": ".\\scripts\\courses.cmd audit --omit=dev --json",
+  "exitCode": 0,
+  "scope": "Locked npm production dependencies only; not Java or a complete security assessment",
+  "counts": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "advisories": [],
+  "networkError": false,
+  "secretsPrinted": false
+}

@@ -1,0 +1,219 @@
+{
+  "phase": "P17",
+  "runId": "2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d",
+  "stage": "full-before-gap",
+  "command": ".\\scripts\\courses.cmd run verify:quality",
+  "ports": {
+    "web": 3101,
+    "api": 8181
+  },
+  "exitCode": 0,
+  "automaticRetries": 0,
+  "stats": {
+    "startTime": "2026-11-09T04:27:15.441Z",
+    "duration": 53366.89,
+    "expected": 9,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "specs": [
+    {
+      "title": "fr · catalogue : trois chargements froids, cinq largeurs et texte 200 %",
+      "ok": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 5045
+        }
+      ]
+    },
+    {
+      "title": "fr · atelier : trois chargements froids, cinq largeurs et texte 200 %",
+      "ok": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 7439
+        }
+      ]
+    },
+    {
+      "title": "en · catalogue : trois chargements froids, cinq largeurs et texte 200 %",
+      "ok": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 4104
+        }
+      ]
+    },
+    {
+      "title": "en · atelier : trois chargements froids, cinq largeurs et texte 200 %",
+      "ok": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 6857
+        }
+      ]
+    },
+    {
+      "title": "01 · clavier CMS, erreur associée et deux dialogues sans mutation implicite",
+      "ok": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 3503
+        }
+      ]
+    },
+    {
+      "title": "02 · hors ligne réel et accusé serveur tardif conservent les retouches",
+      "ok": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 2390
+        }
+      ]
+    },
+    {
+      "title": "03 · conflit PostgreSQL et expiration réelle de session sans perte de saisie",
+      "ok": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 3595
+        }
+      ]
+    },
+    {
+      "title": "04 · propriété, liens S3, permissions financières et préconditions de compte",
+      "ok": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 5758
+        }
+      ]
+    },
+    {
+      "title": "05 · texte éditorial échappé, origine et retour contrôlés, iframe réellement bloquée",
+      "ok": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 6408
+        }
+      ]
+    }
+  ],
+  "cleanupConfirmed": true,
+  "artifacts": {
+    "apiJarSha256": "1D8EB1451FD14944E0B38F64DF128FB92E5ED625E822ED4B42AF3E884826197A",
+    "webBuildId": "gZWlPEzIFLlqAGtBo6GCX"
+  },
+  "isolation": {
+    "disposablePostgreSQL": true,
+    "ownedS3": true,
+    "ownedMailpit": true,
+    "stripeEnabled": false,
+    "commerceEnabled": false,
+    "externalStripeRequests": false
+  },
+  "visualReview": {
+    "behaviourReport": "visual-review-behaviour.json",
+    "note": "Visual reviews apply only to the paths and hashes explicitly listed by their reviewers; performance views are reviewed separately."
+  },
+  "performanceReports": [
+    {
+      "file": "en-catalogue-performance.json",
+      "locale": "en",
+      "page": "catalogue",
+      "budgetStatus": "passed",
+      "matrixCompleted": true,
+      "readinessMs": [
+        297.73869999999806,
+        275.50670000000173,
+        285.5738999999994
+      ],
+      "lcpSnapshotMs": [
+        164,
+        152,
+        156
+      ],
+      "clsSnapshot": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "en-workshop-performance.json",
+      "locale": "en",
+      "page": "workshop",
+      "budgetStatus": "passed",
+      "matrixCompleted": true,
+      "readinessMs": [
+        556.0561999999991,
+        598.7841000000008,
+        521.1928000000007
+      ],
+      "lcpSnapshotMs": [
+        268,
+        260,
+        248
+      ],
+      "clsSnapshot": [
+        0.01735982060185185,
+        0.01735982060185185,
+        0.01735982060185185
+      ]
+    },
+    {
+      "file": "fr-catalogue-performance.json",
+      "locale": "fr",
+      "page": "catalogue",
+      "budgetStatus": "passed",
+      "matrixCompleted": true,
+      "readinessMs": [
+        443.79649999999947,
+        330.9538999999995,
+        343.8129999999983
+      ],
+      "lcpSnapshotMs": [
+        300,
+        168,
+        196
+      ],
+      "clsSnapshot": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "fr-workshop-performance.json",
+      "locale": "fr",
+      "page": "workshop",
+      "budgetStatus": "passed",
+      "matrixCompleted": true,
+      "readinessMs": [
+        682.3657999999996,
+        532.342200000001,
+        778.1532000000007
+      ],
+      "lcpSnapshotMs": [
+        348,
+        252,
+        500
+      ],
+      "clsSnapshot": [
+        0.016717581018518515,
+        0.016717581018518515,
+        0.016717581018518515
+      ]
+    }
+  ]
+}

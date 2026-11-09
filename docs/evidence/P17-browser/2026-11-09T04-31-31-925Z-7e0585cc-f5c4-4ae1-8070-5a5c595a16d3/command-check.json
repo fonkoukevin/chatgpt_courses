@@ -1,0 +1,103 @@
+{
+  "phase": "P17",
+  "runId": "2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3",
+  "stage": "post-spacing-targeted",
+  "command": ".\\scripts\\courses.cmd run verify:quality -- --grep \"atelier :\"",
+  "selectedGrep": "atelier :",
+  "ports": {
+    "web": 3101,
+    "api": 8181
+  },
+  "exitCode": 0,
+  "automaticRetries": 0,
+  "stats": {
+    "startTime": "2026-11-09T04:32:05.530Z",
+    "duration": 22487.361999999997,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "specs": [
+    {
+      "title": "fr · atelier : trois chargements froids, cinq largeurs et texte 200 %",
+      "ok": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 8573
+        }
+      ]
+    },
+    {
+      "title": "en · atelier : trois chargements froids, cinq largeurs et texte 200 %",
+      "ok": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 6751
+        }
+      ]
+    }
+  ],
+  "cleanupConfirmed": true,
+  "artifacts": {
+    "apiJarSha256": "1D8EB1451FD14944E0B38F64DF128FB92E5ED625E822ED4B42AF3E884826197A",
+    "webBuildId": "gZWlPEzIFLlqAGtBo6GCX"
+  },
+  "isolation": {
+    "disposablePostgreSQL": true,
+    "ownedS3": true,
+    "ownedMailpit": true,
+    "stripeEnabled": false,
+    "commerceEnabled": false,
+    "externalStripeRequests": false
+  },
+  "visualReview": "Pending independent opening of the actual PNG files.",
+  "performanceReports": [
+    {
+      "file": "en-workshop-performance.json",
+      "locale": "en",
+      "page": "workshop",
+      "budgetStatus": "passed",
+      "matrixCompleted": true,
+      "readinessMs": [
+        535.4667999999983,
+        487.23289999999906,
+        628.3940000000002
+      ],
+      "lcpSnapshotMs": [
+        232,
+        224,
+        276
+      ],
+      "clsSnapshot": [
+        0.01735982060185185,
+        0.01735982060185185,
+        0.01735982060185185
+      ]
+    },
+    {
+      "file": "fr-workshop-performance.json",
+      "locale": "fr",
+      "page": "workshop",
+      "budgetStatus": "passed",
+      "matrixCompleted": true,
+      "readinessMs": [
+        1424.8451000000005,
+        561.8966,
+        592.1239999999998
+      ],
+      "lcpSnapshotMs": [
+        960,
+        256,
+        308
+      ],
+      "clsSnapshot": [
+        0.016717581018518515,
+        0.016717581018518515,
+        0.016717581018518515
+      ]
+    }
+  ]
+}

@@ -11,7 +11,7 @@ Dernière mise à jour : **9 novembre 2026**. **P16 validé localement**, après
 - Windows natif et versions verrouillées conservés, aucune dépendance ajoutée. Git main local, code P16 `153726e` ; aucun push, remboursement Stripe externe, mode LIVE, déploiement ou CI GitHub exécuté. Les justificatifs commerciaux absents ne sont pas fabriqués.
 - P12 reste validé localement avec vrai Checkout TEST. **Deux refus historiques après READY et deux refus distincts observés en tests P15 restent de cause inconnue** ; les passages ultérieurs réussis ne démontrent aucun correctif de ces causes. Garde P17/P19 avant livraison du parcours commercial : [P12](evidence/P12-access-follow-up.md), [P15](evidence/P15-access-follow-up.md). La limite antérieure P09 reste dans sa preuve.
 - Conservation/traitements irréversibles, documents commerciaux, conditions/prix/fiscalité/durée et horaires/délais d’aide restent à valider avant activation concernée ou vente. Demandes WAITING_POLICY persistées, aucun effacement automatique.
-- **Prochaine phase P17** : qualité transversale, mesures et gardes d’accès historiques conservées avant livraison. P18 préparera les vrais contenus, P19 consolidera recette et CI.
+- **P17 en cours** : qualité transversale, mesures et gardes d’accès historiques conservées avant livraison. P18 préparera les vrais contenus, P19 consolidera recette et CI. [Suivi P17](evidence/P17.md).
 
 ## Phases
 
@@ -34,7 +34,7 @@ Dernière mise à jour : **9 novembre 2026**. **P16 validé localement**, après
 | P14 | Validé localement | Java221, client104, Chromium12/12+ciblé2/2, régression6/6,48captures, migration/restauration préservées ; [preuve](evidence/P14.md) |
 | P15 | Validé localement | Java234, client112, Chromium6/6/clavier et régression paiement8/8, upgrade préservé ; incidents d’accès ouverts P17/P19 ; [preuve](evidence/P15.md) |
 | P16 | Validé localement | Java41 puis22 ciblés, client119, bilingue7/7, SEO4/4,20 captures, V018 préservée ; [preuve](evidence/P16.md) |
-| P17 | À faire | Qualité transversale |
+| P17 | En cours | Audit, mesures PostgreSQL/navigateur et robustesse ; [suivi](evidence/P17.md) |
 | P18 | À faire | Contenus et offre prête |
 | P19 | À faire | Recette et CI complète |
 | P20 | À faire | Infrastructure de production |

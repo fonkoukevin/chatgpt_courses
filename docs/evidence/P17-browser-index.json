@@ -1,0 +1,57 @@
+{
+  "phase": "P17",
+  "runs": [
+    {
+      "runId": "2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348",
+      "stage": "first",
+      "exitCode": 1,
+      "passed": 5,
+      "failed": 4,
+      "skipped": 0,
+      "durationMs": 82791.41,
+      "cleanupConfirmed": true,
+      "commandCheck": "P17-browser/2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348/command-check.json",
+      "results": "P17-browser/2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348/results.json",
+      "pngCount": 18
+    },
+    {
+      "runId": "2026-11-09T04-15-25-626Z-dc071abe-a815-4d62-bd13-62f5fbeb6399",
+      "stage": "second",
+      "exitCode": 1,
+      "passed": 7,
+      "failed": 2,
+      "skipped": 0,
+      "durationMs": 60148.515999999996,
+      "cleanupConfirmed": true,
+      "commandCheck": "P17-browser/2026-11-09T04-15-25-626Z-dc071abe-a815-4d62-bd13-62f5fbeb6399/command-check.json",
+      "results": "P17-browser/2026-11-09T04-15-25-626Z-dc071abe-a815-4d62-bd13-62f5fbeb6399/results.json",
+      "pngCount": 30
+    },
+    {
+      "runId": "2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d",
+      "stage": "full-before-gap",
+      "exitCode": 0,
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 53366.89,
+      "cleanupConfirmed": true,
+      "commandCheck": "P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/command-check.json",
+      "results": "P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/results.json",
+      "pngCount": 32
+    },
+    {
+      "runId": "2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3",
+      "stage": "post-spacing-targeted",
+      "exitCode": 0,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 22487.361999999997,
+      "cleanupConfirmed": true,
+      "commandCheck": "P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/command-check.json",
+      "results": "P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/results.json",
+      "pngCount": 12
+    }
+  ]
+}

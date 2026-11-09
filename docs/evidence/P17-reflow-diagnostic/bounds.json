@@ -1,0 +1,258 @@
+{
+  "sourceRun": "2026-11-09T04-15-25-626Z-dc071abe-a815-4d62-bd13-62f5fbeb6399",
+  "scope": "Lightweight reproduction on the same built production Next public header. API deliberately absent on loopback port1; no database/JAR, private env read, build or service changes.",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "rootFontScale": 2,
+  "pidOwned": 123372,
+  "port": 64341,
+  "samples": [
+    {
+      "locale": "fr",
+      "before": {
+        "viewport": 390,
+        "documentWidth": 393,
+        "bodyWidth": 393,
+        "rootFontPx": 32,
+        "group": {
+          "tag": "DIV",
+          "left": 32,
+          "right": 393.265625,
+          "width": 361.265625,
+          "top": 136,
+          "bottom": 224,
+          "display": "flex",
+          "flexWrap": "nowrap",
+          "minWidth": "auto"
+        },
+        "children": [
+          {
+            "tag": "NAV",
+            "left": 32,
+            "right": 297.265625,
+            "width": 265.265625,
+            "top": 136,
+            "bottom": 224,
+            "display": "flex",
+            "flexWrap": "nowrap",
+            "minWidth": "auto"
+          },
+          {
+            "tag": "DIV",
+            "left": 305.265625,
+            "right": 393.265625,
+            "width": 88,
+            "top": 136,
+            "bottom": 224,
+            "display": "block",
+            "flexWrap": "nowrap",
+            "minWidth": "auto"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "DIV",
+            "left": 32,
+            "right": 393.265625,
+            "width": 361.265625,
+            "top": 136,
+            "bottom": 224,
+            "display": "flex",
+            "flexWrap": "nowrap",
+            "minWidth": "auto"
+          },
+          {
+            "tag": "DIV",
+            "left": 305.265625,
+            "right": 393.265625,
+            "width": 88,
+            "top": 136,
+            "bottom": 224,
+            "display": "block",
+            "flexWrap": "nowrap",
+            "minWidth": "auto"
+          },
+          {
+            "tag": "BUTTON",
+            "left": 305.265625,
+            "right": 393.265625,
+            "width": 88,
+            "top": 136,
+            "bottom": 224,
+            "display": "inline-flex",
+            "flexWrap": "nowrap",
+            "minWidth": "0px"
+          }
+        ]
+      },
+      "after": {
+        "viewport": 390,
+        "documentWidth": 390,
+        "bodyWidth": 390,
+        "rootFontPx": 32,
+        "group": {
+          "tag": "DIV",
+          "left": 32,
+          "right": 358,
+          "width": 326,
+          "top": 136,
+          "bottom": 320,
+          "display": "flex",
+          "flexWrap": "wrap",
+          "minWidth": "auto"
+        },
+        "children": [
+          {
+            "tag": "NAV",
+            "left": 32,
+            "right": 297.265625,
+            "width": 265.265625,
+            "top": 136,
+            "bottom": 224,
+            "display": "flex",
+            "flexWrap": "nowrap",
+            "minWidth": "auto"
+          },
+          {
+            "tag": "DIV",
+            "left": 32,
+            "right": 120,
+            "width": 88,
+            "top": 232,
+            "bottom": 320,
+            "display": "block",
+            "flexWrap": "nowrap",
+            "minWidth": "auto"
+          }
+        ],
+        "overflow": []
+      },
+      "domOnlyChange": "Add existing Tailwind flex-wrap utility to the public language+menu group."
+    },
+    {
+      "locale": "en",
+      "before": {
+        "viewport": 390,
+        "documentWidth": 393,
+        "bodyWidth": 393,
+        "rootFontPx": 32,
+        "group": {
+          "tag": "DIV",
+          "left": 32,
+          "right": 393.265625,
+          "width": 361.265625,
+          "top": 136,
+          "bottom": 224,
+          "display": "flex",
+          "flexWrap": "nowrap",
+          "minWidth": "auto"
+        },
+        "children": [
+          {
+            "tag": "NAV",
+            "left": 32,
+            "right": 297.265625,
+            "width": 265.265625,
+            "top": 136,
+            "bottom": 224,
+            "display": "flex",
+            "flexWrap": "nowrap",
+            "minWidth": "auto"
+          },
+          {
+            "tag": "DIV",
+            "left": 305.265625,
+            "right": 393.265625,
+            "width": 88,
+            "top": 136,
+            "bottom": 224,
+            "display": "block",
+            "flexWrap": "nowrap",
+            "minWidth": "auto"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "DIV",
+            "left": 32,
+            "right": 393.265625,
+            "width": 361.265625,
+            "top": 136,
+            "bottom": 224,
+            "display": "flex",
+            "flexWrap": "nowrap",
+            "minWidth": "auto"
+          },
+          {
+            "tag": "DIV",
+            "left": 305.265625,
+            "right": 393.265625,
+            "width": 88,
+            "top": 136,
+            "bottom": 224,
+            "display": "block",
+            "flexWrap": "nowrap",
+            "minWidth": "auto"
+          },
+          {
+            "tag": "BUTTON",
+            "left": 305.265625,
+            "right": 393.265625,
+            "width": 88,
+            "top": 136,
+            "bottom": 224,
+            "display": "inline-flex",
+            "flexWrap": "nowrap",
+            "minWidth": "0px"
+          }
+        ]
+      },
+      "after": {
+        "viewport": 390,
+        "documentWidth": 390,
+        "bodyWidth": 390,
+        "rootFontPx": 32,
+        "group": {
+          "tag": "DIV",
+          "left": 32,
+          "right": 358,
+          "width": 326,
+          "top": 136,
+          "bottom": 320,
+          "display": "flex",
+          "flexWrap": "wrap",
+          "minWidth": "auto"
+        },
+        "children": [
+          {
+            "tag": "NAV",
+            "left": 32,
+            "right": 297.265625,
+            "width": 265.265625,
+            "top": 136,
+            "bottom": 224,
+            "display": "flex",
+            "flexWrap": "nowrap",
+            "minWidth": "auto"
+          },
+          {
+            "tag": "DIV",
+            "left": 32,
+            "right": 120,
+            "width": 88,
+            "top": 232,
+            "bottom": 320,
+            "display": "block",
+            "flexWrap": "nowrap",
+            "minWidth": "auto"
+          }
+        ],
+        "overflow": []
+      },
+      "domOnlyChange": "Add existing Tailwind flex-wrap utility to the public language+menu group."
+    }
+  ],
+  "cleanupConfirmed": true
+}

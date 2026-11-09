@@ -1,0 +1,353 @@
+{
+  "phase": "P17",
+  "status": "BROWSER_TESTS_PASSED",
+  "asOfRun": "2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3",
+  "command": ".\\scripts\\courses.cmd run verify:quality",
+  "automaticRetries": 0,
+  "artifacts": {
+    "fullNineTestRun": {
+      "apiJarSha256": "1D8EB1451FD14944E0B38F64DF128FB92E5ED625E822ED4B42AF3E884826197A",
+      "webBuildId": "gZWlPEzIFLlqAGtBo6GCX"
+    },
+    "postSpacing": {
+      "apiJarSha256": "1D8EB1451FD14944E0B38F64DF128FB92E5ED625E822ED4B42AF3E884826197A",
+      "webBuildId": "gZWlPEzIFLlqAGtBo6GCX"
+    }
+  },
+  "runs": [
+    {
+      "runId": "2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348",
+      "stage": "first",
+      "exitCode": 1,
+      "passed": 5,
+      "failed": 4,
+      "skipped": 0,
+      "durationMs": 82791.41,
+      "cleanupConfirmed": true,
+      "commandCheck": "P17-browser/2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348/command-check.json",
+      "results": "P17-browser/2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348/results.json",
+      "pngCount": 18
+    },
+    {
+      "runId": "2026-11-09T04-15-25-626Z-dc071abe-a815-4d62-bd13-62f5fbeb6399",
+      "stage": "second",
+      "exitCode": 1,
+      "passed": 7,
+      "failed": 2,
+      "skipped": 0,
+      "durationMs": 60148.515999999996,
+      "cleanupConfirmed": true,
+      "commandCheck": "P17-browser/2026-11-09T04-15-25-626Z-dc071abe-a815-4d62-bd13-62f5fbeb6399/command-check.json",
+      "results": "P17-browser/2026-11-09T04-15-25-626Z-dc071abe-a815-4d62-bd13-62f5fbeb6399/results.json",
+      "pngCount": 30
+    },
+    {
+      "runId": "2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d",
+      "stage": "full-before-gap",
+      "exitCode": 0,
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 53366.89,
+      "cleanupConfirmed": true,
+      "commandCheck": "P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/command-check.json",
+      "results": "P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/results.json",
+      "pngCount": 32
+    },
+    {
+      "runId": "2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3",
+      "stage": "post-spacing-targeted",
+      "exitCode": 0,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 22487.361999999997,
+      "cleanupConfirmed": true,
+      "commandCheck": "P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/command-check.json",
+      "results": "P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/results.json",
+      "pngCount": 12
+    }
+  ],
+  "fullNineTestRun": {
+    "runId": "2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d",
+    "passed": 9,
+    "failed": 0,
+    "skipped": 0,
+    "exitCode": 0,
+    "durationMs": 53366.89,
+    "cleanupConfirmed": true,
+    "pngCount": 32
+  },
+  "postSpacingVerification": {
+    "runId": "2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3",
+    "command": ".\\scripts\\courses.cmd run verify:quality -- --grep \"atelier :\"",
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "exitCode": 0,
+    "durationMs": 22487.361999999997,
+    "cleanupConfirmed": true,
+    "pngCount": 12,
+    "performanceReports": [
+      {
+        "file": "en-workshop-performance.json",
+        "locale": "en",
+        "page": "workshop",
+        "budgetStatus": "passed",
+        "matrixCompleted": true,
+        "readinessMs": [
+          535.4667999999983,
+          487.23289999999906,
+          628.3940000000002
+        ],
+        "lcpSnapshotMs": [
+          232,
+          224,
+          276
+        ],
+        "clsSnapshot": [
+          0.01735982060185185,
+          0.01735982060185185,
+          0.01735982060185185
+        ]
+      },
+      {
+        "file": "fr-workshop-performance.json",
+        "locale": "fr",
+        "page": "workshop",
+        "budgetStatus": "passed",
+        "matrixCompleted": true,
+        "readinessMs": [
+          1424.8451000000005,
+          561.8966,
+          592.1239999999998
+        ],
+        "lcpSnapshotMs": [
+          960,
+          256,
+          308
+        ],
+        "clsSnapshot": [
+          0.016717581018518515,
+          0.016717581018518515,
+          0.016717581018518515
+        ]
+      }
+    ]
+  },
+  "fiveBehaviouralScenarios": [
+    {
+      "number": 1,
+      "status": "PASSED_IN_FULL_NINE_TEST_RUN",
+      "facts": [
+        "CMS keyboard opening and visible labelled fields",
+        "Invalid input focused with visible aria-describedby error",
+        "Nested modal focus containment and Escape return",
+        "Closing retains the proposal without modifying the server revision"
+      ]
+    },
+    {
+      "number": 2,
+      "status": "PASSED_IN_FULL_NINE_TEST_RUN",
+      "facts": [
+        "Actual Chromium offline mode, no fake API response",
+        "Input retained without private browser storage",
+        "Server unchanged offline and after reconnect until explicit save",
+        "Real server response held after commit; newer input remains modified"
+      ]
+    },
+    {
+      "number": 3,
+      "status": "PASSED_IN_FULL_NINE_TEST_RUN",
+      "facts": [
+        "Actual concurrent PostgreSQL edit yields If-Match412",
+        "Comparison and explicit rebase preserve input without saving",
+        "Owned JDBC session timestamps coherently expired",
+        "Actual GET auth/me401 and failed mutation preserve text and server revision"
+      ]
+    },
+    {
+      "number": 4,
+      "status": "PASSED_IN_FULL_NINE_TEST_RUN",
+      "facts": [
+        "Owner SSR200 includes synthetic own marker; other owner SSR404 excludes it",
+        "Private responses remain no-store and noindex",
+        "Actual isolated S3 upload reaches READY; another owner cannot obtain a new link",
+        "EDITOR can read CMS but finance403 and private foreign project404",
+        "Missing CSRF403, missing account context428, changed context409, no revision change",
+        "Local session cookie HttpOnly and SameSiteLax"
+      ]
+    },
+    {
+      "number": 5,
+      "status": "PASSED_IN_FULL_NINE_TEST_RUN",
+      "facts": [
+        "Published editorial HTML is rendered as literal escaped text",
+        "javascript URL rejected400 without editorial revision change",
+        "Forged unsafe Origin rejected403 and external returnTo rejected",
+        "Real app iframe GET200, then actual Chromium frame policy refusal",
+        "CSP frame/object/base restrictions, XFO DENY, nosniff and Permissions-Policy observed"
+      ]
+    }
+  ],
+  "performance": {
+    "budgetFile": "../performance-budgets.json",
+    "chosenAfterPreservedBaseline": true,
+    "budgetsPassedForAllFourPageLocaleReports": true,
+    "reports": [
+      {
+        "file": "en-catalogue-performance.json",
+        "locale": "en",
+        "page": "catalogue",
+        "budgetStatus": "passed",
+        "matrixCompleted": true,
+        "readinessMs": [
+          297.73869999999806,
+          275.50670000000173,
+          285.5738999999994
+        ],
+        "lcpSnapshotMs": [
+          164,
+          152,
+          156
+        ],
+        "clsSnapshot": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "file": "en-workshop-performance.json",
+        "locale": "en",
+        "page": "workshop",
+        "budgetStatus": "passed",
+        "matrixCompleted": true,
+        "readinessMs": [
+          556.0561999999991,
+          598.7841000000008,
+          521.1928000000007
+        ],
+        "lcpSnapshotMs": [
+          268,
+          260,
+          248
+        ],
+        "clsSnapshot": [
+          0.01735982060185185,
+          0.01735982060185185,
+          0.01735982060185185
+        ]
+      },
+      {
+        "file": "fr-catalogue-performance.json",
+        "locale": "fr",
+        "page": "catalogue",
+        "budgetStatus": "passed",
+        "matrixCompleted": true,
+        "readinessMs": [
+          443.79649999999947,
+          330.9538999999995,
+          343.8129999999983
+        ],
+        "lcpSnapshotMs": [
+          300,
+          168,
+          196
+        ],
+        "clsSnapshot": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "file": "fr-workshop-performance.json",
+        "locale": "fr",
+        "page": "workshop",
+        "budgetStatus": "passed",
+        "matrixCompleted": true,
+        "readinessMs": [
+          682.3657999999996,
+          532.342200000001,
+          778.1532000000007
+        ],
+        "lcpSnapshotMs": [
+          348,
+          252,
+          500
+        ],
+        "clsSnapshot": [
+          0.016717581018518515,
+          0.016717581018518515,
+          0.016717581018518515
+        ]
+      }
+    ]
+  },
+  "unresolvedCurrent": [],
+  "resolvedObservedReflow": {
+    "sourceRun": "2026-11-09T04-15-25-626Z-dc071abe-a815-4d62-bd13-62f5fbeb6399",
+    "passingRun": "2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d",
+    "scope": "French and English catalogue, root-font scaling200%, viewport390",
+    "originalDocumentWidth": 393,
+    "viewportWidth": 390,
+    "allFourMatricesComplete": true,
+    "note": "Fixed budgets and zero retries retained; no overflow tolerance introduced."
+  },
+  "visualReview": {
+    "behaviour": {
+      "report": "P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/visual-review-behaviour.json",
+      "actuallyOpened": 8
+    },
+    "performance": "Separate web-agent report; do not infer its review from this file."
+  },
+  "history": [
+    {
+      "run": "2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348",
+      "result": "5passed/4failed",
+      "causes": [
+        "Two exact filter-button locators did not include the active numeric count",
+        "Expiration fixture updated only cleanup EXPIRY_TIME rather than the fields used by MapSession.isExpired",
+        "Wrong SSR expectation200 where the private loader intentionally returns404 for another owner"
+      ],
+      "applicationCorrectionClaimed": false
+    },
+    {
+      "run": "2026-11-09T04-15-25-626Z-dc071abe-a815-4d62-bd13-62f5fbeb6399",
+      "result": "7passed/2failed",
+      "facts": [
+        "The five behavioural cases and both workshop matrices pass",
+        "All twelve cold-browser measurements satisfy the fixed local budgets",
+        "French and English catalogue reflow fail393>390 at200% text"
+      ]
+    },
+    {
+      "run": "2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d",
+      "result": "9passed/0failed",
+      "facts": [
+        "Actual exit0 and cleanup confirmed",
+        "All five behavioural cases and all four performance/reflow matrices pass",
+        "Eight behavioural PNG files actually opened; minor adjacent-link spacing recorded without changing this run"
+      ]
+    },
+    {
+      "run": "2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3",
+      "result": "2passed/0failed",
+      "facts": [
+        "Only the existing French and English workshop scenarios selected with grep atelier :",
+        "Minimal navigation-link spacing fix, same API JAR, separately recorded web build",
+        "Actual exit0 and cleanup confirmed; twelve image files produced for independent review"
+      ]
+    }
+  ],
+  "limits": [
+    "Measurements are unthrottled loopback with CPU1x, production Next build and a warmed running backend; they are not remote/mobile or field Core Web Vitals.",
+    "Root-font scaling is measured200% text growth, not a native browser-zoom claim or WCAG certification.",
+    "No external Stripe request or paid entitlement is created in P17; P12/P15 historical unexplained access refusals remain open for their mandatory follow-up.",
+    "Cookie Secure=false is the observed local HTTP setting; production settings are covered separately.",
+    "Eight behavioural images are actually reviewed with original-detail requested; transport resizing of the two long CMS captures is recorded in their review report.",
+    "Full nine-test run and post-spacing targeted two-test run use separately recorded web builds; do not describe them as eleven independent scenarios or one run.",
+    "Whole-phase closure and the separate performance-image review are recorded by root; this file reports only the observed browser checks."
+  ]
+}

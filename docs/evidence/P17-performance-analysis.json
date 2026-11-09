@@ -1,0 +1,628 @@
+{
+  "phase": "P17",
+  "runId": "2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d",
+  "analyzedAt": "2026-11-09T04:30:58.852Z",
+  "reviewer": "versions_web",
+  "stage": "Full nine-scenario successful run before the minor project action gap correction; later targeted workshop measurements are recorded separately.",
+  "commandObserved": {
+    "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/command-check.json",
+    "exitCode": 0,
+    "cleanupConfirmed": true,
+    "stats": {
+      "startTime": "2026-11-09T04:27:15.441Z",
+      "duration": 53366.89,
+      "expected": 9,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "artifacts": {
+      "apiJarSha256": "1D8EB1451FD14944E0B38F64DF128FB92E5ED625E822ED4B42AF3E884826197A",
+      "webBuildId": "aW_vqIxLneAmITN4litA5"
+    }
+  },
+  "budgets": {
+    "file": "docs/performance-budgets.json",
+    "sha256": "0918230ccaa1993a3063e39265ab306a6a7fca3536381b08a3abcd4c7f3c2ecb",
+    "fixedAfterBaseline": true,
+    "unchangedDuringRuns": true
+  },
+  "environment": {
+    "platform": "win32",
+    "release": "10.0.26200",
+    "architecture": "x64",
+    "cpuModel": "AMD Ryzen 7 5700U with Radeon Graphics         ",
+    "logicalProcessors": 16,
+    "totalMemoryBytes": 16455815168,
+    "freeMemoryBytesAtReport": 546959360,
+    "browserVersion": "158.0.8127.18",
+    "nodeVersion": "v24.22.2"
+  },
+  "protocol": {
+    "network": "unthrottled HTTP loopback",
+    "cpuRate": 1,
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "coldBrowserNavigations": 3,
+    "browserCacheDisabled": true,
+    "browserCacheClearedBeforeEachNavigation": true,
+    "serviceWorkersBypassed": true,
+    "serverCache": "Running API and Next production server; fixture preparation warms the backend. This is not a cold machine/server benchmark.",
+    "boundaries": "Page readiness is the observed ready UI, not networkidle. LCP is a snapshot at readiness; interaction durations are local laboratory actions, not field INP. CDP heap sizes are bytes; ScriptDuration/LayoutDuration/RecalcStyleDuration/TaskDuration are seconds.",
+    "privacy": "No URLs, query strings, headers, identities, cookies, form contents or response bodies are written to this measurement."
+  },
+  "reports": [
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/en-catalogue-performance.json",
+      "sha256": "59985c989663849a67b63c2ac498abe8e11b3d8f1e486877aef7e9686f8d87f2",
+      "locale": "en",
+      "page": "catalogue",
+      "matrixCompleted": true,
+      "fixedBudgetEvaluation": {
+        "file": "docs/performance-budgets.json",
+        "version": 1,
+        "sourceBaselineRun": "2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348",
+        "status": "passed",
+        "checks": [
+          {
+            "metric": "javascriptEncodedBytes",
+            "observed": 323791,
+            "limit": 393216,
+            "passed": true
+          },
+          {
+            "metric": "javascriptDecodedBytes",
+            "observed": 1069442,
+            "limit": 1310720,
+            "passed": true
+          },
+          {
+            "metric": "stylesheetDecodedBytes",
+            "observed": 40547,
+            "limit": 49152,
+            "passed": true
+          },
+          {
+            "metric": "readyMedianMs",
+            "observed": 285.5738999999994,
+            "limit": 1500,
+            "passed": true
+          },
+          {
+            "metric": "readyMaxMs",
+            "observed": 297.73869999999806,
+            "limit": 2500,
+            "passed": true
+          },
+          {
+            "metric": "largestContentfulPaintSnapshotMaxMs",
+            "observed": 164,
+            "limit": 1500,
+            "passed": true
+          },
+          {
+            "metric": "layoutShiftSnapshotMax",
+            "observed": 0,
+            "limit": 0.05,
+            "passed": true
+          }
+        ],
+        "policy": "Fixed limits selected after the preserved baseline; investigate a different machine/profile, never auto-increase or retry away a failure."
+      },
+      "baseline": {
+        "samples": 3,
+        "readyMs": {
+          "min": 287.60149999999885,
+          "median": 338.4454000000005,
+          "max": 390.9400999999998
+        },
+        "ttfbMs": {
+          "min": 46.39999997615814,
+          "max": 75.39999997615814
+        },
+        "largestContentfulPaintSnapshotMaxMs": 216,
+        "layoutShiftSnapshotMax": 0,
+        "javascriptEncodedBytesMax": 323787,
+        "javascriptDecodedBytesMax": 1069432,
+        "stylesheetDecodedBytesMax": 40547,
+        "cacheResponses": 0,
+        "failedRequests": 0
+      },
+      "measured": {
+        "samples": 3,
+        "readyMs": {
+          "min": 275.50670000000173,
+          "median": 285.5738999999994,
+          "max": 297.73869999999806
+        },
+        "ttfbMs": {
+          "min": 47.30000001192093,
+          "max": 53.10000002384186
+        },
+        "largestContentfulPaintSnapshotMaxMs": 164,
+        "layoutShiftSnapshotMax": 0,
+        "javascriptEncodedBytesMax": 323791,
+        "javascriptDecodedBytesMax": 1069442,
+        "stylesheetDecodedBytesMax": 40547,
+        "cacheResponses": 0,
+        "failedRequests": 0
+      },
+      "interactions": {
+        "searchToReadyMs": 205.78240000000005,
+        "keyboardSearch": true,
+        "filtersEscapeAndFocusReturn": true,
+        "mobileMenuEscapeAndFocusReturn": true
+      },
+      "layouts": [
+        {
+          "width": 1440,
+          "viewport": 1440,
+          "document": 1440,
+          "body": 1440
+        },
+        {
+          "width": 1024,
+          "viewport": 1024,
+          "document": 1024,
+          "body": 1024
+        },
+        {
+          "width": 768,
+          "viewport": 768,
+          "document": 768,
+          "body": 768
+        },
+        {
+          "width": 390,
+          "viewport": 390,
+          "document": 390,
+          "body": 390
+        },
+        {
+          "width": 320,
+          "viewport": 320,
+          "document": 320,
+          "body": 320
+        }
+      ],
+      "textResize": {
+        "mechanism": "root-font-size-doubled",
+        "beforePx": 16,
+        "afterPx": 32,
+        "ratio": 2
+      }
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/en-workshop-performance.json",
+      "sha256": "54efdbf610c6dc9037d00f24b17040e6a69b0fa41a5c0795fa14e6a02a975218",
+      "locale": "en",
+      "page": "workshop",
+      "matrixCompleted": true,
+      "fixedBudgetEvaluation": {
+        "file": "docs/performance-budgets.json",
+        "version": 1,
+        "sourceBaselineRun": "2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348",
+        "status": "passed",
+        "checks": [
+          {
+            "metric": "javascriptEncodedBytes",
+            "observed": 305253,
+            "limit": 393216,
+            "passed": true
+          },
+          {
+            "metric": "javascriptDecodedBytes",
+            "observed": 996783,
+            "limit": 1310720,
+            "passed": true
+          },
+          {
+            "metric": "stylesheetDecodedBytes",
+            "observed": 40547,
+            "limit": 49152,
+            "passed": true
+          },
+          {
+            "metric": "readyMedianMs",
+            "observed": 556.0561999999991,
+            "limit": 1500,
+            "passed": true
+          },
+          {
+            "metric": "readyMaxMs",
+            "observed": 598.7841000000008,
+            "limit": 2500,
+            "passed": true
+          },
+          {
+            "metric": "largestContentfulPaintSnapshotMaxMs",
+            "observed": 268,
+            "limit": 1500,
+            "passed": true
+          },
+          {
+            "metric": "layoutShiftSnapshotMax",
+            "observed": 0.01735982060185185,
+            "limit": 0.05,
+            "passed": true
+          }
+        ],
+        "policy": "Fixed limits selected after the preserved baseline; investigate a different machine/profile, never auto-increase or retry away a failure."
+      },
+      "baseline": {
+        "samples": 3,
+        "readyMs": {
+          "min": 458.9332999999997,
+          "median": 490.9951000000001,
+          "max": 565.1589999999997
+        },
+        "ttfbMs": {
+          "min": 111.80000001192093,
+          "max": 119.70000004768372
+        },
+        "largestContentfulPaintSnapshotMaxMs": 228,
+        "layoutShiftSnapshotMax": 0.01735982060185185,
+        "javascriptEncodedBytesMax": 305249,
+        "javascriptDecodedBytesMax": 996773,
+        "stylesheetDecodedBytesMax": 40547,
+        "cacheResponses": 0,
+        "failedRequests": 0
+      },
+      "measured": {
+        "samples": 3,
+        "readyMs": {
+          "min": 521.1928000000007,
+          "median": 556.0561999999991,
+          "max": 598.7841000000008
+        },
+        "ttfbMs": {
+          "min": 131,
+          "max": 140
+        },
+        "largestContentfulPaintSnapshotMaxMs": 268,
+        "layoutShiftSnapshotMax": 0.01735982060185185,
+        "javascriptEncodedBytesMax": 305253,
+        "javascriptDecodedBytesMax": 996783,
+        "stylesheetDecodedBytesMax": 40547,
+        "cacheResponses": 0,
+        "failedRequests": 0
+      },
+      "interactions": {
+        "inputToNextFramesMs": 50.97729999999865,
+        "saveToAcknowledgedUiMs": 125.1202000000012,
+        "importEscapeAndFocusReturn": true,
+        "invalidTitleFocusedAndDescribed": true,
+        "realPatchAcknowledged": true
+      },
+      "layouts": [
+        {
+          "width": 1440,
+          "viewport": 1440,
+          "document": 1440,
+          "body": 1440
+        },
+        {
+          "width": 1024,
+          "viewport": 1024,
+          "document": 1024,
+          "body": 1024
+        },
+        {
+          "width": 768,
+          "viewport": 768,
+          "document": 768,
+          "body": 768
+        },
+        {
+          "width": 390,
+          "viewport": 390,
+          "document": 390,
+          "body": 390
+        },
+        {
+          "width": 320,
+          "viewport": 320,
+          "document": 320,
+          "body": 320
+        }
+      ],
+      "textResize": {
+        "mechanism": "root-font-size-doubled",
+        "beforePx": 16,
+        "afterPx": 32,
+        "ratio": 2
+      }
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/fr-catalogue-performance.json",
+      "sha256": "4b91807dd1e0566427e70b922ee517b71c301944f46e021dab62c5fd338b55e3",
+      "locale": "fr",
+      "page": "catalogue",
+      "matrixCompleted": true,
+      "fixedBudgetEvaluation": {
+        "file": "docs/performance-budgets.json",
+        "version": 1,
+        "sourceBaselineRun": "2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348",
+        "status": "passed",
+        "checks": [
+          {
+            "metric": "javascriptEncodedBytes",
+            "observed": 323791,
+            "limit": 393216,
+            "passed": true
+          },
+          {
+            "metric": "javascriptDecodedBytes",
+            "observed": 1069442,
+            "limit": 1310720,
+            "passed": true
+          },
+          {
+            "metric": "stylesheetDecodedBytes",
+            "observed": 40547,
+            "limit": 49152,
+            "passed": true
+          },
+          {
+            "metric": "readyMedianMs",
+            "observed": 343.8129999999983,
+            "limit": 1500,
+            "passed": true
+          },
+          {
+            "metric": "readyMaxMs",
+            "observed": 443.79649999999947,
+            "limit": 2500,
+            "passed": true
+          },
+          {
+            "metric": "largestContentfulPaintSnapshotMaxMs",
+            "observed": 300,
+            "limit": 1500,
+            "passed": true
+          },
+          {
+            "metric": "layoutShiftSnapshotMax",
+            "observed": 0,
+            "limit": 0.05,
+            "passed": true
+          }
+        ],
+        "policy": "Fixed limits selected after the preserved baseline; investigate a different machine/profile, never auto-increase or retry away a failure."
+      },
+      "baseline": {
+        "samples": 3,
+        "readyMs": {
+          "min": 300.58389999999963,
+          "median": 328.3892999999998,
+          "max": 982.0565000000006
+        },
+        "ttfbMs": {
+          "min": 52,
+          "max": 166.10000002384186
+        },
+        "largestContentfulPaintSnapshotMaxMs": 616,
+        "layoutShiftSnapshotMax": 0,
+        "javascriptEncodedBytesMax": 323787,
+        "javascriptDecodedBytesMax": 1069432,
+        "stylesheetDecodedBytesMax": 40547,
+        "cacheResponses": 0,
+        "failedRequests": 0
+      },
+      "measured": {
+        "samples": 3,
+        "readyMs": {
+          "min": 330.9538999999995,
+          "median": 343.8129999999983,
+          "max": 443.79649999999947
+        },
+        "ttfbMs": {
+          "min": 62.90000003576279,
+          "max": 115.60000002384186
+        },
+        "largestContentfulPaintSnapshotMaxMs": 300,
+        "layoutShiftSnapshotMax": 0,
+        "javascriptEncodedBytesMax": 323791,
+        "javascriptDecodedBytesMax": 1069442,
+        "stylesheetDecodedBytesMax": 40547,
+        "cacheResponses": 0,
+        "failedRequests": 0
+      },
+      "interactions": {
+        "searchToReadyMs": 200.9533999999985,
+        "keyboardSearch": true,
+        "filtersEscapeAndFocusReturn": true,
+        "mobileMenuEscapeAndFocusReturn": true
+      },
+      "layouts": [
+        {
+          "width": 1440,
+          "viewport": 1440,
+          "document": 1440,
+          "body": 1440
+        },
+        {
+          "width": 1024,
+          "viewport": 1024,
+          "document": 1024,
+          "body": 1024
+        },
+        {
+          "width": 768,
+          "viewport": 768,
+          "document": 768,
+          "body": 768
+        },
+        {
+          "width": 390,
+          "viewport": 390,
+          "document": 390,
+          "body": 390
+        },
+        {
+          "width": 320,
+          "viewport": 320,
+          "document": 320,
+          "body": 320
+        }
+      ],
+      "textResize": {
+        "mechanism": "root-font-size-doubled",
+        "beforePx": 16,
+        "afterPx": 32,
+        "ratio": 2
+      }
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/fr-workshop-performance.json",
+      "sha256": "e0d8704f376ea6cb31064f992b932e9149181a9a987868348d0055e2fd1ceb54",
+      "locale": "fr",
+      "page": "workshop",
+      "matrixCompleted": true,
+      "fixedBudgetEvaluation": {
+        "file": "docs/performance-budgets.json",
+        "version": 1,
+        "sourceBaselineRun": "2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348",
+        "status": "passed",
+        "checks": [
+          {
+            "metric": "javascriptEncodedBytes",
+            "observed": 305253,
+            "limit": 393216,
+            "passed": true
+          },
+          {
+            "metric": "javascriptDecodedBytes",
+            "observed": 996783,
+            "limit": 1310720,
+            "passed": true
+          },
+          {
+            "metric": "stylesheetDecodedBytes",
+            "observed": 40547,
+            "limit": 49152,
+            "passed": true
+          },
+          {
+            "metric": "readyMedianMs",
+            "observed": 682.3657999999996,
+            "limit": 1500,
+            "passed": true
+          },
+          {
+            "metric": "readyMaxMs",
+            "observed": 778.1532000000007,
+            "limit": 2500,
+            "passed": true
+          },
+          {
+            "metric": "largestContentfulPaintSnapshotMaxMs",
+            "observed": 500,
+            "limit": 1500,
+            "passed": true
+          },
+          {
+            "metric": "layoutShiftSnapshotMax",
+            "observed": 0.016717581018518515,
+            "limit": 0.05,
+            "passed": true
+          }
+        ],
+        "policy": "Fixed limits selected after the preserved baseline; investigate a different machine/profile, never auto-increase or retry away a failure."
+      },
+      "baseline": {
+        "samples": 3,
+        "readyMs": {
+          "min": 535.2255000000005,
+          "median": 602.9715000000006,
+          "max": 652.1007
+        },
+        "ttfbMs": {
+          "min": 131.30000001192093,
+          "max": 175.10000002384186
+        },
+        "largestContentfulPaintSnapshotMaxMs": 308,
+        "layoutShiftSnapshotMax": 0.016717581018518515,
+        "javascriptEncodedBytesMax": 305249,
+        "javascriptDecodedBytesMax": 996773,
+        "stylesheetDecodedBytesMax": 40547,
+        "cacheResponses": 0,
+        "failedRequests": 0
+      },
+      "measured": {
+        "samples": 3,
+        "readyMs": {
+          "min": 532.342200000001,
+          "median": 682.3657999999996,
+          "max": 778.1532000000007
+        },
+        "ttfbMs": {
+          "min": 124,
+          "max": 214.30000001192093
+        },
+        "largestContentfulPaintSnapshotMaxMs": 500,
+        "layoutShiftSnapshotMax": 0.016717581018518515,
+        "javascriptEncodedBytesMax": 305253,
+        "javascriptDecodedBytesMax": 996783,
+        "stylesheetDecodedBytesMax": 40547,
+        "cacheResponses": 0,
+        "failedRequests": 0
+      },
+      "interactions": {
+        "inputToNextFramesMs": 84.8768999999993,
+        "saveToAcknowledgedUiMs": 212.2989000000016,
+        "importEscapeAndFocusReturn": true,
+        "invalidTitleFocusedAndDescribed": true,
+        "realPatchAcknowledged": true
+      },
+      "layouts": [
+        {
+          "width": 1440,
+          "viewport": 1440,
+          "document": 1440,
+          "body": 1440
+        },
+        {
+          "width": 1024,
+          "viewport": 1024,
+          "document": 1024,
+          "body": 1024
+        },
+        {
+          "width": 768,
+          "viewport": 768,
+          "document": 768,
+          "body": 768
+        },
+        {
+          "width": 390,
+          "viewport": 390,
+          "document": 390,
+          "body": 390
+        },
+        {
+          "width": 320,
+          "viewport": 320,
+          "document": 320,
+          "body": 320
+        }
+      ],
+      "textResize": {
+        "mechanism": "root-font-size-doubled",
+        "beforePx": 16,
+        "afterPx": 32,
+        "ratio": 2
+      }
+    }
+  ],
+  "conclusion": "All four page/locale reports pass the seven fixed local budgets. All20 normal-size layouts report document/body width equal to viewport; actual control text doubles16→32px in all four resize experiments. No failed or cached responses were counted in the12cold navigations.",
+  "interpretation": [
+    "Baseline and final timing differences are descriptive only: layout repair, warm backend state and run-to-run variation prevent attributing a speed gain to the wrapper change.",
+    "JavaScript decoded payload changes by10bytes from the earlier header class change; encoded sizes remain below the fixed393216-byte budget. This is not a new optimization claim.",
+    "ResourceTiming durations are sums for concurrent resources, not a serial download waterfall; aggregate timings alone do not establish the absence of every request cascade.",
+    "Three samples per page cannot establish p95 or field INP. LCP/CLS are readiness snapshots under the documented Windows/Chromium loopback profile.",
+    "No cache of private content, automatic budget increase, skipped assertion or automatic retry was introduced. Different profile failures require investigation."
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "phase" : "before",
+  "measuredAt" : "2026-11-09T03:54:27.281120300Z",
+  "postgresql" : "postgres@sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42",
+  "java" : "21.0.13",
+  "os" : "Windows 11",
+  "cpus" : 16,
+  "queryCounting" : "Mockito spy on real JdbcTemplate terminal query(PreparedStatementCreator,PreparedStatementSetter,ResultSetExtractor) and query(String,ResultSetExtractor); no result stubs, overloads not counted twice",
+  "observations" : [ {
+    "operation" : "publications",
+    "size" : 1,
+    "sqlQueries" : 3,
+    "elapsedMs" : 48.7979,
+    "responseBytes" : 556
+  }, {
+    "operation" : "catalogue",
+    "size" : 1,
+    "sqlQueries" : 2,
+    "elapsedMs" : 34.8736,
+    "responseBytes" : 548
+  }, {
+    "operation" : "publications",
+    "size" : 10,
+    "sqlQueries" : 12,
+    "elapsedMs" : 62.9084,
+    "responseBytes" : 5156
+  }, {
+    "operation" : "catalogue",
+    "size" : 10,
+    "sqlQueries" : 2,
+    "elapsedMs" : 30.9561,
+    "responseBytes" : 5076
+  }, {
+    "operation" : "publications",
+    "size" : 100,
+    "sqlQueries" : 102,
+    "elapsedMs" : 246.9389,
+    "responseBytes" : 51147
+  }, {
+    "operation" : "catalogue",
+    "size" : 100,
+    "sqlQueries" : 2,
+    "elapsedMs" : 32.189,
+    "responseBytes" : 50347
+  }, {
+    "operation" : "enrollment",
+    "size" : 1,
+    "sqlQueries" : 12,
+    "elapsedMs" : 52.2961,
+    "responseBytes" : 2000
+  }, {
+    "operation" : "courseDetail",
+    "size" : 1,
+    "sqlQueries" : 5,
+    "elapsedMs" : 20.0688,
+    "responseBytes" : 2106
+  }, {
+    "operation" : "enrollment",
+    "size" : 10,
+    "sqlQueries" : 21,
+    "elapsedMs" : 58.6974,
+    "responseBytes" : 11011
+  }, {
+    "operation" : "courseDetail",
+    "size" : 10,
+    "sqlQueries" : 5,
+    "elapsedMs" : 19.8026,
+    "responseBytes" : 5778
+  }, {
+    "operation" : "enrollment",
+    "size" : 100,
+    "sqlQueries" : 111,
+    "elapsedMs" : 295.7285,
+    "responseBytes" : 101193
+  }, {
+    "operation" : "courseDetail",
+    "size" : 100,
+    "sqlQueries" : 5,
+    "elapsedMs" : 21.434,
+    "responseBytes" : 42498
+  }, {
+    "operation" : "dashboard",
+    "size" : 3,
+    "sqlQueries" : 144,
+    "elapsedMs" : 385.9044,
+    "responseBytes" : 2204
+  }, {
+    "operation" : "secondOwnerDashboard",
+    "size" : 0,
+    "sqlQueries" : 6,
+    "elapsedMs" : 20.7873,
+    "responseBytes" : 91
+  } ],
+  "limits" : [ "Single local warm process and isolated PostgreSQL; elapsed times are observations, not visitor percentiles or performance guarantees.", "Fixtures, authentication setup and serialization are outside SQL/elapsed count; responseBytes is measured separately after the service call.", "No private body, identifier, SQL parameter, credential or query text is exported." ]
+}

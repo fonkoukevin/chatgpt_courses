@@ -1,0 +1,103 @@
+{
+  "phase": "P17",
+  "runId": "2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d",
+  "reviewedOn": "2026-11-09",
+  "reviewer": "audit_references",
+  "method": "All eight actual PNG files were opened with view_image(detail=original) and displayed to the reviewer; dimensions and hashes below come from the original bytes.",
+  "reviewedCount": 8,
+  "reviewedPaths": [
+    {
+      "path": "fr-390-keyboard-nested-confirmation.png",
+      "width": 390,
+      "height": 6441,
+      "bytes": 236188,
+      "sha256": "09be12fa7a170c9edb9e0d9f944d968e76cff42e308f84e02e1495d43215bc3e",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Nested confirmation, current/proposed slug and reason are readable; Cancel focus is visible and both actions fit the narrow panel."
+    },
+    {
+      "path": "fr-390-keyboard-slug-retained.png",
+      "width": 390,
+      "height": 6441,
+      "bytes": 235248,
+      "sha256": "6a5441dcea94c4ae6eeac1443ff5e27ada487411aaca02a4f4550b5e8754eaf9",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "The retained proposal and reason remain in the labelled fields after closing/reopening; close control has visible focus."
+    },
+    {
+      "path": "fr-390-offline-input-retained.png",
+      "width": 390,
+      "height": 3462,
+      "bytes": 120399,
+      "sha256": "b3e92c903e66d296bd0cf59961de3dd5a3cc99a87da67befe054c0496928f575",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Entered objective is present. Unavailable and unconfirmed messages agree; retry is offered without a saved acknowledgement."
+    },
+    {
+      "path": "fr-390-late-ack-newer-input.png",
+      "width": 390,
+      "height": 3177,
+      "bytes": 111225,
+      "sha256": "a042b6129f95e0693f20dde8ae91f3b0a894ea5c0c7f670c0a23576f74089b32",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Newer objective remains visible and the form explicitly says changes are not saved, despite the prior server revision acknowledgement."
+    },
+    {
+      "path": "fr-390-conflict-comparison.png",
+      "width": 390,
+      "height": 4699,
+      "bytes": 179749,
+      "sha256": "d39d69b0a23a04eb0e0576ddf63adfdf8b8fbe0f450942590fc5c17a5b3b81b2",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "The local and server productions are distinguished, comparison text is readable and rebase/reload actions fit and wrap."
+    },
+    {
+      "path": "fr-390-real-session-expired.png",
+      "width": 390,
+      "height": 3474,
+      "bytes": 127271,
+      "sha256": "443e91654b2e9d11eff0a7b776d133271ccc0a7f55ca3418f164032b95a1ea94",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "Session expiry is explicit; retained fields, inactive saving, copy and reconnect choices remain readable."
+    },
+    {
+      "path": "fr-390-other-owner-no-private-content.png",
+      "width": 390,
+      "height": 844,
+      "bytes": 24735,
+      "sha256": "b682d19058a8c0e6242d3b3bf54492e773d5acc4a7526ea893aed7c16def3001",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "A generic resource-not-found view appears, with catalogue return and no private project title or production."
+    },
+    {
+      "path": "fr-390-editorial-html-literal.png",
+      "width": 390,
+      "height": 1416,
+      "bytes": 52272,
+      "sha256": "9ef3e477c92ee49b5a76914256379380a61ed9873ae366cc873619fcaae026e9",
+      "viewed": true,
+      "requestedDetail": "original",
+      "observation": "The HTML-shaped fixture is displayed as literal text, not an image; missing English translation is stated explicitly."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "minor",
+      "state": "Acknowledged; separate minimal fix and targeted post-fix workshop checks planned by root",
+      "description": "Project back and help links are visually adjacent without spacing in the workshop captures. No product change was made by this reviewer."
+    }
+  ],
+  "limits": [
+    "Two long CMS PNGs are390x6441 originals; the image transport downsampled them to363x6000 despite the original-detail request. Text and modal controls remained readable.",
+    "Scrolled full-page captures show a floating skip link and fixed modal layers within the long document. These recordings are not used to claim normal viewport placement; keyboard focus and modal containment have separate real assertions.",
+    "This review covers only the eight listed behavioural captures. The24 performance/reflow captures are reviewed independently by the web agent.",
+    "This full nine-test run precedes the separately planned link-spacing correction; its artefact identity and observations are preserved."
+  ]
+}

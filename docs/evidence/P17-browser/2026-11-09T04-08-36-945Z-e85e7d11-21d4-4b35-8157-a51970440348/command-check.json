@@ -1,0 +1,238 @@
+{
+  "phase": "P17",
+  "runId": "2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348",
+  "stage": "first",
+  "command": ".\\scripts\\courses.cmd run verify:quality",
+  "ports": {
+    "web": 3101,
+    "api": 8181
+  },
+  "exitCode": 1,
+  "automaticRetries": 0,
+  "stats": {
+    "startTime": "2026-11-09T04:09:08.756Z",
+    "duration": 82791.41,
+    "expected": 5,
+    "skipped": 0,
+    "unexpected": 4,
+    "flaky": 0
+  },
+  "specs": [
+    {
+      "title": "fr · catalogue : trois chargements froids, cinq largeurs et texte 200 %",
+      "ok": false,
+      "results": [
+        {
+          "status": "failed",
+          "durationMs": 13437
+        }
+      ]
+    },
+    {
+      "title": "fr · atelier : trois chargements froids, cinq largeurs et texte 200 %",
+      "ok": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 7028
+        }
+      ]
+    },
+    {
+      "title": "en · catalogue : trois chargements froids, cinq largeurs et texte 200 %",
+      "ok": false,
+      "results": [
+        {
+          "status": "failed",
+          "durationMs": 12653
+        }
+      ]
+    },
+    {
+      "title": "en · atelier : trois chargements froids, cinq largeurs et texte 200 %",
+      "ok": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 6350
+        }
+      ]
+    },
+    {
+      "title": "01 · clavier CMS, erreur associée et deux dialogues sans mutation implicite",
+      "ok": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 2816
+        }
+      ]
+    },
+    {
+      "title": "02 · hors ligne réel et accusé serveur tardif conservent les retouches",
+      "ok": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 2469
+        }
+      ]
+    },
+    {
+      "title": "03 · conflit PostgreSQL et expiration réelle de session sans perte de saisie",
+      "ok": false,
+      "results": [
+        {
+          "status": "failed",
+          "durationMs": 2742
+        }
+      ]
+    },
+    {
+      "title": "04 · propriété, liens S3, permissions financières et préconditions de compte",
+      "ok": false,
+      "results": [
+        {
+          "status": "failed",
+          "durationMs": 6113
+        }
+      ]
+    },
+    {
+      "title": "05 · texte éditorial échappé, origine et retour contrôlés, iframe réellement bloquée",
+      "ok": true,
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 7712
+        }
+      ]
+    }
+  ],
+  "cleanupConfirmed": true,
+  "artifacts": {
+    "apiJarSha256": "1D8EB1451FD14944E0B38F64DF128FB92E5ED625E822ED4B42AF3E884826197A",
+    "webBuildId": "-8_NdHRGu9oCC9zsHxXSa"
+  },
+  "isolation": {
+    "disposablePostgreSQL": true,
+    "ownedS3": true,
+    "ownedMailpit": true,
+    "stripeEnabled": false,
+    "commerceEnabled": false,
+    "externalStripeRequests": false
+  },
+  "visualReview": "Pending independent opening of the actual PNG files.",
+  "observedFailures": [
+    {
+      "count": 2,
+      "source": "Test locator",
+      "detail": "After a real search the accessible filter button includes the active count, so exact Filters/Filtres did not match."
+    },
+    {
+      "count": 1,
+      "source": "Session-expiry fixture",
+      "detail": "Only EXPIRY_TIME was updated. Spring Session JDBC reconstructs LAST_ACCESS_TIME/MAX_INACTIVE_INTERVAL and MapSession computes expiration from them; the observed identity response remained200."
+    },
+    {
+      "count": 1,
+      "source": "SSR test expectation",
+      "detail": "The protected project loader deliberately uses notFound for another owner: actual SSR404 was correct; the test expected200."
+    }
+  ],
+  "sources": [
+    "https://github.com/spring-projects/spring-session/blob/4.1.1/spring-session-core/src/main/java/org/springframework/session/MapSession.java",
+    "https://github.com/spring-projects/spring-session/blob/4.1.1/spring-session-jdbc/src/main/java/org/springframework/session/jdbc/JdbcIndexedSessionRepository.java",
+    "../../../../apps/web/src/components/projects/server-pages.tsx"
+  ],
+  "performanceReports": [
+    {
+      "file": "en-catalogue-performance.json",
+      "locale": "en",
+      "page": "catalogue",
+      "budgetStatus": "not-set-before-measurements",
+      "matrixCompleted": false,
+      "readinessMs": [
+        390.9400999999998,
+        338.4454000000005,
+        287.60149999999885
+      ],
+      "lcpSnapshotMs": [
+        216,
+        156,
+        148
+      ],
+      "clsSnapshot": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "en-workshop-performance.json",
+      "locale": "en",
+      "page": "workshop",
+      "budgetStatus": "not-set-before-measurements",
+      "matrixCompleted": true,
+      "readinessMs": [
+        458.9332999999997,
+        565.1589999999997,
+        490.9951000000001
+      ],
+      "lcpSnapshotMs": [
+        212,
+        228,
+        220
+      ],
+      "clsSnapshot": [
+        0.01735982060185185,
+        0.01735982060185185,
+        0.01735982060185185
+      ]
+    },
+    {
+      "file": "fr-catalogue-performance.json",
+      "locale": "fr",
+      "page": "catalogue",
+      "budgetStatus": "not-set-before-measurements",
+      "matrixCompleted": false,
+      "readinessMs": [
+        982.0565000000006,
+        300.58389999999963,
+        328.3892999999998
+      ],
+      "lcpSnapshotMs": [
+        616,
+        164,
+        156
+      ],
+      "clsSnapshot": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "fr-workshop-performance.json",
+      "locale": "fr",
+      "page": "workshop",
+      "budgetStatus": "not-set-before-measurements",
+      "matrixCompleted": true,
+      "readinessMs": [
+        602.9715000000006,
+        652.1007,
+        535.2255000000005
+      ],
+      "lcpSnapshotMs": [
+        308,
+        292,
+        244
+      ],
+      "clsSnapshot": [
+        0.016717581018518515,
+        0.016717581018518515,
+        0.016717581018518515
+      ]
+    }
+  ]
+}

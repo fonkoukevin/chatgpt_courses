@@ -1,0 +1,63 @@
+{
+  "phase": "P17",
+  "source": "Real Chromium / Spring / isolated PostgreSQL and S3",
+  "checks": {
+    "01": {
+      "keyboardOpen": true,
+      "invalidFocusAndDescription": true,
+      "nestedFocusContained": true,
+      "escapeReturnsFocus": true,
+      "proposalRetained": true,
+      "serverRevisionUnchanged": true,
+      "editorSessionAuthenticated": true
+    },
+    "02": {
+      "actualBrowserOffline": true,
+      "serverUnchangedOfflineAndOnReconnect": true,
+      "explicitSaveRequired": true,
+      "serverCommittedBeforeHeldResponse": true,
+      "newerInputStillModified": true,
+      "privateStorageAbsent": true
+    },
+    "03": {
+      "concurrentServerRevision": true,
+      "ifMatchRefusal": 412,
+      "explicitRebaseNoWrite": true,
+      "persistedSessionExpiry": true,
+      "actualMeStatus": 401,
+      "mutationAfterExpiryStatus": 403,
+      "localInputRetained": true,
+      "noNewServerRevision": true
+    },
+    "04": {
+      "actualS3UploadReady": true,
+      "ownerSsrStatus": 200,
+      "ownerMarkerPresentForOwner": true,
+      "otherOwnerProjectAndNewLinkStatus": 404,
+      "privateSsrNoStoreAndNoindex": true,
+      "ownerMarkerAbsentForOtherAccount": true,
+      "editorCmsStatus": 200,
+      "editorFinanceStatus": 403,
+      "missingCsrf": 403,
+      "missingAccountContext": 428,
+      "changedAccountContext": 409,
+      "serverUnchanged": true,
+      "localCookieHttpOnlySameSiteLax": true
+    },
+    "05": {
+      "publishedLiteralHtmlEscaped": true,
+      "javascriptUrlRejected": 400,
+      "forgedUnsafeOriginRejected": 403,
+      "externalReturnToRejected": true,
+      "actualIframeResponse": 200,
+      "chromiumFramePolicyBlocked": true,
+      "cspFrameObjectBaseAndXfo": true,
+      "permissionsPolicy": true
+    }
+  },
+  "limits": [
+    "Local HTTP cookie Secure=false; production cookie policy is a separate configuration check.",
+    "No paid entitlement is manufactured; P12/P15 historical access incidents remain tracked separately.",
+    "Keyboard samples and selected security scenarios do not constitute a WCAG certification or penetration test."
+  ]
+}

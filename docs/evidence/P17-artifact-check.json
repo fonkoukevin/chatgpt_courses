@@ -1,0 +1,18 @@
+{
+  "verifiedAt": "2026-11-09T04:23:21.536Z",
+  "jarSha256": "1d8eb1451fd14944e0b38f64df128fb92e5ed625e822ed4b42af3e884826197a",
+  "jarSizeBytes": 94637301,
+  "migrationCount": 18,
+  "lastMigration": "V018__localized_slug_reservations_and_history.sql",
+  "sourceAndBuiltMigrationsMatch": true,
+  "applicationFilesChecked": 773,
+  "knownPrivateValuesAbsent": true,
+  "privateEntriesAbsent": true,
+  "secretsPrinted": false,
+  "finalBrowserCopy": {
+    "runId": "2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3",
+    "sha256": "1d8eb1451fd14944e0b38f64df128fb92e5ed625e822ed4b42af3e884826197a"
+  },
+  "finalBrowserCopyMatches": true,
+  "finalBuildId": "gZWlPEzIFLlqAGtBo6GCX"
+}

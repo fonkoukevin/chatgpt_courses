@@ -1,0 +1,11 @@
+{
+  "verifiedAt": "2026-11-09T03:54:45.126Z",
+  "paths": 153,
+  "schemas": 276,
+  "changedOperations": [
+    "login",
+    "register"
+  ],
+  "change": "Existing429 responses specify actual cadence and Retry-After; no new route or DTO",
+  "otherOperationsAndComponentsPreserved": true
+}

@@ -84,6 +84,8 @@ Après inscription, la connexion normale réutilise les filtres Spring et la des
 
 Codes P04 : 400 `VALIDATION_FAILED`/`INVALID_REQUEST`/`INVALID_RESET_TOKEN`, 409 `EMAIL_ALREADY_REGISTERED`, 401 `BAD_CREDENTIALS`/`AUTHENTICATION_REQUIRED`/`ACCOUNT_UNAVAILABLE`, 403 `CSRF_INVALID`/`ACCESS_DENIED`, et les codes de révision ci-dessus. Une indisponibilité de vérification de session reste un échec fermé, avec réponse contrôlée 503. Le quota neutre de récupération n’utilise pas le code 429 préparé pour d’autres limitations.
 
+P17 complète la cadence de login et inscription, validée localement : vingt soumissions de login par fenêtre de cinq minutes et cinq inscriptions par quinze minutes, par session Spring ayant passé CSRF. Le compteur atomique est committé avant authentification/hash et conserve les échecs. Son dépassement répond429 `RATE_LIMITED`, `Retry-After` entier positif et `private, no-store` ; l’interface connaît déjà ce code et le proxy relaie cet en-tête. Aucun verrou permanent de compte ou quota email n’est ajouté. Une nouvelle session est indépendante : cette limite locale n’est pas une protection globale contre les robots ; les contrôles du proxy de livraison restent P20. Le quota neutre de récupération202 et les quotas d’uploads restent distincts.
+
 ## Éditorial — validé localement P05
 
 Ces routes existent dans Spring, OpenAPI et le client généré. Les sept tests HTTP réels P05, huit tests de services PostgreSQL et cinq scénarios navigateur passent ; le global comporte 52 tests Java réussis. Les résultats et limites sont dans [preuve P05](evidence/P05.md). Toutes les routes suivantes portent le préfixe `/api/v1`.

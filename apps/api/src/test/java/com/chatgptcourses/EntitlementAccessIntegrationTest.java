@@ -60,15 +60,20 @@ class EntitlementAccessIntegrationTest {
         assertThat(rights.covers(owner.id(),fixture.activity().resourceId(),fixture.activity().versionId(),"fr")).isTrue();
         assertThat(rights.covers(owner.id(),fixture.activity().resourceId(),fixture.activity().versionId(),"en")).isFalse();
         assertThat(rights.covers(other.id(),fixture.activity().resourceId(),fixture.activity().versionId(),"fr")).isFalse();
+        assertThat(rights.coveredVersions(owner.id(),"fr").contains(fixture.activity().versionId())).isTrue();
+        assertThat(rights.coveredVersions(owner.id(),"en").contains(fixture.activity().versionId())).isFalse();
+        assertThat(rights.coveredVersions(other.id(),"fr").contains(fixture.activity().versionId())).isFalse();
         UUID second=grant(owner.id(),fixture.course(),"[\"fr\",\"en\"]","PINNED","clock_timestamp()-interval '1 minute'","clock_timestamp()+interval '1 day'",null);
         revoke(first);assertThat(rights.covers(owner.id(),fixture.activity().resourceId(),fixture.activity().versionId(),"fr")).isTrue();
         revoke(second);assertThat(rights.covers(owner.id(),fixture.activity().resourceId(),fixture.activity().versionId(),"fr")).isFalse();
+        assertThat(rights.coveredVersions(owner.id(),"fr").contains(fixture.activity().versionId())).isFalse();
         grant(owner.id(),fixture.course(),"[\"fr\"]","PINNED","clock_timestamp()-interval '2 days'","clock_timestamp()-interval '1 day'",null);
         grant(owner.id(),fixture.course(),"[\"fr\"]","PINNED","clock_timestamp()+interval '1 day'","clock_timestamp()+interval '2 days'",null);
         assertThat(rights.covers(owner.id(),fixture.course().resourceId(),fixture.course().versionId(),"fr")).isFalse();
         var production=new EntitlementAccess(jdbc,new RuntimeProperties("production",URI.create("https://courses.invalid"),true));
         grant(owner.id(),fixture.course(),"[\"fr\",\"en\"]","PINNED","clock_timestamp()-interval '1 minute'",null,null);
         assertThat(production.covers(owner.id(),fixture.course().resourceId(),fixture.course().versionId(),"fr")).isFalse();
+        assertThat(production.coveredVersions(owner.id(),"fr").contains(fixture.course().versionId())).isFalse();
         assertThat(jdbc.queryForObject("SELECT count(*) FROM access_grants WHERE owner_id=?",Integer.class,owner.id())).isEqualTo(5);
     }
 
@@ -79,11 +84,14 @@ class EntitlementAccessIntegrationTest {
         var draft=editorial.newVersion(editor.id(),current.id(),tag(current),new NewVersion("Another task","Additional evidence","Another teaching version","Explicit technical fixture",current.document(),List.of(fixture.module().versionId()),"New pedagogical version"));
         var next=publish(editor.id(),draft);
         assertThat(rights.covers(owner.id(),next.resourceId(),next.versionId(),"fr")).isFalse();
+        assertThat(rights.coveredVersions(owner.id(),"fr").contains(next.versionId())).isFalse();
         grant(owner.id(),fixture.course(),"[\"fr\"]","UPDATES_DURING_PERIOD","clock_timestamp()-interval '1 minute'",null,"clock_timestamp()+interval '1 day'");
         assertThat(rights.covers(owner.id(),next.resourceId(),next.versionId(),"fr")).isTrue();
+        assertThat(rights.coveredVersions(owner.id(),"fr").contains(next.versionId())).isTrue();
         assertThat(rights.covers(owner.id(),fixture.activity().resourceId(),fixture.activity().versionId(),"fr")).isTrue();
         var module=editorial.get(editor.id(),fixture.module().id());editorial.archive(editor.id(),module.id(),tag(module),new ArchiveContent("Withdraw a path, preserve grants and work"));
         assertThat(rights.covers(owner.id(),fixture.activity().resourceId(),fixture.activity().versionId(),"fr")).isFalse();
+        assertThat(rights.coveredVersions(owner.id(),"fr").contains(fixture.activity().versionId())).isFalse();
         assertThat(members.detail(owner.id(),fixture.activity().resourceId(),fixture.activity().versionId(),"fr").document()).isNull();
     }
 
@@ -130,14 +138,18 @@ class EntitlementAccessIntegrationTest {
             tasks.add(()->{
                 start.await(10,TimeUnit.SECONDS);
                 var member=get(session,memberPath+"?locale="+locale);
+                if(member.statusCode()!=200)captureFreshFailure(member,session,owner.id(),fixture,locale,"member");
                 assertThat(member.statusCode()).as("Fresh-origin member HTTP status").isEqualTo(200);
                 var memberJson=mapper.readTree(member.body());
+                if(!memberJson.path("document").isObject())captureFreshFailure(member,session,owner.id(),fixture,locale,"member-body");
                 assertThat(memberJson.path("document").isObject()).isTrue();
                 assertThat(member.body().contains("ONLY_MEMBER_BODY")).isTrue();
                 var activity=get(session,"/api/v1/me/enrollments/"+enrollment.summary().id()+"/activities/"+fixture.activity().resourceId()
                     +"?activityVersionId="+fixture.activity().versionId()+"&locale="+locale);
+                if(activity.statusCode()!=200)captureFreshFailure(activity,session,owner.id(),fixture,locale,"activity");
                 assertThat(activity.statusCode()).as("Fresh-origin learning HTTP status").isEqualTo(200);
                 var activityJson=mapper.readTree(activity.body());
+                if(!"ACTIVE".equals(activityJson.path("accessStatus").asText())||!"PUBLISHED".equals(activityJson.path("availability").asText())||!activityJson.path("resource").path("document").isObject())captureFreshFailure(activity,session,owner.id(),fixture,locale,"activity-state");
                 assertThat(activityJson.path("accessStatus").asText()).isEqualTo("ACTIVE");
                 assertThat(activityJson.path("availability").asText()).isEqualTo("PUBLISHED");
                 assertThat(activityJson.path("resource").path("locale").asText()).isEqualTo(locale);
@@ -148,6 +160,40 @@ class EntitlementAccessIntegrationTest {
         try(var executor=Executors.newVirtualThreadPerTaskExecutor()){
             for(var result:executor.invokeAll(tasks,30,TimeUnit.SECONDS))result.get();
         }
+    }
+
+    private void captureFreshFailure(HttpResponse<String> response,HttpClient session,UUID owner,Fixture fixture,String locale,String operation)throws Exception{
+        // Invoked only after the single unexpected read. Never retries member/activity/covers or changes a date.
+        var report=new LinkedHashMap<String,Object>();report.put("operation",operation);report.put("locale",locale);report.put("httpStatus",response.statusCode());report.put("capturedAfterUnexpectedRead",true);
+        try{
+            var problem=mapper.readTree(response.body());String code=problem.path("code").asText();if(code.matches("[A-Z0-9_]{1,80}"))report.put("problemCode",code);
+            var me=get(session,"/api/v1/auth/me");report.put("sessionHttpStatus",me.statusCode());
+            var principal=mapper.readTree(me.body());boolean permission=false;for(var p:principal.path("permissions"))if("learning.read".equals(p.asText()))permission=true;report.put("sessionLearningRead",permission);
+            report.put("ownerActive",jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM user_accounts WHERE id=? AND status='ACTIVE')",Boolean.class,owner));
+            var nodes=new ArrayList<Map<String,Object>>();
+            for(var node:List.of(fixture.course(),fixture.module(),fixture.activity()))nodes.add(jdbc.queryForMap("""
+                SELECT r.kind,r.archived_at IS NULL AS unarchived,t.id IS NOT NULL AS locale_exists,
+                  coalesce(t.editorial_state NOT IN('ARCHIVED','STALE'),false) AS translation_available,
+                  e.id IS NOT NULL AND e.document_json IS NOT NULL AS published_document,
+                  t.id IS NOT NULL AND(t.source_translation_id IS NULL OR coalesce(t.published_source_revision_id=s.current_revision_id AND s.editorial_state NOT IN('ARCHIVED','STALE'),false)) AS source_fresh
+                FROM pedagogical_versions v JOIN learning_resources r ON r.id=v.resource_id
+                LEFT JOIN content_translations t ON t.pedagogical_version_id=v.id AND t.locale=?
+                LEFT JOIN editorial_revisions e ON e.id=t.published_revision_id LEFT JOIN content_translations s ON s.id=t.source_translation_id
+                WHERE v.id=? AND v.resource_id=?
+                """,locale,node.versionId(),node.resourceId()));
+            report.put("exactPinnedNodes",nodes);
+            report.put("origins",jdbc.queryForList("""
+                WITH observed AS MATERIALIZED(SELECT clock_timestamp() AS at)
+                SELECT g.revoked_at IS NULL AS not_revoked,g.starts_at<=observed.at AS started,
+                  g.expires_at IS NULL OR g.expires_at>observed.at AS unexpired,g.locales @> ?::jsonb AS locale_included,
+                  g.version_id=? AS exact_version,g.origin_type='MANUAL_TEST' AS expected_manual_test_origin,
+                  round(extract(epoch FROM(g.starts_at-observed.at))*1000000)::bigint AS start_delta_microseconds,
+                  round(extract(epoch FROM observed.at)*1000000)::bigint AS observed_database_microseconds,
+                  round(extract(epoch FROM g.starts_at)*1000000)::bigint AS starts_at_microseconds
+                FROM access_grants g CROSS JOIN observed WHERE g.owner_id=? AND g.resource_id=? ORDER BY g.created_at
+                ""","[\""+locale+"\"]",fixture.course().versionId(),owner,fixture.course().resourceId()));
+        }catch(Exception unavailable){report.put("diagnosticAvailable",false);}
+        try{var directory=java.nio.file.Path.of("../../.runtime").toAbsolutePath().normalize();java.nio.file.Files.createDirectories(directory);var path=java.nio.file.Files.createTempFile(directory,"p17-fresh-access-refusal-",".json");java.nio.file.Files.write(path,mapper.writeValueAsBytes(report));}catch(java.io.IOException unavailable){/* The original HTTP/access assertion still fails; a diagnostic must never replace it. */}
     }
 
     @Test void protectedLearningAndProjectsWorkAfterARealGrantAndPersonalWorkSurvivesRevocation(){

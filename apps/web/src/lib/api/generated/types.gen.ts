@@ -3095,7 +3095,7 @@ export type RegisterErrors = {
      */
     409: Problem;
     /**
-     * Erreur explicite ; aucune donnée de remplacement.
+     * Cadence de cette session CSRF dépassée, sans verrouillage permanent du compte. RATE_LIMITED ; aucune mutation rejouée automatiquement.
      */
     429: Problem;
     /**
@@ -3138,7 +3138,7 @@ export type LoginErrors = {
      */
     403: Problem;
     /**
-     * Erreur explicite ; aucune donnée de remplacement.
+     * Cadence de cette session CSRF dépassée, sans verrouillage permanent du compte. RATE_LIMITED ; aucune mutation rejouée automatiquement.
      */
     429: Problem;
     /**

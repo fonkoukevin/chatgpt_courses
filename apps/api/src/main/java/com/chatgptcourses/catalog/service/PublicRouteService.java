@@ -7,6 +7,8 @@ import com.chatgptcourses.shared.http.ApiException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -39,11 +41,11 @@ public class PublicRouteService {
             "(SELECT max(p.created_at) FROM editorial_events p WHERE p.translation_id=t.id AND p.revision_id=e.id AND p.event_type='PUBLISH') AS published_at "+PUBLICATIONS+
             " ORDER BY r.kind,s.slug,r.id LIMIT ? OFFSET ?",(rs,n)->{
                 UUID resource=rs.getObject("resource_id",UUID.class),version=rs.getObject("version_id",UUID.class);
-                var languages=publishedLanguages(version);
                 Timestamp published=rs.getTimestamp("published_at");
-                return new PublicPublication(resource,ResourceKind.valueOf(rs.getString("kind")),version,rs.getInt("version_number"),rs.getObject("revision_id",UUID.class),locale,rs.getString("slug"),rs.getString("title"),rs.getString("summary"),published==null?null:published.toInstant(),languages);
+                return new PublicPublication(resource,ResourceKind.valueOf(rs.getString("kind")),version,rs.getInt("version_number"),rs.getObject("revision_id",UUID.class),locale,rs.getString("slug"),rs.getString("title"),rs.getString("summary"),published==null?null:published.toInstant(),List.of());
             },locale,size,(long)page*size);
-        return new PublicPublicationPage(rows,page,size,total);
+        var languages=publishedLanguages(rows.stream().map(PublicPublication::versionId).toList());
+        return new PublicPublicationPage(rows.stream().map(p->new PublicPublication(p.resourceId(),p.kind(),p.versionId(),p.versionNumber(),p.revisionId(),p.locale(),p.slug(),p.title(),p.summary(),p.publishedAt(),languages.getOrDefault(p.versionId(),List.of()))).toList(),page,size,total);
     }
     public PublicActivityContext activityContext(UUID course,UUID courseVersion,UUID activity,UUID activityVersion,String locale){
         locale(locale);check(course!=null&&courseVersion!=null&&activity!=null&&activityVersion!=null);
@@ -67,16 +69,22 @@ public class PublicRouteService {
         var selected=languages.stream().filter(l->l.locale().equals(locale)).findFirst().orElseThrow();
         return new PublicActivityContext(course,courseVersion,activity,activityVersion,locale,selected.availability(),selected.courseSlug(),selected.activitySlug(),List.copyOf(languages));
     }
-    private List<PublishedLanguage> publishedLanguages(UUID version){
-        return jdbc.query("""
-            SELECT t.locale,s.slug FROM content_translations t JOIN pedagogical_versions v ON v.id=t.pedagogical_version_id
+    private Map<UUID,List<PublishedLanguage>> publishedLanguages(List<UUID> versions){
+        if(versions.isEmpty())return Map.of();
+        String slots=String.join(",",versions.stream().map(v->"?").toList());
+        var rows=jdbc.query("""
+            SELECT t.pedagogical_version_id,t.locale,s.slug FROM content_translations t JOIN pedagogical_versions v ON v.id=t.pedagogical_version_id
             JOIN learning_resources r ON r.id=v.resource_id AND r.archived_at IS NULL
             JOIN editorial_revisions e ON e.id=t.published_revision_id AND e.document_json IS NOT NULL
             JOIN resource_slugs s ON s.resource_id=r.id AND s.locale=t.locale
             LEFT JOIN content_translations source ON source.id=t.source_translation_id
-            WHERE t.pedagogical_version_id=? AND t.editorial_state NOT IN('ARCHIVED','STALE')
+            WHERE t.pedagogical_version_id IN(
+            """+slots+") AND t.editorial_state NOT IN('ARCHIVED','STALE') "+"""
               AND(t.source_translation_id IS NULL OR(t.published_source_revision_id=source.current_revision_id AND source.editorial_state NOT IN('ARCHIVED','STALE'))) ORDER BY t.locale
-            """,(r,n)->new PublishedLanguage(r.getString(1),r.getString(2)),version);
+            """,(r,n)->Map.entry(r.getObject(1,UUID.class),new PublishedLanguage(r.getString(2),r.getString(3))),versions.toArray());
+        var result=new HashMap<UUID,List<PublishedLanguage>>();
+        for(var row:rows)result.computeIfAbsent(row.getKey(),ignored->new ArrayList<>()).add(row.getValue());
+        result.replaceAll((version,languages)->List.copyOf(languages));return result;
     }
     private String availability(UUID resource,UUID version,String locale){return publication(resource,version,locale).state();}
     private Publication publication(UUID resource,UUID version,String locale){

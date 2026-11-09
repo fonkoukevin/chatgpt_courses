@@ -57,10 +57,11 @@ public class LearningService {
     public LearningDashboard dashboard(UUID actor,String locale) {
         require(actor,"learning.read");locale(locale);
         var rows=jdbc.query("SELECT * FROM learning_enrollments WHERE owner_id=? ORDER BY last_visited_at DESC NULLS LAST,created_at DESC,id LIMIT 100",(rs,n)->enrollmentRow(rs),actor);
+        var coverage=rows.isEmpty()?Set.<UUID>of():entitlements.coveredVersions(actor,locale);
         var summaries=new ArrayList<EnrollmentSummary>();ResumeTarget resume=null;
         for(var row:rows) {
             var course=catalogue.version(row.courseId(),row.courseVersion(),locale);
-            var items=items(row,course,locale);summaries.add(summary(row,course));
+            var items=items(row,course,locale,coverage);summaries.add(summary(row,course,coverage));
             if(resume==null&&"PUBLISHED".equals(course.availability())) {
                 var available=items.stream().filter(i->"ACTIVE".equals(i.access())).toList();
                 Item selected=available.stream().filter(i->Objects.equals(i.version(),row.lastActivity())).findFirst().orElse(null);
@@ -213,13 +214,13 @@ public class LearningService {
     }
 
     private EnrollmentView view(EnrollmentRow row,String locale) {
-        var course=catalogue.version(row.courseId(),row.courseVersion(),locale);var items=items(row,course,locale);
-        return new EnrollmentView(summary(row,course),course.curriculum(),items.stream().map(i->new EnrolledActivity(i.activity(),i.version(),i.module(),i.moduleVersion(),i.position(),i.title(),i.access(),i.availability(),i.progress())).toList());
+        var course=catalogue.version(row.courseId(),row.courseVersion(),locale);var coverage=entitlements.coveredVersions(row.owner(),locale);var items=items(row,course,locale,coverage);
+        return new EnrollmentView(summary(row,course,coverage),course.curriculum(),items.stream().map(i->new EnrolledActivity(i.activity(),i.version(),i.module(),i.moduleVersion(),i.position(),i.title(),i.access(),i.availability(),i.progress())).toList());
     }
-    private EnrollmentSummary summary(EnrollmentRow row,ResourceDetail course) {
+    private EnrollmentSummary summary(EnrollmentRow row,ResourceDetail course,Set<UUID> coverage) {
         var counts=jdbc.queryForMap("SELECT count(*) FILTER(WHERE p.read_at IS NOT NULL) AS read,count(*) FILTER(WHERE p.completed_at IS NOT NULL) AS completed FROM learning_activity_progress p WHERE enrollment_id=?",row.id());
         int passed=Objects.requireNonNull(jdbc.queryForObject("SELECT count(DISTINCT q.activity_version_id) FROM learning_quiz_attempts q JOIN learning_enrollment_activities i ON i.activity_version_id=q.activity_version_id WHERE i.enrollment_id=? AND q.owner_id=? AND q.passed",Integer.class,row.id(),row.owner()));
-        return new EnrollmentSummary(row.id(),row.courseId(),row.courseVersion(),row.versionNumber(),row.title(),row.locale(),course.slug(),access(course.availability(),course.access(),entitlements.covers(row.owner(),row.courseId(),row.courseVersion(),course.locale())),course.availability(),
+        return new EnrollmentSummary(row.id(),row.courseId(),row.courseVersion(),row.versionNumber(),row.title(),row.locale(),course.slug(),access(course.availability(),course.access(),coverage.contains(row.courseVersion())),course.availability(),
             new ProgressTotals(row.count(),((Number)counts.get("read")).intValue(),((Number)counts.get("completed")).intValue(),passed,"NOT_AVAILABLE"),row.created(),row.lastVisited());
     }
     private Item accessibleItem(UUID actor,UUID context,EnrollmentRow row,UUID activityId,UUID version,String locale) {
@@ -232,6 +233,9 @@ public class LearningService {
         if(rows.isEmpty())throw notFound();return rows.getFirst();
     }
     private List<Item> items(EnrollmentRow row,ResourceDetail course,String locale) {
+        return items(row,course,locale,entitlements.coveredVersions(row.owner(),locale));
+    }
+    private List<Item> items(EnrollmentRow row,ResourceDetail course,String locale,Set<UUID> coverage) {
         String query="""
             SELECT i.*,p.id AS progress_id,p.revision AS progress_revision,p.read_at,p.completed_at,s.slug,e.title,
               e.document_json->>'access' AS activity_access,
@@ -249,7 +253,7 @@ public class LearningService {
             String availability=!"PUBLISHED".equals(course.availability())?course.availability():!"PUBLISHED".equals(rs.getString("module_status"))?rs.getString("module_status"):rs.getString("activity_status");
             String currentTitle=rs.getString("title");
             return new Item(uuid(rs,"activity_id"),uuid(rs,"activity_version_id"),uuid(rs,"module_id"),uuid(rs,"module_version_id"),rs.getInt("position"),
-                currentTitle==null?rs.getString("activity_title"):currentTitle,rs.getString("slug"),availability,access(availability,rs.getString("activity_access"),entitlements.covers(row.owner(),uuid(rs,"activity_id"),uuid(rs,"activity_version_id"),locale)),
+                currentTitle==null?rs.getString("activity_title"):currentTitle,rs.getString("slug"),availability,access(availability,rs.getString("activity_access"),coverage.contains(uuid(rs,"activity_version_id"))),
                 new ActivityProgressView(uuid(rs,"progress_id"),row.id(),uuid(rs,"activity_id"),uuid(rs,"activity_version_id"),rs.getLong("progress_revision"),instant(rs,"read_at"),instant(rs,"completed_at")));
         },locale,locale,locale,row.id());
     }

@@ -28,6 +28,7 @@ Depuis P06, ces contrôles techniques ouvrent `/{locale}/dev/foundations` ; l’
 | P15 exploitation | `run verify:operations` | PostgreSQL/S3/Mailpit propres, comptes et données synthétiques, transport Stripe contrôlé ; aucun appel Stripe externe |
 | P16 langues | `run verify:bilingual` | PostgreSQL/S3/Mailpit propres, publications et historiques FR/EN, clips CC0 locaux explicitement techniques |
 | P16 SEO | `run verify:seo` | Même build Next servi avec configurations production/recette sur3111/3112 en boucle locale ; API et données TEST, aucune publication distante |
+| P17 qualité | `run verify:quality` | Neuf scénarios sur PostgreSQL/S3/Mailpit isolés : robustesse, frontières, clavier et mesures catalogue/atelier FR/EN ; cinq largeurs et texte200%, budgets fixes dans `docs/performance-budgets.json` |
 
 P09 a réussi ses huit scénarios finaux ; P10 ses douze scénarios complets. Les résultats et limites restent dans [P09](../../docs/evidence/P09.md) et [P10](../../docs/evidence/P10.md), sans validation de stockage, de courrier ou de fournisseur vidéo en production.
 

@@ -33,7 +33,7 @@ import tools.jackson.databind.ObjectMapper;
 @Configuration(proxyBeanMethods = false)
 class SecurityConfiguration {
     @Bean
-    SecurityFilterChain apiSecurity(HttpSecurity http, ObjectMapper mapper, IdentityService identities,
+    SecurityFilterChain apiSecurity(HttpSecurity http, ObjectMapper mapper, IdentityService identities,com.chatgptcourses.identity.service.IdentityRequestLimits limits,
                                     UserDetailsService users, PasswordEncoder encoder,
                                     SecurityContextRepository contexts) throws Exception {
         var provider = new DaoAuthenticationProvider(users);
@@ -171,6 +171,7 @@ class SecurityConfiguration {
                 .addFilterAfter(new AuthSessionRefreshFilter(identities, contexts, mapper), SecurityContextHolderFilter.class)
                 .addFilterBefore(new LogoutAccountContextFilter(mapper), org.springframework.security.web.authentication.logout.LogoutFilter.class)
                 .addFilterBefore(new LoginRequestFilter(mapper), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new IdentityRequestLimitFilter(limits,mapper), org.springframework.security.web.csrf.CsrfFilter.class)
                 .formLogin(form -> form.loginPage("/api/v1/auth/login").loginProcessingUrl("/api/v1/auth/login")
                         .usernameParameter("email").passwordParameter("password")
                         .successHandler((request, response, authentication) -> {

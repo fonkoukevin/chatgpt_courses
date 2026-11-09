@@ -62,6 +62,7 @@
     "verify:operations": "node scripts/verify-browser.mjs P15",
     "verify:bilingual": "node scripts/verify-browser.mjs P16",
     "verify:seo": "node scripts/verify-browser.mjs P16_SEO",
+    "verify:quality": "node scripts/verify-browser.mjs P17",
     "verify:design": "node scripts/verify-browser.mjs P02",
     "verify:contrast": "node scripts/verify-contrast.mjs",
     "browser:install": "node scripts/install-browser.mjs",

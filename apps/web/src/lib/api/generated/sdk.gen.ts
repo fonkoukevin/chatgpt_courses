@@ -32,6 +32,8 @@ export const getCsrfToken = <ThrowOnError extends boolean = false>(options?: Opt
 
 /**
  * Créer un compte apprenant sans connexion automatique.
+ *
+ *  Cadence locale : cinq soumissions par fenêtre de quinze minutes, par session Spring après contrôle CSRF.
  */
 export const register = <ThrowOnError extends boolean = false>(options: Options<RegisterData, ThrowOnError>): RequestResult<RegisterResponses, RegisterErrors, ThrowOnError> => (options.client ?? client).post<RegisterResponses, RegisterErrors, ThrowOnError>({
     url: '/auth/register',
@@ -44,6 +46,8 @@ export const register = <ThrowOnError extends boolean = false>(options: Options<
 
 /**
  * Ouvrir une session par les filtres Spring Security.
+ *
+ *  Cadence locale : vingt soumissions par fenêtre de cinq minutes, par session Spring après contrôle CSRF.
  */
 export const login = <ThrowOnError extends boolean = false>(options: Options<LoginData, ThrowOnError>): RequestResult<LoginResponses, LoginErrors, ThrowOnError> => (options.client ?? client).post<LoginResponses, LoginErrors, ThrowOnError>({
     ...urlSearchParamsBodySerializer,

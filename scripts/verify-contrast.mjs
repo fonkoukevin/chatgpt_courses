@@ -2,6 +2,10 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { root } from './lib/runtime.mjs';
 
+const phase = process.argv[2] ?? 'P02';
+if (!/^P\d{2}$/.test(phase) || process.argv.length > 3) throw new Error('Phase attendue : P00 à P99.');
+const evidenceFile = join(root, `docs/evidence/${phase}-contrast.json`);
+
 const source = readFileSync(join(root, 'references/design-tokens.css'), 'utf8');
 const tokens = Object.fromEntries([...source.matchAll(/--([a-z-]+):\s*(#[0-9a-f]{6});/gi)].map((match) => [match[1], match[2]]));
 function luminance(hex) {
@@ -28,9 +32,9 @@ const measurements = pairs.map(([foreground, background, minimum]) => {
   const ratio = (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
   return { foreground, background, colors: [tokens[foreground], tokens[background]], ratio: Number(ratio.toFixed(3)), minimum, passed: ratio >= minimum };
 });
-writeFileSync(join(root, 'docs/evidence/P02-contrast.json'), JSON.stringify({
+writeFileSync(evidenceFile, JSON.stringify({
   measuredAt: new Date().toISOString(), method: 'WCAG 2.2 relative luminance, sRGB, opaque colors',
   reference: 'https://www.w3.org/TR/WCAG22/#contrast-minimum', measurements,
 }, null, 2) + '\n');
 for (const result of measurements) console.log(`${result.passed ? 'PASS' : 'FAIL'} ${result.foreground}/${result.background}: ${result.ratio}:1 (minimum ${result.minimum}:1)`);
-if (measurements.some((result) => !result.passed)) throw new Error('Contraste insuffisant : voir docs/evidence/P02-contrast.json.');
+if (measurements.some((result) => !result.passed)) throw new Error(`Contraste insuffisant : voir docs/evidence/${phase}-contrast.json.`);

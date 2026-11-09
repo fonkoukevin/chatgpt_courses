@@ -13,9 +13,7 @@ public final class EntitlementAccess {
     private final boolean testOrigins;
     public EntitlementAccess(JdbcTemplate jdbc,RuntimeProperties runtime){this.jdbc=jdbc;testOrigins=Set.of("local","test").contains(runtime.environment());}
 
-    public boolean covers(UUID owner,UUID resource,UUID version,String locale){
-        if(owner==null||resource==null||version==null||!("fr".equals(locale)||"en".equals(locale)))return false;
-        return Boolean.TRUE.equals(jdbc.queryForObject("""
+    private static final String COVERED="""
             WITH RECURSIVE covered(id,resource_id,depth) AS (
               SELECT DISTINCT v.id,v.resource_id,0 FROM access_grants g
               JOIN user_accounts u ON u.id=g.owner_id AND u.status='ACTIVE'
@@ -43,7 +41,16 @@ public final class EntitlementAccess {
               WHERE p.depth<2 AND t.editorial_state NOT IN('ARCHIVED','STALE')
                 AND(t.source_translation_id IS NULL OR(t.published_source_revision_id=source.current_revision_id
                   AND source.editorial_state NOT IN('ARCHIVED','STALE')))
-            ) SELECT EXISTS(SELECT 1 FROM covered WHERE id=? AND resource_id=?)
-            """,Boolean.class,locale,owner,"[\""+locale+"\"]",testOrigins,locale,version,resource));
+            )
+            """;
+    public boolean covers(UUID owner,UUID resource,UUID version,String locale){
+        if(!valid(owner,locale)||resource==null||version==null)return false;
+        return Boolean.TRUE.equals(jdbc.queryForObject(COVERED+" SELECT EXISTS(SELECT 1 FROM covered WHERE id=? AND resource_id=?)",Boolean.class,locale,owner,"[\""+locale+"\"]",testOrigins,locale,version,resource));
     }
+    /** A request-local projection of the same policy, never a shared entitlement cache. */
+    public Set<UUID> coveredVersions(UUID owner,String locale){
+        if(!valid(owner,locale))return Set.of();
+        return Set.copyOf(jdbc.query(COVERED+" SELECT DISTINCT id FROM covered",(rs,n)->rs.getObject(1,UUID.class),locale,owner,"[\""+locale+"\"]",testOrigins,locale));
+    }
+    private static boolean valid(UUID owner,String locale){return owner!=null&&("fr".equals(locale)||"en".equals(locale));}
 }

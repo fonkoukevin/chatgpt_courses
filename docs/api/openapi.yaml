@@ -131,9 +131,24 @@ paths:
         '409':
           $ref: '#/components/responses/ProblemResponse'
         '429':
-          $ref: '#/components/responses/ProblemResponse'
+          description: >-
+            Cadence de cette session CSRF dépassée, sans verrouillage permanent du compte.
+            RATE_LIMITED ; aucune mutation rejouée automatiquement.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            Retry-After:
+              description: Nombre entier de secondes avant la fin de cette fenêtre.
+              schema:
+                type: integer
+                minimum: 1
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         default:
           $ref: '#/components/responses/ProblemResponse'
+      description: ' Cadence locale : cinq soumissions par fenêtre de quinze minutes, par session Spring après contrôle CSRF.'
   /auth/login:
     post:
       operationId: login
@@ -164,9 +179,24 @@ paths:
         '403':
           $ref: '#/components/responses/ProblemResponse'
         '429':
-          $ref: '#/components/responses/ProblemResponse'
+          description: >-
+            Cadence de cette session CSRF dépassée, sans verrouillage permanent du compte.
+            RATE_LIMITED ; aucune mutation rejouée automatiquement.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            Retry-After:
+              description: Nombre entier de secondes avant la fin de cette fenêtre.
+              schema:
+                type: integer
+                minimum: 1
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         default:
           $ref: '#/components/responses/ProblemResponse'
+      description: ' Cadence locale : vingt soumissions par fenêtre de cinq minutes, par session Spring après contrôle CSRF.'
   /auth/logout:
     post:
       operationId: logout

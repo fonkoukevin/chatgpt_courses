@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "phase": "P17",
+  "chosenAfterMeasurements": true,
+  "sourceBaselineRun": "2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348",
+  "sourceBaselineDirectory": "docs/evidence/P17-browser/2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348",
+  "scope": {
+    "pages": ["catalogue", "workshop"],
+    "interfaceLocales": ["fr", "en"],
+    "samplesPerPageAndLocale": 3,
+    "viewport": { "width": 1440, "height": 1000 },
+    "network": "Unthrottled HTTP loopback; no remote service or mobile network emulation.",
+    "cpuThrottleRate": 1,
+    "browserCache": "Cleared and disabled before every navigation; fresh browser context, service workers blocked and bypassed.",
+    "serverState": "Running production Next build and Spring API; published fixture preparation warms server/database. This is not a cold server or cold machine benchmark.",
+    "baselineMachine": {
+      "platform": "win32",
+      "release": "10.0.26200",
+      "architecture": "x64",
+      "cpuModel": "AMD Ryzen 7 5700U with Radeon Graphics",
+      "logicalProcessors": 16,
+      "totalMemoryBytes": 16455815168,
+      "browserVersion": "158.0.8127.18",
+      "nodeVersion": "v24.22.2"
+    }
+  },
+  "limits": {
+    "javascriptEncodedBytes": 393216,
+    "javascriptDecodedBytes": 1310720,
+    "stylesheetDecodedBytes": 49152,
+    "readyMedianMs": 1500,
+    "readyMaxMs": 2500,
+    "largestContentfulPaintSnapshotMaxMs": 1500,
+    "layoutShiftSnapshotMax": 0.05
+  },
+  "baselineObservedMaxima": {
+    "javascriptEncodedBytes": 323787,
+    "javascriptDecodedBytes": 1069432,
+    "stylesheetDecodedBytes": 40547,
+    "pageMedianReadyMs": 602.9715,
+    "readyMs": 982.0565,
+    "largestContentfulPaintSnapshotMs": 616,
+    "layoutShiftSnapshot": 0.01735982060185185
+  },
+  "limitsAndPolicy": [
+    "All 12 baseline cold-browser navigations are retained, including the slower first sample. Later catalogue keyboard assertions failed on a test locator, independently of these completed measurements.",
+    "Encoded/decoded sizes come from ResourceTiming response bodies, summed by resource category at observed UI readiness; transport bytes and headers are recorded separately.",
+    "LCP and layout shift are snapshots at readiness, not final field Core Web Vitals. Three samples do not establish p95, field INP, a mobile-network budget or visitor-wide performance.",
+    "Budgets are fixed reviewable regression guards. Tests compare actual measurements with these values; they never raise limits from a new sample or retry a failure to hide it.",
+    "An exceeded latency limit on a different machine/network/profile must be investigated and the profile explicitly evaluated. Any deliberate budget change requires a documented review; no automatic exemption or increase.",
+    "No private data is cached to meet a budget. No price, teaching media or production traffic is inferred from these disposable fixtures."
+  ]
+}

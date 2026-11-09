@@ -1,0 +1,66 @@
+{
+  "checkedAt": "2026-11-09T18:22:55.943Z",
+  "repository": "fonkoukevin/chatgpt_courses",
+  "prNumber": 1,
+  "headSha": "d4f45fe39c4d92bbd29f8729e2c72581abf3ec75",
+  "runs": [
+    {
+      "id": 42672302692,
+      "event": "pull_request",
+      "attempt": 2,
+      "conclusion": "failure",
+      "jobs": 0,
+      "artifacts": 0,
+      "annotation": "Internal server error",
+      "correlationId": "a1301d5f-b42d-4e5a-a362-202f5f88b96d",
+      "annotationUrl": "https://github.com/fonkoukevin/chatgpt_courses/actions/runs/42672302692/attempts/2",
+      "apiExecuted": false,
+      "e2eExecuted": false
+    },
+    {
+      "id": 42672281748,
+      "event": "push",
+      "attempt": 1,
+      "conclusion": "failure",
+      "jobs": 0,
+      "artifacts": 0,
+      "annotation": "Internal server error",
+      "correlationId": "9e65cc6b-190d-46c9-b94b-789f294f14a4",
+      "annotationUrl": "https://github.com/fonkoukevin/chatgpt_courses/actions/runs/42672281748",
+      "apiExecuted": false,
+      "e2eExecuted": false
+    },
+    {
+      "id": 42672302692,
+      "event": "pull_request",
+      "attempt": 1,
+      "conclusion": "failure",
+      "jobs": 0,
+      "artifacts": 0,
+      "annotation": "Internal server error",
+      "correlationId": "5c646c79-5dfa-4008-bce9-32af3909fb3b",
+      "annotationUrl": "https://github.com/fonkoukevin/chatgpt_courses/actions/runs/42672302692",
+      "apiExecuted": false,
+      "e2eExecuted": false
+    }
+  ],
+  "rootRerunsRequested": 1,
+  "additionalRerunRequested": false,
+  "rawLogsRead": false,
+  "serviceObservation": {
+    "source": "https://www.githubstatus.com/api/v2/summary.json",
+    "actions": "partial_outage",
+    "componentUpdatedAt": "2026-11-09T18:12:37.291Z",
+    "incidentId": "tp8cghg7tlc4",
+    "incidentStatus": "investigating",
+    "incidentStartedAt": "2026-11-09T18:12:37.232Z",
+    "incidentUrl": "https://stspg.io/7yw63xl9ztrv",
+    "checksThisTurn": 1
+  },
+  "billingOrYamlCauseObserved": false,
+  "underlyingCauseConfirmed": false,
+  "protectionsWeakened": false,
+  "merged": false,
+  "registryPublished": false,
+  "applicationDeployed": false
+}

@@ -204,11 +204,11 @@ Le client valide réponse, code HTTP et ETag avant confirmation ; conserve les m
 | `POST /me/enrollments` | `{ courseResourceId, courseVersionId, locale }` → `EnrollmentView` | `learning.write`, CSRF/contexte ; 201 créée, 200 existante |
 | `GET /me/enrollments/{id}?locale=fr` | Programme/version figés et dénominateur | Propriétaire ou 404 |
 | `GET /me/enrollments/{id}/activities/{activityId}?activityVersionId={uuid}&locale=fr` | `LearningActivity` et chaîne d’accès agrégée | Propriétaire, couple activité/version du snapshot ; aucun corrigé initial |
-| `POST /me/enrollments/{id}/visits` | `{ activityId, activityVersionId, locale }` → `VisitView` | Mise à jour de reprise seulement ; activité FREE disponible |
+| `POST /me/enrollments/{id}/visits` | `{ activityId, activityVersionId, locale }` → `VisitView` | Mise à jour de reprise seulement ; activité publiée disponible, FREE ou autorisée par un droit membre courant depuis P12 |
 | `GET /me/activity-progress/{activityId}?enrollmentId={uuid}&activityVersionId={uuid}` | `ActivityProgressView` et ETag individuel | Propriétaire et version exacte |
-| `PUT /me/activity-progress/{activityId}` | `{ enrollmentId, activityVersionId, read, completed, locale }` → progrès et nouvel ETag | Propriétaire, publication FREE, If-Match ; faits déclarés séparés |
+| `PUT /me/activity-progress/{activityId}` | `{ enrollmentId, activityVersionId, read, completed, locale }` → progrès et nouvel ETag | Propriétaire, publication autorisée FREE ou droit membre courant, chaîne/version/langue exactes, If-Match ; faits déclarés séparés |
 | `GET /me/activity-notes/by-activity/{activityId}?activityVersionId={uuid}` | `{ note: ActivityNoteView|null }` | Recherche du propriétaire sans création par GET |
-| `POST /me/activity-notes` | `{ activityId, activityVersionId, locale, text }` → 201 note, Location et ETag | Création sur publication FREE ; doublon 409 `ACTIVITY_NOTE_EXISTS` |
+| `POST /me/activity-notes` | `{ activityId, activityVersionId, locale, text }` → 201 note, Location et ETag | Création sur publication autorisée FREE ou droit membre courant depuis P12 ; doublon 409 `ACTIVITY_NOTE_EXISTS` |
 | `GET /me/activity-notes/{id}` | Note et ETag | Propriétaire, y compris après retrait |
 | `PATCH /me/activity-notes/{id}` | `{ text }` → note et nouvel ETag | Propriétaire et If-Match ; langue/origine immuables |
 | `POST /activities/{activityId}/quiz-attempts` | `{ enrollmentId, activityVersionId, revisionId, locale, submissionId, answers }` → 201 `QuizAttemptView` | Propriétaire, version inscrite, publication exacte et correction serveur |

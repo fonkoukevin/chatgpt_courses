@@ -1,0 +1,6 @@
+{
+  "scenarioId": "P19-01",
+  "filtersPreservedOnReturn": true,
+  "zeroResultDistinctFromActualApiOutage": true,
+  "restoredWithoutSubstituteContent": true
+}

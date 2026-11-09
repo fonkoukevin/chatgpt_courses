@@ -1,0 +1,16 @@
+{
+  "runId": "2026-11-09T05-42-50-414Z-5c92ec39-3cf9-46dd-ad44-243ce1f6f126",
+  "result": "failed",
+  "passed": 1,
+  "failed": 1,
+  "didNotRun": 2,
+  "cleanupConfirmed": true,
+  "privateConsoleLog": ".runtime/p19-p19-2026-11-09T05-42-50-174Z.log",
+  "observed": "The French paid lesson, note, durable quiz and protected file completed. The fixture then followed the English language link and immediately issued an additional page.goto. The first observed member response had HTTP 200, finished=true, requestFailure=NONE, bodyReadError=NO_RESOURCE and no decodable body. A subsequent member response and LearningActivity response were valid HTTP 200 with the expected body and ACTIVE access; visit was HTTP 200. SQL showed one ORDER_LINE and zero MANUAL_TEST grants.",
+  "diagnosticClassification": "A Playwright/CDP body-read failure after the fixture's additional navigation was observed. This is not an observed HTTP access refusal and must not be called ERR_ABORTED. The original run's discarded body-read error remains unknown.",
+  "fixtureCorrection": "Attach the paid-content observer before the language-link action; await that single navigation's rendered lesson and complete responses. Do not perform a second goto. Keep all status, contract, identity, access and body assertions; null/NO_RESOURCE remain failures.",
+  "applicationChanged": false,
+  "artifactChanged": false,
+  "automaticRetries": 0,
+  "historicalAccessIncidentDeclaredResolved": false
+}

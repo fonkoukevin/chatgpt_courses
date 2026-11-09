@@ -1,0 +1,11 @@
+{
+  "scenarioId": "P19-03",
+  "conflictStatus": 412,
+  "localAndServerCompared": true,
+  "explicitRebase": true,
+  "realApiStopAndRestart": true,
+  "recoveredSaveConfirmed": true,
+  "archivedMethodSource": true,
+  "originalTextNotesAndOriginRetained": true,
+  "actualClipboardCopy": true
+}

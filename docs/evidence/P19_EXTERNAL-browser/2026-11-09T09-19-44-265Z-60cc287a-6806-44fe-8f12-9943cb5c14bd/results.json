@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "reporter": "external-stripe-allowlist",
+  "phase": "P19_EXTERNAL",
+  "status": "passed",
+  "duration": 121572.624,
+  "tests": [
+    {
+      "id": "P19-EXT-01",
+      "status": "passed",
+      "expectedStatus": "passed",
+      "retry": 0,
+      "duration": 118884,
+      "stage": "completed",
+      "errorCode": null
+    }
+  ],
+  "infrastructureError": false,
+  "rawErrorsRecorded": false,
+  "providerArtifactsRecorded": false
+}

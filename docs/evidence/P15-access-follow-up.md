@@ -30,4 +30,6 @@ La [régression navigateur paiement P15](P15-payments-regression-checks.json) pa
 
 ## Garde P17/P19 avant livraison
 
+**P19,9 novembre** : [global256](P19-api-global-checks.json) avec Refund14/Entitlement5, navigateur consolidé4/4, régressions paiement8/8/remboursement6/6 et vrai fournisseur TEST1/1 passent. [Bilan et limites](P19.md). Le scénario externe confirme deux origines de pack révoquées et l’origine individuelle active après deux remboursements et quatre rejeux. Aucun refus positif inattendu n’est reproduit ; aucun correctif causal des deux occurrences P15 n’est démontré. Les problèmes de synchronisation des tests et le premier timeout UNKNOWN P19 restent des observations distinctes, sans cause commune établie. Les garde-fous et le blocage de livraison commerciale restent applicables.
+
 P15 est validé localement sur les contrôles documentés ; **ce suivi reste ouvert**. Toute récidive doit arrêter la validation du parcours et être analysée avec les faits capturés, avant nettoyage et sans remplacer le refus par un retry réussi. Suspendre la livraison du parcours commercial concerné tant que cette garde n’est pas levée sur des preuves suffisantes. Aucun succès ultérieur, corrigé temporel d’un autre module ou transport de test réparé ne ferme ces occurrences de cause inconnue.

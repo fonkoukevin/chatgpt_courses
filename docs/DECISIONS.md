@@ -67,9 +67,9 @@ Aucune incompatibilité prouvée ne justifie de remplacer la stack. Les compatib
 
 Ces choix techniques sont réversibles et validés localement : ciblé combiné 26/26, global Java 155/155, puis ciblé HTTP final 10/10 après raccordement natif et dernier recontrôle de permission. Chromium 8/8 sans filtre/retry, vingt captures examinées et chaîne HTTP réelle réussissent ; les processus de recette sont arrêtés. Ces résultats ne ferment aucun des paramètres commerciaux réels ci-dessous et ne valident aucun paiement Stripe, réservé à P12. [Preuves P11](evidence/P11.md).
 
-## Décisions techniques P12 — réalisation en cours
+## Décisions techniques P12 — validation locale et Stripe TEST
 
-- Stripe serveur stable 34.1.0 / API 2026-10-28.endive ; aucun mode live ni API preview. Les tests locaux avec transport doublé ne sont pas une transaction Stripe externe. Reprise : clé TEST configurée, compte vérifié et secret CLI obtenu en privé ; aucun Checkout/paiement fournisseur exécuté. La copie du secret reste une action manuelle de l’utilisateur.
+- Stripe serveur stable 34.1.0 / API 2026-10-28.endive ; aucun mode live ni API preview. Les tests locaux avec transport contrôlé sont distincts du Checkout hébergé TEST effectivement exécuté en P12. Clé TEST, compte et secret CLI configurés en privé ; aucune valeur secrète dans les preuves. Les incidents historiques d’accès restent ouverts : [suivi](evidence/P12-access-follow-up.md). Les vérifications P19, notamment les remboursements fournisseur, ont leurs propres résultats dans [P19](evidence/P19.md).
 - L'accès commence à l'activation effective PostgreSQL. Les durées FIXED et périodes d'actualisation sont calculées depuis cette activation selon le snapshot ; UNLIMITED doit être explicite. Cette règle évite de perdre une durée pendant un incident d'activation ; les conditions commerciales réelles devront l'énoncer avant vente. Elle ne tranche ni durée, prix ou support encore ouverts.
 - Une seule opération Checkout durable par commande, paramètres/clé fournisseur et échéance de session fixes. Après timeout ambigu, reprise bornée avec la même intention puis rapprochement GET ; aucun nouveau paiement créé par le worker.
 - Une attente normale de paiement ne compte pas comme erreur. La confirmation financière est durable avant l'activation ; droits et notification d'activation sont ensuite atomiques. Échec SMTP et retrait d'accès restent indépendants.
@@ -105,6 +105,14 @@ Les demandes d’export, d’effacement et de fermeture restent traçables en WA
 
 Les montants 1 200 €, 1 400 € et 1 180 € de `CONTENT_REFERENCE.md` ne sont jamais des prix de formation.
 
+## Choix techniques P19
+
+La CI utilise trois jobs : contrôles/build web et API indépendants, puis recette HTTP/navigateur/configuration production sur les mêmes artefacts identifiés par SHA-256 et commit. Aucun secret fournisseur ou fichier privé local n’est nécessaire aux jobs contrôlés. Les actions sont épinglées aux SHA officiellement vérifiés ; l’exécution GitHub reste distincte des contrôles locaux. Voir [CI](CI.md).
+
+Les rapports d’échec conservent états, compteurs et identifiants fixes, sans erreurs libres, traces de formulaire ou cookies. Huit captures de l’application synthétique sont autorisées avec garde d’origine, taille et empreinte ; aucune capture fournisseur. Les artefacts CI ont trois jours de rétention. Zéro retry automatique pour les recettes sensibles ; aucune réussite ultérieure n’efface un échec historique ou ne prouve sa cause.
+
+Les décisions commerciales du tableau restent ouvertes. Une candidate technique en recette privée garde la vente désactivée, les langues non indexables par défaut et les traitements irréversibles en attente de politique ; elle n’autorise aucun déploiement dans le mandat P15–P19.
+
 ## Registre à maintenir
 
 | Date | Sujet | Décision ou hypothèse | Motif et preuve | Impact | Auteur/validation |
@@ -115,5 +123,6 @@ Les montants 1 200 €, 1 400 € et 1 180 € de `CONTENT_REFERENCE.md` ne sont
 | 2026-11-07 | Routes et configuration | Registre FR/EN central et exemple sans secret ; lancement commercial indécis | `SCREENS.md`, `CONFIGURATION.md`, `.env.example` | P01/P03 puis lots métier | Agent, conventions réversibles |
 | 2026-11-07 | Fondations locales | Outils portables, lockfile/BOM, infrastructure et proxy réels | `evidence/P01.md` | Base des lots suivants ; observation navigateur encore requise | Agent, réalisation P01 |
 | 2026-11-08 | Recette navigateur | Playwright 1.65.0 et Chromium local isolé autorisés, installés et exécutés | Réponse explicite utilisateur ; `evidence/P01-browser/README.md` | Remplace l’attente d’accès navigateur P01 ; validation locale complète | Utilisateur pour la méthode, agent pour l’exécution et la revue |
+| 2026-11-09 | Import local P18 | Acteur technique minimal autorisé, sans mot de passe connu conservé, désactivé après import | Réponse explicite utilisateur ; `evidence/P18-shared-import-checks.json` |28 traductions DRAFT/18 fichiers READY, rejeu stable ; aucun rôle actif ou publication partagé ensuite | Utilisateur pour l’autorisation, agent pour l’exécution vérifiée |
 
 Une décision future doit nommer l’ancienne règle remplacée et les documents affectés. Ne pas masquer une hypothèse non validée sous un statut « décidé ».

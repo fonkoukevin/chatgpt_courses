@@ -1,0 +1,122 @@
+{
+  "phase": "P19",
+  "regressionPhase": "P13",
+  "runId": "2026-11-09T09-13-38-184Z-1f077a71-3cf0-490a-a36d-d396be8cf8bd",
+  "command": "node scripts/verify-browser.mjs P13",
+  "launcher": ".runtime/run-p19-controlled.mjs P13",
+  "privateConsoleLog": ".runtime/p19-p13-2026-11-09T09-13-37-977Z.log",
+  "exitCode": 0,
+  "apiJarSha256": "2154f1f3c8e18d073db8b0ab44cec136d9e9df8825e1920702e66a214ba64b6e",
+  "webBuildId": "hX_-deZsNCevTpDZbakrw",
+  "stats": {
+    "startTime": "2026-11-09T09:14:13.558Z",
+    "duration": 127165.822,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "retries": 0,
+  "cleanupConfirmed": true,
+  "initialRuntimeFlags": {
+    "stripeEnabled": true,
+    "paymentWorkerEnabled": true,
+    "refundWorkerEnabled": true,
+    "notificationWorkerEnabled": true
+  },
+  "finalRuntimeFlags": {
+    "stripeEnabled": true,
+    "paymentWorkerEnabled": true,
+    "refundWorkerEnabled": true,
+    "notificationWorkerEnabled": true
+  },
+  "services": [
+    {
+      "kind": "s3",
+      "tmpfs": true,
+      "stopped": true
+    },
+    {
+      "kind": "mailpit",
+      "tmpfs": true,
+      "stopped": true
+    }
+  ],
+  "processes": [
+    {
+      "name": "web",
+      "terminated": true
+    },
+    {
+      "name": "api",
+      "terminated": true
+    },
+    {
+      "name": "playwright",
+      "terminated": true
+    },
+    {
+      "name": "api",
+      "terminated": true
+    },
+    {
+      "name": "api",
+      "terminated": true
+    },
+    {
+      "name": "api",
+      "terminated": true
+    }
+  ],
+  "screenshots": {
+    "retained": [
+      "en-1440-dashboard-partial-needs-review.png",
+      "en-1440-partial-pending.png",
+      "en-320-partial-failed-access-kept.png",
+      "en-390-partial-pending.png",
+      "fr-1440-operator-preview-pack.png",
+      "fr-1440-origins-pack-refunded.png",
+      "fr-1440-refund-confirmed.png",
+      "fr-320-origins-pack-refunded.png",
+      "fr-390-ambiguous-response-not-confirmed.png",
+      "fr-390-api-unavailable-preserves-reason.png",
+      "fr-390-financial-confirmation.png",
+      "fr-390-old-payment-view-refund-aware.png",
+      "fr-390-origins-pack-refunded.png",
+      "fr-390-partial-keep-no-revocation.png",
+      "fr-390-refund-confirmed-email-incident.png"
+    ],
+    "actuallyViewedInThisNewRegression": 0,
+    "note": "New regression screenshots are preserved. This receipt makes no additional visual-review claim; the eight P19 application captures have their own actual review."
+  },
+  "historicalPhaseEvidenceOverwritten": false,
+  "historicalAccessIncidentsDeclaredResolved": false,
+  "providerLevel": "Controlled local provider transport and real signed-event/PostgreSQL transactions; not an external Stripe verification.",
+  "javaGlobalValidation": "Separate parent-managed evidence, not included in these browser counts.",
+  "reconciliationObservation": {
+    "readOnly": true,
+    "noLeaseOrDateModified": true,
+    "receipt": "docs/evidence/P13-browser/2026-11-09T09-13-38-184Z-1f077a71-3cf0-490a-a36d-d396be8cf8bd/refund-unknown-lease-observations.json",
+    "abandonedLeaseObserved": false,
+    "waitMs": 10000,
+    "extendedWaitBranchExecuted": false,
+    "finalOperationState": "SUCCEEDED",
+    "operationCount": 1
+  },
+  "previousFailure": {
+    "runId": "2026-11-09T09-07-23-554Z-d9b0692b-4da0-4b09-95b9-461d52137f8d",
+    "passed": 3,
+    "failed": 1,
+    "didNotRun": 2,
+    "cleanupConfirmed": true,
+    "diagnostic": "docs/evidence/P19-refund-regression-first-run-checks.json",
+    "originalExactJobLeaseKnown": false
+  },
+  "limits": [
+    "The successful rerun observed no abandoned active lease. The assertion kept its original10-second bound; the conditional extended-wait branch was not exercised.",
+    "This success does not establish the cause of the first UNKNOWN timeout, whose exact job lease was not captured. Its failed run and console are preserved.",
+    "The conditional guard is based on inspected durable-lease semantics, not a claimed reproduction or proof of the original failure.",
+    "Historical P12/P15 access incidents are not declared resolved. Commercial activation remains subject to the parent release verdict.",
+    "The15 new regression screenshots are retained but not claimed visually examined here; eight P19 application PNGs have a separate actual visual review."
+  ]
+}

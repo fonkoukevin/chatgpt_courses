@@ -1,0 +1,216 @@
+{
+  "measuredAt": "2026-11-09T05:35:36.739Z",
+  "method": "WCAG 2.2 relative luminance, sRGB, opaque colors",
+  "reference": "https://www.w3.org/TR/WCAG22/#contrast-minimum",
+  "measurements": [
+    {
+      "foreground": "foreground",
+      "background": "background",
+      "colors": [
+        "#202123",
+        "#ffffff"
+      ],
+      "ratio": 16.114,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "foreground",
+      "background": "surface-subtle",
+      "colors": [
+        "#202123",
+        "#f7f7f8"
+      ],
+      "ratio": 15.051,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "muted-foreground",
+      "background": "surface",
+      "colors": [
+        "#60656c",
+        "#ffffff"
+      ],
+      "ratio": 5.874,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "muted-foreground",
+      "background": "surface-subtle",
+      "colors": [
+        "#60656c",
+        "#f7f7f8"
+      ],
+      "ratio": 5.486,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "muted-foreground",
+      "background": "surface-hover",
+      "colors": [
+        "#60656c",
+        "#efeff1"
+      ],
+      "ratio": 5.115,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "background",
+      "background": "brand",
+      "colors": [
+        "#ffffff",
+        "#12345b"
+      ],
+      "ratio": 12.59,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "background",
+      "background": "brand-hover",
+      "colors": [
+        "#ffffff",
+        "#0b2545"
+      ],
+      "ratio": 15.387,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "brand",
+      "background": "brand-soft",
+      "colors": [
+        "#12345b",
+        "#edf2f8"
+      ],
+      "ratio": 11.186,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "link",
+      "background": "surface",
+      "colors": [
+        "#244f85",
+        "#ffffff"
+      ],
+      "ratio": 8.294,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "link",
+      "background": "surface-subtle",
+      "colors": [
+        "#244f85",
+        "#f7f7f8"
+      ],
+      "ratio": 7.746,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "success",
+      "background": "success-soft",
+      "colors": [
+        "#176b48",
+        "#ecf6f0"
+      ],
+      "ratio": 5.879,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "warning",
+      "background": "warning-soft",
+      "colors": [
+        "#855500",
+        "#fff6df"
+      ],
+      "ratio": 5.915,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "danger",
+      "background": "danger-soft",
+      "colors": [
+        "#b42318",
+        "#fef0ee"
+      ],
+      "ratio": 5.921,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "background",
+      "background": "danger",
+      "colors": [
+        "#ffffff",
+        "#b42318"
+      ],
+      "ratio": 6.574,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "foreground": "control-border",
+      "background": "surface",
+      "colors": [
+        "#8a8f98",
+        "#ffffff"
+      ],
+      "ratio": 3.249,
+      "minimum": 3,
+      "passed": true
+    },
+    {
+      "foreground": "control-border",
+      "background": "surface-subtle",
+      "colors": [
+        "#8a8f98",
+        "#f7f7f8"
+      ],
+      "ratio": 3.035,
+      "minimum": 3,
+      "passed": true
+    },
+    {
+      "foreground": "focus",
+      "background": "surface",
+      "colors": [
+        "#275dad",
+        "#ffffff"
+      ],
+      "ratio": 6.451,
+      "minimum": 3,
+      "passed": true
+    },
+    {
+      "foreground": "focus",
+      "background": "surface-subtle",
+      "colors": [
+        "#275dad",
+        "#f7f7f8"
+      ],
+      "ratio": 6.025,
+      "minimum": 3,
+      "passed": true
+    },
+    {
+      "foreground": "focus",
+      "background": "brand-soft",
+      "colors": [
+        "#275dad",
+        "#edf2f8"
+      ],
+      "ratio": 5.731,
+      "minimum": 3,
+      "passed": true
+    }
+  ]
+}

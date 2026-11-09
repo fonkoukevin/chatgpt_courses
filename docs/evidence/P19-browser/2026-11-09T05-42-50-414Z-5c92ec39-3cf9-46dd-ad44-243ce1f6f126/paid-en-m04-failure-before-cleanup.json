@@ -1,0 +1,226 @@
+{
+  "recordedBeforeCleanup": true,
+  "failed": true,
+  "observations": [
+    {
+      "kind": "member",
+      "status": 200,
+      "requestStartedBeforeObservation": false,
+      "finished": true,
+      "completionError": "NONE",
+      "bodyReadError": "NO_RESOURCE",
+      "jsonDecoded": false,
+      "requestFailure": "NONE",
+      "valid": false,
+      "identity": false,
+      "active": true,
+      "bodyPresent": false,
+      "expectedBlockPresent": false,
+      "code": "NONE"
+    },
+    {
+      "kind": "member",
+      "status": 200,
+      "requestStartedBeforeObservation": false,
+      "finished": true,
+      "completionError": "NONE",
+      "bodyReadError": "NONE",
+      "jsonDecoded": true,
+      "requestFailure": "NONE",
+      "valid": true,
+      "identity": true,
+      "active": true,
+      "bodyPresent": true,
+      "expectedBlockPresent": true,
+      "code": "NONE"
+    },
+    {
+      "kind": "learning",
+      "status": 200,
+      "requestStartedBeforeObservation": false,
+      "finished": true,
+      "completionError": "NONE",
+      "bodyReadError": "NONE",
+      "jsonDecoded": true,
+      "requestFailure": "NONE",
+      "valid": true,
+      "identity": true,
+      "active": true,
+      "bodyPresent": true,
+      "expectedBlockPresent": true,
+      "code": "NONE"
+    },
+    {
+      "kind": "visit",
+      "status": 200,
+      "requestStartedBeforeObservation": false,
+      "finished": true,
+      "completionError": "NONE",
+      "bodyReadError": "NONE",
+      "jsonDecoded": true,
+      "requestFailure": "NONE",
+      "valid": true,
+      "identity": true,
+      "active": true,
+      "bodyPresent": false,
+      "expectedBlockPresent": false,
+      "code": "NONE"
+    }
+  ],
+  "principal": {
+    "status": 200,
+    "expectedOwner": true
+  },
+  "database": {
+    "paths": [
+      {
+        "depth": 2,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 2,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 2,
+        "target": true,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 2,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 2,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 2,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 1,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 1,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 1,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 1,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 1,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 1,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 0,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      }
+    ],
+    "available": true,
+    "accountActive": true,
+    "orderLineGrants": 1,
+    "manualTestGrants": 0
+  },
+  "automaticRetry": false
+}

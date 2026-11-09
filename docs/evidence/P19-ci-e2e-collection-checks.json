@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "phase": "P19",
+  "checkedAt": "2026-11-09T09:05:12.838Z",
+  "scope": "Read-only collection of the existing final controlled P19 run into an owned ignored directory",
+  "sourceRunId": "2026-11-09T05-46-37-307Z-dfb7dab0-df93-4b51-86bd-0892b96bc742",
+  "result": "passed",
+  "collectorExitCode": 0,
+  "sourceSessionResult": "passed",
+  "sourceCleanupConfirmed": true,
+  "checks": {
+    "fourUniqueRequiredScenarioIdsPassedOnce": true,
+    "zeroSkippedFlakyAndRetry": true,
+    "eightApprovedSyntheticApplicationCaptures": true,
+    "manifestShaAndDimensionsMatchActualPngBytes": true,
+    "filteredPublicBoundaryAccepted": true,
+    "exactlyNinePublicFiles": true,
+    "rawResultsSessionAndManifestNotCopied": true
+  },
+  "scenarioIds": [
+    "P19-01",
+    "P19-02",
+    "P19-03",
+    "P19-04"
+  ],
+  "counts": {
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0
+  },
+  "durationMs": 124312.153,
+  "attempts": [
+    {
+      "id": "P19-01",
+      "status": "passed",
+      "retry": 0,
+      "durationMs": 20922
+    },
+    {
+      "id": "P19-02",
+      "status": "passed",
+      "retry": 0,
+      "durationMs": 17713
+    },
+    {
+      "id": "P19-03",
+      "status": "passed",
+      "retry": 0,
+      "durationMs": 23201
+    },
+    {
+      "id": "P19-04",
+      "status": "passed",
+      "retry": 0,
+      "durationMs": 7255
+    }
+  ],
+  "droppedUnknownMetadata": 0,
+  "captureCount": 8,
+  "captures": [
+    {
+      "scenarioId": "P19-01",
+      "path": "fr-390-catalogue-empty.png",
+      "sha256": "55cdecbeee0e19c23ecdc8ed2830257aaffdcd18dd1dc0456d8976af35614675",
+      "width": 390,
+      "height": 1000
+    },
+    {
+      "scenarioId": "P19-01",
+      "path": "fr-390-catalogue-unavailable.png",
+      "sha256": "f53031de91e1d28b2b6dd8a5b3fd7ffe6c3abb5946d3f9b029550e9db9ace91e",
+      "width": 390,
+      "height": 1000
+    },
+    {
+      "scenarioId": "P19-02",
+      "path": "fr-390-paid-original-note.png",
+      "sha256": "7975dc3b4bb94c613d5fe0a24ef4a3e36573e7be005c878f3e9a99c1ebac5cd0",
+      "width": 390,
+      "height": 1000
+    },
+    {
+      "scenarioId": "P19-02",
+      "path": "en-390-paid-original-note.png",
+      "sha256": "8117f1a05132e6e2843d91d59e6b4d342c5ac2acd6d5cfeabf87de809412ae0d",
+      "width": 390,
+      "height": 1000
+    },
+    {
+      "scenarioId": "P19-02",
+      "path": "en-390-paid-french-quiz-history.png",
+      "sha256": "b483ca35950ab68f8e32a00e246715d3888de5268bf27ba239e2087702f3a0bd",
+      "width": 390,
+      "height": 1000
+    },
+    {
+      "scenarioId": "P19-03",
+      "path": "fr-390-project-conflict.png",
+      "sha256": "3da5a753d36d0448da49d5c91ecf8966c82acbfe6616e022d0283ea2505d7f51",
+      "width": 390,
+      "height": 1000
+    },
+    {
+      "scenarioId": "P19-04",
+      "path": "en-390-participation-provenance.png",
+      "sha256": "a564ab82a3f8c059c59444ff747b31e5d306ab2b625e9636736591055a6aedf2",
+      "width": 390,
+      "height": 1000
+    },
+    {
+      "scenarioId": "P19-04",
+      "path": "en-390-contextual-support.png",
+      "sha256": "561a3bafb5269015b56402fbef0030bed2da8b9f2c6b09cd165b09e8b7302213",
+      "width": 390,
+      "height": 1000
+    }
+  ],
+  "approvedFiles": [
+    "release.json",
+    "screenshots/en-390-contextual-support.png",
+    "screenshots/en-390-paid-french-quiz-history.png",
+    "screenshots/en-390-paid-original-note.png",
+    "screenshots/en-390-participation-provenance.png",
+    "screenshots/fr-390-catalogue-empty.png",
+    "screenshots/fr-390-catalogue-unavailable.png",
+    "screenshots/fr-390-paid-original-note.png",
+    "screenshots/fr-390-project-conflict.png"
+  ],
+  "ignoredDestination": ".runtime/ci-e2e-collection-69f70df3-afad-4bd8-9e47-6974e0d5d5e7",
+  "filteredReportSha256": "b8f170136d8fd8e552fe6a1ce8f137089afd467d7e91c2017ed1b18ffc5e60c9",
+  "sourceFiles": [
+    {
+      "path": "results.json",
+      "sha256": "15313bf2c73ba9b87ace4c0f8a8ccfbfe0000d9fe8225d3ee167f613fdff919d"
+    },
+    {
+      "path": "session.json",
+      "sha256": "f6c3e39b56d59a4828e8082c1effd6a8bb2772e1e47ea769b545e8e9efdfad28"
+    },
+    {
+      "path": "capture-manifest.json",
+      "sha256": "d2e6adcf5517e06ffbdb2828348c3cbb221e23d8e6e4f25c4431d37b7158d33b"
+    }
+  ],
+  "collectorFiles": [
+    {
+      "path": "scripts/ci-sanitize.mjs",
+      "sha256": "8ed2a5994949b145132382416b9d7f8733c681cab1731b04b0353da197d5076e"
+    },
+    {
+      "path": "scripts/ci-report.mjs",
+      "sha256": "8810feeb057da18c3a486cba2bae7b8e8c883906ecb2e7687cc00a8796ec312b"
+    }
+  ],
+  "applicationOrDatabaseStarted": false,
+  "browserStarted": false,
+  "stripeCalled": false,
+  "ciRunReleaseInvoked": false,
+  "githubWorkflowExecuted": false,
+  "buildsChanged": false,
+  "sourceEvidenceChanged": false,
+  "rawLogPublished": false,
+  "visualReviewPerformed": false,
+  "limits": [
+    "This executed collection and byte validation, not ci-run release or a GitHub job.",
+    "Source browser success/cleanup comes from the existing final run; it was not rerun by this collector.",
+    "Capture attestations and PNG bytes were validated; visual review belongs to the separate final image review.",
+    "No conclusions about the causes of historical access incidents are inferred from this collection."
+  ]
+}

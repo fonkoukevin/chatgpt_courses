@@ -1,0 +1,93 @@
+{
+  "runId": "production-config-a81b575c-811c-4fb9-a34f-882514c7495f",
+  "startedAt": "2026-11-09T05:26:46.051Z",
+  "environment": "production",
+  "isolatedLoopbackOnly": true,
+  "publicOriginIsSyntheticHttps": true,
+  "tlsDeploymentClaimed": false,
+  "jarSha256": "2154f1f3c8e18d073db8b0ab44cec136d9e9df8825e1920702e66a214ba64b6e",
+  "webBuildId": "hX_-deZsNCevTpDZbakrw",
+  "checks": [
+    {
+      "name": "real-Spring-PostgreSQL-health-through-Next",
+      "passed": true
+    },
+    {
+      "name": "public-page-/fr",
+      "passed": true,
+      "observed": 200
+    },
+    {
+      "name": "public-page-/en",
+      "passed": true,
+      "observed": 200
+    },
+    {
+      "name": "fixture-route-closed-/fr/dev/public",
+      "passed": true,
+      "observed": 404
+    },
+    {
+      "name": "fixture-route-closed-/fr/dev/foundations",
+      "passed": true,
+      "observed": 404
+    },
+    {
+      "name": "fixture-route-closed-/en/dev/public",
+      "passed": true,
+      "observed": 404
+    },
+    {
+      "name": "private-API-requires-authentication",
+      "passed": true,
+      "observed": 401
+    },
+    {
+      "name": "production-session-cookie-flags",
+      "passed": true
+    },
+    {
+      "name": "isolated-production-database-readable",
+      "passed": true
+    },
+    {
+      "name": "no-demo-account-content-offer-order-or-grant",
+      "passed": true,
+      "observed": {
+        "users": 0,
+        "resources": 0,
+        "offers": 0,
+        "orders": 0,
+        "grants": 0,
+        "migrations": 19
+      }
+    },
+    {
+      "name": "Next-started-without-database-mail-storage-or-payment-secrets",
+      "passed": true
+    },
+    {
+      "name": "all-Flyway-migrations-applied",
+      "passed": true,
+      "observed": 19
+    }
+  ],
+  "result": "passed",
+  "cleanupConfirmed": true,
+  "secretsPrinted": false,
+  "processes": [
+    {
+      "name": "web",
+      "stopped": true
+    },
+    {
+      "name": "api",
+      "stopped": true
+    }
+  ],
+  "databaseStopped": true,
+  "completedAt": "2026-11-09T05:27:13.359Z",
+  "providerContacted": false,
+  "seedInvoked": false,
+  "sharedVolumeChanged": false
+}

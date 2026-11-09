@@ -1,0 +1,136 @@
+{
+  "checkedAt": "2026-11-09T09:19:57.804Z",
+  "command": "Pinned Node24.22.2 scripts/ci-run.mjs web STEP",
+  "checks": [
+    {
+      "schemaVersion": 1,
+      "job": "web",
+      "step": "scripts",
+      "exitCode": 0,
+      "result": "passed",
+      "durationMs": 1234,
+      "tap": {
+        "format": "tap-summary-v1",
+        "counts": {
+          "tests": 15,
+          "suites": 0,
+          "pass": 15,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "durationMs": 979.7775
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "job": "web",
+      "step": "contract",
+      "exitCode": 0,
+      "result": "passed",
+      "durationMs": 4215
+    },
+    {
+      "schemaVersion": 1,
+      "job": "web",
+      "step": "client",
+      "exitCode": 0,
+      "result": "passed",
+      "durationMs": 10140,
+      "tap": {
+        "format": "tap-summary-v1",
+        "counts": {
+          "tests": 124,
+          "suites": 0,
+          "pass": 124,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "durationMs": 2174.9544
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "job": "web",
+      "step": "content",
+      "exitCode": 0,
+      "result": "passed",
+      "durationMs": 1615,
+      "evidencePhase": "P19"
+    },
+    {
+      "schemaVersion": 1,
+      "job": "web",
+      "step": "contrast",
+      "exitCode": 0,
+      "result": "passed",
+      "durationMs": 878
+    },
+    {
+      "schemaVersion": 1,
+      "job": "web",
+      "step": "stripeConfig",
+      "exitCode": 0,
+      "result": "passed",
+      "durationMs": 1099,
+      "tap": {
+        "format": "tap-summary-v1",
+        "counts": {
+          "tests": 5,
+          "suites": 0,
+          "pass": 5,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "durationMs": 229.1749
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "job": "web",
+      "step": "lint",
+      "exitCode": 0,
+      "result": "passed",
+      "durationMs": 22356
+    },
+    {
+      "schemaVersion": 1,
+      "job": "web",
+      "step": "types",
+      "exitCode": 0,
+      "result": "passed",
+      "durationMs": 6662
+    },
+    {
+      "schemaVersion": 1,
+      "job": "web",
+      "step": "browserTypes",
+      "exitCode": 0,
+      "result": "passed",
+      "durationMs": 7927
+    }
+  ],
+  "contrast": {
+    "pairs": 19,
+    "failed": 0,
+    "proof": "P19-contrast.json"
+  },
+  "frontendSourceChangedSinceP18": false,
+  "productionBuildReused": {
+    "buildId": "hX_-deZsNCevTpDZbakrw",
+    "actualProductionProbe": "P19-production-config-checks.json",
+    "priorBuildProof": "P18-web-checks.json",
+    "priorProofPresent": true
+  },
+  "limits": [
+    "Local isolated runner commands, not GitHub Actions execution.",
+    "Earlier failed Windows npm-path attempt is preserved separately in P19-ci-checks.json; it is not a passing check.",
+    "No dependency pin changed and no new local npm ci is claimed in P19.",
+    "Application build was not rebuilt during browser runs; the unchanged P18 build is used and identified in actual P19 production/browser probes."
+  ]
+}

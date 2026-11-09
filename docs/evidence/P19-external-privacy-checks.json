@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "phase": "P19",
+  "scope": "Pre-execution external Stripe artifact privacy checks",
+  "providerCallsExecuted": false,
+  "hostedBrowserProbeExecuted": false,
+  "checks": [
+    {
+      "command": "node --test tests/scripts/stripe-artifact-privacy.test.mjs",
+      "exitCode": 0,
+      "tests": 3,
+      "passed": 3,
+      "failures": 0
+    },
+    {
+      "command": "scripts/courses.cmd run typecheck:browser",
+      "exitCode": 0
+    }
+  ],
+  "controls": {
+    "externalScreenshots": "off",
+    "externalTrace": "off",
+    "externalVideo": "off",
+    "hostedHelperScreenshots": false,
+    "playwrightNoCopyPrompt": true,
+    "rawErrorMessagesForwarded": false,
+    "rawStacksForwarded": false,
+    "rawStdoutStderrForwarded": false,
+    "rawAttachmentsForwarded": false,
+    "externalReporter": "tests/browser/stripe-safe-reporter.ts",
+    "errorStatusPreserved": true,
+    "pageClosedBeforeRethrow": true,
+    "errorFieldsRedactedBeforeArtifactPersistence": true,
+    "errorStackAbsent": true,
+    "cardDataWritten": false,
+    "checkoutBearerUrlsWritten": false
+  },
+  "cleanupFollowUp": {
+    "scope": "Offline cleanup checks after controlled P13 six-scenario regression completed",
+    "command": "scripts/courses.cmd run verify:ci",
+    "exitCode": 0,
+    "tests": 15,
+    "passed": 15,
+    "ciSafetyTests": 9,
+    "externalPrivacyAndCleanupTests": 6,
+    "cleanupRegressionsAdded": 3,
+    "browserTypecheckExitCode": 0,
+    "nodeSyntaxChecks": 4,
+    "nodeSyntaxExitCode": 0,
+    "diffCheckExitCode": 0,
+    "allKnownSessionsAttemptedAfterFailure": true,
+    "unresolvedCheckoutLookupBlocksCleanupConfirmation": true,
+    "paidSessionsRetainedWithoutRefund": true,
+    "providerCallsExecutedByChecks": false
+  },
+  "sourceInspection": {
+    "playwright": "1.65.0",
+    "domSnapshotGuard": "node_modules/playwright/lib/index.js::_takePageSnapshot checks PLAYWRIGHT_NO_COPY_PROMPT",
+    "errorContext": "node_modules/playwright/lib/errorContext.js::buildCodeFrame can include 100 source lines above and below; sanitized errors have no stack/errorContext so no such frame is generated"
+  },
+  "limits": [
+    "Tests use synthetic sentinel values and do not call Stripe or open a browser.",
+    "Actual provider recipe is pending root review and explicit runtime GO.",
+    "No claim that screenshots/trace/video alone would prevent all Playwright error artifacts.",
+    "No live credentials, private env files or provider form values were read by these unit tests."
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "authorizedTechnicalActor": true,
+  "sharedLocalDatabase": true,
+  "published": false,
+  "offerActivated": false,
+  "commands": [
+    {
+      "name": "create-actor",
+      "exitCode": 0
+    },
+    {
+      "name": "plan",
+      "exitCode": 0
+    },
+    {
+      "name": "apply",
+      "exitCode": 0
+    },
+    {
+      "name": "replay",
+      "exitCode": 0
+    },
+    {
+      "name": "disable-actor",
+      "exitCode": 0
+    }
+  ],
+  "actorDisabled": true,
+  "secretsPrinted": false,
+  "plan": {
+    "mode": "PLAN",
+    "items": 28,
+    "itemStates": {
+      "CREATE_DRAFT": 28
+    },
+    "files": 18,
+    "fileStates": {
+      "CREATE_INTENT": 18
+    }
+  },
+  "apply": {
+    "mode": "APPLY",
+    "items": 28,
+    "itemStates": {
+      "CREATED_DRAFT": 28
+    },
+    "files": 18,
+    "fileStates": {
+      "READY": 18
+    }
+  },
+  "replay": {
+    "mode": "APPLY",
+    "items": 28,
+    "itemStates": {
+      "UNCHANGED": 28
+    },
+    "files": 18,
+    "fileStates": {
+      "READY": 18
+    }
+  },
+  "privateConfigurationPreserved": true,
+  "knownPasswordRetained": false,
+  "completedAt": "2026-11-09T09:04:35.456Z",
+  "result": "passed",
+  "persistedReadOnlyVerification": {
+    "resources": 14,
+    "readyFiles": 18,
+    "translations": 28,
+    "actorDisabled": true,
+    "solutionFiles": 4,
+    "actorActiveRoleAssignments": 0,
+    "technicalRolePermissionCount": 2
+  },
+  "replayKeptAllIdentitiesRevisionsAndFiles": true,
+  "verifiedAt": "2026-11-09T09:05:12.148Z"
+}

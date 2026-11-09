@@ -1,0 +1,59 @@
+{
+  "verifiedAt": "2026-11-09T09:25:57.922Z",
+  "origin": "http://localhost:3000",
+  "checks": [
+    {
+      "path": "/fr",
+      "status": 200,
+      "expected": 200,
+      "noStore": true
+    },
+    {
+      "path": "/en",
+      "status": 200,
+      "expected": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v1/system/health",
+      "status": 200,
+      "expected": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v1/me/profile",
+      "status": 401,
+      "expected": 401,
+      "noStore": true
+    },
+    {
+      "path": "/api/v1/me/support-tickets",
+      "status": 401,
+      "expected": 401,
+      "noStore": true
+    },
+    {
+      "path": "/api/v1/me/data-requests",
+      "status": 401,
+      "expected": 401,
+      "noStore": true
+    },
+    {
+      "path": "/api/v1/me/attestations",
+      "status": 401,
+      "expected": 401,
+      "noStore": true
+    },
+    {
+      "path": "/api/v1/webhooks/stripe",
+      "method": "POST",
+      "signed": false,
+      "status": 400,
+      "expected": 400
+    }
+  ],
+  "userNextEnvironmentPreserved": true,
+  "privateConfigurationPreserved": true,
+  "financialOperationIssuedByThisRestorationProbe": false,
+  "secretsPrinted": false
+}

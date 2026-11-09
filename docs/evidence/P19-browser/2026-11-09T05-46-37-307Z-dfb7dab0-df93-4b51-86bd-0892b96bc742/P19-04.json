@@ -1,0 +1,18 @@
+{
+  "scenarioId": "P19-04",
+  "orderSnapshotPreserved": true,
+  "participationDocumentActualDownload": {
+    "bytes": 3477,
+    "sha256": "96ae011ae70e8474315011b0c912e849d8243cdf8a6204e57d19a61f1f8dede4"
+  },
+  "automaticQuizFrenchSnapshot": true,
+  "currentRevisionSelfAssessmentDeclaredOnly": true,
+  "humanReview": false,
+  "identityVerified": false,
+  "explicitContextFrenchUnderEnglishUi": true,
+  "otherOwnerRead404": 6,
+  "otherOwnerMutation404": true,
+  "editorFinance403": 2,
+  "ownerWorkStillAccessible": true,
+  "noCommercialReceiptOrHumanSupportClaim": true
+}

@@ -1,17 +1,18 @@
 # État réel du projet
 
-Dernière mise à jour : **9 novembre2026**. **P18 validé localement en environnement isolé**, après P04–P17 dans l’ordre. Le mandat P15→P19 continue avec P19. Aucun mode LIVE, push ou déploiement.
+Dernière mise à jour : **9 novembre 2026**. **P15–P19 réalisés et validés localement**, avec les limites ci-dessous. Candidate à une recette privée, commerce désactivé. Aucun mode LIVE, push ou déploiement.
 
 ## Situation courante
 
 - **P18** : douze leçons FR/EN,18 fichiers Markdown, import CMS durable, corrigés protégés et vrais exports locaux. [Sources](../content/course-client-proposal/README.md), [résultats et limites](evidence/P18.md).
-- Sources30/contrôles223, Java ciblé48/48 puis import11/11 après dernier guard, client124, contrat/lint/types/builds réussis. Chromium4/4,18 téléchargements+4 exports réels et18 PNG examinés ; leçons/méthodes en vues partielles explicitement. [API](evidence/P18-api-checks.json), [web](evidence/P18-web-checks.json), [navigateur](evidence/P18-browser-checks.json). Aucun global Java P18 revendiqué ; dernier global234 enP15.
-- Schéma **V001–V019**, Flyway seul. V018→V019 réel, colonnes préexistantes des80 tables et données conservées ; aucun volume supprimé. [Migration](evidence/P18-upgrade.json), [préservation](evidence/P18-upgrade-preservation.json).
-- **Import des brouillons dans la base partagée en attente du choix utilisateur d’un acteur local** : aucun compte n’a les permissions éditoriales ; aucun rôle/compte créé sans réponse. La question asynchrone reste ouverte. Les recettes PostgreSQL/S3/navigateur isolées sont complètes ; aucune publication partagée ou revue humaine inventée.
-- Configuration privée inchangée et fichier Next utilisateur sauvegardé. Applications/listener TEST initiaux toujours arrêtés par garde de propriété jusqu’à la fin du batch ; PG/Mailpit/S3 partagés sains et volumes conservés. [Contrôle](evidence/P18-private-preservation.json), [audit](evidence/P18-private-audit.json).
+- **P19** : global API256/256,35 suites ; client124, contrat/sources223/contrastes/lint/types et15 garde-fous CI passent. Configuration production12/12 sur base vide et vraie chaîne HTTP arrêt/reprise. Chromium consolidé4/4, paiement8/8, remboursement6/6 ; huit captures examinées. Stripe TEST réel1/1 : deux Checkout, deux remboursements, quatre rejeux sans double effet, origine individuelle conservée. [Matrice, résultats et limites](evidence/P19.md), [candidate](evidence/P19-release-candidate.json).
+- Schéma **V001–V019**, Flyway seul. Base vide et upgrade vérifiés ; anciennes lignes des80 tables conservées après import autorisé, aucun volume supprimé. [Migration](evidence/P18-upgrade.json), [préservation finale](evidence/P19-shared-preservation.json).
+- **Brouillons P18 chargés dans la base partagée après accord utilisateur** :14 identités,28 traductions DRAFT,18 fichiers READY ; rejeu inchangé. Acteur technique désactivé, zéro rôle actif, aucun mot de passe connu conservé. Aucune publication partagée ou revue humaine. [Preuve](evidence/P18-shared-import-checks.json).
+- Développement **http://localhost:3000/fr** et `/en` rétabli, listener Ready TEST vers `/api/v1/webhooks/stripe`. Configuration privée et fichier Next préexistant conservés à l’identique, PG/Mailpit/S3 partagés et volumes préservés. [Restauration](evidence/P19-development-restoration.json), [sondes](evidence/P19-final-development-check.json), [audit privé](evidence/P19-private-audit.json).
 - **Deux refus historiques P12 et deux refus distincts P15 restent ouverts, causes inconnues.** Les succès ultérieurs ne prouvent pas un correctif. Toute récidive impose arrêt du parcours et diagnostic avant nettoyage ; garde avant livraison commerciale maintenue pourP19. [P12](evidence/P12-access-follow-up.md), [P15](evidence/P15-access-follow-up.md).
+- Deux erreurs de synchronisation de recette P19 sont conservées ; le premier timeout UNKNOWN de remboursement reste non attribué. Dernier6/6 sans bail actif, attente10s inchangée : la branche prolongée n’est pas exécutée. Ces limites restent dans le verdict avant livraison commerciale.
 - Fiche d’offre de préparation seulement, sans offre backend/prix réel. Revue humaine FR/EN, vidéos, format vendu, langues de lancement, fiscalité/accès/support/légal/conservation restent à décider avant activation concernée. Aucun remplacement silencieux d’une promesse vidéo. Les demandes WAITING_POLICY sont conservées.
-- Windows natif et versions verrouillées maintenus, aucune dépendance ajoutée P15–P18. Git main local, code P18 b9a61c3. Aucun run GitHub ou remboursement fournisseur externe exécuté enP18. **P19 en cours** : consolider les preuves, le global PostgreSQL, les parcours utiles et la CI sans masquer les limites.
+- Windows natif et versions verrouillées maintenus, aucune dépendance ajoutée P15–P19. CI enrichie et vérifiée localement, aucun run GitHub ; [procédure](CI.md). Git main local, code P19 **a5a491f**, artefacts applicatifs P18 inchangés et réellement réutilisés en P19. Seul le fichier Next utilisateur reste hors des commits.
 
 ## Phases
 
@@ -35,8 +36,8 @@ Dernière mise à jour : **9 novembre2026**. **P18 validé localement en environ
 | P15 | Validé localement | Java234, client112, Chromium6/6/clavier et régression paiement8/8, upgrade préservé ; incidents d’accès ouverts P17/P19 ; [preuve](evidence/P15.md) |
 | P16 | Validé localement | Java41 puis22 ciblés, client119, bilingue7/7, SEO4/4,20 captures, V018 préservée ; [preuve](evidence/P16.md) |
 | P17 | Validé localement | Java ciblé37 puis12 puis1, client119, Chromium9/9 puis2/2,44 captures, SQL/budgets/contrastes ; [preuve](evidence/P17.md) |
-| P18 | Validé localement | Rédaction et intégration isolée4/4,18 fichiers/4 exports/18 captures ; import partagé en attente d’acteur, vente bloquée ; [preuve](evidence/P18.md) |
-| P19 | En cours | Recette consolidée, matrice et CI ; décisions et dépendances externes explicites |
+| P18 | Validé localement | Rédaction et intégration isolée4/4,18 fichiers/4 exports/18 captures ; brouillons partagés importés, acteur désactivé, vente bloquée ; [preuve](evidence/P18.md) |
+| P19 | Validé localement | API256/client124, navigateur4+8+6, fournisseur TEST1/1, CI locale et production12/12 ; commerce bloqué, aucun GitHub/déploiement ; [preuve](evidence/P19.md) |
 | P20 | À faire | Infrastructure de production |
 | P21 | À faire | Déploiement de recette |
 | P22 | À faire | Déploiement de production |
@@ -46,6 +47,6 @@ Dernière mise à jour : **9 novembre2026**. **P18 validé localement en environ
 
 ## Dernier lot
 
-P18 clôture la rédaction et l’intégration locale isolée. Le choix d’acteur pour le chargement partagé reste en attente ; aucune mutation dépendante n’est faite sans réponse. Prochain prompt exécuté : prompts/P19_RECETTE_CI.txt. P20/P21 restent hors du mandat courant.
+P19 clôt le mandat P15–P19 avec preuves locales et fournisseur TEST séparées. Prochain prompt réalisable : **prompts/P20_INFRASTRUCTURE_PRODUCTION.txt**, préparation et vérification des images, réseaux, secrets, sauvegarde/restauration et runbooks. P21 nécessite ensuite une cible de recette autorisée. Ni hébergement, achat, push ou déploiement ne sont engagés ici ; la vente reste bloquée par les incidents et décisions documentés.
 
 Garder ce suivi court ; détails dans docs/evidence/Pxx.md. Repartir des fichiers et preuves réels lors d’une reprise.

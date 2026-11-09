@@ -1,0 +1,58 @@
+{
+  "readOnly": true,
+  "noLeaseOrDateModified": true,
+  "observations": [
+    {
+      "phase": "before-stop",
+      "hasLease": false,
+      "jobState": "WAITING",
+      "sameOrder": true,
+      "leaseActive": false,
+      "nextAttemptDue": false,
+      "operationCount": 1,
+      "operationState": "PREPARED",
+      "leaseRemainingMs": 0,
+      "nextAttemptDelayMs": 9096
+    },
+    {
+      "phase": "unknown-worker-stopped",
+      "hasLease": false,
+      "jobState": "PENDING",
+      "sameOrder": true,
+      "leaseActive": false,
+      "nextAttemptDue": true,
+      "operationCount": 1,
+      "operationState": "UNKNOWN",
+      "leaseRemainingMs": 0,
+      "nextAttemptDelayMs": 0
+    },
+    {
+      "phase": "after-restart",
+      "hasLease": false,
+      "jobState": "PENDING",
+      "sameOrder": true,
+      "leaseActive": false,
+      "nextAttemptDue": true,
+      "operationCount": 1,
+      "operationState": "UNKNOWN",
+      "leaseRemainingMs": 0,
+      "nextAttemptDelayMs": 0
+    },
+    {
+      "abandonedLeaseObserved": false,
+      "waitMs": 10000
+    },
+    {
+      "phase": "after-wait",
+      "hasLease": false,
+      "jobState": "WAITING",
+      "sameOrder": true,
+      "leaseActive": false,
+      "nextAttemptDue": false,
+      "operationCount": 1,
+      "operationState": "SUCCEEDED",
+      "leaseRemainingMs": 0,
+      "nextAttemptDelayMs": 8759
+    }
+  ]
+}

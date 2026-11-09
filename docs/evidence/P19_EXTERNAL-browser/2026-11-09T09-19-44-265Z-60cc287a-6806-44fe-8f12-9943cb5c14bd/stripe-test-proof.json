@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "externalStripe": true,
+  "testMode": true,
+  "stage": "completed",
+  "result": "passed",
+  "testAmountsMinor": {
+    "individual": 100,
+    "pack": 200,
+    "partialRefund": 100,
+    "remainingRefund": 100
+  },
+  "currency": "EUR",
+  "sessions": [
+    {
+      "orderId": "3752cbd9-c3e9-4c80-a4cb-22b4f34e1815",
+      "sessionId": "cs_test_a1f6AxdtNkhVvTxh3uKxAbNq5rjNWI7bUmkU3Ic9JHPRSpo9DUEAFG7EpZ",
+      "operationId": "1c0ad7f5-348e-45b1-83a5-edaaeb7841b0",
+      "checkoutOperationExists": true
+    },
+    {
+      "orderId": "eb27a7b3-2188-4bb1-a562-f3ef35d1723e",
+      "sessionId": "cs_test_a1dXUrLAOJdNYFFE8cHz39xyaW6BADU5D8lwI8KalpZiSnWuGbjB8luv0M",
+      "operationId": "0951ece6-cab9-49d1-86e7-ca26e016d89e",
+      "checkoutOperationExists": true
+    }
+  ],
+  "secretsPrinted": false,
+  "providerScreenshots": false,
+  "cardDataRecorded": false,
+  "individualPaymentEventId": "evt_1UZokvHQH6PJvBLPI0B75hP3",
+  "durableBeforeWorker": true,
+  "packPaymentEventId": "evt_1UZoltHQH6PJvBLP8L9s0JSk",
+  "partial": {
+    "operationId": "9dfa81d6-3367-4340-8ac0-ea914fa7670c",
+    "refundCount": 1,
+    "confirmedMinor": 100,
+    "accessA": "ALLOWED",
+    "accessB": "DENIED",
+    "executionReplaySameOperation": true
+  },
+  "hostedCheckoutCount": 2,
+  "localRefundOperationCount": 2,
+  "providerRefundObjectCount": 2,
+  "refundTotalMinor": 200,
+  "origins": {
+    "total": 3,
+    "active": 1,
+    "revoked": 2
+  },
+  "partialAndCumulativeFullConfirmed": true,
+  "oldPaymentAndRefundReplaysAcknowledged": true,
+  "independentAAfterReplay": true,
+  "bDeniedAfterReplay": true,
+  "publicBodyStillRedacted": true,
+  "newFileAccessDeniedAfterRefund": true,
+  "originalNoteRetained": true,
+  "ledger": {
+    "packGrants": 2,
+    "packRevoked": 2,
+    "refundOperations": 2,
+    "checkoutOperations": 1,
+    "accessNotifications": 1,
+    "refundNotifications": 2
+  },
+  "completedAt": "2026-11-09T09:22:23.996Z"
+}

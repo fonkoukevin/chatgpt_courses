@@ -1,0 +1,28 @@
+{
+  "verifiedAt": "2026-11-09T09:05:59.829Z",
+  "originalTablesCompared": 80,
+  "existingRowsPreserved": true,
+  "changedTables": [],
+  "addedRowsByOriginalTable": {
+    "pedagogical_versions": 14,
+    "content_translations": 28,
+    "role_permissions": 2,
+    "assets": 18,
+    "user_accounts": 1,
+    "flyway_schema_history": 1,
+    "editorial_revisions": 70,
+    "editorial_events": 70,
+    "resource_slugs": 28,
+    "resource_slug_reservations": 28,
+    "user_preferences": 1,
+    "roles": 1,
+    "learning_resources": 14,
+    "user_roles": 1,
+    "version_compositions": 12,
+    "editorial_public_metadata": 28
+  },
+  "sessionTablesExcluded": true,
+  "originalColumnProjection": true,
+  "readOnly": true,
+  "privateRowsPrinted": false
+}

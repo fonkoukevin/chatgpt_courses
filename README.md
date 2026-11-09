@@ -12,7 +12,9 @@ Lire [AGENTS.md](AGENTS.md), puis [docs/STATUS.md](docs/STATUS.md). Vérificatio
 
 ## Structure retenue
 
-Preuves récentes : [P14 compte, aide et attestations](docs/evidence/P14.md), [P13 remboursements](docs/evidence/P13.md), [P12 paiement TEST](docs/evidence/P12.md). Les paramètres commerciaux et de conservation encore absents restent des conditions d’activation explicites. L’exploitation P15 et ses définitions sont décrites dans [OPERATIONS](docs/OPERATIONS.md) ; STATUS fait autorité sur son niveau de validation.
+Preuves récentes : [P18 contenus et intégration](docs/evidence/P18.md), [P17 qualité et mesures](docs/evidence/P17.md), [P16 langues et SEO](docs/evidence/P16.md), [P15 exploitation](docs/evidence/P15.md). La [recette P19](docs/evidence/P19.md) distingue contrôles locaux, fournisseur TEST et décisions encore ouvertes. STATUS fait autorité sur le niveau de validation ; les paramètres commerciaux et de conservation absents restent des conditions d’activation explicites.
+
+P15 ajoute l’exploitation administrative, P16 les parcours bilingues et le SEO, P17 les mesures et corrections de robustesse, P18 le premier parcours rédigé et ses supports, P19 la recette consolidée et la CI. La publication éditoriale, l’activation commerciale et les déploiements gardent leurs propres préconditions.
 
 | Chemin | Rôle | État P01 |
 | --- | --- | --- |
@@ -537,6 +539,8 @@ Après compilation de l’API et du web, `.\scripts\courses.cmd run verify:bilin
 
 La recette transversale utilise `.\scripts\courses.cmd run verify:quality` après les deux builds. Elle prépare ses services isolés, exécute neuf scénarios et vérifie leur nettoyage. Ne lancez pas Maven ou un build pendant les mesures navigateur. `.\scripts\courses.cmd run verify:contrast -- P17` écrit les mesures de contraste de ce lot. Les [budgets et limites](docs/QUALITY.md) distinguent mesures locales, vérifications visuelles et risques encore ouverts.
 
+## P18 — premier parcours et supports
+
 Les [sources du premier parcours](content/course-client-proposal/README.md) contiennent les six modules FR/EN et18 ressources Markdown. Préparez le manifeste puis vérifiez les sources :
 
 ```powershell
@@ -556,3 +560,29 @@ L’import crée des brouillons et refuse les divergences humaines ; aucun compt
 `APP_PUBLISHED_LOCALES` reste vide par défaut : aucune langue indexable choisie implicitement. En production, une liste `fr`, `en` ou `fr,en` contrôle seulement l’indexation ; la publication des contenus et les langues incluses dans une offre restent des opérations distinctes. `/` utilise une redirection temporaire307 vers `APP_DEFAULT_LOCALE`. Le sitemap ne contient que des URL canoniques publiques ; les recherches, versions historiques et pages privées restent non indexables.
 
 En recette `APP_ENV=staging`, renseigner `STAGING_BASIC_USERNAME` et un `STAGING_BASIC_PASSWORD` privé d’au moins24 caractères dans le dispositif de secrets de cet environnement, jamais dans Git ou un paramètre `NEXT_PUBLIC_*`. Les pages/API/assets refusent l’accès sans ces identifiants ; le POST exact du webhook Stripe exige sa signature Spring. Garder les ports internes hors exposition publique dans l’infrastructure P20. Une sonde locale de ce périmètre ne constitue ni une recette distante, ni un déploiement ou une indexation Google observée.
+
+## P19 — recette et CI
+
+Les [preuves P19](docs/evidence/P19.md) relient E01–E16, le périmètre retenu des fonctions et T01–T20. Les résultats antérieurs réutilisés portent leur phase ; ils ne deviennent pas des exécutions P19. La [CI](docs/CI.md) installe depuis le lockfile, vérifie contrat/types/lint/tests, puis transfère les builds identifiés aux sondes et parcours E2E. Les rapports et captures synthétiques autorisés ont une rétention de trois jours. Son exécution sur GitHub doit être observée séparément.
+
+Après arrêt des applications de développement, services Docker disponibles, builds préparés et Chromium installé :
+
+```powershell
+.\scripts\courses.cmd run verify:api
+.\scripts\courses.cmd run build:web
+.\scripts\courses.cmd run verify:release
+.\scripts\courses.cmd run verify:production-config
+.\scripts\courses.cmd run verify:ci
+```
+
+`verify:release` emploie PostgreSQL/S3/Mailpit isolés et le transport Stripe contrôlé ; quatre parcours sans retry vérifient catalogue/panne, acquisition FR/EN, conflit/conservation et compte/provenance/permissions. Il réserve les ports3101/8181. La sonde production utilise les mêmes builds, une base isolée vide et des fournisseurs désactivés ; elle ne déploie pas l’application. Ces commandes ne doivent pas tourner simultanément avec un autre harness ni reconstruire un build utilisé par un serveur.
+
+La recette fournisseur est distincte et nécessite la configuration privée Stripe **TEST** existante, le même compte vérifié et l’arrêt des autres listeners Stripe de ce dépôt :
+
+```powershell
+.\scripts\courses.cmd run verify:release-stripe
+```
+
+Elle prépare deux offres fictives réservées à la recette : achat individuel100 centimesEUR, pack200 centimesEUR, puis deux remboursements du pack de100 centimes. Ces montants ne constituent aucun prix commercial. Les événements réels, confirmations et rejeux sont contrôlés côté serveur. Le harness n’enregistre ni carte, formulaire, DOM ou URL Checkout complète ; les erreurs fournisseur sont remplacées par des codes stables en conservant l’état d’échec. Le nettoyage expire seulement les sessions propres ouvertes et impayées ; il ne rembourse jamais automatiquement un paiement. Aucun résultat externe n’est déduit des fixtures. À la fin, relancer `dev` et le listener TEST existant si ceux-ci avaient été arrêtés.
+
+Les anciens incidents d’accès et les conditions commerciales encore ouvertes restent dans STATUS. Une recette technique réussie ne publie pas les contenus, ne crée pas de rôle dans la base partagée et n’active pas la vente.

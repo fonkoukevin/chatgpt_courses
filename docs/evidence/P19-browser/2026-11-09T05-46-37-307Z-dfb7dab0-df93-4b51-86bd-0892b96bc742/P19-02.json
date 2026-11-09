@@ -1,0 +1,33 @@
+{
+  "scenarioId": "P19-02",
+  "provider": "CONTROLLED_LOCAL_STRIPE_TRANSPORT_NOT_EXTERNAL",
+  "amountMinor": 100,
+  "currency": "EUR",
+  "manualTestGrants": 0,
+  "orderLineGrants": 1,
+  "includedLocales": [
+    "fr",
+    "en"
+  ],
+  "sameEnrollment": true,
+  "frenchNoteUnchanged": true,
+  "frenchQuizHistoryRetained": true,
+  "originalPersonalMethodPreserved": true,
+  "privateDownloads": [
+    {
+      "locale": "fr",
+      "bytes": 2356,
+      "sha256": "143795867f87372590223b98fde740aa1c2f4f7a39c9d869ff7b3e2d1115fe22",
+      "actualUiDownload": true,
+      "sourceAccess": "PROTECTED"
+    },
+    {
+      "locale": "en",
+      "bytes": 2132,
+      "sha256": "51d2f06c571372b0e496194d2e4073832be54c9ebe20b8052e532a3fa235c5f5",
+      "actualUiDownload": true,
+      "sourceAccess": "PROTECTED"
+    }
+  ],
+  "videoPositions": "Not repeated: distinct real local clip/media progress proof remains P16; no course video was invented."
+}

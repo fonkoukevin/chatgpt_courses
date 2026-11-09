@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "phase": "P19",
+  "recordedAt": "2026-11-09T09:19:08Z",
+  "scope": "Offline external TEST cleanup and artifact privacy checks before provider execution",
+  "providerCallsExecuted": false,
+  "checks": [
+    { "command": "scripts/courses.cmd run verify:ci", "exitCode": 0, "tests": 15, "passed": 15, "failures": 0, "skipped": 0, "ciSafetyTests": 9, "externalPrivacyAndCleanupTests": 6 },
+    { "command": "scripts/courses.cmd run typecheck:browser", "exitCode": 0 },
+    { "command": "node --check (four affected JavaScript modules)", "exitCode": 0, "files": 4 },
+    { "command": "git diff --check", "exitCode": 0 }
+  ],
+  "regressions": [
+    "A failed known-session cleanup does not prevent attempts for subsequent known sessions.",
+    "An unresolved checkout-operation lookup prevents cleanup confirmation even when all known sessions were handled.",
+    "Two paid TEST sessions are retained; cleanup has no refund fallback."
+  ],
+  "boundaries": {
+    "allOwnedProcessAndServiceStopsAttemptedAfterProviderCleanupFailure": true,
+    "cleanupFailureReportContainsOnlyStableCodeAndCounts": true,
+    "unknownOperationOrSessionNeverAssumedAbsent": true,
+    "javaAndJarChanged": false,
+    "automaticRefundOnCleanup": false,
+    "externalRecipeExecutedByTheseChecks": false
+  },
+  "limits": [
+    "These are synthetic offline tests. They do not establish availability or success of the actual Stripe TEST recipe.",
+    "The earlier three-test privacy receipt remains historical; this follow-up records the six privacy/cleanup tests within the fifteen-test CI command."
+  ]
+}

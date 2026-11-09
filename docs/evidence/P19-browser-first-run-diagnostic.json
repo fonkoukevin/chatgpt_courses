@@ -1,0 +1,17 @@
+{
+  "runId": "2026-11-09T05-37-33-267Z-d1af2072-d594-4967-accb-2a0cd4af442f",
+  "result": "failed",
+  "passed": 1,
+  "failed": 1,
+  "didNotRun": 2,
+  "cleanupConfirmed": true,
+  "privateConsoleLog": ".runtime/p19-p19-2026-11-09T05-37-33-059Z.log",
+  "observed": "The paid-content helper retained a first LearningActivity HTTP 200 whose body could not be validated, followed by member HTTP 200 with the expected body, LearningActivity HTTP 200 ACTIVE with the expected body, and visit HTTP 200. No HTTP 403 was observed. Current isolated SQL showed one ORDER_LINE grant, zero MANUAL_TEST grants, and the target's published, current, active-language path.",
+  "diagnosticLimit": "The original response.json catch discarded its error. A cancelled original response is not proven; null was retained as failure, never ignored.",
+  "sourceChronology": "ActivityContent.enroll sets the enrolled message before awaiting its LearningActivity GET. The first fixture waited only for that message and immediately navigated again. A response from the prior document could therefore be interrupted by the fixture's navigation. This mechanism is inferred from code chronology, not a recovered network error from the original run.",
+  "fixtureCorrection": "Install response waits before enrolling, then require complete valid LearningActivity and visit HTTP 200 bodies/finished outcomes before navigating. The observed-navigation helper now records bounded requestStartedBeforeObservation, response finished outcome and categorized body-read failures without raw errors or URLs. Invalid/null responses and all unexpected access refusals still fail.",
+  "applicationChanged": false,
+  "artifactChanged": false,
+  "automaticRetries": 0,
+  "historicalAccessIncidentDeclaredResolved": false
+}

@@ -1,0 +1,67 @@
+{
+  "available": true,
+  "readOnly": true,
+  "capturedAt": "2026-11-09T05:45:09.625Z",
+  "aggregates": {
+    "grants": [
+      {
+        "count": "1",
+        "state": "ACTIVE",
+        "origin": "ORDER_LINE"
+      }
+    ],
+    "orders": [
+      {
+        "count": "1",
+        "refundFull": false,
+        "orderStatus": "CONFIRMED",
+        "paymentStatus": "PAID",
+        "fulfillmentStatus": "READY",
+        "refundReviewRequired": false
+      }
+    ],
+    "outbox": [
+      {
+        "type": "ACCESS_ACTIVATED",
+        "count": "1",
+        "status": "SENT",
+        "lastErrorCode": null
+      },
+      {
+        "type": "ACCOUNT_CREATED",
+        "count": "2",
+        "status": "SENT",
+        "lastErrorCode": null
+      }
+    ],
+    "paymentEvents": [
+      {
+        "count": "1",
+        "state": "PROCESSED",
+        "lastErrorCode": null
+      }
+    ],
+    "refundOperations": [],
+    "checkoutOperations": [
+      {
+        "count": "1",
+        "state": "COMPLETE",
+        "lastErrorCode": null
+      }
+    ],
+    "refundReconciliationJobs": [
+      {
+        "count": "1",
+        "state": "WAITING",
+        "lastErrorCode": null
+      }
+    ],
+    "paymentReconciliationJobs": [
+      {
+        "count": "1",
+        "state": "PROCESSED",
+        "lastErrorCode": null
+      }
+    ]
+  }
+}

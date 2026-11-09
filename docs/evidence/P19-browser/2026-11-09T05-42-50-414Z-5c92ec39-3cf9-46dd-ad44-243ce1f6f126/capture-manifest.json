@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "fixtureDataOnly": true,
+  "captures": [
+    {
+      "scenarioId": "P19-01",
+      "path": "fr-390-catalogue-empty.png",
+      "sha256": "bd11b49d921a0a896dbd751843d28031b314402d419f99ca7fcaeecd2f79a268",
+      "width": 390,
+      "height": 1000,
+      "syntheticApp": true,
+      "provider": false,
+      "capturedFromLoopbackApp": true
+    },
+    {
+      "scenarioId": "P19-01",
+      "path": "fr-390-catalogue-unavailable.png",
+      "sha256": "f53031de91e1d28b2b6dd8a5b3fd7ffe6c3abb5946d3f9b029550e9db9ace91e",
+      "width": 390,
+      "height": 1000,
+      "syntheticApp": true,
+      "provider": false,
+      "capturedFromLoopbackApp": true
+    },
+    {
+      "scenarioId": "P19-02",
+      "path": "fr-390-paid-original-note.png",
+      "sha256": "8c5da1845acffb72e6de6296cfd80e10563c1725ed680daba7aa061ef4344bb5",
+      "width": 390,
+      "height": 1000,
+      "syntheticApp": true,
+      "provider": false,
+      "capturedFromLoopbackApp": true
+    }
+  ]
+}

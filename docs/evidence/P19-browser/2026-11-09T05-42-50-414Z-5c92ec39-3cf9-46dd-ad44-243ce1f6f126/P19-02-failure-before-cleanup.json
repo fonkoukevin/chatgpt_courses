@@ -1,0 +1,162 @@
+{
+  "scenarioId": "P19-02",
+  "recordedAfterTestBeforeCleanup": true,
+  "principal": {
+    "status": 200,
+    "expectedOwner": true,
+    "learningRead": true
+  },
+  "database": {
+    "paths": [
+      {
+        "depth": 2,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 2,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 2,
+        "target": true,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 2,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 2,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 2,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 1,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 1,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 1,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 1,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 1,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 1,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      },
+      {
+        "depth": 0,
+        "target": false,
+        "started": true,
+        "published": true,
+        "unexpired": true,
+        "unrevoked": true,
+        "sourceCurrent": true,
+        "editorialState": "PUBLISHED",
+        "localeIncluded": true
+      }
+    ],
+    "available": true,
+    "accountActive": true,
+    "orderLineGrants": 1,
+    "manualTestGrants": 0
+  },
+  "automaticRetry": false,
+  "privacy": "Only statuses, contract flags and current isolated SQL facts; no URL, identity, cookie, provider payload, personal text or secret."
+}

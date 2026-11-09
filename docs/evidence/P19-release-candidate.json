@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-09T09:23:50.797Z",
+  "verdict": "LOCAL_CANDIDATE_FOR_PRIVATE_STAGING_WITH_COMMERCE_DISABLED",
+  "codeCommit": "a5a491f8ae8d7da19e11dd081a00f04938b569ee",
+  "applicationSourceCommit": "b9a61c3b36f43432bb1fafd0ecfb922c0dd46c0c",
+  "applicationSourceUnchangedSinceP18": true,
+  "artifacts": {
+    "jarSha256": "2154f1f3c8e18d073db8b0ab44cec136d9e9df8825e1920702e66a214ba64b6e",
+    "webBuildId": "hX_-deZsNCevTpDZbakrw",
+    "dockerImagesBuilt": false,
+    "registryPublished": false
+  },
+  "versions": {
+    "node": "24.22.2",
+    "npm": "11.19.1",
+    "java": "21.0.13+9",
+    "mavenWrapper": "3.10.0",
+    "springBoot": "4.1.2",
+    "postgresql": "18.6",
+    "next": "16.4.5",
+    "react": "19.3.1",
+    "typescript": "6.0.3",
+    "tailwind": "4.3.5",
+    "playwright": "1.65.0",
+    "stripeJava": "34.1.0",
+    "stripeApi": "2026-10-28.endive",
+    "stripeCli": "1.55.8"
+  },
+  "schema": {
+    "firstMigration": "V001",
+    "lastMigration": "V019",
+    "count": 19,
+    "manager": "Flyway only",
+    "hibernate": "validate",
+    "freshAndUpgrade": "P19-api-global-checks.json"
+  },
+  "checks": {
+    "apiTests": 256,
+    "apiSuites": 35,
+    "clientTests": 124,
+    "courseSourceChecks": 223,
+    "controlledBrowserCases": 4,
+    "controlledPaymentCases": 8,
+    "controlledRefundCases": 6,
+    "reviewedP19Viewports": 8,
+    "productionConfigurationChecks": 12,
+    "realHttpSmoke": true,
+    "externalStripeRecipe": {
+      "runId": "2026-11-09T09-19-44-265Z-60cc287a-6806-44fe-8f12-9943cb5c14bd",
+      "hostedCheckoutTestCount": 2,
+      "refundTestCount": 2,
+      "partialMinor": 100,
+      "cumulativeFullMinor": 200,
+      "individualOriginPreserved": true,
+      "oldEventsReplayed": true,
+      "liveMode": false
+    }
+  },
+  "integrations": {
+    "stripe": "External TEST card success/refunds/replays observed; other states controlled separately",
+    "smtp": "Real local Mailpit SMTP only",
+    "storage": "Local SeaweedFS S3; no production vendor chosen",
+    "video": "Local CC0 technical clips previously tested; no course video produced",
+    "githubActions": "Definition and local validators passed; no remote workflow executed"
+  },
+  "content": {
+    "namespace": "course-client-proposal",
+    "identities": 14,
+    "localDraftTranslations": 28,
+    "localReadyFiles": 18,
+    "solutionFiles": 4,
+    "sharedPublication": false,
+    "humanEditorialReview": false,
+    "technicalImportActorDisabled": true,
+    "knownPasswordRetained": false,
+    "backendCommercialOfferCreated": false
+  },
+  "commercialReleaseAllowed": false,
+  "openCommercialGates": [
+    "P12 two and P15 two historical unexpected access refusals remain of unknown cause; passing tests do not resolve them.",
+    "Original P19 refund reconciliation timeout is not attributed; final controlled run passed without active abandoned lease and did not execute extended waiting branch.",
+    "Human FR/EN editorial review, course media and sold format remain unapproved.",
+    "Offer price/currency/tax/access/update/support/legal and sales languages require validated decisions.",
+    "Retention and irreversible data processing, real commercial documents and production service configuration remain gated."
+  ],
+  "deploymentObserved": false,
+  "pushPerformed": false,
+  "livePaymentPerformed": false,
+  "externalEmailToRealPerson": false,
+  "next": [
+    "P20_INFRASTRUCTURE_PRODUCTION: images/digests, internal networks/Caddy, secrets, migration/backup/restore/runbooks on isolated data; no hosting purchase implicit.",
+    "P21_DEPLOIEMENT_RECETTE: only after authorized target/domain/access; private noindex TEST environment, real deployed acceptance and backup/restore."
+  ],
+  "proofs": [
+    "P19.md",
+    "P19-api-global-checks.json",
+    "P19-browser-checks.json",
+    "P19-payments-regression-checks.json",
+    "P19-refund-regression-checks.json",
+    "P19-production-config-checks.json",
+    "P19-http-smoke-checks.json",
+    "P19-ci-checks.json",
+    "P19-ci-e2e-collection-checks.json",
+    "P18-shared-import-checks.json",
+    "P19-shared-preservation.json",
+    "P19_EXTERNAL-browser/2026-11-09T09-19-44-265Z-60cc287a-6806-44fe-8f12-9943cb5c14bd/stripe-test-proof.json",
+    "P19-development-restoration.json",
+    "P19-final-development-check.json",
+    "P19-private-audit.json",
+    "P19-stripe-external-checks.json"
+  ],
+  "secretsPrinted": false,
+  "finalizedAt": "2026-11-09T09:27:54.602Z",
+  "localDevelopment": {
+    "restored": true,
+    "origin": "http://localhost:3000",
+    "frenchUrl": "http://localhost:3000/fr",
+    "englishUrl": "http://localhost:3000/en",
+    "listenerMode": "TEST",
+    "listenerReady": true,
+    "privateConfigPreserved": true,
+    "userNextFilePreserved": true,
+    "historicalP12ReceiptPreserved": true
+  },
+  "privateAudit": {
+    "knownConfiguredValuesAbsent": true,
+    "filesChecked": 1568,
+    "browserBundlesChecked": 52,
+    "allPossibleSecretsClaimed": false
+  }
+}

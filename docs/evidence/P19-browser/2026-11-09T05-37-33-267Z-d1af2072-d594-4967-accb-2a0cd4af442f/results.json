@@ -1,0 +1,362 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.tools\\node-v24.22.2-win-x64\\node.exe",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts"
+    ],
+    "configFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts",
+    "rootDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 1200000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/.runtime/browser-2026-11-09T05-37-33-267Z-d1af2072-d594-4967-accb-2a0cd4af442f/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/release-candidate.spec.ts"
+        ],
+        "timeout": 240000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T05-37-33-267Z-d1af2072-d594-4967-accb-2a0cd4af442f\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "snapshotDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/release-candidate.spec.ts",
+        "timeout": 240000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3101",
+          "browserName": "chromium",
+          "headless": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "actionTimeout": 10000,
+          "navigationTimeout": 20000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off",
+          "serviceWorkers": "block"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\docs\\evidence\\P19-browser\\2026-11-09T05-37-33-267Z-d1af2072-d594-4967-accb-2a0cd4af442f\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "release-candidate.spec.ts",
+      "file": "release-candidate.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "P19 controlled release candidate",
+          "file": "release-candidate.spec.ts",
+          "line": 28,
+          "column": 6,
+          "specs": [
+            {
+              "title": "P19-01 catalogue selection, return, empty result and real service failure",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\release-candidate.spec.ts",
+                        "line": 28,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 22321,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T05:38:13.499Z",
+                      "annotations": [
+                        {
+                          "type": "serial",
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\release-candidate.spec.ts",
+                            "line": 28,
+                            "column": 6
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "1953c4efb06bf8f1535c-4f25ca50eb9d6a4638d4",
+              "file": "release-candidate.spec.ts",
+              "line": 41,
+              "column": 3
+            },
+            {
+              "title": "P19-02 paid ORDER_LINE covers the same course and preserved French work in English",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\release-candidate.spec.ts",
+                        "line": 28,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 24874,
+                      "error": {
+                        "message": "Error: Paid course observation failed: {\"recordedBeforeCleanup\":true,\"failed\":true,\"observations\":[{\"kind\":\"learning\",\"status\":200,\"valid\":false,\"identity\":false,\"active\":false,\"bodyPresent\":false,\"expectedBlockPresent\":false,\"code\":\"NONE\"},{\"kind\":\"member\",\"status\":200,\"valid\":true,\"identity\":true,\"active\":true,\"bodyPresent\":true,\"expectedBlockPresent\":true,\"code\":\"NONE\"},{\"kind\":\"learning\",\"status\":200,\"valid\":true,\"identity\":true,\"active\":true,\"bodyPresent\":true,\"expectedBlockPresent\":true,\"code\":\"NONE\"},{\"kind\":\"visit\",\"status\":200,\"valid\":true,\"identity\":true,\"active\":true,\"bodyPresent\":false,\"expectedBlockPresent\":false,\"code\":\"NONE\"}],\"principal\":{\"status\":200,\"expectedOwner\":true},\"database\":{\"paths\":[{\"depth\":2,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":2,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":2,\"target\":true,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":2,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":2,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":2,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":1,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":1,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":1,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":1,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":1,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":1,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":0,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true}],\"available\":true,\"accountActive\":true,\"orderLineGrants\":1,\"manualTestGrants\":0},\"automaticRetry\":false}",
+                        "stack": "Error: Paid course observation failed: {\"recordedBeforeCleanup\":true,\"failed\":true,\"observations\":[{\"kind\":\"learning\",\"status\":200,\"valid\":false,\"identity\":false,\"active\":false,\"bodyPresent\":false,\"expectedBlockPresent\":false,\"code\":\"NONE\"},{\"kind\":\"member\",\"status\":200,\"valid\":true,\"identity\":true,\"active\":true,\"bodyPresent\":true,\"expectedBlockPresent\":true,\"code\":\"NONE\"},{\"kind\":\"learning\",\"status\":200,\"valid\":true,\"identity\":true,\"active\":true,\"bodyPresent\":true,\"expectedBlockPresent\":true,\"code\":\"NONE\"},{\"kind\":\"visit\",\"status\":200,\"valid\":true,\"identity\":true,\"active\":true,\"bodyPresent\":false,\"expectedBlockPresent\":false,\"code\":\"NONE\"}],\"principal\":{\"status\":200,\"expectedOwner\":true},\"database\":{\"paths\":[{\"depth\":2,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":2,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":2,\"target\":true,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":2,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":2,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":2,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":1,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":1,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":1,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":1,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":1,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":1,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":0,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true}],\"available\":true,\"accountActive\":true,\"orderLineGrants\":1,\"manualTestGrants\":0},\"automaticRetry\":false}\n    at openPaidCourseLesson (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\release-candidate-fixture.ts:115:11)\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\release-candidate.spec.ts:83:5",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\release-candidate-fixture.ts",
+                          "column": 11,
+                          "line": 115
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mrelease-candidate-fixture.ts:115\n\n \u001b[90m 113 |\u001b[39m     \u001b[36mconst\u001b[39m diagnostic \u001b[33m=\u001b[39m { recordedBeforeCleanup\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m\u001b[33m,\u001b[39m failed\u001b[33m,\u001b[39m observations\u001b[33m,\u001b[39m principal\u001b[33m,\u001b[39m database\u001b[33m:\u001b[39m snapshot\u001b[33m,\u001b[39m automaticRetry\u001b[33m:\u001b[39m \u001b[36mfalse\u001b[39m }\u001b[33m;\u001b[39m\n \u001b[90m 114 |\u001b[39m     evidenceJson(\u001b[32m`paid-${locale}-${key}-failure-before-cleanup.json`\u001b[39m\u001b[33m,\u001b[39m diagnostic)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 115 |\u001b[39m     \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`Paid course observation failed: ${JSON.stringify(diagnostic)}`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 116 |\u001b[39m   } \u001b[36mfinally\u001b[39m { page\u001b[33m.\u001b[39moff(\u001b[32m'response'\u001b[39m\u001b[33m,\u001b[39m listener)\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m \u001b[33mPromise\u001b[39m\u001b[33m.\u001b[39mall([\u001b[33m...\u001b[39mpending])\u001b[33m;\u001b[39m }\n \u001b[90m 117 |\u001b[39m }\n \u001b[90m 118 |\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\release-candidate-fixture.ts",
+                            "column": 11,
+                            "line": 115
+                          },
+                          "message": "Error: Paid course observation failed: {\"recordedBeforeCleanup\":true,\"failed\":true,\"observations\":[{\"kind\":\"learning\",\"status\":200,\"valid\":false,\"identity\":false,\"active\":false,\"bodyPresent\":false,\"expectedBlockPresent\":false,\"code\":\"NONE\"},{\"kind\":\"member\",\"status\":200,\"valid\":true,\"identity\":true,\"active\":true,\"bodyPresent\":true,\"expectedBlockPresent\":true,\"code\":\"NONE\"},{\"kind\":\"learning\",\"status\":200,\"valid\":true,\"identity\":true,\"active\":true,\"bodyPresent\":true,\"expectedBlockPresent\":true,\"code\":\"NONE\"},{\"kind\":\"visit\",\"status\":200,\"valid\":true,\"identity\":true,\"active\":true,\"bodyPresent\":false,\"expectedBlockPresent\":false,\"code\":\"NONE\"}],\"principal\":{\"status\":200,\"expectedOwner\":true},\"database\":{\"paths\":[{\"depth\":2,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":2,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":2,\"target\":true,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":2,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":2,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":2,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":1,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":1,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":1,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":1,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":1,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":1,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true},{\"depth\":0,\"target\":false,\"started\":true,\"published\":true,\"unexpired\":true,\"unrevoked\":true,\"sourceCurrent\":true,\"editorialState\":\"PUBLISHED\",\"localeIncluded\":true}],\"available\":true,\"accountActive\":true,\"orderLineGrants\":1,\"manualTestGrants\":0},\"automaticRetry\":false}\n\n   at release-candidate-fixture.ts:115\n\n  113 |     const diagnostic = { recordedBeforeCleanup: true, failed, observations, principal, database: snapshot, automaticRetry: false };\n  114 |     evidenceJson(`paid-${locale}-${key}-failure-before-cleanup.json`, diagnostic);\n> 115 |     throw new Error(`Paid course observation failed: ${JSON.stringify(diagnostic)}`);\n      |           ^\n  116 |   } finally { page.off('response', listener); await Promise.all([...pending]); }\n  117 | }\n  118 |\n    at openPaidCourseLesson (C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\release-candidate-fixture.ts:115:11)\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\release-candidate.spec.ts:83:5"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T05:39:21.240Z",
+                      "annotations": [
+                        {
+                          "type": "serial",
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\release-candidate.spec.ts",
+                            "line": 28,
+                            "column": 6
+                          }
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T05-37-33-267Z-d1af2072-d594-4967-accb-2a0cd4af442f\\results\\release-candidate-P19-cont-bb0cd-rved-French-work-in-English\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T05-37-33-267Z-d1af2072-d594-4967-accb-2a0cd4af442f\\results\\release-candidate-P19-cont-bb0cd-rved-French-work-in-English\\error-context.md"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-09T05-37-33-267Z-d1af2072-d594-4967-accb-2a0cd4af442f\\results\\release-candidate-P19-cont-bb0cd-rved-French-work-in-English\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\release-candidate-fixture.ts",
+                        "column": 11,
+                        "line": 115
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "1953c4efb06bf8f1535c-15ae0c9169f187999426",
+              "file": "release-candidate.spec.ts",
+              "line": 68,
+              "column": 3
+            },
+            {
+              "title": "P19-03 private project conflict and real outage retain input; archived source keeps the personal method",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\release-candidate.spec.ts",
+                        "line": 28,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T05:39:46.259Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "1953c4efb06bf8f1535c-34f181c77f3151481b70",
+              "file": "release-candidate.spec.ts",
+              "line": 124,
+              "column": 3
+            },
+            {
+              "title": "P19-04 account purchase, contextual help, declared provenance and owner/permission refusals",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\release-candidate.spec.ts",
+                        "line": 28,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-09T05:39:46.260Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "1953c4efb06bf8f1535c-c0206267187810566368",
+              "file": "release-candidate.spec.ts",
+              "line": 161,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-09T05:38:11.453Z",
+    "duration": 94843.249,
+    "expected": 1,
+    "skipped": 2,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

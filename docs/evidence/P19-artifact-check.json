@@ -1,0 +1,12 @@
+{
+  "verifiedAt": "2026-11-09T05:38:46.810Z",
+  "jarSha256": "2154f1f3c8e18d073db8b0ab44cec136d9e9df8825e1920702e66a214ba64b6e",
+  "jarSizeBytes": 94678785,
+  "migrationCount": 19,
+  "lastMigration": "V019__editorial_import_bindings_and_solution_files.sql",
+  "sourceAndBuiltMigrationsMatch": true,
+  "applicationFilesChecked": 787,
+  "knownPrivateValuesAbsent": true,
+  "privateEntriesAbsent": true,
+  "secretsPrinted": false
+}

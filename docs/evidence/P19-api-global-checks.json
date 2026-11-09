@@ -1,0 +1,358 @@
+{
+  "schemaVersion": 1,
+  "phase": "P19",
+  "scope": "Complete local API verification against isolated PostgreSQL and configured local test transports",
+  "command": "scripts/courses.cmd run verify:api",
+  "exitCode": 0,
+  "mavenDuration": "12:14 min",
+  "finishedAt": "2026-11-09T06:25:52+01:00",
+  "tests": 256,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "suiteCount": 35,
+  "suites": [
+    {
+      "name": "com.chatgptcourses.AccessPolicyTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.362
+    },
+    {
+      "name": "com.chatgptcourses.AccountEvidenceHttpIntegrationTest",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 71.09
+    },
+    {
+      "name": "com.chatgptcourses.AdminOperationsHttpIntegrationTest",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 32.04
+    },
+    {
+      "name": "com.chatgptcourses.assets.config.AssetStorageConfigurationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.011
+    },
+    {
+      "name": "com.chatgptcourses.AssetServiceIntegrationTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 23.87
+    },
+    {
+      "name": "com.chatgptcourses.CheckoutIntegrationTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 18.02
+    },
+    {
+      "name": "com.chatgptcourses.CommerceHttpIntegrationTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 31.09
+    },
+    {
+      "name": "com.chatgptcourses.ContentImportIntegrationTest",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 31.94
+    },
+    {
+      "name": "com.chatgptcourses.EditorialHttpIntegrationTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 15.16
+    },
+    {
+      "name": "com.chatgptcourses.EditorialServiceIntegrationTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 11.46
+    },
+    {
+      "name": "com.chatgptcourses.EntitlementAccessIntegrationTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 17.06
+    },
+    {
+      "name": "com.chatgptcourses.FoundationIntegrationTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 9.8
+    },
+    {
+      "name": "com.chatgptcourses.HTTPAuthIntegrationTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 13.18
+    },
+    {
+      "name": "com.chatgptcourses.IdentityRequestLimitIntegrationTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 13.75
+    },
+    {
+      "name": "com.chatgptcourses.IdentityServiceIntegrationTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 13.3
+    },
+    {
+      "name": "com.chatgptcourses.LearningHttpIntegrationTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 24.89
+    },
+    {
+      "name": "com.chatgptcourses.LearningServiceIntegrationTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 15.97
+    },
+    {
+      "name": "com.chatgptcourses.media.VideoHttpIntegrationTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 25.41
+    },
+    {
+      "name": "com.chatgptcourses.MethodServiceIntegrationTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 16.08
+    },
+    {
+      "name": "com.chatgptcourses.notifications.NotificationOutboxIntegrationTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 17.75
+    },
+    {
+      "name": "com.chatgptcourses.OfferServiceIntegrationTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 13.88
+    },
+    {
+      "name": "com.chatgptcourses.payments.config.StripeConfigurationTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.01
+    },
+    {
+      "name": "com.chatgptcourses.payments.inbox.PaymentInboxHttpIntegrationTest",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 41.58
+    },
+    {
+      "name": "com.chatgptcourses.payments.refunds.RefundConfigurationTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.139
+    },
+    {
+      "name": "com.chatgptcourses.PersonalMethodsHttpIntegrationTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 18.39
+    },
+    {
+      "name": "com.chatgptcourses.ProjectServiceIntegrationTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 14.57
+    },
+    {
+      "name": "com.chatgptcourses.ProjectsHttpIntegrationTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 18.93
+    },
+    {
+      "name": "com.chatgptcourses.PublicCatalogueHttpIntegrationTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 21.6
+    },
+    {
+      "name": "com.chatgptcourses.PublicCatalogueIntegrationTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 11.68
+    },
+    {
+      "name": "com.chatgptcourses.PublicRoutingIntegrationTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 11.13
+    },
+    {
+      "name": "com.chatgptcourses.RefundHttpIntegrationTest",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 57.9
+    },
+    {
+      "name": "com.chatgptcourses.SchemaIntegrationTest",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 21.73
+    },
+    {
+      "name": "com.chatgptcourses.shared.http.HttpContractTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.21
+    },
+    {
+      "name": "com.chatgptcourses.shared.money.MoneyValidationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.008
+    },
+    {
+      "name": "com.chatgptcourses.SqlReadBudgetIntegrationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 83.63
+    }
+  ],
+  "log": ".runtime/p19-api-global-first.log",
+  "artifact": {
+    "path": "apps/api/target/chatgpt-courses-api.jar",
+    "sha256": "2154f1f3c8e18d073db8b0ab44cec136d9e9df8825e1920702e66a214ba64b6e",
+    "sizeBytes": 94678785,
+    "packagedBy": "Maven verify: jar + spring-boot repackage",
+    "identicalToP18": true
+  },
+  "environment": {
+    "localEnvFileLoaded": false,
+    "realStripeVariablesStripped": true,
+    "topLevelStripeEnabled": false,
+    "topLevelPaymentAndRefundWorkersEnabled": false,
+    "testClassesOwnTheirControlledConfiguration": true,
+    "postgresql": "18.6, actual disposable Testcontainers databases",
+    "h2": false,
+    "sharedBusinessDatabaseUsed": false,
+    "externalStripeApiCalled": false
+  },
+  "migrations": {
+    "sqlVersions": [
+      "V001",
+      "V002",
+      "V003",
+      "V004",
+      "V005",
+      "V006",
+      "V007",
+      "V008",
+      "V009",
+      "V010",
+      "V011",
+      "V012",
+      "V013",
+      "V014",
+      "V015",
+      "V016",
+      "V017",
+      "V018",
+      "V019"
+    ],
+    "fresh": "SchemaIntegrationTest.aFreshDatabaseMigratesAndHibernateValidatesWithoutSeedingAccountsOrCommerce",
+    "v018Upgrade": "ContentImportIntegrationTest.additiveUpgradeKeepsLegacyAssetAndEditorialRowsAndDefaultsTheirRoleToResource",
+    "v018UpgradeAssertion": "All pre-existing columns of the legacy asset row unchanged; content_role defaults RESOURCE; import mappings empty.",
+    "olderUpgradeCoverage": "SchemaIntegrationTest retains earlier JDBC/session, content, payment and operations upgrade assertions."
+  },
+  "accessFollowUp": {
+    "entitlementTests": 5,
+    "refundTests": 14,
+    "diagnosticsCreatedBeforeCleanup": 0,
+    "diagnosticFiles": [],
+    "historicalP12AndP15IncidentsRemainOpen": true,
+    "unexpectedAccessRetried": false,
+    "grantDatesAntidated": false,
+    "noCauseOrFixInferredFromPassingTests": true
+  },
+  "limits": [
+    "Local API validation is not a GitHub Actions run or production observation.",
+    "Controlled SDK/HTTP/provider scenarios are not external Stripe TEST proof.",
+    "P19 controlled browser and external Stripe TEST recipes remain separate and have not been executed by this global API command.",
+    "No human review, commercial activation or shared editorial import is established here."
+  ]
+}

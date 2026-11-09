@@ -1,0 +1,395 @@
+{
+  "schemaVersion": 1,
+  "phase": "P19",
+  "checkedAt": "2026-11-09T05:49:10.776Z",
+  "scope": "CI definition, privacy boundaries, build transfer and real local HTTP smoke; no remote workflow execution",
+  "result": "LOCAL_CHECKS_PASSED_GITHUB_NOT_EXECUTED",
+  "workflow": {
+    "file": ".github/workflows/ci.yml",
+    "jobs": [
+      "web",
+      "api",
+      "e2e"
+    ],
+    "independentJobs": [
+      "web",
+      "api"
+    ],
+    "e2eNeeds": [
+      "web",
+      "api"
+    ],
+    "runner": "ubuntu-24.04",
+    "node": "24.22.2",
+    "npm": "11.19.1",
+    "java": "21.0.13+9",
+    "permissions": "contents:read",
+    "persistCredentials": false,
+    "retentionDays": 3,
+    "automaticRetries": 0,
+    "continueOnError": false,
+    "externalStripeJob": false
+  },
+  "checks": [
+    {
+      "name": "YAML parsed with installed js-yaml and dependency graph checked",
+      "exitCode": 0
+    },
+    {
+      "name": "actionlint actual workflow validation",
+      "exitCode": 0,
+      "version": "1.7.12",
+      "platform": "windows/amd64",
+      "archiveSha256": "6e7241b51e6817ea6a047693d8e6fed13b31819c9a0dd6c5a726e1592d22f6e9",
+      "shellcheckExecuted": false,
+      "pyflakesExecuted": false
+    },
+    {
+      "name": "CI safety and provider reporter privacy tests through actual CI runner",
+      "exitCode": 0,
+      "tests": 12,
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 834
+    },
+    {
+      "name": "Actual verify:client through isolated CI runner and TAP filter",
+      "exitCode": 0,
+      "tests": 124,
+      "passed": 124,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 10140
+    },
+    {
+      "name": "Existing real PostgreSQL global JUnit XML read and filtered without rerunning Maven",
+      "exitCode": 0,
+      "sourceSuites": 35,
+      "reportedSuites": 35,
+      "tests": 256,
+      "missingSuites": 0,
+      "rawXmlPublished": false,
+      "sourceEvidence": "P19-api-global-checks.json"
+    },
+    {
+      "name": "Existing production probe report filtered without rerunning processes",
+      "exitCode": 0,
+      "checks": 12,
+      "allPassed": true,
+      "cleanupConfirmed": true,
+      "sourceEvidence": "P19-production-config-checks.json"
+    },
+    {
+      "name": "ESLint on the five CI scripts and unit tests with existing configuration",
+      "exitCode": 0
+    },
+    {
+      "name": "git diff --check on owned CI files",
+      "exitCode": 0
+    },
+    {
+      "name": "Exact CI HTTP smoke with real PostgreSQL, API stop and restart",
+      "exitCode": 0,
+      "durationMs": 62292,
+      "checks": 8,
+      "cleanupConfirmed": true,
+      "evidence": "P19-http-smoke-checks.json"
+    }
+  ],
+  "realBuildTransfer": {
+    "exitCode": 0,
+    "sourceBuildsReadOnly": true,
+    "restoredOnlyUnderRuntime": true,
+    "api": {
+      "files": 1,
+      "archiveBytes": 83898591,
+      "archiveSha256": "7db0a3725eeac12e379d5627b51988215b5b52a1d3a8d1058df23ef79af36842",
+      "jarSha256": "2154f1f3c8e18d073db8b0ab44cec136d9e9df8825e1920702e66a214ba64b6e"
+    },
+    "web": {
+      "files": 1814,
+      "archiveBytes": 7089339,
+      "archiveSha256": "b798f5b22fb0823f423596359d8156985db7654f9802116dc340b90d0f749008",
+      "buildId": "hX_-deZsNCevTpDZbakrw"
+    },
+    "newServerStarted": false,
+    "newMavenRun": false
+  },
+  "negativeTests": [
+    "private strings in Playwright/JUnit/TAP excluded while failures retained",
+    "empty/skipped/flaky/retried/duplicate release scenarios rejected",
+    "missing Java suite rejected without hardcoding global count",
+    "inherited provider and bundle credentials excluded",
+    "provider/unattested/path/hash/dimension screenshot rejected",
+    "archive hash, source commit and traversal refused before writes",
+    "existing destination, secret filename and symlink refused",
+    "raw report and credential-bearing JSON refused at artifact boundary"
+  ],
+  "history": [
+    {
+      "step": "actionlint download",
+      "result": "HTTP_504",
+      "followUp": "Second official download succeeded; checksum verified before installation. No invalid binary was executed."
+    },
+    {
+      "step": "first targeted script lint",
+      "result": "2_ERRORS",
+      "cause": "Unsafe throw in finally and unused fixture variable",
+      "followUp": "Cleanup now preserves failure state and reports failure after finally; unused variable removed; final lint passed."
+    },
+    {
+      "step": "first local CI client runner",
+      "result": "FAILED_BEFORE_TESTS",
+      "exitCode": 1,
+      "cause": "Relative npm.cmd resolved npm modules from the workspace on Windows",
+      "followUp": "Use the absolute npm.cmd beside the pinned Node executable; actual client124 passed afterwards. Partial failed metadata remains in ignored local reports."
+    },
+    {
+      "step": "initial content CI invocation",
+      "result": "HISTORICAL_RECEIPT_TIMESTAMP_UPDATED",
+      "cause": "verify:content originally used its default P18 output path",
+      "followUp": "Root verified timestamp-only drift and restored P18 bytes from HEAD; CI now passes validated phase P19 explicitly. The post-correction root execution is recorded separately."
+    }
+  ],
+  "actions": [
+    {
+      "repository": "actions/checkout",
+      "tag": "v7.0.1",
+      "commit": "3d3c42e5aac5ba805825da76410c181273ba90b1"
+    },
+    {
+      "repository": "actions/setup-node",
+      "tag": "v7.1.0",
+      "commit": "949feb2413d6458794dcd2491c4babbbce0c15c1"
+    },
+    {
+      "repository": "actions/setup-java",
+      "tag": "v6.2.0",
+      "commit": "77dd5b2ce225ea11469928ac317850245a74ae78"
+    },
+    {
+      "repository": "actions/upload-artifact",
+      "tag": "v7.0.2",
+      "commit": "cf430e030ddbb5b0abf93d22962f4752f3646cd9"
+    },
+    {
+      "repository": "actions/download-artifact",
+      "tag": "v8.0.2",
+      "commit": "9000827ccba6bdab643e8b6fd33ac0654aef8333"
+    }
+  ],
+  "officialReferencesMethod": "Public official git ls-remote tag refs and action.yml files inspected; no authenticated GitHub request",
+  "sources": [
+    "https://github.com/actions/checkout",
+    "https://github.com/actions/setup-node",
+    "https://github.com/actions/setup-java",
+    "https://github.com/actions/upload-artifact/releases/tag/v7.0.2",
+    "https://github.com/actions/download-artifact/releases/tag/v8.0.2",
+    "https://github.com/rhysd/actionlint/releases/tag/v1.7.12",
+    "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_checksums.txt",
+    "https://playwright.dev/docs/ci"
+  ],
+  "limits": [
+    "No GitHub Actions run, push or deployment performed.",
+    "Linux runner installation, action execution and the full three-job workflow remain to be observed remotely.",
+    "Local build transfer restores bytes but does not itself start the restored builds.",
+    "Root owns actual P19 browser/production/global results; reading their reports is distinct from rerunning them.",
+    "Provider TEST external recipe is separate and is never run by this workflow.",
+    "Historical access incidents remain governed by P12/P15 follow-up evidence; these CI checks do not establish their cause."
+  ],
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "2ebcf60647c90603e7617911d924f054d7b12ab8825dceb5092bd90bbaf82b0a"
+    },
+    {
+      "path": "scripts/ci-sanitize.mjs",
+      "sha256": "8ed2a5994949b145132382416b9d7f8733c681cab1731b04b0353da197d5076e"
+    },
+    {
+      "path": "scripts/ci-build.mjs",
+      "sha256": "78197fbece716004553c21180e0ef23be2dee19baa10e37ccfe67aba018daada"
+    },
+    {
+      "path": "scripts/ci-run.mjs",
+      "sha256": "0899ba96167b00eb781e3f0d36c1019738a1825249882d6682061596767e993a"
+    },
+    {
+      "path": "scripts/ci-report.mjs",
+      "sha256": "8810feeb057da18c3a486cba2bae7b8e8c883906ecb2e7687cc00a8796ec312b"
+    },
+    {
+      "path": "scripts/ci-smoke.mjs",
+      "sha256": "ef5939804d240210ead183b25016e544ec97d71a71adf482bdf1bd5f51ffefee"
+    },
+    {
+      "path": "tests/scripts/ci-safety.test.mjs",
+      "sha256": "4c4e2c2702637ec60561ab558ad7b1882b52f1ab02265a82271b7efeb607d6f4"
+    },
+    {
+      "path": "docs/CI.md",
+      "sha256": "d18da41b10c390209821688a2763a8ac2fe372bc1af215bfcd62d0277d201d0f"
+    }
+  ],
+  "secretsRead": false,
+  "privateEnvironmentChanged": false,
+  "rawLogsUploaded": false,
+  "githubWorkflowRun": false,
+  "pushed": false,
+  "additionalRootRunnerChecks": [
+    {
+      "step": "contract",
+      "exitCode": 0,
+      "result": "passed",
+      "durationMs": 4215
+    },
+    {
+      "step": "content",
+      "exitCode": 0,
+      "result": "passed",
+      "durationMs": 1615,
+      "evidencePhase": "P19",
+      "configuredEvidencePhase": "P19",
+      "postCorrectionRerun": "passed"
+    },
+    {
+      "step": "contrast",
+      "exitCode": 0,
+      "result": "passed",
+      "durationMs": 878,
+      "evidencePhase": "P19",
+      "historicalP02Overwritten": false
+    },
+    {
+      "step": "stripeConfig",
+      "exitCode": 0,
+      "result": "passed",
+      "durationMs": 1099
+    },
+    {
+      "step": "lint",
+      "exitCode": 0,
+      "result": "passed",
+      "durationMs": 22356
+    },
+    {
+      "step": "types",
+      "exitCode": 0,
+      "result": "passed",
+      "durationMs": 6662
+    },
+    {
+      "step": "browserTypes",
+      "exitCode": 0,
+      "result": "passed",
+      "durationMs": 7927
+    }
+  ],
+  "contentEvidenceIsolation": {
+    "configuredPhase": "P19",
+    "historicalP18RestoredByRoot": true,
+    "postCorrectionRun": "passed"
+  },
+  "additionalIndependentScriptChecks": {
+    "scripts": [
+      {
+        "path": "scripts/verify-course-content.mjs",
+        "sha256": "4c541ce97a8b027c4cdcca138411147c833a70572285e296b8b096c74524c48a",
+        "nodeSyntaxExitCode": 0,
+        "eslintExitCode": 0
+      },
+      {
+        "path": "scripts/verify-production-config.mjs",
+        "sha256": "c18375b1e403f68eae2c9c94d2427926fdfe654251b014a368ac5ef2329318e3",
+        "nodeSyntaxExitCode": 0,
+        "eslintExitCode": 0
+      }
+    ],
+    "eslintNodeGlobalsExplicit": [
+      "console",
+      "process",
+      "Buffer",
+      "performance",
+      "TextDecoder",
+      "URL",
+      "setTimeout",
+      "fetch",
+      "AbortSignal"
+    ],
+    "initialLintAttempt": {
+      "exitCode": 1,
+      "errors": 4,
+      "cause": "The targeted lint command omitted Node globals fetch and AbortSignal; source code was unchanged.",
+      "correctedCommandExitCode": 0
+    },
+    "diffCheckExitCode": 0,
+    "markdownFilesChecked": 2,
+    "localMarkdownLinksChecked": 6,
+    "missingLocalLinks": 0,
+    "serversStarted": false,
+    "dependenciesChanged": false
+  },
+  "reportBoundary": {
+    "publicationApprovalOnly": true,
+    "doesNotOverrideCommandOrWorkflowFailure": true,
+    "partialFailureMetadataRetained": true,
+    "localHistoricalDiagnostic": {
+      "path": ".runtime/ci-public/web/client-collection.json",
+      "result": "failed",
+      "origin": "First Windows npm.cmd launch failed before tests",
+      "currentFailure": false,
+      "deleted": false
+    },
+    "currentClient": {
+      "path": ".runtime/ci-public/web/client.json",
+      "exitCode": 0,
+      "tests": 124,
+      "passed": 124
+    },
+    "hostedRunnerStartsWithoutLocalRuntimeHistory": true
+  },
+  "httpSmoke": {
+    "executedLocally": true,
+    "evidence": "P19-http-smoke-checks.json",
+    "exitCode": 0,
+    "ports": [
+      3000,
+      8080
+    ],
+    "portsObservedFree": true,
+    "jarSha256": "2154f1f3c8e18d073db8b0ab44cec136d9e9df8825e1920702e66a214ba64b6e",
+    "webBuildId": "hX_-deZsNCevTpDZbakrw",
+    "historicalP01Overwritten": false
+  },
+  "followUps": [
+    {
+      "checkedAt": "2026-11-09T09:20:46.726Z",
+      "scope": "Root reran the isolated CI script test command after the external cleanup hardening; no supplier run by this check",
+      "sourceCodeCommit": "a5a491f8ae8d7da19e11dd081a00f04938b569ee",
+      "command": "node scripts/ci-run.mjs web scripts",
+      "executionOwner": "root",
+      "exitCode": 0,
+      "result": "passed",
+      "tests": 15,
+      "passed": 15,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 1234,
+      "composition": {
+        "ciSafetyTests": 9,
+        "providerPrivacyAndCleanupTests": 6
+      },
+      "historicalTwelveTestRunPreserved": true,
+      "sourceAppAndContentComparison": {
+        "baseline": "b9a61c3",
+        "reportedBy": "root",
+        "gitDiffNameOnlyEmpty": true
+      },
+      "applicationStartedByThisCheck": false,
+      "providerContactedByThisCheck": false,
+      "githubWorkflowExecuted": false,
+      "releaseVerdictAdded": false
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "fixtureDataOnly": true,
+  "captures": [
+    {
+      "scenarioId": "P19-01",
+      "path": "fr-390-catalogue-empty.png",
+      "sha256": "55cdecbeee0e19c23ecdc8ed2830257aaffdcd18dd1dc0456d8976af35614675",
+      "width": 390,
+      "height": 1000,
+      "syntheticApp": true,
+      "provider": false,
+      "capturedFromLoopbackApp": true
+    },
+    {
+      "scenarioId": "P19-01",
+      "path": "fr-390-catalogue-unavailable.png",
+      "sha256": "f53031de91e1d28b2b6dd8a5b3fd7ffe6c3abb5946d3f9b029550e9db9ace91e",
+      "width": 390,
+      "height": 1000,
+      "syntheticApp": true,
+      "provider": false,
+      "capturedFromLoopbackApp": true
+    },
+    {
+      "scenarioId": "P19-02",
+      "path": "fr-390-paid-original-note.png",
+      "sha256": "7975dc3b4bb94c613d5fe0a24ef4a3e36573e7be005c878f3e9a99c1ebac5cd0",
+      "width": 390,
+      "height": 1000,
+      "syntheticApp": true,
+      "provider": false,
+      "capturedFromLoopbackApp": true
+    },
+    {
+      "scenarioId": "P19-02",
+      "path": "en-390-paid-original-note.png",
+      "sha256": "8117f1a05132e6e2843d91d59e6b4d342c5ac2acd6d5cfeabf87de809412ae0d",
+      "width": 390,
+      "height": 1000,
+      "syntheticApp": true,
+      "provider": false,
+      "capturedFromLoopbackApp": true
+    },
+    {
+      "scenarioId": "P19-02",
+      "path": "en-390-paid-french-quiz-history.png",
+      "sha256": "b483ca35950ab68f8e32a00e246715d3888de5268bf27ba239e2087702f3a0bd",
+      "width": 390,
+      "height": 1000,
+      "syntheticApp": true,
+      "provider": false,
+      "capturedFromLoopbackApp": true
+    },
+    {
+      "scenarioId": "P19-03",
+      "path": "fr-390-project-conflict.png",
+      "sha256": "3da5a753d36d0448da49d5c91ecf8966c82acbfe6616e022d0283ea2505d7f51",
+      "width": 390,
+      "height": 1000,
+      "syntheticApp": true,
+      "provider": false,
+      "capturedFromLoopbackApp": true
+    },
+    {
+      "scenarioId": "P19-04",
+      "path": "en-390-participation-provenance.png",
+      "sha256": "a564ab82a3f8c059c59444ff747b31e5d306ab2b625e9636736591055a6aedf2",
+      "width": 390,
+      "height": 1000,
+      "syntheticApp": true,
+      "provider": false,
+      "capturedFromLoopbackApp": true
+    },
+    {
+      "scenarioId": "P19-04",
+      "path": "en-390-contextual-support.png",
+      "sha256": "561a3bafb5269015b56402fbef0030bed2da8b9f2c6b09cd165b09e8b7302213",
+      "width": 390,
+      "height": 1000,
+      "syntheticApp": true,
+      "provider": false,
+      "capturedFromLoopbackApp": true
+    }
+  ]
+}

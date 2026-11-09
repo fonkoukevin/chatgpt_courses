@@ -1,0 +1,20 @@
+{
+  "regressionPhase": "P13",
+  "runId": "2026-11-09T09-07-23-554Z-d9b0692b-4da0-4b09-95b9-461d52137f8d",
+  "result": "failed",
+  "exitCode": 1,
+  "passed": 3,
+  "failed": 1,
+  "didNotRun": 2,
+  "cleanupConfirmed": true,
+  "privateConsoleLog": ".runtime/p19-p13-2026-11-09T09-07-23-336Z.log",
+  "failure": "Case04 expected SUCCEEDED within the default10-second assertion after restarting the refund worker; the actual operation remained UNKNOWN. No unexpected content-access refusal was observed in the completed steps.",
+  "originalDiagnosticLimit": "The pre-cleanup aggregate showed two PROCESSING refund jobs and one UNKNOWN operation. It did not expose the exact case04 job's lease or remaining lifetime, so an abandoned claim cannot be proven for this original run.",
+  "sourceMechanism": "Stopping the refund worker terminates and restarts the API process. A claimed durable job retains its lease until expiration. RefundStore.enqueue preserves PROCESSING claims; RefundWorker maintenance reclaims expired leases. The configured default lease is120seconds while the old test assertion allowed10seconds.",
+  "nextControlledObservation": "Read only the exact job/operation mapping before stop, after UNKNOWN with worker stopped, after restart and after waiting. Only an observed abandoned active lease permits waiting for its actual remaining lifetime plus a bounded maintenance/poll/controlled-GET margin. Never shorten or rewrite the lease, replay the financial POST, or mark UNKNOWN as success.",
+  "apiJarSha256": "2154f1f3c8e18d073db8b0ab44cec136d9e9df8825e1920702e66a214ba64b6e",
+  "webBuildId": "hX_-deZsNCevTpDZbakrw",
+  "applicationChanged": false,
+  "automaticRetries": 0,
+  "historicalAccessIncidentsDeclaredResolved": false
+}

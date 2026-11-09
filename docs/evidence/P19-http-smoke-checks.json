@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "phase": "P19",
+  "scope": "Real CI HTTP smoke on owned loopback processes and disposable PostgreSQL",
+  "command": "node scripts/ci-run.mjs e2e smoke",
+  "observedAt": "2026-11-09T05:48:51.276Z",
+  "exitCode": 0,
+  "result": "passed",
+  "durationMs": 62292,
+  "checks": {
+    "runnerSucceeded": true,
+    "childCompletedAndDatabaseCleanupConfirmed": true,
+    "sharedDatabaseUntouched": true,
+    "portsFree": true,
+    "threeFrenchAndEnglishPagePasses": true,
+    "twoHealthyAndStructured404Passes": true,
+    "actualApiStopOutageAndRestart": true,
+    "selectedWebBuildFilesUnchanged": true
+  },
+  "observedMarkers": {
+    "frenchPagePasses": 3,
+    "englishPagePasses": 3,
+    "healthyProxyPasses": 2,
+    "structured404Passes": 2,
+    "explicitOutagePasses": 1,
+    "completedChains": 1
+  },
+  "environment": {
+    "APP_ENV": "test",
+    "ports": [
+      3000,
+      8080
+    ],
+    "privateEnvLoaded": false,
+    "providerKeysInherited": false,
+    "realPostgreSQL": true,
+    "ownedTmpfs": true,
+    "externalProviderContacted": false
+  },
+  "artifacts": {
+    "jarSha256": "2154f1f3c8e18d073db8b0ab44cec136d9e9df8825e1920702e66a214ba64b6e",
+    "webBuildId": "hX_-deZsNCevTpDZbakrw",
+    "selectedWebFilesCompared": 1814,
+    "selectedWebFilesChanged": 0,
+    "nextCacheExcludedFromComparison": true,
+    "rebuildInvoked": false,
+    "mavenInvoked": false,
+    "manualNextWriteInvoked": false
+  },
+  "cleanup": {
+    "postgresStopped": true,
+    "webAndApiVerifiedTerminationBySuccessfulVerifyHttp": true,
+    "portObservation": {
+      "observedAt": "2026-11-09T05:48:04.220Z",
+      "checks": [
+        {
+          "port": 3000,
+          "loopbackBindAvailable": true
+        },
+        {
+          "port": 8080,
+          "loopbackBindAvailable": true
+        }
+      ]
+    }
+  },
+  "historicalEvidenceOverwritten": false,
+  "rawLogsPublished": false,
+  "githubWorkflowExecuted": false,
+  "limits": [
+    "Actual smoke executed locally on Windows; not a GitHub Actions run.",
+    "The unavailable proxy status was asserted within 502/503/504 by smoke.mjs; its exact status was not retained in the minimal log.",
+    "Selected build-file comparison excludes Next cache and diagnostics; it is not a claim that every runtime cache timestamp stayed unchanged.",
+    "No new browser, payment, provider, production configuration or full API regression was executed by this command."
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "available": true,
+  "readOnly": true,
+  "capturedAt": "2026-11-09T09:09:45.121Z",
+  "aggregates": {
+    "grants": [
+      {
+        "count": "2",
+        "state": "REVOKED",
+        "origin": "ORDER_LINE"
+      },
+      {
+        "count": "4",
+        "state": "ACTIVE",
+        "origin": "ORDER_LINE"
+      }
+    ],
+    "orders": [
+      {
+        "count": "1",
+        "refundFull": true,
+        "orderStatus": "CONFIRMED",
+        "paymentStatus": "PAID",
+        "fulfillmentStatus": "READY",
+        "refundReviewRequired": false
+      },
+      {
+        "count": "4",
+        "refundFull": false,
+        "orderStatus": "CONFIRMED",
+        "paymentStatus": "PAID",
+        "fulfillmentStatus": "READY",
+        "refundReviewRequired": false
+      }
+    ],
+    "outbox": [
+      {
+        "type": "ACCESS_ACTIVATED",
+        "count": "5",
+        "status": "SENT",
+        "lastErrorCode": null
+      },
+      {
+        "type": "ACCOUNT_CREATED",
+        "count": "6",
+        "status": "SENT",
+        "lastErrorCode": null
+      },
+      {
+        "type": "REFUND_UPDATED",
+        "count": "3",
+        "status": "SENT",
+        "lastErrorCode": null
+      }
+    ],
+    "paymentEvents": [
+      {
+        "count": "9",
+        "state": "PROCESSED",
+        "lastErrorCode": null
+      }
+    ],
+    "refundOperations": [
+      {
+        "count": "1",
+        "state": "FAILED",
+        "origin": "LOCAL_DECISION",
+        "accessState": "NOT_APPLIED",
+        "lastErrorCode": "REFUND_UNKNOWN"
+      },
+      {
+        "count": "1",
+        "state": "SUCCEEDED",
+        "origin": "LOCAL_DECISION",
+        "accessState": "APPLIED",
+        "lastErrorCode": null
+      },
+      {
+        "count": "1",
+        "state": "SUCCEEDED",
+        "origin": "LOCAL_DECISION",
+        "accessState": "KEPT",
+        "lastErrorCode": null
+      },
+      {
+        "count": "1",
+        "state": "SUCCEEDED",
+        "origin": "STRIPE_DASHBOARD",
+        "accessState": "KEPT",
+        "lastErrorCode": null
+      },
+      {
+        "count": "1",
+        "state": "UNKNOWN",
+        "origin": "LOCAL_DECISION",
+        "accessState": "NOT_APPLIED",
+        "lastErrorCode": "PROVIDER_TRANSPORT_UNKNOWN"
+      }
+    ],
+    "checkoutOperations": [
+      {
+        "count": "5",
+        "state": "COMPLETE",
+        "lastErrorCode": null
+      }
+    ],
+    "refundReconciliationJobs": [
+      {
+        "count": "2",
+        "state": "PROCESSING",
+        "lastErrorCode": null
+      },
+      {
+        "count": "3",
+        "state": "WAITING",
+        "lastErrorCode": null
+      }
+    ],
+    "paymentReconciliationJobs": [
+      {
+        "count": "5",
+        "state": "PROCESSED",
+        "lastErrorCode": null
+      }
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "verifiedAt": "2026-11-09T09:22:24.500Z",
+  "testMode": true,
+  "cleanupConfirmed": true,
+  "sessions": [
+    {
+      "sessionId": "cs_test_a1f6AxdtNkhVvTxh3uKxAbNq5rjNWI7bUmkU3Ic9JHPRSpo9DUEAFG7EpZ",
+      "testMode": true,
+      "paid": true,
+      "unusedSessionExpired": false,
+      "sessionRetained": true
+    },
+    {
+      "sessionId": "cs_test_a1dXUrLAOJdNYFFE8cHz39xyaW6BADU5D8lwI8KalpZiSnWuGbjB8luv0M",
+      "testMode": true,
+      "paid": true,
+      "unusedSessionExpired": false,
+      "sessionRetained": true
+    }
+  ],
+  "secretsPrinted": false
+}

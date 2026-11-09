@@ -1,0 +1,134 @@
+{
+  "runId": "2026-11-09T05-46-37-307Z-dfb7dab0-df93-4b51-86bd-0892b96bc742",
+  "phase": "P19",
+  "command": "node scripts/verify-browser.mjs P19",
+  "launcher": ".runtime/run-p19-controlled.mjs P19",
+  "privateConsoleLog": ".runtime/p19-p19-2026-11-09T05-46-37-130Z.log",
+  "exitCode": 0,
+  "apiJarSha256": "2154f1f3c8e18d073db8b0ab44cec136d9e9df8825e1920702e66a214ba64b6e",
+  "webBuildId": "hX_-deZsNCevTpDZbakrw",
+  "stats": {
+    "startTime": "2026-11-09T05:47:18.771Z",
+    "duration": 124312.153,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "retries": 0,
+  "cases": [
+    {
+      "scenarioId": "P19-01",
+      "result": "passed",
+      "receipt": "docs/evidence/P19-browser/2026-11-09T05-46-37-307Z-dfb7dab0-df93-4b51-86bd-0892b96bc742/P19-01.json"
+    },
+    {
+      "scenarioId": "P19-02",
+      "result": "passed",
+      "receipt": "docs/evidence/P19-browser/2026-11-09T05-46-37-307Z-dfb7dab0-df93-4b51-86bd-0892b96bc742/P19-02.json"
+    },
+    {
+      "scenarioId": "P19-03",
+      "result": "passed",
+      "receipt": "docs/evidence/P19-browser/2026-11-09T05-46-37-307Z-dfb7dab0-df93-4b51-86bd-0892b96bc742/P19-03.json"
+    },
+    {
+      "scenarioId": "P19-04",
+      "result": "passed",
+      "receipt": "docs/evidence/P19-browser/2026-11-09T05-46-37-307Z-dfb7dab0-df93-4b51-86bd-0892b96bc742/P19-04.json"
+    }
+  ],
+  "cleanupConfirmed": true,
+  "initialRuntimeFlags": {
+    "stripeEnabled": true,
+    "paymentWorkerEnabled": true,
+    "refundWorkerEnabled": true,
+    "notificationWorkerEnabled": true
+  },
+  "finalRuntimeFlags": {
+    "stripeEnabled": true,
+    "paymentWorkerEnabled": true,
+    "refundWorkerEnabled": true,
+    "notificationWorkerEnabled": true
+  },
+  "services": [
+    {
+      "kind": "s3",
+      "tmpfs": true,
+      "stopped": true
+    },
+    {
+      "kind": "mailpit",
+      "tmpfs": true,
+      "stopped": true
+    }
+  ],
+  "processes": [
+    {
+      "name": "web",
+      "terminated": true
+    },
+    {
+      "name": "api",
+      "terminated": true
+    },
+    {
+      "name": "playwright",
+      "terminated": true
+    },
+    {
+      "name": "api",
+      "terminated": true
+    },
+    {
+      "name": "api",
+      "terminated": true
+    }
+  ],
+  "providerLevel": "Controlled local Stripe SDK transport and signed-event pipeline on disposable PostgreSQL/S3/Mailpit; not an external Stripe session or commercial transaction.",
+  "paidLanguageCoverage": {
+    "amountMinor": 100,
+    "currency": "EUR",
+    "manualTestGrants": 0,
+    "orderLineGrants": 1,
+    "locales": [
+      "fr",
+      "en"
+    ],
+    "sameEnrollment": true,
+    "originalFrenchNoteAndQuiz": true,
+    "privateEditorialFiles": 2
+  },
+  "visualReview": "docs/evidence/P19-visual-review.json",
+  "captureManifest": "docs/evidence/P19-browser/2026-11-09T05-46-37-307Z-dfb7dab0-df93-4b51-86bd-0892b96bc742/capture-manifest.json",
+  "previousFailures": [
+    {
+      "runId": "2026-11-09T05-37-33-267Z-d1af2072-d594-4967-accb-2a0cd4af442f",
+      "passed": 1,
+      "failed": 1,
+      "didNotRun": 2,
+      "cleanupConfirmed": true,
+      "diagnostic": "docs/evidence/P19-browser-first-run-diagnostic.json",
+      "classification": "Incomplete200 body observation; source-chronology inference only, original read error discarded."
+    },
+    {
+      "runId": "2026-11-09T05-42-50-414Z-5c92ec39-3cf9-46dd-ad44-243ce1f6f126",
+      "passed": 1,
+      "failed": 1,
+      "didNotRun": 2,
+      "cleanupConfirmed": true,
+      "diagnostic": "docs/evidence/P19-browser-second-run-diagnostic.json",
+      "classification": "NO_RESOURCE body-read error after additional fixture navigation; HTTP200/finishedtrue, not ERR_ABORTED or observed403."
+    }
+  ],
+  "applicationOrBuildChangedForFixtureFixes": false,
+  "historicalAccessIncidentsDeclaredResolved": false,
+  "javaGlobalValidation": "Separate parent-managed evidence; the256 Java tests are not part of these4 browser scenarios.",
+  "limits": [
+    "Toutes les images sont des viewports de390x1000. Elles ne constituent pas une revue exhaustive de E13, des leçons ou du formulaire projet.",
+    "Le conflit montre le début de la comparaison locale ; la version serveur et les actions plus bas sont vérifiées par assertions DOM/clavier, pas visibles intégralement dans ce viewport.",
+    "Le quiz historique montre deux corrections complètes et le début de la troisième ; la tentative complète et sa langue sont vérifiées séparément par API/DOM.",
+    "Aucun rendu de Stripe, formulaire carte, login, vidéo de cours ou état de production n’est inclus.",
+    "Une capture statique ne démontre pas le clavier. Les confirmations Tab/Shift+Tab/Enter sont des assertions distinctes du scénario."
+  ]
+}

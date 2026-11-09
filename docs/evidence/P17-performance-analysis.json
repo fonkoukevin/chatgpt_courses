@@ -624,5 +624,294 @@
     "ResourceTiming durations are sums for concurrent resources, not a serial download waterfall; aggregate timings alone do not establish the absence of every request cascade.",
     "Three samples per page cannot establish p95 or field INP. LCP/CLS are readiness snapshots under the documented Windows/Chromium loopback profile.",
     "No cache of private content, automatic budget increase, skipped assertion or automatic retry was introduced. Different profile failures require investigation."
-  ]
+  ],
+  "additionalRuns": [
+    {
+      "runId": "2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3",
+      "stage": "Targeted rebuilt workshop verification after the sole action-gap correction.",
+      "session": {
+        "file": "docs/evidence/P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/session.json",
+        "result": "passed",
+        "cleanupConfirmed": true,
+        "completedAt": "2026-11-09T04:32:50.486Z"
+      },
+      "stats": {
+        "file": "docs/evidence/P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/results.json",
+        "startTime": "2026-11-09T04:32:05.530Z",
+        "duration": 22487.361999999997,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "reports": [
+        {
+          "file": "docs/evidence/P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/en-workshop-performance.json",
+          "sha256": "7918e55037646c7450569cdce006aa553dfa5c3a39ab350bf9977ef246f92053",
+          "locale": "en",
+          "page": "workshop",
+          "budgets": {
+            "file": "docs/performance-budgets.json",
+            "version": 1,
+            "sourceBaselineRun": "2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348",
+            "status": "passed",
+            "checks": [
+              {
+                "metric": "javascriptEncodedBytes",
+                "observed": 305256,
+                "limit": 393216,
+                "passed": true
+              },
+              {
+                "metric": "javascriptDecodedBytes",
+                "observed": 996847,
+                "limit": 1310720,
+                "passed": true
+              },
+              {
+                "metric": "stylesheetDecodedBytes",
+                "observed": 40547,
+                "limit": 49152,
+                "passed": true
+              },
+              {
+                "metric": "readyMedianMs",
+                "observed": 535.4667999999983,
+                "limit": 1500,
+                "passed": true
+              },
+              {
+                "metric": "readyMaxMs",
+                "observed": 628.3940000000002,
+                "limit": 2500,
+                "passed": true
+              },
+              {
+                "metric": "largestContentfulPaintSnapshotMaxMs",
+                "observed": 276,
+                "limit": 1500,
+                "passed": true
+              },
+              {
+                "metric": "layoutShiftSnapshotMax",
+                "observed": 0.01735982060185185,
+                "limit": 0.05,
+                "passed": true
+              }
+            ],
+            "policy": "Fixed limits selected after the preserved baseline; investigate a different machine/profile, never auto-increase or retry away a failure."
+          },
+          "samples": [
+            {
+              "readyMs": 535.4667999999983,
+              "ttfbMs": 127.5,
+              "largestContentfulPaintSnapshotMs": 232,
+              "layoutShiftSnapshot": 0.01735982060185185,
+              "cacheResponses": 0,
+              "failedRequests": 0
+            },
+            {
+              "readyMs": 487.23289999999906,
+              "ttfbMs": 124.19999998807907,
+              "largestContentfulPaintSnapshotMs": 224,
+              "layoutShiftSnapshot": 0.01735982060185185,
+              "cacheResponses": 0,
+              "failedRequests": 0
+            },
+            {
+              "readyMs": 628.3940000000002,
+              "ttfbMs": 134.5,
+              "largestContentfulPaintSnapshotMs": 276,
+              "layoutShiftSnapshot": 0.01735982060185185,
+              "cacheResponses": 0,
+              "failedRequests": 0
+            }
+          ],
+          "matrixCompleted": true,
+          "layouts": [
+            {
+              "width": 1440,
+              "viewport": 1440,
+              "document": 1440,
+              "body": 1440
+            },
+            {
+              "width": 1024,
+              "viewport": 1024,
+              "document": 1024,
+              "body": 1024
+            },
+            {
+              "width": 768,
+              "viewport": 768,
+              "document": 768,
+              "body": 768
+            },
+            {
+              "width": 390,
+              "viewport": 390,
+              "document": 390,
+              "body": 390
+            },
+            {
+              "width": 320,
+              "viewport": 320,
+              "document": 320,
+              "body": 320
+            }
+          ],
+          "textResize": {
+            "mechanism": "root-font-size-doubled",
+            "beforePx": 16,
+            "afterPx": 32,
+            "ratio": 2
+          },
+          "interactions": {
+            "inputToNextFramesMs": 81.12389999999868,
+            "saveToAcknowledgedUiMs": 179.09929999999804,
+            "importEscapeAndFocusReturn": true,
+            "invalidTitleFocusedAndDescribed": true,
+            "realPatchAcknowledged": true
+          }
+        },
+        {
+          "file": "docs/evidence/P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/fr-workshop-performance.json",
+          "sha256": "6cd8646d6e5648a61d41274464b693794f77f1ff20dd37df0d2865df4c1a2810",
+          "locale": "fr",
+          "page": "workshop",
+          "budgets": {
+            "file": "docs/performance-budgets.json",
+            "version": 1,
+            "sourceBaselineRun": "2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348",
+            "status": "passed",
+            "checks": [
+              {
+                "metric": "javascriptEncodedBytes",
+                "observed": 305256,
+                "limit": 393216,
+                "passed": true
+              },
+              {
+                "metric": "javascriptDecodedBytes",
+                "observed": 996847,
+                "limit": 1310720,
+                "passed": true
+              },
+              {
+                "metric": "stylesheetDecodedBytes",
+                "observed": 40547,
+                "limit": 49152,
+                "passed": true
+              },
+              {
+                "metric": "readyMedianMs",
+                "observed": 592.1239999999998,
+                "limit": 1500,
+                "passed": true
+              },
+              {
+                "metric": "readyMaxMs",
+                "observed": 1424.8451000000005,
+                "limit": 2500,
+                "passed": true
+              },
+              {
+                "metric": "largestContentfulPaintSnapshotMaxMs",
+                "observed": 960,
+                "limit": 1500,
+                "passed": true
+              },
+              {
+                "metric": "layoutShiftSnapshotMax",
+                "observed": 0.016717581018518515,
+                "limit": 0.05,
+                "passed": true
+              }
+            ],
+            "policy": "Fixed limits selected after the preserved baseline; investigate a different machine/profile, never auto-increase or retry away a failure."
+          },
+          "samples": [
+            {
+              "readyMs": 1424.8451000000005,
+              "ttfbMs": 476,
+              "largestContentfulPaintSnapshotMs": 960,
+              "layoutShiftSnapshot": 0.016717581018518515,
+              "cacheResponses": 0,
+              "failedRequests": 0
+            },
+            {
+              "readyMs": 561.8966,
+              "ttfbMs": 145.19999998807907,
+              "largestContentfulPaintSnapshotMs": 256,
+              "layoutShiftSnapshot": 0.016717581018518515,
+              "cacheResponses": 0,
+              "failedRequests": 0
+            },
+            {
+              "readyMs": 592.1239999999998,
+              "ttfbMs": 174.5,
+              "largestContentfulPaintSnapshotMs": 308,
+              "layoutShiftSnapshot": 0.016717581018518515,
+              "cacheResponses": 0,
+              "failedRequests": 0
+            }
+          ],
+          "matrixCompleted": true,
+          "layouts": [
+            {
+              "width": 1440,
+              "viewport": 1440,
+              "document": 1440,
+              "body": 1440
+            },
+            {
+              "width": 1024,
+              "viewport": 1024,
+              "document": 1024,
+              "body": 1024
+            },
+            {
+              "width": 768,
+              "viewport": 768,
+              "document": 768,
+              "body": 768
+            },
+            {
+              "width": 390,
+              "viewport": 390,
+              "document": 390,
+              "body": 390
+            },
+            {
+              "width": 320,
+              "viewport": 320,
+              "document": 320,
+              "body": 320
+            }
+          ],
+          "textResize": {
+            "mechanism": "root-font-size-doubled",
+            "beforePx": 16,
+            "afterPx": 32,
+            "ratio": 2
+          },
+          "interactions": {
+            "inputToNextFramesMs": 52.153300000001764,
+            "saveToAcknowledgedUiMs": 161.05099999999948,
+            "importEscapeAndFocusReturn": true,
+            "invalidTitleFocusedAndDescribed": true,
+            "realPatchAcknowledged": true
+          }
+        }
+      ],
+      "interpretation": "All6targetedcold navigations retained, including the firstFR1424.8451ms sample. Fourteen unchanged fixed-budget checks pass. This does not assert a speed improvement."
+    }
+  ],
+  "currentEffectiveReports": [
+    "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/en-catalogue-performance.json",
+    "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/fr-catalogue-performance.json",
+    "docs/evidence/P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/en-workshop-performance.json",
+    "docs/evidence/P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/fr-workshop-performance.json"
+  ],
+  "currentEffectiveScope": "Two catalogue reports from the full run retained, plus two rebuilt targeted workshop reports. Different web-build receipts are explicit; no claim that all were re-executed in one new full run."
 }

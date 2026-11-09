@@ -1,17 +1,17 @@
 # État réel du projet
 
-Dernière mise à jour : **9 novembre 2026**. **P16 validé localement**, après P04–P15 dans l’ordre. Le mandat P15→P19 continue avec P17. Aucun ancien prototype repris, mode LIVE ou déploiement.
+Dernière mise à jour : **9 novembre2026**. **P17 validé localement**, après P04–P16 dans l’ordre. Le mandat P15→P19 continue avec P18. Aucun mode LIVE, push ou déploiement.
 
 ## Situation courante
 
-- **P16 validé localement** : noms de langue, saisies conservées, contexte pédagogique exact, slugs réservés/redirections, attestations historiques et SEO configuré. [Résultat et limites](evidence/P16.md), [inventaire FR/EN](I18N.md).
-- Java ciblé **41**, puis **22** après correction du renderer ; client **119**, Chromium bilingue **7/7**, SEO **4/4 et41 contrôles HTTP**, builds/types/lint/contrat réussis. **20 captures finales examinées**, dont vraies vues320 et trois découpes de lecture. Les passages ciblés ne sont pas additionnés ; dernier global Java :234 en P15. [API](evidence/P16-api-checks.json), [web](evidence/P16-web-final-checks.json), [bilingue](evidence/P16-browser-checks.json), [SEO](evidence/P16-seo-checks.json).
-- Schéma **V001–V018** : migration sans seed, lignes des78 tables antérieures préservées, aucun volume supprimé. Réservations et historique de slugs ajoutés sans réécrire les migrations. [Migration](evidence/P16-upgrade.json), [préservation](evidence/P16-upgrade-preservation.json).
-- Applications et listener TEST temporairement arrêtés par contrôle de propriété jusqu’à la fin du batch ; PostgreSQL/Mailpit et volumes conservés. Configuration privée inchangée et fichier Next utilisateur sauvegardé pour restauration. [Contrôle](evidence/P16-private-preservation.json), [audit privé](evidence/P16-private-audit.json).
-- Windows natif et versions verrouillées conservés, aucune dépendance ajoutée. Git main local, code P16 `153726e` ; aucun push, remboursement Stripe externe, mode LIVE, déploiement ou CI GitHub exécuté. Les justificatifs commerciaux absents ne sont pas fabriqués.
-- P12 reste validé localement avec vrai Checkout TEST. **Deux refus historiques après READY et deux refus distincts observés en tests P15 restent de cause inconnue** ; les passages ultérieurs réussis ne démontrent aucun correctif de ces causes. Garde P17/P19 avant livraison du parcours commercial : [P12](evidence/P12-access-follow-up.md), [P15](evidence/P15-access-follow-up.md). La limite antérieure P09 reste dans sa preuve.
-- Conservation/traitements irréversibles, documents commerciaux, conditions/prix/fiscalité/durée et horaires/délais d’aide restent à valider avant activation concernée ou vente. Demandes WAITING_POLICY persistées, aucun effacement automatique.
-- **P17 en cours** : qualité transversale, mesures et gardes d’accès historiques conservées avant livraison. P18 préparera les vrais contenus, P19 consolidera recette et CI. [Suivi P17](evidence/P17.md).
+- **P17** : cadence identité testée, en-têtes de protection, couverture SQL groupée sans cache privé, reflow texte200% et espacement atelier corrigés. [Résultats et limites](evidence/P17.md), [budgets](QUALITY.md).
+- Java ciblé37/37 puis12/12 et cas répété1/1, client119, lint/types/builds/contrat réussis. Chromium complet9/9 puis ateliers ciblés2/2 après correctif visuel, nettoyages confirmés.32+12 captures examinées, plus4 du diagnostic de header. Aucun global Java P17 revendiqué ; dernier global234 enP15.
+- Schéma **V001–V018**, sans nouvelle migration P17. V017→V018 et données antérieures préservées enP16 ; aucun seed structurel ou volume supprimé. [Migration](evidence/P16-upgrade.json), [préservation](evidence/P16-upgrade-preservation.json).
+- Applications et listener TEST initiaux arrêtés par garde de propriété jusqu’à la fin du batch ; PG/Mailpit et volumes conservés. Configuration privée inchangée, stockage déjà configuré, commerce désactivé ; fichier Next utilisateur sauvegardé pour restauration. [Contrôle](evidence/P17-private-preservation.json), [audit](evidence/P17-private-audit.json).
+- Windows natif et versions verrouillées conservés, aucune dépendance ajoutée P15–P17. Git main local ; aucun run GitHub, remboursement fournisseur externe ou production observé.
+- **Deux refus historiques P12 et deux refus distincts P15 restent ouverts, causes inconnues.** Les nouvelles réussites ne prouvent pas un correctif. Toute récidive impose arrêt du parcours et diagnostic avant nettoyage ; garde avant livraison commerciale maintenue pourP19. [P12](evidence/P12-access-follow-up.md), [P15](evidence/P15-access-follow-up.md).
+- Conservation/traitements irréversibles, documents commerciaux, prix/devise/fiscalité/accès/support/légal restent à décider avant activation concernée. Vidéos du cours et revue humaine non fournies ; aucune vente ou équivalence relue par un humain inventée. Demandes WAITING_POLICY conservées.
+- **P18 en cours** : rédaction et intégration réelle en brouillon du premier parcours FR/EN, ressources éditables et préparation d’offre honnête. P19 consolidera la recette et la CI.
 
 ## Phases
 
@@ -34,8 +34,8 @@ Dernière mise à jour : **9 novembre 2026**. **P16 validé localement**, après
 | P14 | Validé localement | Java221, client104, Chromium12/12+ciblé2/2, régression6/6,48captures, migration/restauration préservées ; [preuve](evidence/P14.md) |
 | P15 | Validé localement | Java234, client112, Chromium6/6/clavier et régression paiement8/8, upgrade préservé ; incidents d’accès ouverts P17/P19 ; [preuve](evidence/P15.md) |
 | P16 | Validé localement | Java41 puis22 ciblés, client119, bilingue7/7, SEO4/4,20 captures, V018 préservée ; [preuve](evidence/P16.md) |
-| P17 | En cours | Audit, mesures PostgreSQL/navigateur et robustesse ; [suivi](evidence/P17.md) |
-| P18 | À faire | Contenus et offre prête |
+| P17 | Validé localement | Java ciblé37 puis12 puis1, client119, Chromium9/9 puis2/2,44 captures, SQL/budgets/contrastes ; [preuve](evidence/P17.md) |
+| P18 | En cours | Parcours complet FR/EN, ressources et import en brouillon ; vente bloquée avant décisions et revue |
 | P19 | À faire | Recette et CI complète |
 | P20 | À faire | Infrastructure de production |
 | P21 | À faire | Déploiement de recette |
@@ -46,6 +46,6 @@ Dernière mise à jour : **9 novembre 2026**. **P16 validé localement**, après
 
 ## Dernier lot
 
-P16 clôture le bilingue et le SEO sur des recettes locales réelles. Les langues commerciales restent indécises et l’indexation vide par défaut. Les refus historiques P12/P15 restent ouverts. Prochaine instruction : `prompts/P17_QUALITE_TRANSVERSALE.txt`.
+P17 est clos sur les défauts identifiés et risques documentés, sans essai supplémentaire redondant. Prochain prompt exécuté : prompts/P18_CONTENUS_OFFRES_PRETS.txt, puis P19 dans le mandat courant. Les refus historiques et décisions commerciales restent explicitement ouverts.
 
-Garder ce suivi court ; détailler les commandes et limites dans `docs/evidence/Pxx.md`. Une reprise part des fichiers et preuves présents, sans supposer l’historique de conversation.
+Garder ce suivi court ; détails dans docs/evidence/Pxx.md. Repartir des fichiers et preuves réels lors d’une reprise.

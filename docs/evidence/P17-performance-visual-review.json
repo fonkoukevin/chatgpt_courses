@@ -1,0 +1,539 @@
+{
+  "phase": "P17",
+  "runId": "2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3",
+  "reviewedAt": "2026-11-09T04:33:56.881Z",
+  "reviewer": "versions_web",
+  "scope": "Revue finale ciblée des12captures atelier après espacement des deux liens retour/aide. Le catalogue et les contrôles comportementaux du passage complet sont conservés séparément.",
+  "method": {
+    "tool": "view_image",
+    "requestedDetail": "original",
+    "newOriginalImagesActuallyViewed": 12,
+    "derivedCrops": 0,
+    "newBrowserRunDuringReview": false,
+    "applicationEditedDuringReview": false,
+    "keyboardClaimsFromScreenshots": false
+  },
+  "sessionObserved": {
+    "file": "docs/evidence/P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/session.json",
+    "result": "passed",
+    "cleanupConfirmed": true,
+    "completedAt": "2026-11-09T04:32:50.486Z"
+  },
+  "runStatsObserved": {
+    "file": "docs/evidence/P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/results.json",
+    "startTime": "2026-11-09T04:32:05.530Z",
+    "duration": 22487.361999999997,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "previousReview": {
+    "file": "docs/evidence/P17-performance-visual-review-before-link-gap.json",
+    "sha256": "b5d237470219e78a82f905184ce29dea5840b22b759454330105e92935eeb1b3",
+    "runId": "2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d",
+    "originalProofPreserved": true
+  },
+  "images": [
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/en-1024-workshop.png",
+      "width": 1024,
+      "height": 2934,
+      "sha256": "f1258db2ceff0d44844295ce6aebd9aafe20efd6a8b0d48166e90cd5aff6d4bf",
+      "viewed": true,
+      "observation": "Les deux liens retour bibliothèque et aide sont maintenant distincts avec un espace visible. Champs, onglets, statut de sauvegarde et commandes restent lisibles ; aucun chevauchement ni débordement essentiel observé. Les longs champs natifs gardent leur défilement propre."
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/en-1440-workshop.png",
+      "width": 1440,
+      "height": 2240,
+      "sha256": "c1127f1215e9c77a504b2874a4af9b2a7ed5c156b873922e54ffc32b639446e5",
+      "viewed": true,
+      "observation": "Les deux liens retour bibliothèque et aide sont maintenant distincts avec un espace visible. Champs, onglets, statut de sauvegarde et commandes restent lisibles ; aucun chevauchement ni débordement essentiel observé. Les longs champs natifs gardent leur défilement propre."
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/en-320-workshop.png",
+      "width": 320,
+      "height": 3252,
+      "sha256": "7a390534e70f79dfb62753447162d3873ce9df55cb01fb1f4ce51549ac63a947",
+      "viewed": true,
+      "observation": "Les deux liens retour bibliothèque et aide sont maintenant distincts avec un espace visible. Champs, onglets, statut de sauvegarde et commandes restent lisibles ; aucun chevauchement ni débordement essentiel observé. Les longs champs natifs gardent leur défilement propre."
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/en-390-workshop-text-200-percent-viewport.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "f316d2d4570fb014cf917e7d04fde5ee633fc3240543a09fdaf86f9c52579314",
+      "viewed": true,
+      "observation": "Viewport390 après défilement, texte doublé : sauvegarde/préparation/copie lisibles, boutons repliés et focus bleu visible, état enregistré explicite. Les bords du document hors viewport ne sont pas des coupures de mise en page."
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/en-390-workshop.png",
+      "width": 390,
+      "height": 3141,
+      "sha256": "22f2dffee632ad4e819561708e2ebaf90bafc530a15e21666c5b30a8e60e18ad",
+      "viewed": true,
+      "observation": "Les deux liens retour bibliothèque et aide sont maintenant distincts avec un espace visible. Champs, onglets, statut de sauvegarde et commandes restent lisibles ; aucun chevauchement ni débordement essentiel observé. Les longs champs natifs gardent leur défilement propre."
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/en-768-workshop.png",
+      "width": 768,
+      "height": 2934,
+      "sha256": "cc8178d60fca889a5e62b756b5096bb0df834ef07d3a76939b498c3040950092",
+      "viewed": true,
+      "observation": "Les deux liens retour bibliothèque et aide sont maintenant distincts avec un espace visible. Champs, onglets, statut de sauvegarde et commandes restent lisibles ; aucun chevauchement ni débordement essentiel observé. Les longs champs natifs gardent leur défilement propre."
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/fr-1024-workshop.png",
+      "width": 1024,
+      "height": 2934,
+      "sha256": "1675163857a74e628fc99202e44198d17e29c3dce0de244aa09d03ebe5b3b6dc",
+      "viewed": true,
+      "observation": "Les deux liens retour bibliothèque et aide sont maintenant distincts avec un espace visible. Champs, onglets, statut de sauvegarde et commandes restent lisibles ; aucun chevauchement ni débordement essentiel observé. Les longs champs natifs gardent leur défilement propre."
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/fr-1440-workshop.png",
+      "width": 1440,
+      "height": 2266,
+      "sha256": "a1bb0bc9798505209b24986f0cc54ae038f62d0428c51a1463725d0b0be60737",
+      "viewed": true,
+      "observation": "Les deux liens retour bibliothèque et aide sont maintenant distincts avec un espace visible. Champs, onglets, statut de sauvegarde et commandes restent lisibles ; aucun chevauchement ni débordement essentiel observé. Les longs champs natifs gardent leur défilement propre."
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/fr-320-workshop.png",
+      "width": 320,
+      "height": 3370,
+      "sha256": "12be8afcf2fa2ca2867e3f256e65fe7cc51c09e5b5173314f17017c1461d8aa1",
+      "viewed": true,
+      "observation": "Les deux liens retour bibliothèque et aide sont maintenant distincts avec un espace visible. Champs, onglets, statut de sauvegarde et commandes restent lisibles ; aucun chevauchement ni débordement essentiel observé. Les longs champs natifs gardent leur défilement propre."
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/fr-390-workshop-text-200-percent-viewport.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "e842029aea3f7e74d35ee58554766182cf514dd25fbdb61cf62f9458a6ecf59a",
+      "viewed": true,
+      "observation": "Viewport390 après défilement, texte doublé : sauvegarde/préparation/copie lisibles, boutons repliés et focus bleu visible, état enregistré explicite. Les bords du document hors viewport ne sont pas des coupures de mise en page."
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/fr-390-workshop.png",
+      "width": 390,
+      "height": 3177,
+      "sha256": "e17cba400a2a348eb5ef62f67a1d3fb8723f158904618bc363f348a389138867",
+      "viewed": true,
+      "observation": "Les deux liens retour bibliothèque et aide sont maintenant distincts avec un espace visible. Champs, onglets, statut de sauvegarde et commandes restent lisibles ; aucun chevauchement ni débordement essentiel observé. Les longs champs natifs gardent leur défilement propre."
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/fr-768-workshop.png",
+      "width": 768,
+      "height": 2934,
+      "sha256": "763f13ae18f6c2572a0ac4a2aa789d35588445495eca04db35aba074130e18b0",
+      "viewed": true,
+      "observation": "Les deux liens retour bibliothèque et aide sont maintenant distincts avec un espace visible. Champs, onglets, statut de sauvegarde et commandes restent lisibles ; aucun chevauchement ni débordement essentiel observé. Les longs champs natifs gardent leur défilement propre."
+    }
+  ],
+  "retainedCatalogueImages": [
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/en-1024-catalogue.png",
+      "width": 1024,
+      "height": 1333,
+      "sha256": "fff86841ab91a73fe470023da15eb85d2206229413249dd652ed9914168b6941",
+      "actuallyViewedInPreviousReview": true,
+      "reopenedInThisTargetReview": false,
+      "reason": "La seule modification suivante concernait le conteneur de deux liens du composant atelier."
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/en-1440-catalogue.png",
+      "width": 1440,
+      "height": 1333,
+      "sha256": "9231c8c349aca65b0037e752b08ff8e2f51530b445ed8b8ab3147b5fcb28d573",
+      "actuallyViewedInPreviousReview": true,
+      "reopenedInThisTargetReview": false,
+      "reason": "La seule modification suivante concernait le conteneur de deux liens du composant atelier."
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/en-320-catalogue.png",
+      "width": 320,
+      "height": 1707,
+      "sha256": "50b287787d5aa3ff575ab7f031290c93352f0d56115ed5102d55286e15605787",
+      "actuallyViewedInPreviousReview": true,
+      "reopenedInThisTargetReview": false,
+      "reason": "La seule modification suivante concernait le conteneur de deux liens du composant atelier."
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/en-390-catalogue-text-200-percent-viewport.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "97871c85e3db1aa0140ef407182d5d80ffc0c876eedcea76ad3bf55977b2c8b8",
+      "actuallyViewedInPreviousReview": true,
+      "reopenedInThisTargetReview": false,
+      "reason": "La seule modification suivante concernait le conteneur de deux liens du composant atelier."
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/en-390-catalogue.png",
+      "width": 390,
+      "height": 1494,
+      "sha256": "8b3b943affb1ae6428e43be998f4c53b5f547909af20ea879e16b8e3346ee895",
+      "actuallyViewedInPreviousReview": true,
+      "reopenedInThisTargetReview": false,
+      "reason": "La seule modification suivante concernait le conteneur de deux liens du composant atelier."
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/en-768-catalogue.png",
+      "width": 768,
+      "height": 1050,
+      "sha256": "ca24ba754b295b5952764252aa2b0c36c613f4127b4fc6f5c81bab0c9862343b",
+      "actuallyViewedInPreviousReview": true,
+      "reopenedInThisTargetReview": false,
+      "reason": "La seule modification suivante concernait le conteneur de deux liens du composant atelier."
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/fr-1024-catalogue.png",
+      "width": 1024,
+      "height": 1333,
+      "sha256": "82490dea6edc61db8a02fd75687628070b191b3ff0144a40a49de02cf56d3098",
+      "actuallyViewedInPreviousReview": true,
+      "reopenedInThisTargetReview": false,
+      "reason": "La seule modification suivante concernait le conteneur de deux liens du composant atelier."
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/fr-1440-catalogue.png",
+      "width": 1440,
+      "height": 1333,
+      "sha256": "d3e5f218947a6764e03c88ea703e52a23280c2faedc4069cb7e7e65d7e62747a",
+      "actuallyViewedInPreviousReview": true,
+      "reopenedInThisTargetReview": false,
+      "reason": "La seule modification suivante concernait le conteneur de deux liens du composant atelier."
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/fr-320-catalogue.png",
+      "width": 320,
+      "height": 1727,
+      "sha256": "0dd9ceca661439f29839d3babda55f4bdf8f3a3f95ad636ef573dd5997ddcd08",
+      "actuallyViewedInPreviousReview": true,
+      "reopenedInThisTargetReview": false,
+      "reason": "La seule modification suivante concernait le conteneur de deux liens du composant atelier."
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/fr-390-catalogue-text-200-percent-viewport.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "27384c84903da794142a68e9f8ba026bda174b9aff31ffd0143a3c31bcadb040",
+      "actuallyViewedInPreviousReview": true,
+      "reopenedInThisTargetReview": false,
+      "reason": "La seule modification suivante concernait le conteneur de deux liens du composant atelier."
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/fr-390-catalogue.png",
+      "width": 390,
+      "height": 1546,
+      "sha256": "ba6c64b5948742fecc141ab908a5bd8fe5daeb901d8e4bf9abf69de6c8f64f14",
+      "actuallyViewedInPreviousReview": true,
+      "reopenedInThisTargetReview": false,
+      "reason": "La seule modification suivante concernait le conteneur de deux liens du composant atelier."
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-26-43-832Z-f505b588-e6e0-4b6f-adef-5dd5edc9748d/fr-768-catalogue.png",
+      "width": 768,
+      "height": 1050,
+      "sha256": "096a95033cd87812d2cb14acd30e86d679a7eaccf89b9d15eadaaecb80ec7c6f",
+      "actuallyViewedInPreviousReview": true,
+      "reopenedInThisTargetReview": false,
+      "reason": "La seule modification suivante concernait le conteneur de deux liens du composant atelier."
+    }
+  ],
+  "coverage": {
+    "locales": [
+      "fr",
+      "en"
+    ],
+    "widths": [
+      1440,
+      1024,
+      768,
+      390,
+      320
+    ],
+    "newFullPages": 10,
+    "newText200Viewports": 2,
+    "priorCatalogueFullPagesRetained": 10,
+    "priorCatalogueText200ViewportsRetained": 2
+  },
+  "budgetReports": [
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/en-workshop-performance.json",
+      "sha256": "7918e55037646c7450569cdce006aa553dfa5c3a39ab350bf9977ef246f92053",
+      "locale": "en",
+      "page": "workshop",
+      "budgets": {
+        "file": "docs/performance-budgets.json",
+        "version": 1,
+        "sourceBaselineRun": "2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348",
+        "status": "passed",
+        "checks": [
+          {
+            "metric": "javascriptEncodedBytes",
+            "observed": 305256,
+            "limit": 393216,
+            "passed": true
+          },
+          {
+            "metric": "javascriptDecodedBytes",
+            "observed": 996847,
+            "limit": 1310720,
+            "passed": true
+          },
+          {
+            "metric": "stylesheetDecodedBytes",
+            "observed": 40547,
+            "limit": 49152,
+            "passed": true
+          },
+          {
+            "metric": "readyMedianMs",
+            "observed": 535.4667999999983,
+            "limit": 1500,
+            "passed": true
+          },
+          {
+            "metric": "readyMaxMs",
+            "observed": 628.3940000000002,
+            "limit": 2500,
+            "passed": true
+          },
+          {
+            "metric": "largestContentfulPaintSnapshotMaxMs",
+            "observed": 276,
+            "limit": 1500,
+            "passed": true
+          },
+          {
+            "metric": "layoutShiftSnapshotMax",
+            "observed": 0.01735982060185185,
+            "limit": 0.05,
+            "passed": true
+          }
+        ],
+        "policy": "Fixed limits selected after the preserved baseline; investigate a different machine/profile, never auto-increase or retry away a failure."
+      },
+      "samples": [
+        {
+          "readyMs": 535.4667999999983,
+          "ttfbMs": 127.5,
+          "largestContentfulPaintSnapshotMs": 232,
+          "layoutShiftSnapshot": 0.01735982060185185,
+          "cacheResponses": 0,
+          "failedRequests": 0
+        },
+        {
+          "readyMs": 487.23289999999906,
+          "ttfbMs": 124.19999998807907,
+          "largestContentfulPaintSnapshotMs": 224,
+          "layoutShiftSnapshot": 0.01735982060185185,
+          "cacheResponses": 0,
+          "failedRequests": 0
+        },
+        {
+          "readyMs": 628.3940000000002,
+          "ttfbMs": 134.5,
+          "largestContentfulPaintSnapshotMs": 276,
+          "layoutShiftSnapshot": 0.01735982060185185,
+          "cacheResponses": 0,
+          "failedRequests": 0
+        }
+      ],
+      "matrixCompleted": true,
+      "layouts": [
+        {
+          "width": 1440,
+          "viewport": 1440,
+          "document": 1440,
+          "body": 1440
+        },
+        {
+          "width": 1024,
+          "viewport": 1024,
+          "document": 1024,
+          "body": 1024
+        },
+        {
+          "width": 768,
+          "viewport": 768,
+          "document": 768,
+          "body": 768
+        },
+        {
+          "width": 390,
+          "viewport": 390,
+          "document": 390,
+          "body": 390
+        },
+        {
+          "width": 320,
+          "viewport": 320,
+          "document": 320,
+          "body": 320
+        }
+      ],
+      "textResize": {
+        "mechanism": "root-font-size-doubled",
+        "beforePx": 16,
+        "afterPx": 32,
+        "ratio": 2
+      },
+      "interactions": {
+        "inputToNextFramesMs": 81.12389999999868,
+        "saveToAcknowledgedUiMs": 179.09929999999804,
+        "importEscapeAndFocusReturn": true,
+        "invalidTitleFocusedAndDescribed": true,
+        "realPatchAcknowledged": true
+      }
+    },
+    {
+      "file": "docs/evidence/P17-browser/2026-11-09T04-31-31-925Z-7e0585cc-f5c4-4ae1-8070-5a5c595a16d3/fr-workshop-performance.json",
+      "sha256": "6cd8646d6e5648a61d41274464b693794f77f1ff20dd37df0d2865df4c1a2810",
+      "locale": "fr",
+      "page": "workshop",
+      "budgets": {
+        "file": "docs/performance-budgets.json",
+        "version": 1,
+        "sourceBaselineRun": "2026-11-09T04-08-36-945Z-e85e7d11-21d4-4b35-8157-a51970440348",
+        "status": "passed",
+        "checks": [
+          {
+            "metric": "javascriptEncodedBytes",
+            "observed": 305256,
+            "limit": 393216,
+            "passed": true
+          },
+          {
+            "metric": "javascriptDecodedBytes",
+            "observed": 996847,
+            "limit": 1310720,
+            "passed": true
+          },
+          {
+            "metric": "stylesheetDecodedBytes",
+            "observed": 40547,
+            "limit": 49152,
+            "passed": true
+          },
+          {
+            "metric": "readyMedianMs",
+            "observed": 592.1239999999998,
+            "limit": 1500,
+            "passed": true
+          },
+          {
+            "metric": "readyMaxMs",
+            "observed": 1424.8451000000005,
+            "limit": 2500,
+            "passed": true
+          },
+          {
+            "metric": "largestContentfulPaintSnapshotMaxMs",
+            "observed": 960,
+            "limit": 1500,
+            "passed": true
+          },
+          {
+            "metric": "layoutShiftSnapshotMax",
+            "observed": 0.016717581018518515,
+            "limit": 0.05,
+            "passed": true
+          }
+        ],
+        "policy": "Fixed limits selected after the preserved baseline; investigate a different machine/profile, never auto-increase or retry away a failure."
+      },
+      "samples": [
+        {
+          "readyMs": 1424.8451000000005,
+          "ttfbMs": 476,
+          "largestContentfulPaintSnapshotMs": 960,
+          "layoutShiftSnapshot": 0.016717581018518515,
+          "cacheResponses": 0,
+          "failedRequests": 0
+        },
+        {
+          "readyMs": 561.8966,
+          "ttfbMs": 145.19999998807907,
+          "largestContentfulPaintSnapshotMs": 256,
+          "layoutShiftSnapshot": 0.016717581018518515,
+          "cacheResponses": 0,
+          "failedRequests": 0
+        },
+        {
+          "readyMs": 592.1239999999998,
+          "ttfbMs": 174.5,
+          "largestContentfulPaintSnapshotMs": 308,
+          "layoutShiftSnapshot": 0.016717581018518515,
+          "cacheResponses": 0,
+          "failedRequests": 0
+        }
+      ],
+      "matrixCompleted": true,
+      "layouts": [
+        {
+          "width": 1440,
+          "viewport": 1440,
+          "document": 1440,
+          "body": 1440
+        },
+        {
+          "width": 1024,
+          "viewport": 1024,
+          "document": 1024,
+          "body": 1024
+        },
+        {
+          "width": 768,
+          "viewport": 768,
+          "document": 768,
+          "body": 768
+        },
+        {
+          "width": 390,
+          "viewport": 390,
+          "document": 390,
+          "body": 390
+        },
+        {
+          "width": 320,
+          "viewport": 320,
+          "document": 320,
+          "body": 320
+        }
+      ],
+      "textResize": {
+        "mechanism": "root-font-size-doubled",
+        "beforePx": 16,
+        "afterPx": 32,
+        "ratio": 2
+      },
+      "interactions": {
+        "inputToNextFramesMs": 52.153300000001764,
+        "saveToAcknowledgedUiMs": 161.05099999999948,
+        "importEscapeAndFocusReturn": true,
+        "invalidTitleFocusedAndDescribed": true,
+        "realPatchAcknowledged": true
+      }
+    }
+  ],
+  "resolvedFindings": [
+    {
+      "code": "PROJECT_ACTION_LINKS_TOUCHING",
+      "status": "confirmed resolved in the ten rebuilt normal-scale workshop images",
+      "correction": "Only wrap the two existing links in flex flex-wrap gap-3. No action, route or form logic changed."
+    }
+  ],
+  "materialDefectsObserved": [],
+  "conclusion": "Espacement confirmé en FR/EN aux cinq largeurs ; aucun nouveau défaut matériel observé. Les14contrôles de budgets fixes passent, sans relèvement de seuil ni retry.",
+  "limitations": [
+    "Cette revue est statique ; les actions clavier/focus/erreurs et les sauvegardes réelles sont prouvées par les scénarios exécutés, pas déduites des pixels.",
+    "Les deux images200% sont des viewports après défilement ; elles ne prétendent montrer toute la page agrandie. Le mécanisme documenté double la police racine et vérifie16→32px sur le champ.",
+    "Toutes les hauteurs originales sont inférieures à6000px, aucun crop ni redimensionnement dérivé nécessaire.",
+    "Le passage complet9/9 et ce ciblé2/2 sont distincts et ne deviennent pas11scénarios différents. Les anciennes captures et l’ancien constat restent conservés.",
+    "Mesures locales sur trois navigations par langue, pas de p95, field INP ou gain de vitesse causal attribué au changement d’espacement.",
+    "Aucune conformité globale WCAG, production, intégration Stripe externe ou résolution des refus historiques d’accès n’est déclarée ici."
+  ]
+}

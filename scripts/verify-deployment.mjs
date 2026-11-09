@@ -62,9 +62,9 @@ try{
 }catch(error){failure=error;report.result='failed';report.failureCode=/^[A-Za-z0-9_]+$/.test(error.message)?error.message:'P20_INTEGRATION_FAILED';}
 finally{
  const errors=[];
- for(const record of containers.reverse())try{const label=docker(['inspect','--format','{{index .Config.Labels "com.chatgptcourses.p20"}}',record.id]);if(label!==runId)throw new Error();docker(['rm','--force',record.id]);}catch{errors.push('OWNED_CONTAINER_CLEANUP_UNCONFIRMED');}
+ for(const record of containers.reverse())try{const label=docker(['inspect','--format','{{index .Config.Labels "com.chatgptcourses.p20"}}',record.id]);if(label!==runId)errors.push('OWNED_CONTAINER_CLEANUP_UNCONFIRMED');else docker(['rm','--force',record.id]);}catch{errors.push('OWNED_CONTAINER_CLEANUP_UNCONFIRMED');}
  if(composeStarted)try{compose(['down','--remove-orphans'],{privateLog:'cleanup-compose.log'});}catch{errors.push('COMPOSE_CLEANUP_UNCONFIRMED');}
- for(const volume of volumes)try{if(docker(['volume','inspect','--format','{{index .Labels "com.chatgptcourses.p20"}}',volume])!==runId)throw new Error();docker(['volume','rm',volume]);}catch{errors.push('OWNED_VOLUME_CLEANUP_UNCONFIRMED');}
+ for(const volume of volumes)try{if(docker(['volume','inspect','--format','{{index .Labels "com.chatgptcourses.p20"}}',volume])!==runId)errors.push('OWNED_VOLUME_CLEANUP_UNCONFIRMED');else docker(['volume','rm',volume]);}catch{errors.push('OWNED_VOLUME_CLEANUP_UNCONFIRMED');}
  try{for(const name of docker(['volume','ls','--filter',`label=com.docker.compose.project=${project}`,'--format','{{.Name}}']).split(/\r?\n/).filter(Boolean))docker(['volume','rm',name]);}catch{errors.push('COMPOSE_VOLUME_CLEANUP_UNCONFIRMED');}
  for(const name of networks)try{docker(['network','rm',name]);}catch{errors.push('NETWORK_CLEANUP_UNCONFIRMED');}
  report.cleanupConfirmed=errors.length===0;report.cleanupErrors=errors;report.completedAt=new Date().toISOString();writeFileSync(evidence,JSON.stringify(report,null,2)+'\n');

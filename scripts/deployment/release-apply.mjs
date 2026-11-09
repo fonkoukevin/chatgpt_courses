@@ -2,7 +2,7 @@ import { closeSync, existsSync, lstatSync, mkdirSync, openSync, readFileSync, re
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { requireRelease, parseManifest, validateBackupReceipt, validateSchemaFacts } from './release.mjs';
+import { MAX_BACKUP_RECEIPT_BYTES, requireRelease, parseManifest, validateBackupReceipt, validateSchemaFacts } from './release.mjs';
 import { loadDeployment, validateDeployment } from './config.mjs';
 
 // Runs only on the explicitly configured Linux host. It does not bootstrap a
@@ -78,7 +78,7 @@ function main() {
       requireRelease(/^[a-f0-9]{64}$/u.test(request.migrationBackupReceiptSha256 ?? ''), 'RELEASE_BACKUP_REFERENCE_REQUIRED');
       const backupPath = join(args.directory, 'backups', request.migrationBackupReceiptSha256, 'receipt.json');
       noLinks(backupPath); const stat = lstatSync(backupPath);
-      requireRelease(stat.isFile() && stat.size <= 65536 && (stat.mode & 0o007) === 0, 'RELEASE_PRIVATE_BACKUP_RECEIPT_REQUIRED');
+      requireRelease(stat.isFile() && stat.size <= MAX_BACKUP_RECEIPT_BYTES && (stat.mode & 0o007) === 0, 'RELEASE_PRIVATE_BACKUP_RECEIPT_REQUIRED');
       validateBackupReceipt(readFileSync(backupPath), request.migrationBackupReceiptSha256, { project, environment: request.environment, database: configuration.POSTGRES_DB });
     }
     if (request.operation === 'deploy') run('docker', [...compose, 'run', '--rm', '--no-deps', 'migrate']);

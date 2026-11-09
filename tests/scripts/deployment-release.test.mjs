@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { repository, validateManifest, manifestBytes, sha256, parseManifest, protectedEnvironment, targetConfiguration, validateBackupReceipt, validateSchemaFacts } from '../../scripts/deployment/release.mjs';
+import { MAX_BACKUP_RECEIPT_BYTES, repository, validateManifest, manifestBytes, sha256, parseManifest, protectedEnvironment, targetConfiguration, validateBackupReceipt, validateSchemaFacts } from '../../scripts/deployment/release.mjs';
 
 const prefix='registry.invalid/team/courses';
 const candidate=()=>({schemaVersion:1,sourceCommit:'a'.repeat(40),web:{repository:prefix+'/web',digest:'sha256:'+'b'.repeat(64)},api:{repository:prefix+'/api',digest:'sha256:'+'c'.repeat(64)},schema:{min:19,max:19}});
@@ -43,6 +43,17 @@ test('backup evidence is bound to actual receipt bytes, successful authenticated
  const bytes=Buffer.from(JSON.stringify(value)),hash=sha256(bytes);validateBackupReceipt(bytes,hash,target);
  assert.throws(()=>validateBackupReceipt(Buffer.from(JSON.stringify({...value,project:'courses-production'})),hash,target),/HASH_MISMATCH/);
  for(const changed of [{result:'failed'},{authenticatedEncryption:false},{environment:'production'},{database:'other_database'}]){const altered=Buffer.from(JSON.stringify({...value,...changed}));assert.throws(()=>validateBackupReceipt(altered,sha256(altered),target),/TARGET_MISMATCH/);}
+});
+test('the bounded receipt accepts the full supported object inventory instead of rejecting ordinary backups above 64 KiB',()=>{
+ const target={project:'courses-staging',environment:'staging',database:'courses_staging'};
+ const item=name=>({name,bytes:1048636,sha256:'a'.repeat(64),format:'aes-256-gcm-v1'});
+ for(const objects of [600,100000]){
+  const files=[item('database.enc'),item('objects-manifest.enc'),...Array.from({length:objects},(_,index)=>item(`object-${String(index).padStart(6,'0')}.enc`)),item('notification-key.enc')];
+  const receipt={schemaVersion:1,result:'passed',authenticatedEncryption:true,...target,sourceCommit:'b'.repeat(40),postgresql:'18.6',createdAt:'2026-11-09T00:00:00.000Z',objects,files,keyFingerprint:'c'.repeat(64),outboxKeyFingerprint:'d'.repeat(64),offHostCopyObserved:false};
+  const bytes=Buffer.from(JSON.stringify(receipt,null,2)+'\n');
+  assert.ok(bytes.length>65536);assert.ok(bytes.length<=MAX_BACKUP_RECEIPT_BYTES);validateBackupReceipt(bytes,sha256(bytes),target);
+ }
+ const tooLarge=Buffer.alloc(MAX_BACKUP_RECEIPT_BYTES+1);assert.throws(()=>validateBackupReceipt(tooLarge,'0'.repeat(64),target),/SIZE_INVALID/);
 });
 test('observed schema facts prevent incompatible rollback and false first-install backup exemptions',()=>{
  const manifest=candidate(),facts={historyPresent:true,version:19,failed:0,userTables:80},rollback={operation:'rollback',currentSchemaVersion:19,rollbackSchemaReviewed:true};

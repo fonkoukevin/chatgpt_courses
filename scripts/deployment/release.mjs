@@ -7,6 +7,9 @@ import { spawnSync } from 'node:child_process';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const shaPattern = /^[a-f0-9]{64}$/u, commitPattern = /^[a-f0-9]{40}$/u;
+// The backup bundle may describe 100,000 encrypted objects plus its three
+// fixed files. Its pretty-printed receipt can exceed the 16 MiB inventory.
+export const MAX_BACKUP_RECEIPT_BYTES = 32 * 1024 * 1024;
 const bundleFiles = ['infra/compose/compose.deployment.yml', 'infra/compose/compose.staging.yml', 'infra/caddy/Caddyfile', 'infra/caddy/routes.caddy', 'infra/postgres/init-roles.sh', 'scripts/deployment/config.mjs', 'scripts/deployment/release.mjs', 'scripts/deployment/release-apply.mjs'];
 export function requireRelease(condition, code) { if (!condition) { const error = new Error(code); error.code = code; throw error; } }
 const exact = (value, keys) => value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).toSorted().join(',') === keys.toSorted().join(',');
@@ -39,7 +42,8 @@ export function protectedEnvironment(value, expectedName, workflow, branch) {
   return { reviewersConfigured: Boolean(reviewers), preventSelfReview: reviewers?.prevent_self_review ?? null, adminBypassUiObserved: false };
 }
 export function validateBackupReceipt(bytes, expectedHash, target) {
-  requireRelease(Buffer.isBuffer(bytes) && bytes.length <= 65536 && shaPattern.test(expectedHash ?? '') && sha256(bytes) === expectedHash, 'RELEASE_BACKUP_RECEIPT_HASH_MISMATCH');
+  requireRelease(Buffer.isBuffer(bytes) && bytes.length <= MAX_BACKUP_RECEIPT_BYTES, 'RELEASE_BACKUP_RECEIPT_SIZE_INVALID');
+  requireRelease(shaPattern.test(expectedHash ?? '') && sha256(bytes) === expectedHash, 'RELEASE_BACKUP_RECEIPT_HASH_MISMATCH');
   const receipt = JSON.parse(bytes.toString('utf8'));
   requireRelease(receipt.result === 'passed' && receipt.authenticatedEncryption === true && receipt.project === target.project && receipt.environment === target.environment && receipt.database === target.database, 'RELEASE_BACKUP_RECEIPT_TARGET_MISMATCH');
 }

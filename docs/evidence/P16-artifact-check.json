@@ -1,0 +1,27 @@
+{
+  "verifiedAt": "2026-11-09T03:31:05.330Z",
+  "jarSha256": "ac9af2161e5a4febf1e08ace84b0a014aa5ce2b5c7d116634f1d1885fd0919f6",
+  "jarSizeBytes": 94628568,
+  "migrationCount": 18,
+  "lastMigration": "V018__localized_slug_reservations_and_history.sql",
+  "sourceAndBuiltMigrationsMatch": true,
+  "applicationFilesChecked": 769,
+  "knownPrivateValuesAbsent": true,
+  "privateEntriesAbsent": true,
+  "secretsPrinted": false,
+  "finalBrowserCopies": [
+    {
+      "phase": "P16",
+      "runId": "2026-11-09T03-39-04-008Z-358cf316-1313-4a42-b666-929ecfafc429",
+      "sha256": "ac9af2161e5a4febf1e08ace84b0a014aa5ce2b5c7d116634f1d1885fd0919f6"
+    },
+    {
+      "phase": "P16_SEO",
+      "runId": "2026-11-09T03-38-54-076Z-abb630bb-e2fa-4e0e-ab6b-e1cb39db96c9",
+      "sha256": "ac9af2161e5a4febf1e08ace84b0a014aa5ce2b5c7d116634f1d1885fd0919f6"
+    }
+  ],
+  "allFinalBrowserCopiesMatch": true,
+  "finalBuildId": "D1ja1i9FX6m7Lj_0zUcGM",
+  "sourceCodeCommit": "153726e"
+}

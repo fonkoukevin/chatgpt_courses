@@ -1,0 +1,87 @@
+{
+  "verifiedAt": "2026-11-09T03:15:49.471Z",
+  "scope": "Local production/staging configuration probes on loopback against isolated TEST Spring/PostgreSQL; no deployment or search-engine validation",
+  "syntheticPublicOrigin": "https://courses.invalid",
+  "checks": [
+    {
+      "name": "fr: HTTP200 and indexable header",
+      "passed": true
+    },
+    {
+      "name": "fr: rendered lang and exact title",
+      "passed": true
+    },
+    {
+      "name": "fr: canonical and reciprocal equivalents in server head",
+      "passed": true
+    },
+    {
+      "name": "fr: real BreadcrumbList with matching visible trail",
+      "passed": true
+    },
+    {
+      "name": "fr: public SEO page fits viewport",
+      "passed": true
+    },
+    {
+      "name": "en: HTTP200 and indexable header",
+      "passed": true
+    },
+    {
+      "name": "en: rendered lang and exact title",
+      "passed": true
+    },
+    {
+      "name": "en: canonical and reciprocal equivalents in server head",
+      "passed": true
+    },
+    {
+      "name": "en: real BreadcrumbList with matching visible trail",
+      "passed": true
+    },
+    {
+      "name": "en: public SEO page fits viewport",
+      "passed": true
+    },
+    {
+      "name": "filtered catalogue noindex and clean canonical",
+      "passed": true
+    },
+    {
+      "name": "unknown public slug is actual404",
+      "passed": true
+    },
+    {
+      "name": "rename persisted HTTP200",
+      "passed": true
+    },
+    {
+      "name": "old slug308 preserves pinned version",
+      "passed": true
+    },
+    {
+      "name": "sitemap actual XML and no stale caching",
+      "passed": true
+    },
+    {
+      "name": "sitemap includes new canonical and removes old slug",
+      "passed": true
+    },
+    {
+      "name": "sitemap excludes private, draft, missing EN and query URLs",
+      "passed": false
+    }
+  ],
+  "secondaryServers": [
+    {
+      "mode": "production",
+      "publishedLocales": "fr,en",
+      "port": 3111,
+      "stopped": true
+    }
+  ],
+  "allRecordedChecksPassed": false,
+  "allSecondaryServersStopped": true,
+  "secretsPrinted": false,
+  "rawPrivateHtmlExported": false
+}

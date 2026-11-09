@@ -1,0 +1,122 @@
+{
+  "capturedAt": "2026-11-09T03:40:12.560Z",
+  "outcome": "PASSED",
+  "scope": "Original synthetic fixture requests and completion DOM only; no extra authorization/metadata call",
+  "counters": {
+    "started": 4,
+    "responded": 4,
+    "failed": 0
+  },
+  "pendingOriginalRequests": 0,
+  "truncated": false,
+  "publicContext": {
+    "availability": "MISSING_TRANSLATION",
+    "identitiesMatch": true
+  },
+  "htmlLanguage": "en",
+  "ui": [
+    {
+      "locale": "fr",
+      "panelCount": 0,
+      "loadingCount": 0,
+      "visibleLoadingCount": 0,
+      "loadButtonCount": 0,
+      "nativeVideoCount": 0,
+      "privateWorkspaceLoading": 0
+    },
+    {
+      "locale": "en",
+      "panelCount": 1,
+      "loadingCount": 1,
+      "visibleLoadingCount": 0,
+      "loadButtonCount": 1,
+      "nativeVideoCount": 0,
+      "privateWorkspaceLoading": 0
+    }
+  ],
+  "events": [
+    {
+      "elapsedMs": 1787,
+      "event": "REQUEST",
+      "requestNumber": 1,
+      "kind": "ACCOUNT"
+    },
+    {
+      "elapsedMs": 1791,
+      "event": "RESPONSE",
+      "requestNumber": 1,
+      "kind": "ACCOUNT",
+      "status": 401,
+      "jsonObject": true,
+      "problemCode": "AUTHENTICATION_REQUIRED"
+    },
+    {
+      "elapsedMs": 1865,
+      "event": "REQUEST",
+      "requestNumber": 2,
+      "kind": "VIDEO_METADATA",
+      "locale": "fr",
+      "contextMatches": true,
+      "enrollmentPresent": false
+    },
+    {
+      "elapsedMs": 1998,
+      "event": "REQUEST",
+      "requestNumber": 3,
+      "kind": "ACCOUNT"
+    },
+    {
+      "elapsedMs": 2003,
+      "event": "RESPONSE",
+      "requestNumber": 2,
+      "kind": "VIDEO_METADATA",
+      "locale": "fr",
+      "contextMatches": true,
+      "enrollmentPresent": false,
+      "status": 200,
+      "jsonObject": true,
+      "identityMatches": true,
+      "localeMatches": true,
+      "playbackAvailable": true,
+      "durationFinitePositive": true,
+      "reason": null
+    },
+    {
+      "elapsedMs": 2013,
+      "event": "RESPONSE",
+      "requestNumber": 3,
+      "kind": "ACCOUNT",
+      "status": 401,
+      "jsonObject": true,
+      "problemCode": "AUTHENTICATION_REQUIRED"
+    },
+    {
+      "elapsedMs": 2061,
+      "event": "REQUEST",
+      "requestNumber": 4,
+      "kind": "VIDEO_METADATA",
+      "locale": "en",
+      "contextMatches": true,
+      "enrollmentPresent": false
+    },
+    {
+      "elapsedMs": 2111,
+      "event": "RESPONSE",
+      "requestNumber": 4,
+      "kind": "VIDEO_METADATA",
+      "locale": "en",
+      "contextMatches": true,
+      "enrollmentPresent": false,
+      "status": 200,
+      "jsonObject": true,
+      "identityMatches": true,
+      "localeMatches": true,
+      "playbackAvailable": true,
+      "durationFinitePositive": true,
+      "reason": null
+    }
+  ],
+  "secretsPrinted": false,
+  "bodiesExported": false,
+  "signedOrBearerUrlsExported": false
+}

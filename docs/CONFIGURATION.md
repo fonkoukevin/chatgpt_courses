@@ -21,9 +21,10 @@ Le fichier `.env.local` est chargé uniquement si `APP_ENV` est absent ou vaut `
 | Groupe | Variables / comportement |
 | --- | --- |
 | Environnement | `APP_ENV=local\|test\|production`, `APP_PUBLIC_ORIGIN` sans chemin, identifiants, requête ou fragment. Next prévoit aussi `staging`, non recetté dans P01 ; la recette complète sera fixée en P20 |
-| Langue | `APP_DEFAULT_LOCALE=fr\|en` pilote la redirection de `/` ; les deux routes de fondation existent. `APP_PUBLISHED_LOCALES` reste réservé à la publication future, pas à une offre déjà disponible |
+| Langue | `APP_DEFAULT_LOCALE=fr\|en` pilote la307 de `/`. P16 consomme `APP_PUBLISHED_LOCALES`, liste distincte `fr,en` ou vide ; seule la production peut indexer ces langues. Le défaut de production doit appartenir à la liste non vide. Cette liste ne publie aucun contenu ni ne modifie les langues achetées |
+| Recette Next | `STAGING_BASIC_USERNAME` de3–80 caractères ASCII simples et `STAGING_BASIC_PASSWORD` privé de24–256 caractères, sans deux-points/retour ligne. En `APP_ENV=staging`, absence/invalidité produit503, absence/mauvais identifiants401 ; pages, API et assets protégés. Le POST exact du webhook exige toujours sa signature Spring. Variables exclusivement serveur, jamais `NEXT_PUBLIC_*` |
 | API | `API_INTERNAL_URL` exclusivement serveur ; navigateur sur `/api/v1` en relatif. En local/test, origines en boucle locale ; frontend et API ne peuvent pas être la même origine interne (boucle de proxy refusée) |
-| Timeout | `API_TIMEOUT_MS`, entier de 100 à 30000, défaut 5000. Erreurs proxy 502/504, sans URL interne ni exception dans le corps |
+| Timeout | `API_TIMEOUT_MS`, entier de100 à30000, défaut30000. Erreurs proxy502/504, sans URL interne ni exception dans le corps |
 | Base | `POSTGRES_HOST/PORT/DB/USER/PASSWORD`, connexion JDBC construite par Spring ; secret généré localement |
 | Spring | `SPRING_PROFILES_ACTIVE=local\|test\|production` cohérent avec `APP_ENV`. Le script de démarrage le dérive de `APP_ENV` si absent ; tests avec profil `test` et PostgreSQL isolé |
 | Sessions | `SESSION_COOKIE_SECURE=false` en HTTP local ; `true` requis en production. `HttpOnly`, `SameSite=Lax`, `Path=/`. Schéma JDBC migré par Flyway ; initialisation automatique désactivée |

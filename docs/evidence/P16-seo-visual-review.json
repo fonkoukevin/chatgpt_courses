@@ -1,0 +1,61 @@
+{
+  "phase": "P16",
+  "runId": "2026-11-09T03-38-54-076Z-abb630bb-e2fa-4e0e-ab6b-e1cb39db96c9",
+  "reviewedAt": "2026-11-09T03:45:40.126Z",
+  "reviewer": "versions_web",
+  "scope": "Revue visuelle statique des deux PNG SEO du dernier passage, distincte des vérifications HTTP et du run bilingue complet.",
+  "method": {
+    "tool": "view_image",
+    "requestedDetail": "original",
+    "originalImagesViewed": 2,
+    "newBrowserRun": false,
+    "newCaptures": false,
+    "applicationModified": false
+  },
+  "sessionObserved": {
+    "file": "docs/evidence/P16_SEO-browser/2026-11-09T03-38-54-076Z-abb630bb-e2fa-4e0e-ab6b-e1cb39db96c9/session.json",
+    "result": "passed",
+    "cleanupConfirmed": true,
+    "completedAt": "2026-11-09T03:41:12.022Z"
+  },
+  "runStatsObserved": {
+    "file": "docs/evidence/P16_SEO-browser/2026-11-09T03-38-54-076Z-abb630bb-e2fa-4e0e-ab6b-e1cb39db96c9/results.json",
+    "startTime": "2026-11-09T03:39:35.150Z",
+    "duration": 74584.328,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "previousReview": {
+    "file": "docs/evidence/P16-seo-visual-review-before-copy.json",
+    "runId": "2026-11-09T03-22-02-450Z-43bcff84-3054-476a-87bd-f939c2fcf6ba",
+    "sha256": "f014bd70be91ff6de4387074672b03090994a8cc0a449f8d53ca26e0c49881db",
+    "originalBytesPreserved": true
+  },
+  "images": [
+    {
+      "file": "docs/evidence/P16_SEO-browser/2026-11-09T03-38-54-076Z-abb630bb-e2fa-4e0e-ab6b-e1cb39db96c9/en-seo-published-guide.png",
+      "width": 390,
+      "height": 1356,
+      "sha256": "7dd5676ca8bc10aa3a81853a12a6ab44656096bf400602679d2ca0281d467928",
+      "viewed": true,
+      "observation": "Guide anglais mobile 390 px : navigation Français/English, titre et fil d’Ariane repliés, contexte français conservé dans le contenu de fixture, actions et pied de page complets ; aucun débordement essentiel observé."
+    },
+    {
+      "file": "docs/evidence/P16_SEO-browser/2026-11-09T03-38-54-076Z-abb630bb-e2fa-4e0e-ab6b-e1cb39db96c9/fr-seo-published-guide.png",
+      "width": 1440,
+      "height": 1068,
+      "sha256": "1cdb51da81b205cf2bd23318094be388042f6988c1f2d5b55edff3d353846ff6",
+      "viewed": true,
+      "observation": "Guide français bureau 1440 px : navigation, fil d’Ariane, titre, sommaire, source absente explicitée, actions et pied de page complets ; aucun chevauchement observé."
+    }
+  ],
+  "materialDefectsObserved": [],
+  "conclusion": "Aucun défaut matériel de rendu observé dans ces deux images. Cette lecture ne vérifie pas à elle seule canonical, hreflang, sitemap, robots, indexabilité ou en-têtes.",
+  "limitations": [
+    "Les faits HTTP et les quatre scénarios SEO sont rapportés dans leurs preuves d’exécution, sans les déduire des captures.",
+    "Aucun nouveau test, navigateur, clavier ou changement applicatif effectué par le réviseur.",
+    "Les deux images finales ont les mêmes octets que les vues du passage précédent ; elles ont néanmoins été rouvertes et réellement examinées pour ce run."
+  ]
+}

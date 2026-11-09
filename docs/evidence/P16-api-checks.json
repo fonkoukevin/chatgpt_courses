@@ -1,0 +1,150 @@
+{
+  "verifiedAt": "2026-11-09T03:21:59.165Z",
+  "environment": "isolated PostgreSQL18.6 Testcontainers and loopback HTTP",
+  "targetCommand": ".\\apps\\api\\mvnw.cmd -o -f .\\apps\\api\\pom.xml -Dtest=PublicRoutingIntegrationTest,EditorialServiceIntegrationTest,PublicCatalogueIntegrationTest,LearningServiceIntegrationTest,SchemaIntegrationTest test",
+  "targetExitCode": 0,
+  "targetTests": 41,
+  "target": {
+    "log": ".runtime/p16-api-target-first.log",
+    "success": true,
+    "mavenDuration": "02:13 min",
+    "finishedAt": "2026-11-09T04:07:44+01:00",
+    "suites": [
+      {
+        "suite": "com.chatgptcourses.EditorialServiceIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 37.33
+      },
+      {
+        "suite": "com.chatgptcourses.LearningServiceIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 19.26
+      },
+      {
+        "suite": "com.chatgptcourses.PublicCatalogueIntegrationTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 12.13
+      },
+      {
+        "suite": "com.chatgptcourses.PublicRoutingIntegrationTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 11.64
+      },
+      {
+        "suite": "com.chatgptcourses.SchemaIntegrationTest",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 21.99
+      }
+    ]
+  },
+  "additionalChecks": {
+    "activityMissingStaleWithdrawn": {
+      "passed": true,
+      "log": ".runtime/p16-api-edge-target.log"
+    },
+    "legacyUnknownPublishDate": {
+      "exitCode": 0,
+      "log": ".runtime/p16-api-legacy-target.log",
+      "success": true,
+      "mavenDuration": "45.480 s",
+      "finishedAt": "2026-11-09T04:12:28+01:00",
+      "suites": [
+        {
+          "suite": "com.chatgptcourses.SchemaIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "seconds": 24.87
+        }
+      ]
+    },
+    "intermediateFailure": {
+      "log": ".runtime/p16-api-edge-target.log",
+      "tests": 2,
+      "failures": 0,
+      "errors": 1,
+      "cause": "Legacy SQL fixture omitted frozen pedagogical version; the existing integrity trigger rejected publication. Fixture corrected, no production or constraint change."
+    },
+    "attestationTitleLanguage": {
+      "command": ".\\apps\\api\\mvnw.cmd -o -f .\\apps\\api\\pom.xml -Dtest=AccountEvidenceHttpIntegrationTest,PublicRoutingIntegrationTest test",
+      "log": ".runtime/p16-attestation-lang-target.log",
+      "exitCode": 0,
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mavenDuration": "01:58 min",
+      "finishedAt": "2026-11-09T04:21:05+01:00",
+      "suites": [
+        {
+          "suite": "com.chatgptcourses.AccountEvidenceHttpIntegrationTest",
+          "tests": 16,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "seconds": 70.57
+        },
+        {
+          "suite": "com.chatgptcourses.PublicRoutingIntegrationTest",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "seconds": 14.09
+        }
+      ],
+      "verified": [
+        "English document retains its English HTML language; snapshotted French course and activity titles carry lang=fr.",
+        "Actual PostgreSQL document bytes and SHA-256 match the private download.",
+        "New issue after profile change does not rewrite prior French or English bytes/hash after source/version changes."
+      ],
+      "scope": "Renderer affects new documents only; no stored history, migration, evidence identity or access rule is rewritten."
+    }
+  },
+  "package": {
+    "command": ".\\apps\\api\\mvnw.cmd -o -f .\\apps\\api\\pom.xml -DskipTests package",
+    "exitCode": 0,
+    "log": ".runtime/p16-attestation-lang-package.log",
+    "success": true,
+    "mavenDuration": "10.699 s",
+    "finishedAt": "2026-11-09T04:21:34+01:00",
+    "suites": [],
+    "jarSha256": "AC9AF2161E5A4FEBF1E08ACE84B0A014AA5CE2B5C7D116634F1D1885FD0919F6"
+  },
+  "priorMigrationsGitUnchanged": 17,
+  "sharedDatabaseTouched": false,
+  "secretsPrinted": false,
+  "fullGlobalSuiteRun": false,
+  "phaseValidationClaimed": false,
+  "limits": [
+    "Targets are not added together as separate tests.",
+    "Browser, SEO HTML, shared upgrade and complete phase validation are coordinated separately.",
+    "Historical P12 and P15 access refusals remain unresolved follow-up; no access-policy correction is claimed."
+  ],
+  "initialPackage": {
+    "command": ".\\apps\\api\\mvnw.cmd -o -f .\\apps\\api\\pom.xml -DskipTests package",
+    "exitCode": 0,
+    "log": ".runtime/p16-api-package.log",
+    "success": true,
+    "mavenDuration": "9.470 s",
+    "finishedAt": "2026-11-09T04:12:48+01:00",
+    "suites": [],
+    "jarSha256": "81ED37532404E0A6166A100315CF1A60514F4BFC95C601D24AD76DB263E168A4"
+  }
+}

@@ -504,6 +504,18 @@ Les indicateurs et le CSV `/admin/metrics/export` ont les mêmes filtres. L’ex
 
 ## Contrat et tests
 
+### P16 — adresses et équivalents publiés
+
+`PATCH /admin/contents/{id}/slug` reçoit `RenameContentSlug{slug,reason}`, CSRF, `X-Account-Context` et `If-Match`. `content.write` est nécessaire, avec `content.publish` si cette identité/langue a déjà été publiée. Verrou familial et permission recontrôlés avant écriture ; même slug est un no-op. Une ancienne valeur reste réservée à la même identité/type/langue. Collision409 `SLUG_ALREADY_RESERVED`. Le `ContentView` et son ETag familial sont renvoyés ; aucune révision de texte ou pédagogique fabriquée.
+
+`GET /catalog/by-slug/{kind}/{slug}?locale=...` conserve son DTO et résout les réservations vers l’identité exacte. Le `slug` retourné est canonique ; Next redirige308 en conservant les versions et retours autorisés, sans sauter à un autre cours.
+
+`GET /catalog/publications?locale=...&page=0&pageSize=100` expose uniquement les métadonnées COURSE/GUIDE/METHOD_TEMPLATE de la dernière version globalement publiée et de sa langue encore PUBLISHED. Pagination bornée, ordre stable ; `publishedAt` vient du PUBLISH exact ou reste null si inconnu. `languages` contient les équivalents publiés de cette même identité/version, y compris soi. Aucun corps, auteur, donnée privée ou prix.
+
+`GET /catalog/resources/{courseId}/versions/{courseVersionId}/activities/{activityId}/versions/{activityVersionId}?locale=...` décrit la disponibilité de la composition exacte dans les deux langues, module intermédiaire compris. Une relation inexistante produit404. Les états sont PUBLISHED/MISSING_TRANSLATION/STALE/WITHDRAWN ; aucun remplacement par une version plus récente. Cette projection n’accorde aucun droit et ne contient ni document, corrigé, progrès ou identité de compte. Les autorisations privées restent celles de P08/P12. Le client refuse une réponse dont les identifiants ou la langue ne correspondent pas à la demande.
+
+Ces routes sont définies dans [OpenAPI](api/openapi.yaml), avec types générés et décodeurs réseau explicites. Leurs résultats exécutés seront consignés dans [P16](evidence/P16.md).
+
 P03 livre le contrat machine et les commandes de validation/génération avec des outils compatibles avec TypeScript 6 ; P04 à P08 les étendent aux routes réelles d’identité, CMS, catalogue public, méthodes et apprentissage. La CI est configurée pour ces commandes ; une exécution GitHub n’est pas présumée. Les DTO exposés ne sont jamais des entités JPA brutes. Les modèles et FK actuels/futurs sont précisés dans [DATA_MODEL.md](DATA_MODEL.md), les résultats réellement observés dans les preuves [P03](evidence/P03.md), [P04](evidence/P04.md), [P05](evidence/P05.md), [P06](evidence/P06.md), [P07](evidence/P07.md) et [P08](evidence/P08.md).
 
 Chaque lot qui ajoute une route fournit des tests sur le backend réel pour ses invariants, puis met à jour le client et les écrans. Les états de facture, remboursement ou autorisation ne sont jamais inventés uniquement pour faire passer un test d’interface.

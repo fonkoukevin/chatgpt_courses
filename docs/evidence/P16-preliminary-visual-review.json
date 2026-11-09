@@ -1,0 +1,133 @@
+{
+  "phase": "P16",
+  "stage": "preliminary",
+  "reviewedAt": "2026-11-09T03:20:57.532Z",
+  "reviewer": "versions_web",
+  "method": {
+    "tool": "view_image",
+    "detail": "original",
+    "newBrowserRun": false,
+    "newCaptures": false,
+    "applicationModified": false
+  },
+  "runs": [
+    {
+      "runId": "2026-11-09T03-14-44-077Z-f61f4fe3-e205-4975-b77a-290f2dfa8c32",
+      "sessionObserved": {
+        "result": "failed",
+        "cleanupConfirmed": true
+      },
+      "images": [
+        {
+          "file": "docs/evidence/P16-browser/2026-11-09T03-14-44-077Z-f61f4fe3-e205-4975-b77a-290f2dfa8c32/en-1024-public-language-navigation.png",
+          "width": 1024,
+          "height": 1700,
+          "sha256": "7856dbdff7594493c03e8dfd7594ef67d0c8b741b39b2ed60ae3907cfee53ccc",
+          "viewed": true,
+          "observation": "Navigation English/Français, breadcrumbs et fiche de parcours lisibles à 1024 px, sans chevauchement observé."
+        },
+        {
+          "file": "docs/evidence/P16-browser/2026-11-09T03-14-44-077Z-f61f4fe3-e205-4975-b77a-290f2dfa8c32/en-390-original-french-note-and-common-progress.png",
+          "width": 390,
+          "height": 5406,
+          "sha256": "5586480c833d1673c1ed8e924521b9fb4f631dca2820cb4742a1079e2961a753",
+          "viewed": true,
+          "observation": "Vue longue lisible à 390 px : note originale FR sous UI EN, déclarations enregistrées et tentative historique FR distinctes ; aucune position vidéo prétendue enregistrée."
+        },
+        {
+          "file": "docs/evidence/P16-browser/2026-11-09T03-14-44-077Z-f61f4fe3-e205-4975-b77a-290f2dfa8c32/en-390-public-equivalent.png",
+          "width": 390,
+          "height": 2301,
+          "sha256": "7e9244beed9843091a0176ea190dd41098a391c59f9518faee5d27dbb0552e90",
+          "viewed": true,
+          "observation": "Fiche anglaise lisible à 390 px, liens et titres repliés ; le panneau de droits montre encore Checking my access, état transitoire seulement."
+        },
+        {
+          "file": "docs/evidence/P16-browser/2026-11-09T03-14-44-077Z-f61f4fe3-e205-4975-b77a-290f2dfa8c32/en-390-stale-translation.png",
+          "width": 390,
+          "height": 913,
+          "sha256": "fb1fe81a6f7997cf2c418584683db4c47bf3c8213c657e7530939d3e2aae8479",
+          "viewed": true,
+          "observation": "Traduction périmée signalée sans corps emprunté, retour français et alternative de catalogue visibles."
+        },
+        {
+          "file": "docs/evidence/P16-browser/2026-11-09T03-14-44-077Z-f61f4fe3-e205-4975-b77a-290f2dfa8c32/en-390-voluntary-standalone-alternative.png",
+          "width": 390,
+          "height": 3628,
+          "sha256": "8ca3c4f31ff25d885d19933478b0c1d999ab37fe2d3bb7bcc4a4b630403efdbf",
+          "viewed": true,
+          "observation": "Activité autonome anglaise lisible et aucun contexte de parcours inventé. Preparing playback encore visible et image coupée pendant le footer ; fin de footer non validée."
+        },
+        {
+          "file": "docs/evidence/P16-browser/2026-11-09T03-14-44-077Z-f61f4fe3-e205-4975-b77a-290f2dfa8c32/fr-1024-public-language-navigation.png",
+          "width": 1024,
+          "height": 1700,
+          "sha256": "3bf54da8ae2e73bdb6db3d0f835a6fd2d9e6af20267acf6ced55c993cc5898a0",
+          "viewed": true,
+          "observation": "Navigation Français/English et colonnes de programme/accès lisibles à 1024 px."
+        },
+        {
+          "file": "docs/evidence/P16-browser/2026-11-09T03-14-44-077Z-f61f4fe3-e205-4975-b77a-290f2dfa8c32/fr-1440-public-equivalent.png",
+          "width": 1440,
+          "height": 1700,
+          "sha256": "c0509aa14b066605f338d5e15e3d4eb321c4346fb2b8c7d18df76169f1d7630b",
+          "viewed": true,
+          "observation": "Parcours français, programme et équivalent anglais explicitement proposés, aucun défaut matériel visible."
+        },
+        {
+          "file": "docs/evidence/P16-browser/2026-11-09T03-14-44-077Z-f61f4fe3-e205-4975-b77a-290f2dfa8c32/fr-390-renamed-canonical-guide.png",
+          "width": 390,
+          "height": 1926,
+          "sha256": "f7e848ba89eb340912bc1c829ca5234d85301968c9247c66ec3ec4ed565ca726",
+          "viewed": true,
+          "observation": "Guide renommé lisible à 390 px ; texte de fixture, sommaire, sources et boutons sans troncature essentielle."
+        }
+      ]
+    },
+    {
+      "runId": "2026-11-09T03-14-33-553Z-3ee6a6ad-eaef-488a-ad46-0e6baa9a5a34",
+      "sessionObserved": {
+        "result": "failed",
+        "cleanupConfirmed": true
+      },
+      "images": [
+        {
+          "file": "docs/evidence/P16_SEO-browser/2026-11-09T03-14-33-553Z-3ee6a6ad-eaef-488a-ad46-0e6baa9a5a34/en-seo-published-guide.png",
+          "width": 390,
+          "height": 1356,
+          "sha256": "7dd5676ca8bc10aa3a81853a12a6ab44656096bf400602679d2ca0281d467928",
+          "viewed": true,
+          "observation": "Guide EN lisible à 390 px, nom de langue complet et texte de fixture conservant les pages demandées en français. Capture statique ne valide pas les balises SEO."
+        },
+        {
+          "file": "docs/evidence/P16_SEO-browser/2026-11-09T03-14-33-553Z-3ee6a6ad-eaef-488a-ad46-0e6baa9a5a34/fr-seo-published-guide.png",
+          "width": 1440,
+          "height": 1068,
+          "sha256": "1cdb51da81b205cf2bd23318094be388042f6988c1f2d5b55edff3d353846ff6",
+          "viewed": true,
+          "observation": "Guide FR lisible à 1440 px, breadcrumbs/sommaire/sources/actions espacés et aucun contenu de remplacement affiché."
+        }
+      ]
+    }
+  ],
+  "captureGaps": [
+    {
+      "file": "en-390-public-equivalent.png",
+      "state": "Checking my access",
+      "effect": "Pas une preuve de l’état d’accès résolu."
+    },
+    {
+      "file": "en-390-voluntary-standalone-alternative.png",
+      "state": "Preparing playback",
+      "effect": "Footer inférieur coupé dans le PNG ; cause non déduite. Attendre le rendu résolu pour la preuve finale."
+    }
+  ],
+  "materialProductDefectsObserved": [],
+  "limits": [
+    "Deux runs failed avec nettoyage confirmé ; aucune clôture de phase.",
+    "Dix PNG originaux réellement ouverts, sans nouvelle automation ; largeurs390/1024/1440 seulement, aucune capture320.",
+    "Pas de conclusion WCAG, clavier, balises SEO, routage HTTP ou état fournisseur depuis ces seules images.",
+    "Les textes personnels de fixture visibles ne sont pas reproduits dans cette preuve.",
+    "Cette revue préliminaire devra rester distincte de la recette finale."
+  ]
+}

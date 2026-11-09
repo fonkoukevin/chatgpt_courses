@@ -74,7 +74,17 @@ Ces choix techniques sont réversibles et validés localement : ciblé combiné 
 - Une seule opération Checkout durable par commande, paramètres/clé fournisseur et échéance de session fixes. Après timeout ambigu, reprise bornée avec la même intention puis rapprochement GET ; aucun nouveau paiement créé par le worker.
 - Une attente normale de paiement ne compte pas comme erreur. La confirmation financière est durable avant l'activation ; droits et notification d'activation sont ensuite atomiques. Échec SMTP et retrait d'accès restent indépendants.
 
-## Décisions commerciales encore ouvertes
+## Choix techniques P16 — validés localement
+
+- Les dictionnaires existants restent l’outil FR/EN ; aucune bibliothèque d’i18n supplémentaire. `Français` et `English` sont les noms de navigation, sans drapeau. La langue d’interface ne traduit pas les productions personnelles.
+- `/` reste une307 vers `APP_DEFAULT_LOCALE`. Une URL explicite `/fr` ou `/en` n’est pas réécrite d’après IP ou `Accept-Language`. Cette valeur technique de développement ne fixe pas la langue commerciale du lancement.
+- `APP_PUBLISHED_LOCALES`, vide par défaut, autorise l’indexation seulement en production. Les équivalents SEO sont les traductions publiées de la même identité/version et les langues effectivement activées ; self-inclusion et réciprocité, sans `x-default` ou ciblage régional inventé.
+- Les URL canoniques de fiche utilisent le slug courant sans `returnTo` ni version courante redondante. Une version historique conserve son URL épinglée et reste non indexable. Catalogue/recherche/combinaisons de filtres sont non indexables avec canonical du catalogue ; E10 et activités autonomes ne multiplient pas les entrées du sitemap.
+- Les anciens slugs sont réservés à leur identité dans V018, sans chaîne d’alias ou réaffectation. Renommage explicite avec permission, motif et révision ; Next308 vers le remplaçant en conservant la version et les paramètres autorisés.
+- Le sitemap lit exclusivement les métadonnées réellement publiées et les offres actives traduites, sans session, corps privé ou ancien slug. Aucun `lastmod` de build/revue : date du PUBLISH exact lorsqu’elle est connue. Réponse503 si l’API échoue, jamais un XML partiel présenté comme complet.
+- Le périmètre de recette est HTTP Basic côté Next, paramétré en privé ; pages, API et assets sont concernés. Seul le POST exact du webhook Stripe utilise sa signature obligatoire plutôt que Basic. P20 devra empêcher tout contournement par exposition directe du serveur interne. robots/noindex ne sont pas une authentification.
+
+## Paramètres commerciaux encore ouverts
 
 P14 retient un document **HTML autonome imprimable de participation déclarée**, sans dépendance ni fournisseur supplémentaire. Les critères sont un nom de profil déclaré et au moins une participation persistée sur l’inscription/version exacte : activité déclarée terminée, quiz durable ou autoévaluation de la révision courante. Aucun seuil global d’achèvement n’est décidé ; le seuil BR01 d’une autoévaluation reste propre au projet. L’identité n’est pas vérifiée et aucune revue humaine n’est déduite. Une attestation émise conserve ses preuves et octets.
 

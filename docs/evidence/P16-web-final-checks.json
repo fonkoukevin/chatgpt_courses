@@ -1,0 +1,30 @@
+{
+  "verifiedAt": "2026-11-09T03:37:45.083Z",
+  "checks": [
+    {
+      "command": ".\\scripts\\courses.cmd run lint",
+      "exitCode": 0,
+      "durationMs": 21143
+    },
+    {
+      "command": ".\\scripts\\courses.cmd run typecheck:browser",
+      "exitCode": 0,
+      "durationMs": 8311
+    },
+    {
+      "command": ".\\scripts\\courses.cmd run api:check",
+      "exitCode": 0,
+      "durationMs": 4358
+    },
+    {
+      "command": ".\\scripts\\courses.cmd run build:web",
+      "exitCode": 0,
+      "durationMs": 17768
+    }
+  ],
+  "allPassed": true,
+  "buildId": "D1ja1i9FX6m7Lj_0zUcGM",
+  "dependenciesUnchanged": true,
+  "githubCiExecuted": false,
+  "secretsPrinted": false
+}

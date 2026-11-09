@@ -1,0 +1,50 @@
+{
+  "verifiedAt": "2026-11-09T03:36:38.1945772Z",
+  "command": ".\\scripts\\courses.cmd run verify:bilingual -- --grep \"07 ·\"",
+  "runId": "2026-11-09T03-33-58-913Z-e9f7b2e2-6e70-4926-8870-0824d9621934",
+  "exitCode": 0,
+  "result": "PASSED",
+  "selection": {
+    "grep": "07 ·",
+    "repeatEach": 1
+  },
+  "stats": {
+    "startTime": "2026-11-09T03:34:29.450Z",
+    "duration": 22623.836,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "cleanupConfirmed": true,
+  "apiJarSha256": "AC9AF2161E5A4FEBF1E08ACE84B0A014AA5CE2B5C7D116634F1D1885FD0919F6",
+  "buildId": "lLSqCKfPA4rU1fvGSCLvA",
+  "captureDimensions": [
+    {
+      "name": "en-320-account-saved-explicit-preference.png",
+      "width": 320,
+      "height": 2738
+    },
+    {
+      "name": "en-320-explicit-language-and-original-note.png",
+      "width": 320,
+      "height": 5970
+    },
+    {
+      "name": "fr-320-language-cancel-keeps-unsaved-note.png",
+      "width": 320,
+      "height": 6120
+    },
+    {
+      "name": "fr-320-two-account-drafts-language-cancelled.png",
+      "width": 320,
+      "height": 2923
+    }
+  ],
+  "allCapturedWidthsAre320": true,
+  "scope": "One entire case07 with real keyboard, note/progress guards and two independent profile/preferences forms, explicit native confirmation cancellations and real saved acknowledgements. The four screenshot widths are explicitly320.",
+  "historicalCorrection": "Original full-run four images named320 were actually390 and remain preserved. This one-test supplement is not added to full7 as an8-test suite.",
+  "visualReview": "Pending separate real image review. The6120px French note image needs full-image or explicitly documented sectional review.",
+  "logPrivate": ".runtime/p16-bilingual-case07-320-command.log",
+  "secretsPrinted": false
+}

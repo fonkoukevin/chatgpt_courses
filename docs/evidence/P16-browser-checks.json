@@ -1,0 +1,489 @@
+{
+  "verifiedAt": "2026-11-09T03:42:00.9799957Z",
+  "command": ".\\scripts\\courses.cmd run verify:bilingual",
+  "status": "PASSED_FINAL_FULL_CHECKS_AND_VISUAL_REVIEW",
+  "latestRun": "2026-11-09T03-39-04-008Z-358cf316-1313-4a42-b666-929ecfafc429",
+  "latestResult": "PASSED",
+  "finalRun": "2026-11-09T03-39-04-008Z-358cf316-1313-4a42-b666-929ecfafc429",
+  "automaticRetries": 0,
+  "history": [
+    {
+      "runId": "2026-11-09T03-14-44-077Z-f61f4fe3-e205-4975-b77a-290f2dfa8c32",
+      "result": "failed",
+      "exitCode": 1,
+      "stats": {
+        "startTime": "2026-11-09T03:15:25.089Z",
+        "duration": 48473.456000000006,
+        "expected": 4,
+        "skipped": 2,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "cleanupConfirmed": true,
+      "commandReceipt": "P16-bilingual-first-command.json",
+      "captures": [
+        "en-1024-public-language-navigation.png",
+        "en-390-original-french-note-and-common-progress.png",
+        "en-390-public-equivalent.png",
+        "en-390-stale-translation.png",
+        "en-390-voluntary-standalone-alternative.png",
+        "fr-1024-public-language-navigation.png",
+        "fr-1440-public-equivalent.png",
+        "fr-390-renamed-canonical-guide.png"
+      ],
+      "visualReview": "Not performed by this report; no capture claimed reviewed."
+    },
+    {
+      "runId": "2026-11-09T03-22-39-153Z-22724851-8620-4d0b-b8f9-7161beda7411",
+      "result": "failed",
+      "exitCode": 1,
+      "stats": {
+        "startTime": "2026-11-09T03:23:18.295Z",
+        "duration": 38006.268,
+        "expected": 2,
+        "skipped": 4,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "cleanupConfirmed": true,
+      "commandReceipt": "P16-bilingual-second-command.json",
+      "captures": [
+        "en-1024-public-language-navigation.png",
+        "en-390-public-equivalent.png",
+        "en-390-stale-translation.png",
+        "fr-1024-public-language-navigation.png",
+        "fr-1440-public-equivalent.png",
+        "fr-390-renamed-canonical-guide.png",
+        "fr-390-slug-rename-confirmed-dialog.png"
+      ],
+      "visualReview": "No capture claimed reviewed by this report."
+    },
+    {
+      "runId": "2026-11-09T03-27-30-013Z-4c9412a0-6f53-416b-9ee0-cfbf4f49d296",
+      "result": "failed",
+      "exitCode": 1,
+      "selection": {
+        "grep": "03 · traduction absente, brouillon, périmée et parent manquant ne deviennent pas des équivalents$",
+        "repeatEach": 1
+      },
+      "stats": {
+        "startTime": "2026-11-09T03:28:02.576Z",
+        "duration": 27168.314,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "cleanupConfirmed": true,
+      "commandReceipt": "P16-bilingual-case03-diagnostic-command.json",
+      "captures": [
+        "en-390-stale-translation.png"
+      ],
+      "visualReview": "No capture claimed reviewed by this report."
+    },
+    {
+      "runId": "2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15",
+      "result": "passed",
+      "exitCode": 0,
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "stats": {
+        "startTime": "2026-11-09T03:31:30.355Z",
+        "duration": 46696.361,
+        "expected": 7,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "cleanupConfirmed": true,
+      "commandReceipt": "P16-bilingual-final-command.json",
+      "captures": [
+        "en-1024-public-language-navigation.png",
+        "en-320-account-saved-explicit-preference.png",
+        "en-320-explicit-language-and-original-note.png",
+        "en-390-original-french-attestation-after-new-version.png",
+        "en-390-original-french-note-and-common-progress.png",
+        "en-390-public-equivalent.png",
+        "en-390-separate-test-video-position.png",
+        "en-390-stale-translation.png",
+        "en-390-voluntary-standalone-alternative.png",
+        "fr-1024-public-language-navigation.png",
+        "fr-1440-public-equivalent.png",
+        "fr-320-language-cancel-keeps-unsaved-note.png",
+        "fr-320-two-account-drafts-language-cancelled.png",
+        "fr-390-explicit-new-pedagogical-version.png",
+        "fr-390-original-attestation-after-new-version.png",
+        "fr-390-renamed-canonical-guide.png",
+        "fr-390-slug-rename-confirmed-dialog.png"
+      ],
+      "visualReview": "Pending separate real image review."
+    },
+    {
+      "runId": "2026-11-09T03-33-58-913Z-e9f7b2e2-6e70-4926-8870-0824d9621934",
+      "result": "passed",
+      "exitCode": 0,
+      "selection": {
+        "grep": "07 ·",
+        "repeatEach": 1
+      },
+      "stats": {
+        "startTime": "2026-11-09T03:34:29.450Z",
+        "duration": 22623.836,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "cleanupConfirmed": true,
+      "commandReceipt": "P16-bilingual-case07-320-command.json",
+      "captures": [
+        "en-320-account-saved-explicit-preference.png",
+        "en-320-explicit-language-and-original-note.png",
+        "fr-320-language-cancel-keeps-unsaved-note.png",
+        "fr-320-two-account-drafts-language-cancelled.png"
+      ],
+      "visualReview": "Pending separate real image review."
+    },
+    {
+      "runId": "2026-11-09T03-39-04-008Z-358cf316-1313-4a42-b666-929ecfafc429",
+      "result": "passed",
+      "exitCode": 0,
+      "selection": {
+        "grep": null,
+        "repeatEach": 1
+      },
+      "stats": {
+        "startTime": "2026-11-09T03:39:44.938Z",
+        "duration": 50718.062000000005,
+        "expected": 7,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "cleanupConfirmed": true,
+      "commandReceipt": "P16-bilingual-post-copy-command.json",
+      "captures": [
+        "en-1024-public-language-navigation.png",
+        "en-320-account-saved-explicit-preference.png",
+        "en-320-explicit-language-and-original-note.png",
+        "en-390-original-french-attestation-after-new-version.png",
+        "en-390-original-french-note-and-common-progress.png",
+        "en-390-public-equivalent.png",
+        "en-390-separate-test-video-position.png",
+        "en-390-stale-translation.png",
+        "en-390-voluntary-standalone-alternative.png",
+        "fr-1024-public-language-navigation.png",
+        "fr-1440-public-equivalent.png",
+        "fr-320-language-cancel-keeps-unsaved-note.png",
+        "fr-320-two-account-drafts-language-cancelled.png",
+        "fr-390-explicit-new-pedagogical-version.png",
+        "fr-390-original-attestation-after-new-version.png",
+        "fr-390-renamed-canonical-guide.png",
+        "fr-390-slug-rename-confirmed-dialog.png",
+        "fr-390-slug-rename-saved-ack.png"
+      ],
+      "visualReview": "Pending root/web image review; no capture claimed reviewed by this index."
+    }
+  ],
+  "boundaries": [
+    "Real isolated PostgreSQL, owned local Mailpit/S3 and actual private local-test CC0 video import.",
+    "FREE bilingual scenario does not prove paid language coverage; P12/PG grant tests cover purchases separately.",
+    "Production/staging metadata and Basic-auth configuration probes are tracked by the root P16_SEO harness.",
+    "No live Stripe access, new commercial price, produced lesson or deployment is claimed."
+  ],
+  "privatePayloadsExported": false,
+  "finalStats": {
+    "startTime": "2026-11-09T03:39:44.938Z",
+    "duration": 50718.062000000005,
+    "expected": 7,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "finalCommandReceipt": "P16-bilingual-post-copy-command.json",
+  "cleanupConfirmed": true,
+  "captures": [
+    "en-1024-public-language-navigation.png",
+    "en-320-account-saved-explicit-preference.png",
+    "en-320-explicit-language-and-original-note.png",
+    "en-390-original-french-attestation-after-new-version.png",
+    "en-390-original-french-note-and-common-progress.png",
+    "en-390-public-equivalent.png",
+    "en-390-separate-test-video-position.png",
+    "en-390-stale-translation.png",
+    "en-390-voluntary-standalone-alternative.png",
+    "fr-1024-public-language-navigation.png",
+    "fr-1440-public-equivalent.png",
+    "fr-320-language-cancel-keeps-unsaved-note.png",
+    "fr-320-two-account-drafts-language-cancelled.png",
+    "fr-390-explicit-new-pedagogical-version.png",
+    "fr-390-original-attestation-after-new-version.png",
+    "fr-390-renamed-canonical-guide.png",
+    "fr-390-slug-rename-confirmed-dialog.png",
+    "fr-390-slug-rename-saved-ack.png"
+  ],
+  "originalFullCaptureDimensions": [
+    {
+      "name": "en-1024-public-language-navigation.png",
+      "width": 1024,
+      "height": 1700
+    },
+    {
+      "name": "en-320-account-saved-explicit-preference.png",
+      "width": 390,
+      "height": 2443
+    },
+    {
+      "name": "en-320-explicit-language-and-original-note.png",
+      "width": 390,
+      "height": 5348
+    },
+    {
+      "name": "en-390-original-french-attestation-after-new-version.png",
+      "width": 390,
+      "height": 1399
+    },
+    {
+      "name": "en-390-original-french-note-and-common-progress.png",
+      "width": 390,
+      "height": 5406
+    },
+    {
+      "name": "en-390-public-equivalent.png",
+      "width": 390,
+      "height": 2319
+    },
+    {
+      "name": "en-390-separate-test-video-position.png",
+      "width": 390,
+      "height": 5137
+    },
+    {
+      "name": "en-390-stale-translation.png",
+      "width": 390,
+      "height": 913
+    },
+    {
+      "name": "en-390-voluntary-standalone-alternative.png",
+      "width": 390,
+      "height": 4127
+    },
+    {
+      "name": "fr-1024-public-language-navigation.png",
+      "width": 1024,
+      "height": 1700
+    },
+    {
+      "name": "fr-1440-public-equivalent.png",
+      "width": 1440,
+      "height": 1700
+    },
+    {
+      "name": "fr-320-language-cancel-keeps-unsaved-note.png",
+      "width": 390,
+      "height": 5600
+    },
+    {
+      "name": "fr-320-two-account-drafts-language-cancelled.png",
+      "width": 390,
+      "height": 2687
+    },
+    {
+      "name": "fr-390-explicit-new-pedagogical-version.png",
+      "width": 390,
+      "height": 5250
+    },
+    {
+      "name": "fr-390-original-attestation-after-new-version.png",
+      "width": 390,
+      "height": 1421
+    },
+    {
+      "name": "fr-390-renamed-canonical-guide.png",
+      "width": 390,
+      "height": 1926
+    },
+    {
+      "name": "fr-390-slug-rename-confirmed-dialog.png",
+      "width": 358,
+      "height": 812
+    }
+  ],
+  "mislabelledOriginal320Images": [
+    {
+      "name": "en-320-account-saved-explicit-preference.png",
+      "width": 390,
+      "height": 2443
+    },
+    {
+      "name": "en-320-explicit-language-and-original-note.png",
+      "width": 390,
+      "height": 5348
+    },
+    {
+      "name": "fr-320-language-cancel-keeps-unsaved-note.png",
+      "width": 390,
+      "height": 5600
+    },
+    {
+      "name": "fr-320-two-account-drafts-language-cancelled.png",
+      "width": 390,
+      "height": 2687
+    }
+  ],
+  "width320Supplement": {
+    "runId": "2026-11-09T03-33-58-913Z-e9f7b2e2-6e70-4926-8870-0824d9621934",
+    "evidence": "P16-bilingual-case07-320-command.json",
+    "tests": 1,
+    "exitCode": 0,
+    "stats": {
+      "startTime": "2026-11-09T03:34:29.450Z",
+      "duration": 22623.836,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "captureDimensions": [
+      {
+        "name": "en-320-account-saved-explicit-preference.png",
+        "width": 320,
+        "height": 2738
+      },
+      {
+        "name": "en-320-explicit-language-and-original-note.png",
+        "width": 320,
+        "height": 5970
+      },
+      {
+        "name": "fr-320-language-cancel-keeps-unsaved-note.png",
+        "width": 320,
+        "height": 6120
+      },
+      {
+        "name": "fr-320-two-account-drafts-language-cancelled.png",
+        "width": 320,
+        "height": 2923
+      }
+    ],
+    "notAddedToFullTestCount": true
+  },
+  "finalCaptureDimensions": [
+    {
+      "name": "en-1024-public-language-navigation.png",
+      "width": 1024,
+      "height": 1700,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "en-320-account-saved-explicit-preference.png",
+      "width": 320,
+      "height": 2738,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "en-320-explicit-language-and-original-note.png",
+      "width": 320,
+      "height": 5970,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "en-390-original-french-attestation-after-new-version.png",
+      "width": 390,
+      "height": 1399,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "en-390-original-french-note-and-common-progress.png",
+      "width": 390,
+      "height": 5406,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "en-390-public-equivalent.png",
+      "width": 390,
+      "height": 2319,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "en-390-separate-test-video-position.png",
+      "width": 390,
+      "height": 5114,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "en-390-stale-translation.png",
+      "width": 390,
+      "height": 913,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "en-390-voluntary-standalone-alternative.png",
+      "width": 390,
+      "height": 4104,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "fr-1024-public-language-navigation.png",
+      "width": 1024,
+      "height": 1700,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "fr-1440-public-equivalent.png",
+      "width": 1440,
+      "height": 1700,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "fr-320-language-cancel-keeps-unsaved-note.png",
+      "width": 320,
+      "height": 6192,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "fr-320-two-account-drafts-language-cancelled.png",
+      "width": 320,
+      "height": 2923,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "fr-390-explicit-new-pedagogical-version.png",
+      "width": 390,
+      "height": 5227,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "fr-390-original-attestation-after-new-version.png",
+      "width": 390,
+      "height": 1421,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "fr-390-renamed-canonical-guide.png",
+      "width": 390,
+      "height": 1926,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "fr-390-slug-rename-confirmed-dialog.png",
+      "width": 358,
+      "height": 812,
+      "kind": "COMPONENT_CROP_AT_390_VIEWPORT"
+    },
+    {
+      "name": "fr-390-slug-rename-saved-ack.png",
+      "width": 358,
+      "height": 812,
+      "kind": "COMPONENT_CROP_AT_390_VIEWPORT"
+    }
+  ],
+  "visualReview": {
+    "file": "P16-visual-review.json",
+    "originalImagesViewed": 18,
+    "derivedCropsViewed": 3,
+    "allFour320ImagesActually320": true
+  }
+}

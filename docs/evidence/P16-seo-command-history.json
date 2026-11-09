@@ -1,0 +1,44 @@
+[
+  {
+    "verifiedAt": "2026-11-09T03:16:18.188Z",
+    "command": ".\\scripts\\courses.cmd run verify:seo",
+    "exitCode": 1,
+    "durationMs": 106329,
+    "environment": {
+      "BROWSER_WEB_PORT": 3102,
+      "BROWSER_API_PORT": 8182
+    },
+    "privateLog": ".runtime/p16-seo.log",
+    "secretsPrinted": false
+  },
+  {
+    "verifiedAt": "2026-11-09T03:24:10.768Z",
+    "command": ".\\scripts\\courses.cmd run verify:seo",
+    "exitCode": 0,
+    "durationMs": 129363,
+    "environment": {
+      "BROWSER_WEB_PORT": 3102,
+      "BROWSER_API_PORT": 8182
+    },
+    "privateLog": ".runtime/p16-seo.log",
+    "secretsPrinted": false,
+    "runIds": [
+      "2026-11-09T03-22-02-450Z-43bcff84-3054-476a-87bd-f939c2fcf6ba"
+    ]
+  },
+  {
+    "verifiedAt": "2026-11-09T03:41:12.079Z",
+    "command": ".\\scripts\\courses.cmd run verify:seo",
+    "exitCode": 0,
+    "durationMs": 138841,
+    "environment": {
+      "BROWSER_WEB_PORT": 3102,
+      "BROWSER_API_PORT": 8182
+    },
+    "privateLog": ".runtime/p16-seo.log",
+    "secretsPrinted": false,
+    "runIds": [
+      "2026-11-09T03-38-54-076Z-abb630bb-e2fa-4e0e-ab6b-e1cb39db96c9"
+    ]
+  }
+]

@@ -1,0 +1,230 @@
+{
+  "phase": "P16",
+  "scope": "Contrôles frontend ciblés du sous-agent ; aucune validation navigateur, visuelle ou de phase déduite.",
+  "checkedAt": "2026-11-09T03:12:39.582Z",
+  "reviewer": "versions_web",
+  "commands": [
+    {
+      "name": "Client et contrat",
+      "cwd": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses",
+      "command": ".\\scripts\\courses.cmd run verify:client",
+      "exitCode": 0,
+      "openApiValidation": "Redocly OpenAPI 3.1 réellement exécuté",
+      "tests": 119,
+      "passed": 119,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    {
+      "name": "Lint ciblé",
+      "cwd": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses/apps/web",
+      "executable": "../../.tools/node-v24.22.2-win-x64/node.exe",
+      "args": [
+        "../../node_modules/eslint/bin/eslint.js",
+        "src/components/layouts",
+        "src/components/account",
+        "src/components/auth",
+        "src/components/operations",
+        "src/components/cms/editor.tsx",
+        "src/components/cms/metadata-editor.tsx",
+        "src/components/cms/slug-editor.tsx",
+        "src/components/public/parts.tsx",
+        "src/components/public/document.tsx",
+        "src/components/public/course.tsx",
+        "src/components/public/guide.tsx",
+        "src/components/learning/unsaved.ts",
+        "src/components/learning/activity.tsx",
+        "src/components/methods/source.tsx",
+        "src/lib/api/cms-client.ts",
+        "src/lib/i18n/locales.ts",
+        "src/lib/i18n/public.ts",
+        "src/lib/i18n/operations-data.ts",
+        "src/lib/i18n/cms-slug.ts"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "Types application",
+      "cwd": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses",
+      "executable": ".tools/node-v24.22.2-win-x64/node.exe",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "--project",
+        "apps/web/tsconfig.json",
+        "--noEmit"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "implementation": [
+    "Sélecteurs Français/English et attributs de langue/navigation conservés.",
+    "Garde commune des saisies non acquittées et requêtes en cours ; confirmation unique par clic, sans stockage privé et avec priorité des sorties de confidentialité.",
+    "Texte éditorial explicitement marqué avec sa langue ; libellés d’interface conservés dans la langue de l’interface. Texte libre sans langue connue non attribué arbitrairement.",
+    "Alternative volontaire vers une activité autonome quand le contexte de parcours traduit est indisponible ; rendu des breadcrumbs fournis par le loader coordinateur.",
+    "Libellés des codes opérateurs connus et définitions métriques localisés ; codes transport/CSV et identifiants inchangés.",
+    "Renommage CMS explicite et révisionné avec compte attendu, CSRF, If-Match, motif et confirmation. Proposition gardée en mémoire, 412 comparé sans envoi automatique, même callback de révision du parent."
+  ],
+  "newClientCoverage": [
+    "Refus des paramètres de renommage invalides avant tout HTTP.",
+    "Compte/CSRF/If-Match et forme exacte de l’acquittement, no-op admis et mauvais id/slug/révision refusés.",
+    "Conflit de réservation explicite sans répétition de mutation."
+  ],
+  "sourceSnapshot": [
+    {
+      "file": "apps/web/src/lib/i18n/locales.ts",
+      "sha256": "4b3e30e11a9caa4a7e388879b3f24152731803d3b3892c72e718aba8268c9c11"
+    },
+    {
+      "file": "apps/web/src/lib/i18n/operations-data.ts",
+      "sha256": "8e8bef984adbf0ff54d8ed69d985811d19d9179d3599c7507a35cb64dce83fe7"
+    },
+    {
+      "file": "apps/web/src/lib/i18n/public.ts",
+      "sha256": "b33ea6f4b044d75fec031baa3140b8a63573537e45b2b70870cdb2f105d7433d"
+    },
+    {
+      "file": "apps/web/src/lib/i18n/cms-slug.ts",
+      "sha256": "5724ca750f2811b7094d4b4d1704b3ff2fd7ed575351cae6d903404d4a82ccd3"
+    },
+    {
+      "file": "apps/web/src/lib/api/cms-client.ts",
+      "sha256": "289dbbd1120a37688bfb2d7fc2e418bb7319a6991d56768dde8479935f3c356d"
+    },
+    {
+      "file": "apps/web/src/components/learning/unsaved.ts",
+      "sha256": "ac02f2831edb28a8004b3585a0e668c25cbed6f704508268e412d95067802b44"
+    },
+    {
+      "file": "apps/web/src/components/learning/activity.tsx",
+      "sha256": "1aabac846fa560cc5e3965dc3e23ed284bf15f019b7ac3981a68f58ee21987ce"
+    },
+    {
+      "file": "apps/web/src/components/layouts/public-layout.tsx",
+      "sha256": "0e41acab7b12e64eb79b54a5d418a5ec9405fb30bab71910335d1b958316be93"
+    },
+    {
+      "file": "apps/web/src/components/layouts/learner-layout.tsx",
+      "sha256": "6aa6bc8f06aa6f70e81dd7a33d9b63042b2e1c23b619145358daa8ddf2b8f42f"
+    },
+    {
+      "file": "apps/web/src/components/layouts/admin-layout.tsx",
+      "sha256": "a25a685b91956cae3b387fe1f1e74dcf2424de28f7b18df56de343bf35d39bac"
+    },
+    {
+      "file": "apps/web/src/components/layouts/layout-parts.tsx",
+      "sha256": "2081626292b5e89560b1f2e65b1c1d62fbf29960f6eed5fb110b7ec30cdd0d14"
+    },
+    {
+      "file": "apps/web/src/components/auth/auth-form.tsx",
+      "sha256": "9c5b56bc3881b5919b65c66c3678c5bc5d0947f8c2b986462a9dfe368b190229"
+    },
+    {
+      "file": "apps/web/src/components/auth/auth-frame.tsx",
+      "sha256": "075de3188bb90dff94d75830eaba763b988d4be658b74df30bfacd6c8a7bc0ce"
+    },
+    {
+      "file": "apps/web/src/components/auth/account-actions.tsx",
+      "sha256": "6fd91444a9c48793ca3200fcc33aa0346dd5ab19371a14beeb6650a28341c5c3"
+    },
+    {
+      "file": "apps/web/src/components/account/home.tsx",
+      "sha256": "bc6e873abf01576d0825b7d8db4c90ebd9865ce89956b6f9a61e6a8b19b726e3"
+    },
+    {
+      "file": "apps/web/src/components/account/support.tsx",
+      "sha256": "248639c7944ff4d2908410ed91f8c52c4be23220cb186072c29c37589c09a4de"
+    },
+    {
+      "file": "apps/web/src/components/account/data-requests.tsx",
+      "sha256": "2665453ab770ea74071a4ea879a4c3d57cb5e3120ed693d6b0d3ffb52b63c5fa"
+    },
+    {
+      "file": "apps/web/src/components/public/parts.tsx",
+      "sha256": "7d806966bc1a4e32a2d0db434cab02c7c23b8e94aa4ff211315a4add54505c64"
+    },
+    {
+      "file": "apps/web/src/components/public/document.tsx",
+      "sha256": "aef8b02bcee01c3291c0b8877ed8c73e918969477b8e4d6aa9a10bc8f01f0177"
+    },
+    {
+      "file": "apps/web/src/components/public/course.tsx",
+      "sha256": "4edcc3c4f80821f57ebbece29973eaf95d445c835883353dd5834665514e8876"
+    },
+    {
+      "file": "apps/web/src/components/public/guide.tsx",
+      "sha256": "0df02dea5b944d59dfd9d5c6ab5ea6851ce8fe81072fce0295cecb4579897c3c"
+    },
+    {
+      "file": "apps/web/src/components/methods/source.tsx",
+      "sha256": "781fa149b9fc6888b0008046ef1406a4bed78902b7d20348788580fcf1d2e9ca"
+    },
+    {
+      "file": "apps/web/src/components/operations/offers.tsx",
+      "sha256": "e9e6f0f1ef973c64fa5790cd4360b9429e1de3faee8946766b1e713c1d63a0aa"
+    },
+    {
+      "file": "apps/web/src/components/operations/offer-fields.tsx",
+      "sha256": "c73e6a2e174fcc4bf36ef6e4e7a4ae5743407df22848fb50db4ffc8cbae561cc"
+    },
+    {
+      "file": "apps/web/src/components/operations/support-reply.tsx",
+      "sha256": "ba61a89acf217b1379b355d4b04e805e2b12d22c4d919fb20832ecc92f9d7baa"
+    },
+    {
+      "file": "apps/web/src/components/operations/support-panels.tsx",
+      "sha256": "0cc60b4156f240c7690a2009f994b74f300eb8b563fe16be6816ff15bfdae0ee"
+    },
+    {
+      "file": "apps/web/src/components/operations/cases.tsx",
+      "sha256": "47f28da6e96341c02f31a71697da03d83e6a4805796867d106ac5d57ba5fe648"
+    },
+    {
+      "file": "apps/web/src/components/operations/incidents.tsx",
+      "sha256": "f9efd52dba9ba71c57a8b476d06eb91a093f74697f85051d8e294d1b4787a3c8"
+    },
+    {
+      "file": "apps/web/src/components/operations/audit.tsx",
+      "sha256": "689107ec8975655cbbee10d6824c347b66d753224b77dfbf9e52d0a914036e4c"
+    },
+    {
+      "file": "apps/web/src/components/operations/metrics.tsx",
+      "sha256": "65fcd04fb1d8e56db49fa675dd72d27acc4a0ccbf8179eaeed03b2720225ab43"
+    },
+    {
+      "file": "apps/web/src/components/operations/orders.tsx",
+      "sha256": "7f4593c7fc37dcd8a0051a4840a8fbe1079876892f3e382554568b2bf4150cdf"
+    },
+    {
+      "file": "apps/web/src/components/operations/support.tsx",
+      "sha256": "fd5f0b13119cb02f02d3e2e1eea1724d79d4f76da74e119044a4eb0468e96b98"
+    },
+    {
+      "file": "apps/web/src/components/cms/editor.tsx",
+      "sha256": "a3bd22d338dc8c8507a4dfd76a20855650821f8d669e79b5bd7aac9a81834b4b"
+    },
+    {
+      "file": "apps/web/src/components/cms/metadata-editor.tsx",
+      "sha256": "a769a7d98b1cc51d6c3cc0fe5b7d6b54005be6f637cbf6259e1df71aad8e330d"
+    },
+    {
+      "file": "apps/web/src/components/cms/slug-editor.tsx",
+      "sha256": "6c87c8d6ffff47aa51decf4ff746aa6d708da0be8e53b6f5c8eb60f617efb7a0"
+    },
+    {
+      "file": "tests/api/cms-client.test.ts",
+      "sha256": "780577e922ef770dce9d3b8a7834751a271294406625634a26a81f086da96b96"
+    }
+  ],
+  "limits": [
+    "Aucun build, navigateur ou Maven exécuté par ce sous-agent pour cette preuve.",
+    "Recette T14–T16, clavier, dimensions mobiles et revue des captures encore à effectuer par la coordination.",
+    "SEO, métadonnées, configuration, contrôle de recette, loaders et backend ne sont pas validés par ce seul fichier.",
+    "Aucun changement de prix, langue commerciale publiée ou contenu personnel ; pas de traduction automatique.",
+    "Les incidents historiques de refus après READY suivis P12/P15 ne sont ni résolus ni diagnostiqués par ces contrôles."
+  ],
+  "correctedIntermediateDiagnostics": [
+    "Le premier typecheck pendant raccord CMS trouvait les props expectedAccountId non encore déclarées ; raccord terminé.",
+    "Le premier passage des nouveaux tests trouvait un accès problem non restreint au variant ApiError http ; narrowing corrigé avant les repassages verts."
+  ]
+}

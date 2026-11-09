@@ -1,0 +1,35 @@
+{
+  "verifiedAt": "2026-11-09T03:27:54.0635949Z",
+  "command": ".\\scripts\\courses.cmd run verify:bilingual",
+  "environment": {
+    "BROWSER_WEB_PORT": 3101,
+    "BROWSER_API_PORT": 8181
+  },
+  "runId": "2026-11-09T03-22-39-153Z-22724851-8620-4d0b-b8f9-7161beda7411",
+  "exitCode": 1,
+  "result": "FAILED",
+  "stats": {
+    "startTime": "2026-11-09T03:23:18.295Z",
+    "duration": 38006.268,
+    "expected": 2,
+    "skipped": 4,
+    "unexpected": 1,
+    "flaky": 0
+  },
+  "cleanupConfirmed": true,
+  "apiJarSha256": "AC9AF2161E5A4FEBF1E08ACE84B0A014AA5CE2B5C7D116634F1D1885FD0919F6",
+  "buildId": "lLSqCKfPA4rU1fvGSCLvA",
+  "failedCase": "03 · traduction absente, brouillon, périmée et parent manquant ne deviennent pas des équivalents",
+  "observation": "The stricter final-state screenshot wait observed one English Preparing playback status for ten seconds after voluntary standalone navigation. Two cases passed, four later cases did not run. Original media response/boundary facts were not captured before cleanup; cause unknown.",
+  "passedBeforeFailure": [
+    "Real server HTML/locale/canonical and resolved course access capture",
+    "Real SlugEditor modal and explicit confirmation, exactly one PATCH200/ETag and saved acknowledgement, native308/404"
+  ],
+  "noWaitRelaxed": true,
+  "diagnosticFollowUp": "Case03 original requests/response statuses and safe decoded predicates will be observed without an additional metadata call or retry; actual loader remains required to settle.",
+  "logPrivate": ".runtime/p16-bilingual-second-command.log",
+  "logSha256": "0AF37FBEBEA4A83B758B07652FD6A97B3DBEF6FD5623CAAF1C12DD61FCAABCF5",
+  "externalStripe": false,
+  "visualReviewClaimed": false,
+  "secretsPrinted": false
+}

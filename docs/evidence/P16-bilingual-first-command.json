@@ -1,0 +1,38 @@
+{
+  "verifiedAt": "2026-11-09T03:18:22.7977653Z",
+  "command": ".\\scripts\\courses.cmd run verify:bilingual",
+  "environment": {
+    "BROWSER_WEB_PORT": 3101,
+    "BROWSER_API_PORT": 8181
+  },
+  "runId": "2026-11-09T03-14-44-077Z-f61f4fe3-e205-4975-b77a-290f2dfa8c32",
+  "exitCode": 1,
+  "result": "FAILED",
+  "stats": {
+    "startTime": "2026-11-09T03:15:25.089Z",
+    "duration": 48473.456000000006,
+    "expected": 4,
+    "skipped": 2,
+    "unexpected": 1,
+    "flaky": 0
+  },
+  "cleanupConfirmed": true,
+  "apiJarSha256": "81ED37532404E0A6166A100315CF1A60514F4BFC95C601D24AD76DB263E168A4",
+  "buildId": "lLSqCKfPA4rU1fvGSCLvA",
+  "failedCase": "05 · T14 deux médias FR/EN gardent des positions propres sans modifier les acquis",
+  "observation": "Four cases passed. The fifth expected a video element before performing the explicit load/resume action; the actual UI showed the loaded registry metadata, saved position and load/resume controls. Two later serial cases did not execute.",
+  "passedBeforeFailure": [
+    "Server-rendered bilingual HTML/canonicals",
+    "Real slug rename308 and unknown404",
+    "Missing/draft/stale translation and unavailable course chain",
+    "One enrollment/progress and preserved French note/quiz"
+  ],
+  "mediaFactsPassed": "Distinct FR/EN media positions1/2 were saved/read through real Spring/PostgreSQL and learning progress remained unchanged before the UI locator failed.",
+  "correction": "Test now explicitly resumes the precise media in each locale and checks native readyState/videoWidth/currentTime, retaining independent server positions. No product assertion, permission or readiness rule relaxed.",
+  "rerunPendingNewBackendArtifact": true,
+  "logPrivate": ".runtime/p16-bilingual-first-command.log",
+  "logSha256": "F5130A6AA3EAA7BA99051EC0CA43751934DD1F3CE785312F6B195E638132F860",
+  "externalStripe": false,
+  "visualReviewClaimed": false,
+  "secretsPrinted": false
+}

@@ -1,0 +1,12 @@
+{
+  "verifiedAt": "2026-11-09T03:16:18.188Z",
+  "command": ".\\scripts\\courses.cmd run verify:seo",
+  "exitCode": 1,
+  "durationMs": 106329,
+  "environment": {
+    "BROWSER_WEB_PORT": 3102,
+    "BROWSER_API_PORT": 8182
+  },
+  "privateLog": ".runtime/p16-seo.log",
+  "secretsPrinted": false
+}

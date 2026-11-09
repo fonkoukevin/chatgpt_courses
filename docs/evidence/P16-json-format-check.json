@@ -1,0 +1,43 @@
+{
+  "verifiedAt": "2026-11-09T03:45:17.852Z",
+  "jsonDocumentsParsed": 53,
+  "normalizedUtf8WithoutBom": [
+    {
+      "path": "docs/evidence/P16-bilingual-case03-diagnostic-command.json",
+      "originalSha256": "876fea749e3ca0ad1ea6e82329e6cdd7539ac7eb727b97bfd46536603d6b0aa7",
+      "originalBytesPreservedPrivately": true
+    },
+    {
+      "path": "docs/evidence/P16-bilingual-case07-320-command.json",
+      "originalSha256": "d7eb326de07c83485b2f2c0c7951dac78bc02b0e9e64e562fc540109c87be0d6",
+      "originalBytesPreservedPrivately": true
+    },
+    {
+      "path": "docs/evidence/P16-bilingual-final-command.json",
+      "originalSha256": "a98bf847b10f0aad8e37c5b4bdc1b2c8aa094850399f3e5a1687a94d9cd0ac28",
+      "originalBytesPreservedPrivately": true
+    },
+    {
+      "path": "docs/evidence/P16-bilingual-first-command.json",
+      "originalSha256": "8883c745e8cbbcc71a06883704efcf381c38f175c4034fbc25a2b8e024973a22",
+      "originalBytesPreservedPrivately": true
+    },
+    {
+      "path": "docs/evidence/P16-bilingual-post-copy-command.json",
+      "originalSha256": "f0ed69b467db48c47f83fb08433951d4504f9a7b379e975b0de1586706203ff6",
+      "originalBytesPreservedPrivately": true
+    },
+    {
+      "path": "docs/evidence/P16-bilingual-second-command.json",
+      "originalSha256": "1ed6d416c6db2605f136ffd1ee0b6b609fe095e4bc5e3b6ce4574303b2630340",
+      "originalBytesPreservedPrivately": true
+    },
+    {
+      "path": "docs/evidence/P16-browser-checks.json",
+      "originalSha256": "92123b3ef356c415f6d594ecbfd8c1e3dfdd87a42fc55eeef266f3427435884b",
+      "originalBytesPreservedPrivately": true
+    }
+  ],
+  "semanticValuesUnchanged": true,
+  "testsNotReclassified": true
+}

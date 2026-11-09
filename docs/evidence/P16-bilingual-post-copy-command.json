@@ -1,0 +1,221 @@
+{
+  "verifiedAt": "2026-11-09T03:42:00.5672544Z",
+  "command": ".\\scripts\\courses.cmd run verify:bilingual",
+  "environment": {
+    "BROWSER_WEB_PORT": 3101,
+    "BROWSER_API_PORT": 8181
+  },
+  "runId": "2026-11-09T03-39-04-008Z-358cf316-1313-4a42-b666-929ecfafc429",
+  "result": "PASSED",
+  "exitCode": 0,
+  "stats": {
+    "startTime": "2026-11-09T03:39:44.938Z",
+    "duration": 50718.062000000005,
+    "expected": 7,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "completedAt": "2026-11-09T03:40:59.060Z",
+  "cleanupConfirmed": true,
+  "artifact": {
+    "apiJarSha256": "AC9AF2161E5A4FEBF1E08ACE84B0A014AA5CE2B5C7D116634F1D1885FD0919F6",
+    "apiJarBytes": 94628568,
+    "buildId": "D1ja1i9FX6m7Lj_0zUcGM",
+    "ownedJarCopyUsedByApiAndVideoImporter": true
+  },
+  "logPrivate": ".runtime/p16-bilingual-post-copy-command.log",
+  "logSha256": "EA37BAC8C84880F5190EC43858E5E6058F23A596B21BF282392CD504B607D959",
+  "staticCheck": {
+    "sourceEvidence": "P16-web-final-checks.json",
+    "command": ".\\scripts\\courses.cmd run typecheck:browser",
+    "exitCode": 0,
+    "reportedBy": "Root final build signal; see its command receipts."
+  },
+  "scope": [
+    "Actual server-rendered localized HTML, canonical query policy, reciprocal navigation and noindex/no-hreflang in TEST; hostile forwarded host not reflected.",
+    "Actual SlugEditor modal, exact validation/confirmation, one PATCH200 and correct ETag/acknowledgement; native308 to same version, genuine unknown404.",
+    "Unpublished/draft/stale translation and unavailable course chain stay explicit; voluntary standalone alternative retains exact activity/version.",
+    "One persisted enrollment/progress/quiz and original French note survive English navigation; FREE activity does not prove an acquisition.",
+    "Actual local CC0 import, independent server FR/EN media positions and native Chromium resume on each precise media; no completion inferred.",
+    "Real minor correction and new pedagogical version, explicit new-version page; immutable prior quiz/progress and actual original HTML/SHA attestation, rendered in FR/EN interface.",
+    "Mobile keyboard/skip link and one native confirmation for two dirty note/progress fields and two independent profile/preference forms; cancellations preserve input, real saves precede English navigation."
+  ],
+  "resolvedTestFailures": [
+    "Missing explicit video load/resume action was added before expecting a native video element.",
+    "Screenshot wait previously counted Button loadingLabel spans retained hidden in DOM. Original request diagnostic confirmed2valid metadata200 and2expected anonymous401, no pending/abort. Wait now filters actual visibility, without product change or arbitrary delay."
+  ],
+  "diagnostic": "P16-browser/2026-11-09T03-39-04-008Z-358cf316-1313-4a42-b666-929ecfafc429/case03-media-diagnostic.json",
+  "isolatedPostgres": {
+    "image": "postgres:18.6@sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42",
+    "tmpfs": true,
+    "stopped": true
+  },
+  "isolatedServices": [
+    {
+      "kind": "s3",
+      "image": "chrislusf/seaweedfs:4.52@sha256:57877e32bb90073b37dc109b438ba66e84fd5ed9ced5f5c04f56444ef243ce59",
+      "tmpfs": true,
+      "stopped": true,
+      "observation": {
+        "available": true,
+        "configuredVolumeMax": 24,
+        "maxSlots": [
+          24,
+          24
+        ],
+        "freeSlots": [
+          17
+        ],
+        "collectionCount": 1,
+        "noFreeVolumesObserved": false,
+        "noWritableVolumesObserved": false,
+        "logsAvailable": true
+      }
+    },
+    {
+      "kind": "mailpit",
+      "image": "axllent/mailpit:v1.33.0@sha256:9b3a463be15354c0f0eba91697d80e3e0d8a5623ef0e627cacc836bc17fd5231",
+      "tmpfs": true,
+      "stopped": true
+    }
+  ],
+  "captures": [
+    "en-1024-public-language-navigation.png",
+    "en-320-account-saved-explicit-preference.png",
+    "en-320-explicit-language-and-original-note.png",
+    "en-390-original-french-attestation-after-new-version.png",
+    "en-390-original-french-note-and-common-progress.png",
+    "en-390-public-equivalent.png",
+    "en-390-separate-test-video-position.png",
+    "en-390-stale-translation.png",
+    "en-390-voluntary-standalone-alternative.png",
+    "fr-1024-public-language-navigation.png",
+    "fr-1440-public-equivalent.png",
+    "fr-320-language-cancel-keeps-unsaved-note.png",
+    "fr-320-two-account-drafts-language-cancelled.png",
+    "fr-390-explicit-new-pedagogical-version.png",
+    "fr-390-original-attestation-after-new-version.png",
+    "fr-390-renamed-canonical-guide.png",
+    "fr-390-slug-rename-confirmed-dialog.png",
+    "fr-390-slug-rename-saved-ack.png"
+  ],
+  "visualReview": "Pending separate real image review; no image claimed reviewed by this command receipt.",
+  "externalStripe": false,
+  "livePayment": false,
+  "privatePayloadsExported": false,
+  "secretsPrinted": false,
+  "captureDimensions": [
+    {
+      "name": "en-1024-public-language-navigation.png",
+      "width": 1024,
+      "height": 1700,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "en-320-account-saved-explicit-preference.png",
+      "width": 320,
+      "height": 2738,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "en-320-explicit-language-and-original-note.png",
+      "width": 320,
+      "height": 5970,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "en-390-original-french-attestation-after-new-version.png",
+      "width": 390,
+      "height": 1399,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "en-390-original-french-note-and-common-progress.png",
+      "width": 390,
+      "height": 5406,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "en-390-public-equivalent.png",
+      "width": 390,
+      "height": 2319,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "en-390-separate-test-video-position.png",
+      "width": 390,
+      "height": 5114,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "en-390-stale-translation.png",
+      "width": 390,
+      "height": 913,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "en-390-voluntary-standalone-alternative.png",
+      "width": 390,
+      "height": 4104,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "fr-1024-public-language-navigation.png",
+      "width": 1024,
+      "height": 1700,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "fr-1440-public-equivalent.png",
+      "width": 1440,
+      "height": 1700,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "fr-320-language-cancel-keeps-unsaved-note.png",
+      "width": 320,
+      "height": 6192,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "fr-320-two-account-drafts-language-cancelled.png",
+      "width": 320,
+      "height": 2923,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "fr-390-explicit-new-pedagogical-version.png",
+      "width": 390,
+      "height": 5227,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "fr-390-original-attestation-after-new-version.png",
+      "width": 390,
+      "height": 1421,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "fr-390-renamed-canonical-guide.png",
+      "width": 390,
+      "height": 1926,
+      "kind": "FULL_PAGE"
+    },
+    {
+      "name": "fr-390-slug-rename-confirmed-dialog.png",
+      "width": 358,
+      "height": 812,
+      "kind": "COMPONENT_CROP_AT_390_VIEWPORT"
+    },
+    {
+      "name": "fr-390-slug-rename-saved-ack.png",
+      "width": 358,
+      "height": 812,
+      "kind": "COMPONENT_CROP_AT_390_VIEWPORT"
+    }
+  ],
+  "sourceDeltaFromPreviousFull": "Only two localized formative-quiz notice strings changed in the web product. Tests also make four320 screenshot widths explicit and add a real scrolled saved-ack component capture; API artifact unchanged.",
+  "allFinal320CapturesVerified": true,
+  "previousFullEvidence": "P16-bilingual-final-command.json"
+}

@@ -1,0 +1,15 @@
+{
+  "verifiedAt": "2026-11-09T03:41:12.079Z",
+  "command": ".\\scripts\\courses.cmd run verify:seo",
+  "exitCode": 0,
+  "durationMs": 138841,
+  "environment": {
+    "BROWSER_WEB_PORT": 3102,
+    "BROWSER_API_PORT": 8182
+  },
+  "privateLog": ".runtime/p16-seo.log",
+  "secretsPrinted": false,
+  "runIds": [
+    "2026-11-09T03-38-54-076Z-abb630bb-e2fa-4e0e-ab6b-e1cb39db96c9"
+  ]
+}

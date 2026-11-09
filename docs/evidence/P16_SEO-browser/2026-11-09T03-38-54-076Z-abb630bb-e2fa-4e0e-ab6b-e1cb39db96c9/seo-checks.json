@@ -1,0 +1,207 @@
+{
+  "verifiedAt": "2026-11-09T03:40:49.621Z",
+  "scope": "Local production/staging configuration probes on loopback against isolated TEST Spring/PostgreSQL; no deployment or search-engine validation",
+  "syntheticPublicOrigin": "https://courses.invalid",
+  "checks": [
+    {
+      "name": "fr: HTTP200 and indexable header",
+      "passed": true
+    },
+    {
+      "name": "fr: rendered lang and exact title",
+      "passed": true
+    },
+    {
+      "name": "fr: canonical and reciprocal equivalents in server head",
+      "passed": true
+    },
+    {
+      "name": "fr: real BreadcrumbList with matching visible trail",
+      "passed": true
+    },
+    {
+      "name": "fr: public SEO page fits viewport",
+      "passed": true
+    },
+    {
+      "name": "en: HTTP200 and indexable header",
+      "passed": true
+    },
+    {
+      "name": "en: rendered lang and exact title",
+      "passed": true
+    },
+    {
+      "name": "en: canonical and reciprocal equivalents in server head",
+      "passed": true
+    },
+    {
+      "name": "en: real BreadcrumbList with matching visible trail",
+      "passed": true
+    },
+    {
+      "name": "en: public SEO page fits viewport",
+      "passed": true
+    },
+    {
+      "name": "filtered catalogue noindex and clean canonical",
+      "passed": true
+    },
+    {
+      "name": "unknown public slug is actual404",
+      "passed": true
+    },
+    {
+      "name": "rename persisted HTTP200",
+      "passed": true
+    },
+    {
+      "name": "old slug308 preserves pinned version",
+      "passed": true
+    },
+    {
+      "name": "sitemap actual XML and no stale caching",
+      "passed": true
+    },
+    {
+      "name": "sitemap includes new canonical and removes old slug",
+      "passed": true
+    },
+    {
+      "name": "sitemap contains actual canonical URL entries",
+      "passed": true
+    },
+    {
+      "name": "sitemap excludes private and query URLs",
+      "passed": true
+    },
+    {
+      "name": "sitemap excludes draft and missing EN translation",
+      "passed": true
+    },
+    {
+      "name": "sitemap lastmod equals actual publication event",
+      "passed": true
+    },
+    {
+      "name": "renamed canonical and EN reciprocal now target replacement",
+      "passed": true
+    },
+    {
+      "name": "production robots references HTTPS sitemap",
+      "passed": true
+    },
+    {
+      "name": "root uses configurable temporary307 without IP/browser override",
+      "passed": true
+    },
+    {
+      "name": "unlaunched EN stays accessible but nonindexable and without hreflang",
+      "passed": true
+    },
+    {
+      "name": "sitemap only includes configured FR",
+      "passed": true
+    },
+    {
+      "name": "SSR account remains no-store/noindex",
+      "passed": true
+    },
+    {
+      "name": "same SSR account URL never crosses profile data",
+      "passed": true
+    },
+    {
+      "name": "anonymous private route redirects to identity with noindex",
+      "passed": true
+    },
+    {
+      "name": "staging missing perimeter credentials fails closed503",
+      "passed": true
+    },
+    {
+      "name": "staging actual401 challenge without/with wrong credentials",
+      "passed": true
+    },
+    {
+      "name": "staging authorized200 remains noindex/no-store",
+      "passed": true
+    },
+    {
+      "name": "staging perimeter also gates public API",
+      "passed": true
+    },
+    {
+      "name": "staging real CSS referenced",
+      "passed": true
+    },
+    {
+      "name": "staging perimeter gates actual static assets",
+      "passed": true
+    },
+    {
+      "name": "staging authorized assets stay outside shared cache",
+      "passed": true
+    },
+    {
+      "name": "exact machine webhook reaches Spring and remains closed while Stripe is disabled",
+      "passed": true
+    },
+    {
+      "name": "no broad webhook bypass GET",
+      "passed": true
+    },
+    {
+      "name": "no broad webhook bypass POST",
+      "passed": true
+    },
+    {
+      "name": "staging sitemap empty and robots deny all",
+      "passed": true
+    },
+    {
+      "name": "sitemap unavailable503 instead of success with empty content",
+      "passed": true
+    },
+    {
+      "name": "sitemap recovers only after actual API restart",
+      "passed": true
+    }
+  ],
+  "secondaryServers": [
+    {
+      "mode": "production",
+      "publishedLocales": "fr,en",
+      "port": 3111,
+      "stopped": true
+    },
+    {
+      "mode": "production",
+      "publishedLocales": "fr",
+      "port": 3111,
+      "stopped": true
+    },
+    {
+      "mode": "staging",
+      "publishedLocales": "fr,en",
+      "port": 3112,
+      "stopped": true
+    },
+    {
+      "mode": "staging",
+      "publishedLocales": "fr,en",
+      "port": 3112,
+      "stopped": true
+    },
+    {
+      "mode": "production",
+      "publishedLocales": "fr,en",
+      "port": 3111,
+      "stopped": true
+    }
+  ],
+  "allRecordedChecksPassed": true,
+  "allSecondaryServersStopped": true,
+  "secretsPrinted": false,
+  "rawPrivateHtmlExported": false
+}

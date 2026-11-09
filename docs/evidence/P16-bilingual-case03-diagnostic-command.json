@@ -1,0 +1,30 @@
+{
+  "verifiedAt": "2026-11-09T03:31:07.2601727Z",
+  "command": ".\\scripts\\courses.cmd run verify:bilingual -- --grep \"03 · traduction absente, brouillon, périmée et parent manquant ne deviennent pas des équivalents$\"",
+  "runId": "2026-11-09T03-27-30-013Z-4c9412a0-6f53-416b-9ee0-cfbf4f49d296",
+  "exitCode": 1,
+  "result": "FAILED_TEST_WAIT",
+  "stats": {
+    "startTime": "2026-11-09T03:28:02.576Z",
+    "duration": 27168.314,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  },
+  "cleanupConfirmed": true,
+  "diagnostic": "P16-browser/2026-11-09T03-27-30-013Z-4c9412a0-6f53-416b-9ee0-cfbf4f49d296/case03-media-diagnostic.json",
+  "facts": {
+    "originalRequests": 4,
+    "originalResponses": 4,
+    "metadataValid200": 2,
+    "anonymousAccount401": 2,
+    "failedOrPendingRequests": 0,
+    "englishAccessibleLoadButton": 1,
+    "domLoadingLabelCount": 1
+  },
+  "establishedCause": "Button.tsx always keeps its loadingLabel span in the DOM with invisible/aria-hidden when idle. The test counted that hidden text, although the accessible Load button and two valid metadata200 responses proved the media metadata state resolved. No frontend boundary/authorization defect is established by this case.",
+  "correction": "Use visible loading-state locators, preserving resolved-state checks, real actions, fonts and stable-height screenshot waits. No arbitrary sleep or product change.",
+  "logPrivate": ".runtime/p16-bilingual-case03-diagnostic-command.log",
+  "secretsPrinted": false
+}

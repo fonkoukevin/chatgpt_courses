@@ -1,0 +1,258 @@
+{
+  "phase": "P16",
+  "runId": "2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15",
+  "reviewedAt": "2026-11-09T03:35:44.846Z",
+  "reviewer": "versions_web",
+  "scope": "Revue des17PNG du passage complet ; la couverture320 est encore attendue du ciblé additionnel, sans renommer ou remplacer les captures historiques.",
+  "method": {
+    "tool": "view_image",
+    "requestedDetail": "original",
+    "originalImagesViewed": 17,
+    "derivedCrops": 0,
+    "browserOrKeyboardRunByReviewer": false,
+    "applicationModified": false
+  },
+  "sessionObserved": {
+    "file": "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/session.json",
+    "result": "passed",
+    "cleanupConfirmed": true,
+    "completedAt": "2026-11-09T03:32:37.378Z"
+  },
+  "runStatsObserved": {
+    "file": "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/results.json",
+    "expected": 7,
+    "unexpected": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "durationMs": 46696.361
+  },
+  "images": [
+    {
+      "file": "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/en-1024-public-language-navigation.png",
+      "width": 1024,
+      "height": 1700,
+      "sha256": "7856dbdff7594493c03e8dfd7594ef67d0c8b741b39b2ed60ae3907cfee53ccc",
+      "viewed": true,
+      "detail": "original",
+      "locale": "en",
+      "observation": "Navigation anglaise1024 lisible, Français/English distincts, breadcrumbs et colonnes de programme/accès sans chevauchement."
+    },
+    {
+      "file": "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/en-320-account-saved-explicit-preference.png",
+      "width": 390,
+      "height": 2443,
+      "sha256": "fd918f40a09da0498ad12cd175eb695e5dc6beedfc49578c168ad49e90a88388",
+      "viewed": true,
+      "detail": "original",
+      "locale": "en",
+      "filenameWidth": 320,
+      "actualWidth": 390,
+      "filenameWidthMismatch": true,
+      "observation": "Largeur réelle390 : compte anglais avec nom personnel français conservé, préférence English confirmée, actions et liens achats/accès/aide lisibles."
+    },
+    {
+      "file": "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/en-320-explicit-language-and-original-note.png",
+      "width": 390,
+      "height": 5348,
+      "sha256": "8cb347a69f5f2eef016a63ee9646a51c3f17abe4d04f1b813c0fff4810d47a76",
+      "viewed": true,
+      "detail": "original",
+      "locale": "en",
+      "filenameWidth": 320,
+      "actualWidth": 390,
+      "filenameWidthMismatch": true,
+      "observation": "Largeur réelle390 : interface anglaise, note originale française conservée et annoncée enregistrée ; déclaration de lecture distincte de l’achèvement, footer complet."
+    },
+    {
+      "file": "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/en-390-original-french-attestation-after-new-version.png",
+      "width": 390,
+      "height": 1399,
+      "sha256": "0823da7a2f26eadc0f516aeb077ba0f3015d2839bf7a0c4c9692d31082dad180",
+      "viewed": true,
+      "detail": "original",
+      "locale": "en",
+      "observation": "UI anglaise et attestation originaleFR distinctes ; nom/titres français conservés, faits capturés et absence de certification/revue humaine explicites ; bouton HTML lisible."
+    },
+    {
+      "file": "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/en-390-original-french-note-and-common-progress.png",
+      "width": 390,
+      "height": 5406,
+      "sha256": "0a3d7c02e34c65ec2e1147a3926107155daf4918a2b33da2531462c19c30b394",
+      "viewed": true,
+      "detail": "original",
+      "locale": "en",
+      "observation": "NoteFR, déclarations communes enregistrées et tentative historiqueFR visibles sous UIEN. Aucune position vidéo enregistrée inventée, boutons et footer lisibles."
+    },
+    {
+      "file": "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/en-390-public-equivalent.png",
+      "width": 390,
+      "height": 2319,
+      "sha256": "1dfa217d40d08d69e07bd822c394d1ad1d6a06cf16847d69b02179c624900f16",
+      "viewed": true,
+      "detail": "original",
+      "locale": "en",
+      "observation": "Fiche anglaise390, programme et liens natifs lisibles ; panneau d’accès résolu avec proposition de connexion, sans ancien Checking my access."
+    },
+    {
+      "file": "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/en-390-separate-test-video-position.png",
+      "width": 390,
+      "height": 5137,
+      "sha256": "a5a3d71045da661ac557ba1789ddeaad2324607de76339e342d0d5f4ae81ed47",
+      "viewed": true,
+      "detail": "original",
+      "locale": "en",
+      "observation": "Vraie image du clip technique local visible, position2s enregistrée et bouton de reprise distincts des autres résultats. Note vierge correctement indiquée. Copie du bandeau quiz à clarifier pour un compte connecté sans inscription."
+    },
+    {
+      "file": "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/en-390-stale-translation.png",
+      "width": 390,
+      "height": 913,
+      "sha256": "fb1fe81a6f7997cf2c418584683db4c47bf3c8213c657e7530939d3e2aae8479",
+      "viewed": true,
+      "detail": "original",
+      "locale": "en",
+      "observation": "Indisponibilité de traduction périmée explicite, choix français et catalogue anglais accessibles, aucun corps de remplacement."
+    },
+    {
+      "file": "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/en-390-voluntary-standalone-alternative.png",
+      "width": 390,
+      "height": 4127,
+      "sha256": "c0f928245d98022b262d23b0b2f65188102aaa85c98e9307a6e5e54d3c320b80",
+      "viewed": true,
+      "detail": "original",
+      "locale": "en",
+      "observation": "Activité autonome anglaise, métadonnées vidéo résolues et bouton de chargement visibles ; pas de parcours inventé, footer maintenant entier."
+    },
+    {
+      "file": "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/fr-1024-public-language-navigation.png",
+      "width": 1024,
+      "height": 1700,
+      "sha256": "3bf54da8ae2e73bdb6db3d0f835a6fd2d9e6af20267acf6ced55c993cc5898a0",
+      "viewed": true,
+      "detail": "original",
+      "locale": "fr",
+      "observation": "Fiche française1024 avec noms natifs, breadcrumbs, colonnes et programme lisibles."
+    },
+    {
+      "file": "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/fr-1440-public-equivalent.png",
+      "width": 1440,
+      "height": 1700,
+      "sha256": "c0509aa14b066605f338d5e15e3d4eb321c4346fb2b8c7d18df76169f1d7630b",
+      "viewed": true,
+      "detail": "original",
+      "locale": "fr",
+      "observation": "Fiche française1440 avec programme et accès distincts, informations non renseignées honnêtes et absence de débordement observé."
+    },
+    {
+      "file": "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/fr-320-language-cancel-keeps-unsaved-note.png",
+      "width": 390,
+      "height": 5600,
+      "sha256": "ef516268856281f681bfe3db052fb23670cc683c0b40773e8e494feb581b2f86",
+      "viewed": true,
+      "detail": "original",
+      "locale": "fr",
+      "filenameWidth": 320,
+      "actualWidth": 390,
+      "filenameWidthMismatch": true,
+      "observation": "Largeur réelle390 : note et déclaration modifiées explicitement non enregistrées après annulation du départ ; valeurs visibles, actions et footer complets."
+    },
+    {
+      "file": "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/fr-320-two-account-drafts-language-cancelled.png",
+      "width": 390,
+      "height": 2687,
+      "sha256": "7798cc3abc0b4690e6cbaa88f4540c16b3573a083eda385e2bbcac4bcd5442a3",
+      "viewed": true,
+      "detail": "original",
+      "locale": "fr",
+      "filenameWidth": 320,
+      "actualWidth": 390,
+      "filenameWidthMismatch": true,
+      "observation": "Largeur réelle390 : nom et choixEnglish conservés sous interfaceFR, profil indiqué non enregistré et préférence serveur Français encore affichée ; aucune fausse confirmation."
+    },
+    {
+      "file": "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/fr-390-explicit-new-pedagogical-version.png",
+      "width": 390,
+      "height": 5250,
+      "sha256": "b755381aa9362124d79a24a9bfd278ce8a27a4dfc387d305ca6b4d4c10098fc8",
+      "viewed": true,
+      "detail": "original",
+      "locale": "fr",
+      "observation": "Version2 et objectif différent visibles, traduction anglaise absente explicitée ; note/tentative de la nouvelle version vides, sans reprise silencieuse de la version1."
+    },
+    {
+      "file": "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/fr-390-original-attestation-after-new-version.png",
+      "width": 390,
+      "height": 1421,
+      "sha256": "24a23dd71c38f2d447ad43d4550bd2579daab9ced397f6d16f245b5612ec9e2b",
+      "viewed": true,
+      "detail": "original",
+      "locale": "fr",
+      "observation": "Attestation participationFR : identité déclarée, version1, faits capturés et historique conservés ; aucune certification humaine, bouton HTML lisible."
+    },
+    {
+      "file": "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/fr-390-renamed-canonical-guide.png",
+      "width": 390,
+      "height": 1926,
+      "sha256": "f7e848ba89eb340912bc1c829ca5234d85301968c9247c66ec3ec4ed565ca726",
+      "viewed": true,
+      "detail": "original",
+      "locale": "fr",
+      "observation": "Guide français390 avec breadcrumbs, sommaire, texte de fixture et actions lisibles, sans troncature essentielle."
+    },
+    {
+      "file": "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/fr-390-slug-rename-confirmed-dialog.png",
+      "width": 358,
+      "height": 812,
+      "sha256": "f104e8a608fd2d70761515a6f90c6218ee434b1d8051b84d677c96ccbcd2078c",
+      "viewed": true,
+      "detail": "original",
+      "locale": "fr",
+      "observation": "Crop358x812 du dialogue dans la page390 : explication des anciennes adresses, nom actuel, champs, motif et actions lisibles. Le bas du statut vert est partiellement hors de la zone scrollée capturée ; le contenu entier du dialogue n’est pas visible."
+    }
+  ],
+  "observedPageWidths": [
+    390,
+    1024,
+    1440
+  ],
+  "modalCropWidth": 358,
+  "localesObserved": [
+    "fr",
+    "en"
+  ],
+  "materialLayoutDefectsObserved": [],
+  "productFindings": [
+    {
+      "type": "copy",
+      "severity": "minor",
+      "status": "reported-to-coordinator-no-source-edit",
+      "file": "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/en-390-separate-test-video-position.png",
+      "observation": "Le bandeau quiz !enrollment emploie une formulation sans compte et propose de se connecter alors que la position vidéo a été sauvegardée et les notes privées sont affichées. La correction attendue est une formulation formative neutre, sans changer la politique de conservation."
+    }
+  ],
+  "captureLimitations": [
+    {
+      "type": "filename-width-mismatch",
+      "files": [
+        "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/en-320-account-saved-explicit-preference.png",
+        "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/en-320-explicit-language-and-original-note.png",
+        "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/fr-320-language-cancel-keeps-unsaved-note.png",
+        "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/fr-320-two-account-drafts-language-cancelled.png"
+      ],
+      "effect": "Quatre noms320 sont des images390 ; aucune validation visuelle320 ne peut être déduite de ce run."
+    },
+    {
+      "type": "scroll-container-crop",
+      "file": "docs/evidence/P16-browser/2026-11-09T03-30-52-142Z-94dc8f0c-4ef1-41e9-8a73-d5983a59be15/fr-390-slug-rename-confirmed-dialog.png",
+      "effect": "Bas de contenu du dialogue non visible dans ce crop ; les assertions réseau/état enregistré restent distinctes de la capture."
+    }
+  ],
+  "additionalRuns": [],
+  "limits": [
+    "Captures statiques : pas de nouvelle validation clavier, d’annulation native window.confirm, de langue HTML/SEO ou de faits serveur par le relecteur.",
+    "Les résultats automatisés appartiennent au spec et à results.json ; ce run ne devient pas huit scénarios avec un futur ciblé du même cas07.",
+    "Tous les originaux de ce run ont une hauteur inférieure à6000px ; aucun redimensionnement ou crop d’inspection supplémentaire n’a été requis.",
+    "La revue SEO des2PNG reste dans P16-seo-visual-review.json ; la revue préliminaire et ses limites restent dans P16-preliminary-visual-review.json.",
+    "Les textes et identités de fixture visibles ne sont pas recopiés dans cette preuve ; aucune validation commerciale, Stripe externe ou résolution des refus historiques P12/P15 n’est déduite."
+  ]
+}

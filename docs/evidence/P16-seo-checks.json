@@ -1,0 +1,96 @@
+{
+  "verifiedAt": "2026-11-09T03:41:17.126Z",
+  "command": ".\\scripts\\courses.cmd run verify:seo",
+  "exitCode": 0,
+  "finalRun": "2026-11-09T03-38-54-076Z-abb630bb-e2fa-4e0e-ab6b-e1cb39db96c9",
+  "stats": {
+    "startTime": "2026-11-09T03:39:35.150Z",
+    "duration": 74584.328,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "httpChecks": 41,
+  "cleanupConfirmed": true,
+  "secondaryServers": [
+    {
+      "mode": "production",
+      "publishedLocales": "fr,en",
+      "port": 3111,
+      "stopped": true
+    },
+    {
+      "mode": "production",
+      "publishedLocales": "fr",
+      "port": 3111,
+      "stopped": true
+    },
+    {
+      "mode": "staging",
+      "publishedLocales": "fr,en",
+      "port": 3112,
+      "stopped": true
+    },
+    {
+      "mode": "staging",
+      "publishedLocales": "fr,en",
+      "port": 3112,
+      "stopped": true
+    },
+    {
+      "mode": "production",
+      "publishedLocales": "fr,en",
+      "port": 3111,
+      "stopped": true
+    }
+  ],
+  "testedJarSha256": "ac9af2161e5a4febf1e08ace84b0a014aa5ce2b5c7d116634f1d1885fd0919f6",
+  "configurationProbeOnly": true,
+  "externalDeployment": false,
+  "externalStripe": false,
+  "syntheticPublicOrigin": "https://courses.invalid",
+  "visualReview": "P16-seo-visual-review.json",
+  "history": [
+    {
+      "id": "2026-11-09T03-14-33-553Z-3ee6a6ad-eaef-488a-ad46-0e6baa9a5a34",
+      "stats": {
+        "startTime": "2026-11-09T03:15:17.266Z",
+        "duration": 32463.1,
+        "expected": 0,
+        "skipped": 3,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "result": "failed",
+      "cleanupConfirmed": true
+    },
+    {
+      "id": "2026-11-09T03-22-02-450Z-43bcff84-3054-476a-87bd-f939c2fcf6ba",
+      "stats": {
+        "startTime": "2026-11-09T03:22:35.449Z",
+        "duration": 73839.916,
+        "expected": 4,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "result": "passed",
+      "cleanupConfirmed": true
+    },
+    {
+      "id": "2026-11-09T03-38-54-076Z-abb630bb-e2fa-4e0e-ab6b-e1cb39db96c9",
+      "stats": {
+        "startTime": "2026-11-09T03:39:35.150Z",
+        "duration": 74584.328,
+        "expected": 4,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "result": "passed",
+      "cleanupConfirmed": true
+    }
+  ],
+  "privateHtmlOrCredentialsExported": false
+}

@@ -1,0 +1,44 @@
+{
+  "phase": "P16",
+  "scope": "Revue visuelle statique des deux PNG du run SEO final, distincte des vérifications HTTP et du run bilingue complet.",
+  "runId": "2026-11-09T03-22-02-450Z-43bcff84-3054-476a-87bd-f939c2fcf6ba",
+  "reviewedAt": "2026-11-09T03:25:21.755Z",
+  "reviewer": "versions_web",
+  "method": {
+    "tool": "view_image",
+    "detail": "original",
+    "newBrowserRun": false,
+    "newCaptures": false,
+    "applicationModified": false
+  },
+  "sessionObserved": {
+    "file": "docs/evidence/P16_SEO-browser/2026-11-09T03-22-02-450Z-43bcff84-3054-476a-87bd-f939c2fcf6ba/session.json",
+    "result": "passed",
+    "cleanupConfirmed": true
+  },
+  "images": [
+    {
+      "file": "docs/evidence/P16_SEO-browser/2026-11-09T03-22-02-450Z-43bcff84-3054-476a-87bd-f939c2fcf6ba/fr-seo-published-guide.png",
+      "width": 1440,
+      "height": 1068,
+      "sha256": "1cdb51da81b205cf2bd23318094be388042f6988c1f2d5b55edff3d353846ff6",
+      "viewed": true,
+      "observation": "Guide français1440 : navigation native, breadcrumbs, titre, sommaire, source absente explicitée, actions et footer lisibles sans chevauchement observé."
+    },
+    {
+      "file": "docs/evidence/P16_SEO-browser/2026-11-09T03-22-02-450Z-43bcff84-3054-476a-87bd-f939c2fcf6ba/en-seo-published-guide.png",
+      "width": 390,
+      "height": 1356,
+      "sha256": "7dd5676ca8bc10aa3a81853a12a6ab44656096bf400602679d2ca0281d467928",
+      "viewed": true,
+      "observation": "Guide anglais390 : titre et breadcrumbs repliés, noms Français/English lisibles, contenu de fixture conservant le contexte français, actions et footer complets sans débordement essentiel observé."
+    }
+  ],
+  "materialDefectsObserved": [],
+  "limits": [
+    "Les captures ne prouvent ni canonical/hreflang/robots/cache/authentification, ni l’indexation par un moteur ; ces assertions appartiennent au fichier seo-checks.json du coordinateur.",
+    "Largeurs1440 et390 seulement ; aucune revue320 ou clavier supplémentaire dans cette preuve.",
+    "Aucune recette Stripe externe ou mise en production exécutée.",
+    "La revue préliminaire et ses deux limites de capture sont conservées dans P16-preliminary-visual-review.json ; aucun ancien fichier remplacé."
+  ]
+}

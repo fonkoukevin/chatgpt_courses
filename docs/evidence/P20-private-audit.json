@@ -1,0 +1,11 @@
+{
+  "checkedAt": "2026-11-09T13:43:30.689Z",
+  "privateFileIgnored": true,
+  "filesChecked": 1569,
+  "logsChecked": 25,
+  "knownPrivateValuesAbsent": true,
+  "violatingFiles": [],
+  "scope": "known local and P20 synthetic credential values, current source/evidence text, native static output and P20/current-development logs; image filesystem is audited separately",
+  "encodedUnknownSecretsOrPersonalContentExhaustivelyAudited": false,
+  "secretsPrinted": false
+}

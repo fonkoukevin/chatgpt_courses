@@ -1,0 +1,37 @@
+{
+  "phase": "P20",
+  "attempts": [
+    {
+      "sourceCommit": "982d974f9edf4ecb52d6180fd698c27dfcc83508",
+      "result": "failed",
+      "exitCode": 1,
+      "stage": "web",
+      "cause": "Docker builder did not copy references/design-tokens.css imported by the existing stylesheet.",
+      "privateLogDirectory": ".runtime/image-build-e31fee69-3a85-4383-b57e-2e8159df248f",
+      "correction": "Explicit COPY of the single required CSS reference; no application or design changes."
+    },
+    {
+      "sourceCommit": "140c811e58129da246641b61a636b5cb85ea9cd3",
+      "result": "failed",
+      "exitCode": 1,
+      "stage": "api-dependency-download",
+      "webBuildSucceeded": true,
+      "cause": "Maven Central HTTP502 for locked spring-webmvc7.0.10 POM; no dependency version changed.",
+      "privateLogDirectory": ".runtime/image-build-0bb8d3c5-5c50-48c3-b882-dd26e1948fb2",
+      "followUp": "Retry exact pinned dependencies; Docker-owned Maven cache added to preserve successful downloads."
+    },
+    {
+      "sourceCommit": "a28d8d26692128ddf8ee99fc2d05703c5e9b700a",
+      "result": "passed",
+      "exitCode": 0,
+      "stage": "web-and-api",
+      "startedAt": "2026-11-09T13:21:55.688Z",
+      "completedAt": "2026-11-09T13:23:13.284Z",
+      "privateLogDirectory": ".runtime/image-build-6cce5aa6-fc87-4f5a-90d5-34561344ba27",
+      "baseAndDependencyVersionsUnchanged": true
+    }
+  ],
+  "successfulBuildClaimed": true,
+  "registryPushExecuted": false,
+  "secretsPrinted": false
+}

@@ -1,6 +1,6 @@
 # Déploiement et exploitation de ChatGPT Courses
 
-Document de référence pour P01, P10 et P17 à P23. Ce document fixe une direction et des critères de réalisation ; il ne constitue pas la preuve qu’un serveur, un fournisseur ou une sauvegarde existe déjà.
+Document de référence pour P01, P10 et P17 à P23. Les réalisations locales P20 et leurs limites sont identifiées ci-dessous ; les autres règles restent des critères de livraison. Elles ne prouvent pas l’existence d’un serveur distant, d’un fournisseur autorisé ou d’une copie de sauvegarde hors hôte.
 
 ## Périmètre et décisions de départ
 
@@ -41,13 +41,13 @@ Le frontend peut fonctionner directement dans l’environnement de développemen
 
 P01 utilise ici Node et Java portables natifs Windows, PowerShell 5.1 et Docker Desktop avec moteur Linux. `scripts/courses.cmd` sélectionne les outils et le lanceur npm fonctionnel ; le Maven Wrapper est présent dans `apps/api`. Aucun changement de politique système ni déplacement du dossier OneDrive n’a été effectué. Voir le README pour les commandes exactes, `CONFIGURATION.md` pour le chargement des valeurs et `evidence/P01.md` pour les preuves et limites.
 
-Le navigateur utilise une seule origine. En développement, un proxy Next.js documenté relaie /api/v1 vers Spring. En production, Caddy relaie ce préfixe vers l’API et les autres routes vers Next.js. Le chemin de l’API doit être conservé : une réécriture de préfixe accidentelle casse les contrats et les webhooks.
+Le navigateur utilise une seule origine. En développement, le proxy Next.js relaie `/api/v1` vers Spring. La chaîne de déploiement P20 est **Caddy → Next.js → Spring** : Caddy transmet aussi l’API à Next, qui conserve ses contrôles Basic de recette, d’origine et de CSRF. Le préfixe est conservé à chaque étape ; une réécriture accidentelle casse les contrats et les webhooks.
 
 PostgreSQL possède un volume nommé. Les interfaces d’administration locales et Mailpit sont liées à la boucle locale lorsque leur accès depuis l’hôte est nécessaire. Le port SMTP de Mailpit peut rester interne aux conteneurs. Aucun relais externe n’est activé par défaut. [S1, S2]
 
 L’API étant native Windows dans ce mode, SMTP est publié sur `127.0.0.1:1025`. Le réseau Compose local est un bridge dédié : l’essai `internal:true` empêchait la publication effective des ports sur le moteur observé. La correction conserve les volumes et les bindings exclusivement en boucle locale ; elle ne décide pas du réseau de production.
 
-Pour un S3 local, SeaweedFS en mode mono-nœud constitue un candidat documenté par son projet officiel. Vérifier une version stable, sa commande et son format de configuration avant de retenir l’image ; consigner le choix. Cet usage local ne décide pas du fournisseur S3 de production. [S3]
+P10 a retenu SeaweedFS 4.52 en mode mono-nœud pour l’adaptateur S3 local, avec image verrouillée et tests réels. P20 réemploie ce fournisseur uniquement sur des cibles isolées d’export/restauration. Cet usage ne décide pas du fournisseur S3 de production. [S3]
 
 ## Production sur une origine
 
@@ -55,11 +55,11 @@ Seul Caddy expose les ports nécessaires au site. Next.js, Spring et PostgreSQL 
 
 Caddy gère HTTPS avec une configuration adaptée au domaine et au mode DNS retenus. Vérifier les enregistrements A et AAAA, les ports requis, le stockage persistant des certificats et les contraintes de l’environnement avant d’annoncer HTTPS opérationnel. Si Cloudflare est utilisé, conserver une connexion TLS vérifiée jusqu’à l’origine et n’accorder confiance qu’aux proxys réellement attendus. Un CDN ne remplace pas les autorisations de l’application. [S4, S5]
 
-Les cookies de session Spring couvrent Path=/ pour permettre le rendu authentifié Next.js ; ils sont HttpOnly et Secure en production, avec SameSite=Lax selon le contrat retenu. Le contrat CSRF est défini dans API_CONTRACTS.md : jeton obtenu depuis l’API et renouvelé aux transitions d’identité. Le proxy transmet les en-têtes nécessaires sans contourner CSRF.
+Les cookies de session Spring couvrent Path=/ pour permettre le rendu authentifié Next.js ; ils sont HttpOnly et Secure en HTTPS de recette et de production, avec SameSite=Lax selon le contrat retenu. Le contrat CSRF est défini dans API_CONTRACTS.md : jeton obtenu depuis l’API et renouvelé aux transitions d’identité. Le proxy transmet les en-têtes nécessaires sans contourner CSRF.
 
 Les données privées ne doivent être mises en cache ni par Next.js dans un cache partagé, ni par Caddy, ni par le CDN. Les réponses authentifiées, commandes, productions et bibliothèques utilisent les politiques privées/no-store appropriées. Un cache public doit être réservé à une réponse explicitement publique, correctement segmentée par langue et version. Le frontend ne transfère les cookies de session qu’à son API interne autorisée. [S6]
 
-Les pages de recette sont non indexables et protégées selon le besoin d’accès. Une directive noindex ne constitue pas une protection d’accès. Si la recette utilise une protection au niveau proxy, le webhook Stripe de test doit pouvoir atteindre uniquement sa route exacte, avec vérification de signature par Spring ; ne pas ouvrir toute l’API pour contourner cette contrainte.
+Les pages de recette sont non indexables et protégées par Basic dans Next. Une directive noindex ne constitue pas une protection d’accès. Seul `POST /api/v1/webhooks/stripe` est exempté de Basic et de CSRF pour permettre la vérification de signature par Spring lorsque Stripe est activé ; aucune autre route, variante de chemin ou méthode n’est ouverte. Dans le smoke P20, Stripe reste désactivé : le webhook exact répond 503 `PAYMENT_NOT_CONFIGURED`, les chemins voisins restent refusés et aucune vérification HMAC n’est annoncée.
 
 ## Configuration et secrets
 
@@ -74,6 +74,8 @@ Les pages de recette sont non indexables et protégées selon le besoin d’acc�
 | Exploitation | Canal d’alerte autorisé, suivi d’erreurs, sauvegarde hors hôte, rétention, objectifs RPO/RTO. |
 
 Chaque secret n’est accessible qu’au service qui en a besoin. Les secrets Compose montés comme fichiers peuvent être utilisés ; protéger aussi leurs fichiers sources sur l’hôte. Ils ne constituent pas un coffre magique et ne doivent pas entrer dans une image, un argument de commande journalisé, un rapport ou une variable NEXT_PUBLIC. Ne jamais afficher un fichier .env résolu pour « prouver » sa présence. [S7]
+
+P20 fournit ces montages et leur validation dans [Compose](../infra/compose/compose.deployment.yml) et [config.mjs](../scripts/deployment/config.mjs), avec configuration de recette distincte. Les mots de passe bootstrap PostgreSQL, propriétaire de migrations et application sont séparés ; l’outbox conserve sa clé persistante pour déchiffrement après restauration. Les points d’entrée lisent les fichiers explicitement montés. Les origines et langues publiées sont lues à l’exécution, sans secret navigateur ni `.env.local` du développeur embarqué dans les images.
 
 Prévoir une validation de configuration : un serveur peut fonctionner avec des contenus gratuits alors que les paiements sont désactivés ; une offre incomplète ou sans intégration requise ne devient pas achetable. En production, le mode démo et les utilisateurs de démonstration doivent être désactivés.
 
@@ -150,13 +152,23 @@ Le refus `spawnSync docker ENOENT` du lanceur Windows a été corrigé : normali
 
 Les tests accompagnent chaque lot ; P19 consolide la recette, il ne constitue pas le début des tests. Vérifications minimales : compilation, TypeScript, lint configuré, tests des invariants métier et intégration sur PostgreSQL, puis parcours navigateur représentatifs avec l’API réelle.
 
-La [recette P19](evidence/P19.md) identifie les builds réutilisés et les résultats réellement observés. La [CI](CI.md) transfère les mêmes builds entre jobs après contrôle de commit et de SHA-256, avec rapports filtrés et rétention de trois jours. Sa validation locale ne prouve pas une exécution GitHub. La sonde `verify:production-config` démarre ces builds avec profil production, origine HTTPS synthétique et base isolée vide ; elle ne valide aucun TLS, hébergement ou domaine réel. P20 doit encore produire les images, Compose/Caddy, sauvegarde/restauration et runbooks ; P21 doit observer la cible de recette autorisée. Garder la vente fermée et suivre les incidents d’accès avant toute livraison commerciale.
+La [recette P19](evidence/P19.md) identifie les builds réutilisés et les résultats réellement observés. La [CI](CI.md) transfère les mêmes builds entre jobs après contrôle de commit et de SHA-256, avec rapports filtrés et rétention de trois jours. Sa validation locale ne prouve pas une exécution GitHub. La sonde `verify:production-config` de P19 utilisait une origine HTTPS synthétique sans TLS déployé. P20 ajoute les images et une véritable chaîne TLS locale Caddy/Next/Spring, avec démarrage, migration, sauvegarde et restauration isolés. P21 devra encore observer la cible de recette autorisée ; les incidents [P12](evidence/P12-access-follow-up.md) et [P15](evidence/P15-access-follow-up.md) restent ouverts et la vente fermée.
 
 Les workflows utilisent le minimum de permissions. Épingler les actions à un SHA vérifié et les dépendances à des versions verrouillées. Ne pas exposer les secrets de déploiement aux contributions non approuvées. Les traces et artefacts utilisent des comptes fictifs ; limiter leur rétention. GitHub documente les permissions du jeton, le risque du code non fiable et l’épinglage des actions. [S9]
 
 Les images de production sont construites à partir d’un commit identifiable, publiées avec digest, puis promues en recette et en production. Ne pas reconstruire silencieusement un autre état du dépôt pour la production. La configuration d’environnement reste séparée de l’image ; distinguer les valeurs publiques intégrées au build de celles lues à l’exécution. Pour permettre cette promotion, le navigateur utilise /api/v1 en relatif ; les valeurs publiques qui changent entre environnements doivent être fournies par une configuration serveur à l’exécution, sans secret et sans domaine de recette figé dans le JavaScript de production.
 
 Le déploiement vérifie la configuration, la disponibilité des images, les dépendances, la migration et les sondes. Une sonde publique indique seulement la disponibilité générale. La disponibilité du processus et la capacité à servir des requêtes ne sont pas le même signal.
+
+### Réalisation et frontières P20
+
+Les Dockerfiles [web](../apps/web/Dockerfile) et [API](../apps/api/Dockerfile), les fichiers [Compose](../infra/compose/compose.deployment.yml) et [recette](../infra/compose/compose.staging.yml), ainsi que [Caddy](../infra/caddy/Caddyfile) sont présents. Les bases et images de service sont verrouillées par digest ; les versions et sources sont dans [VERSIONS.md](VERSIONS.md). Les applications tournent sous UID/GID 10001, avec fichiers en lecture seule et espaces temporaires bornés. Les limites de ressources et échantillons observés ne constituent pas une capacité de trafic garantie.
+
+La [recette locale P20](evidence/P20-integration-checks.json) réussit ses 15 contrôles d’intégration, dont smoke HTTPS de recette 12/12 puis production 10/10 sur la même paire d’images, sans rebuild, et le CLI de surveillance avec alertes locales provoquées. L’origine et les langues sont bien fournies à l’exécution. La confiance TLS est vérifiée avec l’autorité locale du seul client de sonde ; un client sans cette autorité est refusé et la confiance système reste inchangée. Les IDs d’images locaux sont conservés ; leur `registryDigest` est nul puisqu’aucune publication n’a eu lieu. Dans le moteur Docker29.8 observé, ces IDs sont des digests d’index OCI locaux ; les manifestes linux/amd64 sont détaillés dans [l’inspection](evidence/P20-image-inspection.json).
+
+La commande ponctuelle `migrate` de l’image API lance Flyway sans Spring, workers ou seed, avec `courses_owner` ; l’application normale utilise `courses_app`, Flyway désactivé et Hibernate en validation. La vérification PostgreSQL observe les 19 migrations et zéro compte métier sur base vide, sans privilège superutilisateur ou CREATE pour le rôle applicatif. Le workflow de déploiement ne démarre pas les écrivains avant la migration contrôlée et ne retire aucun volume.
+
+Le [workflow manuel](../.github/workflows/deploy.yml) et les runbooks [déploiement](runbooks/deploy.md) et [retour de version](runbooks/rollback.md) sont préparés : permissions limitées, environnement GitHub préexistant, branche protégée, exclusion des exécutions concurrentes, commit CI validé et paire de digests conservée entre recette et production. Les reviewers restent facultatifs ; la règle est vérifiée si elle existe. Le contournement administrateur de l’UI n’est pas observable dans la réponse REST documentée et reste à vérifier en P21. Aucune publication de registre, connexion SSH, exécution GitHub ou déploiement distant n’a eu lieu ; aucune cible, dépense ou offre commerciale n’est inventée.
 
 Les migrations Flyway appliquées ne sont pas réécrites. Une migration incompatible nécessite une stratégie explicite, par exemple extension puis transition et retrait ultérieur. Revenir à une image précédente ne revient pas automatiquement à un schéma précédent. Préparer une correction vers l’avant et documenter les conditions dans lesquelles l’ancienne image reste compatible.
 
@@ -171,6 +183,8 @@ Choisir la méthode PostgreSQL en fonction du besoin : export logique pour les c
 La validation comprend une restauration dans une instance isolée, des contrôles de cohérence et le démarrage de l’application restaurée : utilisateurs fictifs, commandes, droits, versions et liens vers fichiers. Mesurer la durée et la date du point restauré. Après restauration, rapprocher les paiements et remboursements avec la source externe avant réouverture des achats ; éviter les doublons d’emails et d’attributions.
 
 Le runbook doit distinguer sauvegarde avant migration, sauvegarde régulière, restauration d’exercice et restauration de production. Cette dernière peut effacer des écritures récentes : elle demande un choix explicite de cible et de point de reprise. Ne jamais automatiser une commande destructive sur une base déduite d’un nom ambigu.
+
+P20 a réellement restauré un dump PostgreSQL vers une base isolée vide et redémarré la même image API en validation Hibernate, avec compte fictif/préférences conservés. Deux objets de buckets distincts ont aussi été exportés puis restaurés avec octets, empreintes et métadonnées identiques. Les cibles non vides sont refusées. Le bundle chiffré authentifié couvre dump, objets et clé outbox ; la preuve indique explicitement `offHostCopyObserved:false`. Ni copie hors hôte, ni PITR, ni rétention/RPO/RTO opérationnels, ni reprise de paiement ne sont validés par cet exercice. Voir [la preuve](evidence/P20-integration-checks.json) et [l’outil de sauvegarde](../scripts/deployment/backup.mjs).
 
 ## Observabilité et coûts
 

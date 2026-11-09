@@ -1,0 +1,30 @@
+{
+  "sourceCommit": "a28d8d26692128ddf8ee99fc2d05703c5e9b700a",
+  "platform": "linux/amd64",
+  "images": {
+    "web": {
+      "tag": "courses-web:a28d8d26692128ddf8ee99fc2d05703c5e9b700a",
+      "imageId": "sha256:dd130120a19c8c8cfbd0fab5ff2d0e407909ccc545f9b60b336d1d2b41ff9953",
+      "sizeBytes": 401378979,
+      "user": "10001:10001",
+      "architecture": "amd64",
+      "registryDigest": null
+    },
+    "api": {
+      "tag": "courses-api:a28d8d26692128ddf8ee99fc2d05703c5e9b700a",
+      "imageId": "sha256:c0228231551ea6f661b4af90e7100c8e6e80263290713fbaf4d9ef54261835b7",
+      "sizeBytes": 582704064,
+      "user": "10001:10001",
+      "architecture": "amd64",
+      "registryDigest": null
+    }
+  },
+  "registryPublished": false,
+  "startedAt": "2026-11-09T13:21:55.688Z",
+  "completedAt": "2026-11-09T13:23:13.284Z",
+  "identityMeaning": "imageId is the local OCI index digest observed with Docker29.8; registry publication has not occurred",
+  "lockedFrontendInstallObserved": true,
+  "webBuildObserved": true,
+  "apiWrapperCompilePackageObserved": true,
+  "containerBuildRunsTests": false
+}

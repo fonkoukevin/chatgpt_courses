@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "phase": "P20",
+  "scope": "Targeted Java/PostgreSQL staging, one-shot Flyway and entitlement boundaries before container execution",
+  "command": "apps/api/mvnw.cmd --batch-mode --no-transfer-progress -Dtest=SchemaMigrationIntegrationTest,StagingConfigurationTest,StagingHttpIntegrationTest,StripeConfigurationTest,EntitlementAccessIntegrationTest test",
+  "environment": {
+    "localEnvLoaded": false,
+    "inheritedStripeVariablesRemoved": true,
+    "externalProviderCalled": false,
+    "sharedDatabaseUsed": false
+  },
+  "exitCode": 0,
+  "mavenDuration": "1:26",
+  "finishedAt": "2026-11-09T14:01:52+01:00",
+  "tests": 14,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "suites": [
+    {
+      "name": "com.chatgptcourses.EntitlementAccessIntegrationTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 38.04
+    },
+    {
+      "name": "com.chatgptcourses.operations.SchemaMigrationIntegrationTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 9.929
+    },
+    {
+      "name": "com.chatgptcourses.payments.config.StripeConfigurationTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.178
+    },
+    {
+      "name": "com.chatgptcourses.shared.config.StagingConfigurationTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.032
+    },
+    {
+      "name": "com.chatgptcourses.StagingHttpIntegrationTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 7.823
+    }
+  ],
+  "history": [
+    {
+      "log": ".runtime/p20-api-target-first-2026-11-09T12-58-29-852Z.log",
+      "exitCode": 1,
+      "tests": 14,
+      "failures": 0,
+      "errors": 4,
+      "skipped": 0,
+      "cause": "Flyway 12.4.0 treats logger name none as a class name; schema tests and subsequent staging context failed before their assertions.",
+      "correction": "Use supported slf4j logger; container standalone tasks retain dedicated logback OFF configuration."
+    },
+    {
+      "log": ".runtime/p20-api-target-second-2026-11-09T13-00-21-673Z.log",
+      "exitCode": 0,
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "verified": [
+    "Fresh Flyway V001-V019, replay with zero additional migrations and no account/order/session/import seed.",
+    "Concurrent V018 to V019 upgrade applies the migration once and preserves the existing synthetic account row.",
+    "Application role is distinct and restricted; schema/database CREATE privilege is refused while DML and read-only Flyway history are granted.",
+    "Staging Spring context starts with Flyway disabled and Hibernate validate after the separate migration.",
+    "Staging HTTP health is minimal and private no-store; CSRF creates Secure/HttpOnly/SameSite=Lax Path=/ session cookie and missing-CSRF logout remains403.",
+    "Staging and production require HTTPS public origin plus secure cookies; exactly one matching runtime profile.",
+    "Staging ignores MANUAL_TEST access origins; Stripe TEST official endpoint is allowed but LIVE/loopback overrides rejected; production payments remain closed."
+  ],
+  "unexecutedHere": [
+    "Container image build, Java HealthProbe execution and non-root/read-only filesystem behavior are not established by this Maven target.",
+    "ObjectSnapshotMain compiled with the real AWS SDK, but object export/restore/tamper/non-empty-target integration is delegated to the isolated P20 Docker harness.",
+    "The HTTP staging test addresses Spring on loopback and inspects secure cookie headers; actual TLS is delegated to the Caddy image recipe.",
+    "The PostgreSQL target uses Testcontainers isolated credentials; a non-superuser migration owner is tested separately by the production Compose recipe.",
+    "No complete global API suite was repeated for this narrow configuration/container delta."
+  ],
+  "imageSources": {
+    "checkedAt": "2026-11-09",
+    "jdk": {
+      "tag": "eclipse-temurin:21.0.13_9-jdk-noble",
+      "digest": "sha256:114cabb73033ca4ce7ceec3deb62396bc1b716282bae051ed3c1d82e38fcab2d"
+    },
+    "jre": {
+      "tag": "eclipse-temurin:21.0.13_9-jre-noble",
+      "digest": "sha256:0eda5830ed7b669abc246a8dc520ea8a23cab06f9a8d4b6964109e2f2394e46f"
+    },
+    "unzipBuilderOnly": "6.0-28ubuntu4.1",
+    "officialRegistryDigestsRead": true,
+    "imagesBuiltByThisTarget": false,
+    "references": [
+      "https://raw.githubusercontent.com/docker-library/official-images/master/library/eclipse-temurin",
+      "https://github.com/adoptium/containers/tree/a240a79c19afb3da535529e29ab3156d5c08a6e0/21",
+      "https://packages.ubuntu.com/noble-updates/unzip",
+      "https://docs.spring.io/spring-boot/specification/executable-jar/property-launcher.html",
+      "https://documentation.red-gate.com/flyway/reference/usage/api-java"
+    ]
+  },
+  "secretsPrinted": false
+}

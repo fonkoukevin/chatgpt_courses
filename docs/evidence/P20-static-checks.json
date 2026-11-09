@@ -1,0 +1,104 @@
+{
+  "phase": "P20",
+  "startedAt": "2026-11-09T13:39:41.098Z",
+  "checks": [
+    {
+      "name": "node-tests",
+      "command": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "tests/scripts/deployment-config.test.mjs",
+        "tests/scripts/deployment-release.test.mjs",
+        "tests/scripts/deployment-smoke.test.mjs",
+        "tests/scripts/deployment-web-runtime.test.mjs"
+      ],
+      "exitCode": 0,
+      "tests": 22,
+      "passed": 22,
+      "failed": 0
+    },
+    {
+      "name": "eslint",
+      "command": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "--config",
+        "apps/web/eslint.config.mjs",
+        "--global",
+        "process",
+        "--global",
+        "Buffer",
+        "--global",
+        "URL",
+        "--global",
+        "console",
+        "--global",
+        "fetch",
+        "--global",
+        "setTimeout",
+        "--global",
+        "clearTimeout",
+        "--global",
+        "AbortSignal",
+        "--global",
+        "URLSearchParams",
+        "--global",
+        "Headers",
+        "--global",
+        "Request",
+        "--global",
+        "Response",
+        "--global",
+        "TextEncoder",
+        "--global",
+        "TextDecoder",
+        "--global",
+        "structuredClone",
+        "scripts/deployment",
+        "scripts/container",
+        "scripts/verify-deployment.mjs",
+        "tests/scripts/deployment-*.test.mjs"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "actionlint",
+      "command": [
+        "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.tools\\actionlint-1.7.12\\actionlint.exe",
+        ".github\\workflows\\ci.yml",
+        ".github\\workflows\\deploy.yml"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "diff-check",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "githubRunObserved": false,
+  "remoteTargetObserved": false,
+  "secretsPrinted": false,
+  "result": "passed",
+  "completedAt": "2026-11-09T13:39:47.432Z",
+  "history": [
+    {
+      "check": "eslint",
+      "result": "failed",
+      "errors": 2,
+      "cause": "no-unsafe-finally: explicit ownership-mismatch throws in cleanup finally",
+      "correction": "Record mismatch and skip deletion; preserve cleanup failure without throwing from finally."
+    },
+    {
+      "check": "test-command",
+      "result": "cancelled",
+      "cause": "npm exec node resolved an unrequested node package instead of invoking the portable binary",
+      "correction": "Cancelled; no package/lockfile change; all recorded tests use the actual portable Node24.22.2 directly."
+    }
+  ]
+}

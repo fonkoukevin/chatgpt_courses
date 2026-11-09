@@ -1,0 +1,74 @@
+# Publier et déployer une release identifiée
+
+**Procédure préparée en P20 ; aucun registre, SSH, GitHub Environment ou déploiement distant n’a été exercé par sa rédaction.** La cible, le domaine et le registre ne sont pas connus. Le verdict [P19](../evidence/P19.md) autorise la préparation d’une recette privée, commerce désactivé ; il n’autorise ni vente ni mode Stripe LIVE. Ce workflow garde ces limites et ne choisit aucun fournisseur payant.
+
+## Identité à conserver
+
+Une release est un JSON canonique avec ces seules clés, dans cet ordre : `schemaVersion`, `sourceCommit`, `web`, `api`, `schema`. Chaque image contient `repository` et `digest`. Le préfixe configurable `IMAGE_REPOSITORY` donne les dépôts `/web` et `/api`. Les références de déploiement sont exclusivement `repository@sha256:<64 caractères hexadécimaux>`. Le schéma testé est actuellement `{min:19,max:19}` ; il ne faut pas inventer une plage de compatibilité plus large.
+
+[release.mjs](../../scripts/deployment/release.mjs) définit les octets canoniques : JSON compact puis un LF final. Le SHA-256 porte sur ces octets. L’artefact `release-manifest.json` est écrit dans ce format ; sa somme peut être vérifiée avec `sha256sum release-manifest.json`. Copier ce fichier et son empreinte, sans reformater le JSON. Les tags `sha-<commit>-<run_id>-<attempt>` servent à retrouver une publication ; ils ne servent jamais de référence de déploiement. Aucun tag `latest` n’est produit.
+
+La publication construit les deux images une fois depuis le commit de la branche par défaut, puis les pousse explicitement au registre autorisé. Leurs digests sont relus après le push. La promotion en production réutilise exactement le manifeste validé en recette : aucun build, retag de promotion ou résolution d’un tag mobile. L’empreinte approuvée est conservée dans `APPROVED_STAGING_RELEASE_SHA256` de l’environnement production.
+
+Un manifeste valide prouve une identité déclarée, pas une disponibilité ou une recette réussie. Avant activation, le contrôleur vérifie aussi le succès du workflow CI pour ce commit, son appartenance à l’historique de la branche par défaut, la configuration cible, les labels OCI `org.opencontainers.image.revision`, la migration et les sondes.
+
+## Préparer les accès sans les inventer
+
+La cible doit être explicitement autorisée : Linux, Docker/Compose compatibles avec les fichiers du dépôt, **Node24.22.2** pour réutiliser le contrôleur et le validateur, accès SSH dédié, ports HTTP/HTTPS et DNS vérifiés. Le compte de déploiement doit pouvoir utiliser Docker ; ce droit donne un pouvoir important sur l’hôte et ne doit pas être présenté comme une isolation de sécurité. Son répertoire est réservé au projet, non modifiable par un tiers. Aucune installation sur un hôte n’est effectuée par ce runbook.
+
+Créer à l’avance les GitHub Environments **staging** et **production**, avec `deployment_branch_policy.protected_branches=true` et la branche par défaut réellement protégée. Les secrets doivent être propres à ces environnements, pas dupliqués au niveau dépôt. Le workflow contrôle via REST l’existence antérieure de l’environnement, cette politique et l’état protégé de la branche, ainsi que le dispatch manuel, la cible autorisée et la source. GitHub peut créer un environnement absent **sans protection** : son nom seul ne suffit pas. La disponibilité des protections dépend du plan et de la visibilité du dépôt ; sans les préconditions nécessaires, le workflow reste bloqué sans achat implicite.
+
+Un second relecteur n’est pas imposé à ce projet individuel. Si une règle `required_reviewers` est configurée, ses reviewers et son booléen `prevent_self_review` sont vérifiés et rapportés ; GitHub applique ensuite cette règle. Le réglage de contournement administrateur de l’UI est une limite opérationnelle à revoir en P21, **non observée par l’API**. Le premier contrôleur exigeait `can_admins_bypass`, champ absent des schémas REST et GraphQL officiels : cette garde non standard a été retirée, sans lui substituer un faux reçu d’attestation. Les champs réellement documentés restent obligatoires.
+
+| Variable d’environnement GitHub | Usage |
+| --- | --- |
+| `IMAGE_REPOSITORY` | Préfixe réel du registre et des dépôts autorisés, sans protocole, tag, credential ou digest |
+| `DEPLOY_TARGET_AUTHORIZED=true` | Cible et accès effectivement autorisés ; ne pas l’inférer d’une recommandation |
+| `DEPLOY_HOST`, `DEPLOY_PORT`, `DEPLOY_USER` | Hôte, port SSH explicite et compte de déploiement |
+| `DEPLOY_DIRECTORY` | Chemin Linux absolu réservé au projet, par exemple une arborescence opérateur sous `/srv` ; staging et production sont distincts |
+| `DEPLOY_PUBLIC_ORIGIN` | Origine HTTPS exacte, sans slash terminal, identifiant, query ou fragment ; identique à la configuration de l’hôte |
+| `STAGING_BASIC_USERNAME` | Identifiant du garde de recette, identique à la configuration déployée |
+| `MIGRATION_BACKUP_RECEIPT_SHA256` | Empreinte d’une preuve de sauvegarde vérifiée avant la migration de cette release |
+| `APPROVED_STAGING_RELEASE_SHA256` | En production seulement : empreinte du manifeste réellement validé en recette |
+
+| Secret de l’environnement GitHub | Usage limité |
+| --- | --- |
+| `REGISTRY_USERNAME`, `REGISTRY_TOKEN` | Publication dans staging seulement ; aucun secret SSH n’est transmis à cette étape |
+| `DEPLOY_SSH_PRIVATE_KEY`, `DEPLOY_SSH_KNOWN_HOSTS` | Déploiement seulement ; clé et empreintes d’hôte vérifiées par un canal indépendant |
+| `STAGING_BASIC_PASSWORD` | Sonde HTTPS de recette ; même secret que le fichier monté dans le service web |
+
+Le SSH utilise `StrictHostKeyChecking=yes`, sans agent transféré ni `ssh-keyscan` considéré comme une preuve de confiance. Le login registre de publication reçoit le token par stdin ; son `DOCKER_CONFIG` temporaire est supprimé en fin de commande. Le serveur doit déjà posséder son credential store de **lecture seule** pour tirer les images privées : le workflow ne lui copie pas la clé de publication.
+
+Sur chaque cible, préparer `<DEPLOY_DIRECTORY>/config/deployment.env` avec le validateur [config.mjs](../../scripts/deployment/config.mjs) et les fichiers de secrets requis par Compose. Le fichier de configuration n’est pas lisible par les autres utilisateurs ; ne pas utiliser `.env.local` du développeur. Les rôles PostgreSQL `courses_owner` et `courses_app` et les quatre secrets associés restent séparés. Les mots de passe, clé outbox, Basic et éventuelles clés futures ne font partie ni des images, ni du manifeste, ni du bundle de code.
+
+La sauvegarde avant migration et sa restauration isolée doivent être vérifiées selon les procédures d’exploitation du dépôt. Arrêter les écrivains du projet autorisé **avant** la sauvegarde et les laisser arrêtés jusqu’au déploiement. Le contrôleur vérifie que les conteneurs API/web de ce projet ne tournent plus ; cela ne dispense pas l’opérateur d’arrêter un éventuel autre écrivain extérieur à cette pile.
+
+Le reçu privé préexistant doit se trouver dans `<DEPLOY_DIRECTORY>/backups/<empreinte>/receipt.json`. Ses octets doivent correspondre à `MIGRATION_BACKUP_RECEIPT_SHA256`, avec `result:passed`, `authenticatedEncryption:true`, le bon `project`, `environment` et `database`. Le contrôleur ne fabrique pas ce reçu et n’accepte pas le seul format d’une empreinte comme sauvegarde. La preuve doit être issue de la véritable opération de sauvegarde chiffrée. La copie hors hôte est une vérification opérateur **séparée**, attestée par `off_host_backup_attested=true` ; le contrôleur ne prétend pas l’avoir observée lui-même. Les choix RPO/RTO/rétention restent à confirmer.
+
+Pour un premier déploiement uniquement, `first_install_empty_database=true` peut remplacer le reçu d’une ancienne base. Cette déclaration est vérifiée dans PostgreSQL : absence de table Flyway et zéro table utilisateur. Une base existante, même sans historique Flyway, ne bénéficie pas de cette dispense si elle contient une table. Aucun reçu fictif n’est créé pour l’installation initiale.
+
+## Publication manuelle
+
+1. Faire passer la [CI](../CI.md) sur le commit de la branche par défaut. Le contrôleur exige un run `ci.yml` réussi issu d’un push de ce même dépôt et commit ; un ancien résultat local ou un run de fork ne suffit pas.
+2. Dans **Manual image release**, choisir `operation=plan`, `environment=staging` pour contrôler les prérequis sans publication ni SSH. Le contrôle lit GitHub ; il n’est pas une sonde de cible.
+3. Après revue explicite, déclencher `operation=publish`, `environment=staging`. La validation des protections précède l’utilisation des credentials de registre. Le build appelle `images.mjs build --commit <commit> --output <fichier>`, puis seules les deux images identifiées sont poussées.
+4. Télécharger le manifeste canonique et `publication.json`. Conserver une copie opérateur durable du manifeste, de son empreinte et de la preuve de recette : les artefacts GitHub ont une rétention de trois jours. Une publication partielle ou un échec n’est pas une release déployée ; inspecter l’incident avant de relancer une publication explicite.
+
+## Déploiement et promotion manuels
+
+1. Préparer les secrets/configurations distincts de la cible. Pour une base existante, arrêter les écrivains autorisés, produire/vérifier la sauvegarde et sa copie hors hôte, puis conserver cette quiescence. Vérifier les images, le schéma et l’autorisation de cible ; le premier déploiement vide emploie la dispense contrôlée ci-dessus.
+2. Déclencher explicitement le workflow avec `operation=deploy`, l’environnement cible, le JSON canonique et son SHA-256. En production, l’empreinte doit égaler `APPROVED_STAGING_RELEASE_SHA256`. Respecter la revue d’environnement si elle est configurée ; aucune exécution sur PR, fork, push ou planning ne déploie.
+3. Le bundle provient des seuls fichiers Compose/Caddy/initialisation PostgreSQL/contrôleurs du commit validé. Les fichiers Git qui seraient des liens sont refusés. Les paramètres privés de l’hôte sont conservés. `release.env` apporte seulement `WEB_IMAGE`, `API_IMAGE` et `APP_ENV` ; le validateur applique une fusion limitée et vérifie le projet/environnement/origine.
+4. Le contrôleur distant contrôle silencieusement Compose, tire les images par digest, vérifie leurs labels de source et la quiescence des écrivains, puis démarre **seulement PostgreSQL**. Il lit réellement la présence/version Flyway, les échecs et le nombre de tables utilisateur, vérifie le reçu privé ou la dispense de première installation vide, puis lance une unique commande `run --rm --no-deps migrate`. Celle-ci emploie l’image API et le rôle propriétaire DDL. Aucune API n’est démarrée avant cette étape ; le serveur normal a Flyway désactivé et le rôle applicatif limité.
+5. Il démarre ensuite `api`, `web` et `caddy` avec `--no-build --no-deps --wait`. Les seules entrées publiques sont celles de Caddy. Le chemin `/api/v1` est préservé sur Caddy→Next→Spring, avec Basic staging et CSRF selon le contrat. Le contrôleur ne retire aucun volume et ne restaure aucune donnée.
+6. Le runner exécute `smoke.mjs --origin <origine HTTPS>` avec Basic seulement en staging. Le lien `current` n’est mis à jour qu’après ce succès. Une réussite signifie la version contrôlée sur cette cible, pas une certification générale ni une mise en vente.
+
+Le verrou hôte `private/deployment.lock` complète la sérialisation GitHub. Après échec ou annulation, il reste volontairement présent : une coupure SSH ou un timeout ne prouve pas que l’opération distante a cessé. Inspecter les processus, conteneurs, schéma Flyway et reçu avant d’enlever un verrou appartenant au seul essai concerné. Aucun rollback automatique ne masque un échec de migration ou de smoke. `current` désigne la dernière release dont le smoke est confirmé ; après un échec, les conteneurs réellement actifs peuvent déjà avoir changé.
+
+Les journaux de commande restent privés sous `.runtime/deployment/private` sur le runner et `<DEPLOY_DIRECTORY>/private` sur l’hôte. Seuls manifestes et résultats à champs fixes sont uploadés, rétention trois jours ; aucun secret/configuration cible, log brut ou corps privé n’est publié. Le retour d’images compatibles suit [rollback.md](rollback.md).
+
+## Sources et vérification de cette préparation
+
+Les actions checkout7.0.1, setup-node7.1.0 et upload-artifact7.0.2 utilisent les SHA complets recensés dans [CI.md](../CI.md) ; les trois tags ont été relus le9novembre2026. `X-GitHub-Api-Version:2026-03-10` est officiellement supportée ; un GET public non authentifié a renvoyé200 avec cette version sélectionnée. Aucun compte ou environnement privé n’a été interrogé et aucun workflow distant lancé. Les tests purs et actionlint restent distincts des futurs essais registre/SSH/Compose.
+
+Sources primaires : [images Docker par digest](https://docs.docker.com/reference/cli/docker/image/pull/), [login par stdin et credential stores](https://docs.docker.com/reference/cli/docker/login/), [Compose up/--no-build/--wait](https://docs.docker.com/reference/cli/docker/compose/up/), [protections et secrets GitHub Environments](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments), [lecture des règles via REST](https://docs.github.com/en/rest/deployments/environments), [versions REST supportées](https://docs.github.com/en/rest/about-the-rest-api/api-versions), [schéma REST officiel](https://github.com/github/rest-api-description/blob/main/descriptions/api.github.com/api.github.com.json), [permissions et prévention d’injection Actions](https://docs.github.com/en/actions/reference/security/secure-use).

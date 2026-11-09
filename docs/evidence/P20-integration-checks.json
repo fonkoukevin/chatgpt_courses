@@ -1,0 +1,331 @@
+{
+  "phase": "P20",
+  "runId": "92553bdd-fb78-41fa-b5f6-cdd5ba521a79",
+  "project": "courses-p20-92553bdd",
+  "startedAt": "2026-11-09T13:33:13.752Z",
+  "sourceCommit": "a28d8d26692128ddf8ee99fc2d05703c5e9b700a",
+  "infrastructureCommit": "cbba40aed81e1632d9550db3737bbd8f938734ce",
+  "images": {
+    "web": {
+      "tag": "courses-web:a28d8d26692128ddf8ee99fc2d05703c5e9b700a",
+      "imageId": "sha256:dd130120a19c8c8cfbd0fab5ff2d0e407909ccc545f9b60b336d1d2b41ff9953",
+      "sizeBytes": 401378979,
+      "user": "10001:10001",
+      "architecture": "amd64",
+      "registryDigest": null
+    },
+    "api": {
+      "tag": "courses-api:a28d8d26692128ddf8ee99fc2d05703c5e9b700a",
+      "imageId": "sha256:c0228231551ea6f661b4af90e7100c8e6e80263290713fbaf4d9ef54261835b7",
+      "sizeBytes": 582704064,
+      "user": "10001:10001",
+      "architecture": "amd64",
+      "registryDigest": null
+    }
+  },
+  "checks": [
+    {
+      "name": "isolated-config-and-secret-files-validated",
+      "passed": true
+    },
+    {
+      "name": "compose-staging-valid-silent",
+      "passed": true
+    },
+    {
+      "name": "staging-images-real-startup-migration-and-health",
+      "passed": true
+    },
+    {
+      "name": "staging-strict-TLS-and-HTTP-smoke",
+      "passed": true
+    },
+    {
+      "name": "untrusted-local-CA-rejected-no-OS-trust-change",
+      "passed": true
+    },
+    {
+      "name": "real-postgres-roles-and-empty-domain-schema",
+      "passed": true,
+      "users": 0,
+      "superuser": false,
+      "migrations": 19,
+      "schemaCreate": false,
+      "databaseCreate": false
+    },
+    {
+      "name": "same-images-promoted-local-production-origin-language-without-rebuild",
+      "passed": true
+    },
+    {
+      "name": "real-S3-object-export-two-buckets",
+      "passed": true
+    },
+    {
+      "name": "database-objects-and-outbox-key-authenticated-encrypted-backup",
+      "passed": true,
+      "objects": 2,
+      "offHostCopyObserved": false
+    },
+    {
+      "name": "real-S3-empty-isolated-target-restored-identical-bytes-metadata-and-bucket-identities",
+      "passed": true
+    },
+    {
+      "name": "nonempty-object-target-refused",
+      "passed": true
+    },
+    {
+      "name": "real-pg-dump-restore-empty-target-preserves-fictitious-account-preferences",
+      "passed": true,
+      "durationMs": 2794
+    },
+    {
+      "name": "nonempty-database-restore-refused",
+      "passed": true
+    },
+    {
+      "name": "same-api-image-Hibernate-validates-and-serves-restored-database",
+      "passed": true
+    },
+    {
+      "name": "monitor-CLI-real-health-backup-and-disk-alerts-without-external-notification",
+      "passed": true
+    }
+  ],
+  "cleanupConfirmed": true,
+  "secretsPrinted": false,
+  "remoteDeploymentObserved": false,
+  "stagingSmoke": {
+    "event": "DEPLOYMENT_SMOKE",
+    "result": "passed",
+    "tlsVerified": true,
+    "webhookMode": "disabled",
+    "checks": [
+      {
+        "id": "PAGE_FR",
+        "result": "passed",
+        "status": 200
+      },
+      {
+        "id": "PAGE_EN",
+        "result": "passed",
+        "status": 200
+      },
+      {
+        "id": "SPRING_HEALTH",
+        "result": "passed",
+        "status": 200,
+        "databaseReady": true
+      },
+      {
+        "id": "REFERENCED_ASSETS",
+        "result": "passed",
+        "javascript": 17,
+        "stylesheets": 1
+      },
+      {
+        "id": "CSRF_SESSION_COOKIE",
+        "result": "passed",
+        "status": 200,
+        "secure": true,
+        "httpOnly": true,
+        "sameSiteLax": true,
+        "rootPath": true
+      },
+      {
+        "id": "PRIVATE_PROFILE_UNAUTHENTICATED",
+        "result": "passed",
+        "status": 401,
+        "noStore": true
+      },
+      {
+        "id": "LOGOUT_MISSING_CSRF",
+        "result": "passed",
+        "status": 403,
+        "noStore": true
+      },
+      {
+        "id": "WEBHOOK_EXACT_FAIL_CLOSED",
+        "result": "passed",
+        "webhookMode": "disabled",
+        "status": 503,
+        "requestedWithoutBasic": true,
+        "hmacValidated": false
+      },
+      {
+        "id": "WEBHOOK_SHADOW_CSRF",
+        "result": "passed",
+        "status": 403,
+        "noStore": true
+      },
+      {
+        "id": "UNKNOWN_API",
+        "result": "passed",
+        "status": 404,
+        "noStore": true
+      },
+      {
+        "id": "STAGING_BASIC_PERIMETER",
+        "result": "passed",
+        "status": 401,
+        "noStore": true
+      },
+      {
+        "id": "STAGING_SHADOW_PERIMETER",
+        "result": "passed",
+        "status": 401,
+        "noStore": true
+      }
+    ]
+  },
+  "resourceSamples": [
+    {
+      "service": "api",
+      "memoryUsage": "281.8MiB / 1GiB",
+      "cpuPercent": "0.39%"
+    },
+    {
+      "service": "caddy",
+      "memoryUsage": "13.48MiB / 192MiB",
+      "cpuPercent": "3.75%"
+    },
+    {
+      "service": "postgres",
+      "memoryUsage": "63.29MiB / 512MiB",
+      "cpuPercent": "0.07%"
+    },
+    {
+      "service": "web",
+      "memoryUsage": "67.63MiB / 512MiB",
+      "cpuPercent": "0.01%"
+    }
+  ],
+  "productionSmoke": {
+    "event": "DEPLOYMENT_SMOKE",
+    "result": "passed",
+    "tlsVerified": true,
+    "webhookMode": "disabled",
+    "checks": [
+      {
+        "id": "PAGE_FR",
+        "result": "passed",
+        "status": 200
+      },
+      {
+        "id": "PAGE_EN",
+        "result": "passed",
+        "status": 200
+      },
+      {
+        "id": "SPRING_HEALTH",
+        "result": "passed",
+        "status": 200,
+        "databaseReady": true
+      },
+      {
+        "id": "REFERENCED_ASSETS",
+        "result": "passed",
+        "javascript": 17,
+        "stylesheets": 1
+      },
+      {
+        "id": "CSRF_SESSION_COOKIE",
+        "result": "passed",
+        "status": 200,
+        "secure": true,
+        "httpOnly": true,
+        "sameSiteLax": true,
+        "rootPath": true
+      },
+      {
+        "id": "PRIVATE_PROFILE_UNAUTHENTICATED",
+        "result": "passed",
+        "status": 401,
+        "noStore": true
+      },
+      {
+        "id": "LOGOUT_MISSING_CSRF",
+        "result": "passed",
+        "status": 403,
+        "noStore": true
+      },
+      {
+        "id": "WEBHOOK_EXACT_FAIL_CLOSED",
+        "result": "passed",
+        "webhookMode": "disabled",
+        "status": 503,
+        "requestedWithoutBasic": true,
+        "hmacValidated": false
+      },
+      {
+        "id": "WEBHOOK_SHADOW_CSRF",
+        "result": "passed",
+        "status": 403,
+        "noStore": true
+      },
+      {
+        "id": "UNKNOWN_API",
+        "result": "passed",
+        "status": 404,
+        "noStore": true
+      }
+    ]
+  },
+  "objectSeed": {
+    "metadataVerified": true,
+    "sha256ByRole": {
+      "EDITORIAL": "d70d164044a1ec144922e67f0a47f690fd940725a0e7fb34b904976ce3dddf68",
+      "PRIVATE": "4f16116b569bdf3c6c9859799d6da72b23047c4e250add4ffb057bea72516c18"
+    },
+    "bytes": 84,
+    "objects": 2,
+    "mode": "seed"
+  },
+  "objectExport": {
+    "result": "exported",
+    "objects": 2,
+    "bytes": 84,
+    "manifestSha256": "b72d561fcc517516436745f9b23408ff86899ccc18f8433208154187bd262da9"
+  },
+  "objectRestore": {
+    "result": "restored",
+    "objects": 2,
+    "bytes": 84,
+    "manifestSha256": "b72d561fcc517516436745f9b23408ff86899ccc18f8433208154187bd262da9"
+  },
+  "objectVerification": {
+    "mode": "verify",
+    "objects": 2,
+    "bytes": 84,
+    "sha256ByRole": {
+      "EDITORIAL": "d70d164044a1ec144922e67f0a47f690fd940725a0e7fb34b904976ce3dddf68",
+      "PRIVATE": "4f16116b569bdf3c6c9859799d6da72b23047c4e250add4ffb057bea72516c18"
+    },
+    "metadataVerified": true
+  },
+  "monitorHealthy": {
+    "observedAt": "2026-11-09T13:36:54.194Z",
+    "httpAvailable": true,
+    "backupAgeSeconds": 65,
+    "diskFreeBytes": 743781277696,
+    "alerts": [],
+    "externalNotificationSent": false,
+    "externalHostLossDetectionObserved": false
+  },
+  "monitorAlarm": {
+    "observedAt": "2026-11-09T13:36:54.553Z",
+    "httpAvailable": true,
+    "backupAgeSeconds": null,
+    "diskFreeBytes": 743780139008,
+    "alerts": [
+      "BACKUP_RECEIPT_MISSING",
+      "DISK_SPACE_LOW"
+    ],
+    "externalNotificationSent": false,
+    "externalHostLossDetectionObserved": false
+  },
+  "result": "passed",
+  "cleanupErrors": [],
+  "completedAt": "2026-11-09T13:37:10.192Z"
+}

@@ -1,0 +1,280 @@
+{
+  "phase": "P20",
+  "check": "final-local-image-inspection",
+  "startedAt": "2026-11-09T13:33:37.353Z",
+  "completedAt": "2026-11-09T13:33:52.744Z",
+  "sourceCommit": "a28d8d26692128ddf8ee99fc2d05703c5e9b700a",
+  "imageInputSha256": "8e2943a9f0ee33476ae3be70726f6d78462fb387852776a436243f134a92e916",
+  "docker": {
+    "client": "29.8.0",
+    "server": "29.8.0",
+    "serverApiVersion": "1.56"
+  },
+  "execution": {
+    "network": "none",
+    "readOnlyRootfs": true,
+    "droppedCapabilities": "ALL",
+    "filesystemReaderCapabilityAdded": "DAC_OVERRIDE only for UID0 filesystem-name reader; app default-UID probes have no added capabilities",
+    "noNewPrivileges": true,
+    "appEntrypointsExecuted": false,
+    "buildsRun": false,
+    "imagesPulled": false,
+    "registryPushed": false,
+    "envFilesReadFromHost": true
+  },
+  "images": [
+    {
+      "service": "web",
+      "imageId": "sha256:dd130120a19c8c8cfbd0fab5ff2d0e407909ccc545f9b60b336d1d2b41ff9953",
+      "inspectedId": "sha256:dd130120a19c8c8cfbd0fab5ff2d0e407909ccc545f9b60b336d1d2b41ff9953",
+      "identityMatchesInput": true,
+      "idMeaning": "local OCI image index digest, as exposed by this Docker 29.8 containerd image store",
+      "ociRevision": "a28d8d26692128ddf8ee99fc2d05703c5e9b700a",
+      "revisionMatchesInput": true,
+      "architecture": "amd64",
+      "os": "linux",
+      "sizeBytes": 401378979,
+      "configuredUser": "10001:10001",
+      "observedUid": 10001,
+      "observedGid": 10001,
+      "nonRootObserved": true,
+      "repoDigests": [
+        "courses-web@sha256:dd130120a19c8c8cfbd0fab5ff2d0e407909ccc545f9b60b336d1d2b41ff9953"
+      ],
+      "registryPublishedByThisInspection": false,
+      "descriptor": {
+        "mediaType": "application/vnd.oci.image.index.v1+json",
+        "digest": "sha256:dd130120a19c8c8cfbd0fab5ff2d0e407909ccc545f9b60b336d1d2b41ff9953",
+        "sizeBytes": 856
+      },
+      "commandAvailability": {
+        "node": true,
+        "npm": false,
+        "npx": false,
+        "yarn": false,
+        "yarnpkg": false,
+        "pnpm": false,
+        "pnpx": false,
+        "corepack": false,
+        "mvn": false,
+        "mvnw": false,
+        "javac": false,
+        "jar": false,
+        "javadoc": false,
+        "jshell": false,
+        "jlink": false,
+        "jmod": false,
+        "jdeps": false,
+        "git": false,
+        "curl": false,
+        "wget": false
+      },
+      "filesystem": {
+        "scannerUid": 0,
+        "excludesVirtualMounts": [
+          "/proc",
+          "/sys",
+          "/dev"
+        ],
+        "envFileNamePattern": ".env*",
+        "envFileCount": 0,
+        "inspectedPathPresence": {
+          "/usr/local/lib/node_modules/npm": false,
+          "/opt/yarn-v1.22.22": false,
+          "/usr/local/include/node": false,
+          "/root/.m2": false,
+          "/root/.npm": false,
+          "/app/.git": false,
+          "/app/.mvn": false,
+          "/app/node_modules/typescript": false,
+          "/app/node_modules/eslint": false,
+          "/app/node_modules/@playwright": false,
+          "/app/tests": false,
+          "/app/scripts/deployment": false
+        }
+      },
+      "secretLikeImageConfigEnvNames": [],
+      "inspectionOutputLogSha256": "e723c6e301edfd0f3123cdff731f2ae2be1d3e133509c26baaec1bb2177cf7b2",
+      "platformManifest": {
+        "os": "linux",
+        "architecture": "amd64",
+        "digest": "sha256:4d0c30fd0122b4b1472dc9ea897c67dfc42436dae2b9e9e2cc999284d6c0e651",
+        "mediaType": "application/vnd.oci.image.manifest.v1+json",
+        "sizeBytes": 2758
+      },
+      "configDigest": null,
+      "configDigestObservation": "Not independently extracted; index and platform-manifest identities were inspected locally without a full image archive export.",
+      "repoDigestObservation": "Local engine references only; no remote registry publication or resolution was performed."
+    },
+    {
+      "service": "api",
+      "imageId": "sha256:c0228231551ea6f661b4af90e7100c8e6e80263290713fbaf4d9ef54261835b7",
+      "inspectedId": "sha256:c0228231551ea6f661b4af90e7100c8e6e80263290713fbaf4d9ef54261835b7",
+      "identityMatchesInput": true,
+      "idMeaning": "local OCI image index digest, as exposed by this Docker 29.8 containerd image store",
+      "ociRevision": "a28d8d26692128ddf8ee99fc2d05703c5e9b700a",
+      "revisionMatchesInput": true,
+      "architecture": "amd64",
+      "os": "linux",
+      "sizeBytes": 582704064,
+      "configuredUser": "10001:10001",
+      "observedUid": 10001,
+      "observedGid": 10001,
+      "nonRootObserved": true,
+      "repoDigests": [
+        "courses-api@sha256:c0228231551ea6f661b4af90e7100c8e6e80263290713fbaf4d9ef54261835b7"
+      ],
+      "registryPublishedByThisInspection": false,
+      "descriptor": {
+        "mediaType": "application/vnd.oci.image.index.v1+json",
+        "digest": "sha256:c0228231551ea6f661b4af90e7100c8e6e80263290713fbaf4d9ef54261835b7",
+        "sizeBytes": 856
+      },
+      "commandAvailability": {
+        "node": false,
+        "npm": false,
+        "npx": false,
+        "yarn": false,
+        "yarnpkg": false,
+        "pnpm": false,
+        "pnpx": false,
+        "corepack": false,
+        "mvn": false,
+        "mvnw": false,
+        "javac": false,
+        "jar": false,
+        "javadoc": false,
+        "jshell": false,
+        "jlink": false,
+        "jmod": false,
+        "jdeps": false,
+        "git": false,
+        "curl": false,
+        "wget": false
+      },
+      "filesystem": {
+        "scannerUid": 0,
+        "excludesVirtualMounts": [
+          "/proc",
+          "/sys",
+          "/dev"
+        ],
+        "envFileNamePattern": ".env*",
+        "envFileCount": 0,
+        "inspectedPathPresence": {
+          "/usr/local/lib/node_modules/npm": false,
+          "/opt/yarn-v1.22.22": false,
+          "/usr/local/include/node": false,
+          "/root/.m2": false,
+          "/root/.npm": false,
+          "/app/.git": false,
+          "/app/.mvn": false,
+          "/app/node_modules/typescript": false,
+          "/app/node_modules/eslint": false,
+          "/app/node_modules/@playwright": false,
+          "/app/tests": false,
+          "/app/scripts/deployment": false
+        },
+        "jarTopLevelEnvEntryCount": 0,
+        "jarInspection": "entry names of outer Spring Boot archive only; nested dependency archives and file contents were not scanned"
+      },
+      "secretLikeImageConfigEnvNames": [],
+      "inspectionOutputLogSha256": "e723c6e301edfd0f3123cdff731f2ae2be1d3e133509c26baaec1bb2177cf7b2",
+      "platformManifest": {
+        "os": "linux",
+        "architecture": "amd64",
+        "digest": "sha256:a75d2d546ee31294cf41afd3c03ba04a1fe034b9ebcba3a5a73f9646527b2f3a",
+        "mediaType": "application/vnd.oci.image.manifest.v1+json",
+        "sizeBytes": 2381
+      },
+      "configDigest": null,
+      "configDigestObservation": "Not independently extracted; index and platform-manifest identities were inspected locally without a full image archive export.",
+      "repoDigestObservation": "Local engine references only; no remote registry publication or resolution was performed."
+    }
+  ],
+  "cleanup": {
+    "createdContainers": 4,
+    "removedContainers": 4,
+    "confirmed": true
+  },
+  "limitations": [
+    "Final merged filesystem and named commands/paths only; no historical image layers or build cache audit.",
+    "OS utilities and Next runtime dependencies remain; development tools means only the explicitly probed commands and paths.",
+    "Known-value comparison is limited to qualifying host .env.local values, final merged filesystem and decompressed API JAR entries, plus the two final-image build logs. Unknown secrets, transformed/encoded values, intermediate layers and arbitrary application runtime logs are not covered."
+  ],
+  "result": "observed",
+  "failureCode": null,
+  "failureFacts": null,
+  "secretAudit": {
+    "completedAt": "2026-11-09T13:37:38.837Z",
+    "referenceSource": "sensitive values from host .env.local parsed in memory only; no values, names, hashes or lengths emitted",
+    "checkedDistinctPatterns": 5,
+    "excludedValueCount": 0,
+    "excludedValueRule": "empty, duplicate, fewer than 8 or more than 8192 characters, NUL/CR/LF, or _FILE references",
+    "transmission": "stdin only; never container arguments, environment, mounted pattern file or log",
+    "filesystem": [
+      {
+        "service": "web",
+        "method": "fixed-byte grep patterns supplied via stdin, final regular files recursively, virtual proc/sys/dev directories excluded, no symlink traversal",
+        "matchedFileCount": 0,
+        "readErrors": 0,
+        "commandExitCode": 1
+      },
+      {
+        "service": "api",
+        "method": "fixed-byte grep patterns supplied via stdin, final regular files recursively, virtual proc/sys/dev directories excluded, no symlink traversal",
+        "matchedFileCount": 0,
+        "readErrors": 0,
+        "commandExitCode": 1
+      }
+    ],
+    "apiArchive": {
+      "scanned": true,
+      "nestedArchives": 126,
+      "decompressedEntries": 57299,
+      "decompressedBytes": 325381533,
+      "matchedEntryCount": 0
+    },
+    "logs": [
+      {
+        "kind": "final-web-image-build",
+        "bytes": 3902,
+        "matched": false
+      },
+      {
+        "kind": "final-api-image-build",
+        "bytes": 7615,
+        "matched": false
+      }
+    ],
+    "applicationRuntimeLogsScanned": false,
+    "cleanup": {
+      "created": 2,
+      "removed": 2,
+      "confirmed": true
+    },
+    "passedWithinScope": true,
+    "failureCode": null
+  },
+  "inspectionSetup": {
+    "incompleteHelperAttempts": 2,
+    "temporaryContainersCreatedAndRemoved": 4,
+    "appEntrypointsExecuted": false,
+    "finalFilesystemAndSecretAuditCompleted": true
+  },
+  "cleanupAggregate": {
+    "temporaryContainersCreated": 10,
+    "temporaryContainersRemoved": 10,
+    "remainingContainersWithEitherInspectionLabel": 0,
+    "checkedAt": "2026-11-09T13:38:18.248Z"
+  },
+  "userNextEnvPreserved": {
+    "sha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+    "matchesPreInspectionObservation": true,
+    "writtenByInspection": false
+  },
+  "references": [
+    "https://docs.docker.com/reference/cli/docker/image/inspect/",
+    "https://docs.docker.com/reference/api/engine/version/v1.56/"
+  ]
+}

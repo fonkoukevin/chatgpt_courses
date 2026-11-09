@@ -1,0 +1,301 @@
+{
+  "phase": "P20",
+  "runId": "0d9ad669-7f0a-4256-bada-72e2aef200ce",
+  "project": "courses-p20-0d9ad669",
+  "startedAt": "2026-11-09T13:24:05.012Z",
+  "sourceCommit": "a28d8d26692128ddf8ee99fc2d05703c5e9b700a",
+  "images": {
+    "web": {
+      "tag": "courses-web:a28d8d26692128ddf8ee99fc2d05703c5e9b700a",
+      "imageId": "sha256:dd130120a19c8c8cfbd0fab5ff2d0e407909ccc545f9b60b336d1d2b41ff9953",
+      "sizeBytes": 401378979,
+      "user": "10001:10001",
+      "architecture": "amd64",
+      "registryDigest": null
+    },
+    "api": {
+      "tag": "courses-api:a28d8d26692128ddf8ee99fc2d05703c5e9b700a",
+      "imageId": "sha256:c0228231551ea6f661b4af90e7100c8e6e80263290713fbaf4d9ef54261835b7",
+      "sizeBytes": 582704064,
+      "user": "10001:10001",
+      "architecture": "amd64",
+      "registryDigest": null
+    }
+  },
+  "checks": [
+    {
+      "name": "isolated-config-and-secret-files-validated",
+      "passed": true
+    },
+    {
+      "name": "compose-staging-valid-silent",
+      "passed": true
+    },
+    {
+      "name": "staging-images-real-startup-migration-and-health",
+      "passed": true
+    },
+    {
+      "name": "staging-strict-TLS-and-HTTP-smoke",
+      "passed": true
+    },
+    {
+      "name": "untrusted-local-CA-rejected-no-OS-trust-change",
+      "passed": true
+    },
+    {
+      "name": "real-postgres-roles-and-empty-domain-schema",
+      "passed": true,
+      "users": 0,
+      "superuser": false,
+      "migrations": 19,
+      "schemaCreate": false,
+      "databaseCreate": false
+    },
+    {
+      "name": "same-images-promoted-local-production-origin-language-without-rebuild",
+      "passed": true
+    },
+    {
+      "name": "real-S3-object-export-two-buckets",
+      "passed": true
+    },
+    {
+      "name": "database-objects-and-outbox-key-authenticated-encrypted-backup",
+      "passed": true,
+      "objects": 2,
+      "offHostCopyObserved": false
+    },
+    {
+      "name": "real-S3-empty-isolated-target-restored-identical-bytes-metadata-and-bucket-identities",
+      "passed": true
+    },
+    {
+      "name": "nonempty-object-target-refused",
+      "passed": true
+    },
+    {
+      "name": "real-pg-dump-restore-empty-target-preserves-fictitious-account-preferences",
+      "passed": true,
+      "durationMs": 2896
+    },
+    {
+      "name": "nonempty-database-restore-refused",
+      "passed": true
+    },
+    {
+      "name": "same-api-image-Hibernate-validates-and-serves-restored-database",
+      "passed": true
+    }
+  ],
+  "cleanupConfirmed": true,
+  "secretsPrinted": false,
+  "remoteDeploymentObserved": false,
+  "stagingSmoke": {
+    "event": "DEPLOYMENT_SMOKE",
+    "result": "passed",
+    "tlsVerified": true,
+    "webhookMode": "disabled",
+    "checks": [
+      {
+        "id": "PAGE_FR",
+        "result": "passed",
+        "status": 200
+      },
+      {
+        "id": "PAGE_EN",
+        "result": "passed",
+        "status": 200
+      },
+      {
+        "id": "SPRING_HEALTH",
+        "result": "passed",
+        "status": 200,
+        "databaseReady": true
+      },
+      {
+        "id": "REFERENCED_ASSETS",
+        "result": "passed",
+        "javascript": 17,
+        "stylesheets": 1
+      },
+      {
+        "id": "CSRF_SESSION_COOKIE",
+        "result": "passed",
+        "status": 200,
+        "secure": true,
+        "httpOnly": true,
+        "sameSiteLax": true,
+        "rootPath": true
+      },
+      {
+        "id": "PRIVATE_PROFILE_UNAUTHENTICATED",
+        "result": "passed",
+        "status": 401,
+        "noStore": true
+      },
+      {
+        "id": "LOGOUT_MISSING_CSRF",
+        "result": "passed",
+        "status": 403,
+        "noStore": true
+      },
+      {
+        "id": "WEBHOOK_EXACT_FAIL_CLOSED",
+        "result": "passed",
+        "webhookMode": "disabled",
+        "status": 503,
+        "requestedWithoutBasic": true,
+        "hmacValidated": false
+      },
+      {
+        "id": "WEBHOOK_SHADOW_CSRF",
+        "result": "passed",
+        "status": 403,
+        "noStore": true
+      },
+      {
+        "id": "UNKNOWN_API",
+        "result": "passed",
+        "status": 404,
+        "noStore": true
+      },
+      {
+        "id": "STAGING_BASIC_PERIMETER",
+        "result": "passed",
+        "status": 401,
+        "noStore": true
+      },
+      {
+        "id": "STAGING_SHADOW_PERIMETER",
+        "result": "passed",
+        "status": 401,
+        "noStore": true
+      }
+    ]
+  },
+  "resourceSamples": [
+    {
+      "memoryUsage": "279.2MiB / 1GiB",
+      "cpuPercent": "0.33%"
+    },
+    {
+      "memoryUsage": "13.87MiB / 192MiB",
+      "cpuPercent": "0.00%"
+    },
+    {
+      "memoryUsage": "65.39MiB / 512MiB",
+      "cpuPercent": "0.07%"
+    },
+    {
+      "memoryUsage": "68.95MiB / 512MiB",
+      "cpuPercent": "0.00%"
+    }
+  ],
+  "productionSmoke": {
+    "event": "DEPLOYMENT_SMOKE",
+    "result": "passed",
+    "tlsVerified": true,
+    "webhookMode": "disabled",
+    "checks": [
+      {
+        "id": "PAGE_FR",
+        "result": "passed",
+        "status": 200
+      },
+      {
+        "id": "PAGE_EN",
+        "result": "passed",
+        "status": 200
+      },
+      {
+        "id": "SPRING_HEALTH",
+        "result": "passed",
+        "status": 200,
+        "databaseReady": true
+      },
+      {
+        "id": "REFERENCED_ASSETS",
+        "result": "passed",
+        "javascript": 17,
+        "stylesheets": 1
+      },
+      {
+        "id": "CSRF_SESSION_COOKIE",
+        "result": "passed",
+        "status": 200,
+        "secure": true,
+        "httpOnly": true,
+        "sameSiteLax": true,
+        "rootPath": true
+      },
+      {
+        "id": "PRIVATE_PROFILE_UNAUTHENTICATED",
+        "result": "passed",
+        "status": 401,
+        "noStore": true
+      },
+      {
+        "id": "LOGOUT_MISSING_CSRF",
+        "result": "passed",
+        "status": 403,
+        "noStore": true
+      },
+      {
+        "id": "WEBHOOK_EXACT_FAIL_CLOSED",
+        "result": "passed",
+        "webhookMode": "disabled",
+        "status": 503,
+        "requestedWithoutBasic": true,
+        "hmacValidated": false
+      },
+      {
+        "id": "WEBHOOK_SHADOW_CSRF",
+        "result": "passed",
+        "status": 403,
+        "noStore": true
+      },
+      {
+        "id": "UNKNOWN_API",
+        "result": "passed",
+        "status": 404,
+        "noStore": true
+      }
+    ]
+  },
+  "objectSeed": {
+    "bytes": 84,
+    "sha256ByRole": {
+      "EDITORIAL": "d70d164044a1ec144922e67f0a47f690fd940725a0e7fb34b904976ce3dddf68",
+      "PRIVATE": "4f16116b569bdf3c6c9859799d6da72b23047c4e250add4ffb057bea72516c18"
+    },
+    "metadataVerified": true,
+    "mode": "seed",
+    "objects": 2
+  },
+  "objectExport": {
+    "result": "exported",
+    "objects": 2,
+    "bytes": 84,
+    "manifestSha256": "1ee90911dface219345b36f5f8f2d6c1ab318e5d1c4e68b0703bfb1509a94155"
+  },
+  "objectRestore": {
+    "result": "restored",
+    "objects": 2,
+    "bytes": 84,
+    "manifestSha256": "1ee90911dface219345b36f5f8f2d6c1ab318e5d1c4e68b0703bfb1509a94155"
+  },
+  "objectVerification": {
+    "mode": "verify",
+    "objects": 2,
+    "bytes": 84,
+    "sha256ByRole": {
+      "EDITORIAL": "d70d164044a1ec144922e67f0a47f690fd940725a0e7fb34b904976ce3dddf68",
+      "PRIVATE": "4f16116b569bdf3c6c9859799d6da72b23047c4e250add4ffb057bea72516c18"
+    },
+    "metadataVerified": true
+  },
+  "result": "passed",
+  "cleanupErrors": [],
+  "completedAt": "2026-11-09T13:27:44.818Z"
+}

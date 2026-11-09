@@ -1,6 +1,24 @@
-# Versions — socle verrouillé et compléments P02/P03
+# Versions — socle verrouillé et compléments par lot
 
 Vérifications réalisées les **7 et 8 novembre 2026**, dans les documentations officielles et les registres officiels. P00 a proposé les versions ci-dessous ; P01 les a installées et verrouillées pour les fondations effectivement présentes. P02 ajoute les primitives et utilitaires du système visuel. Preuves : `evidence/P01.md` et `evidence/P02.md`.
+
+## Images verrouillées et vérifiées en P20 — 9 novembre 2026
+
+La stack applicative P19 reste inchangée. Les [Dockerfiles web](../apps/web/Dockerfile) et [API](../apps/api/Dockerfile) et le [Compose de déploiement](../infra/compose/compose.deployment.yml) épinglent les références suivantes ; les digests sont ceux des manifestes/index OCI, distincts des IDs locaux des images applicatives construites.
+
+| Usage | Image exacte | Digest verrouillé |
+| --- | --- | --- |
+| Build et runtime web | `node:24.22.2-bookworm-slim` | `sha256:01d566e8d94d8c619591d78652babfccd3c6992a3dffa9ed5ab39e11cf6c70e9` |
+| Build API | `eclipse-temurin:21.0.13_9-jdk-noble` | `sha256:114cabb73033ca4ce7ceec3deb62396bc1b716282bae051ed3c1d82e38fcab2d` |
+| Runtime API | `eclipse-temurin:21.0.13_9-jre-noble` | `sha256:0eda5830ed7b669abc246a8dc520ea8a23cab06f9a8d4b6964109e2f2394e46f` |
+| PostgreSQL | `postgres:18.6` | `sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42` |
+| Entrée HTTPS | `caddy:2.11.9-alpine` | `sha256:0bbb055bda6793c999bde78b1b5ce3e89f829fb031af2cf50056ea1246559fee` |
+
+Sources primaires des images officielles : [Node](https://github.com/docker-library/official-images/blob/master/library/node), [Temurin](https://github.com/docker-library/official-images/blob/master/library/eclipse-temurin), [PostgreSQL](https://github.com/docker-library/official-images/blob/master/library/postgres), [Caddy](https://github.com/docker-library/official-images/blob/master/library/caddy). Le build API ajoute seulement dans son étape de construction le paquet Ubuntu Noble `unzip=6.0-28ubuntu4.1` pour utiliser la distribution ZIP Maven dont le checksum est verrouillé ; il n’est pas copié dans l’étape JRE. [Paquet officiel Ubuntu](https://packages.ubuntu.com/noble-updates/unzip).
+
+L’intégration P20 s’exécute sur le moteur Linux **Docker Engine 29.8.0** et **Compose 5.5.1** déjà présents, sans mise à jour d’outil ou nouvelle dépendance applicative. Sources : [notes Engine 29, dont 29.8.0](https://docs.docker.com/engine/release-notes/29/#2980), [release Compose 5.5.1](https://github.com/docker/compose/releases/tag/v5.5.1). Ce sont les versions observées, pas une affirmation qu’il s’agit des derniers correctifs disponibles ; la maintenance de l’hôte cible reste à vérifier avant P21.
+
+La [preuve P20](evidence/P20-integration-checks.json) identifie le commit et les IDs des deux images réellement démarrées, leur UID/GID 10001 et leur promotion locale recette/production sans reconstruction. Aucun `registryDigest` applicatif, push registre ou déploiement distant n’est revendiqué. L’inspection du système de fichiers final ne vaut pas scan de toutes les couches ou de vulnérabilités.
 
 ## Complément verrouillé en P10
 
@@ -135,7 +153,7 @@ P12 est validé localement avec intégration Stripe TEST observée ; aucun dépl
 
 Windows 11 Famille 64 bits, PowerShell 5.1.26100.9711 ; Docker Desktop 4.91.0, Engine 29.8.0 Linux x86_64, Compose 5.5.1. Le moteur répond ; aucun conteneur n’était lancé en P00. Git 2.53.0.windows.1 et ripgrep 15.2.0 sont disponibles. Voir les commandes et distinctions d’erreur dans [evidence/P00.md](evidence/P00.md).
 
-La liste suivante décrit les travaux identifiés en P00. Les points 1–5 sont maintenant couverts pour le socle P01 par les fichiers verrouillés et `evidence/P01.md`. Les composants shadcn et les images de production restent à introduire dans leurs lots :
+La liste suivante conserve les travaux identifiés en P00. Les points 1–5 ont ensuite été couverts pour le socle P01 par les fichiers verrouillés et `evidence/P01.md` ; les composants UI sont introduits en P02 et les images de déploiement sont maintenant documentées dans le complément P20 ci-dessus :
 
 1. Installer ou sélectionner les correctifs Node/npm et Java proposés sans écraser une installation utilisateur ; consigner les versions effectivement utilisées. Aucune mise à jour globale n’a été exécutée en P00.
 2. Épingler les dépendances directes exactes et résoudre un unique lockfile npm ; prouver une réinstallation par `npm.cmd ci`. Les commandes de livraison n’utiliseront pas de `latest` flottant.

@@ -23,13 +23,25 @@ Aucune migration automatique vers Supabase, Firebase, une autre identité ou des
 
 ## Une origine et deux applications
 
-Le navigateur appelle une seule origine HTTPS. Le reverse proxy dirige `/api/v1/**` vers Spring et les autres routes vers Next.js, sans retirer le préfixe attendu par Spring. Les médias peuvent provenir du fournisseur autorisé après délivrance d’un accès temporaire.
+Le navigateur appelle une seule origine HTTPS. En déploiement P20, Caddy transmet toutes les routes à Next.js ; le proxy Next relaie ensuite `/api/v1/**` vers Spring sans retirer le préfixe. Cette chaîne conserve les contrôles Basic de recette, d’origine et de CSRF appliqués par Next. Les médias peuvent provenir du fournisseur autorisé après délivrance d’un accès temporaire.
 
 En développement, un proxy local reproduit ce découpage. Éviter de transformer une mauvaise configuration de proxy en autorisation CORS universelle. PostgreSQL, les endpoints de gestion internes et les consoles de développement restent hors de l’exposition publique.
 
 État P04 : le Route Handler Next relaie GET/HEAD et les mutations de `/api/v1` vers l’origine interne validée, sans retirer le préfixe, sans suivre les redirections et en ne transmettant que le cookie `SESSION` nécessaire. Il préserve ETag, les erreurs structurées et les en-têtes CSRF/If-Match autorisés ; mutations limitées à 64 KiB avec contrôle d’origine. Le login passe par les filtres Spring, la session JDBC et CSRF réels. Le contrat OpenAPI et le SDK/types/transport TypeScript sont générés et vérifiables ; les wrappers valident les réponses réseau à l’exécution. Résultats dans [P04](evidence/P04.md).
 
 Next.js peut lire l’API sur une adresse interne configurée côté serveur. Il transmet seulement le cookie de session requis et les en-têtes explicitement nécessaires à cette API de confiance. Il ne relaie pas tous les cookies ou en-têtes vers une URL libre. Le navigateur utilise des URL relatives de même origine.
+
+### Images et infrastructure vérifiées localement en P20
+
+Les [Dockerfiles web](../apps/web/Dockerfile) et [API](../apps/api/Dockerfile) construisent une sortie Next standalone et un JAR Java 21 par étapes séparées, avec bases verrouillées par digest. Les processus applicatifs utilisent UID/GID 10001 ; Compose impose un système de fichiers en lecture seule, des espaces temporaires bornés, des sondes et des limites de ressources. Les entrées de build sont explicites et excluent les fichiers d’environnement de l’hôte. L’inspection du système de fichiers final ne constitue pas une analyse de toutes les couches, un SBOM ou un verdict de vulnérabilités.
+
+Le [Compose de déploiement](../infra/compose/compose.deployment.yml) sépare réseaux web, application et base ; seuls les ports Caddy sont publiés. Les secrets nécessaires sont montés comme fichiers puis lus par les points d’entrée, sans argument de build ou valeur `NEXT_PUBLIC`. Les origines, langues publiées et adresse API interne sont configurées à l’exécution. La même paire d’images locales a réellement servi les configurations HTTPS de recette puis de production, sans reconstruction ; la preuve distingue leurs IDs locaux d’un digest de registre, encore absent.
+
+La migration est une commande ponctuelle de la même image API : `migrate` lance Flyway sans Spring, worker ou seed, avec le rôle DDL `courses_owner`. Le processus `serve` utilise `courses_app`, Flyway désactivé et Hibernate en validation. La base isolée contient les 19 migrations attendues, aucun compte métier initial ; le rôle applicatif n’est ni superutilisateur ni autorisé à créer schéma ou base. Aucun changement de migration appliquée n’est introduit par P20.
+
+Le profil `staging` impose HTTPS et cookies Secure comme la production, mais conserve Basic et noindex. Seul `POST /api/v1/webhooks/stripe` traverse le garde Basic sans identifiants ; les variantes de chemin et autres mutations restent protégées. La recette P20 garde Stripe, commerce, médias, SMTP et workers désactivés : le refus 503 du webhook exact ne prouve donc aucune vérification HMAC ni nouveau paiement. Les contrôles TLS utilisent une autorité locale explicitement fournie au client de sonde ; une autorité non approuvée est refusée sans modifier la confiance du système.
+
+La [preuve d’intégration](evidence/P20-integration-checks.json) confirme également un export/restauration S3 dans deux buckets isolés et un véritable `pg_dump`/restore sur cible vide, avec sauvegarde authentifiée chiffrée et conservation d’un compte fictif et de ses préférences. La copie hors hôte n’est pas observée. Les limites distantes et procédures de publication/promotion par digests, migration et retour d’images compatibles sont dans [DEPLOYMENT.md](DEPLOYMENT.md), [deploy.md](runbooks/deploy.md) et [rollback.md](runbooks/rollback.md). Aucun registre publié, SSH, workflow GitHub ou déploiement distant n’est déduit de ces contrôles locaux ; les incidents d’accès [P12](evidence/P12-access-follow-up.md) et [P15](evidence/P15-access-follow-up.md) gardent la vente fermée.
 
 ## Authentification et autorisation
 

@@ -67,6 +67,14 @@ Dès Stripe activé, le bail doit couvrir `7 × (STRIPE_CONNECT_TIMEOUT + STRIPE
 
 ## Éléments externes encore nécessaires
 
+### Recette et production P20
+
+La configuration déployée utilise `infra/compose/deployment.env.example` et son équivalent staging, distincts du `.env.local` Windows. `WEB_IMAGE` et `API_IMAGE` sont des références de registre par digest ; `APP_PUBLIC_ORIGIN`, langue par défaut et langues publiables sont lues à l’exécution. Aucun domaine de recette ni credential n’est intégré au build. Les exemples `.invalid` et images vides sont refusés jusqu’à renseignement réel.
+
+`SECRETS_DIR` désigne un répertoire Linux absolu privé0700. Fichiers requis : `postgres-admin-password`, `postgres-owner-password`, `postgres-app-password`, `outbox-key` ; ajouter `staging-basic-password` en recette. Valeurs sans retour ligne, au moins24 octets ; outbox :32 octets aléatoires encodés en base64. Les fichiers peuvent être0444 dans ce répertoire0700 pour les UID différents des conteneurs ; les montages sont en lecture seule. Un changement de fichier mot de passe PostgreSQL ne change pas celui d’un rôle déjà créé : appliquer une rotation coordonnée, jamais supprimer le volume.
+
+Le bootstrap PostgreSQL reçoit les mots de passe des rôles ; le migrateur ne reçoit que celui du propriétaire et l’API que celui du rôle applicatif et la clé outbox. Le web reçoit uniquement Basic en staging. Les entrées serveur lisent ces fichiers `/run/secrets/*` sans afficher leur contenu. Compose ne transmet aucune clé Stripe/S3/SMTP par défaut : ces intégrations et tous les workers sont désactivés dans cette candidate privée. L’activation future exige les fournisseurs, secrets limités et décisions commerciales concernés ; elle ne se déduit pas du bon fonctionnement des images. Voir [déploiement](runbooks/deploy.md) et [reprise](runbooks/backup-restore.md).
+
 Domaine, hébergement autorisé, fournisseurs et secrets de recette/production, expéditeur vérifié, contenus et traductions relus, médias annoncés, identité légale, prix et conditions de chaque offre, langues vendues et support. Ces éléments ne bloquent pas les fondations locales ; leur absence interdira de déclarer fonctionnels l’intégration externe ou le lancement correspondant.
 
 Les limites techniques locales de fichiers/notifications sont explicites dans DEPLOYMENT. Durée d’accès, fiscalité, garanties, actualisations et support commerciaux restent à renseigner par offre ; les instantanés de commande conservent les paramètres acceptés, sans constituer une preuve de paiement.

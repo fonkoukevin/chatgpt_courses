@@ -56,6 +56,8 @@ Ce contrôle valide la structure, expressions, jobs, runners et entrées d’act
 
 ## Sources officielles vérifiées
 
+P20 ajoute [deploy.yml](../.github/workflows/deploy.yml) séparément, déclenchable uniquement par dispatch manuel, sans modifier les jobs ni les contrôles de `ci.yml`. Plan, publication, déploiement et retour d’images sont des opérations explicites ; aucune PR, push ou exécution planifiée ne déploie. L’environnement préexistant et sa branche protégée sont contrôlés, les secrets sont limités aux étapes concernées et les déploiements concurrents sont sérialisés. Les trois actions réemploient les SHA ci-dessous, relus le9novembre2026 ; actionlint et tests purs sont locaux. Aucun run GitHub, registre ou SSH n’est observé. Préconditions et limites API des protections : [runbook](runbooks/deploy.md).
+
 Les cinq tags ont été résolus sur leurs dépôts officiels par `git ls-remote`; le workflow utilise les commits complets, pas les tags mobiles.
 
 | Action | Version | Commit |

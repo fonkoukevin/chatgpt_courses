@@ -1,0 +1,14 @@
+{
+  "verifiedAt": "2026-11-09T13:38:52.964Z",
+  "developmentRestored": true,
+  "listenerRestored": true,
+  "listenerMode": "TEST",
+  "listenerApiVersion": "2026-10-28.endive",
+  "privateSettingsPreserved": true,
+  "userNextEnvironmentPreserved": true,
+  "developmentSupervisorPid": 154344,
+  "listenerSupervisorPid": 150448,
+  "listenerChildPid": 150940,
+  "liveOwnedProcessesConfirmed": true,
+  "secretsPrinted": false
+}

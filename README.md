@@ -586,3 +586,28 @@ La recette fournisseur est distincte et nécessite la configuration privée Stri
 Elle prépare deux offres fictives réservées à la recette : achat individuel100 centimesEUR, pack200 centimesEUR, puis deux remboursements du pack de100 centimes. Ces montants ne constituent aucun prix commercial. Les événements réels, confirmations et rejeux sont contrôlés côté serveur. Le harness n’enregistre ni carte, formulaire, DOM ou URL Checkout complète ; les erreurs fournisseur sont remplacées par des codes stables en conservant l’état d’échec. Le nettoyage expire seulement les sessions propres ouvertes et impayées ; il ne rembourse jamais automatiquement un paiement. Aucun résultat externe n’est déduit des fixtures. À la fin, relancer `dev` et le listener TEST existant si ceux-ci avaient été arrêtés.
 
 Les anciens incidents d’accès et les conditions commerciales encore ouvertes restent dans STATUS. Une recette technique réussie ne publie pas les contenus, ne crée pas de rôle dans la base partagée et n’active pas la vente.
+
+## P20 — Images et préparation de la production
+
+Les [Dockerfiles web](apps/web/Dockerfile) et [API](apps/api/Dockerfile) produisent un serveur Next standalone et un JRE Java21, avec bases par digest et utilisateur10001. La configuration de recette/production reste à l’exécution ; le navigateur utilise `/api/v1` relatif. Le [Compose](infra/compose/compose.deployment.yml) expose seulement Caddy, puis relaie Caddy→Next→Spring. PostgreSQL possède des rôles distincts pour migration et application. Le serveur ne reconstruit rien au redémarrage.
+
+Pour reconstruire localement depuis un commit dont les entrées d’images sont propres, sous Windows natif avec Docker Linux démarré :
+
+```powershell
+$releaseCommit = git rev-parse HEAD
+.\scripts\courses.cmd run images:build -- --commit $releaseCommit --output .runtime/p20-images.json
+.\scripts\courses.cmd run verify:infrastructure -- --images .runtime/p20-images.json
+```
+
+Ces commandes ont réellement construit puis exécuté les images en P20. La seconde crée ses propres projets, ports et volumes isolés, vérifie HTTPS avec une CA locale réservée au client de test, migrations, cookies/CSRF, promotion des mêmes images, sauvegarde/restauration PostgreSQL/S3 et alertes locales. Elle retire seulement ses ressources neuves identifiées ; aucun volume de développement n’est réinitialisé. Les fixtures, clés aléatoires et journaux restent privés dans `.runtime`. Ni publication au registre ni cible distante ne sont impliquées. Détails, digests locaux et limites : [P20](docs/evidence/P20.md).
+
+Sur une **cible Linux autorisée**, utiliser Node24.22.2 et les commandes Linux des runbooks, sans copier les outils `.tools` Windows. Préparer une configuration distincte à partir de [deployment.env.example](infra/compose/deployment.env.example) ou [staging.env.example](infra/compose/staging.env.example) ; les exemples sont volontairement incomplets. Leurs secrets sont des fichiers privés séparés, jamais `.env.local` du développeur. Après renseignement réel :
+
+```sh
+npm run deployment:validate -- --env-file /chemin/prive/deployment.env --environment staging --project courses-staging
+node scripts/deployment/smoke.mjs --origin https://DOMAINE_REEL --basic-username IDENTIFIANT --basic-password-file /chemin/prive/staging-basic-password
+```
+
+Ces deux commandes de cible sont **préparées**, pas exécutées sur un serveur distant. Le domaine et les chemins sont à remplacer. Le validateur exige des images de registre par digest et refuse les secrets inline et les mauvais projets/origines. La sonde exige un certificat TLS valide ; aucune désactivation de TLS n’est prévue.
+
+Procédures : [déploiement et publication manuels](docs/runbooks/deploy.md), [sauvegarde/restauration](docs/runbooks/backup-restore.md), [incident et surveillance](docs/runbooks/incident-monitoring.md), [retour d’images](docs/runbooks/rollback.md). Le [workflow manuel](.github/workflows/deploy.yml) conserve les contrôles CI et emploie les secrets de l’environnement choisi. Il n’a pas été exécuté sur GitHub. Aucun registre, hôte, DNS, sauvegarde hors hôte ou canal d’alerte n’est actuellement raccordé. P21 requiert ces accès et la cible de recette autorisée ; commerce et Stripe restent fermés dans les piles préparées.

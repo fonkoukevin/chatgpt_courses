@@ -115,6 +115,10 @@ Les décisions commerciales du tableau restent ouvertes. Une candidate technique
 
 ## Registre à maintenir
 
+Choix techniques P20 : images multi-étapes verrouillées, Linux/amd64 réellement essayé, Next standalone optionnel au build Docker et JRE21 sans outil de compilation. La chaîne publique devient Caddy→Next→Spring afin de conserver le garde Basic staging existant sur toutes les routes ; le préfixe API et l’exception exacte du webhook restent inchangés. Aucune confiance Cloudflare/CDN n’est ajoutée. Les domaines/langues sont des paramètres serveur à l’exécution, testés avec les mêmes images.
+
+Flyway s’exécute une fois avec le rôle propriétaire avant le serveur en Hibernate validate/rôle applicatif sans DDL. Les sauvegardes logiques et objets sont chiffrés avec AES256-GCM ; la clé outbox est incluse chiffrée et la clé de sauvegarde reste séparée. L’export S3 de test n’est pas un choix de fournisseur de production. Les propositions de cadence, rétention, RPO/RTO des runbooks attendent validation ; aucun SLA ni budget n’est décidé. Le registre, les accès SSH, la copie hors hôte et le canal d’alerte restent à fournir pour P21. [Résultats et frontières](evidence/P20.md).
+
 | Date | Sujet | Décision ou hypothèse | Motif et preuve | Impact | Auteur/validation |
 | --- | --- | --- | --- | --- | --- |
 | 2026-11-07 | Kit initial | Choix techniques proposés ci-dessus | Cahier et demande de développement Codex | P00–P23 | À confronter au dépôt en P00 |

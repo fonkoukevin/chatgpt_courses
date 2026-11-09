@@ -49,6 +49,8 @@ tags:
     description: Assistance persistée et pièces choisies ; notification email indépendante.
   - name: Attestations
     description: Participation déclarée, preuves et documents HTML immuables du propriétaire.
+  - name: Operations
+    description: Exploitation autorisée, assistance interne et métriques issues des faits serveur.
 paths:
   /system/health:
     get:
@@ -7603,6 +7605,1126 @@ paths:
                   - nosniff
           content:
             text/html:
+              schema:
+                type: string
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/operations/dashboard:
+    get:
+      operationId: getOperationsDashboard
+      tags:
+        - Operations
+      summary: get Operations Dashboard.
+      description: >-
+        operations.read. Fenêtre [from,to), durée≤366jours. Compteurs sources protégés séparément ;
+        backlog = état courant des objets créés dans la période.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: from
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UtcInstant'
+        - name: to
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UtcInstant'
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationsDashboard'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/orders:
+    get:
+      operationId: listAdminOrders
+      tags:
+        - Operations
+      summary: list Admin Orders.
+      description: >-
+        commerce.orders.admin.read. Montants et instantanés réellement enregistrés, sans total
+        multi-devise.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: from
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UtcInstant'
+        - name: to
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UtcInstant'
+        - name: paymentStatus
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 60
+        - name: fulfillmentStatus
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 60
+        - name: offerId
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: currency
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - EUR
+              - USD
+              - GBP
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminOrderPage'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/orders/{orderId}:
+    get:
+      operationId: getAdminOrder
+      tags:
+        - Operations
+      summary: get Admin Order.
+      description: commerce.orders.admin.read. Instantané historique, paiement, activation et origines séparés.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminOrderDetail'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/orders/{orderId}/reconciliation-requests:
+    post:
+      operationId: requestOrderReconciliation
+      tags:
+        - Operations
+      summary: request Order Reconciliation.
+      description: >-
+        payments.events.retry. Révision commande contrôlée sous verrou, enregistre/réutilise la
+        réconciliation P12 ; aucun createCheckout ni paiement forcé.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestOrderReconciliation'
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationReceipt'
+        '202':
+          description: Travail enregistré ; aucun succès fournisseur anticipé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationReceipt'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/incidents:
+    get:
+      operationId: listOperationsIncidents
+      tags:
+        - Operations
+      summary: list Operations Incidents.
+      description: >-
+        operations.incidents.read et permissions source. Les travaux normalement PENDING ne deviennent
+        pas des incidents.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: from
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UtcInstant'
+        - name: to
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UtcInstant'
+        - name: kind
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - NOTIFICATION
+              - PAYMENT_EVENT
+              - PAYMENT_RECONCILIATION
+              - CHECKOUT_OPERATION
+              - REFUND_OPERATION
+              - REFUND_RECONCILIATION
+        - name: state
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 60
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncidentPage'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/incidents/{kind}/{id}/retry:
+    post:
+      operationId: retryOperationsIncident
+      tags:
+        - Operations
+      summary: retry Operations Incident.
+      description: >-
+        Permissions de lecture et reprise source requises. Délégation aux services existants ; cas non
+        sûrs non reprenables. Email INDETERMINATE exige ackDuplicate=true.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: kind
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - NOTIFICATION
+              - PAYMENT_EVENT
+              - PAYMENT_RECONCILIATION
+              - CHECKOUT_OPERATION
+              - REFUND_OPERATION
+              - REFUND_RECONCILIATION
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetryIncident'
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationReceipt'
+        '202':
+          description: Travail enregistré ; aucun succès fournisseur anticipé.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationReceipt'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/audit:
+    get:
+      operationId: listOperationsAudit
+      tags:
+        - Operations
+      summary: list Operations Audit.
+      description: >-
+        operations.audit.read. Métadonnées seules ; aucune note privée, charge externe, URL signée,
+        token ou ancienne raison libre.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: from
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UtcInstant'
+        - name: to
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UtcInstant'
+        - name: source
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 60
+        - name: action
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100
+        - name: actorId
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: objectId
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditPage'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/support-assignees:
+    get:
+      operationId: listSupportAssignees
+      tags:
+        - Operations
+      summary: list Support Assignees.
+      description: support.assign. Comptes actifs et éligibles uniquement, sans email.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportAssigneePage'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/support-tickets/{ticketId}/assignment:
+    get:
+      operationId: getSupportAssignment
+      tags:
+        - Operations
+      summary: get Support Assignment.
+      description: support.admin.read. Révision virtuelle0 si non affecté.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportAssignmentView'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    put:
+      operationId: assignSupportTicket
+      tags:
+        - Operations
+      summary: assign Support Ticket.
+      description: >-
+        support.assign. ETag support-assignment-{ticketId}-r{revision}. Cible active éligible vérifiée
+        côté serveur ; null désaffecte.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignSupport'
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportAssignmentView'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/support-tickets/{ticketId}/reply-draft:
+    get:
+      operationId: getSupportReplyDraft
+      tags:
+        - Operations
+      summary: get Support Reply Draft.
+      description: support.drafts. Brouillon de l’opérateur courant uniquement.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportDraftView'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    put:
+      operationId: saveSupportReplyDraft
+      tags:
+        - Operations
+      summary: save Support Reply Draft.
+      description: >-
+        support.drafts. If-Match support-draft-{ticketId}-{authorId}-r{revision}. Aucune publication
+        implicite.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveSupportDraft'
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportDraftView'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/support-tickets/{ticketId}/reply-draft/publications:
+    post:
+      operationId: publishSupportReplyDraft
+      tags:
+        - Operations
+      summary: publish Support Reply Draft.
+      description: >-
+        support.reply et support.drafts. If-Match du brouillon et révision exacte du ticket ; 412 si
+        dépassé,409 si non publiable. Publication/outbox atomiques, réponse sans faux ETag composite.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublishSupportDraft'
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublishedSupportReply'
+        '201':
+          description: Création persistée.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublishedSupportReply'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/support-tickets/{ticketId}/internal-notes:
+    get:
+      operationId: listSupportInternalNotes
+      tags:
+        - Operations
+      summary: list Support Internal Notes.
+      description: Permissions internes spécifiques, aucun accès propriétaire automatique.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalNotePage'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    post:
+      operationId: addSupportInternalNote
+      tags:
+        - Operations
+      summary: add Support Internal Note.
+      description: >-
+        support.internal.write. Note append-only strictement interne, jamais ajoutée à la conversation
+        propriétaire.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddInternalNote'
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalNote'
+        '201':
+          description: Création persistée.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalNote'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/support-tickets/{ticketId}/time-entries:
+    get:
+      operationId: listSupportSupportTimeEntrys
+      tags:
+        - Operations
+      summary: list Support Support Time Entrys.
+      description: Permissions internes spécifiques, aucun accès propriétaire automatique.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportTimePage'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    post:
+      operationId: addSupportSupportTimeEntry
+      tags:
+        - Operations
+      summary: add Support Support Time Entry.
+      description: >-
+        support.time.write. Entrée append-only ; absence inconnue, 0 explicitement saisi est connu ;
+        aucune conversion monétaire.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordSupportTime'
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportTimeEntry'
+        '201':
+          description: Création persistée.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportTimeEntry'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/content-cases:
+    get:
+      operationId: listContentCases
+      tags:
+        - Operations
+      summary: list Content Cases.
+      description: content.cases.read. Dossiers liés à une identité/version/traduction exactes.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: from
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UtcInstant'
+        - name: to
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UtcInstant'
+        - name: state
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - OPEN
+              - IN_PROGRESS
+              - RESOLVED
+              - DISMISSED
+        - name: resourceId
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentCasePage'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    post:
+      operationId: createContentCase
+      tags:
+        - Operations
+      summary: create Content Case.
+      description: >-
+        content.cases.manage. Métadonnées uniquement, ticket autorisé facultatif ; aucun texte de
+        support copié automatiquement.
+      security:
+        - SessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateContentCase'
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentCaseView'
+        '201':
+          description: Création persistée.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentCaseView'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/content-cases/{caseId}:
+    get:
+      operationId: getContentCase
+      tags:
+        - Operations
+      summary: get Content Case.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: caseId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentCaseView'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    patch:
+      operationId: updateContentCase
+      tags:
+        - Operations
+      summary: update Content Case.
+      description: >-
+        content.cases.manage. If-Match content-case-{id}-r{revision}. RESOLVED exige une révision
+        corrigée réellement publiée et disponible de la même identité/langue, différente de la source ;
+        aucune publication CMS ou copie personnelle modifiée par cette action.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: caseId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+        - $ref: '#/components/parameters/IfMatch'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateContentCase'
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentCaseView'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/content-cases/{caseId}/events:
+    get:
+      operationId: listContentCaseEvents
+      tags:
+        - Operations
+      summary: list Content Case Events.
+      description: ''
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: caseId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentCaseEventPage'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/metrics:
+    get:
+      operationId: getOperationsMetrics
+      tags:
+        - Operations
+      summary: get Operations Metrics.
+      description: >-
+        operations.metrics.read. Définitions, unités, dates, déduplication, dénominateurs et limites
+        exposés. Toutes les devises restent séparées.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: from
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UtcInstant'
+        - name: to
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UtcInstant'
+        - name: currency
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - EUR
+              - USD
+              - GBP
+      responses:
+        '200':
+          description: Résultat réel, éventuellement retrouvé par rejeu idempotent.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationsMetrics'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/metrics/export:
+    get:
+      operationId: exportOperationsMetrics
+      tags:
+        - Operations
+      summary: Exporter les agrégats réels avec les mêmes filtres.
+      description: >-
+        operations.metrics.read ET operations.metrics.export. CSV UTF8 réel ≤1MiB, agrégats et
+        définitions uniquement. Aucun export de données privées ; cellules protégées contre les
+        formules.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: from
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UtcInstant'
+        - name: to
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/UtcInstant'
+        - name: currency
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - EUR
+              - USD
+              - GBP
+      responses:
+        '200':
+          description: >-
+            Fichier CSV effectivement produit. Le proxy vérifie les octets, leur taille et SHA256.
+            X-Content-Size porte la taille décodée attendue ; Content-Length dépend du transport.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            Content-Disposition:
+              schema:
+                type: string
+                minLength: 1
+                maxLength: 200
+            Content-Length:
+              description: Présent côté Spring, peut être retiré par le transport Next.
+              schema:
+                type: integer
+                minimum: 1
+                maximum: 1048576
+            X-Content-Size:
+              description: Taille des octets CSV décodés vérifiés par le proxy public.
+              schema:
+                type: integer
+                minimum: 1
+                maximum: 1048576
+            X-Content-SHA256:
+              schema:
+                type: string
+                pattern: ^[a-f0-9]{64}$
+          content:
+            text/csv:
               schema:
                 type: string
         default:
@@ -15646,6 +16768,1171 @@ components:
           items:
             $ref: '#/components/schemas/AttestationEnrollment'
           minItems: 0
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    OperationsPeriod:
+      type: object
+      additionalProperties: false
+      required:
+        - from
+        - to
+      properties:
+        from:
+          $ref: '#/components/schemas/UtcInstant'
+        to:
+          $ref: '#/components/schemas/UtcInstant'
+    DashboardCounter:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - value
+        - availability
+        - unavailableReason
+      properties:
+        code:
+          type: string
+          enum:
+            - ORDERS_CREATED
+            - PAYMENTS_CONFIRMED
+            - ACTIVATIONS_READY
+            - REFUND_REQUESTS_OPEN
+            - INCIDENTS_OPEN
+            - SUPPORT_OPEN
+            - CONTENT_CASES_OPEN
+        value:
+          anyOf:
+            - type: string
+              pattern: ^-?[0-9]+$
+              maxLength: 100
+            - type: 'null'
+        availability:
+          type: string
+          enum:
+            - AVAILABLE
+            - FORBIDDEN
+            - UNKNOWN
+        unavailableReason:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 120
+            - type: 'null'
+    OperationsDashboard:
+      type: object
+      additionalProperties: false
+      required:
+        - period
+        - generatedAt
+        - counters
+      properties:
+        period:
+          $ref: '#/components/schemas/OperationsPeriod'
+        generatedAt:
+          $ref: '#/components/schemas/UtcInstant'
+        counters:
+          type: array
+          items:
+            $ref: '#/components/schemas/DashboardCounter'
+          maxItems: 7
+    AdminOrderSummary:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - ownerId
+        - revision
+        - offerId
+        - title
+        - total
+        - orderStatus
+        - paymentStatus
+        - fulfillmentStatus
+        - createdAt
+        - paidAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        ownerId:
+          $ref: '#/components/schemas/UUID'
+        revision:
+          $ref: '#/components/schemas/Revision'
+        offerId:
+          $ref: '#/components/schemas/UUID'
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        total:
+          $ref: '#/components/schemas/Money'
+        orderStatus:
+          type: string
+          minLength: 1
+          maxLength: 60
+        paymentStatus:
+          type: string
+          minLength: 1
+          maxLength: 60
+        fulfillmentStatus:
+          type: string
+          minLength: 1
+          maxLength: 60
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+        paidAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+    OrderOrigin:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - orderResourceId
+        - resourceId
+        - versionId
+        - versionNumber
+        - locales
+        - state
+        - startsAt
+        - expiresAt
+        - revokedAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        orderResourceId:
+          $ref: '#/components/schemas/UUID'
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        versionId:
+          $ref: '#/components/schemas/UUID'
+        versionNumber:
+          type: integer
+          minimum: 1
+          maximum: 2147483647
+        locales:
+          type: array
+          items:
+            $ref: '#/components/schemas/Locale'
+          maxItems: 2
+        state:
+          type: string
+          minLength: 1
+          maxLength: 60
+        startsAt:
+          $ref: '#/components/schemas/UtcInstant'
+        expiresAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+        revokedAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+    PaymentReference:
+      type: object
+      additionalProperties: false
+      required:
+        - operationId
+        - operationState
+        - sessionId
+        - paymentIntentId
+        - lastErrorCode
+      properties:
+        operationId:
+          $ref: '#/components/schemas/UUID'
+        operationState:
+          type: string
+          minLength: 1
+          maxLength: 60
+        sessionId:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 255
+            - type: 'null'
+        paymentIntentId:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 255
+            - type: 'null'
+        lastErrorCode:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 120
+            - type: 'null'
+    AdminOrderDetail:
+      type: object
+      additionalProperties: false
+      required:
+        - ownerId
+        - order
+        - orderRevisionTag
+        - payment
+        - origins
+        - confirmedRefundedMinor
+        - reservedRefundMinor
+        - refundReviewRequired
+        - canReconcile
+      properties:
+        ownerId:
+          $ref: '#/components/schemas/UUID'
+        order:
+          $ref: '#/components/schemas/OrderView'
+        orderRevisionTag:
+          type: string
+          minLength: 1
+          maxLength: 200
+        payment:
+          anyOf:
+            - $ref: '#/components/schemas/PaymentReference'
+            - type: 'null'
+        origins:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderOrigin'
+          maxItems: 1000
+        confirmedRefundedMinor:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+        reservedRefundMinor:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+        refundReviewRequired:
+          type: boolean
+        canReconcile:
+          type: boolean
+      description: >-
+        Instantané acheté P11 réutilisé. Aucun secret, carte, adresse Checkout ou production privée.
+        orderRevisionTag concerne uniquement la sous-ressource commande ; la réponse composite ne
+        prétend pas avoir un ETag fort.
+    RequestOrderReconciliation:
+      type: object
+      additionalProperties: false
+      required:
+        - reason
+        - expectedOrderRevision
+      properties:
+        reason:
+          type: string
+          enum:
+            - PROVIDER_RECOVERED
+            - MANUAL_RECONCILIATION
+        expectedOrderRevision:
+          $ref: '#/components/schemas/Revision'
+    OperationReceipt:
+      type: object
+      additionalProperties: false
+      required:
+        - actionId
+        - kind
+        - targetId
+        - state
+        - recordedAt
+        - replayed
+      properties:
+        actionId:
+          $ref: '#/components/schemas/UUID'
+        kind:
+          type: string
+          minLength: 1
+          maxLength: 60
+        targetId:
+          $ref: '#/components/schemas/UUID'
+        state:
+          type: string
+          minLength: 1
+          maxLength: 60
+        recordedAt:
+          $ref: '#/components/schemas/UtcInstant'
+        replayed:
+          type: boolean
+    IncidentSummary:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - kind
+        - state
+        - lastErrorCode
+        - orderId
+        - operationId
+        - createdAt
+        - updatedAt
+        - nextAttemptAt
+        - canRetry
+        - retryUnavailableReason
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        kind:
+          type: string
+          enum:
+            - NOTIFICATION
+            - PAYMENT_EVENT
+            - PAYMENT_RECONCILIATION
+            - CHECKOUT_OPERATION
+            - REFUND_OPERATION
+            - REFUND_RECONCILIATION
+        state:
+          type: string
+          minLength: 1
+          maxLength: 60
+        lastErrorCode:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 120
+            - type: 'null'
+        orderId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        operationId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+        updatedAt:
+          $ref: '#/components/schemas/UtcInstant'
+        nextAttemptAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+        canRetry:
+          type: boolean
+        retryUnavailableReason:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 120
+            - type: 'null'
+    RetryIncident:
+      type: object
+      additionalProperties: false
+      required:
+        - reason
+        - ackDuplicate
+      properties:
+        reason:
+          type: string
+          enum:
+            - PROVIDER_RECOVERED
+            - MANUAL_RECONCILIATION
+            - SMTP_RECOVERED
+            - MANUAL_RETRY
+        ackDuplicate:
+          type: boolean
+    AuditEvent:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - source
+        - actorId
+        - action
+        - objectType
+        - objectId
+        - reasonCode
+        - result
+        - occurredAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        source:
+          type: string
+          minLength: 1
+          maxLength: 60
+        actorId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        action:
+          type: string
+          minLength: 1
+          maxLength: 100
+        objectType:
+          type: string
+          minLength: 1
+          maxLength: 60
+        objectId:
+          $ref: '#/components/schemas/UUID'
+        reasonCode:
+          type: string
+          minLength: 1
+          maxLength: 100
+        result:
+          type: string
+          minLength: 1
+          maxLength: 60
+        occurredAt:
+          $ref: '#/components/schemas/UtcInstant'
+    SupportAssignmentView:
+      type: object
+      additionalProperties: false
+      required:
+        - ticketId
+        - revision
+        - assigneeId
+        - updatedAt
+      properties:
+        ticketId:
+          $ref: '#/components/schemas/UUID'
+        revision:
+          $ref: '#/components/schemas/Revision'
+        assigneeId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        updatedAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+    AssignSupport:
+      type: object
+      additionalProperties: false
+      required:
+        - assigneeId
+        - reason
+      properties:
+        assigneeId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    SupportAssignee:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - displayName
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        displayName:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 120
+            - type: 'null'
+    SupportDraftView:
+      type: object
+      additionalProperties: false
+      required:
+        - ticketId
+        - authorId
+        - revision
+        - text
+        - state
+        - publishedMessageId
+        - updatedAt
+      properties:
+        ticketId:
+          $ref: '#/components/schemas/UUID'
+        authorId:
+          $ref: '#/components/schemas/UUID'
+        revision:
+          $ref: '#/components/schemas/Revision'
+        text:
+          type: string
+          minLength: 0
+          maxLength: 8000
+        state:
+          type: string
+          enum:
+            - EMPTY
+            - DRAFT
+            - PUBLISHED
+        publishedMessageId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        updatedAt:
+          anyOf:
+            - $ref: '#/components/schemas/UtcInstant'
+            - type: 'null'
+      description: >-
+        Brouillon privé par opérateur. EMPTY virtuel révision0 sans date. Sauvegarder ne publie aucun
+        message et n’envoie aucun email.
+    SaveSupportDraft:
+      type: object
+      additionalProperties: false
+      required:
+        - text
+      properties:
+        text:
+          type: string
+          minLength: 0
+          maxLength: 8000
+    PublishSupportDraft:
+      type: object
+      additionalProperties: false
+      required:
+        - expectedTicketRevision
+        - reason
+      properties:
+        expectedTicketRevision:
+          $ref: '#/components/schemas/Revision'
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    PublishedSupportReply:
+      type: object
+      additionalProperties: false
+      required:
+        - ticket
+        - message
+        - draft
+      properties:
+        ticket:
+          $ref: '#/components/schemas/SupportTicketView'
+        message:
+          $ref: '#/components/schemas/SupportMessageView'
+        draft:
+          $ref: '#/components/schemas/SupportDraftView'
+      description: >-
+        Publication explicite atomique via le service Support/outbox P10-P14 ; PENDING ne signifie pas
+        email envoyé. Même clé et corps retrouvent la publication sans doublon.
+    InternalNote:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - ticketId
+        - authorId
+        - text
+        - createdAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        ticketId:
+          $ref: '#/components/schemas/UUID'
+        authorId:
+          $ref: '#/components/schemas/UUID'
+        text:
+          type: string
+          minLength: 1
+          maxLength: 4000
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+    AddInternalNote:
+      type: object
+      additionalProperties: false
+      required:
+        - text
+      properties:
+        text:
+          type: string
+          minLength: 1
+          maxLength: 4000
+    SupportTimeEntry:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - ticketId
+        - authorId
+        - minutes
+        - reason
+        - createdAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        ticketId:
+          $ref: '#/components/schemas/UUID'
+        authorId:
+          $ref: '#/components/schemas/UUID'
+        minutes:
+          type: integer
+          minimum: 0
+          maximum: 1440
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+    RecordSupportTime:
+      type: object
+      additionalProperties: false
+      required:
+        - minutes
+        - reason
+      properties:
+        minutes:
+          type: integer
+          minimum: 0
+          maximum: 1440
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    ContentCaseView:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - revision
+        - ticketId
+        - resourceId
+        - versionId
+        - sourceRevisionId
+        - translationId
+        - locale
+        - title
+        - state
+        - assigneeId
+        - correctedRevisionId
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        revision:
+          $ref: '#/components/schemas/Revision'
+        ticketId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        versionId:
+          $ref: '#/components/schemas/UUID'
+        sourceRevisionId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        translationId:
+          $ref: '#/components/schemas/UUID'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        title:
+          type: string
+          minLength: 1
+          maxLength: 240
+        state:
+          type: string
+          enum:
+            - OPEN
+            - IN_PROGRESS
+            - RESOLVED
+            - DISMISSED
+        assigneeId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        correctedRevisionId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+        updatedAt:
+          $ref: '#/components/schemas/UtcInstant'
+    CreateContentCase:
+      type: object
+      additionalProperties: false
+      required:
+        - ticketId
+        - resourceId
+        - versionId
+        - sourceRevisionId
+        - locale
+        - reason
+      properties:
+        ticketId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        resourceId:
+          $ref: '#/components/schemas/UUID'
+        versionId:
+          $ref: '#/components/schemas/UUID'
+        sourceRevisionId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        locale:
+          $ref: '#/components/schemas/Locale'
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    UpdateContentCase:
+      type: object
+      additionalProperties: false
+      required:
+        - state
+        - assigneeId
+        - correctedRevisionId
+        - reason
+      properties:
+        state:
+          type: string
+          enum:
+            - OPEN
+            - IN_PROGRESS
+            - RESOLVED
+            - DISMISSED
+        assigneeId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        correctedRevisionId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    ContentCaseEvent:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - caseId
+        - actorId
+        - action
+        - reason
+        - correctedRevisionId
+        - createdAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        caseId:
+          $ref: '#/components/schemas/UUID'
+        actorId:
+          $ref: '#/components/schemas/UUID'
+        action:
+          type: string
+          minLength: 1
+          maxLength: 100
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        correctedRevisionId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        createdAt:
+          $ref: '#/components/schemas/UtcInstant'
+    MetricDefinition:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - unit
+        - source
+        - dateField
+        - deduplication
+        - denominator
+        - coverage
+        - limitation
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 100
+        unit:
+          type: string
+          minLength: 1
+          maxLength: 60
+        source:
+          type: string
+          minLength: 1
+          maxLength: 300
+        dateField:
+          type: string
+          minLength: 1
+          maxLength: 200
+        deduplication:
+          type: string
+          minLength: 1
+          maxLength: 400
+        denominator:
+          type: string
+          minLength: 1
+          maxLength: 300
+        coverage:
+          type: string
+          minLength: 1
+          maxLength: 1000
+        limitation:
+          type: string
+          minLength: 0
+          maxLength: 2000
+    CountMetric:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - value
+        - availability
+        - unavailableReason
+        - definition
+      properties:
+        code:
+          type: string
+          enum:
+            - USEFUL_VISITS
+            - ACTIVITY_STARTED
+            - PERSONAL_REVISIONS_SAVED
+            - CHECKOUT_STARTED
+            - PAYMENT_CONFIRMED
+            - ACCESS_GRANTED
+            - DECLARED_COMPLETION
+            - REFUND_CONFIRMED
+        value:
+          anyOf:
+            - type: string
+              pattern: ^-?[0-9]+$
+              maxLength: 100
+            - type: 'null'
+        availability:
+          type: string
+          enum:
+            - AVAILABLE
+            - PARTIAL
+            - UNKNOWN
+        unavailableReason:
+          anyOf:
+            - type: string
+              minLength: 1
+              maxLength: 120
+            - type: 'null'
+        definition:
+          $ref: '#/components/schemas/MetricDefinition'
+    CurrencyMetrics:
+      type: object
+      additionalProperties: false
+      required:
+        - currency
+        - grossPaidMinor
+        - confirmedRefundedMinor
+        - netCollectedBeforeCostsMinor
+        - taxesMinor
+        - feesMinor
+        - variableCostsMinor
+        - supportCostMinor
+        - estimatedContributionMinor
+        - unknownReasons
+      properties:
+        currency:
+          type: string
+          enum:
+            - EUR
+            - USD
+            - GBP
+        grossPaidMinor:
+          type: string
+          pattern: ^-?[0-9]+$
+          maxLength: 100
+        confirmedRefundedMinor:
+          type: string
+          pattern: ^-?[0-9]+$
+          maxLength: 100
+        netCollectedBeforeCostsMinor:
+          type: string
+          pattern: ^-?[0-9]+$
+          maxLength: 100
+        taxesMinor:
+          anyOf:
+            - type: string
+              pattern: ^-?[0-9]+$
+              maxLength: 100
+            - type: 'null'
+        feesMinor:
+          anyOf:
+            - type: string
+              pattern: ^-?[0-9]+$
+              maxLength: 100
+            - type: 'null'
+        variableCostsMinor:
+          anyOf:
+            - type: string
+              pattern: ^-?[0-9]+$
+              maxLength: 100
+            - type: 'null'
+        supportCostMinor:
+          anyOf:
+            - type: string
+              pattern: ^-?[0-9]+$
+              maxLength: 100
+            - type: 'null'
+        estimatedContributionMinor:
+          anyOf:
+            - type: string
+              pattern: ^-?[0-9]+$
+              maxLength: 100
+            - type: 'null'
+        unknownReasons:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 120
+          maxItems: 20
+    OperationsMetrics:
+      type: object
+      additionalProperties: false
+      required:
+        - period
+        - generatedAt
+        - revisionTrackingSince
+        - counts
+        - currencies
+        - recordedSupportMinutes
+        - supportMinutesAvailability
+      properties:
+        period:
+          $ref: '#/components/schemas/OperationsPeriod'
+        generatedAt:
+          $ref: '#/components/schemas/UtcInstant'
+        revisionTrackingSince:
+          $ref: '#/components/schemas/UtcInstant'
+        counts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountMetric'
+          maxItems: 8
+        currencies:
+          type: array
+          items:
+            $ref: '#/components/schemas/CurrencyMetrics'
+          maxItems: 100
+        recordedSupportMinutes:
+          anyOf:
+            - type: string
+              pattern: ^-?[0-9]+$
+              maxLength: 100
+            - type: 'null'
+        supportMinutesAvailability:
+          type: string
+          enum:
+            - AVAILABLE
+            - UNKNOWN
+      description: >-
+        Faits serveur uniquement. Visites non mesurées ; ledgers d’activités et révisions observés
+        depuis V017, sans historique reconstruit. Montants entiers exacts sous forme de chaînes, groupés
+        par devise ; inconnus null. Net = paiements confirmés moins remboursements confirmés dans la
+        période, non cohorte et non bénéfice.
+    AdminOrderPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminOrderSummary'
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    IncidentPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/IncidentSummary'
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    AuditPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditEvent'
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    SupportAssigneePage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupportAssignee'
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    InternalNotePage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/InternalNote'
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    SupportTimePage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupportTimeEntry'
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    ContentCasePage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentCaseView'
+          maxItems: 100
+        page:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+    ContentCaseEventPage:
+      type: object
+      additionalProperties: false
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentCaseEvent'
           maxItems: 100
         page:
           type: integer

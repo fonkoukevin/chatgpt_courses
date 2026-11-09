@@ -40,15 +40,17 @@ import tools.jackson.databind.ObjectMapper;
 /** Version-pinned tracking, never an entitlement or an implicit project evaluation. */
 @Service
 public class LearningService {
+    private ActivityNoteView recordedNote(UUID actor,ActivityNoteView value){facts.personalRevision(actor,"NOTE",value.id(),value.revision(),value.updatedAt());return value;}
     private final JdbcTemplate jdbc;
     private final ObjectMapper mapper;
     private final PublicCatalogueService catalogue;
     private final MethodService methods;
+    private final com.chatgptcourses.shared.metrics.BusinessFactRecorder facts;
     private final com.chatgptcourses.access.MemberContentService members;
     private final com.chatgptcourses.access.EntitlementAccess entitlements;
     public LearningService(JdbcTemplate jdbc,ObjectMapper mapper,PublicCatalogueService catalogue,MethodService methods,
         com.chatgptcourses.access.MemberContentService members,com.chatgptcourses.access.EntitlementAccess entitlements) {
-        this.jdbc=jdbc;this.mapper=mapper;this.catalogue=catalogue;this.methods=methods;this.members=members;this.entitlements=entitlements;
+        this.jdbc=jdbc;this.mapper=mapper;this.catalogue=catalogue;this.methods=methods;this.members=members;this.entitlements=entitlements;this.facts=new com.chatgptcourses.shared.metrics.BusinessFactRecorder(jdbc);
     }
 
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
@@ -127,7 +129,7 @@ public class LearningService {
         mutation(actor,accountContext);check(command!=null&&command.activityId()!=null&&command.activityVersionId()!=null);locale(command.locale());
         var row=owned(actor,enrollmentId);var item=accessibleItem(actor,accountContext,row,command.activityId(),command.activityVersionId(),command.locale());
         jdbc.update("UPDATE learning_enrollments SET last_activity_version_id=?,last_visited_at=greatest(created_at,CURRENT_TIMESTAMP,coalesce(last_visited_at,created_at)) WHERE id=?",item.version(),row.id());
-        var current=owned(actor,row.id());return new VisitView(row.id(),item.activity(),item.version(),current.lastVisited());
+        facts.activityStarted(actor,row.id(),item.version());var current=owned(actor,row.id());return new VisitView(row.id(),item.activity(),item.version(),current.lastVisited());
     }
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
     public ActivityProgressView progress(UUID actor,UUID activityId,UUID enrollmentId,UUID activityVersionId) {
@@ -157,7 +159,7 @@ public class LearningService {
         requireReadable(members.detail(actor,command.activityId(),command.activityVersionId(),command.locale()),ResourceKind.ACTIVITY);
         if(Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM learning_activity_notes WHERE owner_id=? AND activity_version_id=?)",Boolean.class,actor,command.activityVersionId())))throw new ApiException(ApiError.ACTIVITY_NOTE_EXISTS);
         UUID id=UUID.randomUUID();jdbc.update("INSERT INTO learning_activity_notes(id,owner_id,activity_id,activity_version_id,locale,body) VALUES(?,?,?,?,?,?)",id,actor,command.activityId(),command.activityVersionId(),command.locale(),command.text());
-        return ownedNote(actor,id,false);
+        return recordedNote(actor,ownedNote(actor,id,false));
     }
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
     public ActivityNoteView note(UUID actor,UUID noteId) {require(actor,"learning.read");return ownedNote(actor,noteId,false);}
@@ -167,7 +169,7 @@ public class LearningService {
         RevisionPreconditions.requireMatch(ifMatch,EntityTags.forRevision("activity-note",old.id(),old.revision()));check(command!=null);noteText(command.text(),mapper);
         if(old.text().equals(command.text()))return old;
         jdbc.update("UPDATE learning_activity_notes SET body=?,revision=revision+1,updated_at=greatest(updated_at,created_at,CURRENT_TIMESTAMP) WHERE id=? AND owner_id=? AND revision=?",command.text(),noteId,actor,old.revision());
-        return ownedNote(actor,noteId,false);
+        return recordedNote(actor,ownedNote(actor,noteId,false));
     }
 
     @Transactional

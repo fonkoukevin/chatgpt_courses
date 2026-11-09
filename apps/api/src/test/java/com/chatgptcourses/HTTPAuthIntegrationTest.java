@@ -146,7 +146,7 @@ class HTTPAuthIntegrationTest {
         assertThat(tree(changed).path("id").asText()).isEqualTo(tree(original).path("id").asText());
         assertThat(tree(changed).path("revision").asLong()).isEqualTo(tree(original).path("revision").asLong() + 1);
         assertProblem(json(browser, "PATCH", "/api/v1/me/preferences", Map.of("locale", "fr"), csrf, etag, owner), 412, "REVISION_CONFLICT");
-        jdbc.update("UPDATE user_roles SET revoked_at=current_timestamp,updated_at=current_timestamp WHERE user_id=? AND revoked_at IS NULL", UUID.fromString(owner));
+        jdbc.update("UPDATE user_roles SET revoked_at=greatest(created_at,updated_at,CURRENT_TIMESTAMP),updated_at=greatest(created_at,updated_at,CURRENT_TIMESTAMP) WHERE user_id=? AND revoked_at IS NULL", UUID.fromString(owner));
         assertProblem(json(browser, "PATCH", "/api/v1/me/preferences", Map.of("locale", "fr"), csrf,
                 changed.headers().firstValue("ETag").orElseThrow(), owner), 403, "ACCESS_DENIED");
         assertThat(get(browser, "/api/v1/me/preferences").statusCode()).isEqualTo(200);

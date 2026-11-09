@@ -1,5 +1,5 @@
 import { isAttestationContentType } from "@/lib/api/attestations-validation";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { getServerConfig } from "@/lib/config/server";
 
 export const dynamic = "force-dynamic";
@@ -84,7 +84,8 @@ async function proxy(request: Request, context: RouteContext): Promise<Response>
   const attestationDocument = request.method === "GET" && path.length === 4 && path[0] === "me" && path[1] === "attestations"
     && /^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/.test(path[2]) && path[3] === "document";
   const stripeWebhook = request.method === "POST" && path.length === 2 && path[0] === "webhooks" && path[1] === "stripe";
-  const headers = new Headers({ Accept: mediaStream ? "video/mp4, application/problem+json" : attestationDocument ? "text/html, application/problem+json" : "application/json, application/problem+json" });
+  const metricsCsv = request.method === "GET" && path.length === 3 && path[0] === "admin" && path[1] === "metrics" && path[2] === "export";
+  const headers = new Headers({ Accept: mediaStream ? "video/mp4, application/problem+json" : attestationDocument ? "text/html, application/problem+json" : metricsCsv ? "text/csv, application/problem+json" : "application/json, application/problem+json" });
   if (mediaStream && request.headers.has("range")) headers.set("Range", request.headers.get("range")!);
   const mutation = !["GET", "HEAD", "OPTIONS"].includes(request.method);
   if (mutation && ((request.headers.has("origin") && request.headers.get("origin") !== config.publicOrigin)
@@ -125,6 +126,26 @@ async function proxy(request: Request, context: RouteContext): Promise<Response>
     }
     for (const cookie of upstream.headers.getSetCookie()) {
       if (cookie.startsWith("SESSION=")) responseHeaders.append("Set-Cookie", cookie);
+    }
+    if (metricsCsv && upstream.ok) {
+      const length = upstream.headers.get("content-length"), disposition = upstream.headers.get("content-disposition"), sha256 = upstream.headers.get("x-content-sha256");
+      if (upstream.status !== 200 || !/^text\/csv(?:;\s*charset=UTF-8)?$/i.test(upstream.headers.get("content-type") ?? "")
+        || !length || !/^\d+$/.test(length) || Number(length) < 1 || Number(length) > 1048576 || !upstream.body
+        || !disposition || !/^attachment; filename="operations-metrics-[0-9]{8}-[0-9]{8}\.csv"$/.test(disposition)
+        || !sha256 || !/^[a-f0-9]{64}$/.test(sha256)) { await upstream.body?.cancel(); return problem(502, "API_INVALID_RESPONSE", instance); }
+      const reader = upstream.body.getReader(), chunks: Uint8Array[] = []; let size = 0;
+      try { for (;;) { const next = await reader.read(); if (next.done) break; size += next.value.byteLength; if (size > Number(length)) { await reader.cancel(); return problem(502, "API_INVALID_RESPONSE", instance); } chunks.push(next.value); } }
+      finally { reader.releaseLock(); }
+      if (size !== Number(length)) return problem(502, "API_INVALID_RESPONSE", instance);
+      const bytes = new Uint8Array(size); let offset = 0; for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+      if (createHash("sha256").update(bytes).digest("hex") !== sha256) return problem(502, "API_INVALID_RESPONSE", instance);
+      responseHeaders.set("Content-Length", length); responseHeaders.set("Content-Disposition", disposition); responseHeaders.set("X-Content-SHA256", sha256);
+      // Next owns transport framing and may remove Content-Length. This size is
+      // the verified decoded CSV size and survives transport compression/chunking.
+      responseHeaders.set("X-Content-Size", String(bytes.byteLength));
+      responseHeaders.set("Cache-Control", "private, no-store, no-transform");
+      responseHeaders.set("Content-Security-Policy", "default-src 'none'; base-uri 'none'; frame-ancestors 'none'; sandbox");
+      return new Response(bytes, { status: 200, headers: responseHeaders });
     }
     if (attestationDocument && upstream.ok) {
       const length = upstream.headers.get("content-length"), disposition = upstream.headers.get("content-disposition"), sha256 = upstream.headers.get("x-content-sha256");

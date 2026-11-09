@@ -9,6 +9,8 @@ import { getNotificationsDictionary } from "@/lib/i18n/notifications";
 import { getRefundsDictionary } from "@/lib/i18n/refunds";
 import { Brand, Breadcrumb, FutureItem, LayoutLanguageSwitch, MobileNavigation } from "./layout-parts";
 
+export type ProductAdminPage = "content" | "notifications" | "refunds" | "dashboard" | "orders" | "offers" | "support" | "content-cases" | "metrics" | "audit" | "incidents";
+export type ProductAdminLink = { key: ProductAdminPage; href: string; label: string };
 export type ProductAdminNavigation = {
   contentHref: string;
   accountHref: string;
@@ -17,7 +19,8 @@ export type ProductAdminNavigation = {
   current?: string;
   notificationsHref?: string;
   refundsHref?: string;
-  active?: "content" | "notifications" | "refunds";
+  active?: ProductAdminPage;
+  additionalLinks?: ProductAdminLink[];
 };
 
 export function AdminLayout({ locale, children, title, description, product }: { locale: Locale; children: ReactNode; title?: string; description?: string; product?: ProductAdminNavigation }) {
@@ -29,6 +32,7 @@ export function AdminLayout({ locale, children, title, description, product }: {
       <NextLink href={product?.contentHref ?? `/${locale}/dev/admin`} prefetch={product ? false : undefined} aria-current={contentActive ? "page" : undefined} className={`flex min-h-12 items-center gap-3 rounded-input px-3 py-3 text-sm font-medium no-underline ${contentActive ? "bg-brand-soft text-brand" : "text-link"}`}><BookOpen size={19} aria-hidden="true" />{common.content}</NextLink>
       {product?.notificationsHref && <NextLink href={product.notificationsHref} prefetch={false} aria-current={product.active === "notifications" ? "page" : undefined} className={`flex min-h-12 items-center gap-3 rounded-input px-3 py-3 text-sm font-medium no-underline ${product.active === "notifications" ? "bg-brand-soft text-brand" : "text-link"}`}><Mail size={19} aria-hidden="true" />{getNotificationsDictionary(locale).title}</NextLink>}
       {product?.refundsHref && <NextLink href={product.refundsHref} prefetch={false} aria-current={product.active === "refunds" ? "page" : undefined} className={`flex min-h-12 items-center gap-3 rounded-input px-3 py-3 text-sm font-medium no-underline ${product.active === "refunds" ? "bg-brand-soft text-brand" : "text-link"}`}><ClipboardList size={19} aria-hidden="true" />{getRefundsDictionary(locale).operatorTitle}</NextLink>}
+      {product?.additionalLinks?.map(link => <NextLink key={link.key} href={link.href} prefetch={false} aria-current={product.active === link.key ? "page" : undefined} className={`flex min-h-12 items-center gap-3 rounded-input px-3 py-3 text-sm font-medium no-underline ${product.active === link.key ? "bg-brand-soft text-brand" : "text-link"}`}><ClipboardList size={19} aria-hidden="true" />{link.label}</NextLink>)}
       {!product && <>
       <FutureItem locale={locale} label={common.translations} icon={<Languages size={19} aria-hidden="true" />} />
       <FutureItem locale={locale} label={common.offers} icon={<Layers size={19} aria-hidden="true" />} />

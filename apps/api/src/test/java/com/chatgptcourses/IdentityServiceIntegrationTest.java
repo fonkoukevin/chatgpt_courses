@@ -122,7 +122,7 @@ class IdentityServiceIntegrationTest {
         expect(ApiError.REVISION_CONFLICT, () -> identity.updatePreferences(first.id(), tag, "fr"));
         assertThat(identity.getPreferences(first.id()).locale()).isEqualTo("en");
         assertThat(identity.getPreferences(second.id()).locale()).isEqualTo("fr");
-        jdbc.update("UPDATE user_roles SET revoked_at = CURRENT_TIMESTAMP, revision = revision + 1 WHERE user_id = ? AND revoked_at IS NULL", first.id());
+        jdbc.update("UPDATE user_roles SET revoked_at = greatest(created_at,updated_at,CURRENT_TIMESTAMP), updated_at = greatest(created_at,updated_at,CURRENT_TIMESTAMP), revision = revision + 1 WHERE user_id = ? AND revoked_at IS NULL", first.id());
         assertThat(catchThrowable(() -> identity.updatePreferences(first.id(),
                 EntityTags.forRevision("preferences", updated.id(), updated.revision()), "fr"))).isInstanceOf(AccessDeniedException.class);
         assertThat(identity.getPreferences(first.id()).locale()).isEqualTo("en");

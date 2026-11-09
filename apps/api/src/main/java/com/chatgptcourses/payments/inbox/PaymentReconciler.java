@@ -38,7 +38,7 @@ public class PaymentReconciler {
         boolean expired=Boolean.TRUE.equals(jdbc.queryForObject("SELECT checkout_expires_at<=clock_timestamp() AND(state<>'CALLING' OR lease_until<=clock_timestamp()) FROM checkout_operations WHERE id=?",Boolean.class,op.id()));
         if(!expired)return Outcome.WAITING;
         String code="SESSION_NOT_FOUND_AFTER_EXPIRY";issue(op,order,code);
-        jdbc.update("UPDATE payment_reconciliation_jobs SET state='DEAD',attempts=attempts+1,next_attempt_at=NULL,lease_id=NULL,lease_until=NULL,last_error_code=?,updated_at=clock_timestamp() WHERE id=? AND lease_id=? AND state='PROCESSING'",code,claim.id(),claim.leaseId());
+        jdbc.update("UPDATE payment_reconciliation_jobs SET state='DEAD',attempts=attempts+1,next_attempt_at=NULL,lease_id=NULL,lease_until=NULL,last_error_code=?,updated_at=greatest(updated_at,created_at,clock_timestamp()) WHERE id=? AND lease_id=? AND state='PROCESSING'",code,claim.id(),claim.leaseId());
         return Outcome.DONE;
     });}
     Outcome apply(CheckoutFacts facts,Claim claim){

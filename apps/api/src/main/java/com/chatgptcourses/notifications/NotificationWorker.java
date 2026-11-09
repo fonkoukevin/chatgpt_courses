@@ -51,17 +51,17 @@ public class NotificationWorker {
             return true;
         }
         // A DB failure here leaves PROCESSING; lease recovery marks it INDETERMINATE, never auto-resends.
-        transactions.executeWithoutResult(status->jdbc.update("UPDATE notification_outbox SET status='SENT',payload_ciphertext=NULL,purged_at=clock_timestamp(),sent_at=clock_timestamp(),updated_at=clock_timestamp(),lease_id=NULL,lease_until=NULL,next_attempt_at=NULL,last_error_code=NULL WHERE id=? AND status='PROCESSING' AND lease_id=?",claim.id(),claim.leaseId()));
+        transactions.executeWithoutResult(status->jdbc.update("UPDATE notification_outbox SET status='SENT',payload_ciphertext=NULL,(purged_at,sent_at,updated_at)=(SELECT stamp,stamp,stamp FROM (SELECT greatest(notification_outbox.updated_at,notification_outbox.created_at,clock_timestamp()) AS stamp) observed),lease_id=NULL,lease_until=NULL,next_attempt_at=NULL,last_error_code=NULL WHERE id=? AND status='PROCESSING' AND lease_id=?",claim.id(),claim.leaseId()));
         return true;
     }
     private void maintenance(){
-        jdbc.update("UPDATE notification_outbox SET status='INDETERMINATE',last_error_code='LEASE_EXPIRED',lease_id=NULL,lease_until=NULL,next_attempt_at=NULL,updated_at=clock_timestamp() WHERE status='PROCESSING' AND lease_until<=clock_timestamp()");
-        jdbc.update("UPDATE notification_outbox SET status=CASE WHEN status IN('PENDING','RETRY') THEN 'DEAD' ELSE status END,last_error_code=CASE WHEN status IN('PENDING','RETRY') THEN 'PAYLOAD_EXPIRED' ELSE last_error_code END,payload_ciphertext=NULL,purged_at=clock_timestamp(),next_attempt_at=CASE WHEN status IN('PENDING','RETRY') THEN NULL ELSE next_attempt_at END,updated_at=clock_timestamp() WHERE payload_ciphertext IS NOT NULL AND expires_at<=clock_timestamp() AND status<>'PROCESSING'");
+        jdbc.update("UPDATE notification_outbox SET status='INDETERMINATE',last_error_code='LEASE_EXPIRED',lease_id=NULL,lease_until=NULL,next_attempt_at=NULL,updated_at=greatest(updated_at,created_at,clock_timestamp()) WHERE status='PROCESSING' AND lease_until<=clock_timestamp()");
+        jdbc.update("UPDATE notification_outbox SET status=CASE WHEN status IN('PENDING','RETRY') THEN 'DEAD' ELSE status END,last_error_code=CASE WHEN status IN('PENDING','RETRY') THEN 'PAYLOAD_EXPIRED' ELSE last_error_code END,payload_ciphertext=NULL,(purged_at,updated_at)=(SELECT stamp,stamp FROM (SELECT greatest(notification_outbox.updated_at,notification_outbox.created_at,clock_timestamp()) AS stamp) observed),next_attempt_at=CASE WHEN status IN('PENDING','RETRY') THEN NULL ELSE next_attempt_at END WHERE payload_ciphertext IS NOT NULL AND expires_at<=clock_timestamp() AND status<>'PROCESSING'");
     }
     private Claim claim(){
         var rows=jdbc.query("SELECT id,event_type,business_key,payload_ciphertext,expires_at FROM notification_outbox WHERE status IN('PENDING','RETRY') AND next_attempt_at<=clock_timestamp() AND expires_at>clock_timestamp() AND payload_ciphertext IS NOT NULL ORDER BY next_attempt_at,created_at,id LIMIT 1 FOR UPDATE SKIP LOCKED",(rs,n)->new Claim(rs.getObject("id",UUID.class),Type.valueOf(rs.getString("event_type")),UUID.randomUUID(),rs.getBytes("payload_ciphertext"),rs.getString("business_key"),rs.getTimestamp("expires_at").toInstant()));
         if(rows.isEmpty())return null;var row=rows.getFirst();
-        int changed=jdbc.update("UPDATE notification_outbox SET status='PROCESSING',lease_id=?,lease_until=clock_timestamp()+(? * interval '1 millisecond'),next_attempt_at=NULL,attempts=attempts+1,cycle_attempts=cycle_attempts+1,updated_at=clock_timestamp() WHERE id=? AND expires_at>clock_timestamp()",row.leaseId(),settings.leaseDuration().toMillis(),row.id());return changed==1?row:null;
+        int changed=jdbc.update("UPDATE notification_outbox SET status='PROCESSING',lease_id=?,lease_until=clock_timestamp()+(? * interval '1 millisecond'),next_attempt_at=NULL,attempts=attempts+1,cycle_attempts=cycle_attempts+1,updated_at=greatest(updated_at,created_at,clock_timestamp()) WHERE id=? AND expires_at>clock_timestamp()",row.leaseId(),settings.leaseDuration().toMillis(),row.id());return changed==1?row:null;
     }
     private void finish(Claim claim,String outcome,String code,boolean retryable){
         transactions.executeWithoutResult(status->{
@@ -69,7 +69,7 @@ public class NotificationWorker {
             if(rows.isEmpty())return;var attempt=rows.getFirst();boolean expired="PAYLOAD_EXPIRED".equals(code)||!attempt.expires().isAfter(Instant.now());
             String target=expired?"DEAD":retryable&&attempt.count()>=settings.maxAttempts()?"DEAD":outcome;
             long exponent=1L<<Math.min(20,Math.max(0,attempt.count()-1)),delay=Math.min(settings.retryMax().toMillis(),Math.multiplyExact(settings.retryBase().toMillis(),exponent));
-            jdbc.update("UPDATE notification_outbox SET status=?,last_error_code=?,next_attempt_at=CASE WHEN ?='RETRY' THEN clock_timestamp()+(? * interval '1 millisecond') ELSE NULL END,lease_id=NULL,lease_until=NULL,payload_ciphertext=CASE WHEN ? THEN NULL ELSE payload_ciphertext END,purged_at=CASE WHEN ? THEN clock_timestamp() ELSE purged_at END,updated_at=clock_timestamp() WHERE id=? AND lease_id=?",target,expired?"PAYLOAD_EXPIRED":code,target,delay,expired,expired,claim.id(),claim.leaseId());
+            jdbc.update("UPDATE notification_outbox SET status=?,last_error_code=?,next_attempt_at=CASE WHEN ?='RETRY' THEN clock_timestamp()+(? * interval '1 millisecond') ELSE NULL END,lease_id=NULL,lease_until=NULL,payload_ciphertext=CASE WHEN ? THEN NULL ELSE payload_ciphertext END,(purged_at,updated_at)=(SELECT CASE WHEN ? THEN stamp ELSE notification_outbox.purged_at END,stamp FROM (SELECT greatest(notification_outbox.updated_at,notification_outbox.created_at,clock_timestamp()) AS stamp) observed) WHERE id=? AND lease_id=?",target,expired?"PAYLOAD_EXPIRED":code,target,delay,expired,expired,claim.id(),claim.leaseId());
         });
     }
     private static String classify(Throwable failure){

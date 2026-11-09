@@ -4,7 +4,7 @@ import { closeSync, existsSync, mkdirSync, openSync, readFileSync, writeFileSync
 import { createServer } from 'node:net';
 import { join } from 'node:path';
 import { environment, preflightServers, root, runtimeDir, start, terminateOwned, waitFor, windows } from './lib/runtime.mjs';
-import { createBrowserDatabase, stopBrowserDatabase } from './lib/browser-database.mjs';
+import { createBrowserDatabase, observeBrowserDatabase, stopBrowserDatabase } from './lib/browser-database.mjs';
 import { createBrowserServices, observeBrowserStorage, setBrowserServicePaused, stopBrowserService } from './lib/browser-services.mjs';
 import { createBrowserPayments } from './lib/browser-payments.mjs';
 import { assertExternalStripeListenerIsolation, createBrowserExternalStripe } from './lib/browser-stripe-external.mjs';
@@ -12,7 +12,7 @@ import { assertExternalStripeListenerIsolation, createBrowserExternalStripe } fr
 const env = environment();
 const phase = process.argv[2] ?? 'P01';
 const externalStripe = phase === 'P12_EXTERNAL';
-const refundPhase = phase === 'P13';
+const refundPhase = phase === 'P13' || phase === 'P15';
 const paymentPhase = phase === 'P12' || externalStripe || refundPhase;
 const externalStripeConfiguration = externalStripe ? { STRIPE_SECRET_KEY: env.STRIPE_SECRET_KEY, STRIPE_ACCOUNT_ID: env.STRIPE_ACCOUNT_ID,
   STRIPE_MODE: env.STRIPE_MODE ?? 'TEST', STRIPE_API_BASE: env.STRIPE_API_BASE ?? 'https://api.stripe.com' } : null;
@@ -25,9 +25,9 @@ for (let index = 3; index < process.argv.length; index += 2) {
   else throw new Error('Diagnostic permis : --grep expression et --repeat-each 1..20.');
   diagnosticArgs.push(flag, value);
 }
-if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14'].includes(phase)) throw new Error('Phase de recette inconnue.');
+if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14', 'P15'].includes(phase)) throw new Error('Phase de recette inconnue.');
 const needsApi = phase !== 'P02';
-const isolatedDatabase = ['P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14'].includes(phase);
+const isolatedDatabase = ['P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14', 'P15'].includes(phase);
 if (!['local', 'test'].includes(env.APP_ENV)) throw new Error('Vérification navigateur réservée à local/test.');
 const port = (value, fallback) => {
   const text = value ?? String(fallback);
@@ -72,6 +72,14 @@ let verificationError;
 let database;
 let services = [];
 let payments;
+let initialRuntimeFlags;
+let databaseDiagnostic;
+
+function runtimeFlags() {
+  const enabled = (key, fallback) => env[key] === undefined ? fallback : String(env[key]).trim().toLowerCase() === 'true';
+  return { stripeEnabled: enabled('STRIPE_ENABLED', false), paymentWorkerEnabled: enabled('PAYMENT_INBOX_ENABLED', true),
+    refundWorkerEnabled: enabled('REFUND_WORKER_ENABLED', false), notificationWorkerEnabled: enabled('NOTIFICATION_OUTBOX_ENABLED', true) };
+}
 
 function save() {
   writeFileSync(manifest, JSON.stringify({ root, runId, supervisor: process.pid,
@@ -145,7 +153,7 @@ const control = createServer((socket) => {
         return { webPid: web.child.pid };
       }
       if (message.operation === 'advance-payment') {
-        if (!['P12','P13'].includes(phase) || !payments) throw new Error('Transport contrôlé de paiement absent.');
+        if (!['P12','P13','P15'].includes(phase) || !payments) throw new Error('Transport contrôlé de paiement absent.');
         return { webPid: web.child.pid, ...await payments.advance(message.orderId,message.state,message.type,message.replayId) };
       }
       if (['configure-refund', 'advance-refund', 'external-refund'].includes(message.operation)) {
@@ -172,7 +180,7 @@ const control = createServer((socket) => {
         return startApi();
       }
       if (['pause-mailpit', 'resume-mailpit'].includes(message.operation)) {
-        if (!['P10','P12','P12_EXTERNAL','P13','P14'].includes(phase)) throw new Error('Contrôle de service réservé à la recette médias/paiements/compte.');
+        if (!['P10','P12','P12_EXTERNAL','P13','P14','P15'].includes(phase)) throw new Error('Contrôle de service réservé à la recette médias/paiements/compte.');
         setBrowserServicePaused(services.find(({ kind }) => kind === 'mailpit'), message.operation === 'pause-mailpit'); save();
         return { webPid: web.child.pid, apiPid: api?.child.pid };
       }
@@ -202,7 +210,7 @@ try {
     env.COMMERCE_ENABLED = 'true'; env.COMMERCE_ALLOWED_CURRENCIES = 'EUR';
     env.STRIPE_ENABLED = 'false'; delete env.STRIPE_SECRET_KEY; delete env.STRIPE_WEBHOOK_SECRET;
   }
-  if (['P10','P12','P12_EXTERNAL','P13','P14'].includes(phase)) {
+  if (['P10','P12','P12_EXTERNAL','P13','P14','P15'].includes(phase)) {
     services = await createBrowserServices(env, runDirectory, runId, (records) => { services = records; save(); });
     if (phase === 'P10') {
       env.VIDEO_ENABLED = 'true'; env.VIDEO_PROVIDER = 'local-test'; env.VIDEO_LOCAL_ROOT = join(runDirectory, 'private-video');
@@ -211,9 +219,11 @@ try {
     }
     save();
   }
-  if (phase === 'P12') { env.API_TIMEOUT_MS = '30000'; payments = await createBrowserPayments(env); }
+  if (phase === 'P12') { env.API_TIMEOUT_MS = '30000'; payments = await createBrowserPayments(env,{refundsEnabled:true}); env.REFUND_WORKER_ENABLED='true'; }
   if (refundPhase) { env.API_TIMEOUT_MS = '30000'; payments = await createBrowserPayments(env,{refundsEnabled:true}); env.PAYMENT_INBOX_ENABLED='true'; env.REFUND_WORKER_ENABLED='true'; }
+  if (phase === 'P15') env.COMMERCE_ALLOWED_CURRENCIES = 'EUR,USD,GBP';
   if (externalStripe) { Object.assign(env, externalStripeConfiguration); payments = await createBrowserExternalStripe(env); }
+  initialRuntimeFlags = runtimeFlags();
   await new Promise((resolveListen, rejectListen) => {
     control.once('error', rejectListen);
     control.listen(ipc, resolveListen);
@@ -295,6 +305,12 @@ try {
   ]);
   const cleanupErrors = results.filter((result) => result.status === 'rejected').map((result) => result.reason);
   if (externalCleanupError) cleanupErrors.push(externalCleanupError);
+  if (database && (verificationError || cleanupErrors.length)) {
+    try { databaseDiagnostic = observeBrowserDatabase(database); }
+    catch { databaseDiagnostic = { available: false, readOnly: true, reason: 'OWNED_DATABASE_DIAGNOSTIC_UNAVAILABLE' }; }
+    try { writeFileSync(join(evidence, 'database-diagnostic.json'), JSON.stringify(databaseDiagnostic, null, 2) + '\n', { mode: 0o600 }); }
+    catch (error) { cleanupErrors.push(error); }
+  }
   try { stopBrowserDatabase(database); save(); } catch (error) { cleanupErrors.push(error); }
   for (const service of services.toReversed()) {
     if (service.kind === 's3') { try { service.observation = observeBrowserStorage(service); } catch { service.observation = { available: false }; } }
@@ -304,6 +320,8 @@ try {
   try {
     writeFileSync(join(evidence, 'session.json'), JSON.stringify({ runId, completedAt: new Date().toISOString(), selection: selected,
       result: verificationError || cleanupErrors.length ? 'failed' : 'passed', cleanupConfirmed: cleanupErrors.length === 0,
+      initialRuntimeFlags, finalRuntimeFlags: runtimeFlags(),
+      ...(databaseDiagnostic ? { databaseDiagnostic: { available: databaseDiagnostic.available, file: 'database-diagnostic.json' } } : {}),
       ...(database ? { isolatedPostgres: { image: database.image, tmpfs: true, stopped: database.stopped } } : {}),
       isolatedServices: services.map(({ kind, image, stopped, observation }) => ({ kind, image, tmpfs: true, stopped, ...(observation ? { observation } : {}) })),
       ...(payments ? { [externalStripe ? 'externalProvider' : 'controlledProvider']: payments.observation() } : {}),

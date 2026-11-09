@@ -29,7 +29,7 @@ function sendControl(operation: string, data: Record<string, string|number> = {}
     let input = '';
     let settled = false;
     const fail = (error: Error) => { settled = true; socket.destroy(); rejectCommand(error); };
-    socket.setTimeout(process.env.COURSES_BROWSER_PHASE?.startsWith('P12') || process.env.COURSES_BROWSER_PHASE === 'P13' ? 360_000 : 90_000, () => fail(new Error('Commande IPC expirée.')));
+    socket.setTimeout(process.env.COURSES_BROWSER_PHASE?.startsWith('P12') || ['P13', 'P15'].includes(process.env.COURSES_BROWSER_PHASE ?? '') ? 360_000 : 90_000, () => fail(new Error('Commande IPC expirée.')));
     socket.once('error', () => fail(new Error('Connexion au superviseur interrompue.')));
     socket.once('connect', () => socket.write(`${JSON.stringify({ token, operation, ...data })}\n`));
     socket.on('data', (chunk) => {

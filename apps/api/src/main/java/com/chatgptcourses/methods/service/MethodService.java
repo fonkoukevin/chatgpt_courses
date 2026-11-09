@@ -29,7 +29,8 @@ public class MethodService {
     private final JdbcTemplate jdbc;
     private final ObjectMapper mapper;
     private final PublicCatalogueService catalogue;
-    public MethodService(JdbcTemplate jdbc,ObjectMapper mapper,PublicCatalogueService catalogue){this.jdbc=jdbc;this.mapper=mapper;this.catalogue=catalogue;}
+    private final com.chatgptcourses.shared.metrics.BusinessFactRecorder facts;
+    public MethodService(JdbcTemplate jdbc,ObjectMapper mapper,PublicCatalogueService catalogue){this.jdbc=jdbc;this.mapper=mapper;this.catalogue=catalogue;this.facts=new com.chatgptcourses.shared.metrics.BusinessFactRecorder(jdbc);}
 
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
     public MethodPage list(UUID actor,MethodQuery query){
@@ -72,9 +73,10 @@ public class MethodService {
     public MethodView update(UUID actor,UUID accountContext,UUID id,String ifMatch,UpdateMethod command){
         mutation(actor,accountContext);var old=owned(actor,id,true);mutation(actor,accountContext);match(old,ifMatch);
         check(command!=null);var f=command.fields();fields(f,mapper);
-        jdbc.update("UPDATE personal_methods SET title=?,locale=?,body=?,parameters=?::jsonb,generated_from=?::jsonb,notes=?,category=?,revision=revision+1,updated_at=greatest(created_at,CURRENT_TIMESTAMP) WHERE id=? AND owner_id=? AND revision=?",
+        if(f.equals(new MethodFields(old.title(),old.locale(),old.text(),old.parameters(),old.generatedFrom(),old.notes(),old.category())))return old;
+        jdbc.update("UPDATE personal_methods SET title=?,locale=?,body=?,parameters=?::jsonb,generated_from=?::jsonb,notes=?,category=?,revision=revision+1,updated_at=greatest(updated_at,created_at,clock_timestamp()) WHERE id=? AND owner_id=? AND revision=?",
             f.title(),f.locale(),f.text(),mapper.writeValueAsString(f.parameters()),f.generatedFrom()==null?null:mapper.writeValueAsString(f.generatedFrom()),f.notes(),f.category(),id,actor,old.revision());
-        return owned(actor,id,false);
+        return recorded(actor,owned(actor,id,false));
     }
     @Transactional
     public MethodView duplicate(UUID actor,UUID accountContext,UUID id,String ifMatch){
@@ -115,8 +117,9 @@ public class MethodService {
             VALUES(?,?,?,?,?,?::jsonb,?::jsonb,?,?,?,?,?,?,?,?,?)
             """,id,actor,f.title(),f.locale(),f.text(),mapper.writeValueAsString(f.parameters()),f.generatedFrom()==null?null:mapper.writeValueAsString(f.generatedFrom()),f.notes(),f.category(),
             origin==null?null:origin.resourceId(),origin==null?null:origin.versionId(),origin==null?null:origin.translationId(),origin==null?null:origin.revisionId(),origin==null?null:origin.locale(),origin==null?null:origin.title(),origin==null?null:origin.slug());
-        return owned(actor,id,false);
+        return recorded(actor,owned(actor,id,false));
     }
+    private MethodView recorded(UUID actor,MethodView value){facts.personalRevision(actor,"METHOD",value.id(),value.revision(),value.updatedAt());return value;}
     private MethodView owned(UUID actor,UUID id,boolean lock){
         var methods=jdbc.query("SELECT * FROM personal_methods WHERE id=? AND owner_id=?"+(lock?" FOR UPDATE":""),(rs,n)->view(rs),id,actor);
         if(methods.isEmpty())throw notFound();return methods.getFirst();

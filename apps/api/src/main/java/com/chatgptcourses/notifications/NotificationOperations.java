@@ -36,7 +36,7 @@ public class NotificationOperations {
         if(reason==null||!Set.of("CONFIGURATION_FIXED","MANUAL_RECONCILIATION").contains(reason)||id==null)throw invalid();
         var rows=jdbc.query("SELECT * FROM notification_outbox WHERE id=? FOR UPDATE",(rs,n)->view(rs),id);if(rows.isEmpty())throw new ApiException(ApiError.RESOURCE_NOT_FOUND);var old=rows.getFirst();require(actor,"notifications.manage");
         if(!Set.of("RETRY","DEAD","INDETERMINATE").contains(old.status())||!old.payloadAvailable()||!old.expiresAt().isAfter(Instant.now())||!Boolean.TRUE.equals(jdbc.queryForObject("SELECT expires_at>clock_timestamp() FROM notification_outbox WHERE id=?",Boolean.class,id))||old.status().equals("INDETERMINATE")&&!ackDuplicate)throw new ApiException(ApiError.CONFLICT);
-        jdbc.update("UPDATE notification_outbox SET status='RETRY',cycle_attempts=0,requeue_count=requeue_count+1,next_attempt_at=clock_timestamp(),last_error_code=NULL,updated_at=clock_timestamp() WHERE id=?",id);
+        jdbc.update("UPDATE notification_outbox SET status='RETRY',cycle_attempts=0,requeue_count=requeue_count+1,next_attempt_at=clock_timestamp(),last_error_code=NULL,updated_at=greatest(updated_at,created_at,clock_timestamp()) WHERE id=?",id);
         jdbc.update("INSERT INTO notification_outbox_requeues(id,notification_id,actor_id,previous_status,reason,duplicate_acknowledged) VALUES(?,?,?,?,?,?)",UUID.randomUUID(),id,actor,old.status(),reason,ackDuplicate);
         return jdbc.queryForObject("SELECT * FROM notification_outbox WHERE id=?",(rs,n)->view(rs),id);
     }

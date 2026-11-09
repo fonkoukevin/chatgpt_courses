@@ -59,6 +59,7 @@
     "verify:stripe-test": "node scripts/verify-browser.mjs P12_EXTERNAL",
     "verify:refunds": "node scripts/verify-browser.mjs P13",
     "verify:account": "node scripts/verify-browser.mjs P14",
+    "verify:operations": "node scripts/verify-browser.mjs P15",
     "verify:design": "node scripts/verify-browser.mjs P02",
     "verify:contrast": "node scripts/verify-contrast.mjs",
     "browser:install": "node scripts/install-browser.mjs",

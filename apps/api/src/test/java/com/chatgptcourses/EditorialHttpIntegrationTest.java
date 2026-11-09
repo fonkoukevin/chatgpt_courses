@@ -183,7 +183,7 @@ class EditorialHttpIntegrationTest {
         assertThat(tree(get(editor, ADMIN + "?kind=ACTIVITY&locale=fr&page=0&size=1")).path("size").asInt()).isEqualTo(1);
         assertProblem(get(editor, ADMIN + "?size=101"), 400, "VALIDATION_FAILED");
         assertProblem(get(editor, ADMIN + "?page=1000001"), 400, "VALIDATION_FAILED");
-        jdbc.update("UPDATE user_roles SET revoked_at=current_timestamp,revision=revision+1 WHERE user_id=? AND role_id=(SELECT id FROM roles WHERE code='EDITOR') AND revoked_at IS NULL", editor.owner());
+        jdbc.update("UPDATE user_roles SET revoked_at=greatest(created_at,updated_at,CURRENT_TIMESTAMP),updated_at=greatest(created_at,updated_at,CURRENT_TIMESTAMP),revision=revision+1 WHERE user_id=? AND role_id=(SELECT id FROM roles WHERE code='EDITOR') AND revoked_at IS NULL", editor.owner());
         assertProblem(get(editor, ADMIN + "/" + id), 403, "ACCESS_DENIED");
     }
 

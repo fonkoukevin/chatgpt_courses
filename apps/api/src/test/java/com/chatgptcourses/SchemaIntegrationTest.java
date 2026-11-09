@@ -66,9 +66,9 @@ class SchemaIntegrationTest {
 
     @Test @Order(1)
     void aFreshDatabaseMigratesAndHibernateValidatesWithoutSeedingAccountsOrCommerce() {
-        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016");
+        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016", "017");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_accounts", Integer.class)).isZero();
-        assertThat(jdbc.queryForList("SELECT code FROM roles ORDER BY code", String.class)).containsExactly("COMMERCE_MANAGER", "EDITOR", "LEARNER", "PAYMENTS_OPERATOR", "REFUND_OPERATOR", "SUPPORT_OPERATOR");
+        assertThat(jdbc.queryForList("SELECT code FROM roles ORDER BY code", String.class)).containsExactly("COMMERCE_MANAGER", "EDITOR", "LEARNER", "OPERATIONS_MANAGER", "OPERATIONS_READER", "PAYMENTS_OPERATOR", "REFUND_OPERATOR", "SUPPORT_OPERATOR");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_roles", Integer.class)).isZero();
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM learning_resources", Integer.class)).isZero();
         assertThat(jdbc.queryForObject("SELECT current_setting('TimeZone')", String.class)).isEqualTo("UTC");
@@ -87,6 +87,7 @@ class SchemaIntegrationTest {
         for (String table : new String[] {"support_tickets", "support_messages", "support_message_attachments", "support_ticket_events", "account_data_requests", "account_data_request_events", "participation_attestations", "account_action_keys"}) {
             assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM " + table, Integer.class)).isZero();
         }
+        for (String table : operationTables()) assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM " + table, Integer.class)).isZero();
         assertThat(jdbc.queryForObject("""
                 SELECT COUNT(*) FROM pg_constraint c JOIN pg_class t ON c.conrelid = t.oid
                 WHERE c.contype = 'f' AND t.relnamespace = 'public'::regnamespace
@@ -113,7 +114,7 @@ class SchemaIntegrationTest {
             var database = new JdbcTemplate(new SingleConnectionDataSourceAdapter(connection));
             assertThat(database.queryForObject("SELECT session_id FROM spring_session WHERE primary_id = ?", String.class, primaryId)).isEqualTo(sessionId);
             assertThat(database.queryForObject("SELECT encode(attribute_bytes, 'hex') FROM spring_session_attributes WHERE session_primary_id = ?", String.class, primaryId)).isEqualTo("010203");
-            assertThat(database.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016");
+            assertThat(database.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016", "017");
         }
     }
 
@@ -142,7 +143,7 @@ class SchemaIntegrationTest {
         var grant = UUID.randomUUID();
         jdbc.update("INSERT INTO user_roles(id,user_id,role_id) VALUES (?,?,?)", grant, user, role);
         expectState("23505", () -> jdbc.update("INSERT INTO user_roles(id,user_id,role_id) VALUES (?,?,?)", UUID.randomUUID(), user, role));
-        jdbc.update("UPDATE user_roles SET revoked_at = CURRENT_TIMESTAMP, revision = revision + 1, updated_at = CURRENT_TIMESTAMP WHERE id = ?", grant);
+        jdbc.update("UPDATE user_roles SET revoked_at = greatest(created_at,updated_at,CURRENT_TIMESTAMP), revision = revision + 1, updated_at = greatest(created_at,updated_at,CURRENT_TIMESTAMP) WHERE id = ?", grant);
         jdbc.update("INSERT INTO user_roles(id,user_id,role_id) VALUES (?,?,?)", UUID.randomUUID(), user, role);
         expectState("23514", () -> jdbc.update("UPDATE user_roles SET revoked_at = NULL WHERE id = ?", grant));
         expectState("23514", () -> jdbc.update("DELETE FROM user_roles WHERE id = ?", grant));
@@ -382,6 +383,43 @@ class SchemaIntegrationTest {
             assertThat(database.queryForObject("SELECT count(*) FROM roles WHERE code='SUPPORT_OPERATOR'", Integer.class)).isEqualTo(1);
         }
     }
+
+    @Test @Order(12)
+    void upgradingV016PreservesAllExistingHistoryAndDoesNotInventOperationalEvents() throws Exception {
+        String schema="upgrade_v016_p15";migrate(schema,"16");
+        UUID owner=UUID.randomUUID(),ticket=UUID.randomUUID(),request=UUID.randomUUID();String session=UUID.randomUUID().toString();
+        java.util.Map<String,java.util.List<String>> before;
+        try(var connection=connection(schema)){
+            var database=new JdbcTemplate(new SingleConnectionDataSourceAdapter(connection));
+            database.update("INSERT INTO user_accounts(id,normalized_email,password_hash,display_name,status) VALUES(?,'upgrade.p15@fixture.invalid','unusable-synthetic-upgrade-hash','Ancien profil conservé','ACTIVE')",owner);
+            database.update("INSERT INTO user_preferences(id,user_id,locale,time_zone) VALUES(?,?,'fr','UTC')",UUID.randomUUID(),owner);
+            database.update("INSERT INTO user_roles(id,user_id,role_id) SELECT ?,?,id FROM roles WHERE code='LEARNER'",UUID.randomUUID(),owner);
+            database.update("INSERT INTO personal_methods(id,owner_id,title,locale,body,parameters,notes) VALUES(?,?,'Ancienne méthode','fr','Texte fictif avant suivi P15','{\"objective\":\"Objectif\",\"context\":\"\",\"availableData\":\"\",\"recipient\":\"\",\"format\":\"\",\"constraints\":\"\",\"clarifications\":\"\"}'::jsonb,'Notes historiques fictives')",UUID.randomUUID(),owner);
+            var stamp=database.queryForObject("SELECT clock_timestamp()",java.sql.Timestamp.class);
+            database.update("INSERT INTO support_tickets(id,owner_id,category,subject,locale,state,created_at,updated_at) VALUES(?,?,'OTHER','Demande antérieure','fr','OPEN',?,?)",ticket,owner,stamp,stamp);
+            database.update("INSERT INTO support_messages(id,ticket_id,owner_id,actor_id,author_kind,body,created_at) VALUES(?,?,?,?,'USER','Message fictif conservé',?)",UUID.randomUUID(),ticket,owner,owner,stamp);
+            database.update("INSERT INTO support_ticket_events(id,ticket_id,actor_id,author_kind,event_type,to_state,created_at) VALUES(?,?,?,'USER','CREATED','OPEN',?)",UUID.randomUUID(),ticket,owner,stamp);
+            database.update("INSERT INTO account_data_requests(id,owner_id,request_type,reason,state,created_at,updated_at) VALUES(?,?,'EXPORT','Demande antérieure sans traitement','WAITING_POLICY',?,?)",request,owner,stamp,stamp);
+            database.update("INSERT INTO account_data_request_events(id,request_id,owner_id,event_type,reason,created_at) VALUES(?,?,?,'REQUESTED','Demande antérieure',?)",UUID.randomUUID(),request,owner,stamp);
+            database.update("INSERT INTO spring_session(primary_id,session_id,creation_time,last_access_time,max_inactive_interval,expiry_time) VALUES(?,?,1,2,1800,1800002)",session,session);
+            database.update("INSERT INTO spring_session_attributes(session_primary_id,attribute_name,attribute_bytes) VALUES(?,'before-v017',?)",session,"Synthetic P15 preserved session".getBytes(StandardCharsets.UTF_8));
+            before=allRows(database,schema);
+        }
+        assertThat(migrate(schema,null).validateWithResult().validationSuccessful).isTrue();
+        try(var connection=connection(schema)){
+            var database=new JdbcTemplate(new SingleConnectionDataSourceAdapter(connection));var after=allRows(database,schema);
+            for(var entry:before.entrySet()){
+                if(java.util.Set.of("roles","permissions","role_permissions").contains(entry.getKey()))assertThat(after.get(entry.getKey())).as("Reference rows preserved: %s",entry.getKey()).containsAll(entry.getValue());
+                else assertThat(after.get(entry.getKey())).as("Historical rows preserved: %s",entry.getKey()).containsExactlyElementsOf(entry.getValue());
+            }
+            for(String table:operationTables())assertThat(after.get(table)).as("No fabricated P15 rows in %s",table).isEmpty();
+            assertThat(database.queryForObject("SELECT count(*) FROM user_accounts",Integer.class)).isEqualTo(1);
+            assertThat(database.queryForObject("SELECT count(*) FROM user_roles",Integer.class)).isEqualTo(1);
+            assertThat(database.queryForObject("SELECT count(*) FROM roles WHERE code IN('OPERATIONS_MANAGER','OPERATIONS_READER')",Integer.class)).isEqualTo(2);
+        }
+    }
+
+    private static String[] operationTables(){return new String[]{"operations_audit","operations_action_keys","support_workspaces","support_reply_drafts","support_internal_notes","support_time_entries","support_reply_publications","editorial_cases","editorial_case_events","operations_activity_starts","operations_personal_revision_events"};}
 
     private static java.util.Map<String, java.util.List<String>> allRows(JdbcTemplate database, String schema) {
         var rows = new java.util.TreeMap<String, java.util.List<String>>();

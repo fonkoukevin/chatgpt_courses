@@ -147,8 +147,14 @@ class RefundHttpIntegrationTest {
             String confirmedAt = text(succeeded, "confirmedAt"); assertThat(confirmedAt).isNotBlank();
             var provider = PROVIDER.refunds.values().stream().filter(r -> r.intent.equals(PROVIDER.sessionForOrder(f.order().id()).intentId())).findFirst().orElseThrow();
             PROVIDER.status(provider.id, "failed"); int posts = PROVIDER.refundPosts.get();
-            assertThat(webhook(event("refund.updated", PROVIDER.refundJson(provider))).statusCode()).isEqualTo(200);
-            until(() -> state(f, id(confirmed)).equals("NEEDS_REVIEW"));
+            String updatedEvent = event("refund.updated", PROVIDER.refundJson(provider));
+            var futureEnvelope = futureVerifiedEnvelope(updatedEvent);
+            until(() -> state(f, id(confirmed)).equals("NEEDS_REVIEW") && inboxState(futureEnvelope.id()).equals("PROCESSED"));
+            var envelopeTimes = jdbc.queryForMap("SELECT created_at,updated_at,processed_at FROM stripe_event_inbox WHERE id=?", futureEnvelope.id());
+            assertThat(((java.sql.Timestamp)envelopeTimes.get("created_at")).toInstant()).isEqualTo(futureEnvelope.createdAt());
+            assertThat(((java.sql.Timestamp)envelopeTimes.get("updated_at")).toInstant()).isAfterOrEqualTo(futureEnvelope.createdAt());
+            assertThat(envelopeTimes.get("processed_at")).isEqualTo(envelopeTimes.get("updated_at"));
+            assertThat(webhook(updatedEvent).statusCode()).isEqualTo(200);
             var reviewed = operation(f, id(confirmed)); assertThat(text(reviewed, "confirmedAt")).isEqualTo(confirmedAt);
             assertThat(tree(reviewed).path("canExecute").asBoolean()).isFalse();
             var balance = tree(get(f.owner(), context(f.order())));
@@ -169,18 +175,31 @@ class RefundHttpIntegrationTest {
             assertThat(tree(get(f.owner(), context(f.order()))).path("confirmedRefundedMinor").asLong()).isEqualTo(amount);
             assertThat(orders.get(f.owner().id(), f.order().id()).paymentStatus()).isEqualTo("PAID");
         }
+        // Also cover failed(): SDK retrieval fails, while the verified immutable envelope is ahead of the clock.
+        int postsBeforeFailure=PROVIDER.refundPosts.get();
+        long operationsBefore=jdbc.queryForObject("SELECT count(*) FROM refund_operations",Long.class);
+        long originsBefore=jdbc.queryForObject("SELECT count(*) FROM access_grants",Long.class);
+        var unavailable=futureVerifiedEnvelope(event("refund.updated",Map.of("id","re_unavailable_"+key().replace("-",""),"object","refund")));
+        until(()->inboxState(unavailable.id()).equals("RETRY"));
+        var failed=jdbc.queryForMap("SELECT created_at,updated_at,processed_at,attempts,next_attempt_at FROM stripe_event_inbox WHERE id=?",unavailable.id());
+        assertThat(((java.sql.Timestamp)failed.get("created_at")).toInstant()).isEqualTo(unavailable.createdAt());
+        assertThat(((java.sql.Timestamp)failed.get("updated_at")).toInstant()).isAfterOrEqualTo(unavailable.createdAt());
+        assertThat(failed.get("processed_at")).isNull();assertThat(failed.get("attempts")).isEqualTo(1);assertThat(failed.get("next_attempt_at")).isNotNull();
+        assertThat(PROVIDER.refundPosts.get()).isEqualTo(postsBeforeFailure);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM refund_operations",Long.class)).isEqualTo(operationsBefore);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM access_grants",Long.class)).isEqualTo(originsBefore);
     }
 
     @Test void pendingThenFailedPartialKeepRetainsAccessAndReleasesOnlyItsReservation() throws Exception {
         var f = fixture(false); var op = approve(f, 400, List.of(allocation(f.order(), 0, 400, "KEEP")));
         PROVIDER.nextRefundStatus = "pending"; var pending = execute(f, op, key()); assertThat(text(pending, "state")).isEqualTo("PENDING");
         var before = tree(get(f.owner(), context(f.order()))); assertThat(before.path("reservedMinor").asLong()).isEqualTo(400); assertThat(before.path("confirmedRefundedMinor").asLong()).isZero();
-        assertThat(rights.covers(f.owner().id(), f.a().course().resourceId(), f.a().course().versionId(), "fr")).isTrue();
+        assertCovered(f.owner().id(), f.a().course().resourceId(), f.a().course().versionId(), "fr");
         String providerId = PROVIDER.refunds.values().stream().filter(r -> r.intent.equals(PROVIDER.sessionForOrder(f.order().id()).intentId())).findFirst().orElseThrow().id;
         PROVIDER.status(providerId, "failed"); reconcile(f, id(op)); until(() -> state(f, id(op)).equals("FAILED"));
         var after = tree(get(f.owner(), context(f.order()))); assertThat(after.path("reservedMinor").asLong()).isZero(); assertThat(after.path("availableMinor").asLong()).isEqualTo(1200); assertThat(after.path("confirmedRefundedMinor").asLong()).isZero();
         assertThat(orders.get(f.owner().id(), f.order().id()).paymentStatus()).isEqualTo("PAID");
-        assertThat(rights.covers(f.owner().id(), f.a().course().resourceId(), f.a().course().versionId(), "fr")).isTrue();
+        assertCovered(f.owner().id(), f.a().course().resourceId(), f.a().course().versionId(), "fr");
     }
 
     @Test void partialConfirmationAndDuplicateSignedRefundEventsApplyOnlyTheSelectedOriginOnce() throws Exception {
@@ -191,7 +210,7 @@ class RefundHttpIntegrationTest {
         assertThat(webhook(event).statusCode()).isEqualTo(200); assertThat(webhook(event).statusCode()).isEqualTo(200);
         for (int i = 0; i < 8; i++) refunds.runOnce();
         assertThat(PROVIDER.refundPosts.get() - posts).isEqualTo(1);
-        assertThat(rights.covers(f.owner().id(), f.a().course().resourceId(), f.a().course().versionId(), "fr")).isTrue();
+        assertCovered(f.owner().id(), f.a().course().resourceId(), f.a().course().versionId(), "fr");
         assertThat(rights.covers(f.owner().id(), f.b().course().resourceId(), f.b().course().versionId(), "fr")).isFalse();
         assertThat(revoked(f.order().id())).isEqualTo(1); assertThat(grants(f.order().id())).isEqualTo(2);
         assertThat(jdbc.queryForObject("SELECT count(*) FROM notification_outbox WHERE business_key=? AND event_type='REFUND_UPDATED'", Integer.class, "refund:confirmed:" + id(op))).isEqualTo(1);
@@ -217,7 +236,7 @@ class RefundHttpIntegrationTest {
         var oldLink = mapper.readValue(issued.body(), DownloadAccess.class); assertThat(download(oldLink).statusCode()).isEqualTo(200);
         var op = approve(f, 1200, List.of(allocation(pack, 0, 1200, "REVOKE"), allocation(pack, 1, 0, "REVOKE"))); execute(f, op, key());
         assertThat(revoked(pack.id())).isEqualTo(2); assertThat(revoked(old.id())).isZero();
-        assertThat(rights.covers(owner.id(), a.activity().resourceId(), a.activity().versionId(), "fr")).isTrue();
+        assertCovered(owner.id(), a.activity().resourceId(), a.activity().versionId(), "fr");
         assertThat(rights.covers(owner.id(), b.activity().resourceId(), b.activity().versionId(), "fr")).isFalse();
         problem(mutate(owner, "POST", linkPath, access, null, null), 403, "ACCESS_DENIED");
         untilDatabaseExpiry(oldLink.expiresAt()); assertThat(download(oldLink).statusCode()).isBetween(400, 499);
@@ -300,8 +319,8 @@ class RefundHttpIntegrationTest {
             assertThat(op.path("state").asText()).isEqualTo("SUCCEEDED"); assertThat(op.path("accessState").asText()).isEqualTo("NEEDS_REVIEW");
         }
         assertThat(revoked(f.order().id())).isZero();
-        assertThat(rights.covers(f.owner().id(), f.a().course().resourceId(), f.a().course().versionId(), "fr")).isTrue();
-        assertThat(rights.covers(f.owner().id(), f.b().course().resourceId(), f.b().course().versionId(), "fr")).isTrue();
+        assertCovered(f.owner().id(), f.a().course().resourceId(), f.a().course().versionId(), "fr");
+        assertCovered(f.owner().id(), f.b().course().resourceId(), f.b().course().versionId(), "fr");
         assertThat(tree(get(f.owner(), context(f.order()))).path("reconciliationState").asText()).isEqualTo("NEEDS_REVIEW");
         for (var op : operations(f).path("items")) {
             var current = operation(f, UUID.fromString(op.path("id").asText()));
@@ -314,7 +333,7 @@ class RefundHttpIntegrationTest {
         assertThat(state(foreign, id(foreignOperation))).isEqualTo("PREPARED");
         assertThat(tree(get(foreign.owner(), context(foreign.order()))).path("reservedMinor").asLong()).isEqualTo(100);
         assertThat(revoked(foreign.order().id())).isZero();
-        assertThat(rights.covers(foreign.owner().id(), foreign.a().course().resourceId(), foreign.a().course().versionId(), "fr")).isTrue();
+        assertCovered(foreign.owner().id(),foreign.a().course().resourceId(),foreign.a().course().versionId(),"fr");
     }
 
     @Test void rejectionAndCancelBeforeSubmissionAreAuditedWithoutCallingStripe() throws Exception {
@@ -329,12 +348,17 @@ class RefundHttpIntegrationTest {
 
     @Test void revokedOperatorPermissionWhileWaitingForOrderPreventsAnyProviderCall() throws Exception {
         var f = fixture(false); var op = approve(f, 300, List.of(allocation(f.order(), 0, 300, "KEEP"))); int before = PROVIDER.refundPosts.get();
+        // A valid new grant with a future persisted creation makes the date-order regression deterministic.
+        // The prior grant remains revoked in history; no immutable creation date or CHECK is rewritten.
+        assertThat(jdbc.update("UPDATE user_roles SET revoked_at=greatest(created_at,updated_at,CURRENT_TIMESTAMP),updated_at=greatest(created_at,updated_at,CURRENT_TIMESTAMP) WHERE user_id=? AND role_id=(SELECT id FROM roles WHERE code='REFUND_OPERATOR') AND revoked_at IS NULL", f.staff().id())).isEqualTo(1);
+        var futureGrant = jdbc.queryForObject("SELECT clock_timestamp()+interval '1 hour'", java.sql.Timestamp.class);
+        assertThat(jdbc.update("INSERT INTO user_roles(id,user_id,role_id,created_at,updated_at) SELECT ?,?,id,?,? FROM roles WHERE code='REFUND_OPERATOR'", UUID.randomUUID(), f.staff().id(), futureGrant, futureGrant)).isEqualTo(1);
         try (var connection = POSTGRES.createConnection("")) {
             connection.setAutoCommit(false); try (var lock = connection.prepareStatement("SELECT id FROM orders WHERE id=? FOR UPDATE")) { lock.setObject(1, f.order().id()); lock.executeQuery(); }
             try (var pool = Executors.newSingleThreadExecutor()) {
                 var pending = pool.submit(() -> execute(f, op, key()));
                 waitUntil(() -> Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE datname=current_database() AND wait_event_type='Lock' AND query ILIKE '%orders%')", Boolean.class)), 5);
-                assertThat(jdbc.update("UPDATE user_roles SET revoked_at=clock_timestamp(),updated_at=greatest(created_at,clock_timestamp()) WHERE user_id=? AND role_id=(SELECT id FROM roles WHERE code='REFUND_OPERATOR') AND revoked_at IS NULL", f.staff().id())).isEqualTo(1);
+                assertThat(jdbc.update("UPDATE user_roles SET revoked_at=greatest(created_at,updated_at,CURRENT_TIMESTAMP),updated_at=greatest(created_at,updated_at,CURRENT_TIMESTAMP) WHERE user_id=? AND role_id=(SELECT id FROM roles WHERE code='REFUND_OPERATOR') AND revoked_at IS NULL", f.staff().id())).isEqualTo(1);
                 connection.commit(); problem(pending.get(20, TimeUnit.SECONDS), 403, "ACCESS_DENIED");
             }
         }
@@ -394,7 +418,7 @@ class RefundHttpIntegrationTest {
         return orders.get(owner.id(), order.id());
     }
     private OrderView prepared(Account owner, Account staff, List<ContentView> sources, long amount) {
-        var fields = new OfferFields(List.of(new OfferCopy("fr", "Offre fictive P13", "Uniquement une recette technique isolée")), sources.stream().map(c -> new OfferResourceInput(c.resourceId(), c.versionId())).toList(), List.of("fr"), new Money(amount, "EUR"), new OfferTax("INCLUSIVE", List.of(new LocalizedText("fr", "Fiscalité fictive"))), new OfferConditions(new OfferPeriod("FIXED", 30), new OfferPeriod("NONE", null), "PINNED", new OfferSupport("NONE", List.of()), false, "p13-test-terms", List.of(new LocalizedText("fr", "Conditions fictives de test"))));
+        var fields = new OfferFields(List.of(new OfferCopy("fr", "Offre fictive P13", "Uniquement une recette technique isolÃ©e")), sources.stream().map(c -> new OfferResourceInput(c.resourceId(), c.versionId())).toList(), List.of("fr"), new Money(amount, "EUR"), new OfferTax("INCLUSIVE", List.of(new LocalizedText("fr", "FiscalitÃ© fictive"))), new OfferConditions(new OfferPeriod("FIXED", 30), new OfferPeriod("NONE", null), "PINNED", new OfferSupport("NONE", List.of()), false, "p13-test-terms", List.of(new LocalizedText("fr", "Conditions fictives de test"))));
         var offer = offers.create(staff.id(), staff.id(), new CreateOffer("p13-" + key(), sources.size() == 1 ? "COURSE" : "PACK", fields, "Isolated refund fixture"));
         offer = offers.activate(staff.id(), staff.id(), offer.id(), EntityTags.forRevision("offer", offer.id(), offer.revision()), new ChangeOfferState("Activate isolated test offer"));
         return orders.create(owner.id(), owner.id(), key(), new CreateOrder(offer.id(), offer.revision(), "fr", "p13-test-terms")).value();
@@ -480,9 +504,77 @@ class RefundHttpIntegrationTest {
         assertThat(browser.http().send(login, HttpResponse.BodyHandlers.discarding()).statusCode()).isEqualTo(200); return browser;
     }
     private String event(String type, Map<String, Object> object) throws Exception { return mapper.writeValueAsString(Map.of("id", "evt_" + key().replace("-", ""), "object", "event", "type", type, "api_version", StripeSettings.API_VERSION, "created", Instant.now().minusSeconds(60).getEpochSecond(), "livemode", false, "data", Map.of("object", object))); }
+    private FutureEnvelope futureVerifiedEnvelope(String body)throws Exception{
+        // Signature is verified by the actual SDK before inserting minimized, valid immutable metadata.
+        var verified=com.stripe.net.Webhook.constructEvent(body,signature(body),WEBHOOK,300);
+        String object=mapper.readTree(body).path("data").path("object").path("id").asText();
+        String canonical=verified.getId()+"|"+verified.getType()+"|"+object+"|false|"+RefundStripeProvider.ACCOUNT+"|"+verified.getApiVersion()+"|"+verified.getCreated();
+        UUID id=UUID.randomUUID();Instant future=jdbc.queryForObject("SELECT clock_timestamp()+interval '1 hour'",(r,n)->r.getTimestamp(1).toInstant());
+        jdbc.update("INSERT INTO stripe_event_inbox(id,account_id,livemode,event_id,event_type,object_id,api_version,event_created_at,canonical_hash,created_at,updated_at,next_attempt_at) VALUES(?,?,false,?,?,?,?,?,?,?,?,clock_timestamp())",id,RefundStripeProvider.ACCOUNT,verified.getId(),verified.getType(),object,verified.getApiVersion(),java.sql.Timestamp.from(Instant.ofEpochSecond(verified.getCreated())),java.security.MessageDigest.getInstance("SHA-256").digest(canonical.getBytes(StandardCharsets.UTF_8)),java.sql.Timestamp.from(future),java.sql.Timestamp.from(future));
+        // The real HTTP receiver verifies the same body again and acknowledges the durable duplicate.
+        assertThat(webhook(body).statusCode()).isEqualTo(200);
+        return new FutureEnvelope(id,future);
+    }
+    private String inboxState(UUID id){return jdbc.queryForObject("SELECT state FROM stripe_event_inbox WHERE id=?",String.class,id);}
+    private void assertCovered(UUID owner,UUID resource,UUID version,String locale){
+        boolean covered=rights.covers(owner,resource,version,locale);
+        assertThat(covered).as("Retained access; safe metadata after its single false read=%s",
+                covered?"not collected":coverageMetadata(owner,resource,version,locale)).isTrue();
+    }
+    private Object coverageMetadata(UUID owner,UUID resource,UUID version,String locale){
+        // Only evaluated after a single false covers(). No transaction, delay, retry or authorization change is introduced.
+        // All diagnostic clocks are AFTER that call, so these observations cannot establish its exact earlier instant.
+        try{
+            String ancestry="""
+                WITH RECURSIVE ancestors(version_id,resource_id,depth) AS (
+                  SELECT id,resource_id,0 FROM pedagogical_versions WHERE id=? AND resource_id=?
+                  UNION
+                  SELECT p.id,p.resource_id,a.depth+1 FROM ancestors a
+                  JOIN version_compositions c ON c.child_version_id=a.version_id
+                  JOIN pedagogical_versions p ON p.id=c.parent_version_id WHERE a.depth<2
+                ), observed AS MATERIALIZED(SELECT clock_timestamp() AS at)
+                """;
+            var predicates=jdbc.queryForMap("""
+                SELECT round(extract(epoch FROM clock_timestamp())*1000000)::bigint AS diagnostic_started_database_microseconds,
+                  EXISTS(SELECT 1 FROM user_accounts WHERE id=? AND status='ACTIVE') AS active_owner,
+                  EXISTS(SELECT 1 FROM pedagogical_versions WHERE id=? AND resource_id=?) AS exact_target_version
+                """,owner,version,resource);
+            var nodes=jdbc.queryForList(ancestry+"""
+                SELECT a.depth,r.kind='COURSE' AS is_course,r.archived_at IS NULL AS resource_unarchived,
+                  t.id IS NOT NULL AS locale_exists,
+                  coalesce(t.editorial_state NOT IN('ARCHIVED','STALE'),false) AS translation_available,
+                  e.id IS NOT NULL AND e.document_json IS NOT NULL AS published_document,
+                  t.id IS NOT NULL AND(t.source_translation_id IS NULL OR
+                    coalesce(t.published_source_revision_id=s.current_revision_id AND s.editorial_state NOT IN('ARCHIVED','STALE'),false)) AS translation_source_fresh
+                FROM ancestors a JOIN learning_resources r ON r.id=a.resource_id
+                LEFT JOIN content_translations t ON t.pedagogical_version_id=a.version_id AND t.locale=?
+                LEFT JOIN editorial_revisions e ON e.id=t.published_revision_id
+                LEFT JOIN content_translations s ON s.id=t.source_translation_id ORDER BY a.depth,a.version_id
+                """,version,resource,locale);
+            var origins=jdbc.queryForList(ancestry+"""
+                SELECT a.depth AS course_parent_depth,g.revoked_at IS NULL AS not_revoked,g.starts_at<=observed.at AS started,
+                  g.expires_at IS NULL OR g.expires_at>observed.at AS unexpired,g.locales @> ?::jsonb AS locale_included,
+                  g.version_id=a.version_id AS exact_version,g.origin_type IN('ORDER_LINE','MANUAL_TEST') AS origin_type_allowed_in_test,
+                  g.version_id=a.version_id OR coalesce(g.version_policy='UPDATES_DURING_PERIOD'
+                    AND v.frozen_at>=g.starts_at AND v.frozen_at<=g.updates_until,false) AS version_policy_eligible,
+                  round(extract(epoch FROM(g.starts_at-observed.at))*1000000)::bigint AS start_delta_microseconds,
+                  round(extract(epoch FROM observed.at)*1000000)::bigint AS observed_database_time_microseconds,
+                  round(extract(epoch FROM g.starts_at)*1000000)::bigint AS starts_at_microseconds,
+                  round(extract(epoch FROM g.expires_at)*1000000)::bigint AS expires_at_microseconds
+                FROM ancestors a JOIN learning_resources r ON r.id=a.resource_id AND r.kind='COURSE'
+                JOIN pedagogical_versions v ON v.id=a.version_id
+                JOIN access_grants g ON g.resource_id=a.resource_id CROSS JOIN observed WHERE g.owner_id=? ORDER BY a.depth,g.id
+                """,version,resource,"[\""+locale+"\"]",owner);
+            var finished=jdbc.queryForObject("SELECT round(extract(epoch FROM clock_timestamp())*1000000)::bigint",Long.class);
+            var metadata=java.util.Map.of("capturedAfterSingleFalseCovers",true,"originCount",origins.size(),
+                    "predicates",predicates,"pinnedAncestors",nodes,"origins",origins,"diagnostic_finished_database_microseconds",finished);
+            try{var directory=java.nio.file.Path.of(System.getProperty("user.dir")).resolve("../../.runtime").normalize();java.nio.file.Files.createDirectories(directory);var destination=java.nio.file.Files.createTempFile(directory,"p15-access-refusal-",".json");java.nio.file.Files.write(destination,mapper.writeValueAsBytes(metadata));}catch(java.io.IOException unavailable){/* Assertion still reports safe metadata. */}
+            return metadata;
+        }catch(RuntimeException unavailable){return java.util.Map.of("diagnosticAvailable",false,"exceptionClass",unavailable.getClass().getSimpleName());}
+    }
+    private String signature(String body)throws Exception{long timestamp=Instant.now().getEpochSecond();var mac=Mac.getInstance("HmacSHA256");mac.init(new SecretKeySpec(WEBHOOK.getBytes(StandardCharsets.UTF_8),"HmacSHA256"));return "t="+timestamp+",v1="+HexFormat.of().formatHex(mac.doFinal((timestamp+"."+body).getBytes(StandardCharsets.UTF_8)));}
     private HttpResponse<String> webhook(String body) throws Exception {
-        long timestamp = Instant.now().getEpochSecond(); var mac = Mac.getInstance("HmacSHA256"); mac.init(new SecretKeySpec(WEBHOOK.getBytes(StandardCharsets.UTF_8), "HmacSHA256")); String signature = HexFormat.of().formatHex(mac.doFinal((timestamp + "." + body).getBytes(StandardCharsets.UTF_8)));
-        return HttpClient.newHttpClient().send(HttpRequest.newBuilder(uri("/api/v1/webhooks/stripe")).header("Content-Type", "application/json").header("Stripe-Signature", "t=" + timestamp + ",v1=" + signature).POST(HttpRequest.BodyPublishers.ofString(body)).build(), HttpResponse.BodyHandlers.ofString());
+        return HttpClient.newHttpClient().send(HttpRequest.newBuilder(uri("/api/v1/webhooks/stripe")).header("Content-Type", "application/json").header("Stripe-Signature", signature(body)).POST(HttpRequest.BodyPublishers.ofString(body)).build(), HttpResponse.BodyHandlers.ofString());
     }
     private HttpResponse<String> mutate(Account who, String method, String path, Object body, String etag, String idem) throws Exception { return send(who, method, path, body, csrf(who), etag, idem, who.id().toString()); }
     private HttpResponse<String> send(Account who, String method, String path, Object body, String token, String etag, String idem, String context) throws Exception {
@@ -504,6 +596,7 @@ class RefundHttpIntegrationTest {
     private URI uri(String path) { return URI.create("http://127.0.0.1:" + port + path); }
     private static String key() { return UUID.randomUUID().toString(); }
     private static String s3Endpoint() { return "http://127.0.0.1:" + S3.getMappedPort(8333); }
+    private record FutureEnvelope(UUID id,Instant createdAt) { }
     private record Account(HttpClient http, UUID id) { }
     private record Bundle(ContentView course, ContentView activity, UUID assetId) { }
     private record Fixture(Account owner, Account staff, Bundle a, Bundle b, OrderView order) { }

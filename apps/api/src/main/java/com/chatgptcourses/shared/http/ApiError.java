@@ -58,6 +58,11 @@ public enum ApiError {
     DATA_REQUEST_NOT_CANCELLABLE(HttpStatus.CONFLICT,"Cette demande ne peut plus être annulée dans son état actuel."),
     ATTESTATION_NOT_ELIGIBLE(HttpStatus.CONFLICT,"Les critères de participation ne sont pas remplis pour cette attestation."),
     ATTESTATION_DOCUMENT_TOO_LARGE(HttpStatus.CONFLICT,"Les preuves dépassent la taille disponible pour ce document."),
+    RECONCILIATION_UNAVAILABLE(HttpStatus.CONFLICT,"Cet objet ne permet pas de rapprochement dans son état actuel."),
+    SUPPORT_DRAFT_NOT_PUBLISHABLE(HttpStatus.CONFLICT,"Préparez et enregistrez une nouvelle réponse avant de la publier."),
+    ASSIGNEE_UNAVAILABLE(HttpStatus.CONFLICT,"Le compte choisi ne peut pas recevoir cette affectation."),
+    CONTENT_CASE_CONFLICT(HttpStatus.CONFLICT,"La résolution ne correspond pas à une correction de ce contenu."),
+    EXPORT_TOO_LARGE(HttpStatus.CONFLICT,"Cet export dépasse la taille disponible. Réduisez la période."),
     REQUEST_TOO_LARGE(HttpStatus.PAYLOAD_TOO_LARGE, "La requête dépasse la taille autorisée."),
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "La requête n’a pas pu être traitée.");
 

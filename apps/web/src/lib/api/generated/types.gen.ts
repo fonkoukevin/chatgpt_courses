@@ -2584,6 +2584,337 @@ export type AttestationEnrollmentPage = {
     total: number;
 };
 
+export type OperationsPeriod = {
+    from: UtcInstant;
+    to: UtcInstant;
+};
+
+export type DashboardCounter = {
+    code: 'ORDERS_CREATED' | 'PAYMENTS_CONFIRMED' | 'ACTIVATIONS_READY' | 'REFUND_REQUESTS_OPEN' | 'INCIDENTS_OPEN' | 'SUPPORT_OPEN' | 'CONTENT_CASES_OPEN';
+    value: string | null;
+    availability: 'AVAILABLE' | 'FORBIDDEN' | 'UNKNOWN';
+    unavailableReason: string | null;
+};
+
+export type OperationsDashboard = {
+    period: OperationsPeriod;
+    generatedAt: UtcInstant;
+    counters: Array<DashboardCounter>;
+};
+
+export type AdminOrderSummary = {
+    id: Uuid;
+    ownerId: Uuid;
+    revision: Revision;
+    offerId: Uuid;
+    title: string;
+    total: Money;
+    orderStatus: string;
+    paymentStatus: string;
+    fulfillmentStatus: string;
+    createdAt: UtcInstant;
+    paidAt: UtcInstant | null;
+};
+
+export type OrderOrigin = {
+    id: Uuid;
+    orderResourceId: Uuid;
+    resourceId: Uuid;
+    versionId: Uuid;
+    versionNumber: number;
+    locales: Array<Locale>;
+    state: string;
+    startsAt: UtcInstant;
+    expiresAt: UtcInstant | null;
+    revokedAt: UtcInstant | null;
+};
+
+export type PaymentReference = {
+    operationId: Uuid;
+    operationState: string;
+    sessionId: string | null;
+    paymentIntentId: string | null;
+    lastErrorCode: string | null;
+};
+
+/**
+ * Instantané acheté P11 réutilisé. Aucun secret, carte, adresse Checkout ou production privée. orderRevisionTag concerne uniquement la sous-ressource commande ; la réponse composite ne prétend pas avoir un ETag fort.
+ */
+export type AdminOrderDetail = {
+    ownerId: Uuid;
+    order: OrderView;
+    orderRevisionTag: string;
+    payment: PaymentReference | null;
+    origins: Array<OrderOrigin>;
+    confirmedRefundedMinor: number;
+    reservedRefundMinor: number;
+    refundReviewRequired: boolean;
+    canReconcile: boolean;
+};
+
+export type RequestOrderReconciliation = {
+    reason: 'PROVIDER_RECOVERED' | 'MANUAL_RECONCILIATION';
+    expectedOrderRevision: Revision;
+};
+
+export type OperationReceipt = {
+    actionId: Uuid;
+    kind: string;
+    targetId: Uuid;
+    state: string;
+    recordedAt: UtcInstant;
+    replayed: boolean;
+};
+
+export type IncidentSummary = {
+    id: Uuid;
+    kind: 'NOTIFICATION' | 'PAYMENT_EVENT' | 'PAYMENT_RECONCILIATION' | 'CHECKOUT_OPERATION' | 'REFUND_OPERATION' | 'REFUND_RECONCILIATION';
+    state: string;
+    lastErrorCode: string | null;
+    orderId: Uuid | null;
+    operationId: Uuid | null;
+    createdAt: UtcInstant;
+    updatedAt: UtcInstant;
+    nextAttemptAt: UtcInstant | null;
+    canRetry: boolean;
+    retryUnavailableReason: string | null;
+};
+
+export type RetryIncident = {
+    reason: 'PROVIDER_RECOVERED' | 'MANUAL_RECONCILIATION' | 'SMTP_RECOVERED' | 'MANUAL_RETRY';
+    ackDuplicate: boolean;
+};
+
+export type AuditEvent = {
+    id: Uuid;
+    source: string;
+    actorId: Uuid | null;
+    action: string;
+    objectType: string;
+    objectId: Uuid;
+    reasonCode: string;
+    result: string;
+    occurredAt: UtcInstant;
+};
+
+export type SupportAssignmentView = {
+    ticketId: Uuid;
+    revision: Revision;
+    assigneeId: Uuid | null;
+    updatedAt: UtcInstant | null;
+};
+
+export type AssignSupport = {
+    assigneeId: Uuid | null;
+    reason: string;
+};
+
+export type SupportAssignee = {
+    id: Uuid;
+    displayName: string | null;
+};
+
+/**
+ * Brouillon privé par opérateur. EMPTY virtuel révision0 sans date. Sauvegarder ne publie aucun message et n’envoie aucun email.
+ */
+export type SupportDraftView = {
+    ticketId: Uuid;
+    authorId: Uuid;
+    revision: Revision;
+    text: string;
+    state: 'EMPTY' | 'DRAFT' | 'PUBLISHED';
+    publishedMessageId: Uuid | null;
+    updatedAt: UtcInstant | null;
+};
+
+export type SaveSupportDraft = {
+    text: string;
+};
+
+export type PublishSupportDraft = {
+    expectedTicketRevision: Revision;
+    reason: string;
+};
+
+/**
+ * Publication explicite atomique via le service Support/outbox P10-P14 ; PENDING ne signifie pas email envoyé. Même clé et corps retrouvent la publication sans doublon.
+ */
+export type PublishedSupportReply = {
+    ticket: SupportTicketView;
+    message: SupportMessageView;
+    draft: SupportDraftView;
+};
+
+export type InternalNote = {
+    id: Uuid;
+    ticketId: Uuid;
+    authorId: Uuid;
+    text: string;
+    createdAt: UtcInstant;
+};
+
+export type AddInternalNote = {
+    text: string;
+};
+
+export type SupportTimeEntry = {
+    id: Uuid;
+    ticketId: Uuid;
+    authorId: Uuid;
+    minutes: number;
+    reason: string;
+    createdAt: UtcInstant;
+};
+
+export type RecordSupportTime = {
+    minutes: number;
+    reason: string;
+};
+
+export type ContentCaseView = {
+    id: Uuid;
+    revision: Revision;
+    ticketId: Uuid | null;
+    resourceId: Uuid;
+    versionId: Uuid;
+    sourceRevisionId: Uuid | null;
+    translationId: Uuid;
+    locale: Locale;
+    title: string;
+    state: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'DISMISSED';
+    assigneeId: Uuid | null;
+    correctedRevisionId: Uuid | null;
+    createdAt: UtcInstant;
+    updatedAt: UtcInstant;
+};
+
+export type CreateContentCase = {
+    ticketId: Uuid | null;
+    resourceId: Uuid;
+    versionId: Uuid;
+    sourceRevisionId: Uuid | null;
+    locale: Locale;
+    reason: string;
+};
+
+export type UpdateContentCase = {
+    state: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'DISMISSED';
+    assigneeId: Uuid | null;
+    correctedRevisionId: Uuid | null;
+    reason: string;
+};
+
+export type ContentCaseEvent = {
+    id: Uuid;
+    caseId: Uuid;
+    actorId: Uuid;
+    action: string;
+    reason: string;
+    correctedRevisionId: Uuid | null;
+    createdAt: UtcInstant;
+};
+
+export type MetricDefinition = {
+    code: string;
+    unit: string;
+    source: string;
+    dateField: string;
+    deduplication: string;
+    denominator: string;
+    coverage: string;
+    limitation: string;
+};
+
+export type CountMetric = {
+    code: 'USEFUL_VISITS' | 'ACTIVITY_STARTED' | 'PERSONAL_REVISIONS_SAVED' | 'CHECKOUT_STARTED' | 'PAYMENT_CONFIRMED' | 'ACCESS_GRANTED' | 'DECLARED_COMPLETION' | 'REFUND_CONFIRMED';
+    value: string | null;
+    availability: 'AVAILABLE' | 'PARTIAL' | 'UNKNOWN';
+    unavailableReason: string | null;
+    definition: MetricDefinition;
+};
+
+export type CurrencyMetrics = {
+    currency: 'EUR' | 'USD' | 'GBP';
+    grossPaidMinor: string;
+    confirmedRefundedMinor: string;
+    netCollectedBeforeCostsMinor: string;
+    taxesMinor: string | null;
+    feesMinor: string | null;
+    variableCostsMinor: string | null;
+    supportCostMinor: string | null;
+    estimatedContributionMinor: string | null;
+    unknownReasons: Array<string>;
+};
+
+/**
+ * Faits serveur uniquement. Visites non mesurées ; ledgers d’activités et révisions observés depuis V017, sans historique reconstruit. Montants entiers exacts sous forme de chaînes, groupés par devise ; inconnus null. Net = paiements confirmés moins remboursements confirmés dans la période, non cohorte et non bénéfice.
+ */
+export type OperationsMetrics = {
+    period: OperationsPeriod;
+    generatedAt: UtcInstant;
+    revisionTrackingSince: UtcInstant;
+    counts: Array<CountMetric>;
+    currencies: Array<CurrencyMetrics>;
+    recordedSupportMinutes: string | null;
+    supportMinutesAvailability: 'AVAILABLE' | 'UNKNOWN';
+};
+
+export type AdminOrderPage = {
+    items: Array<AdminOrderSummary>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+export type IncidentPage = {
+    items: Array<IncidentSummary>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+export type AuditPage = {
+    items: Array<AuditEvent>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+export type SupportAssigneePage = {
+    items: Array<SupportAssignee>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+export type InternalNotePage = {
+    items: Array<InternalNote>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+export type SupportTimePage = {
+    items: Array<SupportTimeEntry>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+export type ContentCasePage = {
+    items: Array<ContentCaseView>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
+export type ContentCaseEventPage = {
+    items: Array<ContentCaseEvent>;
+    page: number;
+    pageSize: number;
+    total: number;
+};
+
 export type RegisterRequestWritable = {
     email: string;
     /**
@@ -10945,3 +11276,851 @@ export type DownloadAttestationDocumentResponses = {
 };
 
 export type DownloadAttestationDocumentResponse = DownloadAttestationDocumentResponses[keyof DownloadAttestationDocumentResponses];
+
+export type GetOperationsDashboardData = {
+    body?: never;
+    path?: never;
+    query: {
+        from: UtcInstant;
+        to: UtcInstant;
+    };
+    url: '/admin/operations/dashboard';
+};
+
+export type GetOperationsDashboardErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetOperationsDashboardError = GetOperationsDashboardErrors[keyof GetOperationsDashboardErrors];
+
+export type GetOperationsDashboardResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: OperationsDashboard;
+};
+
+export type GetOperationsDashboardResponse = GetOperationsDashboardResponses[keyof GetOperationsDashboardResponses];
+
+export type ListAdminOrdersData = {
+    body?: never;
+    path?: never;
+    query: {
+        from: UtcInstant;
+        to: UtcInstant;
+        paymentStatus?: string;
+        fulfillmentStatus?: string;
+        offerId?: Uuid;
+        currency?: 'EUR' | 'USD' | 'GBP';
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/admin/orders';
+};
+
+export type ListAdminOrdersErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListAdminOrdersError = ListAdminOrdersErrors[keyof ListAdminOrdersErrors];
+
+export type ListAdminOrdersResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: AdminOrderPage;
+};
+
+export type ListAdminOrdersResponse = ListAdminOrdersResponses[keyof ListAdminOrdersResponses];
+
+export type GetAdminOrderData = {
+    body?: never;
+    path: {
+        orderId: Uuid;
+    };
+    query?: never;
+    url: '/admin/orders/{orderId}';
+};
+
+export type GetAdminOrderErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetAdminOrderError = GetAdminOrderErrors[keyof GetAdminOrderErrors];
+
+export type GetAdminOrderResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: AdminOrderDetail;
+};
+
+export type GetAdminOrderResponse = GetAdminOrderResponses[keyof GetAdminOrderResponses];
+
+export type RequestOrderReconciliationData = {
+    body: RequestOrderReconciliation;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path: {
+        orderId: Uuid;
+    };
+    query?: never;
+    url: '/admin/orders/{orderId}/reconciliation-requests';
+};
+
+export type RequestOrderReconciliationErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type RequestOrderReconciliationError = RequestOrderReconciliationErrors[keyof RequestOrderReconciliationErrors];
+
+export type RequestOrderReconciliationResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: OperationReceipt;
+    /**
+     * Travail enregistré ; aucun succès fournisseur anticipé.
+     */
+    202: OperationReceipt;
+};
+
+export type RequestOrderReconciliationResponse = RequestOrderReconciliationResponses[keyof RequestOrderReconciliationResponses];
+
+export type ListOperationsIncidentsData = {
+    body?: never;
+    path?: never;
+    query: {
+        from: UtcInstant;
+        to: UtcInstant;
+        kind?: 'NOTIFICATION' | 'PAYMENT_EVENT' | 'PAYMENT_RECONCILIATION' | 'CHECKOUT_OPERATION' | 'REFUND_OPERATION' | 'REFUND_RECONCILIATION';
+        state?: string;
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/admin/incidents';
+};
+
+export type ListOperationsIncidentsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListOperationsIncidentsError = ListOperationsIncidentsErrors[keyof ListOperationsIncidentsErrors];
+
+export type ListOperationsIncidentsResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: IncidentPage;
+};
+
+export type ListOperationsIncidentsResponse = ListOperationsIncidentsResponses[keyof ListOperationsIncidentsResponses];
+
+export type RetryOperationsIncidentData = {
+    body: RetryIncident;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path: {
+        kind: 'NOTIFICATION' | 'PAYMENT_EVENT' | 'PAYMENT_RECONCILIATION' | 'CHECKOUT_OPERATION' | 'REFUND_OPERATION' | 'REFUND_RECONCILIATION';
+        id: Uuid;
+    };
+    query?: never;
+    url: '/admin/incidents/{kind}/{id}/retry';
+};
+
+export type RetryOperationsIncidentErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type RetryOperationsIncidentError = RetryOperationsIncidentErrors[keyof RetryOperationsIncidentErrors];
+
+export type RetryOperationsIncidentResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: OperationReceipt;
+    /**
+     * Travail enregistré ; aucun succès fournisseur anticipé.
+     */
+    202: OperationReceipt;
+};
+
+export type RetryOperationsIncidentResponse = RetryOperationsIncidentResponses[keyof RetryOperationsIncidentResponses];
+
+export type ListOperationsAuditData = {
+    body?: never;
+    path?: never;
+    query: {
+        from: UtcInstant;
+        to: UtcInstant;
+        source?: string;
+        action?: string;
+        actorId?: Uuid;
+        objectId?: Uuid;
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/admin/audit';
+};
+
+export type ListOperationsAuditErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListOperationsAuditError = ListOperationsAuditErrors[keyof ListOperationsAuditErrors];
+
+export type ListOperationsAuditResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: AuditPage;
+};
+
+export type ListOperationsAuditResponse = ListOperationsAuditResponses[keyof ListOperationsAuditResponses];
+
+export type ListSupportAssigneesData = {
+    body?: never;
+    path?: never;
+    query?: {
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/admin/support-assignees';
+};
+
+export type ListSupportAssigneesErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListSupportAssigneesError = ListSupportAssigneesErrors[keyof ListSupportAssigneesErrors];
+
+export type ListSupportAssigneesResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: SupportAssigneePage;
+};
+
+export type ListSupportAssigneesResponse = ListSupportAssigneesResponses[keyof ListSupportAssigneesResponses];
+
+export type GetSupportAssignmentData = {
+    body?: never;
+    path: {
+        ticketId: Uuid;
+    };
+    query?: never;
+    url: '/admin/support-tickets/{ticketId}/assignment';
+};
+
+export type GetSupportAssignmentErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetSupportAssignmentError = GetSupportAssignmentErrors[keyof GetSupportAssignmentErrors];
+
+export type GetSupportAssignmentResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: SupportAssignmentView;
+};
+
+export type GetSupportAssignmentResponse = GetSupportAssignmentResponses[keyof GetSupportAssignmentResponses];
+
+export type AssignSupportTicketData = {
+    body: AssignSupport;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path: {
+        ticketId: Uuid;
+    };
+    query?: never;
+    url: '/admin/support-tickets/{ticketId}/assignment';
+};
+
+export type AssignSupportTicketErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type AssignSupportTicketError = AssignSupportTicketErrors[keyof AssignSupportTicketErrors];
+
+export type AssignSupportTicketResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: SupportAssignmentView;
+};
+
+export type AssignSupportTicketResponse = AssignSupportTicketResponses[keyof AssignSupportTicketResponses];
+
+export type GetSupportReplyDraftData = {
+    body?: never;
+    path: {
+        ticketId: Uuid;
+    };
+    query?: never;
+    url: '/admin/support-tickets/{ticketId}/reply-draft';
+};
+
+export type GetSupportReplyDraftErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetSupportReplyDraftError = GetSupportReplyDraftErrors[keyof GetSupportReplyDraftErrors];
+
+export type GetSupportReplyDraftResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: SupportDraftView;
+};
+
+export type GetSupportReplyDraftResponse = GetSupportReplyDraftResponses[keyof GetSupportReplyDraftResponses];
+
+export type SaveSupportReplyDraftData = {
+    body: SaveSupportDraft;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+    };
+    path: {
+        ticketId: Uuid;
+    };
+    query?: never;
+    url: '/admin/support-tickets/{ticketId}/reply-draft';
+};
+
+export type SaveSupportReplyDraftErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type SaveSupportReplyDraftError = SaveSupportReplyDraftErrors[keyof SaveSupportReplyDraftErrors];
+
+export type SaveSupportReplyDraftResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: SupportDraftView;
+};
+
+export type SaveSupportReplyDraftResponse = SaveSupportReplyDraftResponses[keyof SaveSupportReplyDraftResponses];
+
+export type PublishSupportReplyDraftData = {
+    body: PublishSupportDraft;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path: {
+        ticketId: Uuid;
+    };
+    query?: never;
+    url: '/admin/support-tickets/{ticketId}/reply-draft/publications';
+};
+
+export type PublishSupportReplyDraftErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type PublishSupportReplyDraftError = PublishSupportReplyDraftErrors[keyof PublishSupportReplyDraftErrors];
+
+export type PublishSupportReplyDraftResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: PublishedSupportReply;
+    /**
+     * Création persistée.
+     */
+    201: PublishedSupportReply;
+};
+
+export type PublishSupportReplyDraftResponse = PublishSupportReplyDraftResponses[keyof PublishSupportReplyDraftResponses];
+
+export type ListSupportInternalNotesData = {
+    body?: never;
+    path: {
+        ticketId: Uuid;
+    };
+    query?: {
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/admin/support-tickets/{ticketId}/internal-notes';
+};
+
+export type ListSupportInternalNotesErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListSupportInternalNotesError = ListSupportInternalNotesErrors[keyof ListSupportInternalNotesErrors];
+
+export type ListSupportInternalNotesResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: InternalNotePage;
+};
+
+export type ListSupportInternalNotesResponse = ListSupportInternalNotesResponses[keyof ListSupportInternalNotesResponses];
+
+export type AddSupportInternalNoteData = {
+    body: AddInternalNote;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path: {
+        ticketId: Uuid;
+    };
+    query?: never;
+    url: '/admin/support-tickets/{ticketId}/internal-notes';
+};
+
+export type AddSupportInternalNoteErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type AddSupportInternalNoteError = AddSupportInternalNoteErrors[keyof AddSupportInternalNoteErrors];
+
+export type AddSupportInternalNoteResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: InternalNote;
+    /**
+     * Création persistée.
+     */
+    201: InternalNote;
+};
+
+export type AddSupportInternalNoteResponse = AddSupportInternalNoteResponses[keyof AddSupportInternalNoteResponses];
+
+export type ListSupportSupportTimeEntrysData = {
+    body?: never;
+    path: {
+        ticketId: Uuid;
+    };
+    query?: {
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/admin/support-tickets/{ticketId}/time-entries';
+};
+
+export type ListSupportSupportTimeEntrysErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListSupportSupportTimeEntrysError = ListSupportSupportTimeEntrysErrors[keyof ListSupportSupportTimeEntrysErrors];
+
+export type ListSupportSupportTimeEntrysResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: SupportTimePage;
+};
+
+export type ListSupportSupportTimeEntrysResponse = ListSupportSupportTimeEntrysResponses[keyof ListSupportSupportTimeEntrysResponses];
+
+export type AddSupportSupportTimeEntryData = {
+    body: RecordSupportTime;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path: {
+        ticketId: Uuid;
+    };
+    query?: never;
+    url: '/admin/support-tickets/{ticketId}/time-entries';
+};
+
+export type AddSupportSupportTimeEntryErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type AddSupportSupportTimeEntryError = AddSupportSupportTimeEntryErrors[keyof AddSupportSupportTimeEntryErrors];
+
+export type AddSupportSupportTimeEntryResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: SupportTimeEntry;
+    /**
+     * Création persistée.
+     */
+    201: SupportTimeEntry;
+};
+
+export type AddSupportSupportTimeEntryResponse = AddSupportSupportTimeEntryResponses[keyof AddSupportSupportTimeEntryResponses];
+
+export type ListContentCasesData = {
+    body?: never;
+    path?: never;
+    query: {
+        from: UtcInstant;
+        to: UtcInstant;
+        state?: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'DISMISSED';
+        resourceId?: Uuid;
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/admin/content-cases';
+};
+
+export type ListContentCasesErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListContentCasesError = ListContentCasesErrors[keyof ListContentCasesErrors];
+
+export type ListContentCasesResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: ContentCasePage;
+};
+
+export type ListContentCasesResponse = ListContentCasesResponses[keyof ListContentCasesResponses];
+
+export type CreateContentCaseData = {
+    body: CreateContentCase;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path?: never;
+    query?: never;
+    url: '/admin/content-cases';
+};
+
+export type CreateContentCaseErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type CreateContentCaseError = CreateContentCaseErrors[keyof CreateContentCaseErrors];
+
+export type CreateContentCaseResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: ContentCaseView;
+    /**
+     * Création persistée.
+     */
+    201: ContentCaseView;
+};
+
+export type CreateContentCaseResponse = CreateContentCaseResponses[keyof CreateContentCaseResponses];
+
+export type GetContentCaseData = {
+    body?: never;
+    path: {
+        caseId: Uuid;
+    };
+    query?: never;
+    url: '/admin/content-cases/{caseId}';
+};
+
+export type GetContentCaseErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetContentCaseError = GetContentCaseErrors[keyof GetContentCaseErrors];
+
+export type GetContentCaseResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: ContentCaseView;
+};
+
+export type GetContentCaseResponse = GetContentCaseResponses[keyof GetContentCaseResponses];
+
+export type UpdateContentCaseData = {
+    body: UpdateContentCase;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+        /**
+         * UUID canonique lié au propriétaire et au corps exact. Même clé/autre corps409 ; aucun retry implicite.
+         */
+        'Idempotency-Key': Uuid;
+    };
+    path: {
+        caseId: Uuid;
+    };
+    query?: never;
+    url: '/admin/content-cases/{caseId}';
+};
+
+export type UpdateContentCaseErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type UpdateContentCaseError = UpdateContentCaseErrors[keyof UpdateContentCaseErrors];
+
+export type UpdateContentCaseResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: ContentCaseView;
+};
+
+export type UpdateContentCaseResponse = UpdateContentCaseResponses[keyof UpdateContentCaseResponses];
+
+export type ListContentCaseEventsData = {
+    body?: never;
+    path: {
+        caseId: Uuid;
+    };
+    query?: {
+        page?: number;
+        pageSize?: number;
+    };
+    url: '/admin/content-cases/{caseId}/events';
+};
+
+export type ListContentCaseEventsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ListContentCaseEventsError = ListContentCaseEventsErrors[keyof ListContentCaseEventsErrors];
+
+export type ListContentCaseEventsResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: ContentCaseEventPage;
+};
+
+export type ListContentCaseEventsResponse = ListContentCaseEventsResponses[keyof ListContentCaseEventsResponses];
+
+export type GetOperationsMetricsData = {
+    body?: never;
+    path?: never;
+    query: {
+        from: UtcInstant;
+        to: UtcInstant;
+        currency?: 'EUR' | 'USD' | 'GBP';
+    };
+    url: '/admin/metrics';
+};
+
+export type GetOperationsMetricsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetOperationsMetricsError = GetOperationsMetricsErrors[keyof GetOperationsMetricsErrors];
+
+export type GetOperationsMetricsResponses = {
+    /**
+     * Résultat réel, éventuellement retrouvé par rejeu idempotent.
+     */
+    200: OperationsMetrics;
+};
+
+export type GetOperationsMetricsResponse = GetOperationsMetricsResponses[keyof GetOperationsMetricsResponses];
+
+export type ExportOperationsMetricsData = {
+    body?: never;
+    path?: never;
+    query: {
+        from: UtcInstant;
+        to: UtcInstant;
+        currency?: 'EUR' | 'USD' | 'GBP';
+    };
+    url: '/admin/metrics/export';
+};
+
+export type ExportOperationsMetricsErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ExportOperationsMetricsError = ExportOperationsMetricsErrors[keyof ExportOperationsMetricsErrors];
+
+export type ExportOperationsMetricsResponses = {
+    /**
+     * Fichier CSV effectivement produit. Le proxy vérifie les octets, leur taille et SHA256. X-Content-Size porte la taille décodée attendue ; Content-Length dépend du transport.
+     */
+    200: string;
+};
+
+export type ExportOperationsMetricsResponse = ExportOperationsMetricsResponses[keyof ExportOperationsMetricsResponses];

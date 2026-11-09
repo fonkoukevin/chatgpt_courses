@@ -41,11 +41,21 @@ public class PaymentInboxOperations {
         auth.mutation(actor,context,"payments.events.retry");var current=rows.getFirst();
         boolean abandoned="PROCESSING".equals(current.state())&&Boolean.TRUE.equals(jdbc.queryForObject("SELECT lease_until<=clock_timestamp() FROM "+table+" WHERE id=?",Boolean.class,id));
         if(!Set.of("RETRY","DEAD","WAITING").contains(current.state())&&!abandoned)throw new ApiException(ApiError.CONFLICT);
-        jdbc.update("UPDATE "+table+" SET state='RETRY',attempts=0,next_attempt_at=clock_timestamp(),lease_id=NULL,lease_until=NULL,last_error_code=NULL,processed_at=NULL,updated_at=clock_timestamp() WHERE id=?",id);
+        jdbc.update("UPDATE "+table+" SET state='RETRY',attempts=0,next_attempt_at=clock_timestamp(),lease_id=NULL,lease_until=NULL,last_error_code=NULL,processed_at=NULL,updated_at=greatest(updated_at,created_at,clock_timestamp()) WHERE id=?",id);
         jdbc.update("INSERT INTO payment_work_retries(id,inbox_id,reconciliation_id,actor_id,reason) VALUES(?,?,?,?,?)",UUID.randomUUID(),"stripe_event_inbox".equals(table)?id:null,"payment_reconciliation_jobs".equals(table)?id:null,actor,reason);
         return jdbc.queryForObject("SELECT * FROM("+VIEW+") work WHERE id=?",this::row,id);
     }
     private PaymentEventSummary row(ResultSet rs,int n)throws SQLException{return new PaymentEventSummary(rs.getObject("id",UUID.class),rs.getString("kind"),rs.getString("event_id"),rs.getString("event_type"),rs.getString("object_id"),rs.getBoolean("livemode"),rs.getString("account_id"),rs.getString("api_version"),rs.getString("state"),rs.getInt("attempts"),instant(rs,"next_attempt_at"),rs.getString("last_error_code"),instant(rs,"created_at"),instant(rs,"updated_at"),instant(rs,"processed_at"),rs.getObject("order_id",UUID.class),rs.getObject("operation_id",UUID.class));}
+    /** An explicit operational request only schedules the existing P12 treatment. */
+    @Transactional
+    public UUID reconcileOrder(UUID actor,UUID context,UUID order,Long expectedRevision){
+        auth.mutation(actor,context,"payments.events.retry");var owners=jdbc.query("SELECT owner_id FROM orders WHERE id=?",(r,n)->r.getObject(1,UUID.class),order);if(owners.isEmpty())throw new ApiException(ApiError.RESOURCE_NOT_FOUND);
+        jdbc.query("SELECT id FROM user_accounts WHERE id=? FOR NO KEY UPDATE",(r,n)->r.getObject(1,UUID.class),owners.getFirst());
+        var rows=jdbc.query("SELECT revision,payment_operation_id FROM orders WHERE id=? FOR UPDATE",(r,n)->new Object[]{r.getLong(1),r.getObject(2,UUID.class)},order);auth.mutation(actor,context,"payments.events.retry");
+        if(expectedRevision!=null&&!expectedRevision.equals(rows.getFirst()[0]))throw new ApiException(ApiError.REVISION_CONFLICT);UUID operation=(UUID)rows.getFirst()[1];if(operation==null)throw new ApiException(ApiError.RECONCILIATION_UNAVAILABLE);
+        jdbc.update("INSERT INTO payment_reconciliation_jobs(id,operation_id,order_id,state,next_attempt_at) VALUES(?,?,?,'PENDING',clock_timestamp()) ON CONFLICT(operation_id) DO UPDATE SET state=CASE WHEN payment_reconciliation_jobs.state='PROCESSING' THEN 'PROCESSING' ELSE 'RETRY' END,attempts=CASE WHEN payment_reconciliation_jobs.state='PROCESSING' THEN payment_reconciliation_jobs.attempts ELSE 0 END,next_attempt_at=CASE WHEN payment_reconciliation_jobs.state='PROCESSING' THEN NULL ELSE clock_timestamp() END,processed_at=CASE WHEN payment_reconciliation_jobs.state='PROCESSING' THEN payment_reconciliation_jobs.processed_at ELSE NULL END,last_error_code=CASE WHEN payment_reconciliation_jobs.state='PROCESSING' THEN payment_reconciliation_jobs.last_error_code ELSE NULL END,updated_at=greatest(payment_reconciliation_jobs.updated_at,payment_reconciliation_jobs.created_at,clock_timestamp())",UUID.randomUUID(),operation,order);
+        return jdbc.queryForObject("SELECT id FROM payment_reconciliation_jobs WHERE operation_id=?",UUID.class,operation);
+    }
     private static Instant instant(ResultSet rs,String column)throws SQLException{Timestamp value=rs.getTimestamp(column);return value==null?null:value.toInstant();}
     private record State(String state,Instant leaseUntil){ }
 }

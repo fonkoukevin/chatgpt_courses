@@ -61,3 +61,33 @@ export function stopBrowserDatabase(database) {
   docker(['stop', '--time', '10', matches]);
   database.stopped = true;
 }
+
+// Aggregate only the owned, disposable database. No identifiers, amounts,
+// addresses, payloads or private text are selected or returned by this probe.
+export function observeBrowserDatabase(database) {
+  if (!database || database.stopped || !/^[a-f0-9]{64}$/.test(database.id ?? '')) {
+    throw new Error('Diagnostic refusé : base de recette non disponible.');
+  }
+  const owner = docker(['inspect', '--format', `{{ index .Config.Labels "${ownershipLabel}" }}`, database.id]);
+  if (owner !== database.runId) throw new Error('Diagnostic refusé : propriété de la base non confirmée.');
+  const code = (column) => `CASE WHEN ${column} ~ '^(SMTP|PAYLOAD|LEASE|DELIVERY|PROVIDER|REFUND|PAYMENT|FULFILLMENT|ORDER|WEBHOOK|RECONCILIATION)_[A-Z0-9_]{1,55}$' THEN ${column} WHEN ${column} IS NULL THEN NULL ELSE 'OTHER_CODE' END`;
+  const groups = [
+    ['orders', 'orders', 'order_status AS "orderStatus",payment_status AS "paymentStatus",fulfillment_status AS "fulfillmentStatus",refund_review_required AS "refundReviewRequired",refund_full AS "refundFull"', 5],
+    ['checkoutOperations', 'checkout_operations', `state,${code('last_error_code')} AS "lastErrorCode"`, 2],
+    ['paymentEvents', 'stripe_event_inbox', `state,${code('last_error_code')} AS "lastErrorCode"`, 2],
+    ['paymentReconciliationJobs', 'payment_reconciliation_jobs', `state,${code('last_error_code')} AS "lastErrorCode"`, 2],
+    ['refundOperations', 'refund_operations', `state,access_state AS "accessState",origin,${code('last_error_code')} AS "lastErrorCode"`, 4],
+    ['refundReconciliationJobs', 'refund_reconciliation_jobs', `state,${code('last_error_code')} AS "lastErrorCode"`, 2],
+    ['grants', 'access_grants', "origin_type AS origin,CASE WHEN revoked_at IS NOT NULL THEN 'REVOKED' WHEN starts_at>transaction_timestamp() THEN 'NOT_STARTED' WHEN expires_at<=transaction_timestamp() THEN 'EXPIRED' ELSE 'ACTIVE' END AS state", 2],
+    ['outbox', 'notification_outbox', `event_type AS type,status,${code('last_error_code')} AS "lastErrorCode"`, 3],
+  ];
+  const aggregate = (table, fields, dimensions) => `(SELECT coalesce(jsonb_agg(to_jsonb(g) ORDER BY to_jsonb(g)::text),'[]'::jsonb) FROM (SELECT ${fields},count(*)::text AS count FROM ${table} GROUP BY ${Array.from({ length: dimensions }, (_, index) => index + 1).join(',')}) g)`;
+  const sql = `BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY; SET LOCAL statement_timeout='5s'; SELECT jsonb_build_object(${groups.map(([name, table, fields, dimensions]) => `'${name}',${aggregate(table, fields, dimensions)}`).join(',')}); ROLLBACK;`;
+  const output = docker(['exec', database.id, 'psql', '-X', '-q', '-A', '-t', '-v', 'ON_ERROR_STOP=1',
+    '-U', 'browser_test', '-d', 'courses_browser', '-c', sql], { timeout: 10_000, maxBuffer: 128 * 1024 });
+  const aggregates = JSON.parse(output);
+  if (!aggregates || groups.some(([name]) => !Array.isArray(aggregates[name]))) {
+    throw new Error('Diagnostic de recette non confirmé.');
+  }
+  return { available: true, readOnly: true, capturedAt: new Date().toISOString(), aggregates };
+}

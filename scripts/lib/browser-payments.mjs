@@ -6,7 +6,19 @@ import { createRefundTransport } from './browser-refunds.mjs';
 export async function createBrowserPayments(env,{refundsEnabled=false}={}){
   if(env.APP_ENV!=='test')throw new Error('Controlled payment transport requires the isolated test environment.');
   const secret=`sk_test_browser_${randomBytes(24).toString('hex')}`,webhook=`whsec_${randomBytes(32).toString('hex')}`,account=`acct_${randomBytes(12).toString('hex')}`;
-  const sessions=new Map(),keys=new Map(),events=new Map(),sockets=new Set();let requests=0,creates=0,stopped=false;
+  const sessions=new Map(),keys=new Map(),events=new Map(),sockets=new Set(),requestPaths=new Map();let requests=0,creates=0,stopped=false;
+  const normalizedPath=value=>{
+    let path;try{path=new URL(value,'http://127.0.0.1').pathname;}catch{return 'OTHER';}
+    for(const [pattern,label] of [
+      [/^\/v1\/account$/,'/v1/account'],[/^\/v1\/checkout\/sessions$/,'/v1/checkout/sessions'],
+      [/^\/v1\/checkout\/sessions\/cs_[A-Za-z0-9_]+\/line_items$/,'/v1/checkout/sessions/:sessionId/line_items'],
+      [/^\/v1\/checkout\/sessions\/cs_[A-Za-z0-9_]+$/,'/v1/checkout/sessions/:sessionId'],
+      [/^\/v1\/payment_intents\/pi_[A-Za-z0-9_]+$/,'/v1/payment_intents/:paymentIntentId'],
+      [/^\/v1\/charges\/ch_[A-Za-z0-9_]+$/,'/v1/charges/:chargeId'],
+      [/^\/v1\/refunds$/,'/v1/refunds'],[/^\/v1\/refunds\/re_[A-Za-z0-9_]+$/,'/v1/refunds/:refundId'],
+    ])if(pattern.test(path))return label;
+    return 'OTHER';
+  };
   async function sendEvent(event){
     const body=JSON.stringify(event),timestamp=Math.floor(Date.now()/1000),signature=createHmac('sha256',webhook).update(`${timestamp}.${body}`).digest('hex');
     const result=await fetch(`${env.APP_PUBLIC_ORIGIN}/api/v1/webhooks/stripe`,{method:'POST',headers:{'Content-Type':'application/json','Stripe-Signature':`t=${timestamp},v1=${signature}`},body,redirect:'error',signal:AbortSignal.timeout(10000)});
@@ -21,6 +33,8 @@ export async function createBrowserPayments(env,{refundsEnabled=false}={}){
     return value;
   };
   const server=createServer(async(req,res)=>{
+    const path=normalizedPath(req.url),method=['GET','POST','PUT','PATCH','DELETE','HEAD','OPTIONS'].includes(req.method)?req.method:'OTHER';
+    res.once('finish',()=>{const status=res.statusCode,key=JSON.stringify([method,path,status]);requestPaths.set(key,{method,path,status,count:(requestPaths.get(key)?.count??0)+1});});
     try{
       requests++;
       if(req.headers.authorization!==`Bearer ${secret}`||req.headers['stripe-account']!==undefined||req.headers['stripe-version']!=='2026-10-28.endive')return send(res,401,{error:{type:'authentication_error',message:'Controlled test transport refused this request.'}});
@@ -51,7 +65,7 @@ export async function createBrowserPayments(env,{refundsEnabled=false}={}){
   server.on('connection',s=>{sockets.add(s);s.once('close',()=>sockets.delete(s));});
   await new Promise((resolve,reject)=>{server.once('error',reject);server.listen({host:'127.0.0.1',port:0},resolve);});
   const address=server.address();if(!address||typeof address==='string')throw new Error('Test transport port not assigned.');
-  Object.assign(env,{STRIPE_ENABLED:'true',STRIPE_MODE:'TEST',STRIPE_SECRET_KEY:secret,STRIPE_WEBHOOK_SECRET:webhook,STRIPE_ACCOUNT_ID:account,STRIPE_API_BASE:`http://127.0.0.1:${address.port}`,STRIPE_CONNECT_TIMEOUT:'1s',STRIPE_READ_TIMEOUT:'2s',PAYMENT_INBOX_ENABLED:'false',COMMERCE_ENABLED:'true',COMMERCE_ALLOWED_CURRENCIES:'EUR'});
+  Object.assign(env,{STRIPE_ENABLED:'true',STRIPE_MODE:'TEST',STRIPE_SECRET_KEY:secret,STRIPE_WEBHOOK_SECRET:webhook,STRIPE_ACCOUNT_ID:account,STRIPE_API_BASE:`http://127.0.0.1:${address.port}`,STRIPE_CONNECT_TIMEOUT:'1s',STRIPE_READ_TIMEOUT:'2s',PAYMENT_INBOX_ENABLED:'false',REFUND_WORKER_ENABLED:'false',COMMERCE_ENABLED:'true',COMMERCE_ALLOWED_CURRENCIES:'EUR'});
   return {
     async advance(orderId,state,type,replayId){
       if(!/^[a-f0-9-]{36}$/.test(orderId)||!['OPEN','PROCESSING','PAID','FAILED','EXPIRED','REFUNDED'].includes(state)||!['checkout.session.completed','checkout.session.async_payment_succeeded','checkout.session.async_payment_failed','checkout.session.expired'].includes(type))throw new Error('Controlled payment transition refused.');
@@ -62,7 +76,7 @@ export async function createBrowserPayments(env,{refundsEnabled=false}={}){
     configureRefund:(...args)=>{if(!refunds)throw new Error('Refund transport absent.');return refunds.configure(...args);},
     advanceRefund:(...args)=>{if(!refunds)throw new Error('Refund transport absent.');return refunds.advance(...args);},
     externalRefund:(...args)=>{if(!refunds)throw new Error('Refund transport absent.');return refunds.external(...args);},
-    observation(){return {kind:'controlled-stripe-network',externalStripe:false,requests,createCalls:creates,sessions:sessions.size,stopped,...(refunds?{refunds:refunds.observation()}:{})};},
+    observation(){return {kind:'controlled-stripe-network',externalStripe:false,capabilities:{checkout:true,refunds:refundsEnabled},requests,createCalls:creates,sessions:sessions.size,stopped,requestPaths:[...requestPaths.values()].sort((a,b)=>a.path.localeCompare(b.path)||a.method.localeCompare(b.method)||a.status-b.status),...(refunds?{refunds:refunds.observation()}:{})};},
     async stop(){if(stopped)return;for(const s of sockets)s.destroy();await new Promise((resolve,reject)=>server.close(e=>e?reject(e):resolve()));stopped=true;}
   };
 }

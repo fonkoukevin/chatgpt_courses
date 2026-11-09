@@ -71,6 +71,8 @@ public class OrderService {
         return new OrderPage(rows.stream().map(OrderService::summary).toList(),page,pageSize,total);
     }
     private void lockOwner(UUID actor){if(jdbc.query("SELECT id FROM user_accounts WHERE id=? FOR NO KEY UPDATE",(rs,n)->rs.getObject(1,UUID.class),actor).isEmpty())throw failure(ApiError.ACCOUNT_UNAVAILABLE);}
+    @Transactional(readOnly=true,isolation=org.springframework.transaction.annotation.Isolation.REPEATABLE_READ)
+    public OrderView adminGet(UUID actor,UUID id){authorization.require(actor,"commerce.orders.admin.read");var rows=jdbc.query("SELECT * FROM orders WHERE id=?",this::row,id);if(rows.isEmpty())throw failure(ApiError.RESOURCE_NOT_FOUND);return rows.getFirst();}
     private void expire(UUID actor){jdbc.update("UPDATE orders SET order_status='EXPIRED',active_intention_key=NULL,revision=revision+1 WHERE owner_id=? AND order_status='PREPARED' AND payment_status='NOT_STARTED' AND fulfillment_status='NOT_STARTED' AND payment_operation_id IS NULL AND expires_at<=clock_timestamp()",actor);}
     private List<OrderView> active(UUID actor,UUID offer){return jdbc.query("SELECT * FROM orders WHERE owner_id=? AND offer_id=? AND active_intention_key IS NOT NULL ORDER BY created_at DESC,id",this::row,actor,offer);}
     private OrderView load(UUID actor,UUID id){var rows=jdbc.query("SELECT * FROM orders WHERE id=? AND owner_id=?",this::row,id,actor);if(rows.isEmpty())throw failure(ApiError.RESOURCE_NOT_FOUND);return rows.getFirst();}

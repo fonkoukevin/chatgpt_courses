@@ -41,11 +41,12 @@ public class ProjectService {
     private final ObjectMapper mapper;
     private final PublicCatalogueService catalogue;
     private final LearningService learning;
+    private final com.chatgptcourses.shared.metrics.BusinessFactRecorder facts;
     private final com.chatgptcourses.access.MemberContentService members;
     private static final String CURRENT=" FROM projects p JOIN project_revisions r ON r.id=p.current_revision_id JOIN pedagogical_versions sv ON sv.id=p.source_version_id ";
     private static final String LATEST=" LEFT JOIN LATERAL(SELECT a.* FROM project_self_assessments a WHERE a.project_id=p.id AND a.project_revision_id=p.current_revision_id ORDER BY a.assessment_number DESC LIMIT 1)a ON true ";
     private static final String STATE="CASE WHEN a.id IS NULL THEN r.stage WHEN a.needs_revision THEN 'NEEDS_REVISION' ELSE 'SELF_ASSESSED' END";
-    public ProjectService(JdbcTemplate jdbc,ObjectMapper mapper,PublicCatalogueService catalogue,LearningService learning,com.chatgptcourses.access.MemberContentService members) {this.jdbc=jdbc;this.mapper=mapper;this.catalogue=catalogue;this.learning=learning;this.members=members;}
+    public ProjectService(JdbcTemplate jdbc,ObjectMapper mapper,PublicCatalogueService catalogue,LearningService learning,com.chatgptcourses.access.MemberContentService members) {this.jdbc=jdbc;this.mapper=mapper;this.catalogue=catalogue;this.learning=learning;this.members=members;this.facts=new com.chatgptcourses.shared.metrics.BusinessFactRecorder(jdbc);}
 
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
     public ProjectPage list(UUID actor,ProjectQuery query) {
@@ -106,7 +107,7 @@ public class ProjectService {
             """,id,actor,command.creationId(),fingerprint,command.activityId(),command.activityVersionId(),source.translation(),command.revisionId(),command.sourceLocale(),template.title(),template.resource().slug(),command.enrollmentId(),course,courseVersion,courseTitle);
         var definition=template.rubric();UUID rubric=UUID.randomUUID();jdbc.update("INSERT INTO project_rubric_snapshots(id,project_id,source_revision_id,locale,case_code,pass_points,max_points,reveal_policy,criteria,blocking_definitions) VALUES(?,?,?,?,?,?,?,?,?::jsonb,?::jsonb)",rubric,id,definition.sourceRevisionId(),definition.locale(),definition.caseCode(),definition.passPoints(),definition.maxPoints(),definition.revealPolicy(),mapper.writeValueAsString(definition.criteria()),mapper.writeValueAsString(definition.blockingIssues()));
         UUID revision=insertRevision(id,1,command.fields(),command.stage(),actor);jdbc.update("UPDATE projects SET current_revision_id=?,updated_at=greatest(updated_at,created_at,clock_timestamp()) WHERE id=?",revision,id);
-        return new ProjectCreationResult(owned(actor,id,false),true);
+        return new ProjectCreationResult(recorded(actor,owned(actor,id,false)),true);
     }
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
     public ProjectView get(UUID actor,UUID projectId) {require(actor,"projects.read");return owned(actor,projectId,false);}
@@ -115,7 +116,7 @@ public class ProjectService {
         mutation(actor,accountContext);var old=owned(actor,projectId,true);mutation(actor,accountContext);match(old,ifMatch);check(command!=null);fields(command.fields(),command.stage(),mapper);
         if(old.fields().equals(command.fields())&&old.stage().equals(command.stage()))return old;
         UUID revision=insertRevision(projectId,old.revisionNumber()+1,command.fields(),command.stage(),actor);
-        jdbc.update("UPDATE projects SET current_revision_id=?,revision=revision+1,updated_at=greatest(updated_at,created_at,clock_timestamp()) WHERE id=? AND owner_id=? AND revision=?",revision,projectId,actor,old.revision());return owned(actor,projectId,false);
+        jdbc.update("UPDATE projects SET current_revision_id=?,revision=revision+1,updated_at=greatest(updated_at,created_at,clock_timestamp()) WHERE id=? AND owner_id=? AND revision=?",revision,projectId,actor,old.revision());return recorded(actor,owned(actor,projectId,false));
     }
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
     public ProjectRevisionPage revisions(UUID actor,UUID projectId,int page,int pageSize) {
@@ -194,6 +195,7 @@ public class ProjectService {
         var latest=jdbc.query("SELECT * FROM project_self_assessments WHERE project_id=? AND project_revision_id=? ORDER BY assessment_number DESC LIMIT 1",(rs,n)->assessmentRow(rs),project.id(),project.currentRevisionId());
         var proof=latest.isEmpty()?null:latest.getFirst();return new ProjectStatus(project.id(),project.currentRevisionId(),project.stage(),proof==null?project.stage():proof.needsRevision()?"NEEDS_REVISION":"SELF_ASSESSED",proof);
     }
+    private ProjectView recorded(UUID actor,ProjectView value){facts.personalRevision(actor,"PROJECT",value.id(),value.revision(),value.savedAt());return value;}
     private UUID insertRevision(UUID projectId,int number,ProjectFields fields,String stage,UUID actor) {UUID id=UUID.randomUUID();jdbc.update("INSERT INTO project_revisions(id,project_id,revision_number,fields_json,stage,author_id,created_at) VALUES(?,?,?,?::jsonb,?,?,clock_timestamp())",id,projectId,number,mapper.writeValueAsString(fields),stage,actor);return id;}
     private ProjectView owned(UUID actor,UUID projectId,boolean lock) {
         if(lock) {

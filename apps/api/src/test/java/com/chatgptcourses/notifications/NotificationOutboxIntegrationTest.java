@@ -134,19 +134,19 @@ class NotificationOutboxIntegrationTest {
         int closed;try(var socket=new ServerSocket(0)){closed=socket.getLocalPort();}((JavaMailSenderImpl)mail).setPort(closed);
         try{runUntilAttempt(id);assertThat(status(id)).isEqualTo("RETRY");var row=jdbc.queryForMap("SELECT next_attempt_at,updated_at,last_error_code FROM notification_outbox WHERE id=?",id);assertThat(((java.sql.Timestamp)row.get("next_attempt_at")).toInstant()).isAfter(((java.sql.Timestamp)row.get("updated_at")).toInstant());assertThat(row.get("last_error_code")).isEqualTo("SMTP_CONNECT");}
         finally{((JavaMailSenderImpl)mail).setPort(MAILPIT.getMappedPort(1025));}
-        Thread.sleep(1150);drain();assertThat(status(id)).isEqualTo("SENT");assertThat(jdbc.queryForObject("SELECT attempts FROM notification_outbox WHERE id=?",Integer.class,id)).isEqualTo(2);
+        awaitStatus(id,"SENT",8);assertThat(jdbc.queryForObject("SELECT attempts FROM notification_outbox WHERE id=?",Integer.class,id)).isEqualTo(2);
         assertThat(awaitMessages(owner.email(),2).stream().filter(value->value.path("Subject").asText().contains("accès de formation")).count()).isEqualTo(1);
     }
 
     @Test void exhaustedTransportIsDeadAndOnlyAnAuthorizedExplicitOperationCanResumeIt()throws Exception{
         var owner=account("en");drain();UUID id=transaction().execute(status->notifications.supportReply(UUID.randomUUID(),owner.id(),owner.email(),"en",UUID.randomUUID()));
         int closed;try(var socket=new ServerSocket(0)){closed=socket.getLocalPort();}((JavaMailSenderImpl)mail).setPort(closed);
-        try{runUntilAttempt(id);Thread.sleep(1150);drain();assertThat(status(id)).isEqualTo("DEAD");}
+        try{runUntilAttempt(id);awaitStatus(id,"DEAD",8);assertThat(jdbc.queryForObject("SELECT attempts FROM notification_outbox WHERE id=?",Integer.class,id)).isEqualTo(2);}
         finally{((JavaMailSenderImpl)mail).setPort(MAILPIT.getMappedPort(1025));}
         assertThat(catchThrowable(()->operations.list(owner.id(),null,0,20))).isInstanceOf(AccessDeniedException.class);
         assertThat(catchThrowable(()->operations.retry(owner.id(),owner.id(),id,"CONFIGURATION_FIXED",false))).isInstanceOf(AccessDeniedException.class);
         grantOperator(owner.id());var before=operations.list(owner.id(),"DEAD",0,100);assertThat(before.items().stream().anyMatch(value->value.id().equals(id))).isTrue();
-        var resumed=operations.retry(owner.id(),owner.id(),id,"CONFIGURATION_FIXED",false);assertThat(resumed.status()).isEqualTo("RETRY");assertThat(resumed.cycleAttempts()).isZero();assertThat(resumed.attempts()).isEqualTo(2);drain();assertThat(status(id)).isEqualTo("SENT");
+        var resumed=operations.retry(owner.id(),owner.id(),id,"CONFIGURATION_FIXED",false);assertThat(resumed.status()).isEqualTo("RETRY");assertThat(resumed.cycleAttempts()).isZero();assertThat(resumed.attempts()).isEqualTo(2);awaitStatus(id,"SENT",8);
         assertThat(jdbc.queryForObject("SELECT count(*) FROM notification_outbox_requeues WHERE notification_id=?",Integer.class,id)).isEqualTo(1);
         String operational=mapper.writeValueAsString(operations.list(owner.id(),null,0,100));assertThat(operational.contains(owner.email())||operational.contains("ciphertext")||operational.contains("businessKey")||operational.contains("payload_fingerprint")).as("operational output excludes sensitive fields").isFalse();
     }
@@ -181,12 +181,46 @@ class NotificationOutboxIntegrationTest {
         }finally{controlled.paused=null;controlled.release.countDown();}
     }
 
+    @Test void futurePersistedCreationCannotBreakClaimRetryOrRealSmtpCompletion()throws Exception{
+        var owner=account("en");drain();UUID id=UUID.randomUUID();String business="support:reply:"+UUID.randomUUID();
+        var payload=new Payload(owner.email(),"en",null,null,null,UUID.randomUUID());
+        Instant future=jdbc.queryForObject("SELECT clock_timestamp()+interval '1 hour'",(r,n)->r.getTimestamp(1).toInstant());
+        // Explicit INSERT models a persisted predecessor ahead of the current clock. No immutable row or CHECK is altered.
+        jdbc.update("INSERT INTO notification_outbox(id,owner_id,business_key,event_type,payload_fingerprint,payload_ciphertext,next_attempt_at,created_at,updated_at,expires_at) VALUES(?,?,?,'SUPPORT_REPLY',?,?,clock_timestamp(),?,?,?)",
+            id,owner.id(),business,cipher.fingerprint(Type.SUPPORT_REPLY,payload),cipher.encrypt(id,Type.SUPPORT_REPLY,business,payload),
+            java.sql.Timestamp.from(future),java.sql.Timestamp.from(future),java.sql.Timestamp.from(future.plus(Duration.ofDays(1))));
+        int closed;try(var socket=new ServerSocket(0)){closed=socket.getLocalPort();}((JavaMailSenderImpl)mail).setPort(closed);
+        try{runUntilAttempt(id);assertThat(status(id)).isEqualTo("RETRY");}
+        finally{((JavaMailSenderImpl)mail).setPort(MAILPIT.getMappedPort(1025));}
+        Instant failedAt=jdbc.queryForObject("SELECT updated_at FROM notification_outbox WHERE id=?",(r,n)->r.getTimestamp(1).toInstant(),id);
+        assertThat(failedAt).isAfterOrEqualTo(future);
+        grantOperator(owner.id());var resumed=operations.retry(owner.id(),owner.id(),id,"CONFIGURATION_FIXED",false);
+        assertThat(resumed.updatedAt()).isAfterOrEqualTo(failedAt);assertThat(resumed.status()).isEqualTo("RETRY");
+        awaitStatus(id,"SENT",8);
+        var row=jdbc.queryForMap("SELECT created_at,updated_at,sent_at,purged_at,payload_ciphertext IS NULL AS payload_purged,attempts FROM notification_outbox WHERE id=?",id);
+        Instant completedAt=((java.sql.Timestamp)row.get("updated_at")).toInstant();
+        assertThat(((java.sql.Timestamp)row.get("created_at")).toInstant()).isEqualTo(future);
+        assertThat(completedAt).isAfterOrEqualTo(resumed.updatedAt());
+        assertThat(((java.sql.Timestamp)row.get("sent_at")).toInstant()).isEqualTo(completedAt);
+        assertThat(((java.sql.Timestamp)row.get("purged_at")).toInstant()).isEqualTo(completedAt);
+        assertThat(row.get("payload_purged")).isEqualTo(true);assertThat(row.get("attempts")).isEqualTo(2);
+        assertThat(awaitMessages(owner.email(),2).stream().filter(message->message.path("Subject").asText().equals("A support update is available")).count()).isEqualTo(1);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM notification_outbox WHERE business_key=?",Integer.class,business)).isEqualTo(1);
+    }
+
     private Owner account(String locale){String email=email();var profile=identity.register(email,"Outbox isolated password 123",null,locale);return new Owner(profile.id(),email);}
     private static String email(){return "p10."+UUID.randomUUID()+"@courses.invalid";}
     private long count(){return jdbc.queryForObject("SELECT count(*) FROM notification_outbox",Long.class);}
     private String status(UUID id){return jdbc.queryForObject("SELECT status FROM notification_outbox WHERE id=?",String.class,id);}
     private void runUntilAttempt(UUID id){for(int i=0;i<100;i++){if(jdbc.queryForObject("SELECT attempts FROM notification_outbox WHERE id=?",Integer.class,id)>0)return;worker.runOnce();}throw new AssertionError("Expected an outbox attempt");}
     private void drain(){for(int i=0;i<100&&worker.runOnce();i++){/* SMTP delivery is outside the claim transaction. */}}
+    private void awaitStatus(UUID id,String expected,int seconds)throws Exception{
+        long deadline=System.nanoTime()+Duration.ofSeconds(seconds).toNanos();
+        do{worker.runOnce();if(expected.equals(status(id)))return;Thread.sleep(25);}while(System.nanoTime()<deadline);
+        // Only operational metadata may appear in an assertion; never include recipient, payload, key or ciphertext.
+        var metadata=jdbc.queryForMap("SELECT status,attempts,cycle_attempts,next_attempt_at,clock_timestamp() AS observed_database_time,next_attempt_at<=clock_timestamp() AS due FROM notification_outbox WHERE id=?",id);
+        assertThat(metadata.get("status")).as("Bounded real-worker outcome %s; operational metadata=%s",expected,metadata).isEqualTo(expected);
+    }
     private void grantOperator(UUID owner){UUID role=UUID.randomUUID();jdbc.update("INSERT INTO roles(id,code) VALUES(?,?)",role,"MAIL_OP_"+UUID.randomUUID().toString().substring(0,8).toUpperCase(java.util.Locale.ROOT));jdbc.update("INSERT INTO user_roles(id,user_id,role_id) VALUES(?,?,?)",UUID.randomUUID(),owner,role);jdbc.update("INSERT INTO role_permissions(id,role_id,permission_id) SELECT gen_random_uuid(),?,id FROM permissions WHERE code IN('notifications.read','notifications.manage')",role);}
     private List<JsonNode> messages(String recipient)throws Exception{
         var http=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).build();String base="http://"+MAILPIT.getHost()+":"+MAILPIT.getMappedPort(8025);

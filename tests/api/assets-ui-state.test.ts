@@ -7,12 +7,14 @@ import { safeReturnTo } from "../../apps/web/src/lib/auth/routes";
 
 test("la sélection respecte formats disponibles et limites, sans débloquer PDF ni chemins actifs", () => {
   const policy: AssetUploadCapabilities = { enabled: true, unavailableReason: null, formats: [
-    { contentType: "text/plain", extensions: [".txt"], kind: "FILE", maxBytes: 16, available: true, unavailableReason: null },
+    { contentType: "text/plain", extensions: [".txt", ".md"], kind: "FILE", maxBytes: 16, available: true, unavailableReason: null },
     { contentType: "application/pdf", extensions: [".pdf"], kind: "FILE", maxBytes: 16, available: false, unavailableReason: "VALIDATOR_UNAVAILABLE" },
   ], maxFileBytes: 16, maxFilesPerProject: 2, maxBytesPerProject: 32, uploadTtlSeconds: 300, downloadTtlSeconds: 60 };
   const text = { name: "Mon travail.TXT", size: 16, type: "text/plain" };
   assert.equal(acceptedFile(text, policy)?.contentType, "text/plain");
   assert.equal(acceptedFile({ ...text, type: "" }, policy)?.contentType, "text/plain");
+  assert.equal(acceptedFile({ ...text, name: "Méthode.MD", type: "text/markdown" }, policy)?.contentType, "text/plain");
+  assert.equal(acceptedFile({ ...text, name: "Méthode.md", type: "text/html" }, policy), null);
   for (const file of [{ ...text, size: 17 }, { ...text, size: 0 }, { ...text, name: "../private.txt" }, { ...text, name: "folder\\private.txt" }, { ...text, name: "text\0.txt" }, { ...text, name: "text.txt", type: "text/html" }, { name: "document.pdf", size: 8, type: "application/pdf" }]) assert.equal(acceptedFile(file, policy), null);
   assert.equal(acceptedFile(text, { ...policy, enabled: false }), null);
 });

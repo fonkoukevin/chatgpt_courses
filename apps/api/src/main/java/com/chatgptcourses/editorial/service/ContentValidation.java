@@ -44,7 +44,7 @@ final class ContentValidation {
             else check(b.url()==null);
         }
         check(d.estimatedMinutes()==null || (d.estimatedMinutes()>0 && d.estimatedMinutes()<=1440));
-        if(d.exercise()!=null) {text(d.exercise().instructions(),0,8000);text(d.exercise().correction(),0,8000);}
+        if(d.exercise()!=null) {text(d.exercise().instructions(),0,8000);text(d.exercise().correction(),0,8000);ids(d.exercise().solutionAssetIds(),10);}
         list(d.quiz(),20);var keys=new HashSet<String>();
         for(var q:d.quiz()) {
             key(q.key());check(keys.add(q.key()));text(q.prompt(),1,2000);list(q.options(),8);check(q.options().size()>=2);
@@ -55,6 +55,7 @@ final class ContentValidation {
         for(var r:d.rubric()) {key(r.key());check(keys.add(r.key()));text(r.label(),1,2000);check(r.points()>=1 && r.points()<=1000);}
         check(d.access()!=null && Set.of("FREE","PROTECTED").contains(d.access()));
         list(d.media(),20);var mediaIds=new HashSet<UUID>();
+        if(d.exercise()!=null)check(d.media().stream().noneMatch(m->m!=null&&d.exercise().solutionAssetIds().contains(m.assetId())));
         for(var m:d.media()) {
             check(m.assetId()!=null && mediaIds.add(m.assetId()));
             check(m.kind()!=null && Set.of("IMAGE","VIDEO","FILE").contains(m.kind()));text(m.label(),1,240);

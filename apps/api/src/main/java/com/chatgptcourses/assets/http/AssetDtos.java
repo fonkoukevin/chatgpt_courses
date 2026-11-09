@@ -19,8 +19,8 @@ public final class AssetDtos {
         AssetTypes.UploadRequest command(){return new AssetTypes.UploadRequest(filename,contentType,sizeBytes);}
         @Override public String toString(){return "UploadRequest[redacted]";}
     }
-    public record EditorialUploadRequest(@NotNull UUID resourceId,@NotNull UUID versionId,@NotNull @Pattern(regexp="fr|en") String locale,@NotBlank @Size(max=180) String filename,@NotNull @Pattern(regexp="text/plain|application/pdf|image/png|image/jpeg") String contentType,@NotNull @Min(1) @Max(20971520) Long sizeBytes){
-        AssetTypes.EditorialUploadRequest command(){return new AssetTypes.EditorialUploadRequest(resourceId,versionId,locale,filename,contentType,sizeBytes);}
+    public record EditorialUploadRequest(@NotNull UUID resourceId,@NotNull UUID versionId,@NotNull @Pattern(regexp="fr|en") String locale,@NotBlank @Size(max=180) String filename,@NotNull @Pattern(regexp="text/plain|application/pdf|image/png|image/jpeg") String contentType,@NotNull @Min(1) @Max(20971520) Long sizeBytes,@Pattern(regexp="RESOURCE|SOLUTION") String purpose){
+        AssetTypes.EditorialUploadRequest command(){return new AssetTypes.EditorialUploadRequest(resourceId,versionId,locale,filename,contentType,sizeBytes,purpose);}
         @Override public String toString(){return "EditorialUploadRequest[redacted]";}
     }
     public record ConfirmUpload(@NotNull UUID assetId){ }

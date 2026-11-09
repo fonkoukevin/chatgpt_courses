@@ -106,6 +106,7 @@ class SecurityConfiguration {
                                 "/api/v1/me/projects/*/revisions", "/api/v1/me/projects/*/revisions/*",
                                 "/api/v1/me/projects/*/context", "/api/v1/me/projects/*/status",
                                 "/api/v1/me/projects/*/self-assessments", "/api/v1/me/projects/*/self-assessments/*").hasAuthority("projects.read")
+                        .requestMatchers(HttpMethod.POST,"/api/v1/me/projects/*/solution-reveals/*/files/*/download-access").hasAuthority("projects.read")
                         .requestMatchers(HttpMethod.POST, "/api/v1/me/projects", "/api/v1/me/projects/*/self-assessments",
                                 "/api/v1/activities/*/solution-reveals").hasAuthority("projects.write")
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/me/projects/*").hasAuthority("projects.write")

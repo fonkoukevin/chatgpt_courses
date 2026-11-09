@@ -1,0 +1,141 @@
+{
+  "key": "m06",
+  "locale": "fr",
+  "title": "Présenter la proposition et transférer sa méthode",
+  "summary": "Préparer un email, une relance et une méthode personnelle, puis traiter les contraintes différentes de BR02.",
+  "objective": "Présenter une décision clairement et réutiliser son raisonnement sans recopier les engagements d’un ancien dossier.",
+  "expectedResult": "Deux modèles d’email non envoyés, une méthode personnelle adaptée et une réponse argumentée à Client S.",
+  "prerequisites": [
+    "Avoir relu sa proposition BR01 et renseigné sa grille.",
+    "Identifier les corrections apportées et les questions qui restent ouvertes."
+  ],
+  "blocks": [
+    {
+      "type": "HEADING",
+      "text": "Présenter sans ajouter un engagement",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "L’email aide le client à décider sans remplacer la proposition. Nommez le document préparé, le périmètre et la question suivante, sans ajouter d’engagement. BR01 conserve quatre pages en français et un budget rédactionnel de 1 200 € HT ; son plafond rédactionnel de 1 400 € HT ne chiffre pas les compléments.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Deux modèles à adapter, jamais envoyés par cet exercice",
+      "url": null
+    },
+    {
+      "type": "CODE",
+      "text": "Bonjour, je vous transmets la proposition pour la réécriture de vos quatre pages en français. Elle présente les livrables, le déroulement et un budget de 1 200 € HT. Le logo et l’intégration restent à préciser. Pouvez-vous confirmer le périmètre retenu et la disponibilité des éléments nécessaires ? Nous pourrons ensuite convenir du démarrage.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Le message demande une décision sans prétendre qu’un démarrage est convenu. Pour le réutiliser, vérifiez l’existence et la version du fichier mentionné. Préparer, conserver ou copier ce modèle ne transmet aucun message à un tiers.",
+      "url": null
+    },
+    {
+      "type": "CODE",
+      "text": "Bonjour, je reviens vers vous au sujet de la proposition de réécriture. Avez-vous pu examiner le périmètre et les points à confirmer ? Je peux préciser un élément si nécessaire avant que nous convenions de la suite.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "La relance ne suppose ni accord ni refus et n’invente aucune urgence. Le dossier ne fixe aucun rythme commercial ni date d’envoi. Gardez une question courte plutôt que répéter toute la proposition.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Conserver le raisonnement dans une méthode personnelle",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Distinguez ce qui se répète et ce qui change. Gardez la séquence : lire les faits, isoler les inconnues, décrire les livrables, recalculer, conditionner le calendrier, vérifier, demander une décision. Remplacez les données particulières par sept champs : objectif, contexte, données disponibles, destinataire, format, contraintes et clarifications.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Face à une inconnue, posez une question plutôt qu’inventer un prix, une preuve ou un accès. Le texte final reste indépendant des paramètres : relisez-le après adaptation pour supprimer les anciennes valeurs. Une copie personnelle n’est pas remplacée silencieusement lorsque son modèle évolue.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "BR02 : tester ce qui doit réellement changer",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Client S demande les quatre pages françaises de BR01, une FAQ et l’intégration au site. Le cadrage reste à 180 € HT ; Accueil 320 €, Services 360 €, À propos 220 €, Contact 120 € ; la FAQ ajoute 200 € HT. L’intégration n’a pas de tarif. Le plafond est désormais GLOBAL : 1 200 € HT, pas une enveloppe réservée à la seule rédaction.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Le client demande cinq jours ouvrés, mais la capacité de ce second dossier impose au moins dix jours ouvrés de rédaction. Ne recopiez pas les quinze jours de BR01. Le nouveau calendrier doit partir de BR02 et des informations encore à confirmer. Une autre composition rédactionnelle ne prouve ni que l’intégration devient gratuite ni que cinq jours deviennent possibles.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Exemple commenté : proposer un choix sous réserve",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Une bonne réponse peut expliquer une incompatibilité avant de suggérer une option. Si vous retirez une page pour discuter le budget, nommez la page retirée, obtenez l’accord du client et recalculez les postes réellement conservés. Une réduction de périmètre n’est pas décidée unilatéralement. Demandez ensuite quel levier peut évoluer : périmètre, budget ou délai, et quelles informations permettront de chiffrer l’intégration.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Vérifiez somme complète, option, plafond global et délai minimum. Adaptez la grille à BR02 plutôt que cocher les montants BR01. Gardez réponse et justifications avant le corrigé : réutiliser le raisonnement ne signifie pas accepter toutes les demandes.",
+      "url": null
+    },
+    {
+      "type": "CALLOUT",
+      "text": "Livrables : proposition BR01, grille déclarative, email, relance, méthode réutilisable et réponse BR02. Ils ne prouvent ni envoi, ni validation humaine, ni compétence certifiée.",
+      "url": null
+    }
+  ],
+  "exercise": {
+    "instructions": "Adaptez les deux emails à votre proposition, sans les envoyer. Conservez une méthode dont les données peuvent changer. Puis répondez à BR02 : calculez la rédaction complète, expliquez les deux contraintes, proposez éventuellement une option sous accord et formulez les questions nécessaires. Enregistrez une production distincte de BR01.",
+    "correction": "BR02 : 180 + 320 + 360 + 220 + 120 + 200 = 1 400 € HT avant intégration, au-dessus du plafond GLOBAL de 1 200 €. Dix jours ouvrés minimum sont incompatibles avec les cinq demandés. Sans À propos, l’option coûte 180 + 320 + 360 + 120 + 200 = 1 180 € HT, seulement sous accord. Les 20 € restants ne chiffrent pas l’intégration ; l’option ne justifie pas cinq jours. Une autre réponse peut être recevable si elle expose ces limites sans engagement inventé."
+  },
+  "quiz": [
+    {
+      "key": "m06-full",
+      "prompt": "Que montre le calcul complet de BR02 ?",
+      "options": [
+        "1 200 € HT intégration incluse",
+        "1 400 € HT avant intégration, au-dessus du plafond global",
+        "1 180 € HT sans changement de périmètre"
+      ],
+      "correctOption": 1,
+      "explanation": "La FAQ ajoute 200 € aux 1 200 € rédactionnels. Le plafond global de 1 200 € ne couvre pas cette somme ni un coût d’intégration encore inconnu.",
+      "points": 1
+    },
+    {
+      "key": "m06-option",
+      "prompt": "Quelle condition accompagne l’option à 1 180 € HT ?",
+      "options": [
+        "Le logo devient gratuit",
+        "Les 20 € restants paient forcément l’intégration",
+        "L’accord pour retirer À propos ; intégration et délai restent à résoudre"
+      ],
+      "correctOption": 2,
+      "explanation": "Le périmètre réduit demande un accord. L’intégration reste non chiffrée et cinq jours restent inférieurs au minimum de dix.",
+      "points": 1
+    },
+    {
+      "key": "m06-email",
+      "prompt": "Que prouve la préparation du modèle d’email ?",
+      "options": [
+        "Seulement qu’un texte a été préparé, pas qu’un message est envoyé",
+        "L’acceptation du client",
+        "Une relance automatique programmée"
+      ],
+      "correctOption": 0,
+      "explanation": "Le cours fournit un modèle éditable. Aucun envoi, accord ou automatisme commercial n’en découle.",
+      "points": 1
+    }
+  ]
+}

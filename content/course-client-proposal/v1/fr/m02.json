@@ -1,0 +1,130 @@
+{
+  "key": "m02",
+  "locale": "fr",
+  "title": "Définir une prestation que le client peut valider",
+  "summary": "Délimiter les quatre pages françaises, la remise éditable et les retours compris ; isoler les demandes qui nécessitent une décision ou un chiffrage.",
+  "objective": "Relier le besoin de Client R aux livrables et distinguer ce qui est inclus, à confirmer ou non chiffré.",
+  "expectedResult": "Une liste de périmètre argumentée, accompagnée de conditions de remise, de retours et de démarrage vérifiables.",
+  "prerequisites": [
+    "Avoir lu BR01/TR01 et identifié les faits et inconnues, par exemple avec le tableau de M01."
+  ],
+  "blocks": [
+    {
+      "type": "HEADING",
+      "text": "Décrire un résultat observable",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Un périmètre permet de reconnaître ce qui sera remis. « Améliorer votre site » peut évoquer textes, logo, intégration ou résultats commerciaux. Reliez plutôt le besoin de clarté à la réécriture des quatre pages, sans promettre un effet commercial non démontré.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Utilisez trois statuts. « Inclus » signifie fourni par le dossier et couvert par TR01. « À confirmer » désigne une condition inconnue. « Non chiffré » exclut une demande du montant connu. Clarifier avant de chiffrer ne signifie pas que le travail est définitivement impossible.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Faire l’inventaire des livrables",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "Inclus : cadrage et plan des quatre pages, puis réécriture en français.\nAccueil : 600 mots maximum ; Services : 800 ; À propos : 400 ; Contact : 250. Les limites sont des plafonds, pas des quantités à atteindre artificiellement.\nRemise des textes dans un document éditable. Aucun format propriétaire précis n’est imposé par BR01.\nUn cycle de retours regroupés sur le périmètre validé. Logo, intégration et page supplémentaire ne sont pas chiffrés.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Le plan peut donner une fonction à chaque page : présenter l’offre, expliquer les services, situer l’entreprise avec des faits vérifiés et préparer le contact. Ce sont des pistes, pas un audit des textes existants : vous ne les avez pas reçus.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Poser les frontières sans ambiguïté",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Exemple trop large : « Je prends en charge vos quatre pages et les finitions du site pour 1 200 € HT. » Les « finitions » peuvent faire croire que l’intégration et le logo sont compris. Réécriture fidèle : « Le montant couvre le cadrage, le plan et la réécriture des quatre pages, remis dans un document éditable. Le logo et la mise en ligne doivent être précisés et chiffrés séparément avant engagement. »",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "La correction relie le montant aux seuls postes connus, rend la remise identifiable et expose la limite. Les 200 € sous le plafond ne deviennent pas une prestation disponible. Vous ouvrez une discussion sans inventer un prix ou annoncer la gratuité.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Les retours font partie du périmètre. Le client rassemble ses remarques sur le travail convenu avant la correction. Un cycle ne signifie ni modifications illimitées ni nouvelles pages. BR01 prévoit une centralisation sous trois jours ouvrés ; demandez qui approuve, sans inventer son identité.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Relier le périmètre au calendrier et au calcul",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Conservez le calcul détaillé : 180 + 320 + 360 + 220 + 120 = 1 200 € HT. Le plafond rédactionnel est de 1 400 € HT. Le délai prévu est de quinze jours ouvrés après réception des éléments nécessaires ET validation du brief, avec les retours client dans le délai annoncé. Si une condition ou le périmètre change, le montant et le calendrier demandent un nouvel examen ; aucune règle de supplément n’est fournie ici.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Pour l’intégration, demandez quels contenus, outil, interventions et accès seraient nécessaires. Pour le logo, demandez quelle modification est attendue. Ces précisions préparent un chiffrage distinct ; elles ne prouvent pas que vous avez déjà les accès ou la capacité correspondante.",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "Le client peut-il retrouver les quatre pages, leur langue et leurs limites ?\nLa remise éditable et le cycle unique sont-ils explicites ?\nLogo et intégration apparaissent-ils séparément, sans prix inventé ?\nLe calendrier garde-t-il ses deux conditions de départ ?\nChaque affirmation décrit-elle le dossier plutôt qu’une expérience ou un résultat imaginé ?",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Gardez votre liste et les questions ouvertes dans le tableau de cadrage. Elles guideront le prompt : une instruction ne doit pas élargir votre périmètre. Le module suivant assemble cette demande ; votre liste constitue déjà un livrable complet et vérifiable.",
+      "url": null
+    }
+  ],
+  "exercise": {
+    "instructions": "Rédigez huit lignes de périmètre : quatre pages, remise, retours, logo, intégration. Justifiez chaque statut avec BR01/TR01. Ajoutez calendrier et calcul détaillé. Corrigez « Tout est compris dans votre budget de 1 400 €, avec intégration et retouches illimitées », puis appliquez les cinq questions ci-dessus.",
+    "correction": "Sont inclus : quatre pages françaises avec leurs limites, cadrage/plan, document éditable et un cycle regroupé. Validateur et disponibilité des éléments restent à confirmer. Logo/intégration sont hors des 1 200 € HT faute de périmètre et tarif. Correction possible : « Les cinq postes rédactionnels coûtent 1 200 € HT ; logo et intégration nécessitent clarification et chiffrage distincts. » Gardez quinze jours ouvrés après réception des éléments ET validation du brief."
+  },
+  "quiz": [
+    {
+      "key": "m02-total",
+      "prompt": "Quel montant résulte des cinq tarifs de TR01 ?",
+      "options": [
+        "1 400 € HT.",
+        "1 200 € HT.",
+        "1 180 € HT."
+      ],
+      "correctOption": 1,
+      "explanation": "180 + 320 + 360 + 220 + 120 = 1 200 € HT. Le plafond de 1 400 € ne remplace pas le calcul ; 1 180 € appartient à une option différente de BR02.",
+      "points": 1
+    },
+    {
+      "key": "m02-integration",
+      "prompt": "L’intégration est évoquée sans accès ni tarif. Quelle réponse convient ?",
+      "options": [
+        "L’inclure dans les 200 € restants.",
+        "La déclarer gratuite.",
+        "Clarifier le besoin et chiffrer séparément avant engagement."
+      ],
+      "correctOption": 2,
+      "explanation": "La différence sous le plafond ne crée ni tarif, ni accès, ni périmètre d’intégration convenu.",
+      "points": 1
+    },
+    {
+      "key": "m02-feedback",
+      "prompt": "Quelle condition de retours est fournie ?",
+      "options": [
+        "Un cycle de retours regroupés sur le périmètre validé.",
+        "Des modifications et pages supplémentaires illimitées.",
+        "Aucun retour client possible."
+      ],
+      "correctOption": 0,
+      "explanation": "TR01 comprend un cycle regroupé. BR01 prévoit une centralisation et des réponses sous trois jours ouvrés ; ce n’est pas une promesse de retouches illimitées.",
+      "points": 1
+    }
+  ]
+}

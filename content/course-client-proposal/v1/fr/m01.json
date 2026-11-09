@@ -1,0 +1,135 @@
+{
+  "key": "m01",
+  "locale": "fr",
+  "title": "Comprendre le brief avant de rédiger",
+  "summary": "Transformer le dossier fictif de Client R en un tableau de faits, d’inconnues et de conséquences, puis choisir les premières questions utiles.",
+  "objective": "Distinguer les faits fournis, les demandes ambiguës et les informations manquantes pour produire un cadrage exploitable.",
+  "expectedResult": "Un tableau d’au moins huit lignes et trois questions prioritaires expliquées, sans engagement inventé.",
+  "prerequisites": [
+    "Savoir lire une demande de prestation ; aucune connaissance technique ni utilisation préalable de ChatGPT n’est nécessaire."
+  ],
+  "blocks": [
+    {
+      "type": "HEADING",
+      "text": "Une première production utile, même sans IA",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Avant de rédiger, séparez ce que le dossier établit de ce qui reste à confirmer. Votre livrable sera un tableau et des questions utiles. Un éditeur de texte suffit : vous pouvez terminer sans compte, sans achat et sans transmettre le dossier à ChatGPT.",
+      "url": null
+    },
+    {
+      "type": "CALLOUT",
+      "text": "Client R et les tarifs sont fictifs. Les montants servent à l’exercice ; ils ne sont pas des prix de formation. Aucun texte existant, accès au site ou résultat commercial n’a été fourni pour inspection.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Le dossier BR01 et les conditions TR01",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Client R aménage des bureaux pour de petites entreprises. Il veut rendre ses services plus faciles à comprendre et aider les visiteurs à préparer un premier échange. Le ton demandé est professionnel, simple et rassurant. Ce besoin permet de choisir les informations à mettre en avant ; il ne démontre aucune hausse future des ventes.",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "Réécriture de quatre pages en français : Accueil, 600 mots maximum ; Services, 800 ; À propos, 400 ; Contact, 250.\nÉléments annoncés : quatre textes existants, présentation des services, réponses à un questionnaire. Leur date de disponibilité reste à confirmer.\nAucune ancienneté, référence client ou performance vérifiée n’est fournie.\nLogo et intégration au site sont évoqués, sans périmètre, accès technique ni tarif confirmé.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Le plafond rédactionnel annoncé est de 1 400 € HT. TR01 donne cinq postes : cadrage et plan, 180 € ; Accueil, 320 € ; Services, 360 € ; À propos, 220 € ; Contact, 120 €. Leur somme est de 1 200 € HT. Les 200 € sous le plafond ne constituent ni un prix pour le logo ni une capacité d’intégration.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Les textes seront remis dans un document éditable. Un cycle de retours regroupés sur le périmètre validé est compris. La réalisation prévoit quinze jours ouvrés après réception des éléments nécessaires ET validation du brief, avec retours client centralisés sous trois jours ouvrés. Sans ces conditions de départ, aucune date ferme de livraison ne peut être calculée.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Lire une phrase en trois étapes",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Pour chaque phrase, relevez la source et son affirmation exacte. Cherchez la limite : une possibilité n’est pas une confirmation. Écrivez la conséquence pour la proposition : question, calendrier conditionnel ou prestation séparée. Vous transformez ainsi une observation en action.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Exemple commenté : « Je peux fournir les textes existants. » Fait : les éléments sont annoncés. Inconnue : leur disponibilité et leur contenu. Conséquence : demander la date de remise sans prétendre les avoir audités. Juger leur qualité ajouterait une affirmation sans document examiné.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Autre exemple : « Il faudrait peut-être revoir le logo. » C’est un besoin éventuel, pas un accord ou un tarif. Écrivez « Demande de logo à clarifier séparément ». La transformer en « logo compris » modifierait silencieusement périmètre et budget.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Passer des inconnues aux bonnes questions",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Une question utile vise une décision précise. « Quand les quatre textes et les réponses au questionnaire seront-ils disponibles ? » prépare le démarrage. Demandez aussi qui approuve et centralise les retours, sans lui inventer un nom. Expliquez pourquoi vous avez choisi chaque question.",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "Vérifiez que chaque affirmation peut être reliée à BR01 ou TR01.\nGardez séparés le besoin, le livrable, le montant calculé et le plafond.\nRepérez les deux conditions de démarrage et la limite des services non chiffrés.\nRemplacez toute conclusion non étayée par une inconnue explicite et une action.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Conservez le tableau et comparez-le au corrigé. C’est une production complète, réutilisable pour un autre dossier. La suite s’appuiera sur ce cadrage, mais aucun autre module n’est nécessaire pour terminer cette première tâche.",
+      "url": null
+    }
+  ],
+  "exercise": {
+    "instructions": "Créez les colonnes « Fait et source », « Inconnue ou limite », « Conséquence ». Renseignez huit lignes : pages, éléments, budget, calendrier, retours, preuves commerciales, logo, intégration. Ajoutez trois questions prioritaires et la décision rendue possible par chacune. Relisez chaque ligne en cherchant une affirmation absente du dossier.",
+    "correction": "Conservez quatre pages françaises et leurs limites ; distinguez tarif 1 200 € HT et plafond 1 400 € HT ; gardez quinze jours ouvrés après éléments reçus ET brief validé, un cycle regroupé et des retours sous trois jours ouvrés. Signalez les preuves absentes et les demandes logo/intégration non chiffrées. Questions possibles : disponibilité des éléments, validateur, besoin exact d’intégration. D’autres priorités sont acceptables si leur conséquence est expliquée ; aucune formulation mot à mot n’est imposée."
+  },
+  "quiz": [
+    {
+      "key": "m01-purpose",
+      "prompt": "Quel besoin est effectivement décrit pour Client R ?",
+      "options": [
+        "Garantir une hausse des ventes.",
+        "Rendre les services compréhensibles et préparer un premier échange.",
+        "Démontrer vingt ans d’expérience."
+      ],
+      "correctOption": 1,
+      "explanation": "Le dossier décrit un objectif de clarté et de préparation du contact. Il ne fournit ni résultat commercial garanti ni ancienneté vérifiée.",
+      "points": 1
+    },
+    {
+      "key": "m01-missing",
+      "prompt": "Quelle information manque pour fixer le démarrage ?",
+      "options": [
+        "Le nombre de pages demandé.",
+        "Le plafond du budget rédactionnel.",
+        "La réception effective des éléments et la validation du brief."
+      ],
+      "correctOption": 2,
+      "explanation": "Le démarrage dépend des éléments nécessaires reçus et du brief validé ; leur réalisation n’est pas encore confirmée.",
+      "points": 1
+    },
+    {
+      "key": "m01-schedule",
+      "prompt": "Le dossier permet-il de promettre une date ferme de livraison ?",
+      "options": [
+        "Oui, quinze jours suffisent dans tous les cas.",
+        "Non, les conditions de démarrage ne sont pas confirmées.",
+        "Oui, si le client préfère cette date."
+      ],
+      "correctOption": 1,
+      "explanation": "Quinze jours ouvrés est un délai conditionnel, pas une date de calendrier. Le souhait du client ne confirme pas les conditions de départ.",
+      "points": 1
+    }
+  ]
+}

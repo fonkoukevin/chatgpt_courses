@@ -95,7 +95,7 @@ public class EditorialService {
     @Transactional
     public ContentView create(UUID actor,CreateContent c) {
         require(actor,"content.write");check(c!=null && c.kind()!=null);locale(c.locale());slug(c.slug());
-        header(c.title(),c.summary(),c.reason());pedagogy(c.objectives(),c.evaluationDefinition());document(c.document(),mapper);ids(c.childVersionIds(),100);
+        header(c.title(),c.summary(),c.reason());pedagogy(c.objectives(),c.evaluationDefinition());document(c.document(),mapper);assetRoles(c.kind(),c.document());ids(c.childVersionIds(),100);
         UUID resource=UUID.randomUUID();jdbc.update("INSERT INTO learning_resources(id,kind) VALUES(?,?)",resource,c.kind().name());
         UUID version=createVersion(resource,1,c.objectives(),c.evaluationDefinition(),null);
         setComposition(version,c.kind(),c.childVersionIds());
@@ -108,7 +108,7 @@ public class EditorialService {
     @Transactional
     public ContentView revise(UUID actor,UUID id,String ifMatch,SaveRevision c) {
         require(actor,"content.write");var old=locked(id,ifMatch);require(actor,"content.write");editable(old);check(c!=null);
-        header(c.title(),c.summary(),c.reason());document(c.document(),mapper);
+        header(c.title(),c.summary(),c.reason());document(c.document(),mapper);assetRoles(old.kind(),c.document());
         boolean initialTranslation=old.sourceTranslationId()!=null && old.publishedRevisionId()==null;
         if(old.frozenAt()!=null && !initialTranslation && !samePedagogy(old.document(),c.document()))throw new ApiException(ApiError.NEW_PEDAGOGICAL_VERSION_REQUIRED);
         append(id,c.title(),c.summary(),c.document(),actor,c.reason(),old.currentRevisionId());
@@ -127,7 +127,7 @@ public class EditorialService {
     @Transactional
     public ContentView newVersion(UUID actor,UUID id,String ifMatch,NewVersion c) {
         require(actor,"content.write");var old=locked(id,ifMatch);require(actor,"content.write");editable(old);check(c!=null);
-        header(c.title(),c.summary(),c.reason());pedagogy(c.objectives(),c.evaluationDefinition());document(c.document(),mapper);ids(c.childVersionIds(),100);
+        header(c.title(),c.summary(),c.reason());pedagogy(c.objectives(),c.evaluationDefinition());document(c.document(),mapper);assetRoles(old.kind(),c.document());ids(c.childVersionIds(),100);
         Integer next=jdbc.queryForObject("SELECT coalesce(max(version_number),0)+1 FROM pedagogical_versions WHERE resource_id=?",Integer.class,old.resourceId());
         UUID version=createVersion(old.resourceId(),next,c.objectives(),c.evaluationDefinition(),old.versionId());
         setComposition(version,old.kind(),c.childVersionIds());UUID created=createTranslation(version,old.locale(),null,null);
@@ -149,7 +149,7 @@ public class EditorialService {
     @Transactional
     public ContentView translate(UUID actor,UUID id,String ifMatch,CreateTranslation c) {
         require(actor,"content.write");var old=locked(id,ifMatch);require(actor,"content.write");editable(old);check(c!=null);locale(c.locale());slug(c.slug());
-        check(!old.locale().equals(c.locale()));header(c.title(),c.summary(),c.reason());document(c.document(),mapper);
+        check(!old.locale().equals(c.locale()));header(c.title(),c.summary(),c.reason());document(c.document(),mapper);assetRoles(old.kind(),c.document());
         if(old.currentRevisionId()==null)throw new ApiException(ApiError.CONTENT_NOT_READY);
         if(Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM content_translations WHERE pedagogical_version_id=? AND locale=?)",Boolean.class,old.versionId(),c.locale())))throw new ApiException(ApiError.CONFLICT);
         putSlug(old.resourceId(),old.kind(),c.locale(),c.slug());
@@ -332,6 +332,10 @@ public class EditorialService {
         jdbc.update("DELETE FROM version_compositions WHERE parent_version_id=?",version);
         for(int i=0;i<ids.size();i++)jdbc.update("INSERT INTO version_compositions(id,parent_version_id,child_version_id,position) VALUES(?,?,?,?)",UUID.randomUUID(),version,ids.get(i),i+1);
     }
+    private void assetRoles(ResourceKind kind,ContentDocument document) {
+        check(document.exercise()==null||document.exercise().solutionAssetIds().isEmpty()||kind==ResourceKind.ACTIVITY);
+        check(document.media().stream().noneMatch(m->mediaRegistries.stream().anyMatch(r->r.privateSolution(m.assetId()))));
+    }
     private boolean samePedagogy(ContentDocument before,ContentDocument after) {
         return before!=null && Objects.equals(before.objective(),after.objective()) && Objects.equals(before.exercise(),after.exercise()) && Objects.equals(before.quiz(),after.quiz()) && Objects.equals(before.rubric(),after.rubric())
             && Objects.equals(com.chatgptcourses.learning.service.LearningValidation.effectivePolicy(before.quizPolicy()),com.chatgptcourses.learning.service.LearningValidation.effectivePolicy(after.quizPolicy()))
@@ -351,6 +355,7 @@ public class EditorialService {
         if(d.objective().isBlank())issue(issues,"OBJECTIVE_REQUIRED","document.objective",v.resourceId());
         if(d.expectedResult().isBlank())issue(issues,"EXPECTED_RESULT_REQUIRED","document.expectedResult",v.resourceId());
         if(d.blocks().isEmpty())issue(issues,"CONTENT_REQUIRED","document.blocks",v.resourceId());
+        if(d.exercise()!=null)for(UUID asset:d.exercise().solutionAssetIds())if(mediaRegistries.stream().noneMatch(r->r.readySolution(v.resourceId(),v.versionId(),v.locale(),asset)))issue(issues,"SOLUTION_FILE_NOT_VERIFIED","document.exercise.solutionAssetIds",asset);
         if(v.kind()==ResourceKind.METHOD_TEMPLATE&&!MethodValidation.complete(d.methodDefinition()))issue(issues,"METHOD_DEFINITION_REQUIRED","document.methodDefinition",v.resourceId());
         if(d.projectPolicy()!=null&&v.kind()!=ResourceKind.ACTIVITY)issue(issues,"PROJECT_POLICY_ACTIVITY_ONLY","document.projectPolicy",v.resourceId());
         if(d.projectPolicy()!=null&&!com.chatgptcourses.projects.service.ProjectValidation.complete(d))issue(issues,"PROJECT_RUBRIC_REQUIRED","document.rubric",v.resourceId());

@@ -1,0 +1,130 @@
+{
+  "key": "m02",
+  "locale": "en",
+  "title": "Define a scope the client can agree to",
+  "summary": "Define the four French pages, editable delivery and included feedback; isolate requests needing clarification or separate pricing.",
+  "objective": "Connect Client R’s need to deliverables and distinguish included, to-confirm and unpriced items.",
+  "expectedResult": "An explained scope list with checkable delivery, feedback and starting conditions.",
+  "prerequisites": [
+    "Read BR01/TR01 and identify facts and unknowns, for example using the table from M01."
+  ],
+  "blocks": [
+    {
+      "type": "HEADING",
+      "text": "Describe an observable output",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Scope lets both parties recognise what will be delivered. “Improve your website” might imply copywriting, a logo, integration or commercial results. For BR01, connect the need for clarity to rewriting four pages. Describe the production, without promising an unproven commercial effect.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Use three statuses. “Included” means supplied by the brief and covered by TR01. “To confirm” marks a necessary condition still unknown. “Unpriced” identifies work that cannot enter the stated fee. A request may need clarification before a price is possible; this does not mean the work is permanently impossible.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Inventory the deliverables",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "Included: scoping and outline, then rewriting four pages in French.\nAccueil (Home): 600 words maximum; Services: 800; À propos (About): 400; Contact: 250. These are upper limits, not targets to fill artificially.\nDeliver the text in an editable document; BR01 does not specify a particular proprietary format.\nInclude one consolidated feedback round on the agreed scope. Logo work, integration and extra pages have not been priced.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "An outline can give each page a role: introduce the offer, explain services, present the business using verified information, and prepare contact. These are possible structures, not observations about existing pages. You have not received those texts, so cannot claim to know their defects or performance.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Make the boundary understandable",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Overbroad example: “I will handle your four pages and finish the website for €1,200 excluding tax.” “Finish” could imply integration or logo work. A faithful revision is: “The fee covers scoping, outline and rewriting four pages, delivered in an editable document. Logo work and website integration require separate clarification and pricing before agreement.”",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "This revision connects the price to known work, identifies the delivery and makes the limit visible. It does not turn the €200 below the €1,400 ceiling into an available service. It opens a discussion rather than inventing a price or promising free work.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Feedback is part of scope too. One consolidated round means the client gathers comments on the agreed work before revision; it does not mean unlimited changes or new pages. BR01 provides one person consolidating feedback within three business days. Ask who approves: that person’s identity has not been supplied.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Connect scope, calculation and timing",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Keep the breakdown: 180 + 320 + 360 + 220 + 120 = €1,200 excluding tax, within the €1,400 copywriting ceiling. The planned duration is fifteen business days after required materials are received AND the brief is approved, with feedback in the stated response time. Changed scope or conditions require the fee and schedule to be reviewed; no additional pricing rule is provided here.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "For an additional request, identify what is needed to decide. Integration questions include the content, system, interventions and access required. For the logo, ask what change is expected. These prepare separate scoping and pricing; they do not claim you already hold access or the necessary delivery capacity.",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "Can the client identify all four pages, their language and limits?\nAre editable delivery and the single feedback round explicit?\nAre logo work and integration separate, without invented prices?\nDoes the schedule retain both starting conditions?\nDoes every claim follow the brief rather than imagined experience or results?",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Keep the scope list and open questions with your scoping table. They become input to your prompt: an instruction must not enlarge the agreed boundary. The next module assembles that request, while this list is already a complete, checkable output.",
+      "url": null
+    }
+  ],
+  "exercise": {
+    "instructions": "Write a scope list for Client R: four rows for pages, one for delivery, one for feedback and two for additional requests. Give each a status and justification from BR01/TR01. Add a schedule sentence and the detailed sum. Revise this promise: “Everything fits your €1,400 budget, including integration and unlimited changes.” Check your output against the five questions above.",
+    "correction": "The four French pages and their limits are included, with scoping/outline, editable delivery and one consolidated feedback round. The approver and material-availability date need confirmation. Logo work and integration are outside the €1,200 excluding-tax total because no confirmed scope or price is supplied. A possible revision says the fee covers the five listed items and one round on the agreed scope; logo work and integration need separate clarification and pricing. Retain fifteen business days after receiving materials AND approving the brief."
+  },
+  "quiz": [
+    {
+      "key": "m02-total",
+      "prompt": "What total follows from the five TR01 prices?",
+      "options": [
+        "€1,400 excluding tax.",
+        "€1,200 excluding tax.",
+        "€1,180 excluding tax."
+      ],
+      "correctOption": 1,
+      "explanation": "180 + 320 + 360 + 220 + 120 = 1,200 excluding tax. The €1,400 ceiling is not the calculated fee; €1,180 is a different BR02 option.",
+      "points": 1
+    },
+    {
+      "key": "m02-integration",
+      "prompt": "Integration is mentioned without access or a price. What is appropriate?",
+      "options": [
+        "Include it in the remaining €200.",
+        "Treat it as free.",
+        "Clarify the requirement and price it separately before committing."
+      ],
+      "correctOption": 2,
+      "explanation": "Remaining budget does not create a price, technical access or an agreed integration scope.",
+      "points": 1
+    },
+    {
+      "key": "m02-feedback",
+      "prompt": "Which feedback condition is supplied?",
+      "options": [
+        "One consolidated feedback round on the agreed scope.",
+        "Unlimited changes and additional pages.",
+        "No client feedback is possible."
+      ],
+      "correctOption": 0,
+      "explanation": "TR01 includes one consolidated round. BR01 provides feedback within three business days; this is not unlimited revision.",
+      "points": 1
+    }
+  ]
+}

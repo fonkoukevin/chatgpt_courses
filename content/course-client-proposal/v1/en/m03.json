@@ -1,0 +1,136 @@
+{
+  "key": "m03",
+  "locale": "en",
+  "title": "Prepare a checkable request for ChatGPT",
+  "summary": "Assemble useful parameters, preserve the facts and prepare checks for an eventual response.",
+  "objective": "Prepare an editable instruction that preserves BR01/TR01 and requests a checkable proposal rather than invented commercial claims.",
+  "expectedResult": "A complete prompt, explained parameters and checks for any eventual response.",
+  "prerequisites": [
+    "Have BR01/TR01 and your scope list, with unpriced requests separated.",
+    "Be able to use a text editor; running the prompt in ChatGPT is optional when preparing the method."
+  ],
+  "blocks": [
+    {
+      "type": "HEADING",
+      "text": "A prompt prepares work; it does not validate it",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Prepare an instruction connecting the output to its data. The platform does not call an AI API or claim a response was obtained. An editor is enough; no particular paid model is required.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Official guidance suggests clarifying the goal, context, output and boundaries without a rigid formula. Apply these ideas to the fictional case.",
+      "url": null
+    },
+    {
+      "type": "LINK",
+      "text": "Official OpenAI guidance: preparing a prompt.",
+      "url": "https://learn.chatgpt.com/docs/prompting"
+    },
+    {
+      "type": "HEADING",
+      "text": "Choose seven useful parameters",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "Goal: prepare a clear proposal for Client R.\nContext: office fit-out services, small businesses, clarity and preparation for initial contact.\nAvailable data: BR01, TR01 and your scope list; do not claim to hold the existing website texts.\nAudience: Client R; professional, simple and reassuring tone.\nFormat: no more than two pages, named sections and an itemised calculation.\nBoundaries: four French pages, word limits, editable delivery and agreed feedback.\nUnknowns: material availability, approval, logo work and integration; identify them and ask useful questions.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Supply the facts: an external tool may not know the labels BR01/TR01. Paste useful data or provide authorised documents. For real work, remove unnecessary confidential information and check your sharing rules first.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "An editable starting instruction",
+      "url": null
+    },
+    {
+      "type": "CODE",
+      "text": "Prepare an English proposal for Client R using the BR01/TR01 data below. The website copy remains in French. Aim: make services clearer and prepare initial contact, without promising commercial results.\nSections: objective, deliverables, approach, timeline, budget, points to confirm and next step. Maximum two pages; professional, simple and reassuring tone.\nKeep four French pages: Home: 600 words maximum, Services: 800, About: 400, Contact: 250. Deliver editable text with one consolidated feedback round on the agreed scope.\nShow 180 + 320 + 360 + 220 + 120 = €1,200 excluding tax, distinct from the €1,400 copywriting ceiling. Fifteen business days after required materials are received AND the brief approved; client feedback within three business days.\nInvent no references, business history, testimonials, missing prices or fixed dates. Logo work and integration remain separate and unpriced. Distinguish facts from unknowns. End with questions and scope agreement.\nData: [insert BR01/TR01 and the retained scope here].",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Complete the data placeholder. Named sections support comparison with scope; itemised prices distinguish fee from ceiling without guaranteeing arithmetic. Timing stays conditional, and explicit unknowns prevent invented commitments.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Check the request before trusting its result",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "“Make a convincing proposal and add the usual details” defines neither sources nor boundaries. Replace “usual” with required sections and a rule for missing information. Request a focused revision without changing the other facts.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Official guidance also calls for checking important numbers, claims and sources before using a result. Apply that to any response: calculate independently, compare with the case, identify unknowns and inspect every section.",
+      "url": null
+    },
+    {
+      "type": "LINK",
+      "text": "Official OpenAI guidance: check results before use.",
+      "url": "https://learn.chatgpt.com/docs/use-chatgpt"
+    },
+    {
+      "type": "LIST",
+      "text": "Can every number and unit be traced to the data?\nAre both starting conditions and three-business-day feedback retained?\nAre logo work and integration outside the known fee?\nHave the actual data been included and the limits stated?\nCan you check the output without relying on its confidence?",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Keep the parameters and instruction as an adaptable personal method. The next module structures the proposal; copying or saving the prompt proves neither execution nor accuracy.",
+      "url": null
+    }
+  ],
+  "exercise": {
+    "instructions": "Assemble all seven parameters and replace the data placeholder with BR01/TR01. Identify scope limits and how unknowns are handled. Name two independent checks. Without execution, label it “prompt prepared, not run”. Do not fabricate a ChatGPT response.",
+    "correction": "Retain the need, French pages and limits, format, five prices, €1,200 excluding-tax total and €1,400 ceiling; fifteen business days after both conditions, one consolidated round and feedback within three business days. Separate logo work/integration, reject invented references and ask focused questions. Check the sum and every commitment’s source. Different wording is valid; no syntax guarantees correctness."
+  },
+  "quiz": [
+    {
+      "key": "m03-evidence",
+      "prompt": "How should an unspecified business history be handled?",
+      "options": [
+        "Add a credible number of years.",
+        "Flag the gap and request verified information if needed.",
+        "Remove questions to make the proposal more persuasive."
+      ],
+      "correctOption": 1,
+      "explanation": "Plausibility is not evidence. Preserve the unknown instead of completing a commercial claim.",
+      "points": 1
+    },
+    {
+      "key": "m03-output-language",
+      "prompt": "Which language remains required for the four BR01 website pages?",
+      "options": [
+        "French, even in the English learning course.",
+        "The platform’s menu language.",
+        "Any language chosen by the AI."
+      ],
+      "correctOption": 0,
+      "explanation": "The website-copy language belongs to the assignment, independently of the learning or navigation language.",
+      "points": 1
+    },
+    {
+      "key": "m03-control",
+      "prompt": "What remains necessary after a well-written response?",
+      "options": [
+        "Accept its total if the style sounds professional.",
+        "Treat the prompt itself as validation.",
+        "Recalculate the prices and compare commitments with the sources."
+      ],
+      "correctOption": 2,
+      "explanation": "Fluent writing can contain errors or assumptions. Calculation and comparison with the brief remain separate checks.",
+      "points": 1
+    }
+  ]
+}

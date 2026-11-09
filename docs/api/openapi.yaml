@@ -3407,6 +3407,63 @@ paths:
           $ref: '#/components/responses/ProblemResponse'
         default:
           $ref: '#/components/responses/ProblemResponse'
+  /me/projects/{projectId}/solution-reveals/{revealId}/files/{assetId}/download-access:
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: revealId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    post:
+      operationId: getSolutionFileDownload
+      tags:
+        - Projects
+      summary: Préparer le téléchargement d’un corrigé après sa révélation explicite.
+      security:
+        - SessionCookie: []
+      description: >-
+        Propriétaire et permissions projects.read/assets.read, CSRF, compte attendu. Vérifie la
+        révélation, sa source/version/langue exacte, la référence privée du fichier et les
+        droits/chaîne actuels. Ne crée ni nouvelle preuve pédagogique ni accès depuis le navigateur.
+      parameters:
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+      responses:
+        '200':
+          description: Accès temporaire après autorisation réelle.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetDownloadAccess'
+        '400':
+          $ref: '#/components/responses/ProblemResponse'
+        '401':
+          $ref: '#/components/responses/ProblemResponse'
+        '403':
+          $ref: '#/components/responses/ProblemResponse'
+        '404':
+          $ref: '#/components/responses/ProblemResponse'
+        '409':
+          $ref: '#/components/responses/ProblemResponse'
+        '428':
+          $ref: '#/components/responses/ProblemResponse'
+        '503':
+          $ref: '#/components/responses/ProblemResponse'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
   /project-templates/{activityId}/versions/{versionId}:
     parameters:
       - name: activityId
@@ -9220,6 +9277,15 @@ components:
           type: string
           minLength: 0
           maxLength: 8000
+        solutionAssetIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/UUID'
+          maxItems: 10
+          uniqueItems: true
+          description: >-
+            Fichiers privés de corrigé ; absent signifie liste vide pour les documents historiques.
+            Exclus du PublicDocument et gelés avec la pédagogie.
     QuizQuestion:
       type: object
       additionalProperties: false
@@ -12951,6 +13017,7 @@ components:
         - locale
         - correction
         - revealedAt
+        - files
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -12972,10 +13039,31 @@ components:
           maxLength: 8000
         revealedAt:
           $ref: '#/components/schemas/UtcInstant'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/SolutionFile'
+          maxItems: 10
       description: >-
         Consultation explicite tracée, unique par propriétaire/révision personnelle/source/langue.
         Réautorisation de la publication couranteFREE à chaque livraison et rejeu. Ne change ni
         production, stade, score ou progression.
+    SolutionFile:
+      type: object
+      additionalProperties: false
+      required:
+        - assetId
+        - filename
+        - locale
+      properties:
+        assetId:
+          $ref: '#/components/schemas/UUID'
+        filename:
+          type: string
+          minLength: 1
+          maxLength: 180
+        locale:
+          $ref: '#/components/schemas/Locale'
     CreateProject:
       type: object
       additionalProperties: false
@@ -13268,6 +13356,10 @@ components:
         - contentType
         - sizeBytes
       properties:
+        purpose:
+          type: string
+          enum: [RESOURCE, SOLUTION]
+          description: Classification immuable ; absent signifie RESOURCE. SOLUTION est un fichier de corrigé privé, exclu des téléchargements ordinaires.
         resourceId:
           $ref: '#/components/schemas/UUID'
         versionId:

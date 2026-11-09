@@ -1,0 +1,136 @@
+{
+  "key": "m03",
+  "locale": "fr",
+  "title": "Préparer une demande vérifiable pour ChatGPT",
+  "summary": "Assembler les paramètres utiles, préserver les faits et préparer les contrôles d’une réponse éventuelle.",
+  "objective": "Préparer une instruction modifiable qui conserve BR01/TR01 et demande une sortie contrôlable plutôt qu’une réponse commerciale inventée.",
+  "expectedResult": "Un prompt complet, ses paramètres expliqués et une liste de vérifications à appliquer à toute réponse éventuelle.",
+  "prerequisites": [
+    "Disposer de BR01/TR01 et de votre périmètre, avec les demandes non chiffrées séparées.",
+    "Pouvoir utiliser un éditeur de texte ; une exécution dans ChatGPT reste facultative pour préparer la méthode."
+  ],
+  "blocks": [
+    {
+      "type": "HEADING",
+      "text": "Le prompt prépare le travail ; il ne le valide pas",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Préparez une instruction qui relie résultat et données. La plateforme n’appelle pas une API IA et ne prétend pas obtenir une réponse. Un éditeur suffit ; aucun modèle payant particulier n’est nécessaire.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "La documentation officielle propose de préciser but, contexte, forme attendue et limites, sans formule obligatoire. Appliquons ces repères au dossier.",
+      "url": null
+    },
+    {
+      "type": "LINK",
+      "text": "Documentation officielle OpenAI : préparer une demande.",
+      "url": "https://learn.chatgpt.com/docs/prompting"
+    },
+    {
+      "type": "HEADING",
+      "text": "Renseigner sept paramètres sans remplir pour remplir",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "Objectif : préparer une proposition commerciale lisible pour Client R.\nContexte : prestations d’aménagement de bureaux, petites entreprises, besoin de clarté et de préparation du premier échange.\nDonnées disponibles : BR01, TR01 et votre liste de périmètre ; ne pas prétendre disposer des textes existants.\nDestinataire : Client R, avec un ton professionnel, simple et rassurant.\nFormat : proposition de deux pages maximum, sections nommées et calcul détaillé.\nContraintes : quatre pages françaises, limites de mots, remise éditable et retours convenus.\nInconnues : éléments à recevoir, validation, logo et intégration ; les signaler et poser les questions nécessaires.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Fournissez les faits : un outil extérieur peut ignorer les noms BR01/TR01. Collez les données utiles ou fournissez les documents autorisés. Pour un dossier réel, retirez les informations confidentielles inutiles et vérifiez vos règles de partage.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Une instruction de départ à modifier",
+      "url": null
+    },
+    {
+      "type": "CODE",
+      "text": "Prépare une proposition commerciale en français pour Client R, à partir des données BR01 et TR01 ci-dessous. Objectif : clarifier ses services et préparer un premier échange, sans promettre de résultat commercial.\nPrésente : objectif, livrables, méthode, calendrier, budget, points à confirmer et prochaine étape. Maximum deux pages ; ton professionnel, simple et rassurant.\nConserve les quatre pages en français : Accueil : 600 mots maximum, Services : 800, À propos : 400, Contact : 250. Remise dans un document éditable ; un cycle de retours regroupés sur le périmètre validé.\nMontre 180 + 320 + 360 + 220 + 120 = 1 200 € HT, distinct du plafond rédactionnel de 1 400 € HT. Quinze jours ouvrés après éléments nécessaires reçus ET brief validé, avec retours client sous trois jours ouvrés.\nN’invente ni référence, ancienneté, témoignage, prix manquant ni date ferme. Logo et intégration : demandes séparées, non chiffrées. Distingue faits et inconnues. Termine par les questions et une validation du périmètre.\nDonnées : [insérer ici le dossier BR01/TR01 et le périmètre conservé].",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Complétez l’emplacement des données. Les rubriques permettent la comparaison au périmètre ; le détail tarifaire distingue plafond et prix sans garantir la somme. Le calendrier reste conditionnel ; les inconnues empêchent un engagement inventé.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Tester la demande avant toute confiance",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "« Fais une proposition convaincante, ajoute les détails habituels » ne définit ni sources ni limites. Remplacez « habituels » par les rubriques et le signalement des absences. Demandez ensuite une correction ciblée, sans modifier les autres faits.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "La documentation officielle rappelle de contrôler nombres, affirmations et sources. Vérifiez la réponse éventuelle par recalcul, comparaison au dossier et lecture complète.",
+      "url": null
+    },
+    {
+      "type": "LINK",
+      "text": "Documentation officielle OpenAI : vérifier le résultat avant utilisation.",
+      "url": "https://learn.chatgpt.com/docs/use-chatgpt"
+    },
+    {
+      "type": "LIST",
+      "text": "Le prompt permet-il de retrouver tous les chiffres et leurs unités ?\nExige-t-il les deux conditions de démarrage et les retours sous trois jours ouvrés ?\nSépare-t-il logo et intégration du montant connu ?\nLes données sont-elles réellement jointes au texte, et les limites explicites ?\nPourriez-vous vérifier la sortie sans accepter sa seule assurance de qualité ?",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Conservez paramètres et instruction comme méthode personnelle adaptable. Le prochain module structurera la proposition ; copier ou enregistrer le prompt ne prouve ni exécution ni exactitude.",
+      "url": null
+    }
+  ],
+  "exercise": {
+    "instructions": "Assemblez les sept paramètres et remplacez l’emplacement des données par BR01/TR01. Repérez les limites de périmètre et le traitement des inconnues. Nommez deux contrôles personnels. Sans exécution, indiquez « prompt préparé, non exécuté ». Ne fabriquez aucune réponse attribuée à ChatGPT.",
+    "correction": "La demande conserve besoin, pages françaises et limites, format, cinq tarifs, total 1 200 € HT et plafond 1 400 € HT ; quinze jours ouvrés après les deux conditions, cycle regroupé et retours sous trois jours ouvrés. Elle sépare logo/intégration, refuse les références inventées et pose des questions précises. Vérifiez la somme et la source de chaque engagement. Plusieurs formulations sont valables ; aucune syntaxe ne garantit la justesse."
+  },
+  "quiz": [
+    {
+      "key": "m03-evidence",
+      "prompt": "Comment traiter une ancienneté absente du dossier ?",
+      "options": [
+        "Ajouter une ancienneté crédible.",
+        "Signaler l’absence et demander une donnée vérifiée si elle est nécessaire.",
+        "Supprimer toutes les questions pour rendre la proposition plus persuasive."
+      ],
+      "correctOption": 1,
+      "explanation": "Une information plausible n’est pas une preuve. Le prompt doit préserver l’inconnue plutôt que compléter une affirmation commerciale.",
+      "points": 1
+    },
+    {
+      "key": "m03-output-language",
+      "prompt": "Dans BR01, quelle langue reste imposée pour les quatre pages du site ?",
+      "options": [
+        "Le français, même dans un parcours d’apprentissage en anglais.",
+        "La langue du menu de la plateforme.",
+        "N’importe quelle langue choisie par l’IA."
+      ],
+      "correctOption": 0,
+      "explanation": "La langue du dossier est une contrainte de la prestation, distincte de la langue de navigation ou d’apprentissage.",
+      "points": 1
+    },
+    {
+      "key": "m03-control",
+      "prompt": "Quel contrôle reste nécessaire après une réponse bien rédigée ?",
+      "options": [
+        "Accepter son total si le style est professionnel.",
+        "Considérer que le prompt suffit comme validation.",
+        "Recalculer les montants et comparer les engagements aux sources."
+      ],
+      "correctOption": 2,
+      "explanation": "Une réponse fluide peut comporter erreurs ou hypothèses. Le calcul et la comparaison au dossier restent des vérifications distinctes.",
+      "points": 1
+    }
+  ]
+}

@@ -93,8 +93,9 @@ public final class ProjectDtos {
     public record SelfAssessmentPage(List<SelfAssessmentSummary> items, int page, int pageSize, long total) {
         public static SelfAssessmentPage from(ProjectTypes.SelfAssessmentPage value) { return value == null ? null : new SelfAssessmentPage(value.items().stream().map(SelfAssessmentSummary::from).toList(), value.page(), value.pageSize(), value.total()); }
     }
-    public record SolutionRevealView(UUID id, UUID projectId, UUID projectRevisionId, UUID activityId, UUID activityVersionId, UUID revisionId, String locale, String correction, Instant revealedAt) {
-        public static SolutionRevealView from(ProjectTypes.SolutionRevealView value) { return value == null ? null : new SolutionRevealView(value.id(), value.projectId(), value.projectRevisionId(), value.activityId(), value.activityVersionId(), value.revisionId(), value.locale(), value.correction(), value.revealedAt()); }
+    public record SolutionFile(UUID assetId,String filename,String locale){static SolutionFile from(ProjectTypes.SolutionFile v){return new SolutionFile(v.assetId(),v.filename(),v.locale());}}
+    public record SolutionRevealView(UUID id, UUID projectId, UUID projectRevisionId, UUID activityId, UUID activityVersionId, UUID revisionId, String locale, String correction, Instant revealedAt,List<SolutionFile> files) {
+        public static SolutionRevealView from(ProjectTypes.SolutionRevealView value) { return value == null ? null : new SolutionRevealView(value.id(), value.projectId(), value.projectRevisionId(), value.activityId(), value.activityVersionId(), value.revisionId(), value.locale(), value.correction(), value.revealedAt(),value.files().stream().map(SolutionFile::from).toList()); }
         @Override public String toString() { return "SolutionRevealView[redacted]"; }
     }
     public record CreateProject(@NotNull UUID creationId, @NotNull UUID activityId, @NotNull UUID activityVersionId,

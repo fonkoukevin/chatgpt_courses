@@ -1,0 +1,161 @@
+{
+  "key": "m05",
+  "locale": "en",
+  "title": "Check the proposal and explain your revisions",
+  "summary": "Review a specific revision against twenty checks, address blocking issues and retain the reasons for changes.",
+  "objective": "Identify and correct departures from BR01 facts without treating a self-reported score as validation.",
+  "expectedResult": "A BR01 self-assessment tied to one revision, an improved proposal and reasons for the corrections.",
+  "prerequisites": [
+    "Have a saved version of your BR01 proposal.",
+    "Keep the brief, TR01 and starting conditions available."
+  ],
+  "blocks": [
+    {
+      "type": "HEADING",
+      "text": "Look for evidence rather than an impression",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "A sentence can sound professional while committing to too much. Review the proposal beside BR01 and TR01. For each check, identify a specific passage in your work and the supplied fact that supports it. If the passage is missing or ambiguous, leave the check unsatisfied and record the correction needed. An intention the reader cannot find in the document does not satisfy a criterion.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Fidelity: four checks",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "fidelity-1 — Client R’s actual need is described accurately.\nfidelity-2 — All four requested pages are included.\nfidelity-3 — No references, experience or commercial results are invented.\nfidelity-4 — Missing information is identified.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Scope: four checks",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "scope-1 — Deliverables are clearly identified.\nscope-2 — Delivery in an editable document is stated.\nscope-3 — One consolidated feedback round on the agreed scope is included.\nscope-4 — Logo work and website integration are addressed separately.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Budget: four checks",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "budget-1 — All five supplied prices are used correctly.\nbudget-2 — The total is €1,200 excluding tax.\nbudget-3 — The currency and excluding-tax basis are retained.\nbudget-4 — No invented cost or unpriced service is included.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Schedule: four checks",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "schedule-1 — The planned duration is fifteen business days.\nschedule-2 — Starting depends on receiving materials and approving the brief.\nschedule-3 — Client feedback within three business days is stated.\nschedule-4 — The work stages are consistent with the schedule.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Presentation: four checks",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "presentation-1 — The document is readable and structured.\npresentation-2 — The objective is clear without unsupported promises.\npresentation-3 — Questions resolve specific missing facts or decisions.\npresentation-4 — A clear next step allows the scope to be agreed.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Address four blocking issues",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "Invented references, years in business or commercial performance.\nAn incorrect calculation presented as final.\nAn unpriced service included in the commitment.\nA firm date promised without known starting conditions.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "A blocking issue remains a priority even when many checks are satisfied. Twenty criteria represent twenty self-reported points; the design reference is 16/20 with no blocking issue. This is neither certification nor human review. Calculating a score records your declaration but does not prove every sentence matches the case. A high score with a blocking issue still requires revision.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Worked example: repair the reasoning",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "If the proposal includes integration in the €200 left below the ceiling, merely deleting the word “included” is insufficient. Copywriting still totals €1,200 excluding tax. The additional service must be removed from the commitment and become a question about requirements, scope and access. The correction changes a decision, not just the tone of a sentence.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Likewise, replace an unsupported firm date with fifteen business days after receiving materials AND approving the brief, with consolidated feedback within three business days. Explain which fact was missing. Keeping that explanation makes the method reusable and reduces the chance of repeating the same error in another request.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Keep history without overstating what it proves",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Save the work before completing its self-assessment. Editing it later creates new work to check: the old assessment remains attached to its revision. Open the commented solution when you choose to compare; viewing it validates nothing. Different wording is acceptable when it retains the facts, qualifications and a next step the client can act on.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Finish by recording three changed decisions and their justification, then reread the revised version. The next module turns the proposal into an email and a personal method before testing the reasoning on BR02. Reuse the questions and checks, without automatically carrying across BR01 amounts or timing.",
+      "url": null
+    }
+  ],
+  "exercise": {
+    "instructions": "Complete the twenty checks for your BR01 revision and declare any blocking issues. Correct the departures in a new version. For three changes, record the passage, source fact and decision changed. Save and reassess the improved revision.",
+    "correction": "Twenty checks are divided into five four-point categories. The design reference is 16/20 without a blocking issue; a high score cannot cancel any of the four blockers. The five prices total €1,200 excluding tax. BR01 provides fifteen business days subject to both starting conditions, with feedback within three business days. An old assessment or a viewed solution does not validate new wording."
+  },
+  "quiz": [
+    {
+      "key": "m05-blocking",
+      "prompt": "The grid shows 20/20, but the proposal includes an unpriced service. What follows?",
+      "options": [
+        "The proposal is certified",
+        "The blocking issue still requires revision",
+        "A score above 16 allows the issue to be ignored"
+      ],
+      "correctOption": 1,
+      "explanation": "The score is self-reported. A blocking issue prevents treating the work as sufficiently corrected.",
+      "points": 1
+    },
+    {
+      "key": "m05-revision",
+      "prompt": "You edit the work after completing the grid. What does the old evidence cover?",
+      "options": [
+        "Every later version",
+        "An implied human review",
+        "Only the assessed revision"
+      ],
+      "correctOption": 2,
+      "explanation": "The self-assessment stays tied to its revision. The new work needs another review and assessment.",
+      "points": 1
+    },
+    {
+      "key": "m05-solution",
+      "prompt": "What is the purpose of the commented solution?",
+      "options": [
+        "Compare the reasoning without automatic validation",
+        "Require every sentence to be replaced",
+        "Guarantee the work is true"
+      ],
+      "correctOption": 0,
+      "explanation": "Different wording may be acceptable. Reading a solution does not check your own work for you.",
+      "points": 1
+    }
+  ]
+}

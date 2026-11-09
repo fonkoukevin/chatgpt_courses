@@ -66,7 +66,7 @@ class SchemaIntegrationTest {
 
     @Test @Order(1)
     void aFreshDatabaseMigratesAndHibernateValidatesWithoutSeedingAccountsOrCommerce() {
-        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016", "017", "018");
+        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016", "017", "018", "019");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_accounts", Integer.class)).isZero();
         assertThat(jdbc.queryForList("SELECT code FROM roles ORDER BY code", String.class)).containsExactly("COMMERCE_MANAGER", "EDITOR", "LEARNER", "OPERATIONS_MANAGER", "OPERATIONS_READER", "PAYMENTS_OPERATOR", "REFUND_OPERATOR", "SUPPORT_OPERATOR");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_roles", Integer.class)).isZero();
@@ -88,7 +88,7 @@ class SchemaIntegrationTest {
             assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM " + table, Integer.class)).isZero();
         }
         for (String table : operationTables()) assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM " + table, Integer.class)).isZero();
-        for(String table:new String[]{"resource_slug_reservations","resource_slug_changes"})assertThat(jdbc.queryForObject("SELECT count(*) FROM "+table,Integer.class)).isZero();
+        for(String table:new String[]{"resource_slug_reservations","resource_slug_changes","editorial_import_resources","editorial_import_translations","editorial_import_files"})assertThat(jdbc.queryForObject("SELECT count(*) FROM "+table,Integer.class)).isZero();
         assertThat(jdbc.queryForObject("""
                 SELECT COUNT(*) FROM pg_constraint c JOIN pg_class t ON c.conrelid = t.oid
                 WHERE c.contype = 'f' AND t.relnamespace = 'public'::regnamespace
@@ -115,7 +115,7 @@ class SchemaIntegrationTest {
             var database = new JdbcTemplate(new SingleConnectionDataSourceAdapter(connection));
             assertThat(database.queryForObject("SELECT session_id FROM spring_session WHERE primary_id = ?", String.class, primaryId)).isEqualTo(sessionId);
             assertThat(database.queryForObject("SELECT encode(attribute_bytes, 'hex') FROM spring_session_attributes WHERE session_primary_id = ?", String.class, primaryId)).isEqualTo("010203");
-            assertThat(database.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016", "017", "018");
+            assertThat(database.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016", "017", "018", "019");
         }
     }
 

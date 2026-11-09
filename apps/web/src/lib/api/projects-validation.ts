@@ -1,4 +1,5 @@
 import { record } from "./auth-validation";
+import { assetFilename } from "./assets-validation";
 import { isUuid } from "./cms-validation";
 import { isResourceDetail } from "./public-validation";
 import { isMemberResourceDetail } from "./member-content-validation";
@@ -140,7 +141,9 @@ export function isProjectStatus(value: unknown): value is ProjectStatus {
       && value.state === (value.latestAssessment.needsRevision ? "NEEDS_REVISION" : "SELF_ASSESSED"));
 }
 export function isSolutionRevealView(value: unknown): value is SolutionRevealView {
-  return record(value) && keys(value, ["id", "projectId", "projectRevisionId", "activityId", "activityVersionId", "revisionId", "locale", "correction", "revealedAt"])
+  return record(value) && keys(value, ["id", "projectId", "projectRevisionId", "activityId", "activityVersionId", "revisionId", "locale", "correction", "revealedAt", "files"])
     && [value.id, value.projectId, value.projectRevisionId, value.activityId, value.activityVersionId, value.revisionId].every(isUuid)
-    && language(value.locale) && validMethodText(value.correction, 8000, 1) && instant(value.revealedAt);
+    && language(value.locale) && validMethodText(value.correction, 8000, 1) && instant(value.revealedAt)
+    && Array.isArray(value.files) && value.files.length <= 10 && value.files.every(file => record(file) && keys(file, ["assetId", "filename", "locale"]) && isUuid(file.assetId) && assetFilename(file.filename) && file.locale === value.locale)
+    && new Set(value.files.map(file => file.assetId)).size === value.files.length;
 }

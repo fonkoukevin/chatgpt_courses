@@ -1,0 +1,135 @@
+{
+  "key": "m01",
+  "locale": "en",
+  "title": "Understand the brief before drafting",
+  "summary": "Turn Client R’s fictional brief into facts, unknowns and consequences, then choose useful first questions.",
+  "objective": "Distinguish supplied facts, ambiguous requests and missing information to produce a usable scoping record.",
+  "expectedResult": "A table with at least eight rows and three explained priority questions, without invented commitments.",
+  "prerequisites": [
+    "Be able to read a service request; no technical knowledge or previous use of ChatGPT is required."
+  ],
+  "blocks": [
+    {
+      "type": "HEADING",
+      "text": "A useful first output, with or without AI",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Before writing a proposal, separate what the brief establishes from what still needs agreement. Your output is a scoping table and useful questions. A text editor is enough: you can complete this activity without an account, a purchase or sending the brief to ChatGPT.",
+      "url": null
+    },
+    {
+      "type": "CALLOUT",
+      "text": "Client R and the prices are fictional exercise data, not course prices. No existing website text, technical access or verified commercial results have been supplied for inspection.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "The BR01 brief and TR01 working conditions",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Client R provides office fit-out services to small businesses. The client wants the services to be clearer and visitors to prepare for an initial conversation. The tone should be professional, simple and reassuring. This need guides the information to explain; it does not establish a future increase in sales.",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "Rewrite four website pages in French: Accueil (Home), 600 words maximum; Services, 800; À propos (About), 400; Contact, 250.\nAvailable materials are announced: four existing texts, a description of the services and questionnaire answers. Their delivery date is unknown.\nNo verified years in business, customer references or commercial results are supplied.\nLogo work and website integration are mentioned without confirmed scope, technical access or price.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "The copywriting budget ceiling is €1,400 excluding tax. TR01 lists scoping and outline €180, Home €320, Services €360, About €220 and Contact €120. The sum is €1,200 excluding tax. The remaining €200 below the ceiling is not a price for logo work or evidence that integration can be carried out.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Text is delivered in an editable document with one consolidated feedback round on the agreed scope. The planned duration is fifteen business days after receiving the required materials AND approving the brief, with consolidated client feedback within three business days. Until the starting conditions are confirmed, no fixed delivery date can be calculated.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Read each sentence in three steps",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Record the source and its actual claim. Identify the limit: a possibility is not confirmation, and a wish is not capacity. Then state the consequence for the proposal: a question, a conditional schedule or a separately scoped item. This turns a reading note into an action.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Worked example: “I can provide the existing texts.” Fact: the materials are announced. Unknown: delivery date and exact contents. Consequence: ask when they will be available and do not claim to have audited them. Calling these unseen texts poor would add an unsupported judgement.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Second example: “We might need to revisit the logo.” This establishes a possible request, not agreement on a replacement or a price. Write “Logo request to clarify separately”. Changing that to “logo included” would silently change both the scope and the budget.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Turn unknowns into focused questions",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "“Could you clarify?” is less useful than “When will the four texts and questionnaire answers be available?” Explain why you ask: the answer affects starting conditions. Also identify who approves and consolidates feedback, without inventing that person’s name or role.",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "Trace every claim to BR01 or TR01.\nSeparate the need, deliverables, calculated fee and budget ceiling.\nKeep both starting conditions and the limits on unpriced work.\nReplace unsupported conclusions with an explicit unknown and an action.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Keep your table and questions, then compare them with the correction below. They form a complete first output that you can reuse for another brief. Later modules build on it, but you do not need them to finish this activity or make your questions useful.",
+      "url": null
+    }
+  ],
+  "exercise": {
+    "instructions": "Create “Fact and source”, “Unknown or limit”, and “Consequence” columns. Add eight rows: pages, materials, budget, schedule, feedback, commercial evidence, logo and integration. Write three priority questions and explain the decision each enables. Check every row for a claim absent from the case.",
+    "correction": "A possible answer retains four French pages and their word limits; asks when materials and brief approval will be ready; separates the €1,200 excluding-tax fee from the €1,400 ceiling; keeps fifteen business days after both conditions; retains one consolidated round and feedback within three business days; rejects invented references; and keeps logo work and integration separate and unpriced. Questions might address material availability, the approver and the exact integration request. Other priorities are valid when their consequences are explained; identical wording is unnecessary."
+  },
+  "quiz": [
+    {
+      "key": "m01-purpose",
+      "prompt": "Which need is actually described for Client R?",
+      "options": [
+        "Guaranteeing an increase in sales.",
+        "Making services clearer and preparing an initial conversation.",
+        "Demonstrating twenty years of experience."
+      ],
+      "correctOption": 1,
+      "explanation": "The brief describes clarity and preparation for contact, not a guaranteed commercial outcome or verified business history.",
+      "points": 1
+    },
+    {
+      "key": "m01-missing",
+      "prompt": "Which information is missing for fixing the start?",
+      "options": [
+        "The requested number of pages.",
+        "The copywriting budget ceiling.",
+        "Actual receipt of the materials and approval of the brief."
+      ],
+      "correctOption": 2,
+      "explanation": "Starting depends on receiving the required materials and approving the brief; these conditions are not yet confirmed.",
+      "points": 1
+    },
+    {
+      "key": "m01-schedule",
+      "prompt": "Does this brief justify a fixed delivery date?",
+      "options": [
+        "Yes, fifteen days are enough in every situation.",
+        "No, the starting conditions have not been confirmed.",
+        "Yes, if the client prefers that date."
+      ],
+      "correctOption": 1,
+      "explanation": "Fifteen business days is a conditional duration, not an agreed calendar date. A preference does not confirm starting conditions.",
+      "points": 1
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "key": "m06",
+  "locale": "en",
+  "title": "Present the proposal and transfer your method",
+  "summary": "Prepare a presentation email, a follow-up and a personal method, then address the different constraints in BR02.",
+  "objective": "Present a decision clearly and reuse the reasoning without copying commitments from an earlier case.",
+  "expectedResult": "Two unsent email templates, an adapted personal method and a reasoned response to Client S.",
+  "prerequisites": [
+    "Review your BR01 proposal and complete its self-assessment.",
+    "Identify your corrections and the decisions that remain open."
+  ],
+  "blocks": [
+    {
+      "type": "HEADING",
+      "text": "Present without adding a commitment",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "The email supports a decision without replacing the proposal. Name the prepared document, scope and next question without adding commitments. BR01 retains four French pages, a €1,200 excluding-tax fee and a €1,400 copywriting ceiling that does not price additional work.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Two templates to adapt, never sent by this exercise",
+      "url": null
+    },
+    {
+      "type": "CODE",
+      "text": "Hello, please find the proposal for rewriting your four website pages in French. It sets out the deliverables, approach and a fee of €1,200 excluding tax. Logo work and website integration still need clarification. Could you confirm the agreed scope and when the required materials will be available? We can then arrange a start.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "The message requests a decision without claiming an agreed start. Before reusing it, check that the named file exists and is the correct version. Preparing, keeping or copying this learning template sends no message to another person.",
+      "url": null
+    },
+    {
+      "type": "CODE",
+      "text": "Hello, I’m following up on the copywriting proposal. Have you had a chance to review the scope and the points to confirm? I can clarify anything you need before we agree on the next step.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "The follow-up assumes neither acceptance nor rejection and invents no urgency. The case provides no sending date or sales cadence. Keep the question short instead of repeating the whole proposal.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Retain the reasoning as a personal method",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Separate what repeats from what changes. Keep the sequence: read facts, isolate unknowns, describe deliverables, recalculate, condition the timeline, check and request a decision. Replace case-specific data with seven fields: objective, context, available data, recipient, format, constraints and clarifications.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "When information is missing, ask rather than invent a price, proof or permission. Final text remains independent of parameters: reread it after adaptation to remove old values. A personal copy is not silently replaced when its source template changes.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "BR02: test what really needs to change",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Client S requests the four French pages from BR01, an FAQ and website integration. Scoping remains €180 excluding tax; Home €320, Services €360, About €220, Contact €120; the FAQ adds €200 excluding tax. Integration has no supplied price. The ceiling is now OVERALL: €1,200 excluding tax, not a budget set aside for copywriting alone.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "The client requests five business days, but the capacity supplied for this second case requires at least ten business days for copywriting. Do not copy BR01’s fifteen days. The new timeline must use BR02 facts and acknowledge information still needed. A different set of writing deliverables proves neither that integration becomes free nor that five days becomes achievable.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Worked example: offer a choice subject to agreement",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "A useful response can explain an incompatibility before suggesting an option. If you remove a page to discuss the budget, name the removed page, obtain the client’s agreement and recalculate the items actually retained. A scope reduction is not a unilateral decision. Ask which constraint can change: scope, budget or timing, and what information is needed to price integration.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Check the full total, option, overall ceiling and minimum duration. Adapt the grid to BR02 instead of ticking BR01 amounts. Keep the response and reasons before viewing the solution: reusing the reasoning does not mean accepting every request.",
+      "url": null
+    },
+    {
+      "type": "CALLOUT",
+      "text": "Final outputs: the BR01 proposal, declared assessment, presentation email, follow-up, reusable method and BR02 response. These prove neither sending nor human approval nor certified competence.",
+      "url": null
+    }
+  ],
+  "exercise": {
+    "instructions": "Adapt both emails to your proposal without sending them. Keep a method whose data can change. Then answer BR02: calculate the complete copywriting fee, explain both constraints, optionally propose an agreed alternative and ask the necessary questions. Save it as work distinct from BR01.",
+    "correction": "BR02: 180 + 320 + 360 + 220 + 120 + 200 = €1,400 excluding tax before integration, above the OVERALL €1,200 ceiling. At least ten business days is incompatible with the five requested. Removing About gives 180 + 320 + 360 + 120 + 200 = €1,180 excluding tax, subject to agreement. The remaining €20 does not price integration; the option does not justify five days. Other wording is acceptable if it explains these limits without invented commitments."
+  },
+  "quiz": [
+    {
+      "key": "m06-full",
+      "prompt": "What does the full BR02 calculation show?",
+      "options": [
+        "€1,200 excluding tax including integration",
+        "€1,400 excluding tax before integration, above the overall ceiling",
+        "€1,180 excluding tax without changing scope"
+      ],
+      "correctOption": 1,
+      "explanation": "The FAQ adds €200 to €1,200 of copywriting. The overall €1,200 ceiling covers neither this total nor an unknown integration cost.",
+      "points": 1
+    },
+    {
+      "key": "m06-option",
+      "prompt": "Which condition accompanies the €1,180 excluding-tax option?",
+      "options": [
+        "Logo work becomes free",
+        "The remaining €20 necessarily pays for integration",
+        "Agreement to remove About; integration and timing still need resolution"
+      ],
+      "correctOption": 2,
+      "explanation": "Reduced scope needs agreement. Integration remains unpriced, and five days remains below the ten-day minimum.",
+      "points": 1
+    },
+    {
+      "key": "m06-email",
+      "prompt": "What does preparing the email template prove?",
+      "options": [
+        "Only that text was prepared, not that a message was sent",
+        "Client acceptance",
+        "An automatically scheduled follow-up"
+      ],
+      "correctOption": 0,
+      "explanation": "The course provides an editable template. It creates no sending, agreement or sales automation.",
+      "points": 1
+    }
+  ]
+}

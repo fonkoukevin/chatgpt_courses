@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { createHash, randomUUID } from "node:crypto";
 import { afterEach, beforeEach, test } from "node:test";
 import { clearCsrfToken } from "../../apps/web/src/lib/api/auth-client";
-import { confirmProjectUpload, createProjectUpload, downloadAssetFile, getAssetDownload, listProjectFiles, transferAssetFile } from "../../apps/web/src/lib/api/assets-client";
+import { confirmProjectUpload, createProjectUpload, downloadAssetFile, getAssetDownload, getSolutionFileDownload, listProjectFiles, transferAssetFile } from "../../apps/web/src/lib/api/assets-client";
 import { decodeAssetResponse } from "../../apps/web/src/lib/api/assets-response";
 import { isAssetDownloadAccess, isAssetUploadIntent, isAssetView } from "../../apps/web/src/lib/api/assets-validation";
 import { listNotifications, retryNotification } from "../../apps/web/src/lib/api/notifications-client";
@@ -36,6 +36,26 @@ test("le PUT sans cookie confirme seulement le transfert et accepte File.type vi
   const result = await transferAssetFile(value, new File([content], "production.txt")); assert.equal(result.ok, true); if (result.ok) assert.equal(result.data, undefined);
   assert.equal(value.asset.state, "PENDING"); assert.deepEqual(value, snapshot); assert.equal(called, 1);
   assert.equal((await transferAssetFile(value, new File([content], "production.txt", { type: "text/html" }))).ok, false); assert.equal(called, 1);
+});
+
+test("un Markdown du navigateur est transféré en texte UTF-8 avec le MIME canonique de l’intent", async () => {
+  const value = intent(); value.asset.filename = "production.md"; let writes = 0;
+  globalThis.fetch = async (_path, init) => { writes++; assert.equal(new Headers(init?.headers).get("Content-Type"), "text/plain"); assert.equal(init?.credentials, "omit"); return new Response(null, { status: 200 }); };
+  assert.equal((await transferAssetFile(value, new File([content], "production.md", { type: "text/markdown" }))).ok, true);
+  assert.equal((await transferAssetFile(value, new File([content], "production.md", { type: "text/html" }))).ok, false);
+  assert.equal(writes, 1);
+});
+
+test("un lien de corrigé reste lié au projet, à la révélation et au fichier sans replay", async () => {
+  const revealId = randomUUID(); let writes = 0;
+  globalThis.fetch = async (path, init) => {
+    if (String(path).endsWith("/auth/csrf")) return Response.json({ token: "synthetic-csrf", headerName: "X-CSRF-TOKEN", parameterName: "_csrf" });
+    writes++; assert.equal(path, `/api/v1/me/projects/${projectId}/solution-reveals/${revealId}/files/${assetId}/download-access`);
+    assert.equal(new Headers(init?.headers).get("X-Account-Context"), actor); assert.equal(init?.method, "POST");
+    return Response.json({ ...access(), assetId: randomUUID() });
+  };
+  const result = await getSolutionFileDownload(projectId, revealId, assetId, actor);
+  assert.deepEqual(result, { ok: false, error: { kind: "invalid-response", status: 200 } }); assert.equal(writes, 1);
 });
 
 test("le téléchargement contrôle réellement MIME, octets exacts et SHA-256 sans cookie", async () => {

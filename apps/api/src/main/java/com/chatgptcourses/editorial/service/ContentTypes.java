@@ -31,7 +31,10 @@ public final class ContentTypes {
         }
     }
     public record ContentBlock(String type, String text, String url) { }
-    public record Exercise(String instructions, String correction) { }
+    public record Exercise(String instructions, String correction,List<UUID> solutionAssetIds) {
+        public Exercise {solutionAssetIds=solutionAssetIds==null?List.of():List.copyOf(solutionAssetIds);}
+        public Exercise(String instructions,String correction){this(instructions,correction,List.of());}
+    }
     public record QuizQuestion(String key, String prompt, List<String> options, int correctOption, String explanation, int points) { }
     public record RubricCriterion(String key, String label, int points, boolean blocking) { }
     public record MediaReference(UUID assetId, String kind, boolean required, String label) { }

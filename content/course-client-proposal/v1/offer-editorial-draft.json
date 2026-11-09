@@ -1,0 +1,45 @@
+{
+  "preparationOnly": true,
+  "backendOfferId": null,
+  "courseLogicalKey": "course-client-proposal",
+  "commercialState": "NOT_ACTIVATED",
+  "copies": [
+    {
+      "locale": "fr",
+      "title": "Du brief client à la proposition commerciale avec ChatGPT",
+      "summary": "Six modules rédigés pour cadrer une demande fictive, préparer une instruction, rédiger et contrôler une proposition, puis adapter sa méthode à un second dossier. M01 fournit une première activité gratuite autonome. Les supports actuellement produits sont des textes et ressources Markdown ; le format commercial reste à valider."
+    },
+    {
+      "locale": "en",
+      "title": "From client brief to a clear proposal with ChatGPT",
+      "summary": "Six written modules to scope a fictional request, prepare an instruction, draft and check a proposal, then adapt the method to a second case. M01 provides a complete free activity. The material currently produced is text and Markdown resources; the commercial delivery format still needs approval."
+    }
+  ],
+  "authoredLocales": ["fr", "en"],
+  "salesLocales": null,
+  "defaultSalesLocale": null,
+  "priceMinor": null,
+  "currency": null,
+  "taxPresentation": null,
+  "accessPeriod": null,
+  "updatePeriod": null,
+  "supportPolicy": null,
+  "legalIdentity": null,
+  "termsVersion": null,
+  "refundPolicy": null,
+  "retentionPolicy": null,
+  "deliveryFormatDecision": null,
+  "producedFormats": ["TEXT", "EDITABLE_MARKDOWN"],
+  "notProduced": ["COURSE_VIDEOS", "VOICE_RECORDINGS", "REAL_CHATGPT_INTERFACE_CAPTURES"],
+  "assessment": "Explained quizzes and self-reported project assessment. No human review or official certification.",
+  "humanEditorialReview": "REQUIRED_BEFORE_PUBLICATION",
+  "learnerTrial": "NOT_PERFORMED_WITH_A_HUMAN",
+  "activationBlockers": [
+    "Validate human editorial and FR/EN meaning equivalence review.",
+    "Decide the actual delivery format; do not silently replace a video promise with a text-only offer.",
+    "Provide real price, currency, tax presentation, access, updates, support, legal terms, refunds and retention decisions.",
+    "Decide sales languages independently of the authored translations.",
+    "Produce and verify any media promised by the eventual offer.",
+    "Resolve the release gate for the historical P12/P15 access incidents before delivering the commercial flow."
+  ]
+}

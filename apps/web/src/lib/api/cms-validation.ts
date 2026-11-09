@@ -36,7 +36,8 @@ export function isContentDocument(value: unknown): value is ContentDocument {
     && Array.isArray(value.blocks) && value.blocks.length <= 60 && value.blocks.every((block) => record(block) && keys(block, ["type", "text", "url"])
       && oneOf(block.type, ["HEADING", "PARAGRAPH", "LIST", "CALLOUT", "CODE", "LINK"]) && string(block.text)
       && (block.url === null || safeContentLink(block.url) !== null))
-    && (value.exercise === null || (record(value.exercise) && keys(value.exercise, ["instructions", "correction"]) && string(value.exercise.instructions) && string(value.exercise.correction)))
+    && (value.exercise === null || (record(value.exercise) && keys(value.exercise, ["instructions", "correction", "solutionAssetIds"]) && string(value.exercise.instructions) && string(value.exercise.correction)
+      && (value.exercise.solutionAssetIds === undefined || uuids(value.exercise.solutionAssetIds) && value.exercise.solutionAssetIds.length <= 10 && new Set(value.exercise.solutionAssetIds).size === value.exercise.solutionAssetIds.length)))
     && Array.isArray(value.quiz) && value.quiz.length <= 20 && value.quiz.every((question) => record(question) && keys(question, ["key", "prompt", "options", "correctOption", "explanation", "points"])
       && string(question.key) && string(question.prompt) && strings(question.options) && question.options.length >= 2 && question.options.length <= 8
       && integer(question.correctOption) && question.correctOption < question.options.length && string(question.explanation) && integer(question.points))

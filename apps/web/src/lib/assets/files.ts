@@ -9,5 +9,8 @@ export function fileSize(bytes: number, locale: Locale): string {
 export function acceptedFile(file: Pick<File, "name" | "type" | "size">, policy: AssetUploadCapabilities): AssetAcceptedFormat | null {
   if (!policy.enabled || !Number.isSafeInteger(file.size) || file.size <= 0 || file.name.length > 180 || /[\\/]/.test(file.name) || Array.from(file.name).some((character) => character.charCodeAt(0) < 32 || character.charCodeAt(0) === 127)) return null;
   return policy.formats.find((format) => format.available && file.size <= format.maxBytes && format.extensions.some((extension) => file.name.toLowerCase().endsWith(extension.toLowerCase()))
-    && (!file.type || file.type === format.contentType)) ?? null;
+    && (!file.type || canonicalFileMime(file) === format.contentType)) ?? null;
+}
+export function canonicalFileMime(file: Pick<File, "name" | "type">): string {
+  return /\.md$/i.test(file.name) && file.type === "text/markdown" ? "text/plain" : file.type;
 }

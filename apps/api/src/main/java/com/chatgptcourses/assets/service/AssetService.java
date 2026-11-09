@@ -28,7 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AssetService implements EditorialMediaRegistry {
     private final JdbcTemplate jdbc;private final AssetAccessPolicy policy;private final ObjectStorage storage;private final AssetStorageProperties properties;private final AssetContentValidator validator;
-    public AssetService(JdbcTemplate jdbc,AssetAccessPolicy policy,ObjectStorage storage,AssetStorageProperties properties,AssetContentValidator validator){this.jdbc=jdbc;this.policy=policy;this.storage=storage;this.properties=properties;this.validator=validator;}
+    private final com.chatgptcourses.projects.service.ProjectService projects;
+    public AssetService(JdbcTemplate jdbc,AssetAccessPolicy policy,ObjectStorage storage,AssetStorageProperties properties,AssetContentValidator validator,com.chatgptcourses.projects.service.ProjectService projects){this.jdbc=jdbc;this.policy=policy;this.storage=storage;this.properties=properties;this.validator=validator;this.projects=projects;}
     @Transactional(readOnly=true)
     public UploadCapabilities projectPolicy(UUID actor,UUID projectId){policy.project(actor,projectId,"assets.read",false);return capabilities(false);}
     @Transactional(readOnly=true)
@@ -50,11 +51,12 @@ public class AssetService implements EditorialMediaRegistry {
     @Transactional
     public UploadIntent createEditorialIntent(UUID actor,UUID accountContext,EditorialUploadRequest command){
         policy.mutation(actor,accountContext,"content.write");enabled();check(command!=null);var upload=new UploadRequest(command.filename(),command.contentType(),command.sizeBytes());validate(upload,true);
+        check(java.util.Set.of("RESOURCE","SOLUTION").contains(command.purpose()));check(!"SOLUTION".equals(command.purpose())||"text/plain".equals(command.contentType()));
         policy.editorialOrigin(command.resourceId(),command.versionId(),command.locale());
         jdbc.query("SELECT id FROM user_accounts WHERE id=? FOR NO KEY UPDATE",(rs,n)->rs.getObject(1,UUID.class),actor);policy.mutation(actor,accountContext,"content.write");
         long count=jdbc.queryForObject("SELECT count(*) FROM assets WHERE owner_id=? AND scope='EDITORIAL' AND state='PENDING' AND expires_at>clock_timestamp()",Long.class,actor);
         if(count>=properties.maxFilesPerProject())throw new ApiException(ApiError.ASSET_QUOTA_EXCEEDED);
-        return intent(insert(actor,"EDITORIAL",null,command.resourceId(),command.versionId(),command.locale(),upload));
+        return intent(insert(actor,"EDITORIAL",null,command.resourceId(),command.versionId(),command.locale(),upload,command.purpose()));
     }
     @Transactional
     public AssetView confirmProject(UUID actor,UUID accountContext,UUID projectId,UUID assetId){
@@ -76,17 +78,27 @@ public class AssetService implements EditorialMediaRegistry {
         policy.accountContext(actor,accountContext);
         var asset=load(assetId,false);
         if("PROJECT_FILE".equals(asset.scope())){if(!asset.owner().equals(actor))throw notFound();policy.project(actor,asset.project(),"assets.read",false);}
-        else policy.editorialDownload(actor,asset.id(),asset.kind(),asset.locale(),context);
+        else {if(solutionRole(assetId))throw notFound();policy.editorialDownload(actor,asset.id(),asset.kind(),asset.locale(),context);}
         return access(asset);
     }
+    @Transactional
+    public DownloadAccess solutionDownload(UUID actor,UUID context,UUID project,UUID reveal,UUID assetId){
+        policy.mutation(actor,context,"assets.read");String locale=projects.authorizeSolutionFile(actor,context,project,reveal,assetId);policy.mutation(actor,context,"assets.read");var asset=load(assetId,false);
+        if(!"EDITORIAL".equals(asset.scope())||!"FILE".equals(asset.kind())||!locale.equals(asset.locale())||!solutionRole(assetId))throw notFound();return access(asset);
+    }
+    private boolean solutionRole(UUID id){return Boolean.TRUE.equals(jdbc.queryForObject("SELECT content_role='SOLUTION' FROM assets WHERE id=?",Boolean.class,id));}
+    @Override public boolean privateSolution(UUID id){return Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM assets WHERE id=? AND content_role='SOLUTION')",Boolean.class,id));}
     /** Publication hook: records are terminal/immutable. The author cannot mark an arbitrary UUID verified. */
     @Transactional(readOnly=true)
     public boolean readyEditorial(UUID assetId,String kind,String locale){
         if(!properties.enabled()||assetId==null||kind==null||locale==null)return false;
-        var rows=jdbc.query("SELECT * FROM assets WHERE id=? AND scope='EDITORIAL' AND state='READY' AND kind=? AND locale=?",this::row,assetId,kind,locale);if(rows.isEmpty())return false;
+        var rows=jdbc.query("SELECT * FROM assets WHERE id=? AND scope='EDITORIAL' AND content_role='RESOURCE' AND state='READY' AND kind=? AND locale=?",this::row,assetId,kind,locale);if(rows.isEmpty())return false;
         try{return objectMatches(rows.getFirst());}catch(StorageUnavailableException unavailable){return false;}
     }
     @Override public boolean ready(UUID resourceId,UUID versionId,String locale,UUID mediaId,String kind){return ("FILE".equals(kind)||"IMAGE".equals(kind))&&readyEditorial(mediaId,kind,locale);}
+    @Transactional(readOnly=true)
+    public boolean readySolution(UUID assetId,String locale){if(!properties.enabled())return false;var rows=jdbc.query("SELECT * FROM assets WHERE id=? AND scope='EDITORIAL' AND content_role='SOLUTION' AND state='READY' AND kind='FILE' AND locale=?",this::row,assetId,locale);if(rows.isEmpty())return false;try{return objectMatches(rows.getFirst());}catch(StorageUnavailableException unavailable){return false;}}
+    @Override public boolean readySolution(UUID resource,UUID version,String locale,UUID asset){return readySolution(asset,locale);}
     private AssetView confirm(Asset asset){
         if(!"PENDING".equals(asset.state()))return view(asset);enabled();
         if(!asset.expiresAt().isAfter(now())){jdbc.update("UPDATE assets SET state='EXPIRED',revision=revision+1 WHERE id=?",asset.id());return view(load(asset.id(),false));}
@@ -119,19 +131,22 @@ public class AssetService implements EditorialMediaRegistry {
         catch(StorageUnavailableException e){throw new ApiException(ApiError.SERVICE_UNAVAILABLE);}
     }
     private Asset insert(UUID actor,String scope,UUID project,UUID resource,UUID version,String locale,UploadRequest command){
+        return insert(actor,scope,project,resource,version,locale,command,"RESOURCE");
+    }
+    private Asset insert(UUID actor,String scope,UUID project,UUID resource,UUID version,String locale,UploadRequest command,String purpose){
         UUID id=UUID.randomUUID();String kind=command.contentType().startsWith("image/")?"IMAGE":"FILE",bucket="PROJECT_FILE".equals(scope)?properties.privateBucket():properties.editorialBucket();
         Instant issuedAt=now();
-        jdbc.update("INSERT INTO assets(id,owner_id,scope,kind,project_id,origin_resource_id,origin_version_id,locale,bucket_name,staging_key,ready_key,filename,declared_content_type,declared_size,created_at,expires_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",id,actor,scope,kind,project,resource,version,locale,bucket,"staging/"+id+"/"+UUID.randomUUID(),"ready/"+id+"/"+UUID.randomUUID(),command.filename(),command.contentType(),command.sizeBytes(),java.sql.Timestamp.from(issuedAt),java.sql.Timestamp.from(issuedAt.plusSeconds(properties.uploadTtlSeconds())));return load(id,false);
+        jdbc.update("INSERT INTO assets(id,owner_id,scope,kind,project_id,origin_resource_id,origin_version_id,locale,bucket_name,staging_key,ready_key,filename,declared_content_type,declared_size,created_at,expires_at,content_role) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",id,actor,scope,kind,project,resource,version,locale,bucket,"staging/"+id+"/"+UUID.randomUUID(),"ready/"+id+"/"+UUID.randomUUID(),command.filename(),command.contentType(),command.sizeBytes(),java.sql.Timestamp.from(issuedAt),java.sql.Timestamp.from(issuedAt.plusSeconds(properties.uploadTtlSeconds())),purpose);return load(id,false);
     }
     private void validate(UploadRequest command,boolean editorial){
         check(command!=null&&command.filename()!=null&&command.filename().length()>=1&&command.filename().length()<=180&&command.filename().equals(command.filename().strip())&&!command.filename().contains("/")&&!command.filename().contains("\\")&&command.filename().codePoints().noneMatch(c->Character.isISOControl(c)||c>=0xd800&&c<=0xdfff));
         check(command.contentType()!=null&&command.sizeBytes()>0);String name=command.filename().toLowerCase(java.util.Locale.ROOT);
-        boolean allowed=editorial?"image/png".equals(command.contentType())&&name.endsWith(".png")||"image/jpeg".equals(command.contentType())&&(name.endsWith(".jpg")||name.endsWith(".jpeg"))||"text/plain".equals(command.contentType())&&name.endsWith(".txt")
-            :"text/plain".equals(command.contentType())&&name.endsWith(".txt")||"application/pdf".equals(command.contentType())&&name.endsWith(".pdf")&&validator.pdfAvailable();
+        boolean allowed=editorial?"image/png".equals(command.contentType())&&name.endsWith(".png")||"image/jpeg".equals(command.contentType())&&(name.endsWith(".jpg")||name.endsWith(".jpeg"))||"text/plain".equals(command.contentType())&&(name.endsWith(".txt")||name.endsWith(".md"))
+            :"text/plain".equals(command.contentType())&&(name.endsWith(".txt")||name.endsWith(".md"))||"application/pdf".equals(command.contentType())&&name.endsWith(".pdf")&&validator.pdfAvailable();
         check(allowed&&command.sizeBytes()<=maximum(command.contentType().startsWith("image/")?"IMAGE":"FILE"));
     }
     private UploadCapabilities capabilities(boolean editorial){
-        var text=new AcceptedFormat("text/plain",List.of(".txt"),"FILE",properties.maxFileBytes(),properties.enabled(),properties.enabled()?null:"STORAGE_NOT_CONFIGURED");
+        var text=new AcceptedFormat("text/plain",List.of(".txt",".md"),"FILE",properties.maxFileBytes(),properties.enabled(),properties.enabled()?null:"STORAGE_NOT_CONFIGURED");
         var pdf=new AcceptedFormat("application/pdf",List.of(".pdf"),"FILE",properties.maxFileBytes(),properties.enabled()&&validator.pdfAvailable(),validator.pdfAvailable()?properties.enabled()?null:"STORAGE_NOT_CONFIGURED":"DOCUMENT_VALIDATOR_UNAVAILABLE");
         List<AcceptedFormat> formats=editorial?List.of(text,new AcceptedFormat("image/png",List.of(".png"),"IMAGE",properties.maxImageBytes(),properties.enabled(),properties.enabled()?null:"STORAGE_NOT_CONFIGURED"),new AcceptedFormat("image/jpeg",List.of(".jpg",".jpeg"),"IMAGE",properties.maxImageBytes(),properties.enabled(),properties.enabled()?null:"STORAGE_NOT_CONFIGURED"),pdf):List.of(text,pdf);
         return new UploadCapabilities(properties.enabled(),properties.enabled()?null:"STORAGE_NOT_CONFIGURED",formats,editorial?Math.max(properties.maxFileBytes(),properties.maxImageBytes()):properties.maxFileBytes(),properties.maxFilesPerProject(),properties.maxBytesPerProject(),properties.uploadTtlSeconds(),properties.downloadTtlSeconds());

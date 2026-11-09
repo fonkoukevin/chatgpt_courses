@@ -1,0 +1,161 @@
+{
+  "key": "m05",
+  "locale": "fr",
+  "title": "Contrôler la proposition et justifier ses corrections",
+  "summary": "Relire une révision avec vingt critères, traiter les erreurs bloquantes et conserver les raisons des changements.",
+  "objective": "Repérer puis corriger les écarts aux faits de BR01 sans confondre score déclaré et validation.",
+  "expectedResult": "Une grille BR01 renseignée sur une révision précise, une production corrigée et une justification des corrections.",
+  "prerequisites": [
+    "Disposer de sa proposition BR01 enregistrée.",
+    "Garder le brief, TR01 et les conditions de démarrage accessibles."
+  ],
+  "blocks": [
+    {
+      "type": "HEADING",
+      "text": "Partir d’une preuve, pas d’une impression",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Une phrase peut paraître professionnelle tout en engageant trop. Pour chaque case, cherchez un passage précis de la proposition et le fait BR01/TR01 qui le justifie. Si le passage manque ou reste ambigu, laissez la case non satisfaite et notez la correction. Une intention invisible au lecteur ne suffit pas.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Fidélité : quatre contrôles",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "fidelity-1 — Le besoin réel de Client R est correctement reformulé.\nfidelity-2 — Les quatre pages demandées sont conservées.\nfidelity-3 — Aucune référence, expérience ou performance commerciale n’est inventée.\nfidelity-4 — Les informations manquantes sont signalées.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Périmètre : quatre contrôles",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "scope-1 — Les livrables sont clairement identifiés.\nscope-2 — Le document éditable est annoncé.\nscope-3 — Un cycle de retours regroupés est prévu sur le périmètre validé.\nscope-4 — Le logo et l’intégration sont traités séparément.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Budget : quatre contrôles",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "budget-1 — Les cinq tarifs fournis sont repris correctement.\nbudget-2 — Le total est de 1 200 € HT.\nbudget-3 — La devise et la mention HT sont conservées.\nbudget-4 — Aucun coût inventé ni service non chiffré n’est inclus.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Calendrier : quatre contrôles",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "schedule-1 — La durée prévue est de quinze jours ouvrés.\nschedule-2 — Le démarrage dépend des éléments reçus et du brief validé.\nschedule-3 — Les retours client sous trois jours ouvrés sont précisés.\nschedule-4 — Les étapes de réalisation sont cohérentes.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Présentation : quatre contrôles",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "presentation-1 — Le document est lisible et structuré.\npresentation-2 — L’objectif est compréhensible et sans résultat non étayé promis.\npresentation-3 — Les questions permettent de confirmer des éléments précis.\npresentation-4 — Une prochaine étape explicite valide le périmètre.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Traiter les quatre erreurs bloquantes",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "Référence, ancienneté ou performance inventée.\nCalcul faux présenté comme définitif.\nPrestation non chiffrée incluse.\nDate ferme promise sans conditions de démarrage connues.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Une erreur bloquante reste prioritaire même avec beaucoup de cases satisfaites. Vingt critères valent vingt points déclarés ; le repère de conception est 16/20 sans erreur bloquante. Il ne s’agit ni d’une certification ni d’une vérification humaine. Le calcul du score conserve votre déclaration, mais ne prouve pas que chaque phrase respecte le dossier. Un résultat élevé avec un blocage demande encore une révision.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Exemple commenté : corriger la logique",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Si la proposition inclut l’intégration dans les 200 € restant sous le plafond, supprimer seulement le mot « incluse » ne suffit pas. Le calcul rédactionnel reste 1 200 € HT ; la prestation complémentaire doit sortir du montant et devenir une question sur le besoin, le périmètre et les accès. La correction porte sur une décision, pas seulement sur le ton.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "De même, remplacez une date ferme non justifiée par les quinze jours ouvrés après réception des éléments ET validation du brief, avec retours centralisés sous trois jours ouvrés. Expliquez quel fait manquait. Cette justification rend votre méthode réutilisable et évite de reproduire l’erreur dans une autre demande.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Conserver l’historique sans lui faire dire plus",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Enregistrez la production avant de renseigner sa grille. Une retouche ultérieure crée un nouveau travail à vérifier : l’ancienne autoévaluation reste attachée à sa révision. Consultez le corrigé commenté seulement lorsque vous choisissez de comparer ; sa consultation ne valide rien. Vous pouvez défendre une formulation différente si elle conserve les faits, les réserves et une prochaine étape vérifiable.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Pour terminer, relevez trois décisions modifiées et leur justification, puis relisez la nouvelle version. Le module suivant transforme cette proposition en email et en méthode personnelle, avant de tester le raisonnement sur BR02. Vous y réutiliserez vos questions et vos contrôles, sans transporter automatiquement les montants ni les délais de BR01.",
+      "url": null
+    }
+  ],
+  "exercise": {
+    "instructions": "Renseignez les vingt contrôles sur votre révision BR01 et déclarez les blocages présents. Corrigez les écarts dans une nouvelle version. Pour trois corrections, notez le passage concerné, le fait de référence et la décision changée. Enregistrez puis réévaluez la révision corrigée.",
+    "correction": "Les vingt critères sont répartis en cinq catégories de quatre points. Le seuil de conception est 16/20 sans blocage ; un score élevé ne neutralise aucune des quatre erreurs bloquantes. Les cinq tarifs donnent 1 200 € HT. La durée BR01 est de quinze jours ouvrés sous les deux conditions de démarrage, avec retours sous trois jours ouvrés. L’évaluation d’une ancienne révision et le corrigé consulté ne valident pas le nouveau texte."
+  },
+  "quiz": [
+    {
+      "key": "m05-blocking",
+      "prompt": "La grille annonce 20/20 mais une prestation non chiffrée est incluse. Que conclure ?",
+      "options": [
+        "La proposition est certifiée",
+        "Le blocage impose encore une révision",
+        "Le blocage peut être ignoré au-dessus de 16"
+      ],
+      "correctOption": 1,
+      "explanation": "Le score est déclaré ; une erreur bloquante empêche de considérer le travail comme suffisamment corrigé.",
+      "points": 1
+    },
+    {
+      "key": "m05-revision",
+      "prompt": "Vous modifiez la production après avoir renseigné la grille. Que couvre l’ancienne preuve ?",
+      "options": [
+        "Toutes les versions suivantes",
+        "Une revue humaine implicite",
+        "Uniquement la révision évaluée"
+      ],
+      "correctOption": 2,
+      "explanation": "L’autoévaluation reste liée à sa révision. La nouvelle production doit être relue et réévaluée.",
+      "points": 1
+    },
+    {
+      "key": "m05-solution",
+      "prompt": "Quel rôle joue le corrigé commenté ?",
+      "options": [
+        "Comparer son raisonnement sans validation automatique",
+        "Remplacer obligatoirement chaque phrase",
+        "Garantir la vérité de la production"
+      ],
+      "correctOption": 0,
+      "explanation": "Des formulations différentes peuvent être recevables. Lire une solution ne vérifie pas votre texte à votre place.",
+      "points": 1
+    }
+  ]
+}

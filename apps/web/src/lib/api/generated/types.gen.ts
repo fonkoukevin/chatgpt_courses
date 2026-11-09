@@ -143,6 +143,10 @@ export type ContentBlock = {
 export type Exercise = {
     instructions: string;
     correction: string;
+    /**
+     * Fichiers privés de corrigé ; absent signifie liste vide pour les documents historiques. Exclus du PublicDocument et gelés avec la pédagogie.
+     */
+    solutionAssetIds?: Array<Uuid>;
 };
 
 /**
@@ -1341,6 +1345,13 @@ export type SolutionRevealView = {
     locale: Locale;
     correction: string;
     revealedAt: UtcInstant;
+    files: Array<SolutionFile>;
+};
+
+export type SolutionFile = {
+    assetId: Uuid;
+    filename: string;
+    locale: Locale;
 };
 
 /**
@@ -1578,6 +1589,10 @@ export type AssetUploadRequest = {
  * Éditeur autorisé, identité/version/langue exactes. Une confirmation READY ne publie pas ce fichier et ne l’ajoute pas silencieusement au contenu.
  */
 export type EditorialAssetUploadRequest = {
+    /**
+     * Classification immuable ; absent signifie RESOURCE. SOLUTION est un fichier de corrigé privé, exclu des téléchargements ordinaires.
+     */
+    purpose?: 'RESOURCE' | 'SOLUTION';
     resourceId: Uuid;
     versionId: Uuid;
     locale: Locale;
@@ -6713,6 +6728,73 @@ export type RevealSolutionResponses = {
 };
 
 export type RevealSolutionResponse = RevealSolutionResponses[keyof RevealSolutionResponses];
+
+export type GetSolutionFileDownloadData = {
+    body?: never;
+    headers: {
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+    };
+    path: {
+        projectId: Uuid;
+        revealId: Uuid;
+        assetId: Uuid;
+    };
+    query?: never;
+    url: '/me/projects/{projectId}/solution-reveals/{revealId}/files/{assetId}/download-access';
+};
+
+export type GetSolutionFileDownloadErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    400: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    401: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    403: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    404: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    409: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    428: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    503: Problem;
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetSolutionFileDownloadError = GetSolutionFileDownloadErrors[keyof GetSolutionFileDownloadErrors];
+
+export type GetSolutionFileDownloadResponses = {
+    /**
+     * Accès temporaire après autorisation réelle.
+     */
+    200: AssetDownloadAccess;
+};
+
+export type GetSolutionFileDownloadResponse = GetSolutionFileDownloadResponses[keyof GetSolutionFileDownloadResponses];
 
 export type GetProjectTemplateData = {
     body?: never;

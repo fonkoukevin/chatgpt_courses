@@ -1,0 +1,131 @@
+{
+  "key": "m04",
+  "locale": "en",
+  "title": "Build a proposal the client can decide on",
+  "summary": "Turn BR01 facts into a short, itemised and conditional proposal, then retain a first version of your work.",
+  "objective": "Write a structured proposal whose scope, calculation and starting conditions can be checked.",
+  "expectedResult": "A seven-section proposal, no longer than two pages after layout, with an itemised fee and specific open questions.",
+  "prerequisites": [
+    "Separate the known facts from missing information in BR01.",
+    "Have TR01 prices and the editable instruction prepared in the previous module."
+  ],
+  "blocks": [
+    {
+      "type": "HEADING",
+      "text": "Make the required decision clear",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Client R needs to understand the deliverables, open decisions and starting conditions. Use the scoping table and TR01. Fluent language that adds a service or turns a relative duration into a firm date still produces an unreliable proposal.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "The need is to make the office fit-out services easier to understand and help visitors prepare for an initial conversation. All four website pages must be rewritten in French, including when you study in English: Home, no more than 600 words; Services, 800; About, 400; Contact, 250. These are limits, not targets that require padding.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Build seven useful sections",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "Objective: describe the need without an unsupported commercial promise.\nScope: name the four pages, their limits and the editable delivery document.\nApproach: scoping, outline, drafting, consolidated feedback, revisions and delivery.\nTimeline: give the relative duration and the starting conditions.\nBudget: show five items, the total, currency and excluding-tax basis.\nPoints to confirm: materials, approval, logo work and integration.\nNext step: request agreement on scope and confirmation of available materials.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Each section answers a client question without repeating the brief. The editable template supplies a structure, not a response to copy. Draft in the workspace or elsewhere and keep external text separate from structured sections. Bringing it in does not make it correct or confirm saving.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Worked example: calculate instead of copying the ceiling",
+      "url": null
+    },
+    {
+      "type": "CODE",
+      "text": "Copywriting fee: scoping and outline €180 + Home €320 + Services €360 + About €220 + Contact €120 = €1,200 excluding tax. This is within the €1,400 copywriting ceiling. Logo work and website integration need separate clarification and pricing.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "The breakdown separates fee and ceiling. The remaining €200 does not price another service. Additional work may be discussed, but the current proposal must not silently include it, make it free or claim technical access that was not supplied.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Describe a conditional timeline",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "The planned duration is fifteen business days after receiving the necessary materials AND approving the brief. One person consolidates feedback within three business days, for one feedback round on the agreed scope. A possible sequence is scoping and outline on days 1–2, drafting on days 3–7, feedback on days 8–10, revisions on days 11–13, and checking and delivery on days 14–15. These are relative learning milestones, not reserved calendar dates.",
+      "url": null
+    },
+    {
+      "type": "CALLOUT",
+      "text": "When materials are unavailable or the brief still needs approval, the starting point remains unknown. Ask for the missing decision. Do not infer a firm date from the duration alone or invent an additional contractual rule.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Draft, shorten and keep a version",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Prepare your proposal using the seven sections. To stay within two pages after layout, remove repetition and sales language that adds no useful decision. Keep the limits, calculation and qualifications: shortening must not remove a condition. Check pagination in your chosen editor; a Markdown file does not guarantee a page count.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Before saving, check every amount and every commitment. Keep a copy if the network is unavailable and wait for the save acknowledgement that matches your input. The next module applies twenty self-reported checks to this revision. A first draft, even when saved, is neither a completed self-assessment nor validation of the project.",
+      "url": null
+    }
+  ],
+  "exercise": {
+    "instructions": "Write the BR01 proposal in seven sections. Show all five TR01 items, the conditional timeline and requests needing clarification. If drafting elsewhere, deliberately bring the text in without replacing your structured sections. Check a maximum of two pages after layout, then save your work.",
+    "correction": "An acceptable response retains the four French pages and their limits, editable delivery and one consolidated feedback round. The fee is €1,200 excluding tax against a €1,400 copywriting ceiling. Fifteen business days start after receiving materials AND approving the brief; feedback arrives within three business days. Logo work and integration remain separate. Accept any faithful wording with a specific next step, not only a verbatim match."
+  },
+  "quiz": [
+    {
+      "key": "m04-budget",
+      "prompt": "Which amount should the proposal show for the five TR01 items?",
+      "options": [
+        "€1,400 excluding tax because it is the ceiling",
+        "€1,200 excluding tax with the five-item breakdown",
+        "€1,180 excluding tax without any other change"
+      ],
+      "correctOption": 1,
+      "explanation": "180 + 320 + 360 + 220 + 120 = 1,200. The ceiling is not the fee; 1,180 belongs to a different BR02 option.",
+      "points": 1
+    },
+    {
+      "key": "m04-start",
+      "prompt": "Which starting point supports the BR01 timeline?",
+      "options": [
+        "Writing the proposal",
+        "The client’s preferred date",
+        "Receiving necessary materials and approving the brief"
+      ],
+      "correctOption": 2,
+      "explanation": "Both conditions are required before the fifteen business days begin. A firm delivery date is not justified yet.",
+      "points": 1
+    },
+    {
+      "key": "m04-extra",
+      "prompt": "How should the remaining €200 below the copywriting ceiling be treated?",
+      "options": [
+        "As a difference that includes no unpriced service",
+        "As automatic payment for integration",
+        "As grounds to offer a free logo"
+      ],
+      "correctOption": 0,
+      "explanation": "A budget difference supplies no price, scope or technical access for an additional service.",
+      "points": 1
+    }
+  ]
+}

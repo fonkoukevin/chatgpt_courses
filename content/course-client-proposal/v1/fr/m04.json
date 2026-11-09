@@ -1,0 +1,131 @@
+{
+  "key": "m04",
+  "locale": "fr",
+  "title": "Construire une proposition qui permet de décider",
+  "summary": "Assembler les faits de BR01 en une proposition courte, chiffrée et conditionnelle, puis conserver une première production.",
+  "objective": "Rédiger une proposition structurée dont le périmètre, le calcul et les conditions de démarrage sont vérifiables.",
+  "expectedResult": "Une proposition en sept rubriques, limitée à deux pages après mise en page, avec détail du budget et questions ouvertes.",
+  "prerequisites": [
+    "Avoir distingué les faits et inconnues de BR01.",
+    "Disposer des tarifs TR01 et de son instruction modifiable issue du module précédent."
+  ],
+  "blocks": [
+    {
+      "type": "HEADING",
+      "text": "Faire apparaître la décision attendue",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Client R doit comprendre ce qui sera livré, ce qui reste à décider et ce qui déclenche le travail. Partez du tableau de cadrage et de TR01. Une réponse fluide qui ajoute une prestation ou transforme un délai relatif en date ferme reste une mauvaise proposition.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Le besoin est de rendre les services d’aménagement de bureaux plus compréhensibles et de préparer un premier échange. Les quatre pages seront réécrites en français, même si vous suivez le parcours en anglais : Accueil, 600 mots maximum ; Services, 800 ; À propos, 400 ; Contact, 250. Il s’agit de limites, pas de volumes à atteindre artificiellement.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Construire sept rubriques utiles",
+      "url": null
+    },
+    {
+      "type": "LIST",
+      "text": "Objectif : reformuler le besoin sans promettre de résultat commercial non étayé.\nPérimètre : nommer les quatre pages, leurs limites et le document éditable remis.\nMéthode : cadrage, plan, rédaction, retours regroupés, corrections et remise.\nCalendrier : délai relatif et conditions nécessaires au démarrage.\nBudget : cinq postes, somme, devise et mention HT.\nPoints à confirmer : éléments, validation, logo et intégration.\nProchaine étape : demander l’accord sur le périmètre et la disponibilité des éléments.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Chaque rubrique répond à une question du client, sans répéter le brief. Le modèle éditable fournit une structure, pas une réponse à recopier. Rédigez dans l’atelier ou ailleurs, puis conservez le texte externe séparément des sections. Le reporter ne le rend ni exact ni enregistré.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Exemple commenté : calculer au lieu de reprendre le plafond",
+      "url": null
+    },
+    {
+      "type": "CODE",
+      "text": "Budget rédactionnel : cadrage et plan 180 € + Accueil 320 € + Services 360 € + À propos 220 € + Contact 120 € = 1 200 € HT. Ce montant respecte le plafond rédactionnel de 1 400 € HT. Le logo et l’intégration au site restent à préciser et à chiffrer séparément.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Le détail distingue prix et plafond. Les 200 € disponibles ne tarifent pas un service supplémentaire. Une discussion sur d’autres prestations reste possible ; la proposition actuelle ne doit ni les inclure silencieusement, ni les rendre gratuites, ni supposer un accès technique non fourni.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Décrire un calendrier conditionnel",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "La réalisation est prévue sur quinze jours ouvrés après réception des éléments nécessaires ET validation du brief. Les retours sont centralisés par une personne, sous trois jours ouvrés, dans un seul cycle sur le périmètre validé. Une séquence possible est : cadrage et plan aux jours 1–2, rédaction aux jours 3–7, retours aux jours 8–10, corrections aux jours 11–13, contrôle et remise aux jours 14–15. Ce sont des repères relatifs, pas des dates réservées.",
+      "url": null
+    },
+    {
+      "type": "CALLOUT",
+      "text": "Si les éléments ne sont pas disponibles ou si le brief reste à approuver, le point de départ est inconnu. Demandez ce qui manque. Ne déduisez pas une date ferme du seul nombre de jours et n’ajoutez pas une nouvelle règle contractuelle non fournie.",
+      "url": null
+    },
+    {
+      "type": "HEADING",
+      "text": "Rédiger, réduire, puis garder une version",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Préparez votre proposition avec les sept rubriques. Pour tenir sur deux pages maximum après mise en page, supprimez les répétitions et les formules de vente qui n’apportent aucune décision. Conservez les limites, le calcul et les réserves : raccourcir ne signifie pas effacer une condition. Vérifiez la pagination dans l’éditeur choisi ; un fichier Markdown n’a pas un nombre de pages garanti.",
+      "url": null
+    },
+    {
+      "type": "PARAGRAPH",
+      "text": "Avant d’enregistrer, contrôlez montants et engagements. Gardez une copie hors ligne et attendez la confirmation correspondant à votre saisie. Le module suivant applique vingt contrôles déclaratifs à cette révision : un brouillon enregistré n’est pas encore un projet autoévalué ou validé.",
+      "url": null
+    }
+  ],
+  "exercise": {
+    "instructions": "Rédigez la proposition BR01 dans les sept rubriques. Montrez les cinq postes TR01, le calendrier conditionnel et les demandes à clarifier. Si vous travaillez ailleurs, reportez volontairement le texte sans écraser vos sections. Vérifiez deux pages maximum après mise en page, puis enregistrez la production.",
+    "correction": "Une réponse recevable conserve les quatre pages françaises et leurs limites, le document éditable et un seul cycle regroupé. Le total est 1 200 € HT pour un plafond rédactionnel de 1 400 €. Les quinze jours ouvrés démarrent après réception des éléments ET validation du brief ; les retours arrivent sous trois jours ouvrés. Logo et intégration restent séparés. Acceptez toute formulation fidèle avec une prochaine étape précise, pas une copie mot à mot."
+  },
+  "quiz": [
+    {
+      "key": "m04-budget",
+      "prompt": "Quel montant faut-il présenter pour les cinq postes TR01 ?",
+      "options": [
+        "1 400 € HT, car c’est le plafond",
+        "1 200 € HT avec le détail des cinq postes",
+        "1 180 € HT sans autre changement"
+      ],
+      "correctOption": 1,
+      "explanation": "180 + 320 + 360 + 220 + 120 = 1 200. Le plafond n’est pas le prix ; 1 180 correspond à une autre option de BR02.",
+      "points": 1
+    },
+    {
+      "key": "m04-start",
+      "prompt": "Quel point de départ permet le calendrier BR01 ?",
+      "options": [
+        "La rédaction de la proposition",
+        "Une préférence de date du client",
+        "Réception des éléments nécessaires et validation du brief"
+      ],
+      "correctOption": 2,
+      "explanation": "Les deux conditions sont nécessaires avant les quinze jours ouvrés. Aucune date ferme n’est encore justifiée.",
+      "points": 1
+    },
+    {
+      "key": "m04-extra",
+      "prompt": "Que faire des 200 € restant sous le plafond rédactionnel ?",
+      "options": [
+        "Les laisser comme différence sans y inclure de service non chiffré",
+        "Y inclure automatiquement l’intégration",
+        "Promettre le logo gratuitement"
+      ],
+      "correctOption": 0,
+      "explanation": "Une différence budgétaire ne fournit ni prix, ni périmètre, ni accès technique pour une prestation supplémentaire.",
+      "points": 1
+    }
+  ]
+}

@@ -188,7 +188,26 @@ public class ProjectService {
         var existing=jdbc.query("SELECT id,revealed_at FROM project_solution_reveals WHERE owner_id=? AND project_revision_id=? AND source_revision_id=? AND locale=?",(rs,n)->new Reveal(uuid(rs,"id"),instant(rs,"revealed_at")),actor,command.projectRevisionId(),origin.revisionId(),origin.locale());
         Reveal trace;
         if(existing.isEmpty()){UUID id=UUID.randomUUID();jdbc.update("INSERT INTO project_solution_reveals(id,owner_id,project_id,project_revision_id,source_revision_id,locale,revealed_at) VALUES(?,?,?,?,?,?,clock_timestamp())",id,actor,project.id(),command.projectRevisionId(),origin.revisionId(),origin.locale());trace=jdbc.queryForObject("SELECT id,revealed_at FROM project_solution_reveals WHERE id=?",(rs,n)->new Reveal(uuid(rs,"id"),instant(rs,"revealed_at")),id);}else trace=existing.getFirst();
-        return new SolutionRevealView(trace.id(),project.id(),command.projectRevisionId(),activityId,origin.activityVersionId(),origin.revisionId(),origin.locale(),source.document().exercise().correction(),trace.at());
+        return new SolutionRevealView(trace.id(),project.id(),command.projectRevisionId(),activityId,origin.activityVersionId(),origin.revisionId(),origin.locale(),source.document().exercise().correction(),trace.at(),solutionFiles(source.document(),origin.locale()));
+    }
+
+    /** Re-authorizes an existing disclosure; reading a file never creates a disclosure or validates a production. */
+    @Transactional
+    public String authorizeSolutionFile(UUID actor,UUID context,UUID projectId,UUID revealId,UUID assetId){
+        require(actor,"projects.read");if(context==null)throw new ApiException(ApiError.ACCOUNT_CONTEXT_REQUIRED);if(!actor.equals(context))throw new ApiException(ApiError.ACCOUNT_CONTEXT_CHANGED);
+        var project=owned(actor,projectId,true);var origin=project.origin();
+        var rows=jdbc.query("SELECT project_revision_id FROM project_solution_reveals WHERE id=? AND project_id=? AND owner_id=? AND source_revision_id=? AND locale=?",(r,n)->r.getObject(1,UUID.class),revealId,projectId,actor,origin.revisionId(),origin.locale());
+        if(rows.isEmpty())throw notFound();revisionRow(projectId,rows.getFirst());
+        lockSources(sourceResources(actor,origin.enrollmentId(),origin.activityId(),origin.activityVersionId()));require(actor,"projects.read");
+        if(origin.enrollmentId()!=null){var enrolled=learning.activity(actor,origin.enrollmentId(),origin.activityId(),origin.activityVersionId(),origin.locale());if(!"PUBLISHED".equals(enrolled.availability()))throw notFound();if(!"ACTIVE".equals(enrolled.accessStatus()))throw denied();}
+        requireReadable(members.detail(actor,origin.activityId(),origin.activityVersionId(),origin.locale()));
+        var document=source(origin.activityVersionId(),origin.locale(),origin.revisionId()).document();if(document.exercise()==null||!document.exercise().solutionAssetIds().contains(assetId))throw notFound();return origin.locale();
+    }
+    private List<SolutionFile> solutionFiles(ContentDocument document,String locale){
+        if(document.exercise()==null||document.exercise().solutionAssetIds().isEmpty())return List.of();
+        var result=new ArrayList<SolutionFile>();for(UUID id:document.exercise().solutionAssetIds()){
+            var rows=jdbc.query("SELECT id,filename,locale FROM assets WHERE id=? AND scope='EDITORIAL' AND kind='FILE' AND state='READY' AND content_role='SOLUTION' AND locale=?",(r,n)->new SolutionFile(r.getObject(1,UUID.class),r.getString(2),r.getString(3)),id,locale);if(rows.isEmpty())throw new ApiException(ApiError.ASSET_NOT_READY);result.add(rows.getFirst());
+        }return List.copyOf(result);
     }
 
     private ProjectStatus status(ProjectView project) {

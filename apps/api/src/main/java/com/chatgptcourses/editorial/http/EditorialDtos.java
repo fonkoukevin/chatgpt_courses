@@ -27,9 +27,10 @@ public final class EditorialDtos {
         ContentTypes.ContentBlock command() { return new ContentTypes.ContentBlock(type, text, url); }
         static Block from(ContentTypes.ContentBlock value) { return new Block(value.type(), value.text(), value.url()); }
     }
-    public record Exercise(@NotNull @Size(max = 8000) String instructions, @NotNull @Size(max = 8000) String correction) {
-        ContentTypes.Exercise command() { return new ContentTypes.Exercise(instructions, correction); }
-        static Exercise from(ContentTypes.Exercise value) { return value == null ? null : new Exercise(value.instructions(), value.correction()); }
+    public record Exercise(@NotNull @Size(max = 8000) String instructions, @NotNull @Size(max = 8000) String correction,@Size(max=10) List<@NotNull UUID> solutionAssetIds) {
+        public Exercise(String instructions,String correction){this(instructions,correction,List.of());}
+        ContentTypes.Exercise command() { return new ContentTypes.Exercise(instructions, correction,solutionAssetIds); }
+        static Exercise from(ContentTypes.Exercise value) { return value == null ? null : new Exercise(value.instructions(), value.correction(),value.solutionAssetIds()); }
     }
     public record Quiz(@NotBlank @Size(max = 64) @Pattern(regexp = "[a-zA-Z0-9][a-zA-Z0-9_-]*") String key, @NotBlank @Size(max = 2000) String prompt,
                        @NotNull @Size(min = 2, max = 8) List<@NotBlank @Size(max = 1000) String> options,

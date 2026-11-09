@@ -2,6 +2,7 @@ import type { AuthResult } from "./auth-client";
 import type { AssetAccessContext, AssetDownloadAccess, AssetUploadIntent, AssetUploadRequest, AssetView, EditorialAssetUploadRequest } from "./generated/types.gen";
 import { isAssetDownloadAccess, isAssetPage, isAssetUploadCapabilities, isAssetUploadIntent, isAssetView, maxAssetBytes } from "./assets-validation";
 import { matchingResource as matching, mutateResourceJson, readResourceJson, resourceId as id, resourcePagination } from "./resource-http";
+import { canonicalFileMime } from "../assets/files";
 
 export const getProjectFilePolicy = (projectId: string) => readResourceJson(`/me/projects/${id(projectId)}/file-policy`, isAssetUploadCapabilities);
 export const listProjectFiles = (projectId: string, page = 0, pageSize = 20) => readResourceJson(`/me/projects/${id(projectId)}/attachments?${resourcePagination(page, pageSize)}`, matching(isAssetPage, (value) => value.page === page && value.pageSize === pageSize && value.items.every((asset) => asset.scope === "PROJECT_FILE" && asset.projectId === projectId)));
@@ -15,6 +16,7 @@ export const createEditorialUpload = (body: EditorialAssetUploadRequest, account
 export const getEditorialAsset = (assetId: string) => readResourceJson(`/admin/assets/${id(assetId)}`, matching(isAssetView, (value) => value.id === assetId && value.scope === "EDITORIAL"));
 export const confirmEditorialUpload = (assetId: string, accountContext: string) => mutateResourceJson(`/admin/assets/${id(assetId)}/confirmations`, undefined, id(accountContext), matching(isAssetView, (value) => value.id === assetId && value.scope === "EDITORIAL"));
 export const getEditorialAssetPreview = (assetId: string, accountContext: string) => mutateResourceJson(`/admin/assets/${id(assetId)}/download-access`, undefined, id(accountContext), matching(isAssetDownloadAccess, (value) => value.assetId === assetId));
+export const getSolutionFileDownload = (projectId: string, revealId: string, assetId: string, accountContext: string) => mutateResourceJson(`/me/projects/${id(projectId)}/solution-reveals/${id(revealId)}/files/${id(assetId)}/download-access`, undefined, id(accountContext), matching(isAssetDownloadAccess, value => value.assetId === assetId));
 export const getAssetDownload = (assetId: string, context: AssetAccessContext | null, accountContext?: string) => {
   if (context) { id(context.resourceId); id(context.versionId); if (context.enrollmentId) id(context.enrollmentId); if (context.locale !== "fr" && context.locale !== "en") throw new Error("Invalid asset access locale."); }
   return mutateResourceJson(`/assets/${id(assetId)}/download-access`, context, accountContext, matching(isAssetDownloadAccess, (value) => value.assetId === assetId));
@@ -23,7 +25,7 @@ export const getAssetDownload = (assetId: string, context: AssetAccessContext | 
 // Binary transport receives only the canonical, validated API intent/access.
 // No API cookie, CSRF header, external XML response or signed URL is forwarded to logs.
 export async function transferAssetFile(intent: AssetUploadIntent, file: File): Promise<AuthResult<void>> {
-  if (!isAssetUploadIntent(intent) || Date.parse(intent.expiresAt) <= Date.now() || file.size !== intent.asset.sizeBytes || file.name !== intent.asset.filename || file.type && file.type !== intent.asset.contentType) return { ok: false, error: { kind: "invalid-response", status: 0 } };
+  if (!isAssetUploadIntent(intent) || Date.parse(intent.expiresAt) <= Date.now() || file.size !== intent.asset.sizeBytes || file.name !== intent.asset.filename || file.type && canonicalFileMime(file) !== intent.asset.contentType) return { ok: false, error: { kind: "invalid-response", status: 0 } };
   const controller = new AbortController(), timer = setTimeout(() => controller.abort(), 60000);
   try {
     const response = await fetch(intent.uploadUrl, { method: "PUT", headers: intent.headers, body: file, credentials: "omit", redirect: "error", cache: "no-store", referrerPolicy: "no-referrer", signal: controller.signal });

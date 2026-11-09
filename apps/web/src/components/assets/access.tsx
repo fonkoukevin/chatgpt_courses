@@ -5,21 +5,22 @@ import { useEffect, useRef, useState } from "react";
 import { Button, StatusMessage } from "@/components/ui";
 import type { ApiError } from "@/lib/api/client";
 import type { AssetAccessContext, AssetDownloadAccess } from "@/lib/api/generated/types.gen";
-import { downloadAssetFile, getAssetDownload, getEditorialAssetPreview } from "@/lib/api/assets-client";
+import { downloadAssetFile, getAssetDownload, getEditorialAssetPreview, getSolutionFileDownload } from "@/lib/api/assets-client";
 import { getAssetsDictionary } from "@/lib/i18n/assets";
 import type { Locale } from "@/lib/i18n/locales";
 import type { LearningAccountBoundary, LearningAccountState } from "@/lib/learning/account";
 import { AssetError } from "./upload";
 
-export function AssetAccess({ locale, assetId, label, kind, context, account, boundary, privateFile = false, editorialPreview = false }: {
+export function AssetAccess({ locale, assetId, label, kind, context, account, boundary, privateFile = false, editorialPreview = false, solutionReveal }: {
   locale: Locale; assetId: string; label: string; kind: "FILE" | "IMAGE"; context: AssetAccessContext | null;
   account?: LearningAccountState; boundary?: LearningAccountBoundary; privateFile?: boolean; editorialPreview?: boolean;
+  solutionReveal?: { projectId: string; revealId: string };
 }) {
   const t = getAssetsDictionary(locale), [pending, setPending] = useState(false), [error, setError] = useState<ApiError | null>(null);
   const [access, setAccess] = useState<AssetDownloadAccess | null>(null), [expired, setExpired] = useState(false), [imageError, setImageError] = useState(false), [prepared, setPrepared] = useState(false), [unconfirmed, setUnconfirmed] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const lock = useRef(false), sequence = useRef(0), blobUrls = useRef(new Set<string>());
-  const blocked = Boolean(account && account.status !== "active" && account.status !== "anonymous") || (privateFile || editorialPreview) && account?.status !== "active";
+  const blocked = Boolean(account && account.status !== "active" && account.status !== "anonymous") || (privateFile || editorialPreview || Boolean(solutionReveal)) && account?.status !== "active";
   useEffect(() => { if (!access) return; const timer = setTimeout(() => { setExpired(true); setAccess(null); setImageUrl(null); }, Math.max(0, Date.parse(access.expiresAt) - Date.now())); return () => clearTimeout(timer); }, [access]);
   useEffect(() => { if (!imageUrl) return; const urls = blobUrls.current; return () => { URL.revokeObjectURL(imageUrl); urls.delete(imageUrl); }; }, [imageUrl]);
   useEffect(() => { const urls = blobUrls.current, request = sequence; return () => { request.current++; for (const value of urls) URL.revokeObjectURL(value); urls.clear(); }; }, []);
@@ -29,7 +30,7 @@ export function AssetAccess({ locale, assetId, label, kind, context, account, bo
     const current = () => request === sequence.current && (!boundary || scope !== undefined && boundary.isCurrent(scope));
     lock.current = true; setPending(true); setError(null); setExpired(false); setImageError(false); setPrepared(false); setUnconfirmed(false); setAccess(null); setImageUrl(null);
     try {
-      const response = editorialPreview ? await getEditorialAssetPreview(assetId, account!.accountId!) : await getAssetDownload(assetId, context, account?.status === "active" ? account.accountId! : undefined);
+      const response = solutionReveal ? await getSolutionFileDownload(solutionReveal.projectId, solutionReveal.revealId, assetId, account!.accountId!) : editorialPreview ? await getEditorialAssetPreview(assetId, account!.accountId!) : await getAssetDownload(assetId, context, account?.status === "active" ? account.accountId! : undefined);
       if (!current()) { setUnconfirmed(true); return; }
       if (!response.ok) { setError(response.error); boundary?.fail(response.error); return; }
       if (Date.parse(response.data.expiresAt) <= Date.now()) { setExpired(true); return; }

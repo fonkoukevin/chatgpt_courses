@@ -4,7 +4,7 @@ import { afterEach, beforeEach, test } from "node:test";
 import { clearCsrfToken } from "../../apps/web/src/lib/api/auth-client";
 import { createProject, getProject, getProjectTemplate, getMemberProjectTemplate, revealSolution, submitSelfAssessment, updateProject } from "../../apps/web/src/lib/api/projects-client";
 import { decodeProjectsResponse } from "../../apps/web/src/lib/api/projects-response";
-import { isMemberProjectTemplate, isProjectContext, isProjectPreset, isProjectStatus, isProjectTemplate, isProjectView, isSelfAssessmentView, projectEtag } from "../../apps/web/src/lib/api/projects-validation";
+import { isMemberProjectTemplate, isProjectContext, isProjectPreset, isProjectStatus, isProjectTemplate, isProjectView, isSelfAssessmentView, isSolutionRevealView, projectEtag } from "../../apps/web/src/lib/api/projects-validation";
 import type { CreateProject, ProjectContext, ProjectFields, ProjectPreset, ProjectRubricDefinition, ProjectStatus, ProjectTemplate, ProjectView, ResourceDetail, SelfAssessmentView, SubmitSelfAssessment } from "../../apps/web/src/lib/api/generated/types.gen";
 import { parseProjectDraft, projectDraftTtlMs } from "../../apps/web/src/lib/auth/project-draft";
 import { authHref, safeReturnTo, translateReturnTo } from "../../apps/web/src/lib/auth/routes";
@@ -12,6 +12,13 @@ import { projectBlockingKeys, projectCriterionKeys } from "../../apps/web/src/li
 
 // Unit tests with synthetic network responses; these are not HTTP/PostgreSQL or browser validations.
 const originalFetch=globalThis.fetch;
+
+test("un corrigé révélé ne livre que ses fichiers localisés sans URL ou identité de propriétaire", () => {
+  const file = { assetId: randomUUID(), filename: "corrige-br01-fr.md", locale: "fr" };
+  const value = { id: randomUUID(), projectId: randomUUID(), projectRevisionId: randomUUID(), activityId: randomUUID(), activityVersionId: randomUUID(), revisionId: randomUUID(), locale: "fr", correction: "Une formulation possible, sans revue humaine.", revealedAt: "2026-11-09T00:00:00Z", files: [file] };
+  assert.equal(isSolutionRevealView(value), true);
+  for (const invalid of [{ ...value, files: [{ ...file, locale: "en" }] }, { ...value, files: [{ ...file, filename: "../private.md" }] }, { ...value, files: [{ ...file, url: "https://example.invalid/secret" }] }, { ...value, files: [file, file] }, { ...value, ownerId: randomUUID() }]) assert.equal(isSolutionRevealView(invalid), false);
+});
 const actor=randomUUID(),projectId=randomUUID(),projectRevisionId=randomUUID(),activityId=randomUUID(),versionId=randomUUID(),sourceRevisionId=randomUUID(),rubricId=randomUUID();
 const date="2026-11-08T00:00:00Z",csrf={token:"unit-only-project-csrf",headerName:"X-CSRF-TOKEN",parameterName:"_csrf"};
 function fields():ProjectFields{return {title:"Proposition personnelle fictive",locale:"fr",objective:"",scope:"",method:"",timeline:"",budget:"",clarifications:"",nextStep:"",externalText:"Mon texte français autonome."};}
@@ -110,7 +117,7 @@ test("une réponse valide d’un autre projet est refusée en lecture autoévalu
   globalThis.fetch=async(path,init)=>{
     if(path==="/api/v1/auth/csrf")return Response.json(csrf);
     if(String(path).endsWith("/self-assessments")){assessments++;assert.equal(init?.method,"POST");return Response.json(foreignAssessment,{status:201});}
-    if(String(path).endsWith("/solution-reveals")){reveals++;return Response.json({id:randomUUID(),projectId:foreignId,projectRevisionId,activityId,activityVersionId:versionId,revisionId:sourceRevisionId,locale:"fr",correction:"Corrigé synthétique d’une autre production.",revealedAt:date});}
+    if(String(path).endsWith("/solution-reveals")){reveals++;return Response.json({id:randomUUID(),projectId:foreignId,projectRevisionId,activityId,activityVersionId:versionId,revisionId:sourceRevisionId,locale:"fr",correction:"Corrigé synthétique d’une autre production.",revealedAt:date,files:[]});}
     reads++;return Response.json(foreignProject,{headers:{ETag:projectEtag(foreignProject)}});
   };
   const original=structuredClone(declared);

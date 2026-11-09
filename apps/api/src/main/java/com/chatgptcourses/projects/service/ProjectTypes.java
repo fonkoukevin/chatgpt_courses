@@ -30,7 +30,10 @@ public final class ProjectTypes {
     public record SelfAssessmentView(UUID id,UUID submissionId,UUID projectId,UUID projectRevisionId,UUID rubricVersionId,String method,int scorePoints,int maxPoints,int passPoints,boolean thresholdMet,boolean needsRevision,List<CriterionDeclaration> answers,List<BlockingDeclaration> blockingDeclarations,List<DeclaredBlockingIssue> blockingIssues,String comment,Instant evaluatedAt,UUID authorId,UUID evaluatorId,boolean declaredByUser) { }
     public record SelfAssessmentSummary(UUID id,UUID projectId,UUID projectRevisionId,UUID rubricVersionId,String method,int scorePoints,int maxPoints,int passPoints,boolean thresholdMet,boolean needsRevision,int blockingIssueCount,Instant evaluatedAt,UUID authorId) { }
     public record SelfAssessmentPage(List<SelfAssessmentSummary> items,int page,int pageSize,long total) { }
-    public record SolutionRevealView(UUID id,UUID projectId,UUID projectRevisionId,UUID activityId,UUID activityVersionId,UUID revisionId,String locale,String correction,Instant revealedAt) { }
+    public record SolutionFile(UUID assetId,String filename,String locale) { }
+    public record SolutionRevealView(UUID id,UUID projectId,UUID projectRevisionId,UUID activityId,UUID activityVersionId,UUID revisionId,String locale,String correction,Instant revealedAt,List<SolutionFile> files) {
+        public SolutionRevealView(UUID id,UUID projectId,UUID projectRevisionId,UUID activityId,UUID activityVersionId,UUID revisionId,String locale,String correction,Instant revealedAt){this(id,projectId,projectRevisionId,activityId,activityVersionId,revisionId,locale,correction,revealedAt,List.of());}
+    }
     public record CreateProject(UUID creationId,UUID activityId,UUID activityVersionId,UUID revisionId,String sourceLocale,UUID enrollmentId,ProjectFields fields,String stage) { }
     public record ProjectCreationResult(ProjectView value,boolean created) { }
     public record SaveProject(ProjectFields fields,String stage) { }

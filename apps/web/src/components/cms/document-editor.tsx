@@ -67,8 +67,8 @@ export function DocumentEditor({ locale, value, onChange, sectionPrefix = "cms" 
       <Button variant="secondary" disabled={value.blocks.length >= 60} onClick={() => set("blocks", [...value.blocks, { type: "PARAGRAPH", text: "", url: null }])}>{text.addBlock}</Button>
     </section>
     <section id={`${sectionPrefix}-exercise`} className="space-y-4"><h2 className="text-xl font-semibold">{text.exercise}</h2>
-      {value.exercise ? <><FormField id={field("instructions")} label={text.instructions}><TextArea rows={5} value={value.exercise.instructions} onChange={(event) => set("exercise", { instructions: event.target.value, correction: value.exercise!.correction })} /></FormField>
-        <FormField id={field("correction")} label={text.correction}><TextArea rows={6} value={value.exercise.correction} onChange={(event) => set("exercise", { instructions: value.exercise!.instructions, correction: event.target.value })} /></FormField>
+      {value.exercise ? <><FormField id={field("instructions")} label={text.instructions}><TextArea rows={5} value={value.exercise.instructions} onChange={(event) => set("exercise", { ...value.exercise!, instructions: event.target.value })} /></FormField>
+        <FormField id={field("correction")} label={text.correction}><TextArea rows={6} value={value.exercise.correction} onChange={(event) => set("exercise", { ...value.exercise!, correction: event.target.value })} /></FormField>
         <Button variant="ghost" onClick={() => set("exercise", null)}>{text.removeExercise}</Button></> : <Button variant="secondary" onClick={() => set("exercise", { instructions: "", correction: "" })}>{text.addExercise}</Button>}
     </section>
     <section id={`${sectionPrefix}-quiz`} className="space-y-5"><h2 className="text-xl font-semibold">{text.quiz}</h2>

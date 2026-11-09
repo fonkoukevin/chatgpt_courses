@@ -1,0 +1,106 @@
+# Explicit shared-staging integrations. No host ports, Internet SMTP or video provider.
+services:
+  api:
+    environment:
+      STAGING_INTEGRATIONS: mailpit-s3
+      MAIL_MODE: smtp
+      MAIL_HOST: mailpit
+      MAIL_PORT: "1025"
+      MAIL_FROM: noreply@courses-staging.invalid
+      MAIL_SMTP_AUTH: "false"
+      MAIL_SMTP_STARTTLS: "false"
+      MAIL_SMTP_STARTTLS_REQUIRED: "false"
+      MAIL_SMTP_SSL: "false"
+      NOTIFICATION_OUTBOX_ENABLED: "true"
+      STORAGE_ENABLED: "true"
+      S3_ENDPOINT: http://s3:8333
+      S3_EXTERNAL_ENDPOINT: ${FILES_PUBLIC_ORIGIN:?Explicit staging files HTTPS origin required}
+      S3_REGION: us-east-1
+      S3_PATH_STYLE: "true"
+      S3_PUBLIC_BUCKET: courses-editorial-staging
+      S3_PRIVATE_BUCKET: courses-private-staging
+      S3_ACCESS_KEY_FILE: /run/secrets/S3_ACCESS_KEY
+      S3_SECRET_KEY_FILE: /run/secrets/S3_SECRET_KEY
+      ASSET_STAGING_CLEANUP_WORKER_ENABLED: "true"
+      VIDEO_ENABLED: "false"
+    secrets:
+      - source: staging_s3_access_key
+        target: S3_ACCESS_KEY
+      - source: staging_s3_secret_key
+        target: S3_SECRET_KEY
+    networks:
+      application: {}
+      database: {}
+      api_egress: {}
+      staging_mail: {}
+      staging_objects: {}
+    depends_on:
+      mailpit: { condition: service_healthy }
+      s3: { condition: service_healthy }
+  mailpit:
+    image: axllent/mailpit:v1.33.0@sha256:9b3a463be15354c0f0eba91697d80e3e0d8a5623ef0e627cacc836bc17fd5231
+    environment:
+      MP_DATABASE: /data/mailpit.db
+      MP_MAX_MESSAGES: "500"
+    volumes: [staging_mailpit_data:/data]
+    networks: [staging_mail]
+    healthcheck:
+      test: [CMD, /mailpit, readyz]
+      interval: 5s
+      timeout: 3s
+      start_period: 10s
+      retries: 18
+    restart: unless-stopped
+    mem_limit: 128m
+    cpus: 0.5
+    pids_limit: 128
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    logging: { driver: none }
+  s3:
+    image: chrislusf/seaweedfs:4.52@sha256:57877e32bb90073b37dc109b438ba66e84fd5ed9ced5f5c04f56444ef243ce59
+    command:
+      - server
+      - -dir=/data
+      - -ip=s3
+      - -ip.bind=0.0.0.0
+      - -master.volumeSizeLimitMB=64
+      - -master.telemetry=false
+      - -volume.max=24
+      - -filer
+      - -s3
+      - -s3.port=8333
+      - -s3.port.iceberg=0
+      - -s3.port.lance=0
+      - -s3.config=/run/secrets/s3.staging.json
+    secrets:
+      - source: staging_s3_auth
+        target: s3.staging.json
+    volumes: [staging_s3_data:/data]
+    networks:
+      staging_objects: {}
+      shared_ingress:
+        aliases: [courses-staging-s3]
+    healthcheck:
+      test: [CMD, curl, --fail, --silent, http://127.0.0.1:8333/healthz]
+      interval: 5s
+      timeout: 3s
+      start_period: 15s
+      retries: 18
+    restart: unless-stopped
+    mem_limit: 512m
+    cpus: 1
+    pids_limit: 256
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    logging: { driver: none }
+networks:
+  staging_mail: { internal: true }
+  staging_objects: { internal: true }
+volumes:
+  staging_mailpit_data: {}
+  staging_s3_data: {}
+secrets:
+  staging_s3_access_key: { file: "${SECRETS_DIR:?}/staging-s3-access-key" }
+  staging_s3_secret_key: { file: "${SECRETS_DIR}/staging-s3-secret-key" }
+  staging_s3_auth: { file: "${SECRETS_DIR}/staging-s3-auth.json" }

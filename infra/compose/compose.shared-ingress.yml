@@ -1,0 +1,17 @@
+# Staging only. The operator creates this internal bridge before deployment.
+# Its lifecycle belongs to neither application Compose project.
+services:
+  caddy:
+    profiles: [dedicated-ingress]
+    ports: !reset []
+  web:
+    ports: !reset []
+    networks:
+      web: {}
+      application: {}
+      shared_ingress:
+        aliases: [courses-staging-web]
+networks:
+  shared_ingress:
+    external: true
+    name: courses-staging-ingress

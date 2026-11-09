@@ -56,7 +56,7 @@ export function runStep(job, step) {
   // This constant reaches the nested node:test process launched by verify:client.
   if (['scripts', 'client', 'stripeConfig'].includes(step)) env.NODE_OPTIONS = '--test-reporter=tap';
   let executable, args;
-  if (step === 'scripts') { executable = process.execPath; args = ['--test', ...readdirSync(join(root, 'tests/scripts')).filter(name => /^ci-.*\.test\.mjs$/u.test(name)).toSorted().map(name => join(root, 'tests/scripts', name)), join(root, 'tests/scripts/stripe-artifact-privacy.test.mjs')]; }
+  if (step === 'scripts') { executable = process.execPath; args = ['--test', ...readdirSync(join(root, 'tests/scripts')).filter(name => /^(?:ci-|deployment-|shared-ingress-).*\.test\.mjs$/u.test(name)).toSorted().map(name => join(root, 'tests/scripts', name)), join(root, 'tests/scripts/stripe-artifact-privacy.test.mjs')]; }
   else if (step === 'browsers') { executable = process.execPath; args = [join(root, 'node_modules/@playwright/test/cli.js'), 'install', '--with-deps', 'chromium']; }
   else if (step === 'smoke') { executable = process.execPath; args = [join(root, 'scripts/ci-smoke.mjs')]; }
   else [executable, args] = command(windows ? join(dirname(process.execPath), 'npm.cmd') : 'npm', steps[step]);

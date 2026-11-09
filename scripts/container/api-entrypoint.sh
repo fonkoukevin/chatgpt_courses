@@ -26,9 +26,18 @@ secret_file() {
 required() { eval "value=\${$1-}"; [ -n "$value" ] || fail; }
 
 mode=${1:-serve}
-case "$mode" in serve|migrate) [ "$#" -le 1 ] || fail ;; objects) [ "$#" -eq 3 ] || fail ;; *) fail ;; esac
+case "$mode" in serve|migrate|storage-bootstrap) [ "$#" -le 1 ] || fail ;; objects) [ "$#" -eq 3 ] || fail ;; *) fail ;; esac
 # Prevent JVM/launcher options from turning configuration secrets into command logs.
 [ -z "${JAVA_TOOL_OPTIONS-}${JDK_JAVA_OPTIONS-}${_JAVA_OPTIONS-}${LOADER_MAIN-}${LOADER_PATH-}${LOADER_ARGS-}${LOADER_HOME-}${LOADER_CONFIG_LOCATION-}${LOADER_CONFIG_NAME-}${LOADER_SYSTEM-}" ] || fail
+if [ "$mode" = storage-bootstrap ]; then
+    [ "${APP_ENV-}" = staging ] && [ "${STAGING_INTEGRATIONS-}" = mailpit-s3 ] || fail
+    secret_file S3_ACCESS_KEY
+    secret_file S3_SECRET_KEY
+    for key in APP_PUBLIC_ORIGIN S3_ENDPOINT S3_EXTERNAL_ENDPOINT S3_REGION S3_PUBLIC_BUCKET S3_PRIVATE_BUCKET S3_ACCESS_KEY S3_SECRET_KEY; do required "$key"; done
+    exec java -XX:MaxRAMPercentage=75 -Dfile.encoding=UTF-8 -Duser.timezone=UTC -Dlogback.configurationFile=/app/cli-logback.xml \
+        -Dloader.main=com.chatgptcourses.operations.StagingStorageBootstrapMain \
+        -cp /app/api.jar org.springframework.boot.loader.launch.PropertiesLauncher
+fi
 if [ "$mode" = objects ]; then
     case "${APP_ENV-}" in staging|production) ;; test) [ "${ISOLATED_OBJECT_SNAPSHOT-false}" = true ] || fail ;; *) fail ;; esac
     case "$2" in export|restore) ;; *) fail ;; esac

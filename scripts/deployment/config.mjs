@@ -3,12 +3,20 @@ import {readFileSync,lstatSync} from 'node:fs';
 import {resolve,isAbsolute,relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
 const image=/^[a-z0-9][a-z0-9.:/_-]+@sha256:[a-f0-9]{64}$/;
-const keys=new Set(['COMPOSE_PROJECT_NAME','APP_ENV','PUBLIC_DOMAIN','APP_PUBLIC_ORIGIN','POSTGRES_DB','WEB_IMAGE','API_IMAGE','SECRETS_DIR','APP_DEFAULT_LOCALE','APP_PUBLISHED_LOCALES','HTTP_BIND','HTTP_PORT','HTTPS_PORT','STAGING_BASIC_USERNAME']);
+const keys=new Set(['COMPOSE_PROJECT_NAME','APP_ENV','PUBLIC_DOMAIN','APP_PUBLIC_ORIGIN','POSTGRES_DB','WEB_IMAGE','API_IMAGE','SECRETS_DIR','APP_DEFAULT_LOCALE','APP_PUBLISHED_LOCALES','HTTP_BIND','HTTP_PORT','HTTPS_PORT','STAGING_BASIC_USERNAME','INGRESS_MODE','INGRESS_NETWORK','STAGING_INTEGRATIONS','FILES_PUBLIC_ORIGIN']);
 export const secretFiles=['postgres-admin-password','postgres-owner-password','postgres-app-password','outbox-key'];
 export function validateDeployment(env,{isolated=false,checkFiles=true}={}){
  const fail=code=>{throw new Error(code);};
  if(Object.keys(env).some(key=>!keys.has(key)))fail('DEPLOYMENT_UNKNOWN_VARIABLE');
  if(!['staging','production'].includes(env.APP_ENV))fail('DEPLOYMENT_ENVIRONMENT_REQUIRED');
+ const ingressMode=env.INGRESS_MODE??'dedicated';
+ if(!['dedicated','shared'].includes(ingressMode))fail('DEPLOYMENT_INGRESS_MODE_INVALID');
+ if(ingressMode==='shared'&&(env.APP_ENV!=='staging'||env.INGRESS_NETWORK!=='courses-staging-ingress'))fail('DEPLOYMENT_SHARED_INGRESS_INVALID');
+ if(ingressMode==='dedicated'&&env.INGRESS_NETWORK!==undefined)fail('DEPLOYMENT_UNEXPECTED_INGRESS_NETWORK');
+ const stagingIntegrations=env.STAGING_INTEGRATIONS??'none';
+ if(!['none','mailpit-s3'].includes(stagingIntegrations))fail('DEPLOYMENT_STAGING_INTEGRATIONS_INVALID');
+ if(stagingIntegrations!=='none'&&(env.APP_ENV!=='staging'||ingressMode!=='shared'))fail('DEPLOYMENT_STAGING_INTEGRATIONS_REQUIRE_SHARED_STAGING');
+ if(stagingIntegrations==='none'&&env.FILES_PUBLIC_ORIGIN!==undefined)fail('DEPLOYMENT_UNEXPECTED_FILES_ORIGIN');
  if(!/^courses-(?:staging|production|p20-[a-f0-9-]{8,36})$/.test(env.COMPOSE_PROJECT_NAME??''))fail('DEPLOYMENT_PROJECT_INVALID');
  if(!isolated&&env.COMPOSE_PROJECT_NAME!==`courses-${env.APP_ENV}`)fail('DEPLOYMENT_PROJECT_ENVIRONMENT_MISMATCH');
  for(const name of ['WEB_IMAGE','API_IMAGE'])if(!image.test(env[name]??'')&&!(isolated&&/^sha256:[a-f0-9]{64}$/.test(env[name]??'')))fail(`DEPLOYMENT_${name}_DIGEST_REQUIRED`);
@@ -17,6 +25,10 @@ export function validateDeployment(env,{isolated=false,checkFiles=true}={}){
  if(!isolated&&/\.(?:invalid|example|localhost|test)$/.test(env.PUBLIC_DOMAIN))fail('DEPLOYMENT_REAL_DOMAIN_REQUIRED');
  let origin;try{origin=new URL(env.APP_PUBLIC_ORIGIN);}catch{fail('DEPLOYMENT_ORIGIN_INVALID');}
  if(origin.protocol!=='https:'||origin.hostname!==env.PUBLIC_DOMAIN||origin.username||origin.password||!['','/'].includes(origin.pathname)||origin.search||origin.hash)fail('DEPLOYMENT_ORIGIN_DOMAIN_MISMATCH');
+ if(stagingIntegrations==='mailpit-s3'){
+  let files;try{files=new URL(env.FILES_PUBLIC_ORIGIN);}catch{fail('DEPLOYMENT_FILES_ORIGIN_INVALID');}
+  if(!origin.hostname.startsWith('staging.')||files.protocol!=='https:'||files.origin!==env.FILES_PUBLIC_ORIGIN||files.port||files.hostname===origin.hostname||!files.hostname.startsWith('files-staging.')||files.hostname!==`files-staging.${origin.hostname.split('.').slice(1).join('.')}`||!isolated&&/\.(?:invalid|example|localhost|test)$/.test(files.hostname))fail('DEPLOYMENT_FILES_ORIGIN_INVALID');
+ }
  if(!['fr','en'].includes(env.APP_DEFAULT_LOCALE??'fr')||!/^$|^(?:fr|en)(?:,(?:fr|en))?$/.test(env.APP_PUBLISHED_LOCALES??''))fail('DEPLOYMENT_LOCALES_INVALID');
  const locales=(env.APP_PUBLISHED_LOCALES??'').split(',').filter(Boolean);if(new Set(locales).size!==locales.length||env.APP_ENV==='staging'&&locales.length)fail('DEPLOYMENT_INDEXING_NOT_ALLOWED');
  for(const key of ['HTTP_PORT','HTTPS_PORT'])if(env[key]!==undefined&&(!/^\d+$/.test(env[key])||Number(env[key])<1||Number(env[key])>65535))fail('DEPLOYMENT_PORT_INVALID');
@@ -24,12 +36,19 @@ export function validateDeployment(env,{isolated=false,checkFiles=true}={}){
  if(!isAbsolute(env.SECRETS_DIR??''))fail('DEPLOYMENT_ABSOLUTE_SECRETS_DIRECTORY_REQUIRED');
  if(isolated){const child=relative(resolve('.runtime'),resolve(env.SECRETS_DIR));if(!env.PUBLIC_DOMAIN.endsWith('.localhost')||env.HTTP_BIND!=='127.0.0.1'||!child||child.startsWith('..')||isAbsolute(child))fail('DEPLOYMENT_ISOLATED_SCOPE_INVALID');}
  if(env.APP_ENV==='staging'&&!/^[A-Za-z0-9._-]{3,80}$/.test(env.STAGING_BASIC_USERNAME??''))fail('DEPLOYMENT_STAGING_USERNAME_INVALID');
- if(checkFiles){const directory=lstatSync(env.SECRETS_DIR);if(!directory.isDirectory()||directory.isSymbolicLink()||process.platform==='linux'&&(directory.mode&0o077)!==0)fail('DEPLOYMENT_SECRETS_DIRECTORY_MUST_BE_PRIVATE');for(const name of [...secretFiles,...(env.APP_ENV==='staging'?['staging-basic-password']:[])]){
+ if(checkFiles){const directory=lstatSync(env.SECRETS_DIR);if(!directory.isDirectory()||directory.isSymbolicLink()||process.platform==='linux'&&(directory.mode&0o077)!==0)fail('DEPLOYMENT_SECRETS_DIRECTORY_MUST_BE_PRIVATE');for(const name of [...secretFiles,...(env.APP_ENV==='staging'?['staging-basic-password']:[]),...(stagingIntegrations==='mailpit-s3'?['staging-s3-access-key','staging-s3-secret-key']:[])]){
    const path=resolve(env.SECRETS_DIR,name);let stat,bytes;try{stat=lstatSync(path);bytes=readFileSync(path);}catch{fail('DEPLOYMENT_SECRET_FILE_MISSING');}
    if(!stat.isFile()||stat.isSymbolicLink()||bytes.length<24||bytes.length>512||/[\r\n\0]/.test(bytes.toString('utf8')))fail('DEPLOYMENT_SECRET_FILE_INVALID');
    if(name==='outbox-key'&&Buffer.from(bytes.toString('utf8'),'base64').length!==32)fail('DEPLOYMENT_OUTBOX_KEY_INVALID');
   }}
- return {environment:env.APP_ENV,project:env.COMPOSE_PROJECT_NAME,digestImages:true,httpsOrigin:true,secretsChecked:checkFiles,isolated,commerceEnabled:false};
+ if(checkFiles&&stagingIntegrations==='mailpit-s3'){
+  let stat,bytes,auth;try{const path=resolve(env.SECRETS_DIR,'staging-s3-auth.json');stat=lstatSync(path);bytes=readFileSync(path);auth=JSON.parse(bytes.toString('utf8'));}catch{fail('DEPLOYMENT_S3_AUTH_CONFIGURATION_INVALID');}
+  if(!stat.isFile()||stat.isSymbolicLink()||bytes.length>16384||!Array.isArray(auth?.identities)||auth.identities.length!==1)fail('DEPLOYMENT_S3_AUTH_CONFIGURATION_INVALID');
+  const identity=auth.identities[0],credentials=identity?.credentials,actions=identity?.actions;
+  if(identity?.name!=='courses-staging'||!Array.isArray(credentials)||credentials.length!==1||!Array.isArray(actions)||actions.length!==5||!['Admin','Read','List','Tagging','Write'].every(action=>actions.includes(action)))fail('DEPLOYMENT_S3_AUTH_CONFIGURATION_INVALID');
+  if(credentials[0]?.accessKey!==readFileSync(resolve(env.SECRETS_DIR,'staging-s3-access-key'),'utf8')||credentials[0]?.secretKey!==readFileSync(resolve(env.SECRETS_DIR,'staging-s3-secret-key'),'utf8'))fail('DEPLOYMENT_S3_AUTH_CREDENTIAL_MISMATCH');
+ }
+ return {environment:env.APP_ENV,project:env.COMPOSE_PROJECT_NAME,digestImages:true,httpsOrigin:true,secretsChecked:checkFiles,isolated,commerceEnabled:false,ingressMode,ingressNetwork:ingressMode==='shared'?env.INGRESS_NETWORK:null,stagingIntegrations,filesPublicOrigin:stagingIntegrations==='mailpit-s3'?env.FILES_PUBLIC_ORIGIN:null,videoEnabled:false};
 }
 export function loadDeployment(file,releaseFile){
  const env=parseEnv(readFileSync(file,'utf8'));

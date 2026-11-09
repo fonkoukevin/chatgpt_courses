@@ -15,6 +15,9 @@ function argumentsOf(values) {
 function noLinks(path) {
   for (let current = resolve(path); current !== dirname(current); current = dirname(current)) if (existsSync(current)) requireRelease(!lstatSync(current).isSymbolicLink(), 'RELEASE_REMOTE_SYMLINK_REFUSED');
 }
+export function validateSharedIngressNetwork(facts) {
+  requireRelease(facts?.name === 'courses-staging-ingress' && facts.internal === true && facts.driver === 'bridge', 'RELEASE_SHARED_INGRESS_NETWORK_INVALID');
+}
 function main() {
   requireRelease(process.platform === 'linux' && process.versions.node === '24.22.2', 'RELEASE_REMOTE_LINUX_NODE_24_22_2_REQUIRED');
   const args = argumentsOf(process.argv.slice(2)), release = join(args.directory, 'releases', args.hash);
@@ -47,9 +50,15 @@ function main() {
     writeFileSync(images, `WEB_IMAGE=${manifest.web.repository}@${manifest.web.digest}\nAPI_IMAGE=${manifest.api.repository}@${manifest.api.digest}\nAPP_ENV=${request.environment}\n`, { mode: 0o600 });
     const configuration = loadDeployment(config, images), validated = validateDeployment(configuration, { isolated: false, checkFiles: true });
     requireRelease(validated.environment === request.environment && validated.project === project && configuration.APP_PUBLIC_ORIGIN === request.expectedPublicOrigin, 'RELEASE_REMOTE_TARGET_CONFIG_MISMATCH');
-    const compose = ['compose', '--project-name', project, '--env-file', config, '--env-file', images, '-f', join(release, 'infra/compose/compose.deployment.yml'), ...(request.environment === 'staging' ? ['-f', join(release, 'infra/compose/compose.staging.yml')] : [])];
+    const sharedIngress = validated.ingressMode === 'shared';
+    const stagingIntegrations = validated.stagingIntegrations === 'mailpit-s3';
+    const compose = ['compose', '--project-name', project, '--env-file', config, '--env-file', images, '-f', join(release, 'infra/compose/compose.deployment.yml'), ...(request.environment === 'staging' ? ['-f', join(release, 'infra/compose/compose.staging.yml')] : []), ...(sharedIngress ? ['-f', join(release, 'infra/compose/compose.shared-ingress.yml')] : []), ...(stagingIntegrations ? ['-f', join(release, 'infra/compose/compose.staging-integrations.yml')] : [])];
     run('docker', [...compose, 'config', '--quiet']);
-    run('docker', [...compose, 'pull', '--quiet']);
+    if (sharedIngress) {
+      const facts = run('docker', ['network', 'inspect', '--format', '{"name":{{json .Name}},"internal":{{json .Internal}},"driver":{{json .Driver}}}', validated.ingressNetwork], true).stdout;
+      validateSharedIngressNetwork(JSON.parse(facts));
+    }
+    run('docker', [...compose, 'pull', '--quiet', ...(sharedIngress ? ['postgres', 'migrate', 'api', 'web', ...(stagingIntegrations ? ['mailpit', 's3'] : [])] : [])]);
     for (const kind of ['web', 'api']) {
       const reference = `${manifest[kind].repository}@${manifest[kind].digest}`;
       const revision = run('docker', ['image', 'inspect', '--format', '{{index .Config.Labels "org.opencontainers.image.revision"}}', reference], true).stdout.trim();
@@ -82,8 +91,12 @@ function main() {
       validateBackupReceipt(readFileSync(backupPath), request.migrationBackupReceiptSha256, { project, environment: request.environment, database: configuration.POSTGRES_DB });
     }
     if (request.operation === 'deploy') run('docker', [...compose, 'run', '--rm', '--no-deps', 'migrate']);
-    run('docker', [...compose, 'up', '--no-build', '--no-deps', '-d', '--wait', '--wait-timeout', '180', 'api', 'web', 'caddy']);
-    writeFileSync(receiptPath, JSON.stringify({ result: 'awaiting-external-smoke', manifestSha256: args.hash, sourceCommit: manifest.sourceCommit, environment: request.environment, operation: request.operation, completedAt: new Date().toISOString(), imageBuildInvoked: false, migrationInvoked: request.operation === 'deploy', observedSchemaVersionBefore: facts.version, firstInstallEmptyDatabaseObserved: request.firstInstallEmptyDatabase === true, rollbackSchemaReviewRequired: request.operation === 'rollback', backupReceiptSha256: request.migrationBackupReceiptSha256, offHostBackupIsOperatorAttestation: request.offHostBackupAttested === true, dataRestored: false }) + '\n', { mode: 0o600 });
+    if (stagingIntegrations) {
+      run('docker', [...compose, 'up', '--no-build', '--no-deps', '-d', '--wait', '--wait-timeout', '180', 'mailpit', 's3']);
+      run('docker', [...compose, 'run', '--rm', '--no-deps', 'api', 'storage-bootstrap']);
+    }
+    run('docker', [...compose, 'up', '--no-build', '--no-deps', '-d', '--wait', '--wait-timeout', '180', 'api', 'web', ...(sharedIngress ? [] : ['caddy'])]);
+    writeFileSync(receiptPath, JSON.stringify({ result: 'awaiting-external-smoke', manifestSha256: args.hash, sourceCommit: manifest.sourceCommit, environment: request.environment, operation: request.operation, completedAt: new Date().toISOString(), imageBuildInvoked: false, migrationInvoked: request.operation === 'deploy', observedSchemaVersionBefore: facts.version, firstInstallEmptyDatabaseObserved: request.firstInstallEmptyDatabase === true, rollbackSchemaReviewRequired: request.operation === 'rollback', backupReceiptSha256: request.migrationBackupReceiptSha256, offHostBackupIsOperatorAttestation: request.offHostBackupAttested === true, dataRestored: false, ingressMode: validated.ingressMode, ingressNetwork: validated.ingressNetwork, sharedIngressNetworkValidated: sharedIngress, dedicatedCaddyRequested: !sharedIngress, stagingIntegrations: validated.stagingIntegrations }) + '\n', { mode: 0o600 });
   } finally { closeSync(handle); }
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

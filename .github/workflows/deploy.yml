@@ -53,8 +53,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  release:
-    if: ${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && !github.event.repository.fork }}
+  plan:
+    if: ${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && !github.event.repository.fork && inputs.operation == 'plan' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     environment: ${{ inputs.environment }}
@@ -72,12 +72,14 @@ jobs:
       FIRST_INSTALL_EMPTY_DATABASE: ${{ inputs.first_install_empty_database }}
       OFF_HOST_BACKUP_ATTESTED: ${{ inputs.off_host_backup_attested }}
       IMAGE_REPOSITORY: ${{ vars.IMAGE_REPOSITORY }}
+      EXPECTED_SOURCE_VISIBILITY: ${{ vars.EXPECTED_SOURCE_VISIBILITY }}
       APPROVED_STAGING_RELEASE_SHA256: ${{ vars.APPROVED_STAGING_RELEASE_SHA256 }}
       MIGRATION_BACKUP_RECEIPT_SHA256: ${{ vars.MIGRATION_BACKUP_RECEIPT_SHA256 }}
       DEPLOY_TARGET_AUTHORIZED: ${{ vars.DEPLOY_TARGET_AUTHORIZED }}
       DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
       DEPLOY_PORT: ${{ vars.DEPLOY_PORT }}
       DEPLOY_USER: ${{ vars.DEPLOY_USER }}
+      DEPLOY_NODE_PATH: ${{ vars.DEPLOY_NODE_PATH }}
       DEPLOY_DIRECTORY: ${{ vars.DEPLOY_DIRECTORY }}
       DEPLOY_PUBLIC_ORIGIN: ${{ vars.DEPLOY_PUBLIC_ORIGIN }}
     steps:
@@ -92,19 +94,121 @@ jobs:
           package-manager-cache: false
       - name: Assert the controller toolchain
         run: test "$(node --version)" = "v24.22.2"
-      - name: Validate protected environment, source, CI and digest manifest
+      - name: Validate protected environment and release prerequisites
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/deployment/release.mjs guard
-      - name: Build and explicitly publish the release once
-        if: ${{ inputs.operation == 'publish' }}
+      - name: Keep only non-sensitive manifest and result metadata
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: manual-release-plan-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/deployment/public/*.json
+          include-hidden-files: true
+          if-no-files-found: error
+          overwrite: false
+          retention-days: 3
+
+  publish:
+    if: ${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && !github.event.repository.fork && inputs.operation == 'publish' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    environment: ${{ inputs.environment }}
+    permissions:
+      contents: read
+      actions: read
+      deployments: write
+      packages: write
+    env:
+      RELEASE_OPERATION: ${{ inputs.operation }}
+      TARGET_ENVIRONMENT: ${{ inputs.environment }}
+      RELEASE_MANIFEST_JSON: ${{ inputs.manifest }}
+      EXPECTED_RELEASE_SHA256: ${{ inputs.manifest_sha256 }}
+      ROLLBACK_SCHEMA_REVIEWED: ${{ inputs.rollback_schema_reviewed }}
+      CURRENT_SCHEMA_VERSION: ${{ inputs.current_schema_version }}
+      FIRST_INSTALL_EMPTY_DATABASE: ${{ inputs.first_install_empty_database }}
+      OFF_HOST_BACKUP_ATTESTED: ${{ inputs.off_host_backup_attested }}
+      IMAGE_REPOSITORY: ${{ vars.IMAGE_REPOSITORY }}
+      EXPECTED_SOURCE_VISIBILITY: ${{ vars.EXPECTED_SOURCE_VISIBILITY }}
+      APPROVED_STAGING_RELEASE_SHA256: ${{ vars.APPROVED_STAGING_RELEASE_SHA256 }}
+      MIGRATION_BACKUP_RECEIPT_SHA256: ${{ vars.MIGRATION_BACKUP_RECEIPT_SHA256 }}
+      DEPLOY_TARGET_AUTHORIZED: ${{ vars.DEPLOY_TARGET_AUTHORIZED }}
+      DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+      DEPLOY_PORT: ${{ vars.DEPLOY_PORT }}
+      DEPLOY_USER: ${{ vars.DEPLOY_USER }}
+      DEPLOY_NODE_PATH: ${{ vars.DEPLOY_NODE_PATH }}
+      DEPLOY_DIRECTORY: ${{ vars.DEPLOY_DIRECTORY }}
+      DEPLOY_PUBLIC_ORIGIN: ${{ vars.DEPLOY_PUBLIC_ORIGIN }}
+    steps:
+      - name: Check out only the selected default-branch commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.22.2
+          package-manager-cache: false
+      - name: Assert the controller toolchain
+        run: test "$(node --version)" = "v24.22.2"
+      - name: Build and explicitly publish private GHCR images with the job token
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
-          REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN }}
         run: node scripts/deployment/release.mjs publish
-      - name: Deploy the already published digest pair without rebuilding
-        if: ${{ inputs.operation == 'deploy' || inputs.operation == 'rollback' }}
+      - name: Keep only non-sensitive manifest and result metadata
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: manual-release-publish-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/deployment/public/*.json
+          include-hidden-files: true
+          if-no-files-found: error
+          overwrite: false
+          retention-days: 3
+
+  deploy:
+    if: ${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && !github.event.repository.fork && (inputs.operation == 'deploy' || inputs.operation == 'rollback') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    environment: ${{ inputs.environment }}
+    permissions:
+      contents: read
+      actions: read
+      deployments: write
+      packages: read
+    env:
+      RELEASE_OPERATION: ${{ inputs.operation }}
+      TARGET_ENVIRONMENT: ${{ inputs.environment }}
+      RELEASE_MANIFEST_JSON: ${{ inputs.manifest }}
+      EXPECTED_RELEASE_SHA256: ${{ inputs.manifest_sha256 }}
+      ROLLBACK_SCHEMA_REVIEWED: ${{ inputs.rollback_schema_reviewed }}
+      CURRENT_SCHEMA_VERSION: ${{ inputs.current_schema_version }}
+      FIRST_INSTALL_EMPTY_DATABASE: ${{ inputs.first_install_empty_database }}
+      OFF_HOST_BACKUP_ATTESTED: ${{ inputs.off_host_backup_attested }}
+      IMAGE_REPOSITORY: ${{ vars.IMAGE_REPOSITORY }}
+      EXPECTED_SOURCE_VISIBILITY: ${{ vars.EXPECTED_SOURCE_VISIBILITY }}
+      APPROVED_STAGING_RELEASE_SHA256: ${{ vars.APPROVED_STAGING_RELEASE_SHA256 }}
+      MIGRATION_BACKUP_RECEIPT_SHA256: ${{ vars.MIGRATION_BACKUP_RECEIPT_SHA256 }}
+      DEPLOY_TARGET_AUTHORIZED: ${{ vars.DEPLOY_TARGET_AUTHORIZED }}
+      DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+      DEPLOY_PORT: ${{ vars.DEPLOY_PORT }}
+      DEPLOY_USER: ${{ vars.DEPLOY_USER }}
+      DEPLOY_NODE_PATH: ${{ vars.DEPLOY_NODE_PATH }}
+      DEPLOY_DIRECTORY: ${{ vars.DEPLOY_DIRECTORY }}
+      DEPLOY_PUBLIC_ORIGIN: ${{ vars.DEPLOY_PUBLIC_ORIGIN }}
+    steps:
+      - name: Check out only the selected default-branch commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.22.2
+          package-manager-cache: false
+      - name: Assert the controller toolchain
+        run: test "$(node --version)" = "v24.22.2"
+      - name: Pull exact private digests using an ephemeral read token and deploy
         env:
           GITHUB_TOKEN: ${{ github.token }}
           DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
@@ -116,7 +220,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: manual-release-${{ github.run_id }}-${{ github.run_attempt }}
+          name: manual-release-deploy-${{ github.run_id }}-${{ github.run_attempt }}
           path: .runtime/deployment/public/*.json
           include-hidden-files: true
           if-no-files-found: error

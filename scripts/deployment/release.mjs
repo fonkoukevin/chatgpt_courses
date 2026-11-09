@@ -10,13 +10,77 @@ const shaPattern = /^[a-f0-9]{64}$/u, commitPattern = /^[a-f0-9]{40}$/u;
 // The backup bundle may describe 100,000 encrypted objects plus its three
 // fixed files. Its pretty-printed receipt can exceed the 16 MiB inventory.
 export const MAX_BACKUP_RECEIPT_BYTES = 32 * 1024 * 1024;
-const bundleFiles = ['infra/compose/compose.deployment.yml', 'infra/compose/compose.staging.yml', 'infra/caddy/Caddyfile', 'infra/caddy/routes.caddy', 'infra/postgres/init-roles.sh', 'scripts/deployment/config.mjs', 'scripts/deployment/release.mjs', 'scripts/deployment/release-apply.mjs'];
+const bundleFiles = ['infra/compose/compose.deployment.yml', 'infra/compose/compose.staging.yml', 'infra/compose/compose.shared-ingress.yml', 'infra/compose/compose.staging-integrations.yml', 'infra/caddy/Caddyfile', 'infra/caddy/routes.caddy', 'infra/postgres/init-roles.sh', 'scripts/deployment/config.mjs', 'scripts/deployment/release.mjs', 'scripts/deployment/release-apply.mjs'];
 export function requireRelease(condition, code) { if (!condition) { const error = new Error(code); error.code = code; throw error; } }
 const exact = (value, keys) => value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).toSorted().join(',') === keys.toSorted().join(',');
 export function repository(value) {
   const match = typeof value === 'string' && value.match(/^([a-z0-9](?:[a-z0-9.-]*[a-z0-9])?)(?::([1-9][0-9]{0,4}))?\/[a-z0-9]+(?:[._-][a-z0-9]+)*(?:\/[a-z0-9]+(?:[._-][a-z0-9]+)*)*$/u);
   requireRelease(match && value.length <= 200 && !value.includes('..') && (match[1].includes('.') || match[1] === 'localhost' || match[2]) && (!match[2] || Number(match[2]) <= 65535), 'RELEASE_REPOSITORY_REQUIRED');
   return value;
+}
+function expectedSourceVisibility(env) {
+  const expected = env.EXPECTED_SOURCE_VISIBILITY || 'private';
+  requireRelease(['private', 'public'].includes(expected), 'RELEASE_SOURCE_VISIBILITY_INVALID');
+  return expected;
+}
+export function validateSourceRepository(value, env) {
+  const expected = expectedSourceVisibility(env);
+  requireRelease(value?.full_name === env.GITHUB_REPOSITORY && value.visibility === expected && value.private === (expected === 'private'), 'RELEASE_SOURCE_VISIBILITY_MISMATCH');
+  return expected;
+}
+export function ghcrConfiguration(env) {
+  requireRelease(/^[A-Za-z0-9][A-Za-z0-9-]{0,38}\/[A-Za-z0-9_.-]{1,100}$/u.test(env.GITHUB_REPOSITORY ?? '') && !env.GITHUB_REPOSITORY.includes('..'), 'RELEASE_GHCR_REPOSITORY_CONTEXT_REQUIRED');
+  requireRelease(repository(env.IMAGE_REPOSITORY) === `ghcr.io/${env.GITHUB_REPOSITORY.toLowerCase()}`, 'RELEASE_GHCR_SOURCE_NAMESPACE_REQUIRED');
+  requireRelease(/^[A-Za-z0-9][A-Za-z0-9-]{0,38}(?:\[bot\])?$/u.test(env.GITHUB_ACTOR ?? ''), 'RELEASE_GHCR_ACTOR_REQUIRED');
+  return { registry: 'ghcr.io', imageRepository: env.IMAGE_REPOSITORY, username: env.GITHUB_ACTOR, sourceUrl: `https://github.com/${env.GITHUB_REPOSITORY}`, sourceVisibility: expectedSourceVisibility(env) };
+}
+function jobToken(env) {
+  requireRelease(typeof env.GITHUB_TOKEN === 'string' && env.GITHUB_TOKEN.length >= 20 && env.GITHUB_TOKEN.length <= 4096 && !/\s/u.test(env.GITHUB_TOKEN), 'RELEASE_JOB_TOKEN_REQUIRED');
+  return env.GITHUB_TOKEN;
+}
+async function responseJson(response, maximum, code) {
+  const text = await response.text(); requireRelease(Buffer.byteLength(text, 'utf8') <= maximum, code);
+  try { return JSON.parse(text); } catch { requireRelease(false, code); }
+}
+async function requireRegistryDenial(response) {
+  requireRelease([401, 403].includes(response.status), 'RELEASE_GHCR_PRIVACY_UNVERIFIED');
+  const body = await responseJson(response, 16384, 'RELEASE_GHCR_PRIVACY_UNVERIFIED');
+  requireRelease(Array.isArray(body?.errors) && body.errors.length >= 1 && body.errors.length <= 10 && body.errors.every(error => ['DENIED', 'UNAUTHORIZED'].includes(error?.code)), 'RELEASE_GHCR_PRIVACY_UNVERIFIED');
+}
+export async function requireGhcrAnonymousReadDenied(image, request = fetch) {
+  requireRelease(/^ghcr\.io\/[a-z0-9][a-z0-9-]*\/[a-z0-9_.-]+\/(?:web|api)$/u.test(image), 'RELEASE_GHCR_IMAGE_REQUIRED');
+  const options = { redirect: 'error', signal: AbortSignal.timeout(15000) };
+  const name = image.slice('ghcr.io/'.length), tokenUrl = `https://ghcr.io/token?service=ghcr.io&scope=${encodeURIComponent(`repository:${name}:pull`)}`;
+  const authorization = await request(tokenUrl, options);
+  if ([401, 403].includes(authorization.status)) return requireRegistryDenial(authorization);
+  requireRelease(authorization.ok, 'RELEASE_GHCR_PRIVACY_UNVERIFIED');
+  const anonymousToken = (await responseJson(authorization, 16384, 'RELEASE_GHCR_PRIVACY_UNVERIFIED'))?.token;
+  requireRelease(typeof anonymousToken === 'string' && anonymousToken.length >= 1 && anonymousToken.length <= 8192 && !/\s/u.test(anonymousToken), 'RELEASE_GHCR_PRIVACY_UNVERIFIED');
+  const listing = await request(`https://ghcr.io/v2/${name}/tags/list?n=1`, { ...options, headers: { Authorization: `Bearer ${anonymousToken}` } });
+  requireRelease(!listing.ok, 'RELEASE_GHCR_PRIVATE_PACKAGE_REQUIRED');
+  await requireRegistryDenial(listing);
+}
+export async function requireGhcrPrivatePackage(env, kind, { allowMissing = false, request = fetch } = {}) {
+  const { imageRepository } = ghcrConfiguration(env);
+  requireRelease(['web', 'api'].includes(kind), 'RELEASE_GHCR_IMAGE_REQUIRED');
+  const [owner, repositoryName] = env.GITHUB_REPOSITORY.split('/'), packageName = `${repositoryName.toLowerCase()}/${kind}`;
+  // This documented authenticated-user endpoint supports installation tokens.
+  // An unavailable capability is a blocker, never permission to use a broad PAT.
+  const metadata = await request(`https://api.github.com/user/packages/container/${encodeURIComponent(packageName)}`, {
+    headers: { Accept: 'application/vnd.github+json', Authorization: `Bearer ${jobToken(env)}`, 'X-GitHub-Api-Version': '2026-03-10' },
+    redirect: 'error', signal: AbortSignal.timeout(15000)
+  });
+  if (metadata.status === 404 && allowMissing) {
+    await requireGhcrAnonymousReadDenied(`${imageRepository}/${kind}`, request);
+    return 'absent';
+  }
+  requireRelease(metadata.status === 200, 'RELEASE_GHCR_PACKAGE_METADATA_UNAVAILABLE');
+  const value = await responseJson(metadata, 256 * 1024, 'RELEASE_GHCR_PACKAGE_METADATA_UNAVAILABLE');
+  requireRelease(value?.name === packageName && value.package_type === 'container' && typeof value.owner?.login === 'string' && value.owner.login.toLowerCase() === owner.toLowerCase(), 'RELEASE_GHCR_PACKAGE_IDENTITY_MISMATCH');
+  requireRelease(value.visibility === 'private', 'RELEASE_GHCR_PRIVATE_PACKAGE_REQUIRED');
+  requireRelease(value.repository?.full_name === env.GITHUB_REPOSITORY && value.repository?.private === (expectedSourceVisibility(env) === 'private'), 'RELEASE_GHCR_PACKAGE_SOURCE_REQUIRED');
+  await requireGhcrAnonymousReadDenied(`${imageRepository}/${kind}`, request);
+  return 'private';
 }
 export function validateManifest(value, imageRepository) {
   const prefix = repository(imageRepository);
@@ -57,10 +121,12 @@ export function targetConfiguration(env) {
   requireRelease(['staging', 'production'].includes(env.TARGET_ENVIRONMENT) && env.DEPLOY_TARGET_AUTHORIZED === 'true', 'RELEASE_AUTHORIZED_TARGET_REQUIRED');
   requireRelease(/^[a-zA-Z0-9][a-zA-Z0-9.-]{0,252}$/u.test(env.DEPLOY_HOST ?? '') && !env.DEPLOY_HOST.endsWith('.invalid') && !env.DEPLOY_HOST.includes('..') && /^[a-z_][a-z0-9_-]{0,31}$/u.test(env.DEPLOY_USER ?? ''), 'RELEASE_SSH_TARGET_INVALID');
   requireRelease(/^[1-9][0-9]{0,4}$/u.test(env.DEPLOY_PORT ?? '') && Number(env.DEPLOY_PORT) <= 65535, 'RELEASE_SSH_PORT_INVALID');
+  const nodePath = env.DEPLOY_NODE_PATH || 'node';
+  requireRelease(nodePath === 'node' || typeof nodePath === 'string' && nodePath.length <= 512 && /^\/[A-Za-z0-9._-]+(?:\/[A-Za-z0-9._-]+)*$/u.test(nodePath) && !nodePath.includes('..') && nodePath.split('/').every(part => part !== '.'), 'RELEASE_NODE_PATH_INVALID');
   requireRelease(/^\/[A-Za-z0-9_-]+(?:\/[A-Za-z0-9_-]+)+$/u.test(env.DEPLOY_DIRECTORY ?? '') && !['/tmp/releases', '/var/tmp'].includes(env.DEPLOY_DIRECTORY), 'RELEASE_TARGET_DIRECTORY_INVALID');
   let origin; try { origin = new URL(env.DEPLOY_PUBLIC_ORIGIN); } catch { requireRelease(false, 'RELEASE_HTTPS_ORIGIN_REQUIRED'); }
   requireRelease(origin.protocol === 'https:' && origin.origin === env.DEPLOY_PUBLIC_ORIGIN && !origin.username && !origin.password && !origin.hostname.endsWith('.invalid'), 'RELEASE_HTTPS_ORIGIN_REQUIRED');
-  return { environment: env.TARGET_ENVIRONMENT, host: env.DEPLOY_HOST, user: env.DEPLOY_USER, port: env.DEPLOY_PORT, directory: env.DEPLOY_DIRECTORY };
+  return { environment: env.TARGET_ENVIRONMENT, host: env.DEPLOY_HOST, user: env.DEPLOY_USER, port: env.DEPLOY_PORT, directory: env.DEPLOY_DIRECTORY, nodePath };
 }
 function childEnvironment(extra = {}) { return { ...Object.fromEntries(Object.entries(process.env).filter(([key]) => /^(PATH|HOME|USERPROFILE|SystemRoot|TEMP|TMP|LANG|JAVA_HOME)$/u.test(key))), ...extra }; }
 function execute(file, args, options = {}) {
@@ -72,7 +138,7 @@ function execute(file, args, options = {}) {
 function publicReceipt(name, value) { const directory = join(root, '.runtime/deployment/public'); mkdirSync(directory, { recursive: true }); writeFileSync(join(directory, name), name === 'release-manifest.json' ? manifestBytes(value) : JSON.stringify(value, null, 2) + '\n', { mode: 0o600 }); }
 async function github(path) {
   requireRelease(process.env.GITHUB_API_URL === 'https://api.github.com' && process.env.GITHUB_SERVER_URL === 'https://github.com' && /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/u.test(process.env.GITHUB_REPOSITORY ?? '') && process.env.GITHUB_TOKEN, 'RELEASE_GITHUB_CONTEXT_REQUIRED');
-  const response = await fetch(`https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/${path}`, { headers: { Accept: 'application/vnd.github+json', Authorization: `Bearer ${process.env.GITHUB_TOKEN}`, 'X-GitHub-Api-Version': '2026-03-10' }, redirect: 'error', signal: AbortSignal.timeout(15000) });
+  const response = await fetch(`https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}${path ? '/' + path : ''}`, { headers: { Accept: 'application/vnd.github+json', Authorization: `Bearer ${process.env.GITHUB_TOKEN}`, 'X-GitHub-Api-Version': '2026-03-10' }, redirect: 'error', signal: AbortSignal.timeout(15000) });
   requireRelease(response.ok, 'RELEASE_GITHUB_GUARD_UNAVAILABLE');
   const bytes = await response.text(); requireRelease(Buffer.byteLength(bytes) <= 1024 * 1024, 'RELEASE_GITHUB_RESPONSE_TOO_LARGE'); return JSON.parse(bytes);
 }
@@ -85,7 +151,9 @@ async function guard() {
   const workflow = await github(`actions/runs/${env.GITHUB_RUN_ID}`);
   const branch = await github(`branches/${encodeURIComponent(event.repository.default_branch)}`);
   const protections = protectedEnvironment(environment, env.TARGET_ENVIRONMENT, workflow, branch);
-  const imageRepository = repository(env.IMAGE_REPOSITORY);
+  const currentRepository = await github('');
+  const sourceVisibility = validateSourceRepository(currentRepository, env);
+  const { imageRepository } = ghcrConfiguration(env);
   if (env.RELEASE_OPERATION === 'publish') requireRelease(env.TARGET_ENVIRONMENT === 'staging', 'RELEASE_PUBLISH_IN_STAGING_ONLY');
   let manifest;
   if (['deploy', 'rollback'].includes(env.RELEASE_OPERATION)) {
@@ -102,36 +170,69 @@ async function guard() {
     const runs = await github(`actions/workflows/ci.yml/runs?head_sha=${source}&status=success&per_page=100`);
     requireRelease(runs.workflow_runs?.some(run => run.head_sha === source && run.head_branch === event.repository.default_branch && run.head_repository?.full_name === env.GITHUB_REPOSITORY && run.event === 'push' && run.conclusion === 'success'), 'RELEASE_SUCCESSFUL_CI_REQUIRED');
   }
-  publicReceipt('guard.json', { result: 'passed', operation: env.RELEASE_OPERATION, environment: env.TARGET_ENVIRONMENT, sourceCommit: source, protectedEnvironmentChecked: true, environmentPreexisting: true, defaultBranchProtected: true, defaultBranchOnly: true, ...protections, registryOrTargetMutationExecuted: false });
+  publicReceipt('guard.json', { result: 'passed', operation: env.RELEASE_OPERATION, environment: env.TARGET_ENVIRONMENT, sourceCommit: source, sourceVisibility, protectedEnvironmentChecked: true, environmentPreexisting: true, defaultBranchProtected: true, defaultBranchOnly: true, ...protections, registryOrTargetMutationExecuted: false });
 }
 async function publish() {
   await guard(); const env = process.env;
-  requireRelease(env.RELEASE_OPERATION === 'publish' && env.REGISTRY_USERNAME && env.REGISTRY_TOKEN && /^\d+$/u.test(env.GITHUB_RUN_ID ?? '') && /^[1-9]\d*$/u.test(env.GITHUB_RUN_ATTEMPT ?? ''), 'RELEASE_PUBLICATION_CONFIGURATION_REQUIRED');
-  const imageRepository = repository(env.IMAGE_REPOSITORY), registry = imageRepository.split('/')[0];
+  requireRelease(env.RELEASE_OPERATION === 'publish' && /^\d+$/u.test(env.GITHUB_RUN_ID ?? '') && /^[1-9]\d*$/u.test(env.GITHUB_RUN_ATTEMPT ?? ''), 'RELEASE_PUBLICATION_CONFIGURATION_REQUIRED');
+  const { imageRepository, registry, username, sourceUrl } = ghcrConfiguration(env), token = jobToken(env);
+  for (const kind of ['web', 'api']) await requireGhcrPrivatePackage(env, kind, { allowMissing: true });
   const dockerConfig = mkdtempSync(join(tmpdir(), 'courses-release-registry-'));
   const dockerEnv = childEnvironment({ DOCKER_CONFIG: dockerConfig });
   try {
-    execute('docker', ['login', registry, '--username', env.REGISTRY_USERNAME, '--password-stdin'], { env: dockerEnv, input: env.REGISTRY_TOKEN });
-    execute(process.execPath, [join(root, 'scripts/deployment/images.mjs'), 'build', '--commit', env.GITHUB_SHA, '--output', join(root, '.runtime/deployment/build.json')], { env: dockerEnv });
+    execute('docker', ['login', registry, '--username', username, '--password-stdin'], { env: dockerEnv, input: token });
+    execute(process.execPath, [join(root, 'scripts/deployment/images.mjs'), 'build', '--commit', env.GITHUB_SHA, '--source-url', sourceUrl, '--output', join(root, '.runtime/deployment/build.json')], { env: dockerEnv });
     const manifest = { schemaVersion: 1, sourceCommit: env.GITHUB_SHA, web: null, api: null, schema: { min: 19, max: 19 } };
     for (const kind of ['web', 'api']) {
       const tag = `${imageRepository}/${kind}:sha-${env.GITHUB_SHA}-${env.GITHUB_RUN_ID}-${env.GITHUB_RUN_ATTEMPT}`;
+      const label = execute('docker', ['image', 'inspect', '--format', '{{index .Config.Labels "org.opencontainers.image.source"}}', `courses-${kind}:${env.GITHUB_SHA}`], { env: dockerEnv, stdio: ['pipe', 'pipe', 'pipe'], encoding: 'utf8' }).stdout.trim();
+      requireRelease(label === sourceUrl, 'RELEASE_IMAGE_SOURCE_URL_REQUIRED');
       execute('docker', ['image', 'tag', `courses-${kind}:${env.GITHUB_SHA}`, tag], { env: dockerEnv });
       execute('docker', ['image', 'push', tag], { env: dockerEnv });
       const inspect = execute('docker', ['image', 'inspect', '--format', '{{json .RepoDigests}}', tag], { env: dockerEnv, stdio: ['pipe', 'pipe', 'pipe'], encoding: 'utf8' });
       const matches = JSON.parse(inspect.stdout).filter(value => value.startsWith(`${imageRepository}/${kind}@sha256:`));
       requireRelease(matches.length === 1, 'RELEASE_PUSHED_DIGEST_NOT_CONFIRMED');
       manifest[kind] = { repository: `${imageRepository}/${kind}`, digest: matches[0].split('@')[1] };
+      await requireGhcrPrivatePackage(env, kind);
     }
     const canonical = validateManifest(manifest, imageRepository), manifestSha256 = sha256(manifestBytes(canonical));
     publicReceipt('release-manifest.json', canonical);
-    publicReceipt('publication.json', { result: 'passed', sourceCommit: env.GITHUB_SHA, manifestSha256, registryPublicationExecuted: true, deployed: false, tagsInformationalOnly: true });
+    publicReceipt('publication.json', { result: 'passed', sourceCommit: env.GITHUB_SHA, manifestSha256, registryPublicationExecuted: true, packageMetadataPrivateVerified: true, packageSourceLinkVerified: true, anonymousPackageReadDenied: true, credentialMode: 'ephemeral-job-token', deployed: false, tagsInformationalOnly: true });
     console.log(JSON.stringify({ result: 'published', manifestSha256 }));
   } finally { requireRelease(dockerConfig.startsWith(join(tmpdir(), 'courses-release-registry-')), 'RELEASE_CREDENTIAL_CLEANUP_REFUSED'); rmSync(dockerConfig, { recursive: true, force: true }); }
 }
 const quote = text => `'${text.replaceAll("'", "'\\''")}'`;
+export function ghcrRemoteScript(env, command) {
+  const { username } = ghcrConfiguration(env);
+  requireRelease(/^\d+$/u.test(env.GITHUB_RUN_ID ?? '') && typeof command === 'string' && command.length <= 32768, 'RELEASE_GHCR_REMOTE_CONTEXT_REQUIRED');
+  return `set -eu
+umask 077
+test -d /dev/shm && test ! -L /dev/shm
+test "$(stat -f -c %T /dev/shm)" = tmpfs
+registry_config=$(mktemp -d /dev/shm/courses-ghcr-${env.GITHUB_RUN_ID}-XXXXXX)
+cleanup_registry() {
+  exit_status=$?
+  trap - EXIT HUP INT TERM
+  case "$registry_config" in /dev/shm/courses-ghcr-${env.GITHUB_RUN_ID}-??????) ;; *) printf '%s\\n' RELEASE_GHCR_CLEANUP_REFUSED >&2; exit 1 ;; esac
+  if [ -L "$registry_config" ] || [ "$(realpath "$registry_config")" != "$registry_config" ]; then printf '%s\\n' RELEASE_GHCR_CLEANUP_REFUSED >&2; exit 1; fi
+  docker --config "$registry_config" logout ghcr.io >/dev/null 2>&1 || :
+  if ! rm -rf -- "$registry_config"; then printf '%s\\n' RELEASE_GHCR_CLEANUP_FAILED >&2; exit_status=1; fi
+  exit "$exit_status"
+}
+trap cleanup_registry EXIT
+trap 'exit 129' HUP
+trap 'exit 130' INT
+trap 'exit 143' TERM
+docker --config "$registry_config" login ghcr.io --username ${quote(username)} --password-stdin >/dev/null
+export DOCKER_CONFIG="$registry_config"
+umask 022
+${command}
+`;
+}
 async function deploy() {
   await guard(); const env = process.env, target = targetConfiguration(env), manifest = parseManifest(env.RELEASE_MANIFEST_JSON, env.IMAGE_REPOSITORY, env.EXPECTED_RELEASE_SHA256);
+  const token = jobToken(env);
+  for (const kind of ['web', 'api']) await requireGhcrPrivatePackage(env, kind);
   requireRelease(['deploy', 'rollback'].includes(env.RELEASE_OPERATION) && /^-----BEGIN (?:OPENSSH |RSA )?PRIVATE KEY-----\r?\n/u.test(env.DEPLOY_SSH_PRIVATE_KEY ?? '') && typeof env.DEPLOY_SSH_KNOWN_HOSTS === 'string' && env.DEPLOY_SSH_KNOWN_HOSTS.trim().length > 40, 'RELEASE_SSH_SECRETS_REQUIRED');
   const work = mkdtempSync(join(tmpdir(), 'courses-release-target-')), bundle = join(work, 'bundle'); mkdirSync(bundle);
   const key = join(work, 'key'), known = join(work, 'known_hosts'); writeFileSync(key, env.DEPLOY_SSH_PRIVATE_KEY, { mode: 0o600 }); writeFileSync(known, env.DEPLOY_SSH_KNOWN_HOSTS, { mode: 0o600 });
@@ -159,10 +260,11 @@ async function deploy() {
     ssh(`set -eu\numask 077\ntest -d ${quote(target.directory)}\ntest ! -L ${quote(target.directory)}\ntest "$(realpath ${quote(target.directory)})" = ${quote(target.directory)}\ntest ! -L ${quote(target.directory + '/incoming')}\nmkdir -p ${quote(target.directory + '/incoming')}\n`);
     execute('scp', [...options, '-P', target.port, archive, `${host}:${upload}`]);
     const releaseDirectory = `${target.directory}/releases/${releaseHash}`;
-    ssh(`set -eu\numask 022\ntest "$(sha256sum ${quote(upload)} | cut -d ' ' -f 1)" = ${quote(bundleHash)}\ntest ! -L ${quote(target.directory + '/releases')}\ntest ! -L ${quote(releaseDirectory)}\nmkdir -p ${quote(releaseDirectory)}\ntest "$(realpath ${quote(releaseDirectory)})" = ${quote(releaseDirectory)}\ntest -z "$(find ${quote(releaseDirectory)} -type l -print -quit)"\ntar -xf ${quote(upload)} -C ${quote(releaseDirectory)}\nnode ${quote(releaseDirectory + '/scripts/deployment/release-apply.mjs')} apply --root ${quote(target.directory)} --release ${quote(releaseHash)}\nrm -f ${quote(upload)}\n`);
+    const applyScript = `test "$(sha256sum ${quote(upload)} | cut -d ' ' -f 1)" = ${quote(bundleHash)}\ntest ! -L ${quote(target.directory + '/releases')}\ntest ! -L ${quote(releaseDirectory)}\nmkdir -p ${quote(releaseDirectory)}\ntest "$(realpath ${quote(releaseDirectory)})" = ${quote(releaseDirectory)}\ntest -z "$(find ${quote(releaseDirectory)} -type l -print -quit)"\ntar -xf ${quote(upload)} -C ${quote(releaseDirectory)}\n${quote(target.nodePath)} ${quote(releaseDirectory + '/scripts/deployment/release-apply.mjs')} apply --root ${quote(target.directory)} --release ${quote(releaseHash)}\nrm -f ${quote(upload)}\n`;
+    execute('ssh', [...options, '-p', target.port, host, `sh -c ${quote(ghcrRemoteScript(env, applyScript))}`], { input: token });
     execute(process.execPath, smokeArgs);
-    ssh(`set -eu\nnode ${quote(releaseDirectory + '/scripts/deployment/release-apply.mjs')} activate --root ${quote(target.directory)} --release ${quote(releaseHash)}\n`);
-    publicReceipt('deployment.json', { result: 'passed', environment: target.environment, operation: env.RELEASE_OPERATION, sourceCommit: manifest.sourceCommit, manifestSha256: releaseHash, bundleSha256: bundleHash, migrationInvoked: env.RELEASE_OPERATION === 'deploy', imageBuildInvoked: false, healthSmokePassed: true, activePointerUpdated: true, dataRestoreInvoked: false });
+    ssh(`set -eu\n${quote(target.nodePath)} ${quote(releaseDirectory + '/scripts/deployment/release-apply.mjs')} activate --root ${quote(target.directory)} --release ${quote(releaseHash)}\n`);
+    publicReceipt('deployment.json', { result: 'passed', environment: target.environment, operation: env.RELEASE_OPERATION, sourceCommit: manifest.sourceCommit, manifestSha256: releaseHash, bundleSha256: bundleHash, credentialMode: 'ephemeral-job-token-tmpfs', packageMetadataPrivateVerified: true, packageSourceLinkVerified: true, anonymousPackageReadDenied: true, migrationInvoked: env.RELEASE_OPERATION === 'deploy', imageBuildInvoked: false, healthSmokePassed: true, activePointerUpdated: true, dataRestoreInvoked: false });
     console.log(JSON.stringify({ result: 'deployed', environment: target.environment, manifestSha256: releaseHash }));
   } finally { requireRelease(work.startsWith(join(tmpdir(), 'courses-release-target-')), 'RELEASE_PRIVATE_CLEANUP_REFUSED'); rmSync(work, { recursive: true, force: true }); }
 }

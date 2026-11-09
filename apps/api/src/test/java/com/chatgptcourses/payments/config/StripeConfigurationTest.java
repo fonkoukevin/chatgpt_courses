@@ -26,6 +26,8 @@ class StripeConfigurationTest {
         assertThat(catchThrowable(()->factory.paymentGateway(enabled,runtime("production")))).isInstanceOf(IllegalStateException.class).hasMessage("Stripe payments are unavailable in production");
         assertThat(factory.paymentGateway(settings(false,"TEST","",URI.create("https://api.stripe.com")),runtime("production")).configured()).isFalse();
         assertThat(factory.paymentGateway(enabled,runtime("staging")).configured()).isTrue();
+        assertThat(catchThrowable(()->factory.paymentGateway(settings(true,"LIVE","sk_live_"+UUID.randomUUID(),URI.create("https://api.stripe.com")),runtime("staging")))).isInstanceOf(IllegalStateException.class);
+        assertThat(catchThrowable(()->factory.paymentGateway(settings(true,"TEST","sk_test_"+UUID.randomUUID(),URI.create("http://127.0.0.1:9876")),runtime("staging")))).isInstanceOf(IllegalStateException.class);
     }
     private static StripeSettings settings(boolean enabled,String mode,String key,URI base){return new StripeSettings(enabled,mode,key,"whsec_local_only","acct_local_test",base,Duration.ofSeconds(3),Duration.ofSeconds(8),Duration.ofMinutes(10));}
     private static RuntimeProperties runtime(String environment){return new RuntimeProperties(environment,URI.create("https://courses.invalid"),true);}

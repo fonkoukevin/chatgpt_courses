@@ -1,0 +1,21 @@
+import{createHash,randomUUID}from'node:crypto';import{readFileSync,writeFileSync,mkdirSync,renameSync,lstatSync,existsSync}from'node:fs';import{join,resolve}from'node:path';import{backupDatabase,sealFile,openFile,readBackupKey,hashFile}from'./backup.mjs';
+export async function captureBundle({container,project,environment,database,sourceCommit,objectDirectory,backupRoot,keyFile,outboxKeyFile}){
+ if(!['staging','production'].includes(environment)||!/^courses-[a-z0-9-]{4,80}$/.test(project)||!/^courses_[a-z0-9_]+$/.test(database)||!/^[a-f0-9]{40}$/.test(sourceCommit))throw new Error('BACKUP_BUNDLE_IDENTITY_INVALID');
+ const key=readBackupKey(keyFile),temporary=join(resolve(backupRoot),'pending-'+randomUUID());mkdirSync(temporary,{mode:0o700});
+ const files=[];async function seal(input,name){const details=await sealFile(input,join(temporary,name),key);files.push({name,...details});}
+ const db=await backupDatabase({container,project,database,output:join(temporary,'database.enc'),key});files.push({name:'database.enc',...db});
+ const inventory=JSON.parse(readFileSync(join(objectDirectory,'manifest.json'),'utf8'));
+ if(inventory.schemaVersion!==1||!Array.isArray(inventory.entries)||inventory.entries.length>100000)throw new Error('BACKUP_OBJECT_INVENTORY_INVALID');
+ await seal(join(objectDirectory,'manifest.json'),'objects-manifest.enc');
+ for(const item of inventory.entries){if(!/^\d{6}\.bin$/.test(item.filename)||lstatSync(join(objectDirectory,item.filename)).isSymbolicLink()||await hashFile(join(objectDirectory,item.filename))!==item.sha256)throw new Error('BACKUP_OBJECT_BYTES_INVALID');await seal(join(objectDirectory,item.filename),'object-'+item.filename.replace('.bin','.enc'));}
+ await seal(outboxKeyFile,'notification-key.enc');
+ const receipt={schemaVersion:1,result:'passed',authenticatedEncryption:true,project,environment,database,sourceCommit,postgresql:'18.6',createdAt:new Date().toISOString(),objects:inventory.entries.length,files,keyFingerprint:createHash('sha256').update(key).digest('hex'),outboxKeyFingerprint:createHash('sha256').update(readFileSync(outboxKeyFile)).digest('hex'),offHostCopyObserved:false};
+ const bytes=Buffer.from(JSON.stringify(receipt,null,2)+'\n'),sha=createHash('sha256').update(bytes).digest('hex');writeFileSync(join(temporary,'receipt.json'),bytes,{flag:'wx',mode:0o600});const destination=join(resolve(backupRoot),sha);if(existsSync(destination))throw new Error('BACKUP_BUNDLE_ALREADY_EXISTS');renameSync(temporary,destination);return {directory:destination,receiptSha256:sha,objects:receipt.objects,offHostCopyObserved:false};
+}
+export async function unpackBundle({directory,receiptSha256,keyFile,output}){
+ const bytes=readFileSync(join(directory,'receipt.json'));if(createHash('sha256').update(bytes).digest('hex')!==receiptSha256)throw new Error('RESTORE_RECEIPT_HASH_MISMATCH');const receipt=JSON.parse(bytes),key=readBackupKey(keyFile);
+ if(receipt.result!=='passed'||!receipt.authenticatedEncryption||createHash('sha256').update(key).digest('hex')!==receipt.keyFingerprint||!Array.isArray(receipt.files)||receipt.files.length>100003)throw new Error('RESTORE_RECEIPT_INVALID');
+ if(existsSync(output))throw new Error('RESTORE_OUTPUT_MUST_BE_NEW');mkdirSync(output,{mode:0o700});mkdirSync(join(output,'objects'),{mode:0o700});
+ for(const file of receipt.files){if(!/^(?:database|objects-manifest|notification-key|object-\d{6})\.enc$/.test(file.name)||await hashFile(join(directory,file.name))!==file.sha256)throw new Error('RESTORE_CIPHER_HASH_MISMATCH');const object=file.name==='objects-manifest.enc'||file.name.startsWith('object-'),name=file.name==='objects-manifest.enc'?'manifest.json':file.name.startsWith('object-')?file.name.slice(7).replace('.enc','.bin'):file.name.replace('.enc','');await openFile(join(directory,file.name),join(output,...(object?['objects',name]:[name])),key);}
+ return {authenticated:true,receipt};
+}

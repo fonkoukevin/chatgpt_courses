@@ -11,9 +11,9 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties("courses.runtime")
 public record RuntimeProperties(@NotBlank String environment, URI publicOrigin,
                                 boolean sessionCookieSecure) {
-    @AssertTrue(message = "APP_ENV doit valoir local, test ou production")
+    @AssertTrue(message = "APP_ENV doit valoir local, test, staging ou production")
     public boolean isKnownEnvironment() {
-        return environment != null && Set.of("local", "test", "production").contains(environment);
+        return environment != null && Set.of("local", "test", "staging", "production").contains(environment);
     }
 
     @AssertTrue(message = "APP_PUBLIC_ORIGIN doit être une origine HTTP(S), sans chemin, identifiants, requête ou fragment")
@@ -25,9 +25,9 @@ public record RuntimeProperties(@NotBlank String environment, URI publicOrigin,
                 && (publicOrigin.getPath() == null || publicOrigin.getPath().isEmpty());
     }
 
-    @AssertTrue(message = "En production : APP_PUBLIC_ORIGIN en HTTPS et SESSION_COOKIE_SECURE=true obligatoires")
+    @AssertTrue(message = "En staging/production : APP_PUBLIC_ORIGIN en HTTPS et SESSION_COOKIE_SECURE=true obligatoires")
     public boolean isProductionSecure() {
-        return !"production".equals(environment)
+        return !("production".equals(environment) || "staging".equals(environment))
                 || (publicOrigin != null && "https".equals(publicOrigin.getScheme()) && sessionCookieSecure);
     }
 }

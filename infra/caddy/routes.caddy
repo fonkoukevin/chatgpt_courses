@@ -1,0 +1,30 @@
+# URI and prefix remain unchanged. Next retains its staging/CSRF proxy policy.
+@api path /api/v1 /api/v1/*
+request_body @api {
+ max_size 65536
+}
+header {
+ -Server
+ Strict-Transport-Security "max-age=31536000"
+ X-Content-Type-Options nosniff
+ Referrer-Policy strict-origin-when-cross-origin
+}
+log {
+ output stdout
+ format filter {
+  wrap json
+  fields {
+   request delete
+   resp_headers delete
+   err_trace delete
+  }
+ }
+}
+reverse_proxy web:3000 {
+ header_up -Forwarded
+ header_up -X-Forwarded-For
+ transport http {
+  dial_timeout 3s
+  response_header_timeout 35s
+ }
+}

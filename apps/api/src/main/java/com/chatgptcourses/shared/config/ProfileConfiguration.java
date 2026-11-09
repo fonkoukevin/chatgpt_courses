@@ -9,9 +9,9 @@ import org.springframework.core.env.Environment;
 class ProfileConfiguration {
     ProfileConfiguration(Environment environment, RuntimeProperties properties) {
         var runtimeProfiles = Arrays.stream(environment.getActiveProfiles())
-                .filter(Set.of("local", "test", "production")::contains).toList();
+                .filter(Set.of("local", "test", "staging", "production")::contains).toList();
         if (runtimeProfiles.size() != 1 || !runtimeProfiles.getFirst().equals(properties.environment())) {
-            throw new IllegalStateException("Activer exactement un profil Spring local, test ou production correspondant à APP_ENV");
+            throw new IllegalStateException("Activer exactement un profil Spring local, test, staging ou production correspondant à APP_ENV");
         }
     }
 }

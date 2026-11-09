@@ -1,0 +1,124 @@
+name: Manual image release
+run-name: ${{ inputs.operation }} to ${{ inputs.environment }}
+
+# No push, PR, workflow_run or schedule can publish or deploy anything.
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: Plan, publish images, deploy a manifest, or explicitly return to compatible images
+        required: true
+        type: choice
+        default: plan
+        options: [plan, publish, deploy, rollback]
+      environment:
+        description: Pre-created protected environment; production remains commerce-disabled
+        required: true
+        type: choice
+        default: staging
+        options: [staging, production]
+      manifest:
+        description: Exact public release manifest JSON from an approved publication
+        required: false
+        type: string
+      manifest_sha256:
+        description: SHA256 of canonical manifest bytes including its final LF
+        required: false
+        type: string
+      rollback_schema_reviewed:
+        description: Only for rollback; actual target schema and old-image compatibility were reviewed
+        required: true
+        type: boolean
+        default: false
+      current_schema_version:
+        description: Only for rollback; successful target Flyway version actually inspected by operator
+        required: false
+        type: string
+      first_install_empty_database:
+        description: Only for a first install; target must actually have no Flyway history or user table
+        required: true
+        type: boolean
+        default: false
+      off_host_backup_attested:
+        description: For an existing database; operator separately verified the protected off-host backup copy
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: manual-release-${{ github.repository }}-${{ inputs.environment }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: ${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && !github.event.repository.fork }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    environment: ${{ inputs.environment }}
+    permissions:
+      contents: read
+      actions: read
+      deployments: write
+    env:
+      RELEASE_OPERATION: ${{ inputs.operation }}
+      TARGET_ENVIRONMENT: ${{ inputs.environment }}
+      RELEASE_MANIFEST_JSON: ${{ inputs.manifest }}
+      EXPECTED_RELEASE_SHA256: ${{ inputs.manifest_sha256 }}
+      ROLLBACK_SCHEMA_REVIEWED: ${{ inputs.rollback_schema_reviewed }}
+      CURRENT_SCHEMA_VERSION: ${{ inputs.current_schema_version }}
+      FIRST_INSTALL_EMPTY_DATABASE: ${{ inputs.first_install_empty_database }}
+      OFF_HOST_BACKUP_ATTESTED: ${{ inputs.off_host_backup_attested }}
+      IMAGE_REPOSITORY: ${{ vars.IMAGE_REPOSITORY }}
+      APPROVED_STAGING_RELEASE_SHA256: ${{ vars.APPROVED_STAGING_RELEASE_SHA256 }}
+      MIGRATION_BACKUP_RECEIPT_SHA256: ${{ vars.MIGRATION_BACKUP_RECEIPT_SHA256 }}
+      DEPLOY_TARGET_AUTHORIZED: ${{ vars.DEPLOY_TARGET_AUTHORIZED }}
+      DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+      DEPLOY_PORT: ${{ vars.DEPLOY_PORT }}
+      DEPLOY_USER: ${{ vars.DEPLOY_USER }}
+      DEPLOY_DIRECTORY: ${{ vars.DEPLOY_DIRECTORY }}
+      DEPLOY_PUBLIC_ORIGIN: ${{ vars.DEPLOY_PUBLIC_ORIGIN }}
+    steps:
+      - name: Check out only the selected default-branch commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.22.2
+          package-manager-cache: false
+      - name: Assert the controller toolchain
+        run: test "$(node --version)" = "v24.22.2"
+      - name: Validate protected environment, source, CI and digest manifest
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/deployment/release.mjs guard
+      - name: Build and explicitly publish the release once
+        if: ${{ inputs.operation == 'publish' }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+          REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN }}
+        run: node scripts/deployment/release.mjs publish
+      - name: Deploy the already published digest pair without rebuilding
+        if: ${{ inputs.operation == 'deploy' || inputs.operation == 'rollback' }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+          DEPLOY_SSH_KNOWN_HOSTS: ${{ secrets.DEPLOY_SSH_KNOWN_HOSTS }}
+          STAGING_BASIC_USERNAME: ${{ vars.STAGING_BASIC_USERNAME }}
+          STAGING_BASIC_PASSWORD: ${{ secrets.STAGING_BASIC_PASSWORD }}
+        run: node scripts/deployment/release.mjs deploy
+      - name: Keep only non-sensitive manifest and result metadata
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: manual-release-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/deployment/public/*.json
+          include-hidden-files: true
+          if-no-files-found: error
+          overwrite: false
+          retention-days: 3

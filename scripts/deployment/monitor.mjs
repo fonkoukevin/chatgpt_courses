@@ -1,0 +1,9 @@
+import{statfsSync,readFileSync}from'node:fs';import{resolve}from'node:path';import{fileURLToPath}from'node:url';import{createHTTPSClient}from'./http.mjs';
+export async function observe({origin,caFile,basicUsername,basicPasswordFile,localLoopback=false,backupReceipt,diskPath='.',maxBackupAgeSeconds=86400,minDiskFreeBytes=5*1024**3}){
+ const alerts=[],client=createHTTPSClient({origin,caFile,basicUsername,basicPasswordFile,localLoopback});
+ try{const r=await client.request('/api/v1/system/health',{timeoutMs:10000});if(r.status!==200||r.json()?.status!=='UP')alerts.push('HTTP_UNAVAILABLE');}catch{alerts.push('HTTP_UNAVAILABLE');}finally{client.close();}
+ let backupAgeSeconds=null;try{const receipt=JSON.parse(readFileSync(backupReceipt,'utf8'));backupAgeSeconds=Math.max(0,Math.floor((Date.now()-Date.parse(receipt.createdAt))/1000));if(!Number.isFinite(backupAgeSeconds)||backupAgeSeconds>maxBackupAgeSeconds||receipt.result!=='passed')alerts.push('BACKUP_STALE_OR_INVALID');}catch{alerts.push('BACKUP_RECEIPT_MISSING');}
+ const disk=statfsSync(diskPath,{bigint:true}),freeBytes=Number(disk.bavail*disk.bsize);if(freeBytes<minDiskFreeBytes)alerts.push('DISK_SPACE_LOW');
+ return {observedAt:new Date().toISOString(),httpAvailable:!alerts.includes('HTTP_UNAVAILABLE'),backupAgeSeconds,diskFreeBytes:freeBytes,alerts,externalNotificationSent:false,externalHostLossDetectionObserved:false};
+}
+if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){try{const options={};for(let i=2;i<process.argv.length;i+=2){const key=process.argv[i].slice(2).replace(/-([a-z])/g,(_,s)=>s.toUpperCase());options[key]=process.argv[i+1];}const result=await observe(options);console.log(JSON.stringify(result));if(result.alerts.length)process.exitCode=2;}catch{console.error('MONITOR_OBSERVATION_FAILED');process.exitCode=1;}}

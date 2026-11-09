@@ -1,0 +1,10 @@
+services:
+  web:
+    environment:
+      APP_ENV: staging
+      STAGING_BASIC_USERNAME: ${STAGING_BASIC_USERNAME:?Choose the private staging gateway username}
+      STAGING_BASIC_PASSWORD_FILE: /run/secrets/STAGING_BASIC_PASSWORD
+      APP_PUBLISHED_LOCALES: ""
+    secrets:
+      - source: staging_basic_password
+        target: STAGING_BASIC_PASSWORD

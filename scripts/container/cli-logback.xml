@@ -1,0 +1,4 @@
+<configuration>
+  <!-- Standalone SDK/Flyway tasks print only their explicit sanitized receipt. -->
+  <root level="OFF"/>
+</configuration>

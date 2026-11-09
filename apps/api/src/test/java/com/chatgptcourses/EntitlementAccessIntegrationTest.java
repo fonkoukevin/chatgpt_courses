@@ -74,6 +74,9 @@ class EntitlementAccessIntegrationTest {
         grant(owner.id(),fixture.course(),"[\"fr\",\"en\"]","PINNED","clock_timestamp()-interval '1 minute'",null,null);
         assertThat(production.covers(owner.id(),fixture.course().resourceId(),fixture.course().versionId(),"fr")).isFalse();
         assertThat(production.coveredVersions(owner.id(),"fr").contains(fixture.course().versionId())).isFalse();
+        var staging=new EntitlementAccess(jdbc,new RuntimeProperties("staging",URI.create("https://staging.courses.invalid"),true));
+        assertThat(staging.covers(owner.id(),fixture.activity().resourceId(),fixture.activity().versionId(),"fr")).isFalse();
+        assertThat(staging.coveredVersions(owner.id(),"fr")).isEmpty();
         assertThat(jdbc.queryForObject("SELECT count(*) FROM access_grants WHERE owner_id=?",Integer.class,owner.id())).isEqualTo(5);
     }
 

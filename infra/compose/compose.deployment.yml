@@ -1,0 +1,176 @@
+name: ${COMPOSE_PROJECT_NAME:?Use a distinct deployment project}
+
+x-logging: &logging
+  driver: local
+  options: { max-size: "10m", max-file: "3" }
+x-api-env: &api-env
+  APP_ENV: ${APP_ENV:?Choose staging or production}
+  SPRING_PROFILES_ACTIVE: ${APP_ENV}
+  APP_PUBLIC_ORIGIN: ${APP_PUBLIC_ORIGIN:?Explicit HTTPS origin required}
+  SESSION_COOKIE_SECURE: "true"
+  API_PORT: "8080"
+  POSTGRES_HOST: postgres
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: ${POSTGRES_DB:?Database name required}
+  POSTGRES_USER: courses_app
+  POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
+  NOTIFICATION_OUTBOX_KEY_FILE: /run/secrets/NOTIFICATION_OUTBOX_KEY
+  SPRING_FLYWAY_ENABLED: "false"
+  LOGGING_STRUCTURED_FORMAT_CONSOLE: ecs
+  COMMERCE_ENABLED: "false"
+  STRIPE_ENABLED: "false"
+  PAYMENT_INBOX_ENABLED: "false"
+  REFUND_WORKER_ENABLED: "false"
+  MAIL_MODE: disabled
+  NOTIFICATION_OUTBOX_ENABLED: "false"
+  STORAGE_ENABLED: "false"
+  VIDEO_ENABLED: "false"
+  ASSET_STAGING_CLEANUP_WORKER_ENABLED: "false"
+
+services:
+  postgres:
+    image: postgres:18.6@sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: courses_bootstrap
+      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_ADMIN_PASSWORD
+    secrets:
+      - source: postgres_admin_password
+        target: POSTGRES_ADMIN_PASSWORD
+      - source: postgres_owner_password
+        target: POSTGRES_MIGRATION_PASSWORD
+      - source: postgres_app_password
+        target: POSTGRES_APP_PASSWORD
+    volumes:
+      - database:/var/lib/postgresql
+      - ../postgres/init-roles.sh:/docker-entrypoint-initdb.d/10-roles.sh:ro
+    networks: [database]
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -h 127.0.0.1 -U courses_bootstrap -d "$$POSTGRES_DB"']
+      interval: 5s
+      timeout: 3s
+      start_period: 10s
+      retries: 24
+    restart: unless-stopped
+    mem_limit: 512m
+    cpus: 1
+    pids_limit: 128
+    logging: *logging
+    security_opt: [no-new-privileges:true]
+  migrate:
+    image: ${API_IMAGE:?Use the tested API image digest}
+    command: [migrate]
+    environment:
+      <<: *api-env
+      POSTGRES_USER: courses_owner
+      POSTGRES_APP_ROLE: courses_app
+    secrets:
+      - source: postgres_owner_password
+        target: POSTGRES_PASSWORD
+    networks: [database]
+    depends_on:
+      postgres: { condition: service_healthy }
+    restart: "no"
+    read_only: true
+    tmpfs: ["/tmp:size=128m,uid=10001,gid=10001,mode=1770"]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 512m
+    cpus: 1
+    pids_limit: 128
+    logging: *logging
+  api:
+    image: ${API_IMAGE}
+    environment: *api-env
+    secrets:
+      - source: postgres_app_password
+        target: POSTGRES_PASSWORD
+      - source: outbox_key
+        target: NOTIFICATION_OUTBOX_KEY
+    networks: [application, database, api_egress]
+    depends_on:
+      postgres: { condition: service_healthy }
+      migrate: { condition: service_completed_successfully }
+    restart: unless-stopped
+    read_only: true
+    tmpfs: ["/tmp:size=128m,uid=10001,gid=10001,mode=1770"]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 1024m
+    cpus: 1.5
+    pids_limit: 256
+    logging: *logging
+  web:
+    image: ${WEB_IMAGE:?Use the tested web image digest}
+    environment:
+      APP_ENV: ${APP_ENV}
+      APP_PUBLIC_ORIGIN: ${APP_PUBLIC_ORIGIN}
+      API_INTERNAL_URL: http://api:8080
+      APP_DEFAULT_LOCALE: ${APP_DEFAULT_LOCALE:-fr}
+      APP_PUBLISHED_LOCALES: ${APP_PUBLISHED_LOCALES:-}
+      API_TIMEOUT_MS: "30000"
+      HOSTNAME: 0.0.0.0
+      PORT: "3000"
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: "1"
+    networks: [web, application]
+    depends_on:
+      api: { condition: service_healthy }
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,uid=10001,gid=10001,mode=1770
+      - /app/apps/web/.next/cache:size=128m,uid=10001,gid=10001,mode=1770
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 512m
+    cpus: 1
+    pids_limit: 128
+    logging: *logging
+  caddy:
+    image: caddy:2.11.9-alpine@sha256:0bbb055bda6793c999bde78b1b5ce3e89f829fb031af2cf50056ea1246559fee
+    environment:
+      PUBLIC_DOMAIN: ${PUBLIC_DOMAIN:?Explicit domain required}
+    ports:
+      - ${HTTP_BIND:-0.0.0.0}:${HTTP_PORT:-80}:80
+      - ${HTTP_BIND:-0.0.0.0}:${HTTPS_PORT:-443}:443
+    volumes:
+      - ../caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ../caddy/routes.caddy:/etc/caddy/routes.caddy:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks: [edge, web]
+    depends_on:
+      web: { condition: service_healthy }
+    restart: unless-stopped
+    read_only: true
+    tmpfs: ["/tmp:size=32m"]
+    cap_drop: [ALL]
+    cap_add: [NET_BIND_SERVICE]
+    healthcheck:
+      test: [CMD, wget, -q, -O, /dev/null, http://127.0.0.1:2015/health]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+    mem_limit: 192m
+    cpus: 0.5
+    pids_limit: 128
+    logging: *logging
+    security_opt: [no-new-privileges:true]
+
+networks:
+  edge: {}
+  web: { internal: true }
+  application: { internal: true }
+  database: { internal: true }
+  api_egress: {}
+volumes:
+  database: {}
+  caddy_data: {}
+  caddy_config: {}
+secrets:
+  postgres_admin_password: { file: "${SECRETS_DIR:?}/postgres-admin-password", name: POSTGRES_ADMIN_PASSWORD }
+  postgres_owner_password: { file: "${SECRETS_DIR}/postgres-owner-password", name: POSTGRES_MIGRATION_PASSWORD }
+  postgres_app_password: { file: "${SECRETS_DIR}/postgres-app-password", name: POSTGRES_APP_PASSWORD }
+  outbox_key: { file: "${SECRETS_DIR}/outbox-key" }
+  staging_basic_password: { file: "${SECRETS_DIR}/staging-basic-password" }

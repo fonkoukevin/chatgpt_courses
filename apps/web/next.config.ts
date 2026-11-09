@@ -3,6 +3,10 @@ import type { NextConfig } from "next";
 
 const config: NextConfig = {
   poweredByHeader: false,
+  // Container builds run on Linux; native Windows development keeps its
+  // existing output and does not need relocatable standalone symlinks.
+  output: process.env.COURSES_BUILD_STANDALONE === "1" ? "standalone" : undefined,
+  outputFileTracingRoot: resolve(__dirname, "../.."),
   turbopack: {
     root: resolve(__dirname, "../.."),
   },

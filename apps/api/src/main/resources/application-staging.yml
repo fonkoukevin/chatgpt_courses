@@ -1,0 +1,11 @@
+# Private HTTPS staging uses its own database/secrets and only Stripe TEST.
+spring:
+  config:
+    activate:
+      on-profile: staging
+server:
+  address: 0.0.0.0
+  servlet:
+    session:
+      cookie:
+        secure: true

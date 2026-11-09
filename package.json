@@ -11,6 +11,10 @@
   },
   "packageManager": "npm@11.19.1",
   "scripts": {
+    "images:build": "node scripts/deployment/images.mjs build",
+    "deployment:validate": "node scripts/deployment/config.mjs validate",
+    "deployment:smoke": "node scripts/deployment/smoke.mjs",
+    "verify:infrastructure": "node scripts/verify-deployment.mjs",
     "setup:local": "node scripts/setup-local.mjs",
     "services:up": "node scripts/local.mjs up",
     "services:stop": "node scripts/local.mjs stop",

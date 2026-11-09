@@ -1,0 +1,32 @@
+{
+ admin off
+ persist_config off
+ skip_install_trust
+ log default {
+  output stdout
+  format filter {
+   wrap json
+   fields {
+    request delete
+    resp_headers delete
+    err_trace delete
+   }
+  }
+ }
+ servers {
+  max_header_size 32KB
+  timeouts {
+   read_header 10s
+   read_body 30s
+   write 60s
+   idle 2m
+  }
+ }
+}
+{$PUBLIC_DOMAIN} {
+ import /etc/caddy/routes.caddy
+}
+http://127.0.0.1:2015 {
+ bind 127.0.0.1
+ respond /health "UP" 200
+}

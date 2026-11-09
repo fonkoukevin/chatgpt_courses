@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-11-09T20:12:25.620Z",
+  "image": "ghcr.io/fonkoukevin/chatgpt_courses/web@sha256:1ba45a1d85e42c899cae9d8f1926d6e0e77a46dc93c48e6c4c0125c327d938ad",
+  "sourceCommit": "f5cef430da472a0f2eecb9f016deb9a8815ee675",
+  "packageVersionId": 1531288133,
+  "visibility": "public",
+  "anonymousRegistryReadConfirmed": true,
+  "configuration": {
+    "hashVerified": true,
+    "sourceCommitMatches": true,
+    "sourceRepositoryMatches": true,
+    "user": "10001:10001",
+    "knownPrivateValuesCompared": 14,
+    "knownValueMatches": 0
+  },
+  "layerAudit": {
+    "layers": 13,
+    "allLayerDigestsVerified": true,
+    "knownPrivateValuesCompared": 16,
+    "knownPrivateValueMatches": 0,
+    "providerPatternCandidates": 4,
+    "completePemCandidates": 6,
+    "publicGnutlsSelfTestVectorsMatched": 6,
+    "sourceCommit": "ca61668d7764fc29fb4cc2aa396cb035e176636d",
+    "sourceUrl": "https://gitlab.com/gnutls/gnutls/-/blob/ca61668d7764fc29fb4cc2aa396cb035e176636d/lib/crypto-selftests-pk.c",
+    "headerOnlyMarkers": "npm documentation"
+  },
+  "imageExecuted": false,
+  "rawKeyValuesPrinted": false,
+  "deletionAuthorized": true,
+  "deletionExecuted": false,
+  "replacementImageRepository": "ghcr.io/fonkoukevin/chatgpt_courses-private",
+  "limits": [
+    "Known literal values and selected patterns only; unknown or encoded credentials are not excluded.",
+    "Six exact PEM candidates match published upstream self-test vectors; the exact Debian binary revision was not independently established.",
+    "Public package visibility cause remains unknown. Deletion cannot erase previously downloaded copies or third-party caches."
+  ]
+}

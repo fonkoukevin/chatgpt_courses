@@ -1,10 +1,10 @@
 # État réel du projet
 
-Dernière mise à jour : **9 novembre 2026**. **P20 validé localement**, P21 en cours sur la cible OVH fournie. CI de main verte ; publication GHCR tentée puis échouée sans manifeste validé, état d’un push partiel encore indéterminé. Aucun déploiement Courses distant ou mode LIVE.
+Dernière mise à jour : **9 novembre 2026**. **P20 validé localement**, P21 en cours sur la cible OVH fournie. CI de main verte ; deux publications échouées, premier paquet web d’essai public identifié. Suppression ciblée autorisée et nouveaux noms privés en préparation. Aucun déploiement Courses distant ou mode LIVE.
 
 ## Situation courante
 
-- **P21 en cours** : PR1 puis `main` **f5cef43** entièrement verts : API266/40suites, scripts Linux65, client124, navigateur4/4 sans relance, production12/12, cleanup confirmé ; huit captures examinées. Publication42683545119 échouée avec `RELEASE_NOT_VALIDATED`, garde passée, aucun manifeste ; diagnostic filtré en préparation avant toute relance. SSH/DNS/protections/secrets réels, 12 anciens conteneurs préservés ; aucun proxy activé ou déploiement Courses. [Faits et reprise](evidence/P21.md).
+- **P21 en cours** : PR2 fusionnée normalement et `main` **c08be05** vert : API266/40suites, scripts Linux70, client124, navigateur4/4 sans relance, production12/12, cleanup confirmé. Première publication : un paquet web public identifié ; deuxième refus avant push car privé obligatoire. Audit des13couches : aucune valeur privée connue trouvée ; six candidats classés vecteurs publics GnuTLS. L’utilisateur autorise uniquement la suppression de l’essai et de nouveaux noms privés ; nettoyage et publication restent à exécuter. SSH/DNS/protections/secrets réels, 12 anciens conteneurs préservés ; aucun proxy activé ou déploiement Courses. [Faits et reprise](evidence/P21.md).
 - **P20** : deux images multi-étapes réellement construites, UID10001, bases par digest ; Compose/Caddy et secrets séparés. API ciblée14/14, scripts22/22, lint/actionlint passent. Intégration isolée15 contrôles : HTTPS, smoke staging12/production10,19 migrations, mêmes images promues sans rebuild, sauvegarde chiffrée et restauration PG/S3, moniteur CLI. [Résultats et limites](evidence/P20.md), [intégration](evidence/P20-integration-checks.json), [runbooks](runbooks/deploy.md). Aucun registre/SSH/GitHub/off-host/alerte externe observé.
 - **P18** : douze leçons FR/EN,18 fichiers Markdown, import CMS durable, corrigés protégés et vrais exports locaux. [Sources](../content/course-client-proposal/README.md), [résultats et limites](evidence/P18.md).
 - **P19** : global API256/256,35 suites ; client124, contrat/sources223/contrastes/lint/types et15 garde-fous CI passent. Configuration production12/12 sur base vide et vraie chaîne HTTP arrêt/reprise. Chromium consolidé4/4, paiement8/8, remboursement6/6 ; huit captures examinées. Stripe TEST réel1/1 : deux Checkout, deux remboursements, quatre rejeux sans double effet, origine individuelle conservée. [Matrice, résultats et limites](evidence/P19.md), [candidate](evidence/P19-release-candidate.json).
@@ -41,7 +41,7 @@ Dernière mise à jour : **9 novembre 2026**. **P20 validé localement**, P21 en
 | P18 | Validé localement | Rédaction et intégration isolée4/4,18 fichiers/4 exports/18 captures ; brouillons partagés importés, acteur désactivé, vente bloquée ; [preuve](evidence/P18.md) |
 | P19 | Validé localement | API256/client124, navigateur4+8+6, fournisseur TEST1/1, CI locale et production12/12 ; commerce bloqué, aucun GitHub/déploiement ; [preuve](evidence/P19.md) |
 | P20 | Validé localement | Images réelles, API14/scripts22, TLS et promotion12+10, migration/restauration/moniteur15 contrôles ; cible/registre/off-host manquants ; [preuve](evidence/P20.md) |
-| P21 | En cours | PR1 et CI main vertes ; publication échouée, diagnostic puis livraison/recette distante à finaliser ; [suivi](evidence/P21.md) |
+| P21 | En cours | CI main verte ; nettoyage autorisé du paquet d’essai public, publication privée puis livraison/recette à finaliser ; [suivi](evidence/P21.md) |
 | P22 | À faire | Déploiement de production |
 | P23 | À faire | Exploitation après lancement |
 
@@ -49,6 +49,6 @@ Dernière mise à jour : **9 novembre 2026**. **P20 validé localement**, P21 en
 
 ## Dernier lot
 
-Reprise **`prompts/P21_DEPLOIEMENT_RECETTE.txt`** : finaliser P21 avant P22. CI main `f5cef43` verte ; comprendre l’échec de publication42683545119 avant de relancer. Candidats Caddy/Compose et helpers privés prêts, non activés. Restent Stripe TEST distant, parcours HTTPS, restauration complète et alertes. Aucun achat ou déploiement Courses distant, vente toujours bloquée par les incidents et décisions documentés.
+Reprise **`prompts/P21_DEPLOIEMENT_RECETTE.txt`** : finaliser P21 avant P22. CI main `c08be05` verte ; exécuter le nettoyage strict autorisé de la version1531288133 et publier de nouveaux paquets privés. La cause technique du premier échec reste inconnue ; le deuxième refus de visibilité est établi. Candidats Caddy/Compose et helpers privés prêts, non activés. Restent Stripe TEST distant, parcours HTTPS, restauration complète et alertes. Aucun achat ou déploiement Courses distant, vente toujours bloquée par les incidents et décisions documentés.
 
 Garder ce suivi court ; détails dans docs/evidence/Pxx.md. Repartir des fichiers et preuves réels lors d’une reprise.

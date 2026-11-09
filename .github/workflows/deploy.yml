@@ -44,6 +44,11 @@ on:
         required: true
         type: boolean
         default: false
+      approved_test_package_cleanup:
+        description: Staging publish only; delete the explicitly approved public web test version 1531288133
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -122,6 +127,7 @@ jobs:
       packages: write
     env:
       RELEASE_OPERATION: ${{ inputs.operation }}
+      APPROVED_TEST_PACKAGE_CLEANUP: ${{ inputs.approved_test_package_cleanup }}
       TARGET_ENVIRONMENT: ${{ inputs.environment }}
       STAGING_PAYMENT_TEST: ${{ vars.STAGING_PAYMENT_TEST }}
       RELEASE_MANIFEST_JSON: ${{ inputs.manifest }}

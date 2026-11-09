@@ -1,17 +1,18 @@
-import { createHash } from 'node:crypto';
-import { closeSync, mkdirSync, mkdtempSync, openSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { createHash, randomUUID } from 'node:crypto';
+import { closeSync, fsyncSync, mkdirSync, mkdtempSync, openSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { safeReleaseFailure, inspectRegistryReadOnly } from './release-diagnostics.mjs';
+import { cleanupApprovedTestVersion } from './approved-test-cleanup.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const shaPattern = /^[a-f0-9]{64}$/u, commitPattern = /^[a-f0-9]{40}$/u;
 // The backup bundle may describe 100,000 encrypted objects plus its three
 // fixed files. Its pretty-printed receipt can exceed the 16 MiB inventory.
 export const MAX_BACKUP_RECEIPT_BYTES = 32 * 1024 * 1024;
-const bundleFiles = ['infra/compose/compose.deployment.yml', 'infra/compose/compose.staging.yml', 'infra/compose/compose.shared-ingress.yml', 'infra/compose/compose.staging-integrations.yml', 'infra/compose/compose.staging-payment-test.yml', 'infra/caddy/Caddyfile', 'infra/caddy/routes.caddy', 'infra/postgres/init-roles.sh', 'scripts/deployment/config.mjs', 'scripts/deployment/release.mjs', 'scripts/deployment/release-apply.mjs', 'scripts/deployment/release-diagnostics.mjs'];
+const bundleFiles = ['infra/compose/compose.deployment.yml', 'infra/compose/compose.staging.yml', 'infra/compose/compose.shared-ingress.yml', 'infra/compose/compose.staging-integrations.yml', 'infra/compose/compose.staging-payment-test.yml', 'infra/caddy/Caddyfile', 'infra/caddy/routes.caddy', 'infra/postgres/init-roles.sh', 'scripts/deployment/config.mjs', 'scripts/deployment/release.mjs', 'scripts/deployment/release-apply.mjs', 'scripts/deployment/release-diagnostics.mjs', 'scripts/deployment/approved-test-cleanup.mjs'];
 export function requireRelease(condition, code) { if (!condition) { const error = new Error(code); error.code = code; throw error; } }
 const exact = (value, keys) => value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).toSorted().join(',') === keys.toSorted().join(',');
 export function repository(value) {
@@ -31,7 +32,7 @@ export function validateSourceRepository(value, env) {
 }
 export function ghcrConfiguration(env) {
   requireRelease(/^[A-Za-z0-9][A-Za-z0-9-]{0,38}\/[A-Za-z0-9_.-]{1,100}$/u.test(env.GITHUB_REPOSITORY ?? '') && !env.GITHUB_REPOSITORY.includes('..'), 'RELEASE_GHCR_REPOSITORY_CONTEXT_REQUIRED');
-  requireRelease(repository(env.IMAGE_REPOSITORY) === `ghcr.io/${env.GITHUB_REPOSITORY.toLowerCase()}`, 'RELEASE_GHCR_SOURCE_NAMESPACE_REQUIRED');
+  requireRelease(repository(env.IMAGE_REPOSITORY) === `ghcr.io/${env.GITHUB_REPOSITORY.toLowerCase()}-private`, 'RELEASE_GHCR_SOURCE_NAMESPACE_REQUIRED');
   requireRelease(/^[A-Za-z0-9][A-Za-z0-9-]{0,38}(?:\[bot\])?$/u.test(env.GITHUB_ACTOR ?? ''), 'RELEASE_GHCR_ACTOR_REQUIRED');
   return { registry: 'ghcr.io', imageRepository: env.IMAGE_REPOSITORY, username: env.GITHUB_ACTOR, sourceUrl: `https://github.com/${env.GITHUB_REPOSITORY}`, sourceVisibility: expectedSourceVisibility(env) };
 }
@@ -64,7 +65,7 @@ export async function requireGhcrAnonymousReadDenied(image, request = fetch) {
 export async function requireGhcrPrivatePackage(env, kind, { allowMissing = false, request = fetch } = {}) {
   const { imageRepository } = ghcrConfiguration(env);
   requireRelease(['web', 'api'].includes(kind), 'RELEASE_GHCR_IMAGE_REQUIRED');
-  const [owner, repositoryName] = env.GITHUB_REPOSITORY.split('/'), packageName = `${repositoryName.toLowerCase()}/${kind}`;
+  const [, owner, ...packagePath] = imageRepository.split('/'), packageName = `${packagePath.join('/')}/${kind}`;
   // This documented authenticated-user endpoint supports installation tokens.
   // An unavailable capability is a blocker, never permission to use a broad PAT.
   const metadata = await request(`https://api.github.com/user/packages/container/${encodeURIComponent(packageName)}`, {
@@ -142,7 +143,15 @@ function execute(file, args, options = {}) {
   try { const result = spawnSync(file, args, { cwd: root, env: childEnvironment(), timeout: 1200000, stdio: ['pipe', handle, handle], windowsHide: true, ...options }); requireRelease(!result.error && result.status === 0, 'RELEASE_COMMAND_FAILED'); return result; }
   finally { closeSync(handle); }
 }
-function publicReceipt(name, value) { const directory = join(root, '.runtime/deployment/public'); mkdirSync(directory, { recursive: true }); writeFileSync(join(directory, name), name === 'release-manifest.json' ? manifestBytes(value) : JSON.stringify(value, null, 2) + '\n', { mode: 0o600 }); }
+function publicReceipt(name, value) {
+  const directory = join(root, '.runtime/deployment/public'); mkdirSync(directory, { recursive: true });
+  // Preserve the preceding durable intent if the process dies during a later
+  // update. Interrupted temporary files are never selected by *.json upload.
+  const temporary = join(directory, `.${name}.${randomUUID()}.tmp`);
+  writeFileSync(temporary, name === 'release-manifest.json' ? manifestBytes(value) : JSON.stringify(value, null, 2) + '\n', { flag: 'wx', mode: 0o600, flush: true });
+  renameSync(temporary, join(directory, name));
+  if (process.platform !== 'win32') { const handle = openSync(directory, 'r'); try { fsyncSync(handle); } finally { closeSync(handle); } }
+}
 async function github(path) {
   requireRelease(process.env.GITHUB_API_URL === 'https://api.github.com' && process.env.GITHUB_SERVER_URL === 'https://github.com' && /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/u.test(process.env.GITHUB_REPOSITORY ?? '') && process.env.GITHUB_TOKEN, 'RELEASE_GITHUB_CONTEXT_REQUIRED');
   const response = await fetch(`https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}${path ? '/' + path : ''}`, { headers: { Accept: 'application/vnd.github+json', Authorization: `Bearer ${process.env.GITHUB_TOKEN}`, 'X-GitHub-Api-Version': '2026-03-10' }, redirect: 'error', signal: AbortSignal.timeout(15000) });
@@ -190,7 +199,14 @@ async function publish() {
     stage('GUARD'); await guard(); progress.guardPassed = true; stage('CONFIGURATION');
     requireRelease(env.RELEASE_OPERATION === 'publish' && /^\d+$/u.test(env.GITHUB_RUN_ID ?? '') && /^[1-9]\d*$/u.test(env.GITHUB_RUN_ATTEMPT ?? ''), 'RELEASE_PUBLICATION_CONFIGURATION_REQUIRED');
     const { imageRepository, registry, username, sourceUrl } = ghcrConfiguration(env), token = jobToken(env);
-    registryContext = { owner: env.GITHUB_REPOSITORY.split('/')[0], repositoryName: env.GITHUB_REPOSITORY.split('/')[1], token };
+    registryContext = { owner: env.GITHUB_REPOSITORY.split('/')[0], repositoryName: env.GITHUB_REPOSITORY.split('/')[1], imageRepository, token };
+    requireRelease(['', 'false', 'true'].includes(env.APPROVED_TEST_PACKAGE_CLEANUP ?? ''), 'RELEASE_APPROVED_TEST_CLEANUP_FLAG_INVALID');
+    if (env.APPROVED_TEST_PACKAGE_CLEANUP === 'true') {
+      stage('APPROVED_TEST_CLEANUP');
+      await cleanupApprovedTestVersion({ approvedTestCleanup: true, environment: env.TARGET_ENVIRONMENT,
+        guardPassed: progress.guardPassed, sourceRepository: env.GITHUB_REPOSITORY, imageRepository, token },
+      { record: async value => publicReceipt('approved-test-cleanup.json', value) });
+    }
     for (const kind of ['web', 'api']) { stage(`CHECK_EXISTING_${kind.toUpperCase()}`); await requireGhcrPrivatePackage(env, kind, { allowMissing: true }); }
     const dockerConfig = mkdtempSync(join(tmpdir(), 'courses-release-registry-'));
     progress.temporaryCredentialsCreated = true;

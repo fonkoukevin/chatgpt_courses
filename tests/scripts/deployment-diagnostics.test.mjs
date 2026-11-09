@@ -7,9 +7,9 @@ import { safeReleaseFailure, inspectRegistryReadOnly, publicationStages } from '
 
 const releaseUrl = new URL('../../scripts/deployment/release.mjs', import.meta.url);
 const lines = readFileSync(releaseUrl, 'utf8').split(/\r?\n/u);
-const input = () => ({ owner: 'synthetic-owner', repositoryName: 'synthetic_courses', token: 'SYNTHETIC_EPHEMERAL_JOB_TOKEN_42' });
+const input = () => ({ owner: 'synthetic-owner', repositoryName: 'synthetic_courses', imageRepository: 'ghcr.io/synthetic-owner/synthetic_courses-private', token: 'SYNTHETIC_EPHEMERAL_JOB_TOKEN_42' });
 const json = (body, status = 200) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
-const metadata = (kind, changes = {}) => ({ name: `synthetic_courses/${kind}`, package_type: 'container', owner: { login: 'synthetic-owner' },
+const metadata = (kind, changes = {}) => ({ name: `synthetic_courses-private/${kind}`, package_type: 'container', owner: { login: 'synthetic-owner' },
   repository: { full_name: 'synthetic-owner/synthetic_courses' }, visibility: 'private', version_count: 2, ...changes });
 
 test('failure diagnostics expose only a fixed class/code and a real bounded release.mjs frame', () => {
@@ -39,11 +39,11 @@ test('cross-file frames, hostile properties and out-of-source line/column number
 });
 
 test('registry diagnosis makes exactly four fixed GETs using one job token, manual redirects and no fallback or retry', async () => {
-  const calls = [], env = input(); let deniedBodiesCancelled = 0;
+  const calls = [], env = { ...input(), token: 'SYNTHETIC.opaque-job-token+/=42' }; let deniedBodiesCancelled = 0;
   const rows = await inspectRegistryReadOnly(env, { request: async (url, options) => {
     calls.push({ url, options });
     assert.equal(options.method, 'GET'); assert.equal(options.redirect, 'manual'); assert.equal(options.signal instanceof AbortSignal, true);
-    assert.equal(options.headers.Authorization, `Bearer ${env.token}`); assert.equal(options.headers['X-GitHub-Api-Version'], '2026-03-10');
+    assert.equal(options.headers.Authorization === `Bearer ${env.token}`, true); assert.equal(options.headers['X-GitHub-Api-Version'], '2026-03-10');
     const kind = url.endsWith('%2Fweb') ? 'web' : 'api';
     return url.includes('/user/') ? json(metadata(kind)) : new Response(new ReadableStream({
       start(controller) { controller.enqueue(Buffer.from(JSON.stringify({ visibility: 'private', message: env.token }))); },
@@ -53,12 +53,29 @@ test('registry diagnosis makes exactly four fixed GETs using one job token, manu
   assert.equal(calls.length, 4);
   assert.equal(deniedBodiesCancelled, 2);
   assert.deepEqual(calls.map(c => c.url), [
-    'https://api.github.com/user/packages/container/synthetic_courses%2Fweb', 'https://api.github.com/user/packages/container/synthetic_courses%2Fapi',
-    'https://api.github.com/users/synthetic-owner/packages/container/synthetic_courses%2Fweb', 'https://api.github.com/users/synthetic-owner/packages/container/synthetic_courses%2Fapi']);
+    'https://api.github.com/user/packages/container/synthetic_courses-private%2Fweb', 'https://api.github.com/user/packages/container/synthetic_courses-private%2Fapi',
+    'https://api.github.com/users/synthetic-owner/packages/container/synthetic_courses-private%2Fweb', 'https://api.github.com/users/synthetic-owner/packages/container/synthetic_courses-private%2Fapi']);
   assert.equal(rows[0].visibility, 'private'); assert.equal(rows[0].identityMatches, true); assert.equal(rows[0].repoMatches, true); assert.equal(rows[0].safeVersionCount, 2);
   assert.equal(rows[2].status, 403); assert.equal(rows[2].visibility, 'UNKNOWN'); assert.equal(rows[2].identityMatches, false); assert.equal(rows[2].safeVersionCount, null);
   assert.equal(JSON.stringify(rows).includes(env.token), false);
   assert.equal(rows.every(row => Object.keys(row).toSorted().join(',') === 'identityMatches,kind,redirectSameOrigin,repoMatches,routeKind,safeVersionCount,status,visibility'), true);
+});
+
+test('opaque job token length boundaries are accepted without exposing the value or retrying failed reads', async () => {
+  for (const token of ['S'.repeat(20), 'S'.repeat(4096)]) {
+    let calls = 0;
+    const configuration = { ...input(), token };
+    if (token.length === 20) delete configuration.imageRepository;
+    const rows = await inspectRegistryReadOnly(configuration, { request: async (url, options) => {
+      calls++;
+      assert.equal(url.includes('synthetic_courses-private%2F'), true);
+      assert.equal(options.headers.Authorization === `Bearer ${token}`, true);
+      throw new Error('SYNTHETIC_PRIVATE_TRANSPORT_FAILURE');
+    } });
+    assert.equal(calls, 4);
+    assert.equal(JSON.stringify(rows).includes(token), false);
+    assert.equal(rows.every(row => row.status === null && row.visibility === 'UNKNOWN'), true);
+  }
 });
 
 test('redirects, 404 and unreadable or contaminated bodies stay unknown; metadata identity remains independent of a private label', async () => {
@@ -66,7 +83,7 @@ test('redirects, 404 and unreadable or contaminated bodies stay unknown; metadat
   const rows = await inspectRegistryReadOnly(env, { request: async () => {
     calls++;
     if (calls === 1) return new Response(null, { status: 302, headers: { Location: 'https://foreign.invalid/private?token=SYNTHETIC_PRIVATE' } });
-    if (calls === 2) return new Response(null, { status: 307, headers: { Location: '/users/synthetic-owner/packages/container/synthetic_courses%2Fapi' } });
+    if (calls === 2) return new Response(null, { status: 307, headers: { Location: '/users/synthetic-owner/packages/container/synthetic_courses-private%2Fapi' } });
     if (calls === 3) return json({ visibility: 'private', version_count: 99 }, 404);
     return new Response('SYNTHETIC_PRIVATE HTML', { status: 200, headers: { 'Content-Type': 'text/html' } });
   } });
@@ -80,9 +97,17 @@ test('redirects, 404 and unreadable or contaminated bodies stay unknown; metadat
 test('input injection is rejected before any request and transport or invalid JSON failures never retry or expose payloads', async () => {
   let calls = 0;
   const request = async () => { calls++; throw new Error('SYNTHETIC_PRIVATE'); };
+  const controls = [...Array.from({ length: 32 }, (_value, code) => code), 127];
   for (const changes of [{ owner: 'owner/foreign' }, { owner: '-bad' }, { repositoryName: '../foreign' }, { repositoryName: 'repo?token=private' },
-    { token: 'SYNTHETIC_PRIVATE\nAuthorization:value' }, { token: '' }, { extra: 'SYNTHETIC_PRIVATE' }]) {
-    await assert.rejects(inspectRegistryReadOnly({ ...input(), ...changes }, { request }), error => error.code === 'RELEASE_DIAGNOSTIC_CONFIGURATION_INVALID');
+    { imageRepository: 'ghcr.io/synthetic-owner/synthetic_courses' }, { imageRepository: 'ghcr.io/foreign/synthetic_courses-private' },
+    { token: 'SYNTHETIC_PRIVATE\nAuthorization:value' }, { token: '' }, { token: 'S'.repeat(19) }, { token: 'S'.repeat(4097) },
+    { token: 'SYNTHETIC PRIVATE JOB TOKEN' }, { token: 'SYNTHETIC_PRIVATE\u00a0JOB_TOKEN' }, { extra: 'SYNTHETIC_PRIVATE' },
+    ...controls.map(code => ({ token: `SYNTHETIC_PRIVATE${String.fromCharCode(code)}JOB_TOKEN` }))]) {
+    await assert.rejects(inspectRegistryReadOnly({ ...input(), ...changes }, { request }), error => {
+      const diagnostic = safeReleaseFailure(error, 'CHECK_EXISTING_WEB');
+      assert.equal(diagnostic.causeCode, 'RELEASE_DIAGNOSTIC_CONFIGURATION_INVALID');
+      return error.code === 'RELEASE_DIAGNOSTIC_CONFIGURATION_INVALID';
+    });
   }
   assert.equal(calls, 0);
   const failed = await inspectRegistryReadOnly(input(), { request }); assert.equal(calls, 4);

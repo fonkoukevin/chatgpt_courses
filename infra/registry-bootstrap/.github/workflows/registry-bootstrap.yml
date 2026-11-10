@@ -1,0 +1,113 @@
+name: Plan inert private registry bootstrap
+run-name: Inert registry bootstrap - ${{ inputs.operation }}
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: Plan only, or explicitly bootstrap inert packages
+        required: true
+        type: choice
+        default: plan
+        options: [plan, bootstrap]
+      bootstrap_private_packages_authorized:
+        description: Explicitly authorized creation of both inert packages after review
+        required: true
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: courses-private-registry-bootstrap
+  cancel-in-progress: false
+jobs:
+  plan:
+    if: ${{ github.repository == 'fonkoukevin/chatgpt_courses_registry' && github.ref == 'refs/heads/main' && !github.event.repository.fork && inputs.operation == 'plan' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.22.2
+          package-manager-cache: false
+      - name: Read-only plan; existing or ambiguous packages block
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/registry-bootstrap.mjs plan
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: registry-bootstrap-plan-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/registry-bootstrap/*.json
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 3
+          overwrite: false
+  bootstrap:
+    if: ${{ github.repository == 'fonkoukevin/chatgpt_courses_registry' && github.ref == 'refs/heads/main' && !github.event.repository.fork && inputs.operation == 'bootstrap' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.22.2
+          package-manager-cache: false
+      - name: Publish only the fixed inert stub, with private postchecks
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          BOOTSTRAP_AUTHORIZED: ${{ inputs.bootstrap_private_packages_authorized }}
+        run: |
+          set -euo pipefail
+          test "$BOOTSTRAP_AUTHORIZED" = true
+          test "$(node --version)" = v24.22.2
+          node scripts/registry-bootstrap.mjs plan
+          # No Docker credential directory exists before the successful plan.
+          auth_dir="$(mktemp -d "$RUNNER_TEMP/courses-registry-auth.XXXXXX")"
+          auth_identity="$(stat -c '%d:%i:%u:%a' "$auth_dir")"
+          buildx_dir="$(mktemp -d "$RUNNER_TEMP/courses-registry-buildx.XXXXXX")"
+          export DOCKER_CONFIG="$auth_dir"
+          export BUILDX_CONFIG="$buildx_dir"
+          cleanup_registry() {
+            test -d "$auth_dir" && test ! -L "$auth_dir" || return 1
+            test "$(stat -c '%d:%i:%u:%a' "$auth_dir")" = "$auth_identity" || return 1
+            [[ "$auth_dir" == "$RUNNER_TEMP"/courses-registry-auth.?????? ]] || return 1
+            # Only this dedicated job configuration; never the user's Docker store.
+            if test -e "$auth_dir/config.json" || test -L "$auth_dir/config.json"; then
+              test -f "$auth_dir/config.json" && test ! -L "$auth_dir/config.json" || return 1
+              test "$(stat -c '%u:%h' "$auth_dir/config.json")" = "$(id -u):1" || return 1
+            fi
+            docker --config "$auth_dir" logout ghcr.io >/dev/null 2>&1 || true
+            test "$(stat -c '%d:%i:%u:%a' "$auth_dir")" = "$auth_identity" || return 1
+            test ! -L "$auth_dir/config.json" || return 1
+            rm -f -- "$auth_dir/config.json"
+            rmdir -- "$auth_dir"
+            # Buildx state is isolated from credentials and all existing stores.
+            # Only remove an empty directory; residual inert state is left to the
+            # disposable GitHub-hosted runner, without recursive deletion.
+            rmdir -- "$buildx_dir" 2>/dev/null || true
+          }
+          trap cleanup_registry EXIT
+          trap 'exit 130' INT
+          trap 'exit 143' TERM
+          node scripts/registry-bootstrap.mjs bootstrap
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: registry-bootstrap-stub-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/registry-bootstrap/*.json
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 3
+          overwrite: false

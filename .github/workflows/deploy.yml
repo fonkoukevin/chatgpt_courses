@@ -79,6 +79,7 @@ jobs:
       OFF_HOST_BACKUP_ATTESTED: ${{ inputs.off_host_backup_attested }}
       IMAGE_REPOSITORY: ${{ vars.IMAGE_REPOSITORY }}
       EXPECTED_SOURCE_VISIBILITY: ${{ vars.EXPECTED_SOURCE_VISIBILITY }}
+      EXPECTED_IMAGE_VISIBILITY: ${{ vars.EXPECTED_IMAGE_VISIBILITY }}
       APPROVED_STAGING_RELEASE_SHA256: ${{ vars.APPROVED_STAGING_RELEASE_SHA256 }}
       MIGRATION_BACKUP_RECEIPT_SHA256: ${{ vars.MIGRATION_BACKUP_RECEIPT_SHA256 }}
       DEPLOY_TARGET_AUTHORIZED: ${{ vars.DEPLOY_TARGET_AUTHORIZED }}
@@ -138,6 +139,7 @@ jobs:
       OFF_HOST_BACKUP_ATTESTED: ${{ inputs.off_host_backup_attested }}
       IMAGE_REPOSITORY: ${{ vars.IMAGE_REPOSITORY }}
       EXPECTED_SOURCE_VISIBILITY: ${{ vars.EXPECTED_SOURCE_VISIBILITY }}
+      EXPECTED_IMAGE_VISIBILITY: ${{ vars.EXPECTED_IMAGE_VISIBILITY }}
       APPROVED_STAGING_RELEASE_SHA256: ${{ vars.APPROVED_STAGING_RELEASE_SHA256 }}
       MIGRATION_BACKUP_RECEIPT_SHA256: ${{ vars.MIGRATION_BACKUP_RECEIPT_SHA256 }}
       DEPLOY_TARGET_AUTHORIZED: ${{ vars.DEPLOY_TARGET_AUTHORIZED }}
@@ -159,7 +161,7 @@ jobs:
           package-manager-cache: false
       - name: Assert the controller toolchain
         run: test "$(node --version)" = "v24.22.2"
-      - name: Build and explicitly publish private GHCR images with the job token
+      - name: Build and publish GHCR images with the explicitly expected visibility
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/deployment/release.mjs publish
@@ -196,6 +198,7 @@ jobs:
       OFF_HOST_BACKUP_ATTESTED: ${{ inputs.off_host_backup_attested }}
       IMAGE_REPOSITORY: ${{ vars.IMAGE_REPOSITORY }}
       EXPECTED_SOURCE_VISIBILITY: ${{ vars.EXPECTED_SOURCE_VISIBILITY }}
+      EXPECTED_IMAGE_VISIBILITY: ${{ vars.EXPECTED_IMAGE_VISIBILITY }}
       APPROVED_STAGING_RELEASE_SHA256: ${{ vars.APPROVED_STAGING_RELEASE_SHA256 }}
       MIGRATION_BACKUP_RECEIPT_SHA256: ${{ vars.MIGRATION_BACKUP_RECEIPT_SHA256 }}
       DEPLOY_TARGET_AUTHORIZED: ${{ vars.DEPLOY_TARGET_AUTHORIZED }}

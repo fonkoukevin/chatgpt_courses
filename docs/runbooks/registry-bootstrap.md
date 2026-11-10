@@ -2,6 +2,8 @@
 
 **10 novembre 2026 : création du dépôt privé et installation des six fichiers autorisées puis observées. Aucun job lancé.** L’exécution du bootstrap, la suppression du paquet public et les accès supplémentaires restent hors de cet accord. Ce document complète le [runbook de livraison](deploy.md) ; il ne débloque pas P21 à lui seul.
 
+**Décision ultérieure : l’utilisateur autorise explicitement les images publiques.** Le chemin courant revient donc au dépôt applicatif public et à son environnement protégé existant. Ce mécanisme privé reste conservé, inactif, sans job ni secret supplémentaire. Les étapes ci-dessous décrivent la piste préparée et ne sont plus nécessaires à P21 dans le choix actuel.
+
 ## Motif et niveau de preuve
 
 Le propriétaire confirme n’avoir jamais changé manuellement la visibilité des images. Deux premières créations depuis le workflow du dépôt public ont néanmoins produit un paquet web public. Les métadonnées authentifiées, le registre anonyme et la lecture manuelle des réglages concordent. Aucun secret applicatif connu n’a été trouvé dans l’audit borné du dernier digest ; cela n’exclut pas les secrets inconnus ou transformés.

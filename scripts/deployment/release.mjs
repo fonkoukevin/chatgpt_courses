@@ -30,11 +30,19 @@ export function validateSourceRepository(value, env) {
   requireRelease(value?.full_name === env.GITHUB_REPOSITORY && value.visibility === expected && value.private === (expected === 'private'), 'RELEASE_SOURCE_VISIBILITY_MISMATCH');
   return expected;
 }
+export function expectedImageVisibility(env) {
+  const expected = env.EXPECTED_IMAGE_VISIBILITY === undefined || env.EXPECTED_IMAGE_VISIBILITY === '' ? 'private' : env.EXPECTED_IMAGE_VISIBILITY;
+  requireRelease(['private', 'public'].includes(expected), 'RELEASE_IMAGE_VISIBILITY_INVALID');
+  return expected;
+}
 export function ghcrConfiguration(env) {
   requireRelease(/^[A-Za-z0-9][A-Za-z0-9-]{0,38}\/[A-Za-z0-9_.-]{1,100}$/u.test(env.GITHUB_REPOSITORY ?? '') && !env.GITHUB_REPOSITORY.includes('..'), 'RELEASE_GHCR_REPOSITORY_CONTEXT_REQUIRED');
-  requireRelease(repository(env.IMAGE_REPOSITORY) === `ghcr.io/${env.GITHUB_REPOSITORY.toLowerCase()}-private`, 'RELEASE_GHCR_SOURCE_NAMESPACE_REQUIRED');
+  const imageVisibility = expectedImageVisibility(env);
+  if (imageVisibility === 'public') requireRelease(env.GITHUB_REPOSITORY === 'fonkoukevin/chatgpt_courses' && expectedSourceVisibility(env) === 'public', 'RELEASE_PUBLIC_IMAGES_REQUIRE_PUBLIC_SOURCE');
+  const expectedRepository = imageVisibility === 'private' ? `ghcr.io/${env.GITHUB_REPOSITORY.toLowerCase()}-private` : 'ghcr.io/fonkoukevin/chatgpt_courses';
+  requireRelease(repository(env.IMAGE_REPOSITORY) === expectedRepository, 'RELEASE_GHCR_SOURCE_NAMESPACE_REQUIRED');
   requireRelease(/^[A-Za-z0-9][A-Za-z0-9-]{0,38}(?:\[bot\])?$/u.test(env.GITHUB_ACTOR ?? ''), 'RELEASE_GHCR_ACTOR_REQUIRED');
-  return { registry: 'ghcr.io', imageRepository: env.IMAGE_REPOSITORY, username: env.GITHUB_ACTOR, sourceUrl: `https://github.com/${env.GITHUB_REPOSITORY}`, sourceVisibility: expectedSourceVisibility(env) };
+  return { registry: 'ghcr.io', imageRepository: env.IMAGE_REPOSITORY, username: env.GITHUB_ACTOR, sourceUrl: `https://github.com/${env.GITHUB_REPOSITORY}`, sourceVisibility: expectedSourceVisibility(env), imageVisibility };
 }
 function jobToken(env) {
   requireRelease(typeof env.GITHUB_TOKEN === 'string' && env.GITHUB_TOKEN.length >= 20 && env.GITHUB_TOKEN.length <= 4096 && !/\s/u.test(env.GITHUB_TOKEN), 'RELEASE_JOB_TOKEN_REQUIRED');
@@ -62,8 +70,31 @@ export async function requireGhcrAnonymousReadDenied(image, request = fetch) {
   requireRelease(!listing.ok, 'RELEASE_GHCR_PRIVATE_PACKAGE_REQUIRED');
   await requireRegistryDenial(listing);
 }
-export async function requireGhcrPrivatePackage(env, kind, { request = fetch } = {}) {
-  const { imageRepository } = ghcrConfiguration(env);
+export async function requireGhcrAnonymousDigestReadable(image, digest, request = fetch) {
+  requireRelease(/^ghcr\.io\/[a-z0-9][a-z0-9-]*\/[a-z0-9_.-]+\/(?:web|api)$/u.test(image), 'RELEASE_GHCR_IMAGE_REQUIRED');
+  requireRelease(/^sha256:[a-f0-9]{64}$/u.test(digest ?? ''), 'RELEASE_IMAGE_DIGEST_REQUIRED');
+  const name = image.slice('ghcr.io/'.length), options = { method: 'GET', redirect: 'error', signal: AbortSignal.timeout(15000) };
+  const authorization = await request(`https://ghcr.io/token?service=ghcr.io&scope=${encodeURIComponent(`repository:${name}:pull`)}`, options);
+  requireRelease(authorization.status === 200, 'RELEASE_GHCR_PUBLIC_DIGEST_UNVERIFIED');
+  const token = (await responseJson(authorization, 16384, 'RELEASE_GHCR_PUBLIC_DIGEST_UNVERIFIED'))?.token;
+  requireRelease(typeof token === 'string' && token.length > 0 && token.length <= 8192 && !/\s/u.test(token), 'RELEASE_GHCR_PUBLIC_DIGEST_UNVERIFIED');
+  const mediaTypes = ['application/vnd.oci.image.manifest.v1+json', 'application/vnd.docker.distribution.manifest.v2+json', 'application/vnd.oci.image.index.v1+json', 'application/vnd.docker.distribution.manifest.list.v2+json'];
+  const response = await request(`https://ghcr.io/v2/${name}/manifests/${digest}`, { ...options, headers: { Authorization: `Bearer ${token}`, Accept: mediaTypes.join(', ') } });
+  const maximum = 4 * 1024 * 1024, length = response.headers?.get('content-length');
+  requireRelease(response.status === 200 && response.headers?.get('docker-content-digest') === digest
+    && mediaTypes.includes(response.headers?.get('content-type')?.split(';')[0].trim().toLowerCase())
+    && (length === null || /^\d{1,10}$/u.test(length ?? '') && Number(length) <= maximum), 'RELEASE_GHCR_PUBLIC_DIGEST_UNVERIFIED');
+  const reader = response.body?.getReader(); requireRelease(reader, 'RELEASE_GHCR_PUBLIC_DIGEST_UNVERIFIED');
+  const hash = createHash('sha256'); let bytes = 0;
+  try {
+    while (true) { const part = await reader.read(); if (part.done) break; bytes += part.value.byteLength;
+      requireRelease(bytes <= maximum, 'RELEASE_GHCR_PUBLIC_DIGEST_UNVERIFIED'); hash.update(part.value); }
+    requireRelease(bytes > 0 && `sha256:${hash.digest('hex')}` === digest, 'RELEASE_GHCR_PUBLIC_DIGEST_UNVERIFIED');
+  } finally { try { await reader.cancel(); } catch { /* Never publish provider body or cancellation details. */ } reader.releaseLock(); }
+}
+export async function requireGhcrPackage(env, kind, { allowMissing = false, digest, request = fetch } = {}) {
+  const { imageRepository, imageVisibility } = ghcrConfiguration(env);
+  requireRelease(!allowMissing || imageVisibility === 'public', 'RELEASE_GHCR_PRIVATE_PACKAGE_REQUIRED');
   requireRelease(['web', 'api'].includes(kind), 'RELEASE_GHCR_IMAGE_REQUIRED');
   const [, owner, ...packagePath] = imageRepository.split('/'), packageName = `${packagePath.join('/')}/${kind}`;
   // This documented authenticated-user endpoint supports installation tokens.
@@ -72,13 +103,19 @@ export async function requireGhcrPrivatePackage(env, kind, { request = fetch } =
     headers: { Accept: 'application/vnd.github+json', Authorization: `Bearer ${jobToken(env)}`, 'X-GitHub-Api-Version': '2026-03-10' },
     redirect: 'error', signal: AbortSignal.timeout(15000)
   });
+  if (metadata.status === 404 && allowMissing && digest === undefined) return 'absent';
   requireRelease(metadata.status === 200, 'RELEASE_GHCR_PACKAGE_METADATA_UNAVAILABLE');
   const value = await responseJson(metadata, 256 * 1024, 'RELEASE_GHCR_PACKAGE_METADATA_UNAVAILABLE');
   requireRelease(value?.name === packageName && value.package_type === 'container' && typeof value.owner?.login === 'string' && value.owner.login.toLowerCase() === owner.toLowerCase(), 'RELEASE_GHCR_PACKAGE_IDENTITY_MISMATCH');
-  requireRelease(value.visibility === 'private', 'RELEASE_GHCR_PRIVATE_PACKAGE_REQUIRED');
+  requireRelease(value.visibility === imageVisibility, imageVisibility === 'private' ? 'RELEASE_GHCR_PRIVATE_PACKAGE_REQUIRED' : 'RELEASE_GHCR_PUBLIC_PACKAGE_REQUIRED');
   requireRelease(value.repository?.full_name === env.GITHUB_REPOSITORY && value.repository?.private === (expectedSourceVisibility(env) === 'private'), 'RELEASE_GHCR_PACKAGE_SOURCE_REQUIRED');
-  await requireGhcrAnonymousReadDenied(`${imageRepository}/${kind}`, request);
-  return 'private';
+  if (imageVisibility === 'private') await requireGhcrAnonymousReadDenied(`${imageRepository}/${kind}`, request);
+  else if (digest !== undefined) await requireGhcrAnonymousDigestReadable(`${imageRepository}/${kind}`, digest, request);
+  return imageVisibility;
+}
+export async function requireGhcrPrivatePackage(env, kind, options = {}) {
+  requireRelease(expectedImageVisibility(env) === 'private', 'RELEASE_GHCR_PRIVATE_PACKAGE_REQUIRED');
+  return requireGhcrPackage(env, kind, options);
 }
 export function validateManifest(value, imageRepository) {
   const prefix = repository(imageRepository);
@@ -166,7 +203,7 @@ async function guard() {
   const protections = protectedEnvironment(environment, env.TARGET_ENVIRONMENT, workflow, branch);
   const currentRepository = await github('');
   const sourceVisibility = validateSourceRepository(currentRepository, env);
-  const { imageRepository } = ghcrConfiguration(env);
+  const { imageRepository, imageVisibility } = ghcrConfiguration(env);
   if (env.RELEASE_OPERATION === 'publish') requireRelease(env.TARGET_ENVIRONMENT === 'staging', 'RELEASE_PUBLISH_IN_STAGING_ONLY');
   let manifest;
   if (['deploy', 'rollback'].includes(env.RELEASE_OPERATION)) {
@@ -183,23 +220,32 @@ async function guard() {
     const runs = await github(`actions/workflows/ci.yml/runs?head_sha=${source}&status=success&per_page=100`);
     requireRelease(runs.workflow_runs?.some(run => run.head_sha === source && run.head_branch === event.repository.default_branch && run.head_repository?.full_name === env.GITHUB_REPOSITORY && run.event === 'push' && run.conclusion === 'success'), 'RELEASE_SUCCESSFUL_CI_REQUIRED');
   }
-  publicReceipt('guard.json', { result: 'passed', operation: env.RELEASE_OPERATION, environment: env.TARGET_ENVIRONMENT, sourceCommit: source, sourceVisibility, stagingPaymentTest, protectedEnvironmentChecked: true, environmentPreexisting: true, defaultBranchProtected: true, defaultBranchOnly: true, ...protections, registryOrTargetMutationExecuted: false });
+  publicReceipt('guard.json', { result: 'passed', operation: env.RELEASE_OPERATION, environment: env.TARGET_ENVIRONMENT, sourceCommit: source, sourceVisibility, expectedImageVisibility: imageVisibility, stagingPaymentTest, protectedEnvironmentChecked: true, environmentPreexisting: true, defaultBranchProtected: true, defaultBranchOnly: true, ...protections, registryOrTargetMutationExecuted: false });
+}
+function verifiedVisibilityReceipt(imageVisibility) {
+  return { expectedImageVisibility: imageVisibility, observedImageVisibility: imageVisibility,
+    packageMetadataPrivateVerified: imageVisibility === 'private', packageMetadataPublicVerified: imageVisibility === 'public',
+    anonymousPackageReadDenied: imageVisibility === 'private', anonymousPackageReadAllowed: imageVisibility === 'public',
+    anonymousDigestReadVerified: imageVisibility === 'public', packageSourceLinkVerified: true };
 }
 async function publish() {
   const env = process.env;
   const progress = { schemaVersion: 1, sourceCommit: commitPattern.test(env.GITHUB_SHA ?? '') ? env.GITHUB_SHA : null, stage: 'GUARD', guardPassed: false,
-    images: Object.fromEntries(['web', 'api'].map(kind => [kind, { pushAttempted: false, pushConfirmed: false, digestConfirmed: false, metadataVerified: false }])), temporaryCredentialsCreated: false, temporaryCredentialsRemoved: false };
+    expectedImageVisibility: null,
+    images: Object.fromEntries(['web', 'api'].map(kind => [kind, { pushAttempted: false, pushConfirmed: false, digestConfirmed: false, metadataVerified: false, observedVisibility: null, anonymousRead: null }])), temporaryCredentialsCreated: false, temporaryCredentialsRemoved: false };
   const stage = value => { progress.stage = value; publicReceipt('publication-progress.json', progress); };
   let registryContext;
   try {
     stage('GUARD'); await guard(); progress.guardPassed = true; stage('CONFIGURATION');
     requireRelease(env.RELEASE_OPERATION === 'publish' && /^\d+$/u.test(env.GITHUB_RUN_ID ?? '') && /^[1-9]\d*$/u.test(env.GITHUB_RUN_ATTEMPT ?? ''), 'RELEASE_PUBLICATION_CONFIGURATION_REQUIRED');
-    const { imageRepository, registry, username, sourceUrl } = ghcrConfiguration(env), token = jobToken(env);
+    const { imageRepository, registry, username, sourceUrl, imageVisibility } = ghcrConfiguration(env), token = jobToken(env);
+    progress.expectedImageVisibility = imageVisibility;
     registryContext = { owner: env.GITHUB_REPOSITORY.split('/')[0], repositoryName: env.GITHUB_REPOSITORY.split('/')[1], imageRepository, token };
     requireRelease(['', 'false', 'true'].includes(env.APPROVED_TEST_PACKAGE_CLEANUP ?? ''), 'RELEASE_APPROVED_TEST_CLEANUP_FLAG_INVALID');
-    // A missing package has no established private policy. Both destinations
-    // must already be private before credentials, cleanup, build or any push.
-    for (const kind of ['web', 'api']) { stage(`CHECK_EXISTING_${kind.toUpperCase()}`); await requireGhcrPrivatePackage(env, kind); }
+    requireRelease(imageVisibility !== 'public' || env.APPROVED_TEST_PACKAGE_CLEANUP !== 'true', 'RELEASE_PUBLIC_IMAGES_CLEANUP_FORBIDDEN');
+    // Private destinations must already have an established private policy.
+    // Only the explicit public contract permits an initial publication.
+    for (const kind of ['web', 'api']) { stage(`CHECK_EXISTING_${kind.toUpperCase()}`); await requireGhcrPackage(env, kind, { allowMissing: imageVisibility === 'public' }); }
     if (env.APPROVED_TEST_PACKAGE_CLEANUP === 'true') {
       stage('APPROVED_TEST_CLEANUP');
       await cleanupApprovedTestPackage({ approvedTestCleanup: true, environment: env.TARGET_ENVIRONMENT,
@@ -232,14 +278,14 @@ async function publish() {
         requireRelease(matches.length === 1, 'RELEASE_PUSHED_DIGEST_NOT_CONFIRMED');
         manifest[kind] = { repository: `${imageRepository}/${kind}`, digest: matches[0].split('@')[1] };
         progress.images[kind].digestConfirmed = true; stage(`VERIFY_${kind.toUpperCase()}`);
-        await requireGhcrPrivatePackage(env, kind);
-        progress.images[kind].metadataVerified = true;
+        await requireGhcrPackage(env, kind, { digest: manifest[kind].digest });
+        Object.assign(progress.images[kind], { metadataVerified: true, observedVisibility: imageVisibility, anonymousRead: imageVisibility === 'public' ? 'ALLOWED' : 'DENIED' });
       }
       stage('MANIFEST');
       canonical = validateManifest(manifest, imageRepository); manifestSha256 = sha256(manifestBytes(canonical));
     } finally { requireRelease(dockerConfig.startsWith(join(tmpdir(), 'courses-release-registry-')), 'RELEASE_CREDENTIAL_CLEANUP_REFUSED'); rmSync(dockerConfig, { recursive: true, force: true }); progress.temporaryCredentialsRemoved = true; }
     publicReceipt('release-manifest.json', canonical);
-    publicReceipt('publication.json', { result: 'passed', sourceCommit: env.GITHUB_SHA, manifestSha256, registryPublicationExecuted: true, packageMetadataPrivateVerified: true, packageSourceLinkVerified: true, anonymousPackageReadDenied: true, credentialMode: 'ephemeral-job-token', temporaryCredentialsRemoved: true, deployed: false, tagsInformationalOnly: true });
+    publicReceipt('publication.json', { result: 'passed', sourceCommit: env.GITHUB_SHA, manifestSha256, registryPublicationExecuted: true, ...verifiedVisibilityReceipt(imageVisibility), credentialMode: 'ephemeral-job-token', temporaryCredentialsRemoved: true, deployed: false, tagsInformationalOnly: true });
     stage('COMPLETE');
     console.log(JSON.stringify({ result: 'published', manifestSha256 }));
   } catch (error) {
@@ -285,7 +331,8 @@ ${command}
 async function deploy() {
   await guard(); const env = process.env, target = targetConfiguration(env), manifest = parseManifest(env.RELEASE_MANIFEST_JSON, env.IMAGE_REPOSITORY, env.EXPECTED_RELEASE_SHA256);
   const token = jobToken(env);
-  for (const kind of ['web', 'api']) await requireGhcrPrivatePackage(env, kind);
+  const imageVisibility = expectedImageVisibility(env);
+  for (const kind of ['web', 'api']) await requireGhcrPackage(env, kind, { digest: manifest[kind].digest });
   requireRelease(['deploy', 'rollback'].includes(env.RELEASE_OPERATION) && /^-----BEGIN (?:OPENSSH |RSA )?PRIVATE KEY-----\r?\n/u.test(env.DEPLOY_SSH_PRIVATE_KEY ?? '') && typeof env.DEPLOY_SSH_KNOWN_HOSTS === 'string' && env.DEPLOY_SSH_KNOWN_HOSTS.trim().length > 40, 'RELEASE_SSH_SECRETS_REQUIRED');
   const work = mkdtempSync(join(tmpdir(), 'courses-release-target-')), bundle = join(work, 'bundle'); mkdirSync(bundle);
   const key = join(work, 'key'), known = join(work, 'known_hosts'); writeFileSync(key, env.DEPLOY_SSH_PRIVATE_KEY, { mode: 0o600 }); writeFileSync(known, env.DEPLOY_SSH_KNOWN_HOSTS, { mode: 0o600 });
@@ -317,7 +364,7 @@ async function deploy() {
     execute('ssh', [...options, '-p', target.port, host, `sh -c ${quote(ghcrRemoteScript(env, applyScript))}`], { input: token });
     execute(process.execPath, smokeArgs);
     ssh(`set -eu\n${quote(target.nodePath)} ${quote(releaseDirectory + '/scripts/deployment/release-apply.mjs')} activate --root ${quote(target.directory)} --release ${quote(releaseHash)}\n`);
-    publicReceipt('deployment.json', { result: 'passed', environment: target.environment, operation: env.RELEASE_OPERATION, sourceCommit: manifest.sourceCommit, manifestSha256: releaseHash, bundleSha256: bundleHash, credentialMode: 'ephemeral-job-token-tmpfs', packageMetadataPrivateVerified: true, packageSourceLinkVerified: true, anonymousPackageReadDenied: true, migrationInvoked: env.RELEASE_OPERATION === 'deploy', imageBuildInvoked: false, healthSmokePassed: true, activePointerUpdated: true, dataRestoreInvoked: false });
+    publicReceipt('deployment.json', { result: 'passed', environment: target.environment, operation: env.RELEASE_OPERATION, sourceCommit: manifest.sourceCommit, manifestSha256: releaseHash, bundleSha256: bundleHash, credentialMode: 'ephemeral-job-token-tmpfs', ...verifiedVisibilityReceipt(imageVisibility), migrationInvoked: env.RELEASE_OPERATION === 'deploy', imageBuildInvoked: false, healthSmokePassed: true, activePointerUpdated: true, dataRestoreInvoked: false });
     console.log(JSON.stringify({ result: 'deployed', environment: target.environment, manifestSha256: releaseHash }));
   } finally { requireRelease(work.startsWith(join(tmpdir(), 'courses-release-target-')), 'RELEASE_PRIVATE_CLEANUP_REFUSED'); rmSync(work, { recursive: true, force: true }); }
 }

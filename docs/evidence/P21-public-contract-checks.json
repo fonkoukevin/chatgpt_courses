@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-10T23:36:59.724Z",
+  "result": "passed-locally",
+  "sourceBase": "b476b84dbc226d9e28b08d857a159ff1aa47ef44",
+  "userDecision": {
+    "publicImagesExplicitlyAuthorized": true,
+    "privateImageRequirementSuperseded": true,
+    "applicationDataAndSecretsRemainPrivate": true
+  },
+  "contract": {
+    "defaultImageVisibility": "private",
+    "configuredImageVisibility": "public",
+    "requiredSource": "fonkoukevin/chatgpt_courses",
+    "imagePrefix": "ghcr.io/fonkoukevin/chatgpt_courses",
+    "anonymousExactDigestVerification": true,
+    "response403Blocks": true,
+    "historicalCleanupForbiddenInPublicMode": true,
+    "privateBootstrapUsed": false
+  },
+  "inputs": [
+    {
+      "path": "scripts/deployment/release.mjs",
+      "sha256": "538f2d473e7ec042f7e8dde0d2b29d0e0152639f7cdae4f6913ceecce5c38f34"
+    },
+    {
+      "path": "scripts/deployment/release-diagnostics.mjs",
+      "sha256": "87e930b38d7a1f37d574f72337c561d64b696a18829de539b5271d6a11691562"
+    },
+    {
+      "path": "scripts/deployment/current-public-package-inventory.mjs",
+      "sha256": "78d9f7d5175990fcffd3276b4ed8ea099aceeb9816f2e8a8f455e6a0b2089091"
+    },
+    {
+      "path": ".github/workflows/deploy.yml",
+      "sha256": "75a78df1bdff842f7bdbd7e1e64b7e0a5f9318e2952c0e6ee610254a894f0c46"
+    },
+    {
+      "path": "tests/fixtures/deployment/publication-probe.mjs",
+      "sha256": "fb1ee1566da354b4032fb133ba852ae1b8d27de97ad58ffba15ac3807aa64d9a"
+    },
+    {
+      "path": "tests/scripts/deployment-release.test.mjs",
+      "sha256": "16759f5079f56179b04b0e53c67ffe2f1e9dec41463a603a7b43732d9fed53c4"
+    },
+    {
+      "path": "tests/scripts/deployment-publication.test.mjs",
+      "sha256": "d376d9fc57b62ea2c345a43b13b082397353ae86ed3758ac01489d94250f9da7"
+    },
+    {
+      "path": "tests/scripts/deployment-diagnostics.test.mjs",
+      "sha256": "b62bf70263cf95a33a415e07b249636c38d858317e68c7def2892f64db9b0deb"
+    },
+    {
+      "path": "tests/scripts/deployment-package-inventory.test.mjs",
+      "sha256": "63a8c2df3c9e9c2a7b520a2ba34d6dad1750754e9e8cb45f449b6421f56db470"
+    }
+  ],
+  "checks": {
+    "node": "v24.22.2",
+    "platform": "win32",
+    "scripts": {
+      "tests": 102,
+      "suites": 0,
+      "pass": 102,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "lint": "passed-with-standard-Node-globals",
+    "actionlint": "1.7.12-passed",
+    "independentReview": "no-material-defect-found",
+    "rulesDisabled": false
+  },
+  "preservation": {
+    "userNextEnvUnchanged": true,
+    "privateEnvironmentUnchanged": true
+  },
+  "scope": {
+    "localTestsUseMockRegistryAndDocker": true,
+    "remotePublicationExecuted": false,
+    "remoteDeploymentExecuted": false,
+    "packageDeleted": false,
+    "paidPlanPurchased": false,
+    "privateJobDispatched": false
+  },
+  "unchangedGuards": [
+    "default-branch-only",
+    "preexisting-protected-staging-environment",
+    "successful-source-CI",
+    "immutable-digests",
+    "same-manifest-promotion",
+    "image-revision",
+    "server-secrets-external",
+    "session-and-CSRF"
+  ],
+  "limits": [
+    "New GitHub CI and actual public publication/deployment remain to execute.",
+    "Tests simulate provider replies and Docker; they do not establish a new remote manifest.",
+    "Build input review excludes private runtime paths but cannot guarantee absence of unknown secrets in arbitrary source."
+  ]
+}

@@ -62,7 +62,7 @@ function validateInput(value, request) {
     || !['owner,repositoryName,token', 'imageRepository,owner,repositoryName,token'].includes(Object.keys(value).toSorted().join(','))) invalid();
   if (typeof value.owner !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9-]{0,38}$/u.test(value.owner)
     || typeof value.repositoryName !== 'string' || !/^[A-Za-z0-9_.-]{1,100}$/u.test(value.repositoryName) || value.repositoryName.includes('..')
-    || (Object.hasOwn(value, 'imageRepository') && value.imageRepository !== `ghcr.io/${value.owner.toLowerCase()}/${value.repositoryName.toLowerCase()}-private`)
+    || (Object.hasOwn(value, 'imageRepository') && ![`ghcr.io/${value.owner.toLowerCase()}/${value.repositoryName.toLowerCase()}-private`, `ghcr.io/${value.owner.toLowerCase()}/${value.repositoryName.toLowerCase()}`].includes(value.imageRepository))
     || typeof value.token !== 'string' || value.token.length < 20 || value.token.length > 4096 || /\s/u.test(value.token)
     || Array.from(value.token).some(character => character.charCodeAt(0) < 32 || character.charCodeAt(0) === 127)
     || typeof request !== 'function') invalid();

@@ -1,0 +1,340 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-10T19:38:09.284Z",
+  "sourceCommit": "8138ae03fede797087224c72efa2a50c856e01dd",
+  "runId": 42877515322,
+  "attempt": 1,
+  "conclusion": "failure",
+  "artifact": {
+    "id": 13792452765,
+    "name": "manual-release-publish-42877515322-1",
+    "zipSha256": "77c682bc60d4210d19e25f3a1a581b287c7981bb351031803b701a08c7ed796c",
+    "zipDigestVerified": true,
+    "files": [
+      {
+        "path": "approved-test-cleanup.json",
+        "sha256": "a5db6c16df2a57d3d17640021d64b731ea59ca1d90f8f6c37b0132eb61838d17",
+        "bytes": 1419
+      },
+      {
+        "path": "failure.json",
+        "sha256": "bb8d62f639cdc0aa5dd66047d138fc51008ad982658da4b4f44bd7ab9a855afc",
+        "bytes": 90
+      },
+      {
+        "path": "guard.json",
+        "sha256": "359acec0d29dc2d3778f7df814d6a60cd5ce853d1238ebbe077c9a55da21c569",
+        "bytes": 480
+      },
+      {
+        "path": "publication-diagnostic.json",
+        "sha256": "9927d2d421fed71d02e0384d345687cc0cf7100884a848fbe48ffb857b66a99e",
+        "bytes": 130
+      },
+      {
+        "path": "publication-progress.json",
+        "sha256": "9e4949df0209c09e158c097a8bf8b3ef26b458d5531278be7d38a684c0fb6cb0",
+        "bytes": 516
+      },
+      {
+        "path": "registry-inspection.json",
+        "sha256": "fc82804d44d81129ccd5b761b47b4ed667d45c0797109d564c1206e7a97cb883",
+        "bytes": 877
+      }
+    ]
+  },
+  "cleanup": {
+    "operation": "DELETE_APPROVED_PUBLIC_TEST_PACKAGE",
+    "result": "passed",
+    "stage": "COMPLETE",
+    "owner": "fonkoukevin",
+    "packageName": "chatgpt_courses/web",
+    "versionId": 1531288133,
+    "digest": "sha256:1ba45a1d85e42c899cae9d8f1926d6e0e77a46dc93c48e6c4c0125c327d938ad",
+    "replacementImageRepository": "ghcr.io/fonkoukevin/chatgpt_courses-private",
+    "packageGetStatus": 200,
+    "packageMetadataVerified": true,
+    "versionGetStatus": 200,
+    "versionMetadataVerified": true,
+    "activeVersionsGetStatus": 200,
+    "activeVersionCount": 1,
+    "activeVersionsPaginationPresent": false,
+    "deletedVersionsGetStatus": 200,
+    "deletedVersionCount": 0,
+    "deletedVersionsPaginationPresent": false,
+    "packageInventoryVerified": true,
+    "deleteAttempted": true,
+    "deletionMayHaveOccurred": true,
+    "deleteResponseStatus": 204,
+    "deleteAcknowledged": true,
+    "providerDeleteErrorCategory": "NONE",
+    "packageVerificationGetStatus": 404,
+    "verificationGetStatus": 404,
+    "packageDeletionConfirmed": true,
+    "versionDeletionConfirmed": true
+  },
+  "publication": {
+    "result": "failed",
+    "stage": "VERIFY_WEB",
+    "errorClass": "TypeError",
+    "causeCode": "UND_ERR_SOCKET",
+    "source": null,
+    "releaseManifestProduced": false,
+    "publicationSuccessReceiptProduced": false,
+    "registryInspection": [
+      {
+        "kind": "web",
+        "routeKind": "USER",
+        "status": 200,
+        "visibility": "public",
+        "identityMatches": true,
+        "repoMatches": true,
+        "safeVersionCount": 1,
+        "redirectSameOrigin": null
+      },
+      {
+        "kind": "api",
+        "routeKind": "USER",
+        "status": 404,
+        "visibility": "UNKNOWN",
+        "identityMatches": false,
+        "repoMatches": false,
+        "safeVersionCount": null,
+        "redirectSameOrigin": null
+      },
+      {
+        "kind": "web",
+        "routeKind": "NAMED_OWNER",
+        "status": 200,
+        "visibility": "public",
+        "identityMatches": true,
+        "repoMatches": true,
+        "safeVersionCount": 1,
+        "redirectSameOrigin": null
+      },
+      {
+        "kind": "api",
+        "routeKind": "NAMED_OWNER",
+        "status": 404,
+        "visibility": "UNKNOWN",
+        "identityMatches": false,
+        "repoMatches": false,
+        "safeVersionCount": null,
+        "redirectSameOrigin": null
+      }
+    ],
+    "progress": {
+      "schemaVersion": 1,
+      "sourceCommit": "8138ae03fede797087224c72efa2a50c856e01dd",
+      "stage": "VERIFY_WEB",
+      "guardPassed": true,
+      "images": {
+        "web": {
+          "pushAttempted": true,
+          "pushConfirmed": true,
+          "digestConfirmed": true,
+          "metadataVerified": false
+        },
+        "api": {
+          "pushAttempted": false,
+          "pushConfirmed": false,
+          "digestConfirmed": false,
+          "metadataVerified": false
+        }
+      },
+      "temporaryCredentialsCreated": true,
+      "temporaryCredentialsRemoved": true
+    },
+    "automaticRollback": false,
+    "deploymentInvoked": false
+  },
+  "anonymousObservation": {
+    "observedAt": "2026-11-10T19:35:33.498Z",
+    "anonymousOnly": true,
+    "authorizationStatus": 200,
+    "manifestStatus": 200,
+    "repository": "ghcr.io/fonkoukevin/chatgpt_courses-private/web",
+    "manifestDigest": "sha256:1eab5f2bc954e4736bf3f2c83286f0c0b99035d411b2ad35c4cb36da30df43db",
+    "tag": "sha-8138ae03fede797087224c72efa2a50c856e01dd-42877515322-1",
+    "providerBodiesPrinted": false,
+    "packageApiStatuses": [
+      {
+        "kind": "package",
+        "status": 401
+      },
+      {
+        "kind": "versions",
+        "status": 401
+      }
+    ]
+  },
+  "webSourceComparison": {
+    "previousAuditedSourceCommit": "f5cef430da472a0f2eecb9f016deb9a8815ee675",
+    "newSourceCommit": "8138ae03fede797087224c72efa2a50c856e01dd",
+    "gitComparisonExecuted": true,
+    "explicitBuildInputPathsCompared": 14,
+    "inputIdentities": [
+      {
+        "path": "apps/web/Dockerfile",
+        "previousGitObject": "07df4a8ace52ad6fe6f4dff2763fed461df93f0d",
+        "currentGitObject": "07df4a8ace52ad6fe6f4dff2763fed461df93f0d",
+        "unchanged": true
+      },
+      {
+        "path": "apps/web/src",
+        "previousGitObject": "3d51c7f16c615e696b3134865f06d2d284a5290a",
+        "currentGitObject": "3d51c7f16c615e696b3134865f06d2d284a5290a",
+        "unchanged": true
+      },
+      {
+        "path": "apps/web/package.json",
+        "previousGitObject": "0dd5cfdca4a18e6e30f6586450bc2294aba35db4",
+        "currentGitObject": "0dd5cfdca4a18e6e30f6586450bc2294aba35db4",
+        "unchanged": true
+      },
+      {
+        "path": "apps/web/next.config.ts",
+        "previousGitObject": "3f965df7913d7533bca42f5adf4d0ead32bd96a8",
+        "currentGitObject": "3f965df7913d7533bca42f5adf4d0ead32bd96a8",
+        "unchanged": true
+      },
+      {
+        "path": "apps/web/postcss.config.mjs",
+        "previousGitObject": "c2ddf7482206a37d9ae2e5ca0eeddd81b4bde2b7",
+        "currentGitObject": "c2ddf7482206a37d9ae2e5ca0eeddd81b4bde2b7",
+        "unchanged": true
+      },
+      {
+        "path": "apps/web/tsconfig.json",
+        "previousGitObject": "a556ef43ef072413defec03492935a6527863eb2",
+        "currentGitObject": "a556ef43ef072413defec03492935a6527863eb2",
+        "unchanged": true
+      },
+      {
+        "path": "references/design-tokens.css",
+        "previousGitObject": "8c04087b701728c724cb98803e8eff62930555a1",
+        "currentGitObject": "8c04087b701728c724cb98803e8eff62930555a1",
+        "unchanged": true
+      },
+      {
+        "path": "package.json",
+        "previousGitObject": "f87c6a518e0bb3a0fc8034ef41bb394774c1419b",
+        "currentGitObject": "f87c6a518e0bb3a0fc8034ef41bb394774c1419b",
+        "unchanged": true
+      },
+      {
+        "path": "package-lock.json",
+        "previousGitObject": "4b846c760f791310e3dfe29716dc92d3b2d92e74",
+        "currentGitObject": "4b846c760f791310e3dfe29716dc92d3b2d92e74",
+        "unchanged": true
+      },
+      {
+        "path": ".npmrc",
+        "previousGitObject": "6c1eae3b0aa7a64db260fcead15cb9c26a859b10",
+        "currentGitObject": "6c1eae3b0aa7a64db260fcead15cb9c26a859b10",
+        "unchanged": true
+      },
+      {
+        "path": "scripts/container/web-entrypoint.mjs",
+        "previousGitObject": "3972ebc742b32a383d6dd89efc5f0ef663a50c9d",
+        "currentGitObject": "3972ebc742b32a383d6dd89efc5f0ef663a50c9d",
+        "unchanged": true
+      },
+      {
+        "path": "scripts/container/web-healthcheck.mjs",
+        "previousGitObject": "34b3e1476c9ff9446f4559574d188bd6c52d46fc",
+        "currentGitObject": "34b3e1476c9ff9446f4559574d188bd6c52d46fc",
+        "unchanged": true
+      },
+      {
+        "path": ".dockerignore",
+        "previousGitObject": "c1bb925fe8a226f09db2c1e3f4fc63fbd70207e9",
+        "currentGitObject": "c1bb925fe8a226f09db2c1e3f4fc63fbd70207e9",
+        "unchanged": true
+      },
+      {
+        "path": "scripts/deployment/images.mjs",
+        "previousGitObject": "03b54eb3447b27e211a8c966bd8cd6fe6c38da61",
+        "currentGitObject": "03b54eb3447b27e211a8c966bd8cd6fe6c38da61",
+        "unchanged": true
+      }
+    ],
+    "sourceChanges": [
+      {
+        "status": "M",
+        "path": ".github/workflows/deploy.yml"
+      },
+      {
+        "status": "M",
+        "path": "README.md"
+      },
+      {
+        "status": "M",
+        "path": "docs/DECISIONS.md"
+      },
+      {
+        "status": "M",
+        "path": "docs/STATUS.md"
+      },
+      {
+        "status": "A",
+        "path": "docs/evidence/P21-github-linux-checks.json"
+      },
+      {
+        "status": "A",
+        "path": "docs/evidence/P21-package-cleanup-attempt.json"
+      },
+      {
+        "status": "A",
+        "path": "docs/evidence/P21-public-web-audit.json"
+      },
+      {
+        "status": "M",
+        "path": "docs/evidence/P21.md"
+      },
+      {
+        "status": "M",
+        "path": "docs/runbooks/deploy.md"
+      },
+      {
+        "status": "A",
+        "path": "scripts/deployment/approved-test-cleanup.mjs"
+      },
+      {
+        "status": "A",
+        "path": "scripts/deployment/release-diagnostics.mjs"
+      },
+      {
+        "status": "M",
+        "path": "scripts/deployment/release.mjs"
+      },
+      {
+        "status": "A",
+        "path": "tests/scripts/deployment-approved-cleanup.test.mjs"
+      },
+      {
+        "status": "A",
+        "path": "tests/scripts/deployment-diagnostics.test.mjs"
+      },
+      {
+        "status": "M",
+        "path": "tests/scripts/deployment-release.test.mjs"
+      }
+    ],
+    "webBuildInputChanges": [],
+    "baseImageReferenceUnchanged": "node:24.22.2-bookworm-slim@sha256:01d566e8d94d8c619591d78652babfccd3c6992a3dffa9ed5ab39e11cf6c70e9",
+    "revisionBuildArgumentChanged": true,
+    "identicalImageClaimed": false,
+    "newImageConfigOrLayersAudited": false,
+    "previousImageAuditExtendedToNewImage": false
+  },
+  "limits": [
+    "The public replacement web image has not been audited by this comparison.",
+    "A source-input comparison does not prove absence of secrets in an image.",
+    "Authenticated package deletion acknowledgements do not prove removal of cached or previously downloaded bytes.",
+    "The recorded socket error does not establish why the replacement package became public."
+  ],
+  "rawLogsRead": false,
+  "secretsReadForThisProjection": false,
+  "newProviderOrSshCalls": false
+}

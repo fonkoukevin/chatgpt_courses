@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-11-10T21:17:32.445Z",
+  "result": "passed-local-startup",
+  "localOrigins": {
+    "web": "http://localhost:3000",
+    "api": "http://localhost:8080",
+    "mailpit": "http://localhost:8025"
+  },
+  "http": [
+    {
+      "name": "fr",
+      "status": 200
+    },
+    {
+      "name": "en",
+      "status": 200
+    },
+    {
+      "name": "api",
+      "status": 200
+    },
+    {
+      "name": "proxy",
+      "status": 200
+    },
+    {
+      "name": "mailpit",
+      "status": 200
+    }
+  ],
+  "smokeExecuted": true,
+  "smokeChecks": [
+    "FR page200",
+    "EN page200",
+    "Spring/PostgreSQL through same-origin proxy",
+    "structured404 without internal details"
+  ],
+  "browser": {
+    "checkedAt": "2026-11-10T21:16:40.684Z",
+    "result": "passed",
+    "checks": [
+      {
+        "path": "/fr",
+        "status": 200,
+        "mainVisible": true,
+        "headingPresent": true
+      },
+      {
+        "path": "/fr/inscription",
+        "status": 200,
+        "mainVisible": true,
+        "headingPresent": true,
+        "emailFieldVisible": true,
+        "passwordFieldVisible": true
+      }
+    ],
+    "accountsCreated": 0,
+    "providerCalls": 0
+  },
+  "privateEnvironmentUnchanged": true,
+  "userNextEnvUnchanged": true,
+  "staleProcessRecordArchived": true,
+  "stalePidsConfirmedAbsent": true,
+  "unknownProcessesTerminated": false,
+  "existingVolumesDeleted": false,
+  "accountsCreated": 0,
+  "providerCallsByChecks": 0,
+  "stripeListenerStarted": false,
+  "remoteDeploymentExecuted": false,
+  "limits": [
+    "First bounded startup wait ended before Maven/Spring finished; subsequent HTTP/smoke/browser checks passed.",
+    "First Chromium launch used the default browser location and failed before launch; explicit existing .tools/playwright path corrected it, without installation.",
+    "Two public pages checked headlessly; no new full authenticated business or visual review claimed.",
+    "P21 registry privacy blocker remains unchanged."
+  ]
+}

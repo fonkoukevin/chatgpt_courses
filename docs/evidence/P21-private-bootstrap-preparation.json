@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-10T22:10:39.143Z",
+  "result": "prepared-and-checked-locally",
+  "baseCommit": "242e6515bbc874bdcc490318e6a84e6d1e834948",
+  "node": "v24.22.2",
+  "platform": "win32",
+  "userStatement": {
+    "manualPackageVisibilityChange": false,
+    "accountSettingsPublicConfirmedInPreviousExchange": true
+  },
+  "explanation": {
+    "confidence": "probable-documentary-explanation",
+    "workflowRepositoryVisibility": "public",
+    "publicationCredentialMode": "ephemeral-GITHUB_TOKEN",
+    "internalVisibilityChangeAuditObserved": false,
+    "specificWorkflowDocumentation": "https://docs.github.com/en/packages/managing-github-packages-using-github-actions-workflows/publishing-and-installing-a-package-with-github-actions#default-permissions-and-access-settings-for-packages-modified-through-workflows",
+    "conflictingGeneralDocumentation": "https://docs.github.com/en/packages/learn-github-packages/configuring-a-packages-access-control-and-visibility"
+  },
+  "proposedRepository": {
+    "fullName": "fonkoukevin/chatgpt_courses_registry",
+    "requiredVisibility": "private",
+    "connectorGetStatus": 404,
+    "nameAvailabilityGuaranteed": false,
+    "creationAuthorized": false,
+    "created": false,
+    "filesInstalledRemotely": false
+  },
+  "candidate": {
+    "files": [
+      {
+        "path": "infra/registry-bootstrap/README.md",
+        "sha256": "aa521e3c8a6383b2b32f9309649875b9d2d2ff7fee1d14641a235d277c6f7c35"
+      },
+      {
+        "path": "infra/registry-bootstrap/.github/workflows/registry-bootstrap.yml",
+        "sha256": "e1b65f965056b497bc0c82d13a0ced0943222cc9f2d36e616738196f01e614b1"
+      },
+      {
+        "path": "infra/registry-bootstrap/scripts/registry-bootstrap.mjs",
+        "sha256": "ba932ba1daaba33a25ccc87bcdcbc4f3d1dff78ea7e50e84de2ac3813182432b"
+      },
+      {
+        "path": "infra/registry-bootstrap/stub/Dockerfile",
+        "sha256": "3ef893f351e36ff1d64aa2c0c1924ddc07078668a566358c3c9b6a03240be68e"
+      },
+      {
+        "path": "infra/registry-bootstrap/stub/marker.txt",
+        "sha256": "485b2913022f2c828a5668b0da3313a96a2ca39b0458d808a50509832620e6af"
+      },
+      {
+        "path": "infra/registry-bootstrap/tests/registry-bootstrap.test.mjs",
+        "sha256": "099ec1301d2fa78f6fd83fb1270d6ddaf4a6838d7ae557e97e3c4ce7627d7be3"
+      }
+    ],
+    "imagePrefix": "ghcr.io/fonkoukevin/chatgpt_courses-private",
+    "kinds": [
+      "web",
+      "api"
+    ],
+    "contents": "FROM scratch plus fixed inert marker only",
+    "workflowDispatchOnly": true,
+    "defaultOperation": "plan",
+    "nestedWorkflowActiveInApplicationRepository": false,
+    "existingPackageMustBlock": true,
+    "publicWebPackageStillBlocks": true,
+    "deletionImplemented": false,
+    "applicationReleaseProduced": false,
+    "durableCredentialRequired": false,
+    "futureSourceAndActionsAccessNeedSeparateReview": true
+  },
+  "checks": {
+    "scripts": {
+      "command": ".tools/node-v24.22.2-win-x64/node.exe scripts/ci-run.mjs web scripts",
+      "tests": 89,
+      "suites": 0,
+      "pass": 89,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "summarySha256": "51383233f5e4d82f7bde9d0752fefd3c60266df365a642e52776f2ca4112298f"
+    },
+    "bootstrapPolicyTests": {
+      "tests": 10,
+      "passed": 10,
+      "includedInScriptsGroup": true,
+      "importedBy": "tests/scripts/deployment-registry-bootstrap.test.mjs",
+      "dockerAndProviders": "simulated"
+    },
+    "lint": {
+      "result": "passed",
+      "config": "apps/web/eslint.config.mjs",
+      "nodeGlobalsDeclared": true,
+      "rulesDisabled": false
+    },
+    "actionlint": {
+      "version": "1.7.12",
+      "result": "passed",
+      "target": "infra/registry-bootstrap/.github/workflows/registry-bootstrap.yml"
+    },
+    "independentReview": {
+      "result": "no-material-defect-remaining",
+      "includedWorkflowAndCleanup": true
+    }
+  },
+  "history": [
+    {
+      "check": "candidate-review",
+      "issuesCorrected": [
+        "Unknown CLI operations could select bootstrap.",
+        "Post-push digest and partial progress were initially missing.",
+        "Docker Buildx state needed a separate directory from credentials."
+      ]
+    },
+    {
+      "check": "lint",
+      "initialErrors": 2,
+      "corrected": [
+        "Document intentional cancellation-error suppression.",
+        "Check control characters by code point without a control-character regular expression."
+      ],
+      "rulesDisabled": false
+    }
+  ],
+  "preservation": {
+    "userNextEnvUnchanged": true,
+    "privateEnvironmentUnchanged": true
+  },
+  "externalMutationPerformed": false,
+  "githubJobDispatched": false,
+  "registryPushExecuted": false,
+  "packageDeleted": false,
+  "dockerBuildExecuted": false,
+  "linuxCleanupObserved": false,
+  "vpsAccessedThisTurn": false,
+  "providerOrPersonalLogBodyPrinted": false,
+  "limits": [
+    "Documentation gives a probable explanation, not internal attribution of the two past events.",
+    "All bootstrap success and failure scenarios are simulated; no GHCR bootstrap, Docker build or Linux cleanup was performed.",
+    "The public package remains a separately authorized cleanup problem; no new image name was selected.",
+    "A public repository granted access may allow forks to access private packages; this must be resolved before granting access.",
+    "404 is limited to caller visibility; neither name availability nor global package absence is guaranteed.",
+    "No job may run before authorization and applicable quota/budget checks; no paid subscription or budget increase is authorized.",
+    "Preparation and creation/install authorization do not authorize any bootstrap execution, image publication, access grant or deployment."
+  ]
+}

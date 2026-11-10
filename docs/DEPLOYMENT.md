@@ -35,6 +35,8 @@ Les noms exacts peuvent s’adapter à un dépôt existant sans restructuration 
 
 Les fichiers d’environnement réels sont exclus du dépôt. Les exemples listent les noms, le caractère obligatoire et la source attendue des valeurs, sans secret réel.
 
+P21 contrôle explicitement la visibilité des paquets GHCR `/web` et `/api`. Le défaut `EXPECTED_IMAGE_VISIBILITY=private` exige deux paquets préexistants privés, propriétaire/source concordants et refus anonyme. **Le 10novembre, l’utilisateur autorise ensuite les images publiques** : `EXPECTED_IMAGE_VISIBILITY=public`, source publique et préfixe `ghcr.io/fonkoukevin/chatgpt_courses`. Ce mode peut créer les paquets, puis exige métadonnées publiques et lecture anonyme du digest exact après chaque push et avant déploiement. Les secrets/configurations/données privés restent hors des images. Un403 ou une identité ambiguë bloque toujours. Voir la [décision](DECISIONS.md) et le [runbook](runbooks/deploy.md).
+
 ## Exécution locale
 
 Le frontend peut fonctionner directement dans l’environnement de développement choisi en P00, notamment WSL2 si c’est le mode retenu sur Windows. Les dépendances locales tournent dans Compose. Préserver la cohérence entre chemins, exécutables, Docker et réseau ; ne pas mélanger involontairement installations Windows et WSL.

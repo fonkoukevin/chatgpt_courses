@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { MAX_BACKUP_RECEIPT_BYTES, repository, validateSourceRepository, ghcrConfiguration, ghcrRemoteScript, requireGhcrAnonymousReadDenied, requireGhcrPrivatePackage, validateManifest, manifestBytes, sha256, parseManifest, protectedEnvironment, targetConfiguration, stagingPaymentTestFlag, validateBackupReceipt, validateSchemaFacts } from '../../scripts/deployment/release.mjs';
+import { MAX_BACKUP_RECEIPT_BYTES, repository, validateSourceRepository, expectedImageVisibility, ghcrConfiguration, ghcrRemoteScript, requireGhcrAnonymousReadDenied, requireGhcrAnonymousDigestReadable, requireGhcrPackage, requireGhcrPrivatePackage, validateManifest, manifestBytes, sha256, parseManifest, protectedEnvironment, targetConfiguration, stagingPaymentTestFlag, validateBackupReceipt, validateSchemaFacts } from '../../scripts/deployment/release.mjs';
 
 const prefix='registry.invalid/team/courses';
 const candidate=()=>({schemaVersion:1,sourceCommit:'a'.repeat(40),web:{repository:prefix+'/web',digest:'sha256:'+'b'.repeat(64)},api:{repository:prefix+'/api',digest:'sha256:'+'c'.repeat(64)},schema:{min:19,max:19}});
@@ -105,16 +105,47 @@ test('private package metadata must positively bind visibility, owner and the ex
   let probes=0;await assert.rejects(requireGhcrPrivatePackage(env,'web',{request:async()=>{probes++;return reply(200,{...metadata,...changed});}}),/PRIVATE_PACKAGE_REQUIRED|PACKAGE_SOURCE_REQUIRED|PACKAGE_IDENTITY_MISMATCH/);assert.equal(probes,1);
  }
 });
-test('missing metadata is allowed only before initial publication with a structured anonymous denial; unknown capability blocks',async()=>{
- const env=ghcrEnvironment(),reply=(status,value)=>({status,ok:status>=200&&status<300,text:async()=>value===undefined?'':JSON.stringify(value)}),denied={errors:[{code:'UNAUTHORIZED',message:'SYNTHETIC_PRIVATE_MESSAGE'}]};
- const absent=async url=>url.startsWith('https://api.github.com/')?reply(404):reply(401,denied);
- assert.equal(await requireGhcrPrivatePackage(env,'web',{allowMissing:true,request:absent}),'absent');
- await assert.rejects(requireGhcrPrivatePackage(env,'web',{request:absent}),/PACKAGE_METADATA_UNAVAILABLE/);
- for(const status of [401,403,429,500,503]){
-  let probes=0;await assert.rejects(requireGhcrPrivatePackage(env,'web',{allowMissing:true,request:async()=>{probes++;return reply(status);}}),/PACKAGE_METADATA_UNAVAILABLE/);assert.equal(probes,1);
+test('missing metadata and unknown capabilities cannot establish a private package or permit an initial publication',async()=>{
+ const env=ghcrEnvironment(),reply=status=>({status,ok:status>=200&&status<300,text:async()=>''});
+ for(const kind of ['web','api'])for(const status of [401,403,404,429,500,503]){
+  let probes=0;await assert.rejects(requireGhcrPrivatePackage(env,kind,{request:async()=>{probes++;return reply(status);}}),/PACKAGE_METADATA_UNAVAILABLE/);assert.equal(probes,1);
  }
- await assert.rejects(requireGhcrPrivatePackage(env,'web',{allowMissing:true,request:async url=>url.startsWith('https://api.github.com/')?reply(404):reply(403)}),/PRIVACY_UNVERIFIED/);
- await assert.rejects(requireGhcrPrivatePackage(env,'web',{allowMissing:true,request:async url=>url.startsWith('https://api.github.com/')?reply(404):url.includes('/token?')?reply(200,{token:'SYNTHETIC_ANONYMOUS_TOKEN'}):reply(200,{tags:['public']})}),/PRIVATE_PACKAGE_REQUIRED/);
+});
+const publicEnvironment=()=>({...ghcrEnvironment(),EXPECTED_IMAGE_VISIBILITY:'public',EXPECTED_SOURCE_VISIBILITY:'public',IMAGE_REPOSITORY:'ghcr.io/fonkoukevin/chatgpt_courses'});
+const publicManifest=Buffer.from(JSON.stringify({schemaVersion:2,mediaType:'application/vnd.oci.image.manifest.v1+json',config:{},layers:[]}));
+const publicDigest='sha256:'+sha256(publicManifest);
+const publicReply=(bytes=publicManifest,headers={},status=200)=>new Response(bytes,{status,headers:{'Content-Type':'application/vnd.oci.image.manifest.v1+json','Docker-Content-Digest':publicDigest,...headers}});
+test('public image visibility requires its explicit public source and one exact namespace; the default stays private',()=>{
+ assert.equal(expectedImageVisibility({}),'private');assert.equal(expectedImageVisibility({EXPECTED_IMAGE_VISIBILITY:''}),'private');
+ for(const value of ['PUBLIC','yes',true,false,null])assert.throws(()=>expectedImageVisibility({EXPECTED_IMAGE_VISIBILITY:value}),/IMAGE_VISIBILITY_INVALID/);
+ const env=publicEnvironment();assert.equal(ghcrConfiguration(env).imageVisibility,'public');
+ for(const change of [{EXPECTED_SOURCE_VISIBILITY:'private'},{EXPECTED_SOURCE_VISIBILITY:''},{GITHUB_REPOSITORY:'other/source'}])assert.throws(()=>ghcrConfiguration({...env,...change}),/PUBLIC_IMAGES_REQUIRE_PUBLIC_SOURCE/);
+ for(const prefix of ['ghcr.io/fonkoukevin/chatgpt_courses-private','ghcr.io/other/chatgpt_courses','ghcr.io/fonkoukevin/chatgpt_courses-more'])assert.throws(()=>ghcrConfiguration({...env,IMAGE_REPOSITORY:prefix}),/SOURCE_NAMESPACE_REQUIRED/);
+ assert.throws(()=>ghcrConfiguration({...env,EXPECTED_IMAGE_VISIBILITY:''}),/SOURCE_NAMESPACE_REQUIRED/);
+});
+test('a public digest is read anonymously at its immutable URL and must match both response header and body hash',async()=>{
+ const image=publicEnvironment().IMAGE_REPOSITORY+'/web',calls=[];
+ const request=async(url,options)=>{calls.push({url,options});return url.includes('/token?')?new Response(JSON.stringify({token:'SYNTHETIC_ANONYMOUS_TOKEN'})):publicReply();};
+ await requireGhcrAnonymousDigestReadable(image,publicDigest,request);
+ assert.equal(calls.length,2);assert.equal(calls[0].options.headers,undefined);
+ assert.equal(calls[1].url,`https://ghcr.io/v2/fonkoukevin/chatgpt_courses/web/manifests/${publicDigest}`);
+ assert.equal(calls[1].options.headers.Authorization,'Bearer SYNTHETIC_ANONYMOUS_TOKEN');assert.equal(calls[1].options.redirect,'error');
+ assert.equal(JSON.stringify(calls).includes(publicEnvironment().GITHUB_TOKEN),false);
+ const bad=[()=>publicReply(publicManifest,{'Docker-Content-Digest':'sha256:'+'f'.repeat(64)}),()=>publicReply(Buffer.from('changed')),()=>publicReply(publicManifest,{'Content-Type':'text/html'}),()=>publicReply(publicManifest,{'Content-Length':'4194305'}),()=>publicReply(publicManifest,{'Content-Length':'invalid'}),()=>publicReply(publicManifest,{},403),()=>publicReply(publicManifest,{},302),()=>new Response(new Uint8Array(4194305),{headers:{'Content-Type':'application/vnd.oci.image.manifest.v1+json','Docker-Content-Digest':publicDigest}})];
+ for(const reply of bad)await assert.rejects(requireGhcrAnonymousDigestReadable(image,publicDigest,async url=>url.includes('/token?')?new Response(JSON.stringify({token:'SYNTHETIC_ANONYMOUS_TOKEN'})):reply()),/PUBLIC_DIGEST_UNVERIFIED/);
+ await assert.rejects(requireGhcrAnonymousDigestReadable(image,'latest',request),/IMAGE_DIGEST_REQUIRED/);
+ await assert.rejects(requireGhcrAnonymousDigestReadable(image,publicDigest,async()=>new Response(null,{status:403})),/PUBLIC_DIGEST_UNVERIFIED/);
+});
+test('public package metadata must positively bind visibility and source; only an initial public 404 permits creation',async()=>{
+ const env=publicEnvironment(),metadata={name:'chatgpt_courses/web',package_type:'container',owner:{login:'fonkoukevin'},visibility:'public',repository:{full_name:env.GITHUB_REPOSITORY,private:false}};
+ const request=async url=>url.startsWith('https://api.github.com/')?new Response(JSON.stringify(metadata)):url.includes('/token?')?new Response(JSON.stringify({token:'SYNTHETIC_ANONYMOUS_TOKEN'})):publicReply();
+ assert.equal(await requireGhcrPackage(env,'web',{digest:publicDigest,request}),'public');
+ for(const changed of [{visibility:'private'},{visibility:'internal'},{visibility:undefined},{owner:{login:'other'}},{repository:{full_name:env.GITHUB_REPOSITORY,private:true}},{repository:{full_name:'other/source',private:false}}])await assert.rejects(requireGhcrPackage(env,'web',{digest:publicDigest,request:async()=>new Response(JSON.stringify({...metadata,...changed}))}),/PUBLIC_PACKAGE_REQUIRED|PACKAGE_SOURCE_REQUIRED|PACKAGE_IDENTITY_MISMATCH/);
+ assert.equal(await requireGhcrPackage(env,'web',{allowMissing:true,request:async()=>new Response(null,{status:404})}),'absent');
+ for(const options of [{},{digest:publicDigest},{allowMissing:true,digest:publicDigest}])await assert.rejects(requireGhcrPackage(env,'web',{...options,request:async()=>new Response(null,{status:404})}),/PACKAGE_METADATA_UNAVAILABLE/);
+ for(const status of [401,403,429,500])await assert.rejects(requireGhcrPackage(env,'web',{allowMissing:true,request:async()=>new Response(null,{status})}),/PACKAGE_METADATA_UNAVAILABLE/);
+ await assert.rejects(requireGhcrPrivatePackage(env,'web',{request}),/PRIVATE_PACKAGE_REQUIRED/);
+ await assert.rejects(requireGhcrPackage(ghcrEnvironment(),'web',{allowMissing:true,request}),/PRIVATE_PACKAGE_REQUIRED/);
 });
 test('backup evidence is bound to actual receipt bytes, successful authenticated encryption and the exact target',()=>{
  const target={project:'courses-staging',environment:'staging',database:'courses_staging'},value={result:'passed',authenticatedEncryption:true,...target};

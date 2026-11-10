@@ -12,6 +12,17 @@ const json = (body, status = 200) => new Response(JSON.stringify(body), { status
 const metadata = (kind, changes = {}) => ({ name: `synthetic_courses-private/${kind}`, package_type: 'container', owner: { login: 'synthetic-owner' },
   repository: { full_name: 'synthetic-owner/synthetic_courses' }, visibility: 'private', version_count: 2, ...changes });
 
+test('read-only diagnosis supports the exact public namespace without confusing its identity with the private namespace', async () => {
+  const env = { ...input(), imageRepository: 'ghcr.io/synthetic-owner/synthetic_courses' };
+  const rows = await inspectRegistryReadOnly(env, { request: async url => {
+    assert.equal(url.includes('synthetic_courses-private'), false);
+    const kind = decodeURIComponent(url).split('/').at(-1);
+    return json(metadata(kind, { name: `synthetic_courses/${kind}`, visibility: 'public' }));
+  } });
+  assert.equal(rows.length, 4);
+  assert.ok(rows.every(row => row.status === 200 && row.visibility === 'public' && row.identityMatches && row.repoMatches));
+});
+
 test('failure diagnostics expose only a fixed class/code and a real bounded release.mjs frame', () => {
   const secret = 'SYNTHETIC_PRIVATE_SENTINEL';
   const error = Object.assign(new TypeError(`${secret} https://private.invalid/?token=${secret}`), { code: secret,
@@ -99,7 +110,7 @@ test('input injection is rejected before any request and transport or invalid JS
   const request = async () => { calls++; throw new Error('SYNTHETIC_PRIVATE'); };
   const controls = [...Array.from({ length: 32 }, (_value, code) => code), 127];
   for (const changes of [{ owner: 'owner/foreign' }, { owner: '-bad' }, { repositoryName: '../foreign' }, { repositoryName: 'repo?token=private' },
-    { imageRepository: 'ghcr.io/synthetic-owner/synthetic_courses' }, { imageRepository: 'ghcr.io/foreign/synthetic_courses-private' },
+    { imageRepository: 'ghcr.io/synthetic-owner/synthetic_courses-public' }, { imageRepository: 'ghcr.io/foreign/synthetic_courses-private' },
     { token: 'SYNTHETIC_PRIVATE\nAuthorization:value' }, { token: '' }, { token: 'S'.repeat(19) }, { token: 'S'.repeat(4097) },
     { token: 'SYNTHETIC PRIVATE JOB TOKEN' }, { token: 'SYNTHETIC_PRIVATE\u00a0JOB_TOKEN' }, { extra: 'SYNTHETIC_PRIVATE' },
     ...controls.map(code => ({ token: `SYNTHETIC_PRIVATE${String.fromCharCode(code)}JOB_TOKEN` }))]) {

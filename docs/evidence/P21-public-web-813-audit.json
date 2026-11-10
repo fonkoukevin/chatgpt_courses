@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-11-10T21:50:33.747Z",
+  "image": "ghcr.io/fonkoukevin/chatgpt_courses-private/web@sha256:1eab5f2bc954e4736bf3f2c83286f0c0b99035d411b2ad35c4cb36da30df43db",
+  "sourceCommit": "8138ae03fede797087224c72efa2a50c856e01dd",
+  "result": "passed-bounded-audit",
+  "anonymousRegistryReadConfirmed": true,
+  "configuration": {
+    "hashVerified": true,
+    "sourceCommitMatches": true,
+    "sourceRepositoryMatches": true,
+    "user": "10001:10001",
+    "knownPrivateValuesCompared": 16,
+    "knownValueMatches": 0
+  },
+  "layerAudit": {
+    "layers": 13,
+    "allLayerDigestsVerified": true,
+    "compressedBytes": 96288865,
+    "expandedBytes": 285816320,
+    "knownPrivateValuesCompared": 16,
+    "knownPrivateValueMatches": 0,
+    "providerPatternCandidates": 4,
+    "completePemCandidates": 6,
+    "exactCandidateFilesUnchanged": true,
+    "allBlocksPreviouslyClassified": true,
+    "classificationSource": "preserved-2026-11-09-GnuTLS-self-test-vector-review",
+    "publicGnutlsSelfTestVectorsMatched": 6,
+    "headerOnlyMarkers": "unchanged npm documentation",
+    "sourceUrl": "https://gitlab.com/gnutls/gnutls/-/blob/ca61668d7764fc29fb4cc2aa396cb035e176636d/lib/crypto-selftests-pk.c"
+  },
+  "receipts": [
+    {
+      "file": "public-web-813-full-layer-audit.json",
+      "sha256": "f8d837163229ad4750e0f062a95e4b472f945cffe2326ffb602011884c640f78"
+    },
+    {
+      "file": "public-web-813-config-audit.json",
+      "sha256": "426db731597387a8e33d8f970ea2478dc55eb50cd1715b48e579a3301e48ed84"
+    },
+    {
+      "file": "public-web-813-pem-candidate-paths.private.json",
+      "sha256": "7e0501f3c80fc15707a0fd45a28f5352e4b6a06fbaf8f69680980a7ce583553c"
+    },
+    {
+      "file": "public-web-gnutls-vector-classification.private.json",
+      "sha256": "6a260576826235f54c62c41e5ba709b219b2cb97f73ec7e97d4207d7154a758a"
+    }
+  ],
+  "imageExecuted": false,
+  "registryCredentialUsed": false,
+  "privateApplicationKeyValuesPrinted": false,
+  "remoteMutationPerformed": false,
+  "limits": [
+    "Exact known literal values and five provider-pattern families only; unknown or transformed credentials are not excluded.",
+    "All thirteen gzip tar-layer streams and the configuration were scanned without executing or extracting image files to disk.",
+    "Six PEM blocks match the hashes and sizes from the preserved upstream classification; unchanged candidate files were verified, without a new upstream download.",
+    "The exact Debian binary revision was not independently established.",
+    "The cause of public visibility and any previous third-party downloads remain unknown."
+  ]
+}

@@ -35,6 +35,8 @@ Les noms exacts peuvent s’adapter à un dépôt existant sans restructuration 
 
 Les fichiers d’environnement réels sont exclus du dépôt. Les exemples listent les noms, le caractère obligatoire et la source attendue des valeurs, sans secret réel.
 
+P21 impose des paquets GHCR `/web` et `/api` préexistants et positivement privés avant toute publication applicative : métadonnées, propriétaire, lien source et refus anonyme sont contrôlés avant nettoyage optionnel, credentials Docker, build ou push, puis après chaque push. L’absence d’un paquet ne prouve pas sa future confidentialité et bloque le contrôleur. Le provisionnement initial reste une opération distincte à résoudre après l’incident de visibilité, selon le [runbook de livraison](runbooks/deploy.md).
+
 ## Exécution locale
 
 Le frontend peut fonctionner directement dans l’environnement de développement choisi en P00, notamment WSL2 si c’est le mode retenu sur Windows. Les dépendances locales tournent dans Compose. Préserver la cohérence entre chemins, exécutables, Docker et réseau ; ne pas mélanger involontairement installations Windows et WSL.

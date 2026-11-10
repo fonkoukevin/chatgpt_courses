@@ -105,16 +105,11 @@ test('private package metadata must positively bind visibility, owner and the ex
   let probes=0;await assert.rejects(requireGhcrPrivatePackage(env,'web',{request:async()=>{probes++;return reply(200,{...metadata,...changed});}}),/PRIVATE_PACKAGE_REQUIRED|PACKAGE_SOURCE_REQUIRED|PACKAGE_IDENTITY_MISMATCH/);assert.equal(probes,1);
  }
 });
-test('missing metadata is allowed only before initial publication with a structured anonymous denial; unknown capability blocks',async()=>{
- const env=ghcrEnvironment(),reply=(status,value)=>({status,ok:status>=200&&status<300,text:async()=>value===undefined?'':JSON.stringify(value)}),denied={errors:[{code:'UNAUTHORIZED',message:'SYNTHETIC_PRIVATE_MESSAGE'}]};
- const absent=async url=>url.startsWith('https://api.github.com/')?reply(404):reply(401,denied);
- assert.equal(await requireGhcrPrivatePackage(env,'web',{allowMissing:true,request:absent}),'absent');
- await assert.rejects(requireGhcrPrivatePackage(env,'web',{request:absent}),/PACKAGE_METADATA_UNAVAILABLE/);
- for(const status of [401,403,429,500,503]){
-  let probes=0;await assert.rejects(requireGhcrPrivatePackage(env,'web',{allowMissing:true,request:async()=>{probes++;return reply(status);}}),/PACKAGE_METADATA_UNAVAILABLE/);assert.equal(probes,1);
+test('missing metadata and unknown capabilities cannot establish a private package or permit an initial publication',async()=>{
+ const env=ghcrEnvironment(),reply=status=>({status,ok:status>=200&&status<300,text:async()=>''});
+ for(const kind of ['web','api'])for(const status of [401,403,404,429,500,503]){
+  let probes=0;await assert.rejects(requireGhcrPrivatePackage(env,kind,{request:async()=>{probes++;return reply(status);}}),/PACKAGE_METADATA_UNAVAILABLE/);assert.equal(probes,1);
  }
- await assert.rejects(requireGhcrPrivatePackage(env,'web',{allowMissing:true,request:async url=>url.startsWith('https://api.github.com/')?reply(404):reply(403)}),/PRIVACY_UNVERIFIED/);
- await assert.rejects(requireGhcrPrivatePackage(env,'web',{allowMissing:true,request:async url=>url.startsWith('https://api.github.com/')?reply(404):url.includes('/token?')?reply(200,{token:'SYNTHETIC_ANONYMOUS_TOKEN'}):reply(200,{tags:['public']})}),/PRIVATE_PACKAGE_REQUIRED/);
 });
 test('backup evidence is bound to actual receipt bytes, successful authenticated encryption and the exact target',()=>{
  const target={project:'courses-staging',environment:'staging',database:'courses_staging'},value={result:'passed',authenticatedEncryption:true,...target};

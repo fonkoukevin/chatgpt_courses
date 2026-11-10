@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-10T21:52:06.222Z",
+  "result": "passed-locally",
+  "baseCommit": "11d12603c9ea452cbbe6038f846e425cc467c28c",
+  "node": "v24.22.2",
+  "platform": "win32",
+  "correction": "Require both preexisting private packages before optional registry cleanup, Docker credentials, build or push; remove allowMissing.",
+  "inputs": [
+    {
+      "path": "scripts/deployment/release.mjs",
+      "sha256": "966cb454c5b7fe3dc55443f195ad99e6a1b56ac571e8336effa6a9d64c9442d1"
+    },
+    {
+      "path": "tests/scripts/deployment-release.test.mjs",
+      "sha256": "903ef9c1763e0229dc54f3e93a5d27a0e7d0a82454440f26834821f11d2ff148"
+    },
+    {
+      "path": "tests/scripts/deployment-publication.test.mjs",
+      "sha256": "be4e662096abc8622cd68e9e5463810203005ff462ad25af1c292b76f07c3843"
+    },
+    {
+      "path": "tests/fixtures/deployment/publication-probe.mjs",
+      "sha256": "b95ed96e1db5b583fdb56d543946af7fbb6ddd0c309dfa53579502e5c79be245"
+    }
+  ],
+  "checks": {
+    "scripts": {
+      "command": ".tools/node-v24.22.2-win-x64/node.exe scripts/ci-run.mjs web scripts",
+      "tests": 79,
+      "suites": 0,
+      "pass": 79,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "exitCode": 0,
+      "summarySha256": "17e0741ef231d7c8dcf7be17b5ad5fc23887043e86231fd31336a388ec6cbe66"
+    },
+    "targeted": {
+      "tests": 31,
+      "passed": 31,
+      "failed": 0,
+      "skipped": 0,
+      "suites": [
+        "deployment-publication",
+        "deployment-release",
+        "deployment-diagnostics",
+        "deployment-approved-cleanup"
+      ]
+    },
+    "publicationProbe": {
+      "realCliExecuted": true,
+      "subprocessIsolated": true,
+      "providersAndDockerSimulated": true,
+      "casesRejectedBeforeMutation": [
+        "web absent",
+        "web public",
+        "api absent",
+        "api public"
+      ],
+      "cleanupOptInEnabledInRejectedCases": true,
+      "existingPrivatePairSimulatedSuccessfully": true,
+      "postPushChecksRetained": true,
+      "actualRegistryPublicationExecuted": false
+    },
+    "lint": {
+      "result": "passed",
+      "config": "apps/web/eslint.config.mjs",
+      "nodeGlobalsExplicit": true,
+      "rulesDisabled": false,
+      "files": [
+        "scripts/deployment/release.mjs",
+        "tests/scripts/deployment-release.test.mjs",
+        "tests/scripts/deployment-publication.test.mjs",
+        "tests/fixtures/deployment/publication-probe.mjs"
+      ]
+    },
+    "actionlint": {
+      "version": "1.7.12",
+      "result": "passed",
+      "files": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/deploy.yml"
+      ]
+    },
+    "independentReadOnlyReview": {
+      "result": "no-material-defect-found",
+      "testsExecutedByReviewer": false
+    }
+  },
+  "remoteReadOnly": {
+    "checkedAt": "2026-11-10T21:49:14.226620+00:00",
+    "result": "passed-read-only",
+    "preexistingContainers": 12,
+    "containerIdentityStateAndImagesUnchanged": true,
+    "caddyAndComposeHashesAndInodesUnchanged": true,
+    "stagingContainers": 0,
+    "stagingVolumes": 0,
+    "secretValuesRead": false,
+    "mutationPerformed": false
+  },
+  "preservation": {
+    "checkedAt": "2026-11-10T21:52:06.077Z",
+    "node": "v24.22.2",
+    "userNextEnvUnchanged": true,
+    "privateEnvironmentUnchanged": true,
+    "privateValuesPrinted": false
+  },
+  "browserSettings": {
+    "inventoryRead": true,
+    "browserAccessHostAvailable": false,
+    "browserSelected": false,
+    "settingsInspected": false,
+    "restrictionBypassed": false,
+    "manualInspectionRequested": true
+  },
+  "localHttp": {
+    "port": 3000,
+    "result": "ECONNREFUSED",
+    "attemptedBeforeServiceMutation": true,
+    "processesStartedOrStopped": false
+  },
+  "history": [
+    {
+      "check": "targeted-tests",
+      "result": "failed-initially",
+      "failures": 2,
+      "node": "v24.14.0",
+      "cause": "Synthetic openSync adapter intercepted the ESM loader read.",
+      "correction": "Delegate read descriptors to the original functions; final checks use pinned Node24.22.2."
+    },
+    {
+      "check": "eslint",
+      "result": "failed-initially",
+      "cause": "Web ESLint configuration has no Node global declarations for scripts.",
+      "correction": "Supply standard Node globals explicitly, as in the existing P20 check; no rule disabled."
+    }
+  ],
+  "limits": [
+    "Linux checks unavailable: Docker Desktop Linux engine pipe absent; no Docker service started.",
+    "Docker and successful publication in the CLI probe are simulated; no new GitHub CI run, image build, push or deployment.",
+    "Privacy checks are point-in-time and cannot prevent a concurrent external visibility change.",
+    "Public visibility cause and safe initial package provisioning remain unresolved.",
+    "No production, Stripe, migration, backup, proxy or external alert action performed."
+  ]
+}

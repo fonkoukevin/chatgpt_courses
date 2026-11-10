@@ -62,7 +62,7 @@ export async function requireGhcrAnonymousReadDenied(image, request = fetch) {
   requireRelease(!listing.ok, 'RELEASE_GHCR_PRIVATE_PACKAGE_REQUIRED');
   await requireRegistryDenial(listing);
 }
-export async function requireGhcrPrivatePackage(env, kind, { allowMissing = false, request = fetch } = {}) {
+export async function requireGhcrPrivatePackage(env, kind, { request = fetch } = {}) {
   const { imageRepository } = ghcrConfiguration(env);
   requireRelease(['web', 'api'].includes(kind), 'RELEASE_GHCR_IMAGE_REQUIRED');
   const [, owner, ...packagePath] = imageRepository.split('/'), packageName = `${packagePath.join('/')}/${kind}`;
@@ -72,10 +72,6 @@ export async function requireGhcrPrivatePackage(env, kind, { allowMissing = fals
     headers: { Accept: 'application/vnd.github+json', Authorization: `Bearer ${jobToken(env)}`, 'X-GitHub-Api-Version': '2026-03-10' },
     redirect: 'error', signal: AbortSignal.timeout(15000)
   });
-  if (metadata.status === 404 && allowMissing) {
-    await requireGhcrAnonymousReadDenied(`${imageRepository}/${kind}`, request);
-    return 'absent';
-  }
   requireRelease(metadata.status === 200, 'RELEASE_GHCR_PACKAGE_METADATA_UNAVAILABLE');
   const value = await responseJson(metadata, 256 * 1024, 'RELEASE_GHCR_PACKAGE_METADATA_UNAVAILABLE');
   requireRelease(value?.name === packageName && value.package_type === 'container' && typeof value.owner?.login === 'string' && value.owner.login.toLowerCase() === owner.toLowerCase(), 'RELEASE_GHCR_PACKAGE_IDENTITY_MISMATCH');
@@ -201,13 +197,15 @@ async function publish() {
     const { imageRepository, registry, username, sourceUrl } = ghcrConfiguration(env), token = jobToken(env);
     registryContext = { owner: env.GITHUB_REPOSITORY.split('/')[0], repositoryName: env.GITHUB_REPOSITORY.split('/')[1], imageRepository, token };
     requireRelease(['', 'false', 'true'].includes(env.APPROVED_TEST_PACKAGE_CLEANUP ?? ''), 'RELEASE_APPROVED_TEST_CLEANUP_FLAG_INVALID');
+    // A missing package has no established private policy. Both destinations
+    // must already be private before credentials, cleanup, build or any push.
+    for (const kind of ['web', 'api']) { stage(`CHECK_EXISTING_${kind.toUpperCase()}`); await requireGhcrPrivatePackage(env, kind); }
     if (env.APPROVED_TEST_PACKAGE_CLEANUP === 'true') {
       stage('APPROVED_TEST_CLEANUP');
       await cleanupApprovedTestPackage({ approvedTestCleanup: true, environment: env.TARGET_ENVIRONMENT,
         guardPassed: progress.guardPassed, sourceRepository: env.GITHUB_REPOSITORY, imageRepository, token },
       { record: async value => publicReceipt('approved-test-cleanup.json', value) });
     }
-    for (const kind of ['web', 'api']) { stage(`CHECK_EXISTING_${kind.toUpperCase()}`); await requireGhcrPrivatePackage(env, kind, { allowMissing: true }); }
     const dockerConfig = mkdtempSync(join(tmpdir(), 'courses-release-registry-'));
     progress.temporaryCredentialsCreated = true;
     const dockerEnv = childEnvironment({ DOCKER_CONFIG: dockerConfig });

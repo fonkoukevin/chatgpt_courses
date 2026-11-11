@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-11-11T14:39:33.559Z",
+  "sourceCommit": "58d7dd55cfaba685cacae3d7d29251fc93af6e5b",
+  "repository": "fonkoukevin/chatgpt_courses",
+  "environment": "staging",
+  "ci": {
+    "runId": 42926443798,
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "web",
+        "id": 130213997898,
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "api",
+        "id": 130213998651,
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "e2e",
+        "id": 130216658165,
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "checks": [
+      {
+        "kind": "api",
+        "counts": {
+          "tests": 266,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "client": null,
+        "scripts": null,
+        "artifactId": 13813528696,
+        "zipSha256": "9e719400bda071689295992d63ac2d74b106517d6d2db6c4e98b1e0db51f4f34",
+        "zipDigestVerified": true
+      },
+      {
+        "kind": "web",
+        "counts": null,
+        "client": {
+          "tests": 124,
+          "suites": 0,
+          "pass": 124,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "scripts": {
+          "tests": 104,
+          "suites": 0,
+          "pass": 104,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "artifactId": 13815080025,
+        "zipSha256": "8ff6f3e6f06b6ba36f3b27ccb92007a7612812a439fee42127d8abf4f4b90552",
+        "zipDigestVerified": true
+      },
+      {
+        "kind": "e2e",
+        "counts": null,
+        "client": null,
+        "scripts": null,
+        "artifactId": 13815181140,
+        "zipSha256": "44947f283fc3c50a143690a55d8d810bcbf580af9feb8d834e5f6e9df23dff67",
+        "zipDigestVerified": true
+      }
+    ]
+  },
+  "stagingPolicy": {
+    "result": "staging-public-image-policy-set-and-readback",
+    "rows": [
+      {
+        "name": "EXPECTED_SOURCE_VISIBILITY",
+        "existed": true,
+        "changed": false,
+        "verified": true
+      },
+      {
+        "name": "EXPECTED_IMAGE_VISIBILITY",
+        "existed": false,
+        "changed": true,
+        "verified": true
+      },
+      {
+        "name": "IMAGE_REPOSITORY",
+        "existed": true,
+        "changed": true,
+        "verified": true
+      }
+    ],
+    "productionChanged": false,
+    "secretsChanged": false
+  },
+  "plan": {
+    "runId": 43039870362,
+    "conclusion": "success",
+    "artifact": {
+      "id": 13865311391,
+      "name": "manual-release-plan-43039870362-1",
+      "sha256": "bc5a804bea81d860d9bcbd3faba769597fa4aec942f938de54bd232d44c510bc",
+      "zipDigestVerified": true
+    },
+    "guard": {
+      "result": "passed",
+      "operation": "plan",
+      "environment": "staging",
+      "sourceCommit": "58d7dd55cfaba685cacae3d7d29251fc93af6e5b",
+      "sourceVisibility": "public",
+      "expectedImageVisibility": "public",
+      "stagingPaymentTest": false,
+      "protectedEnvironmentChecked": true,
+      "environmentPreexisting": true,
+      "defaultBranchProtected": true,
+      "defaultBranchOnly": true,
+      "reviewersConfigured": false,
+      "preventSelfReview": null,
+      "adminBypassUiObserved": false,
+      "registryOrTargetMutationExecuted": false
+    }
+  },
+  "publication": {
+    "runId": 43039977823,
+    "conclusion": "failure",
+    "artifact": {
+      "id": 13865351656,
+      "name": "manual-release-publish-43039977823-1",
+      "zipSha256": "a3de1df4b81b59cb2ec35318da782b0c669e18f041cbdc4e1b307efb887291ac",
+      "zipBytes": 1616,
+      "zipDigestVerified": true,
+      "sourceVerified": true
+    },
+    "receiptValidationPassed": true,
+    "files": [
+      {
+        "path": "failure.json",
+        "bytes": 91,
+        "sha256": "8cf49701f25b5c0f63f259d4e8fcb804a6c3b2be02099da4bbb1be1170b43895"
+      },
+      {
+        "path": "publication-diagnostic.json",
+        "bytes": 178,
+        "sha256": "397cb4921f0f885992d8f39348d6cc57baa012a165dc146101f277bf3c029a78"
+      },
+      {
+        "path": "guard.json",
+        "bytes": 519,
+        "sha256": "c91ea50bc0ceef47308df02ea0348d9682ce11c062347c323e270ccb058524a8"
+      },
+      {
+        "path": "publication-progress.json",
+        "bytes": 685,
+        "sha256": "0ded1b6aad17dd5a95d6c8e38562d587f3648611439321d33112cc24c3c0fad5"
+      },
+      {
+        "path": "registry-inspection.json",
+        "bytes": 890,
+        "sha256": "489a673f099704c67ca66ef9c9988ca9ce8de18a75938d25c5ad19466aec6536"
+      }
+    ],
+    "diagnostic": {
+      "result": "failed",
+      "stage": "IMAGE_BUILD",
+      "errorClass": "Error",
+      "causeCode": "NONE",
+      "source": {
+        "file": "release.mjs",
+        "line": 16,
+        "column": 83
+      }
+    },
+    "progress": {
+      "schemaVersion": 1,
+      "sourceCommit": "58d7dd55cfaba685cacae3d7d29251fc93af6e5b",
+      "stage": "IMAGE_BUILD",
+      "guardPassed": true,
+      "expectedImageVisibility": "public",
+      "images": {
+        "web": {
+          "pushAttempted": false,
+          "pushConfirmed": false,
+          "digestConfirmed": false,
+          "metadataVerified": false,
+          "observedVisibility": null,
+          "anonymousRead": null
+        },
+        "api": {
+          "pushAttempted": false,
+          "pushConfirmed": false,
+          "digestConfirmed": false,
+          "metadataVerified": false,
+          "observedVisibility": null,
+          "anonymousRead": null
+        }
+      },
+      "temporaryCredentialsCreated": true,
+      "temporaryCredentialsRemoved": true
+    },
+    "manifestProduced": false,
+    "sourceOfPreviousFailureEstablished": false,
+    "rawRunnerLogBytesClassifiedInMemoryOnly": true,
+    "rawRunnerLogsPrintedOrStored": false,
+    "dockerBuildLogsAvailableAfterRunner": false
+  },
+  "remote": {
+    "deploymentAttempted": false,
+    "ingressActivationAttempted": false,
+    "stripeConfigurationInstalled": false
+  },
+  "limits": [
+    "The former build failure cannot be assigned a precise cause from retained structured receipts.",
+    "IMAGE_BUILD failure precedes both image pushes; no valid manifest or remote deployment resulted.",
+    "A new identifiable run with bounded diagnostics is needed; no blind replay was dispatched."
+  ]
+}

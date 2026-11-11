@@ -51,6 +51,19 @@ test('both existing private packages pass before login and build and remain chec
   assert.equal(result.publication.anonymousPackageReadAllowed, false);
 });
 
+test('publication includes only a validated matching build diagnostic and still removes credentials before reporting failure', () => {
+  const result = publication({ mode: 'public', buildFailure: true });
+  assert.equal(result.exitCode, 1); assert.equal(result.progress.stage, 'IMAGE_BUILD');
+  assert.equal(result.diagnostic.build.failureCode, 'IMAGE_WEB_BUILD_FAILED');
+  assert.deepEqual(result.diagnostic.build.observedCauses, ['DOCKER_HUB_RATE_LIMIT']);
+  assert.equal(result.progress.temporaryCredentialsRemoved, true); assert.equal(result.credentialsRemoved, 1);
+  assert.deepEqual(result.commands, ['LOGIN', 'BUILD']); assert.equal(result.publication, undefined);
+  const contaminated = publication({ mode: 'public', buildFailure: true, badBuildDiagnostic: true });
+  assert.equal(contaminated.exitCode, 1); assert.equal(contaminated.diagnostic.build, undefined);
+  assert.equal(JSON.stringify(contaminated).includes('SYNTHETIC_PRIVATE_NEVER_PUBLISH'), false);
+  assert.equal(contaminated.progress.temporaryCredentialsRemoved, true);
+});
+
 test('explicit public initial and existing packages publish only after exact anonymous digest verification', () => {
   for (const initial of [false, true]) {
     const result = publication({ mode: 'public', ...(initial ? { web: 'absent', api: 'absent' } : {}) });

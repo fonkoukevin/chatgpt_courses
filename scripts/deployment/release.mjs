@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { safeReleaseFailure, inspectRegistryReadOnly } from './release-diagnostics.mjs';
+import { safeReleaseFailure, inspectRegistryReadOnly, readImageBuildDiagnostic } from './release-diagnostics.mjs';
 import { cleanupApprovedTestPackage } from './approved-test-cleanup.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -234,7 +234,7 @@ async function publish() {
     expectedImageVisibility: null,
     images: Object.fromEntries(['web', 'api'].map(kind => [kind, { pushAttempted: false, pushConfirmed: false, digestConfirmed: false, metadataVerified: false, observedVisibility: null, anonymousRead: null }])), temporaryCredentialsCreated: false, temporaryCredentialsRemoved: false };
   const stage = value => { progress.stage = value; publicReceipt('publication-progress.json', progress); };
-  let registryContext;
+  let registryContext, buildDiagnosticPath;
   try {
     stage('GUARD'); await guard(); progress.guardPassed = true; stage('CONFIGURATION');
     requireRelease(env.RELEASE_OPERATION === 'publish' && /^\d+$/u.test(env.GITHUB_RUN_ID ?? '') && /^[1-9]\d*$/u.test(env.GITHUB_RUN_ATTEMPT ?? ''), 'RELEASE_PUBLICATION_CONFIGURATION_REQUIRED');
@@ -260,7 +260,8 @@ async function publish() {
       stage('REGISTRY_LOGIN');
       execute('docker', ['login', registry, '--username', username, '--password-stdin'], { env: dockerEnv, input: token });
       stage('IMAGE_BUILD');
-      execute(process.execPath, [join(root, 'scripts/deployment/images.mjs'), 'build', '--commit', env.GITHUB_SHA, '--source-url', sourceUrl, '--output', join(root, '.runtime/deployment/build.json')], { env: dockerEnv });
+      buildDiagnosticPath = join(root, `.runtime/deployment/build-diagnostic-${randomUUID()}.json`);
+      execute(process.execPath, [join(root, 'scripts/deployment/images.mjs'), 'build', '--commit', env.GITHUB_SHA, '--source-url', sourceUrl, '--output', join(root, '.runtime/deployment/build.json'), '--diagnostic-output', buildDiagnosticPath], { env: dockerEnv });
       const manifest = { schemaVersion: 1, sourceCommit: env.GITHUB_SHA, web: null, api: null, schema: { min: 19, max: 19 } };
       for (const kind of ['web', 'api']) {
         const tag = `${imageRepository}/${kind}:sha-${env.GITHUB_SHA}-${env.GITHUB_RUN_ID}-${env.GITHUB_RUN_ATTEMPT}`;
@@ -290,7 +291,8 @@ async function publish() {
     console.log(JSON.stringify({ result: 'published', manifestSha256 }));
   } catch (error) {
     publicReceipt('publication-progress.json', progress);
-    publicReceipt('publication-diagnostic.json', { result: 'failed', ...safeReleaseFailure(error, progress.stage) });
+    const build = progress.stage === 'IMAGE_BUILD' && buildDiagnosticPath ? readImageBuildDiagnostic(buildDiagnosticPath, env.GITHUB_SHA) : null;
+    publicReceipt('publication-diagnostic.json', { result: 'failed', ...safeReleaseFailure(error, progress.stage), ...(build ? { build } : {}) });
     // Diagnostic GETs only, after the protected source/environment guard passed.
     // They do not allow a failed publication to continue or follow redirects.
     if (progress.guardPassed && registryContext) {

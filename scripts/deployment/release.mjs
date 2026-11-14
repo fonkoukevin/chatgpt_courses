@@ -1,10 +1,10 @@
 import { createHash, randomUUID } from 'node:crypto';
-import { closeSync, fsyncSync, mkdirSync, mkdtempSync, openSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
+import { closeSync, fstatSync, fsyncSync, mkdirSync, mkdtempSync, openSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { safeReleaseFailure, inspectRegistryReadOnly, readImageBuildDiagnostic } from './release-diagnostics.mjs';
+import { safeReleaseFailure, inspectRegistryReadOnly, readImageBuildDiagnostic, deploymentStages, deploymentCommandFailure, readDeploymentCommandLog, safeDeploymentFailure } from './release-diagnostics.mjs';
 import { cleanupApprovedTestPackage } from './approved-test-cleanup.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -172,8 +172,18 @@ export function targetConfiguration(env) {
 function childEnvironment(extra = {}) { return { ...Object.fromEntries(Object.entries(process.env).filter(([key]) => /^(PATH|HOME|USERPROFILE|SystemRoot|TEMP|TMP|LANG|JAVA_HOME)$/u.test(key))), ...extra }; }
 function execute(file, args, options = {}) {
   const directory = join(root, '.runtime/deployment/private'); mkdirSync(directory, { recursive: true, mode: 0o700 });
-  const handle = openSync(join(directory, 'commands.log'), 'a', 0o600);
-  try { const result = spawnSync(file, args, { cwd: root, env: childEnvironment(), timeout: 1200000, stdio: ['pipe', handle, handle], windowsHide: true, ...options }); requireRelease(!result.error && result.status === 0, 'RELEASE_COMMAND_FAILED'); return result; }
+  const path = join(directory, 'commands.log'), handle = openSync(path, 'a', 0o600);
+  const { diagnosticStage, ...spawnOptions } = options;
+  try {
+    const offset = deploymentStages.includes(diagnosticStage) ? fstatSync(handle).size : 0;
+    const result = spawnSync(file, args, { cwd: root, env: childEnvironment(), timeout: 1200000, stdio: ['pipe', handle, handle], windowsHide: true, ...spawnOptions });
+    if (result.error || result.status !== 0) {
+      const error = new Error('RELEASE_COMMAND_FAILED'); error.code = 'RELEASE_COMMAND_FAILED';
+      if (deploymentStages.includes(diagnosticStage)) error.deploymentCommand = deploymentCommandFailure(diagnosticStage, file === process.execPath ? 'node' : file, result, readDeploymentCommandLog(path, offset));
+      throw error;
+    }
+    return result;
+  }
   finally { closeSync(handle); }
 }
 function publicReceipt(name, value) {
@@ -208,7 +218,7 @@ async function guard() {
   let manifest;
   if (['deploy', 'rollback'].includes(env.RELEASE_OPERATION)) {
     manifest = parseManifest(env.RELEASE_MANIFEST_JSON, imageRepository, env.EXPECTED_RELEASE_SHA256);
-    execute('git', ['merge-base', '--is-ancestor', manifest.sourceCommit, env.GITHUB_SHA]);
+    execute('git', ['merge-base', '--is-ancestor', manifest.sourceCommit, env.GITHUB_SHA], { diagnosticStage: 'GUARD' });
     targetConfiguration(env);
     if (env.TARGET_ENVIRONMENT === 'production') requireRelease(env.APPROVED_STAGING_RELEASE_SHA256 === env.EXPECTED_RELEASE_SHA256, 'RELEASE_SAME_STAGING_DIGESTS_REQUIRED');
     if (env.RELEASE_OPERATION === 'rollback') requireRelease(env.ROLLBACK_SCHEMA_REVIEWED === 'true' && /^[1-9][0-9]{0,2}$/u.test(env.CURRENT_SCHEMA_VERSION ?? '') && Number(env.CURRENT_SCHEMA_VERSION) >= manifest.schema.min && Number(env.CURRENT_SCHEMA_VERSION) <= manifest.schema.max, 'RELEASE_ROLLBACK_SCHEMA_REVIEW_REQUIRED');
@@ -331,16 +341,24 @@ ${command}
 `;
 }
 async function deploy() {
+  let stage = 'GUARD';
+  const setStage = value => { requireRelease(deploymentStages.includes(value), 'RELEASE_DEPLOYMENT_STAGE_INVALID'); stage = value; };
+  try { await applyDeployment(setStage); }
+  catch (error) { publicReceipt('deployment-failure.json', safeDeploymentFailure(error, stage)); throw error; }
+}
+async function applyDeployment(setStage) {
   await guard(); const env = process.env, target = targetConfiguration(env), manifest = parseManifest(env.RELEASE_MANIFEST_JSON, env.IMAGE_REPOSITORY, env.EXPECTED_RELEASE_SHA256);
+  setStage('REGISTRY_VERIFICATION');
   const token = jobToken(env);
   const imageVisibility = expectedImageVisibility(env);
   for (const kind of ['web', 'api']) await requireGhcrPackage(env, kind, { digest: manifest[kind].digest });
   requireRelease(['deploy', 'rollback'].includes(env.RELEASE_OPERATION) && /^-----BEGIN (?:OPENSSH |RSA )?PRIVATE KEY-----\r?\n/u.test(env.DEPLOY_SSH_PRIVATE_KEY ?? '') && typeof env.DEPLOY_SSH_KNOWN_HOSTS === 'string' && env.DEPLOY_SSH_KNOWN_HOSTS.trim().length > 40, 'RELEASE_SSH_SECRETS_REQUIRED');
+  setStage('LOCAL_BUNDLE');
   const work = mkdtempSync(join(tmpdir(), 'courses-release-target-')), bundle = join(work, 'bundle'); mkdirSync(bundle);
   const key = join(work, 'key'), known = join(work, 'known_hosts'); writeFileSync(key, env.DEPLOY_SSH_PRIVATE_KEY, { mode: 0o600 }); writeFileSync(known, env.DEPLOY_SSH_KNOWN_HOSTS, { mode: 0o600 });
   const options = ['-i', key, '-o', 'BatchMode=yes', '-o', 'IdentitiesOnly=yes', '-o', 'ForwardAgent=no', '-o', 'StrictHostKeyChecking=yes', '-o', `UserKnownHostsFile=${known}`, '-o', 'ConnectTimeout=15'];
   const host = `${target.user}@${target.host}`, releaseHash = env.EXPECTED_RELEASE_SHA256;
-  const ssh = script => execute('ssh', [...options, '-p', target.port, host, 'sh -s'], { input: script });
+  const ssh = (script, diagnosticStage) => execute('ssh', [...options, '-p', target.port, host, 'sh -s'], { input: script, diagnosticStage });
   try {
     const smokeArgs = [join(root, 'scripts/deployment/smoke.mjs'), '--origin', env.DEPLOY_PUBLIC_ORIGIN, '--stripe-enabled', String(target.stagingPaymentTest)];
     if (target.environment === 'staging') {
@@ -349,24 +367,30 @@ async function deploy() {
       smokeArgs.push('--basic-username', env.STAGING_BASIC_USERNAME, '--basic-password-file', basicFile);
     }
     for (const path of bundleFiles) {
-      const type = execute('git', ['ls-tree', manifest.sourceCommit, '--', path], { stdio: ['pipe', 'pipe', 'pipe'], encoding: 'utf8' }).stdout;
+      const type = execute('git', ['ls-tree', manifest.sourceCommit, '--', path], { stdio: ['pipe', 'pipe', 'pipe'], encoding: 'utf8', diagnosticStage: 'LOCAL_BUNDLE' }).stdout;
       requireRelease(/^100(?:644|755) blob /u.test(type), 'RELEASE_SOURCE_FILE_NOT_REGULAR');
-      const bytes = execute('git', ['show', `${manifest.sourceCommit}:${path}`], { stdio: ['pipe', 'pipe', 'pipe'] }).stdout;
+      const bytes = execute('git', ['show', `${manifest.sourceCommit}:${path}`], { stdio: ['pipe', 'pipe', 'pipe'], diagnosticStage: 'LOCAL_BUNDLE' }).stdout;
       mkdirSync(dirname(join(bundle, path)), { recursive: true }); writeFileSync(join(bundle, path), bytes, { mode: 0o644 });
     }
     writeFileSync(join(bundle, 'release-manifest.json'), manifestBytes(manifest), { mode: 0o644 });
     const request = { operation: env.RELEASE_OPERATION, environment: target.environment, stagingPaymentTest: target.stagingPaymentTest, imageRepository: env.IMAGE_REPOSITORY, manifestSha256: releaseHash, expectedPublicOrigin: env.DEPLOY_PUBLIC_ORIGIN, currentSchemaVersion: env.CURRENT_SCHEMA_VERSION ? Number(env.CURRENT_SCHEMA_VERSION) : null, rollbackSchemaReviewed: env.ROLLBACK_SCHEMA_REVIEWED === 'true', firstInstallEmptyDatabase: env.FIRST_INSTALL_EMPTY_DATABASE === 'true', offHostBackupAttested: env.OFF_HOST_BACKUP_ATTESTED === 'true', migrationBackupReceiptSha256: env.MIGRATION_BACKUP_RECEIPT_SHA256 || null };
     writeFileSync(join(bundle, 'release-request.json'), JSON.stringify(request) + '\n', { mode: 0o644 });
-    const archive = join(work, 'release.tar'); execute('tar', ['-C', bundle, '-cf', archive, '--', ...bundleFiles, 'release-manifest.json', 'release-request.json']);
+    const archive = join(work, 'release.tar'); execute('tar', ['-C', bundle, '-cf', archive, '--', ...bundleFiles, 'release-manifest.json', 'release-request.json'], { diagnosticStage: 'LOCAL_BUNDLE' });
     const bundleHash = sha256(readFileSync(archive)), upload = `${target.directory}/incoming/${releaseHash}-${env.GITHUB_RUN_ID}.tar`;
-    ssh(`set -eu\numask 077\ntest -d ${quote(target.directory)}\ntest ! -L ${quote(target.directory)}\ntest "$(realpath ${quote(target.directory)})" = ${quote(target.directory)}\ntest ! -L ${quote(target.directory + '/incoming')}\nmkdir -p ${quote(target.directory + '/incoming')}\n`);
-    execute('scp', [...options, '-P', target.port, archive, `${host}:${upload}`]);
+    setStage('SSH_PREPARE');
+    ssh(`set -eu\numask 077\ntest -d ${quote(target.directory)}\ntest ! -L ${quote(target.directory)}\ntest "$(realpath ${quote(target.directory)})" = ${quote(target.directory)}\ntest ! -L ${quote(target.directory + '/incoming')}\nmkdir -p ${quote(target.directory + '/incoming')}\n`, 'SSH_PREPARE');
+    setStage('SCP_UPLOAD');
+    execute('scp', [...options, '-P', target.port, archive, `${host}:${upload}`], { diagnosticStage: 'SCP_UPLOAD' });
     const releaseDirectory = `${target.directory}/releases/${releaseHash}`;
     const applyScript = `test "$(sha256sum ${quote(upload)} | cut -d ' ' -f 1)" = ${quote(bundleHash)}\ntest ! -L ${quote(target.directory + '/releases')}\ntest ! -L ${quote(releaseDirectory)}\nmkdir -p ${quote(releaseDirectory)}\ntest "$(realpath ${quote(releaseDirectory)})" = ${quote(releaseDirectory)}\ntest -z "$(find ${quote(releaseDirectory)} -type l -print -quit)"\ntar -xf ${quote(upload)} -C ${quote(releaseDirectory)}\n${quote(target.nodePath)} ${quote(releaseDirectory + '/scripts/deployment/release-apply.mjs')} apply --root ${quote(target.directory)} --release ${quote(releaseHash)}\nrm -f ${quote(upload)}\n`;
-    execute('ssh', [...options, '-p', target.port, host, `sh -c ${quote(ghcrRemoteScript(env, applyScript))}`], { input: token });
-    execute(process.execPath, smokeArgs);
-    ssh(`set -eu\n${quote(target.nodePath)} ${quote(releaseDirectory + '/scripts/deployment/release-apply.mjs')} activate --root ${quote(target.directory)} --release ${quote(releaseHash)}\n`);
+    setStage('REMOTE_APPLY');
+    execute('ssh', [...options, '-p', target.port, host, `sh -c ${quote(ghcrRemoteScript(env, applyScript))}`], { input: token, diagnosticStage: 'REMOTE_APPLY' });
+    setStage('EXTERNAL_SMOKE');
+    execute(process.execPath, smokeArgs, { diagnosticStage: 'EXTERNAL_SMOKE' });
+    setStage('ACTIVATE');
+    ssh(`set -eu\n${quote(target.nodePath)} ${quote(releaseDirectory + '/scripts/deployment/release-apply.mjs')} activate --root ${quote(target.directory)} --release ${quote(releaseHash)}\n`, 'ACTIVATE');
     publicReceipt('deployment.json', { result: 'passed', environment: target.environment, operation: env.RELEASE_OPERATION, sourceCommit: manifest.sourceCommit, manifestSha256: releaseHash, bundleSha256: bundleHash, credentialMode: 'ephemeral-job-token-tmpfs', ...verifiedVisibilityReceipt(imageVisibility), migrationInvoked: env.RELEASE_OPERATION === 'deploy', imageBuildInvoked: false, healthSmokePassed: true, activePointerUpdated: true, dataRestoreInvoked: false });
+    setStage('COMPLETE');
     console.log(JSON.stringify({ result: 'deployed', environment: target.environment, manifestSha256: releaseHash }));
   } finally { requireRelease(work.startsWith(join(tmpdir(), 'courses-release-target-')), 'RELEASE_PRIVATE_CLEANUP_REFUSED'); rmSync(work, { recursive: true, force: true }); }
 }

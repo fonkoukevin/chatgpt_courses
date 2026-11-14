@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-11-14T17:18:42.511Z",
+  "sourceCommit": "aae3d1ace003ceb82a7a79575c5dcc459719d000",
+  "result": "active",
+  "activationReceiptSha256": "a4b88c80248ffe4e456cd58db4f806a49188c469c662b8c781c95f37c02ccc59",
+  "observationSha256": "0cb2c64c1ec45eda903978f1984ff635540d94eb622e8029af3dfc904531134b",
+  "noCaddyRecreate": true,
+  "noImagePull": true,
+  "sourceInodesPreserved": true,
+  "preexistingGitStatePreserved": true,
+  "networkId": "990813384e01eb49edd2fcc42d7836619bcc3ae2386425f7af73cdb6ced6cde8",
+  "existingHostRoutesPreserved": 4,
+  "ingressProof": {
+    "result": "passed",
+    "active": true,
+    "publicOrigin": "https://staging.chatgpt-courses.com",
+    "filesOrigin": "https://files-staging.chatgpt-courses.com",
+    "networkInternal": true,
+    "configLiveVerified": true,
+    "caddyConfigSha256": "8333128e21a8e3876e4b30bd5b210a5b193caa93c5919b650b4f08c5d72a3b9e"
+  },
+  "tlsProof": {
+    "result": "passed",
+    "publicOrigin": "https://staging.chatgpt-courses.com",
+    "normalTlsVerification": true,
+    "certificateChainVerified": true,
+    "certificateHostnameVerified": true
+  },
+  "tls": [
+    {
+      "publicOrigin": "https://staging.chatgpt-courses.com",
+      "status": 502,
+      "normalTlsVerification": true,
+      "certificateChainVerified": true,
+      "certificateHostnameVerified": true
+    },
+    {
+      "publicOrigin": "https://files-staging.chatgpt-courses.com",
+      "status": 502,
+      "normalTlsVerification": true,
+      "certificateChainVerified": true,
+      "certificateHostnameVerified": true
+    }
+  ],
+  "deployed": false
+}

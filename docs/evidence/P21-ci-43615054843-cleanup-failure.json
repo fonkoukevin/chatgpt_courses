@@ -1,0 +1,280 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-11-14T16:29:46.949Z",
+  "runId": 43615054843,
+  "sourceCommit": "36ba04963d981e1cc8ad203099f459216049cb94",
+  "conclusion": "failure",
+  "artifactId": 14122151769,
+  "zipSha256": "18accc7ee4d95b988a26ee28f29442cec9de0e958cbb9455169899fd9346f2b5",
+  "zipDigestVerified": true,
+  "rawLogsRead": false,
+  "files": [
+    {
+      "path": "browsers.json",
+      "sha256": "50e33c5a0cd5dd66fee5a6a0e1510034fefa3d0114f6ad8fb5f8a534d18f7312",
+      "bytes": 492
+    },
+    {
+      "path": "install.json",
+      "sha256": "3fa1edf626d00053822528102aef2dfe1c0c2ba4a27346fe7b8a629df8bc9a8b",
+      "bytes": 123
+    },
+    {
+      "path": "http-probe.json",
+      "sha256": "115072be1ef9f05247c333144271d7d3d4f92edf27075b4e1e19b21484210485",
+      "bytes": 113
+    },
+    {
+      "path": "release-collection.json",
+      "sha256": "2ef656b35e4a3c69e9d0ed96d459ca1d35491732c752bbba822b6ea9be19553d",
+      "bytes": 63
+    },
+    {
+      "path": "release-harness.json",
+      "sha256": "279de56575d0ce7e1684342ece36968b5b45bc0c0e9c6fd5a6c65bdd491cb51e",
+      "bytes": 182
+    },
+    {
+      "path": "release.json",
+      "sha256": "58c1f7d14b049a30ae13de700843d9928bea90b4acd0e1869c0796eb8442b21c",
+      "bytes": 3010
+    },
+    {
+      "path": "report.json",
+      "sha256": "6377afc555c9a65b5eb5f2e1791e675ba81559991d255668829033f914bd1fb7",
+      "bytes": 106
+    },
+    {
+      "path": "screenshots/en-390-contextual-support.png",
+      "sha256": "49858f72ea4f9711fa38a6b662cee637c4d7ee0db5bf855963750788883d421b",
+      "bytes": 69777
+    },
+    {
+      "path": "screenshots/en-390-paid-french-quiz-history.png",
+      "sha256": "53358668b81ad4051f329b40033b764d1c655cd7bedff8cad2999292b627a610",
+      "bytes": 65982
+    },
+    {
+      "path": "screenshots/en-390-paid-original-note.png",
+      "sha256": "91c88c27e8799a25be1346dad4cceda30de19a8f850540fd90d9ca24a5b94885",
+      "bytes": 54999
+    },
+    {
+      "path": "screenshots/en-390-participation-provenance.png",
+      "sha256": "ff978f5c277492937eaa540397ee459af76a189eff60d23d54de19fe0c6857ab",
+      "bytes": 58801
+    },
+    {
+      "path": "screenshots/fr-390-catalogue-empty.png",
+      "sha256": "3634edabf8adb23cbd00e44c106b7e7150be2281b0d38eb9c81fd28178602ebf",
+      "bytes": 58253
+    },
+    {
+      "path": "screenshots/fr-390-catalogue-unavailable.png",
+      "sha256": "4f5c0d803bdb79208ece538ee671bf905a2f3a10f7b05b0ca5860cbebc81adb6",
+      "bytes": 49298
+    },
+    {
+      "path": "screenshots/fr-390-project-conflict.png",
+      "sha256": "4a046075f37c9dbce5b85d2af02ee44d0604e38917b4f0a80de754187e5cf859",
+      "bytes": 76097
+    },
+    {
+      "path": "screenshots/fr-390-paid-original-note.png",
+      "sha256": "d2bf39063904e91aa8f5a152ca254c023423c61b58cba974ea567ea8784e338e",
+      "bytes": 56559
+    },
+    {
+      "path": "smoke.json",
+      "sha256": "6e2e40f516fbc7b365eb721cc746e9d29282603be0e56ffc5910d9872ebe0ddf",
+      "bytes": 122
+    }
+  ],
+  "reports": {
+    "browsers.json": {
+      "schemaVersion": 1,
+      "job": "e2e",
+      "step": "browsers",
+      "exitCode": 0,
+      "result": "passed",
+      "durationMs": 22145,
+      "browserInstall": {
+        "format": "browser-install-summary-v1",
+        "logReadStatus": "READ",
+        "observedPhases": [
+          "SYSTEM_DEPENDENCIES",
+          "APT_REFRESH",
+          "APT_PACKAGES",
+          "BROWSER_DOWNLOAD"
+        ],
+        "lastObservedPhase": "BROWSER_DOWNLOAD",
+        "observedCauses": [],
+        "observedErrnos": [],
+        "spawnCode": null,
+        "signal": null
+      }
+    },
+    "install.json": {
+      "schemaVersion": 1,
+      "job": "e2e",
+      "step": "install",
+      "exitCode": 0,
+      "result": "passed",
+      "durationMs": 7610
+    },
+    "http-probe.json": {
+      "result": "passed",
+      "cleanupConfirmed": true,
+      "realPostgreSQL": true,
+      "sharedDatabaseChanged": false
+    },
+    "release-collection.json": {
+      "result": "failed",
+      "code": "CI_EVIDENCE_NOT_APPROVED"
+    },
+    "release-harness.json": {
+      "format": "browser-harness-summary-v1",
+      "result": "failed",
+      "cleanupConfirmed": false,
+      "stage": "COMPLETE",
+      "errorCode": "HARNESS_FAILURE",
+      "playwrightStarted": true
+    },
+    "release.json": {
+      "format": "playwright-summary-v1",
+      "counts": {
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "flaky": 0
+      },
+      "durationMs": 46400.219,
+      "tests": [
+        {
+          "id": "P19-01",
+          "name": "catalogue-search",
+          "attempts": [
+            {
+              "status": "passed",
+              "durationMs": 9138,
+              "retry": 0
+            }
+          ]
+        },
+        {
+          "id": "P19-02",
+          "name": "paid-bilingual-learning",
+          "attempts": [
+            {
+              "status": "passed",
+              "durationMs": 7179,
+              "retry": 0
+            }
+          ]
+        },
+        {
+          "id": "P19-03",
+          "name": "retained-personal-work",
+          "attempts": [
+            {
+              "status": "passed",
+              "durationMs": 10393,
+              "retry": 0
+            }
+          ]
+        },
+        {
+          "id": "P19-04",
+          "name": "account-and-permissions",
+          "attempts": [
+            {
+              "status": "passed",
+              "durationMs": 3685,
+              "retry": 0
+            }
+          ]
+        }
+      ],
+      "droppedMetadata": 0,
+      "automaticRetriesObserved": false,
+      "privacy": "Only fixed scenario IDs/names, statuses, bounded counts and durations; titles, errors, snippets, output, attachments and context are omitted.",
+      "cleanupConfirmed": false,
+      "harnessResult": "failed",
+      "captures": [
+        {
+          "scenarioId": "P19-01",
+          "path": "fr-390-catalogue-empty.png",
+          "sha256": "3634edabf8adb23cbd00e44c106b7e7150be2281b0d38eb9c81fd28178602ebf",
+          "width": 390,
+          "height": 1000
+        },
+        {
+          "scenarioId": "P19-01",
+          "path": "fr-390-catalogue-unavailable.png",
+          "sha256": "4f5c0d803bdb79208ece538ee671bf905a2f3a10f7b05b0ca5860cbebc81adb6",
+          "width": 390,
+          "height": 1000
+        },
+        {
+          "scenarioId": "P19-02",
+          "path": "fr-390-paid-original-note.png",
+          "sha256": "d2bf39063904e91aa8f5a152ca254c023423c61b58cba974ea567ea8784e338e",
+          "width": 390,
+          "height": 1000
+        },
+        {
+          "scenarioId": "P19-02",
+          "path": "en-390-paid-original-note.png",
+          "sha256": "91c88c27e8799a25be1346dad4cceda30de19a8f850540fd90d9ca24a5b94885",
+          "width": 390,
+          "height": 1000
+        },
+        {
+          "scenarioId": "P19-02",
+          "path": "en-390-paid-french-quiz-history.png",
+          "sha256": "53358668b81ad4051f329b40033b764d1c655cd7bedff8cad2999292b627a610",
+          "width": 390,
+          "height": 1000
+        },
+        {
+          "scenarioId": "P19-03",
+          "path": "fr-390-project-conflict.png",
+          "sha256": "4a046075f37c9dbce5b85d2af02ee44d0604e38917b4f0a80de754187e5cf859",
+          "width": 390,
+          "height": 1000
+        },
+        {
+          "scenarioId": "P19-04",
+          "path": "en-390-participation-provenance.png",
+          "sha256": "ff978f5c277492937eaa540397ee459af76a189eff60d23d54de19fe0c6857ab",
+          "width": 390,
+          "height": 1000
+        },
+        {
+          "scenarioId": "P19-04",
+          "path": "en-390-contextual-support.png",
+          "sha256": "49858f72ea4f9711fa38a6b662cee637c4d7ee0db5bf855963750788883d421b",
+          "width": 390,
+          "height": 1000
+        }
+      ]
+    },
+    "report.json": {
+      "schemaVersion": 1,
+      "job": "e2e",
+      "rawLogsPublished": false,
+      "providerImagesPublished": false
+    },
+    "smoke.json": {
+      "schemaVersion": 1,
+      "job": "e2e",
+      "step": "smoke",
+      "exitCode": 0,
+      "result": "passed",
+      "durationMs": 34286
+    }
+  },
+  "preciseCleanupCauseEstablished": false,
+  "productionConfigurationExecuted": false,
+  "publicationExecuted": false
+}

@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-11-11T14:44:48.071Z",
+  "node": "v24.22.2",
+  "platform": "win32",
+  "testedFiles": [
+    {
+      "path": "scripts/deployment/images.mjs",
+      "sha256": "5c0710c34f6b4b2e77aee5ba253b95f602d301049ceae2c599869c836dbbf6ee"
+    },
+    {
+      "path": "scripts/deployment/release.mjs",
+      "sha256": "e828b748086ccc381887ce66bef58a7f2d9178160c2f70bb80f3c8d92447a6b3"
+    },
+    {
+      "path": "scripts/deployment/release-diagnostics.mjs",
+      "sha256": "9f86507c8b308bcddcce7acd3e35791586f3e8241024d1fe2a663ded66cd8e10"
+    },
+    {
+      "path": "tests/scripts/deployment-images.test.mjs",
+      "sha256": "843c0dcee067e7430aad924956daf580bd8d376e53bcd735da26a4a2da526438"
+    },
+    {
+      "path": "tests/scripts/deployment-publication.test.mjs",
+      "sha256": "bd10f20a5adab7d9a56957f88fce6f53c1a95b4a767650338a372600f5bf2f17"
+    },
+    {
+      "path": "tests/fixtures/deployment/image-build-probe.mjs",
+      "sha256": "fe03aadd102ba0cc1f251b5e1913cc4532ff6a93ecc0ffdc5b9c841445c1b83d"
+    },
+    {
+      "path": "tests/fixtures/deployment/publication-probe.mjs",
+      "sha256": "9878f37a8d67d459e30592f057a165de3be0bc594a42ad5dda5f04bb70c85e0c"
+    }
+  ],
+  "checks": {
+    "scripts": {
+      "tests": 107,
+      "suites": 0,
+      "pass": 107,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "lint": {
+      "files": 7,
+      "errors": 0,
+      "warnings": 0,
+      "standardNodeGlobals": true,
+      "rulesDisabled": false
+    },
+    "collector": {
+      "tests": 8,
+      "pass": 8,
+      "fail": 0
+    },
+    "independentReview": "no-blocking-defect-found"
+  },
+  "preservation": {
+    "userNextEnvUnchanged": true,
+    "privateEnvironmentUnchanged": true
+  },
+  "diagnostic": {
+    "exactInvocationSourceRequired": true,
+    "uniqueChildFile": true,
+    "childFileMaxBytes": 16384,
+    "privateDockerLogReadMaxBytes": 262144,
+    "publicFreeFormLogText": false,
+    "publicBuildFieldOptional": true,
+    "failureStillBlocksPush": true
+  },
+  "scope": {
+    "dockerAndGitCallsSimulatedInTests": true,
+    "realDockerBuildExecuted": false,
+    "publicationDispatchedFromThisCode": false,
+    "remoteDeploymentExecuted": false
+  },
+  "corrections": [
+    "Initial targeted lint invocation could not resolve the optional globals package; rerun used actual standard Node globals without installing dependencies or disabling rules."
+  ],
+  "limits": [
+    "The precise cause of run43039977823 remains unknown.",
+    "Structured observations can classify a future failure but do not establish its root cause.",
+    "New protected PR/main CI and publication remain required."
+  ]
+}

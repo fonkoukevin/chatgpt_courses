@@ -18,8 +18,8 @@ const manifest = Buffer.from(JSON.stringify({ schemaVersion: 2, mediaType: 'appl
 const digest = 'sha256:' + createHash('sha256').update(manifest).digest('hex');
 const files = new Map(), commands = [], methods = [], packageReads = [], anonymousReads = [], pushed = new Set();
 let credentialsCreated = 0, credentialsRemoved = 0, checksBeforeFirstCommand;
-const originalRead = fs.readFileSync, originalOpen = fs.openSync, originalClose = fs.closeSync, originalFsync = fs.fsyncSync;
-const syntheticDescriptor = 424242;
+const originalRead = fs.readFileSync, originalOpen = fs.openSync, originalClose = fs.closeSync, originalFsync = fs.fsyncSync, originalStat = fs.fstatSync, originalReadSync = fs.readSync;
+const syntheticDescriptor = 424242, diagnosticDescriptor = 424243; let diagnosticBytes;
 Object.assign(fs, {
   readFileSync(path, ...options) {
     if (path === 'SYNTHETIC_EVENT_PATH') return JSON.stringify({ repository: { fork: false, full_name: sourceRepository, default_branch: 'main' } });
@@ -28,10 +28,13 @@ Object.assign(fs, {
   mkdirSync() {},
   openSync(path, flags, ...options) {
     if (basename(String(path)) === 'commands.log' || String(path).replaceAll('\\', '/').endsWith('/.runtime/deployment/public')) return syntheticDescriptor;
+    if (basename(String(path)).startsWith('build-diagnostic-') && files.has(String(path))) { diagnosticBytes = files.get(String(path)); return diagnosticDescriptor; }
     if (flags !== 'r') throw new Error('UNEXPECTED_FILESYSTEM_MUTATION');
     return originalOpen(path, flags, ...options);
   },
-  closeSync(fd) { if (fd !== syntheticDescriptor) originalClose(fd); },
+  closeSync(fd) { if (![syntheticDescriptor, diagnosticDescriptor].includes(fd)) originalClose(fd); },
+  fstatSync(fd) { return fd === diagnosticDescriptor ? { isFile: () => true, nlink: 1, size: diagnosticBytes.length } : originalStat(fd); },
+  readSync(fd, target, offset, length, position) { return fd === diagnosticDescriptor ? diagnosticBytes.copy(target, offset, position, position + length) : originalReadSync(fd, target, offset, length, position); },
   fsyncSync(fd) { if (fd !== syntheticDescriptor) originalFsync(fd); },
   writeFileSync(path, bytes) { files.set(String(path), Buffer.from(bytes)); },
   renameSync(from, to) { files.set(String(to), files.get(String(from))); files.delete(String(from)); },
@@ -54,6 +57,13 @@ childProcess.spawnSync = (file, args) => {
   }
   if (name === 'UNEXPECTED') throw new Error('UNEXPECTED_COMMAND');
   commands.push(name);
+  if (name === 'BUILD' && scenario.buildFailure) {
+    const diagnostic = { schemaVersion: 1, sourceCommit: 'a'.repeat(40), result: 'failed', service: 'web', phase: 'BUILD',
+      failureCode: 'IMAGE_WEB_BUILD_FAILED', exitCode: 1, signal: null, spawnCode: null, logReadStatus: 'READ', observedCauses: ['DOCKER_HUB_RATE_LIMIT'] };
+    if (scenario.badBuildDiagnostic) diagnostic.secret = 'SYNTHETIC_PRIVATE_NEVER_PUBLISH';
+    files.set(args[args.indexOf('--diagnostic-output') + 1], Buffer.from(JSON.stringify(diagnostic)));
+    return { status: 1, stdout: '', stderr: '' };
+  }
   return { status: 0, stdout, stderr: '' };
 };
 syncBuiltinESMExports();
@@ -102,4 +112,4 @@ process.argv[2] = 'publish';
 await import(release.href);
 const receipts = Object.fromEntries([...files].filter(([path]) => path.endsWith('.json')).map(([path, bytes]) => [basename(path), JSON.parse(bytes.toString('utf8'))]));
 console.log('PUBLICATION_PROBE ' + JSON.stringify({ exitCode: process.exitCode ?? 0, methods, commands, packageReads, anonymousReads, digest, credentialsCreated, credentialsRemoved,
-  checksBeforeFirstCommand, progress: receipts['publication-progress.json'], failure: receipts['failure.json'], publication: receipts['publication.json'] }));
+  checksBeforeFirstCommand, progress: receipts['publication-progress.json'], failure: receipts['failure.json'], publication: receipts['publication.json'], diagnostic: receipts['publication-diagnostic.json'] }));

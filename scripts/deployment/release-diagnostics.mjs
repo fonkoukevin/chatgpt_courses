@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, openSync, closeSync, fstatSync, readSync, constants as F } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 // No import of release.mjs: its CLI imports this helper, including on the host.
@@ -16,6 +16,72 @@ const causeCodes = new Set(['ENOTFOUND', 'EAI_AGAIN', 'ECONNRESET', 'ECONNREFUSE
   'SELF_SIGNED_CERT_IN_CHAIN', 'DEPTH_ZERO_SELF_SIGNED_CERT', 'ERR_INVALID_ARG_TYPE', 'ERR_INVALID_STATE',
   'RELEASE_DIAGNOSTIC_CONFIGURATION_INVALID']);
 const property = (value, key) => { try { return value?.[key]; } catch { return undefined; } };
+
+export const imageBuildFailureCodes = Object.freeze(['IMAGE_SOURCE_OR_PLATFORM_INVALID', 'IMAGE_SOURCE_URL_INVALID',
+  'IMAGE_INPUTS_MUST_BE_COMMITTED', 'IMAGE_GIT_COMMAND_FAILED', 'IMAGE_BUILD_START_FAILED', 'IMAGE_WEB_BUILD_FAILED', 'IMAGE_API_BUILD_FAILED',
+  'IMAGE_IDENTITY_INVALID', 'IMAGE_COMMIT_LABEL_INVALID', 'IMAGE_SOURCE_LABEL_INVALID', 'IMAGE_VALIDATION_FAILED',
+  'IMAGE_INSPECTION_FAILED', 'IMAGE_OUTPUT_FAILED', 'IMAGE_BUILD_FAILED']);
+export const imageBuildCauses = Object.freeze(['DOCKER_HUB_RATE_LIMIT', 'REGISTRY_AUTHORIZATION_FAILED', 'REGISTRY_MANIFEST_UNAVAILABLE',
+  'NETWORK_TIMEOUT', 'DNS_LOOKUP_FAILED', 'NPM_LOCK_MISMATCH', 'NPM_PACKAGE_UNAVAILABLE', 'COMPILATION_FAILED',
+  'MAVEN_DEPENDENCY_RESOLUTION_FAILED', 'DISK_FULL', 'OUT_OF_MEMORY', 'BUILDX_UNAVAILABLE', 'DOCKER_DAEMON_UNAVAILABLE',
+  'APT_PACKAGE_UNAVAILABLE', 'TLS_CERTIFICATE_FAILED', 'GIT_REPOSITORY_UNAVAILABLE', 'GIT_OWNERSHIP_REJECTED']);
+const imageSpawnCodes = new Set(['ENOENT', 'EACCES', 'EPERM', 'ENOMEM', 'EAGAIN', 'ENOSPC', 'ETIMEDOUT']);
+const imageSignals = new Set(['SIGTERM', 'SIGKILL', 'SIGINT', 'SIGABRT', 'SIGSEGV']);
+const imagePhases = new Set(['VALIDATION', 'BUILD', 'INSPECTION', 'OUTPUT']);
+
+/** Pattern observations only: no log line, capture, URL, package name or command is returned. */
+export function classifyImageBuildLog(value) {
+  if (typeof value !== 'string' || Buffer.byteLength(value) > 1024 * 1024) return [];
+  const checks = [
+    /toomanyrequests:\s*(?:You have reached your (?:unauthenticated )?pull rate limit|Rate exceeded)/iu,
+    /failed to authorize:[^\r\n]*(?:401 Unauthorized|403 Forbidden)|unauthorized: authentication required/iu,
+    /failed to resolve source metadata[^\r\n]*not found|manifest unknown: manifest unknown/iu,
+    /i\/o timeout|TLS handshake timeout|context deadline exceeded|net\/http: request canceled/iu,
+    /no such host|temporary failure in name resolution|\bEAI_AGAIN\b/iu,
+    /npm (?:error|ERR!) [^\r\n]*npm ci[^\r\n]*can only install packages|npm (?:error|ERR!) (?:Missing:|Invalid:)[^\r\n]*lock file/iu,
+    /npm (?:error|ERR!) code (?:E404|ETARGET)\b/iu,
+    /Failed to compile\.|\bType error:|\[ERROR\] COMPILATION ERROR/iu,
+    /Could not resolve dependencies for project/iu,
+    /no space left on device/iu,
+    /JavaScript heap out of memory|cannot allocate memory|OutOfMemoryError/iu,
+    /docker: 'buildx' is not a docker command|BuildKit is enabled but the buildx component is missing or broken/iu,
+    /Cannot connect to the Docker daemon/iu,
+    /E: Version '[^'\r\n]{1,200}' for '[^'\r\n]{1,200}' was not found/iu,
+    /x509: certificate (?:signed by unknown authority|has expired|is valid for)/iu,
+    /fatal: not a git repository/iu,
+    /fatal: detected dubious ownership in repository/iu,
+  ];
+  return imageBuildCauses.filter((_cause, index) => checks[index].test(value));
+}
+
+/** Validate a child-produced diagnostic against this exact invocation before publication. */
+export function safeImageBuildDiagnostic(value, expectedCommit) {
+  try {
+    const keys = ['schemaVersion', 'sourceCommit', 'result', 'service', 'phase', 'failureCode', 'exitCode', 'signal', 'spawnCode', 'logReadStatus', 'observedCauses'];
+    if (!value || typeof value !== 'object' || Array.isArray(value) || Object.keys(value).toSorted().join(',') !== keys.toSorted().join(',')
+      || typeof expectedCommit !== 'string' || !/^[a-f0-9]{40}$/u.test(expectedCommit) || value.sourceCommit !== expectedCommit || value.schemaVersion !== 1 || value.result !== 'failed'
+      || ![null, 'web', 'api'].includes(value.service) || !imagePhases.has(value.phase) || !imageBuildFailureCodes.includes(value.failureCode)
+      || !(value.exitCode === null || Number.isInteger(value.exitCode) && value.exitCode >= 0 && value.exitCode <= 255)
+      || !(value.signal === null || imageSignals.has(value.signal)) || !(value.spawnCode === null || imageSpawnCodes.has(value.spawnCode))
+      || !['NOT_READ', 'READ', 'TAIL_ONLY', 'UNAVAILABLE'].includes(value.logReadStatus) || !Array.isArray(value.observedCauses)
+      || value.observedCauses.length > imageBuildCauses.length || new Set(value.observedCauses).size !== value.observedCauses.length
+      || !value.observedCauses.every(cause => imageBuildCauses.includes(cause))) return null;
+    return Object.fromEntries(keys.map(key => [key, key === 'observedCauses' ? [...value[key]] : value[key]]));
+  } catch { return null; }
+}
+
+export function readImageBuildDiagnostic(path, expectedCommit) {
+  let fd;
+  try {
+    fd = openSync(path, F.O_RDONLY | (F.O_NOFOLLOW ?? 0));
+    const stat = fstatSync(fd);
+    if (!stat.isFile() || stat.nlink !== 1 || stat.size < 1 || stat.size > 16384) return null;
+    const bytes = Buffer.alloc(stat.size), length = readSync(fd, bytes, 0, bytes.length, 0);
+    if (length !== bytes.length) return null;
+    return safeImageBuildDiagnostic(JSON.parse(bytes.toString('utf8')), expectedCommit);
+  } catch { return null; }
+  finally { if (fd !== undefined) closeSync(fd); }
+}
 
 function sourceLocation(stack) {
   if (typeof stack !== 'string' || stack.length > 65536) return null;

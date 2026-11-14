@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-11-11T15:07:02.906Z",
+  "repository": "fonkoukevin/chatgpt_courses",
+  "runId": 43041579035,
+  "sourceCommit": "e8ef9bba2f78b1241a630ffacbf14931ee9b228f",
+  "conclusion": "failure",
+  "jobs": [
+    {
+      "name": "web",
+      "conclusion": "success",
+      "status": "completed"
+    },
+    {
+      "name": "api",
+      "conclusion": "success",
+      "status": "completed"
+    },
+    {
+      "name": "e2e",
+      "conclusion": "failure",
+      "status": "completed"
+    }
+  ],
+  "checks": [
+    {
+      "kind": "api",
+      "artifactId": 13866400767,
+      "zipSha256": "65a424eef09b0a869a58f2fa1d3773c7bc831115bcad486c4ee8664a9f3da93d",
+      "zipDigestVerified": true,
+      "counts": {
+        "tests": 266,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "suites": 40
+    },
+    {
+      "kind": "web",
+      "artifactId": 13865875999,
+      "zipSha256": "03f2b9efd17c866ae1aed81eecac1e443b94f1a333a0891531e9c86375bd5790",
+      "zipDigestVerified": true,
+      "client": {
+        "tests": 124,
+        "suites": 0,
+        "pass": 124,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "scripts": {
+        "tests": 109,
+        "suites": 0,
+        "pass": 109,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stripeConfig": {
+        "tests": 5,
+        "suites": 0,
+        "pass": 5,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    }
+  ],
+  "e2e": {
+    "artifactId": 13866467477,
+    "zipSha256": "951cbe349d5ee4054aa13ddc9dafcd7380a6f7b651a1773a957dc1cd19fc3aa0",
+    "zipDigestVerified": true,
+    "reports": {
+      "browsers.json": {
+        "schemaVersion": 1,
+        "job": "e2e",
+        "step": "browsers",
+        "exitCode": 1,
+        "result": "failed",
+        "durationMs": 604976
+      },
+      "install.json": {
+        "schemaVersion": 1,
+        "job": "e2e",
+        "step": "install",
+        "exitCode": 0,
+        "result": "passed",
+        "durationMs": 8748
+      },
+      "report.json": {
+        "schemaVersion": 1,
+        "job": "e2e",
+        "rawLogsPublished": false,
+        "providerImagesPublished": false
+      }
+    },
+    "browserScenariosExecuted": false
+  },
+  "rawLogsRead": false,
+  "preciseInstallerCauseEstablished": false,
+  "mainMerged": false,
+  "imagesPublished": false,
+  "remoteDeploymentExecuted": false
+}

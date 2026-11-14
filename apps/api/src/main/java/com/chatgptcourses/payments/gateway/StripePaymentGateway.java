@@ -85,7 +85,7 @@ public final class StripePaymentGateway implements PaymentGateway {
             throw new PaymentGatewayException("PROVIDER_SEARCH_LIMIT",false);
         }catch(StripeException failure){throw classify(failure);}catch(PaymentGatewayException failure){throw failure;}catch(RuntimeException failure){throw new PaymentGatewayException("PROVIDER_RESPONSE_INVALID",true);}
     }
-    public static boolean validCheckoutUrl(String value){try{if(value==null||value.length()>4096)return false;var uri=URI.create(value);return "https".equals(uri.getScheme())&&"checkout.stripe.com".equals(uri.getHost())&&uri.getPort()==-1&&uri.getUserInfo()==null&&uri.getPath()!=null&&uri.getPath().startsWith("/c/pay/");}catch(RuntimeException invalid){return false;}}
+    public static boolean validCheckoutUrl(String value){try{if(value==null||value.length()>4096)return false;var uri=URI.create(value);return "https".equals(uri.getScheme())&&"checkout.stripe.com".equals(uri.getHost())&&uri.getPort()==-1&&uri.getUserInfo()==null&&uri.getPath()!=null&&(uri.getPath().startsWith("/c/pay/")||uri.getPath().startsWith("/g/pay/"));}catch(RuntimeException invalid){return false;}}
     @Override public RefundFacts createRefund(RefundParameters p,String key){
         ready();if(p==null||p.operationId()==null||p.orderId()==null||p.paymentIntentId()==null||!p.paymentIntentId().matches("pi_[A-Za-z0-9_]{1,250}")||p.amountMinor()<1||p.amountMinor()>99_999_999||key==null||!key.equals("cc-refund-"+p.operationId()))throw new PaymentGatewayException("PROVIDER_REQUEST_INVALID",false);
         try{

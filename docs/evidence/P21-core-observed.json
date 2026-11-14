@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "result": "passed",
+  "scope": "CORE_STAGING_RECIPE_AND_ROOT_VISUAL_REVIEW",
+  "environment": "staging",
+  "sourceCommit": "ddaf5a51103568ac4af35ac4e1b64852dce9dacf",
+  "manifestSha256": "5b7b33e27b6e19d9beec2026be368f0b42af179924a0fac1e55d072850e625ab",
+  "deployment": {
+    "runId": 43644585354,
+    "nativeReceiptSha256": "1b8f84f1b48ebfce38470c9f42d855cb1f9a11cdba5f3e7eed1b11b1fdfc1eba",
+    "active": true,
+    "healthyServices": 5,
+    "currentPointerVerified": true,
+    "migrationsSuccessful": 19,
+    "schemaVersion": 19,
+    "migrationsFailed": 0,
+    "imageBuildInvoked": false,
+    "dataRestoreInvoked": false
+  },
+  "core": {
+    "samePrivateJournalResumed": true,
+    "attempts": [
+      {
+        "ordinal": 1,
+        "result": "failed",
+        "checksPassed": 4,
+        "ownedContextsClosed": true,
+        "failedCheck": "FRESH_UI_SESSION_LOGIN",
+        "code": "REMOTE_CORE_UI_LOGIN_FAILED",
+        "diagnosedCause": "EXACT_PASSWORD_LABEL_STAR_MISMATCH",
+        "loginPostAttempted": false,
+        "apiDiagnosticStatus": 200,
+        "automaticRetry": false
+      },
+      {
+        "ordinal": 2,
+        "result": "failed",
+        "checksPassed": 4,
+        "ownedContextsClosed": true,
+        "failedCheck": "INDEPENDENT_PERSONAL_METHOD",
+        "code": "REMOTE_CORE_TRANSPORT_OR_UI_FAILED",
+        "diagnosedCause": "UNKNOWN",
+        "failureBeforeBrowserCreation": true,
+        "apiDiagnosticStatus": 200,
+        "automaticRetry": false
+      },
+      {
+        "ordinal": 3,
+        "result": "passed",
+        "checksPassed": 10,
+        "ownedContextsClosed": true,
+        "checks": [
+          {
+            "id": "BASIC_PERIMETER",
+            "result": "passed"
+          },
+          {
+            "id": "HEALTH_AND_NOINDEX_BEFORE_CREATION",
+            "result": "passed"
+          },
+          {
+            "id": "REGISTER_LOGIN_AND_SESSION",
+            "result": "passed"
+          },
+          {
+            "id": "INDEPENDENT_PERSONAL_METHOD",
+            "result": "passed"
+          },
+          {
+            "id": "FRESH_UI_SESSION_LOGIN",
+            "result": "passed"
+          },
+          {
+            "id": "OPTIMISTIC_UPDATE_AND_STALE_ETAG",
+            "result": "passed"
+          },
+          {
+            "id": "FR_PRIVATE_DEEP_RELOAD",
+            "result": "passed"
+          },
+          {
+            "id": "EN_PRIVATE_DEEP_RELOAD_ORIGINAL_TEXT",
+            "result": "passed"
+          },
+          {
+            "id": "OTHER_OWNER_CANNOT_READ_METHOD",
+            "result": "passed"
+          },
+          {
+            "id": "LOGOUT_AND_PRIVATE_ROUTE_PROTECTED",
+            "result": "passed"
+          }
+        ]
+      }
+    ],
+    "finalChecksPassed": 10,
+    "finalChecksTotal": 10,
+    "ownedContextsClosed": true,
+    "credentialsStoredSeparately": true,
+    "syntheticServerDataRetained": true,
+    "helperSha256": "aa95e95595761584e3b4acd2b2ca9d00bd1f9119467d98b82fa40e4a8119a9e4",
+    "journalSha256": "d0f1a5bc873dd5cc0b5bd2745c0165ea4f3825932b2ed81a557e6abe782edfc1",
+    "localValidation": {
+      "testsPassed": 11,
+      "testsTotal": 11,
+      "historicalLintFindingsUnchanged": 7,
+      "newLintFindings": 0
+    }
+  },
+  "visual": {
+    "reviewAttribution": "ROOT_OBSERVED_EXACT_CAPTURES",
+    "captures": [
+      {
+        "locale": "fr",
+        "width": 1440,
+        "height": 900,
+        "sha256": "6b9611dd4d04cbe4b598a7e613f73b467ac49147ed420849b8cb81fdd3f2088b",
+        "pngSignatureVerified": true,
+        "dimensionsVerified": true,
+        "automatedJournalVisualReviewPerformed": false,
+        "rootVisualReviewPerformed": true,
+        "rootObservedBlockingDefect": false
+      },
+      {
+        "locale": "en",
+        "width": 390,
+        "height": 900,
+        "sha256": "59777fde041e69d4d489937ea4f03e84881e5aa91ddd937a678f3c5dc4221e9e",
+        "pngSignatureVerified": true,
+        "dimensionsVerified": true,
+        "automatedJournalVisualReviewPerformed": false,
+        "rootVisualReviewPerformed": true,
+        "rootObservedBlockingDefect": false
+      }
+    ],
+    "publicScreenshotBodiesIncluded": false
+  },
+  "preservation": {
+    "observedAt": "2026-11-14T22:50:21.887736+00:00",
+    "receiptSha256": "d4717a6e255bac5bc4490ac07a0a310ab3fc2882d77c7f7c730f6c1e7bffb0d6",
+    "readOnly": true,
+    "sameFiveHealthyServiceIds": true,
+    "activePointerVerified": true,
+    "schemaVersion": 19,
+    "migrationsSuccessful": 19,
+    "migrationsFailed": 0,
+    "legacyContainersPreserved": 12,
+    "legacyHttpsPreserved": 4,
+    "basicGateStatus": 401,
+    "ingressHashesPreserved": true,
+    "normalTls": true,
+    "deploymentLockAbsent": true
+  },
+  "limitations": [
+    "SECOND_FAILED_CORE_ATTEMPT_CAUSE_UNKNOWN",
+    "EDITORIAL_AND_LEARNING_RECIPE_NOT_YET_OBSERVED",
+    "STRIPE_TEST_PAYMENTS_NOT_YET_OBSERVED",
+    "INCIDENT_RECIPE_NOT_YET_OBSERVED",
+    "APPLICATION_RESTORE_NOT_OBSERVED",
+    "REPEAT_DEPLOYMENT_NOT_OBSERVED",
+    "P21_NOT_COMPLETE"
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "result": "passed-isolated-comparison",
+  "observedAt": "2026-11-14T18:05:26.988872+00:00",
+  "scope": "Original SeaweedFS entrypoint with server-help only; existing staging was not restarted or repaired by these probes.",
+  "image": {
+    "reference": "chrislusf/seaweedfs:4.52@sha256:57877e32bb90073b37dc109b438ba66e84fd5ed9ced5f5c04f56444ef243ce59",
+    "observedImageId": "sha256:57877e32bb90073b37dc109b438ba66e84fd5ed9ced5f5c04f56444ef243ce59",
+    "digestVerified": true
+  },
+  "command": [
+    "server",
+    "-h"
+  ],
+  "originalEntrypoint": true,
+  "comparisons": [
+    {
+      "variant": "A",
+      "capabilitiesDropped": [
+        "ALL"
+      ],
+      "capabilitiesAdded": [],
+      "exitCode": 1,
+      "timedOut": false,
+      "chownFailure": true,
+      "suExecSetgroupsFailure": true,
+      "suExecSetuidFailure": false,
+      "serverHelpObserved": false,
+      "probeAbsentAfter": true,
+      "stopCleanupNeeded": false
+    },
+    {
+      "variant": "B",
+      "capabilitiesDropped": [
+        "ALL"
+      ],
+      "capabilitiesAdded": [
+        "CHOWN",
+        "SETGID",
+        "SETUID"
+      ],
+      "exitCode": 2,
+      "timedOut": false,
+      "chownFailure": false,
+      "suExecSetgroupsFailure": false,
+      "suExecSetuidFailure": false,
+      "serverHelpObserved": true,
+      "probeAbsentAfter": true,
+      "stopCleanupNeeded": false
+    }
+  ],
+  "entrypointCapabilityEffectObserved": true,
+  "isolation": {
+    "network": "none",
+    "rootFilesystemReadOnly": true,
+    "noNewPrivileges": true,
+    "pidsLimit": 64,
+    "memoryBytes": 134217728,
+    "cpus": 0.25,
+    "onlyMount": {
+      "type": "tmpfs",
+      "destination": "/data",
+      "sizeBytes": 8388608,
+      "newEmptyMemoryOnly": true
+    },
+    "existingDataOrSecretMounts": false,
+    "hostPortsPublished": false,
+    "imagePullInvoked": false,
+    "loggingDriver": "none"
+  },
+  "preservation": {
+    "existingContainerCount": 15,
+    "legacyContainerCount": 12,
+    "stagingServiceCount": 3,
+    "allExistingContainerIdentitiesPreserved": true,
+    "legacyStatesPreserved": true,
+    "existingVolumesUnchanged": true,
+    "deploymentLockTouched": false,
+    "existingStagingServiceStopStartInvoked": false
+  },
+  "privacy": {
+    "rawLogsRetained": false,
+    "helpOrEntrypointBodiesPublished": false,
+    "secretsRead": false,
+    "privatePathsPublished": false
+  },
+  "sourceEvidenceSha256": "15650dcc83c1194e9b844fa16517f8ee18fcd663df08d94fbd96f837c09796a0",
+  "limits": [
+    "This demonstrates entrypoint capability failure and successful help parsing, not a full S3 startup or service health.",
+    "No existing service, volume, application configuration or deployment lock was changed by the probes."
+  ],
+  "nativeComposeComparison": {
+    "result": "passed",
+    "observedAt": "2026-11-14T18:11:55.294Z",
+    "nativeEnvironmentAndReleaseOverlayUsed": true,
+    "allFiveNativeFilesMerged": true,
+    "stdinIntegrationOverlayOnly": true,
+    "projectDirectoryExplicit": true,
+    "s3CapabilityAdditionOnly": true,
+    "allOtherParametersIncludingEnvironmentEqual": true,
+    "s3CapDropAllRetained": true,
+    "servicesCount": 6,
+    "existingContainerCount": 15,
+    "existingContainerIdentitiesPreserved": true,
+    "existingVolumesUnchanged": true,
+    "deploymentLockUnchanged": true,
+    "remoteFilesWritten": false,
+    "upPullExecInvoked": false,
+    "privateEnvironmentReturned": false,
+    "rawOutputRetained": false,
+    "sourceEvidenceSha256": "f25453ee3e487b6d6ea798ae608539bc97a4d1d66a02598986d7f2503d80bcea"
+  }
+}

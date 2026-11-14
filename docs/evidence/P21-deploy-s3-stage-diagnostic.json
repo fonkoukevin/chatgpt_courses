@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "result": "failed",
+  "stage": "REMOTE_APPLY",
+  "command": {
+    "stage": "REMOTE_APPLY",
+    "program": "ssh",
+    "exitCode": 1,
+    "signal": null,
+    "spawnCode": null,
+    "logReadStatus": "READ",
+    "observedCauses": [
+      "REMOTE_COMMAND_FAILED"
+    ]
+  }
+}

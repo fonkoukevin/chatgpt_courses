@@ -12,12 +12,43 @@ const count = value => Number.isSafeInteger(value) && value >= 0 && value <= 1_0
 export const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 export const browserStages = Object.freeze(['DATABASE', 'SERVICES', 'PAYMENTS', 'CONTROL_LISTEN', 'START_SERVERS', 'BROWSER', 'FIXTURE_GUARDS', 'COMPLETE']);
 export const browserErrorCodes = Object.freeze(['EINVAL', 'ENAMETOOLONG', 'EADDRINUSE', 'EACCES', 'EPERM', 'ENOENT', 'ECONNREFUSED', 'ETIMEDOUT']);
+export const browserCleanupStages = Object.freeze(['PROCESS_API', 'PROCESS_WEB', 'PROCESS_PLAYWRIGHT', 'PROCESS_OTHER', 'CONTROL_SERVER', 'CONTROL_ENDPOINT', 'EXTERNAL_SESSIONS', 'DATABASE_DIAGNOSTIC_WRITE', 'DATABASE_STOP', 'SERVICE_MAILPIT_STOP', 'SERVICE_S3_STOP', 'SERVICE_OTHER_STOP', 'PROVIDER_STOP']);
+const cleanupErrorCodes = Object.freeze([...browserErrorCodes, 'ESRCH', 'ENOTEMPTY', 'EBUSY', 'EIO', 'EMFILE', 'ENFILE', 'ECONNRESET', 'ERR_SERVER_NOT_RUNNING', 'BROWSER_PROCESS_STOP_UNCONFIRMED', 'BROWSER_CONTROL_DIRECTORY_IDENTITY_CHANGED', 'BROWSER_CONTROL_DIRECTORY_NOT_EMPTY_OR_SERVER_OPEN', 'BROWSER_CONTROL_CLEANUP_FAILED']);
+const cleanupSignals = Object.freeze(['SIGTERM', 'SIGKILL', 'SIGINT', 'SIGQUIT', 'SIGABRT', 'SIGSEGV', 'SIGPIPE', 'SIGHUP', 'SIGBUS', 'SIGILL', 'SIGFPE', 'SIGTRAP', 'SIGXCPU', 'SIGXFSZ', 'SIGSYS', 'SIGUSR1', 'SIGUSR2', 'OTHER']);
+const exactKeys = (value, keys) => value !== null && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).sort().join(',') === [...keys].sort().join(',');
+const cleanupProcessKeys = ['leaderPresent', 'groupPresent', 'childExitObserved', 'exitCode', 'signal', 'terminationConfirmed'];
+function cleanupProcessFacts(value) {
+  if (!exactKeys(value, cleanupProcessKeys) || !['leaderPresent', 'groupPresent'].every(key => value[key] === null || typeof value[key] === 'boolean')
+    || typeof value.childExitObserved !== 'boolean' || typeof value.terminationConfirmed !== 'boolean'
+    || !(value.exitCode === null || Number.isInteger(value.exitCode) && value.exitCode >= 0 && value.exitCode <= 65535)
+    || !(value.signal === null || cleanupSignals.includes(value.signal))) return null;
+  return Object.fromEntries(cleanupProcessKeys.map(key => [key, value[key]]));
+}
+// The supervisor supplies only scalar process facts, never PIDs, argv, /proc text or errors.
+export function browserCleanupStep(stage, result, error, before = null, after = null) {
+  return { stage: browserCleanupStages.includes(stage) ? stage : 'PROCESS_OTHER', result: ['passed', 'failed', 'not-required'].includes(result) ? result : 'failed',
+    errorCode: result === 'failed' ? cleanupErrorCodes.includes(error?.code) ? error.code : 'OPERATION_UNCONFIRMED' : 'NONE',
+    processBefore: cleanupProcessFacts(before), processAfter: cleanupProcessFacts(after) };
+}
+export function sanitizeBrowserCleanup(raw) {
+  const unavailable = { format: 'browser-cleanup-summary-v1', status: 'INVALID', steps: [] };
+  if (!exactKeys(raw, ['format', 'steps']) || raw.format !== 'browser-cleanup-summary-v1' || !Array.isArray(raw.steps) || raw.steps.length > 256) return unavailable;
+  const steps = [];
+  for (const item of raw.steps) {
+    if (!exactKeys(item, ['stage', 'result', 'errorCode', 'processBefore', 'processAfter']) || !browserCleanupStages.includes(item.stage)
+      || !['passed', 'failed', 'not-required'].includes(item.result) || !(item.result === 'failed' ? [...cleanupErrorCodes, 'OPERATION_UNCONFIRMED'].includes(item.errorCode) : item.errorCode === 'NONE')
+      || item.processBefore !== null && !cleanupProcessFacts(item.processBefore) || item.processAfter !== null && !cleanupProcessFacts(item.processAfter)) return unavailable;
+    steps.push({ stage: item.stage, result: item.result, errorCode: item.errorCode, processBefore: cleanupProcessFacts(item.processBefore), processAfter: cleanupProcessFacts(item.processAfter) });
+  }
+  return { format: 'browser-cleanup-summary-v1', status: 'RECORDED', steps };
+}
 // Never publish exception messages, process arguments, socket paths or session data.
 export function sanitizeBrowserSession(raw) {
   return { format: 'browser-harness-summary-v1', result: raw?.result === 'passed' ? 'passed' : 'failed', cleanupConfirmed: raw?.cleanupConfirmed === true,
     stage: browserStages.includes(raw?.stage) ? raw.stage : 'UNKNOWN',
     errorCode: browserErrorCodes.includes(raw?.failureCode) ? raw.failureCode : raw?.result === 'passed' ? 'NONE' : 'HARNESS_FAILURE',
-    playwrightStarted: raw?.playwrightStarted === true };
+    playwrightStarted: raw?.playwrightStarted === true,
+    ...(raw?.cleanup === undefined ? {} : { cleanup: sanitizeBrowserCleanup(raw.cleanup) }) };
 }
 export function inside(root, path) { const child = relative(resolve(root), resolve(path)); return child !== '' && child !== '..' && !child.startsWith(`..${sep}`) && !child.startsWith(sep) && !/^[A-Za-z]:/u.test(child); }
 export function regularOwnedFile(root, file) {

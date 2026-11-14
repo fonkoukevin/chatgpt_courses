@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "validatedOn": "2026-11-14",
+  "result": "validated-locally",
+  "files": [
+    {
+      "path": "scripts/verify-browser.mjs",
+      "sha256": "e543bf657f917fe51f9ca0d672088e61665bfab40e3cd1dad507dd05c46e4fe7"
+    },
+    {
+      "path": "scripts/ci-sanitize.mjs",
+      "sha256": "93d137f6e8e6b4f9dcc53bc5299fcde5742181998f910f32a2376649dfc06b70"
+    },
+    {
+      "path": "tests/scripts/ci-browser-cleanup.test.mjs",
+      "sha256": "94a704f344d09a32b32781cd229874ee6019dfece7ad13c9cbcd97e22e25e68d"
+    },
+    {
+      "path": "tests/fixtures/ci-browser-cleanup-probe.mjs",
+      "sha256": "275f4739581c8619b47378d6b8ff90d127d068ae5c17ada92fd16deff32dcc0d"
+    }
+  ],
+  "checks": {
+    "scripts": {
+      "tests": 118,
+      "suites": 0,
+      "pass": 118,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "targetedTests": 22,
+    "passed": 22,
+    "newTests": 4,
+    "independentInjectedCleanupFailures": 9,
+    "collectorPass": 8,
+    "lintNewFindings": 0,
+    "lintHistorical": {
+      "file": "scripts/verify-browser.mjs",
+      "rule": "no-unsafe-finally",
+      "baseline": 1,
+      "current": 1,
+      "rulesDisabled": false
+    },
+    "independentReview": "no-blocking-defect-found"
+  },
+  "diagnostic": {
+    "format": "browser-cleanup-summary-v1",
+    "fixedStageCount": 13,
+    "freeTextPublished": false,
+    "pidsPublished": false,
+    "processArgumentsPublished": false,
+    "processStatesAreDiagnosticOnly": true,
+    "stopOrderChanged": false,
+    "terminationGuardsChanged": false,
+    "retriesAdded": false,
+    "failedCleanupRemainsFailed": true
+  },
+  "isolatedDockerProbe": {
+    "result": "passed",
+    "iterations": 10,
+    "raceObserved": false,
+    "baselineContainerIdsUnchanged": true,
+    "newImagePull": false,
+    "volumesMounted": false,
+    "oldServicesTouched": false
+  },
+  "scope": {
+    "ciMainRun": 43615054843,
+    "preciseHistoricalCauseEstablished": false,
+    "applicationDeployed": false
+  },
+  "limits": [
+    "Tests execute the real harness through in-memory process/service adapters, not a real browser recipe.",
+    "The 10 own ephemeral Docker containers did not reproduce an auto-remove race; no fix is attributed to that hypothesis.",
+    "A new CI must observe the exact cleanup step. Historical failure remains unattributed."
+  ]
+}

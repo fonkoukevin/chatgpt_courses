@@ -8,7 +8,7 @@ import { createBrowserDatabase, observeBrowserDatabase, stopBrowserDatabase } fr
 import { createBrowserServices, observeBrowserStorage, setBrowserServicePaused, stopBrowserService } from './lib/browser-services.mjs';
 import { createBrowserPayments } from './lib/browser-payments.mjs';
 import { assertExternalStripeListenerIsolation, createBrowserExternalStripe } from './lib/browser-stripe-external.mjs';
-import { browserErrorCodes } from './ci-sanitize.mjs';
+import { browserCleanupStep, browserErrorCodes } from './ci-sanitize.mjs';
 import { createBrowserControlEndpoint } from './lib/browser-control-endpoint.mjs';
 
 const env = environment();
@@ -82,6 +82,22 @@ let initialRuntimeFlags;
 let databaseDiagnostic;
 let stage = 'DATABASE';
 let playwrightStarted = false;
+const cleanupSteps = [];
+
+function processCleanupFacts(record) {
+  if (!Number.isInteger(record?.child.pid)) return null;
+  const present = target => { try { process.kill(target, 0); return true; } catch (error) { return error.code === 'ESRCH' ? false : null; } };
+  const signal = record.child.signalCode;
+  return { leaderPresent: present(record.child.pid), groupPresent: windows ? null : present(-record.child.pid), childExitObserved: record.exitObserved === true,
+    exitCode: Number.isInteger(record.child.exitCode) && record.child.exitCode >= 0 && record.child.exitCode <= 65535 ? record.child.exitCode : null,
+    signal: signal === null || signal === undefined ? null : ['SIGTERM', 'SIGKILL', 'SIGINT'].includes(signal) ? signal : 'OTHER', terminationConfirmed: record.terminated === true };
+}
+async function observeCleanup(stage, action, record = null, required = true) {
+  const before = processCleanupFacts(record);
+  if (!required) { cleanupSteps.push(browserCleanupStep(stage, 'not-required', null)); return; }
+  try { const result = await action(); cleanupSteps.push(browserCleanupStep(stage, 'passed', null, before, processCleanupFacts(record))); return result; }
+  catch (error) { cleanupSteps.push(browserCleanupStep(stage, 'failed', error, before, processCleanupFacts(record))); throw error; }
+}
 
 function runtimeFlags() {
   const enabled = (key, fallback) => env[key] === undefined ? fallback : String(env[key]).trim().toLowerCase() === 'true';
@@ -102,7 +118,7 @@ function launch(name, executable, args, options = {}) {
   finally { closeSync(handle); }
   const record = { name, child, terminated: false };
   record.exit = new Promise((resolveExit) => {
-    child.once('exit', (code, signal) => resolveExit({ code, signal }));
+    child.once('exit', (code, signal) => { record.exitObserved = true; resolveExit({ code, signal }); });
     child.once('error', () => resolveExit({ code: 1, signal: null }));
   });
   children.push(record);
@@ -122,7 +138,7 @@ async function terminate(record) {
     save();
     return;
   }
-  if (!await terminateOwned(record.child.pid, !windows)) throw new Error(`Arrêt non confirmé : ${record.name}.`);
+  if (!await terminateOwned(record.child.pid, !windows)) throw Object.assign(new Error(`Arrêt non confirmé : ${record.name}.`), { code: 'BROWSER_PROCESS_STOP_UNCONFIRMED' });
   await record.exit;
   record.terminated = true;
   save();
@@ -322,8 +338,10 @@ try {
   let externalCleanupError;
   if (externalStripe && payments && existsSync(join(evidence, 'stripe-test-proof.json'))) {
     try {
-      const cleanup = await payments.expireUnused(JSON.parse(readFileSync(join(evidence, 'stripe-test-proof.json'), 'utf8')));
-      writeFileSync(join(evidence, 'provider-session-cleanup.json'), JSON.stringify({ verifiedAt: new Date().toISOString(), ...cleanup, secretsPrinted: false }, null, 2) + '\n');
+      await observeCleanup('EXTERNAL_SESSIONS', async () => {
+        const cleanup = await payments.expireUnused(JSON.parse(readFileSync(join(evidence, 'stripe-test-proof.json'), 'utf8')));
+        writeFileSync(join(evidence, 'provider-session-cleanup.json'), JSON.stringify({ verifiedAt: new Date().toISOString(), ...cleanup, secretsPrinted: false }, null, 2) + '\n');
+      });
     } catch (error) {
       externalCleanupError = new Error('External TEST session cleanup remains unconfirmed.');
       const facts = error?.cleanupFacts;
@@ -333,36 +351,37 @@ try {
       try { writeFileSync(join(evidence, 'provider-session-cleanup.json'), JSON.stringify({ verifiedAt: new Date().toISOString(), testMode: true, cleanupConfirmed: false, ...safeFacts, secretsPrinted: false }, null, 2) + '\n'); }
       catch { /* All owned process and service stops still run below. */ }
     }
-  }
+  } else cleanupSteps.push(browserCleanupStep('EXTERNAL_SESSIONS', 'not-required', null));
   for (const socket of sockets) socket.destroy();
   const results = await Promise.allSettled([
-    ...children.toReversed().map((record) => terminate(record)),
-    (async () => {
+    ...children.toReversed().map((record) => observeCleanup(record.name === 'api' ? 'PROCESS_API' : record.name === 'playwright' ? 'PROCESS_PLAYWRIGHT' : /^web(?:-|$)/u.test(record.name) ? 'PROCESS_WEB' : 'PROCESS_OTHER', () => terminate(record), record)),
+    observeCleanup('CONTROL_SERVER', async () => {
       await controlQueue;
       if (control.listening) await new Promise((resolveClose, rejectClose) => {
         control.close((error) => error ? rejectClose(error) : resolveClose());
       });
-    })(),
+    }),
   ]);
   const cleanupErrors = results.filter((result) => result.status === 'rejected').map((result) => result.reason);
-  try { controlEndpoint?.cleanup(); } catch (error) { cleanupErrors.push(error); }
+  try { await observeCleanup('CONTROL_ENDPOINT', () => controlEndpoint.cleanup(), null, Boolean(controlEndpoint)); } catch (error) { cleanupErrors.push(error); }
   if (externalCleanupError) cleanupErrors.push(externalCleanupError);
   if (database && (verificationError || cleanupErrors.length)) {
     try { databaseDiagnostic = observeBrowserDatabase(database); }
     catch { databaseDiagnostic = { available: false, readOnly: true, reason: 'OWNED_DATABASE_DIAGNOSTIC_UNAVAILABLE' }; }
-    try { writeFileSync(join(evidence, 'database-diagnostic.json'), JSON.stringify(databaseDiagnostic, null, 2) + '\n', { mode: 0o600 }); }
+    try { await observeCleanup('DATABASE_DIAGNOSTIC_WRITE', () => writeFileSync(join(evidence, 'database-diagnostic.json'), JSON.stringify(databaseDiagnostic, null, 2) + '\n', { mode: 0o600 })); }
     catch (error) { cleanupErrors.push(error); }
   }
-  try { stopBrowserDatabase(database); save(); } catch (error) { cleanupErrors.push(error); }
+  try { await observeCleanup('DATABASE_STOP', () => { stopBrowserDatabase(database); save(); }, null, Boolean(database)); } catch (error) { cleanupErrors.push(error); }
   for (const service of services.toReversed()) {
     if (service.kind === 's3') { try { service.observation = observeBrowserStorage(service); } catch { service.observation = { available: false }; } }
-    try { stopBrowserService(service); save(); } catch (error) { cleanupErrors.push(error); }
+    try { await observeCleanup(service.kind === 'mailpit' ? 'SERVICE_MAILPIT_STOP' : service.kind === 's3' ? 'SERVICE_S3_STOP' : 'SERVICE_OTHER_STOP', () => { stopBrowserService(service); save(); }); } catch (error) { cleanupErrors.push(error); }
   }
-  try { await payments?.stop(); } catch(error) { cleanupErrors.push(error); }
+  try { await observeCleanup('PROVIDER_STOP', () => payments.stop(), null, Boolean(payments)); } catch(error) { cleanupErrors.push(error); }
   try {
     writeFileSync(join(evidence, 'session.json'), JSON.stringify({ runId, completedAt: new Date().toISOString(), selection: selected,
       result: verificationError || cleanupErrors.length ? 'failed' : 'passed', cleanupConfirmed: cleanupErrors.length === 0,
       stage, playwrightStarted,
+      cleanup: { format: 'browser-cleanup-summary-v1', steps: cleanupSteps },
       failureCode: browserErrorCodes.includes(verificationError?.code) ? verificationError.code : verificationError ? 'HARNESS_FAILURE' : 'NONE',
       initialRuntimeFlags, finalRuntimeFlags: runtimeFlags(),
       ...(databaseDiagnostic ? { databaseDiagnostic: { available: databaseDiagnostic.available, file: 'database-diagnostic.json' } } : {}),

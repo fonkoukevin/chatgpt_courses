@@ -12,6 +12,8 @@ La publication contrôle `EXPECTED_IMAGE_VISIBILITY`. Le défaut `private` conse
 
 Après ce précontrôle, la publication construit les deux images une fois depuis le commit de la branche par défaut, puis les pousse explicitement au registre autorisé. Leurs digests et leur visibilité explicitement autorisée sont vérifiés après chaque push ; le mode public exige la lecture anonyme du digest exact. La promotion en production réutilise exactement le manifeste validé en recette : aucun build, retag de promotion ou résolution d’un tag mobile. L’empreinte approuvée est conservée dans `APPROVED_STAGING_RELEASE_SHA256` de l’environnement production.
 
+Le contrôleur demande la fermeture de chaque connexion HTTP GitHub/GHCR : ses commandes synchrones de build/push peuvent durer plusieurs minutes et une connexion inactive peut être fermée pendant ce blocage. Chaque requête reste unique, sans retry ; TLS, refus des redirections, délais, permissions, visibilité et vérification des octets du digest restent obligatoires. Une erreur de transport arrête toujours la publication. Les GET de diagnostic exécutés ensuite décrivent un état ultérieur ; ils ne valident pas la requête qui a échoué ni un manifeste complet.
+
 Un manifeste valide prouve une identité déclarée, pas une disponibilité ou une recette réussie. Avant activation, le contrôleur vérifie aussi le succès du workflow CI pour ce commit, son appartenance à l’historique de la branche par défaut, la configuration cible, les labels OCI `org.opencontainers.image.revision`, la migration et les sondes.
 
 ## Préparer les accès sans les inventer

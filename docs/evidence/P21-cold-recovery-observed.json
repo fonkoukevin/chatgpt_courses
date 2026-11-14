@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "operation": "COLD_PHYSICAL_RECOVERY_BACKUP",
+  "result": "passed",
+  "environment": "staging",
+  "sourceCommit": "aae3d1ace003ceb82a7a79575c5dcc459719d000",
+  "sourceManifestSha256": "8c3de54198bea5399549813f0020dd27a5b78cf358d8f58fb7975fc91ae08860",
+  "failedDeploymentRunId": 43623390877,
+  "recoveryRunId": "c87d281e-df04-4f13-bb73-e764b5f104ab",
+  "backupReceiptSha256": "34369fc11157139728bf5593bf21eba709c9b96a71942259cdeb5b4e7e1d30d3",
+  "backupCreatedAt": "2026-11-14T21:12:42.151Z",
+  "phases": [
+    {
+      "phase": "prepare",
+      "result": "passed",
+      "recordedTimestamp": "2026-11-14T21:12:15.565Z",
+      "privateReceiptSha256": "d63287c9afae3aa43d23f888423a7d0995ea14087d9849e2dd4a6557d9442113"
+    },
+    {
+      "phase": "capture",
+      "result": "passed",
+      "recordedTimestamp": "2026-11-14T21:12:39.966Z",
+      "privateReceiptSha256": "699514e8c7814b88f006d8f5f76fbba57c7eb8c95c534e222764f0aecdc8c9bb"
+    },
+    {
+      "phase": "offhost",
+      "result": "passed",
+      "recordedTimestamp": "2026-11-14T21:13:17.303Z",
+      "privateReceiptSha256": "b30bb471678c456a487fbfdf341a993135414a5b21e893c7b095a4049f4598a4"
+    },
+    {
+      "phase": "archive-lock",
+      "result": "passed",
+      "recordedTimestamp": "2026-11-14T21:13:35.813Z",
+      "privateReceiptSha256": "ce39346c8e54be3c9321aa0065460d00579d2ec1dd4baf0572da93b67c2578ae"
+    }
+  ],
+  "postgresql": {
+    "version": "18.6",
+    "schemaVersion": 19,
+    "migrationsSuccessful": 19,
+    "migrationsFailed": 0,
+    "userAccounts": 0,
+    "assets": 0,
+    "orders": 0,
+    "otherActiveClients": 0,
+    "nativeCustomDump": true,
+    "pgRestoreListSucceeded": true,
+    "customFormatVerified": true,
+    "listLines": 741,
+    "listBytes": 66666,
+    "listedContentsRetained": false,
+    "databaseRestored": false
+  },
+  "s3": {
+    "scope": "COMPLETE_COLD_PHYSICAL_VOLUME_ARCHIVE",
+    "sourceStopped": true,
+    "rawVolumeArchived": true,
+    "tarFiles": 0,
+    "tarDirectories": 2,
+    "tarDataBytes": 0,
+    "tarBytes": 2048,
+    "headerChecksumsVerified": true,
+    "pathsAndTypesVerified": true,
+    "allFileDataHashed": true,
+    "logicalS3ExportPerformed": false,
+    "logicalObjectInventoryAvailable": false,
+    "rawVolumeRestoreVerified": false
+  },
+  "encryption": {
+    "format": "aes-256-gcm-v1",
+    "cipherFiles": 3,
+    "authenticatedCipherFiles": 3,
+    "notificationKeyIncluded": true,
+    "plaintextScratchRemoved": true
+  },
+  "offhost": {
+    "result": "passed",
+    "copiedFiles": 4,
+    "windowsPcRuntime": true,
+    "cipherHashesVerified": true,
+    "receiptTargetVerified": true,
+    "keyStoredSeparately": true,
+    "independentPcOperatorConfirmed": true,
+    "verifiedAt": "2026-11-14T21:13:15.979Z"
+  },
+  "deploymentLock": {
+    "failedJobTerminalVerified": true,
+    "allThreeJobsCompleted": true,
+    "archivedByRename": true,
+    "inodePreserved": true,
+    "bytesSha256Preserved": true,
+    "sourceLockPathAbsent": true,
+    "resourcesRetained": true
+  },
+  "nextDeploymentRequirements": {
+    "firstInstallEmptyDatabase": false,
+    "offHostBackupAttested": true,
+    "migrationBackupReceiptSha256": "34369fc11157139728bf5593bf21eba709c9b96a71942259cdeb5b4e7e1d30d3"
+  },
+  "preservation": {
+    "baselineContainersVerified": 15,
+    "legacyContainersPreserved": 12,
+    "ownedDataVolumesVerified": 3,
+    "archiveHelperRetained": true
+  },
+  "failedPreparations": [
+    {
+      "runId": "89c3fb4f-705a-4072-aa1a-37a8ff83f283",
+      "phase": "prepare",
+      "result": "failed-or-unconfirmed",
+      "code": "P21_RECOVERY_PRIVATE_PATH_REQUIRED",
+      "diagnosedCause": "STAGING_ROOT_PARENT_REJECTED",
+      "capturePerformed": false,
+      "backupProduced": false,
+      "automaticRetry": false,
+      "resourcesRetained": true,
+      "failureReceiptSha256": "552a3cfb864003989142087e946dee90ef54be0cfb9eff76fad130ebb6424054"
+    },
+    {
+      "runId": "9f42b802-204d-4867-b7dc-389da4beb49b",
+      "phase": "prepare",
+      "result": "failed-or-unconfirmed",
+      "code": "P21_RECOVERY_CHILD_OUTCOME_UNCONFIRMED",
+      "diagnosedCause": "LEGACY_OPTIONAL_HEALTH_FIELD_MISSING",
+      "capturePerformed": false,
+      "backupProduced": false,
+      "automaticRetry": false,
+      "resourcesRetained": true,
+      "failureReceiptSha256": "551901f7709ce0473f2cebe50c88ce838fe275c41e0d9f94f62f73fac3728e35"
+    }
+  ],
+  "limitations": [
+    "PHYSICAL_VOLUME_ARCHIVE_NOT_LOGICAL_S3_EXPORT",
+    "NO_LOGICAL_OBJECT_INVENTORY",
+    "RAW_VOLUME_RESTORE_NOT_OBSERVED",
+    "APPLICATION_RESTORE_NOT_OBSERVED",
+    "APPLICATION_DEPLOYMENT_NOT_ESTABLISHED",
+    "RPO_RTO_NOT_MEASURED"
+  ]
+}

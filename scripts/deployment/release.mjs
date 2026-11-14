@@ -48,6 +48,11 @@ function jobToken(env) {
   requireRelease(typeof env.GITHUB_TOKEN === 'string' && env.GITHUB_TOKEN.length >= 20 && env.GITHUB_TOKEN.length <= 4096 && !/\s/u.test(env.GITHUB_TOKEN), 'RELEASE_JOB_TOKEN_REQUIRED');
   return env.GITHUB_TOKEN;
 }
+// Builds/pushes block the event loop; do not retain an idle HTTP connection
+// across those synchronous commands. Each request still runs exactly once.
+export function releaseRequest(address, options = {}) {
+  return fetch(address, { ...options, headers: { ...options.headers, Connection: 'close' } });
+}
 async function responseJson(response, maximum, code) {
   const text = await response.text(); requireRelease(Buffer.byteLength(text, 'utf8') <= maximum, code);
   try { return JSON.parse(text); } catch { requireRelease(false, code); }
@@ -57,7 +62,7 @@ async function requireRegistryDenial(response) {
   const body = await responseJson(response, 16384, 'RELEASE_GHCR_PRIVACY_UNVERIFIED');
   requireRelease(Array.isArray(body?.errors) && body.errors.length >= 1 && body.errors.length <= 10 && body.errors.every(error => ['DENIED', 'UNAUTHORIZED'].includes(error?.code)), 'RELEASE_GHCR_PRIVACY_UNVERIFIED');
 }
-export async function requireGhcrAnonymousReadDenied(image, request = fetch) {
+export async function requireGhcrAnonymousReadDenied(image, request = releaseRequest) {
   requireRelease(/^ghcr\.io\/[a-z0-9][a-z0-9-]*\/[a-z0-9_.-]+\/(?:web|api)$/u.test(image), 'RELEASE_GHCR_IMAGE_REQUIRED');
   const options = { redirect: 'error', signal: AbortSignal.timeout(15000) };
   const name = image.slice('ghcr.io/'.length), tokenUrl = `https://ghcr.io/token?service=ghcr.io&scope=${encodeURIComponent(`repository:${name}:pull`)}`;
@@ -70,7 +75,7 @@ export async function requireGhcrAnonymousReadDenied(image, request = fetch) {
   requireRelease(!listing.ok, 'RELEASE_GHCR_PRIVATE_PACKAGE_REQUIRED');
   await requireRegistryDenial(listing);
 }
-export async function requireGhcrAnonymousDigestReadable(image, digest, request = fetch) {
+export async function requireGhcrAnonymousDigestReadable(image, digest, request = releaseRequest) {
   requireRelease(/^ghcr\.io\/[a-z0-9][a-z0-9-]*\/[a-z0-9_.-]+\/(?:web|api)$/u.test(image), 'RELEASE_GHCR_IMAGE_REQUIRED');
   requireRelease(/^sha256:[a-f0-9]{64}$/u.test(digest ?? ''), 'RELEASE_IMAGE_DIGEST_REQUIRED');
   const name = image.slice('ghcr.io/'.length), options = { method: 'GET', redirect: 'error', signal: AbortSignal.timeout(15000) };
@@ -92,7 +97,7 @@ export async function requireGhcrAnonymousDigestReadable(image, digest, request 
     requireRelease(bytes > 0 && `sha256:${hash.digest('hex')}` === digest, 'RELEASE_GHCR_PUBLIC_DIGEST_UNVERIFIED');
   } finally { try { await reader.cancel(); } catch { /* Never publish provider body or cancellation details. */ } reader.releaseLock(); }
 }
-export async function requireGhcrPackage(env, kind, { allowMissing = false, digest, request = fetch } = {}) {
+export async function requireGhcrPackage(env, kind, { allowMissing = false, digest, request = releaseRequest } = {}) {
   const { imageRepository, imageVisibility } = ghcrConfiguration(env);
   requireRelease(!allowMissing || imageVisibility === 'public', 'RELEASE_GHCR_PRIVATE_PACKAGE_REQUIRED');
   requireRelease(['web', 'api'].includes(kind), 'RELEASE_GHCR_IMAGE_REQUIRED');
@@ -197,7 +202,7 @@ function publicReceipt(name, value) {
 }
 async function github(path) {
   requireRelease(process.env.GITHUB_API_URL === 'https://api.github.com' && process.env.GITHUB_SERVER_URL === 'https://github.com' && /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/u.test(process.env.GITHUB_REPOSITORY ?? '') && process.env.GITHUB_TOKEN, 'RELEASE_GITHUB_CONTEXT_REQUIRED');
-  const response = await fetch(`https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}${path ? '/' + path : ''}`, { headers: { Accept: 'application/vnd.github+json', Authorization: `Bearer ${process.env.GITHUB_TOKEN}`, 'X-GitHub-Api-Version': '2026-03-10' }, redirect: 'error', signal: AbortSignal.timeout(15000) });
+  const response = await releaseRequest(`https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}${path ? '/' + path : ''}`, { headers: { Accept: 'application/vnd.github+json', Authorization: `Bearer ${process.env.GITHUB_TOKEN}`, 'X-GitHub-Api-Version': '2026-03-10' }, redirect: 'error', signal: AbortSignal.timeout(15000) });
   requireRelease(response.ok, 'RELEASE_GITHUB_GUARD_UNAVAILABLE');
   const bytes = await response.text(); requireRelease(Buffer.byteLength(bytes) <= 1024 * 1024, 'RELEASE_GITHUB_RESPONSE_TOO_LARGE'); return JSON.parse(bytes);
 }
@@ -260,7 +265,7 @@ async function publish() {
       stage('APPROVED_TEST_CLEANUP');
       await cleanupApprovedTestPackage({ approvedTestCleanup: true, environment: env.TARGET_ENVIRONMENT,
         guardPassed: progress.guardPassed, sourceRepository: env.GITHUB_REPOSITORY, imageRepository, token },
-      { record: async value => publicReceipt('approved-test-cleanup.json', value) });
+      { request: releaseRequest, record: async value => publicReceipt('approved-test-cleanup.json', value) });
     }
     const dockerConfig = mkdtempSync(join(tmpdir(), 'courses-release-registry-'));
     progress.temporaryCredentialsCreated = true;
@@ -306,7 +311,7 @@ async function publish() {
     // Diagnostic GETs only, after the protected source/environment guard passed.
     // They do not allow a failed publication to continue or follow redirects.
     if (progress.guardPassed && registryContext) {
-      try { publicReceipt('registry-inspection.json', await inspectRegistryReadOnly(registryContext)); }
+      try { publicReceipt('registry-inspection.json', await inspectRegistryReadOnly(registryContext, { request: releaseRequest })); }
       catch (inspectionError) { publicReceipt('registry-inspection.json', { result: 'unavailable', ...safeReleaseFailure(inspectionError, progress.stage) }); }
     }
     throw error;

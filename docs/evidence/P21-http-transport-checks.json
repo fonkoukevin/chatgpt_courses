@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-11-14T21:25:19.081Z",
+  "environment": "local-Windows",
+  "nodeVersion": "v24.22.2",
+  "result": "passed",
+  "files": [
+    {
+      "path": "scripts/deployment/release.mjs",
+      "sha256": "43a39dbb6a7b957e6279f00952b2fe2c3d17192b5c479cc347cf925303ae8f91"
+    },
+    {
+      "path": "tests/scripts/deployment-http.test.mjs",
+      "sha256": "f000f57bdf42739869bab7b925c7a3cf07b060349c3209ef838aeecf8cab93e2"
+    },
+    {
+      "path": "tests/fixtures/deployment/http-stale-server.mjs",
+      "sha256": "19d089b6593fe4e21591fc48bbe84bfbdbcf02b1affbfbef5e2553ce3fdb8834"
+    },
+    {
+      "path": "tests/scripts/deployment-publication.test.mjs",
+      "sha256": "c471dc4b5d0c6c4e60486078c844fe988cad65c58f629f50c3cbc4ba15730421"
+    },
+    {
+      "path": "tests/fixtures/deployment/publication-probe.mjs",
+      "sha256": "a10345c2c353134451bc146eb459aeab517499ba574828c9b970353c9a79eefd"
+    }
+  ],
+  "checks": {
+    "ciScriptGroup": {
+      "schemaVersion": 1,
+      "job": "web",
+      "step": "scripts",
+      "exitCode": 0,
+      "result": "passed",
+      "durationMs": 6965,
+      "tap": {
+        "format": "tap-summary-v1",
+        "counts": {
+          "tests": 132,
+          "suites": 0,
+          "pass": 132,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "durationMs": 6848.1533
+      }
+    },
+    "deploymentTests": 94,
+    "independentFocusedTests": 45,
+    "eslint": {
+      "files": 5,
+      "errors": 0,
+      "warnings": 0,
+      "configuration": "ESLint recommended with actual Node runtime globals"
+    },
+    "actualHttpFixture": {
+      "separateServerProcess": true,
+      "blockingChildProcess": true,
+      "idleResetReproduced": true,
+      "baselineCauseCode": "ECONNRESET",
+      "freshConnections": 2,
+      "requestAttempts": 2,
+      "retries": 0,
+      "unauthorizedStatusesStillBlocked": [
+        401,
+        403
+      ]
+    },
+    "publicationSuccessRequestCount": 13
+  },
+  "remoteFailure": {
+    "runIds": [
+      43641209927,
+      43641702241
+    ],
+    "stage": "VERIFY_WEB",
+    "causeCode": "UND_ERR_SOCKET",
+    "preciseRemoteCauseEstablished": false
+  },
+  "limitations": [
+    "Loopback HTTP reset reproduction does not establish the cause of the remote HTTPS failures.",
+    "Corrected publication and deployment have not yet been observed."
+  ]
+}

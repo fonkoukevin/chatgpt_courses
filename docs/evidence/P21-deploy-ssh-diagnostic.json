@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "result": "failed",
+  "stage": "SSH_PREPARE",
+  "command": {
+    "stage": "SSH_PREPARE",
+    "program": "ssh",
+    "exitCode": 255,
+    "signal": null,
+    "spawnCode": null,
+    "logReadStatus": "READ",
+    "observedCauses": [
+      "SSH_AUTHENTICATION_REJECTED"
+    ]
+  }
+}

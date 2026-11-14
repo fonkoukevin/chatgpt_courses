@@ -37,6 +37,7 @@ test('both existing private packages pass before login and build and remain chec
   assert.equal(result.exitCode, 0);
   assert.deepEqual(result.checksBeforeFirstCommand, ['web', 'api']);
   assert.deepEqual(result.packageReads, ['web', 'api', 'web', 'api']);
+  assert.equal(result.methods.length, 13);
   assert.deepEqual(result.commands, ['LOGIN', 'BUILD', 'INSPECT', 'TAG', 'PUSH', 'INSPECT', 'INSPECT', 'TAG', 'PUSH', 'INSPECT']);
   assert.equal(result.credentialsCreated, 1);
   assert.equal(result.credentialsRemoved, 1);
@@ -70,6 +71,7 @@ test('explicit public initial and existing packages publish only after exact ano
     assert.equal(result.exitCode, 0);
     assert.deepEqual(result.checksBeforeFirstCommand, ['web', 'api']);
     assert.deepEqual(result.packageReads, ['web', 'api', 'web', 'api']);
+    assert.equal(result.methods.length, 13);
     assert.equal(result.progress.stage, 'COMPLETE');
     assert.equal(result.publication.expectedImageVisibility, 'public');
     assert.equal(result.publication.observedImageVisibility, 'public');

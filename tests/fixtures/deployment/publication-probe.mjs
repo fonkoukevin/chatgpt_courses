@@ -70,6 +70,7 @@ syncBuiltinESMExports();
 
 const json = (body, status = 200) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
 globalThis.fetch = async (address, options = {}) => {
+  if (options.headers?.Connection !== 'close') throw new Error('RELEASE_HTTP_CONNECTION_REUSE_REFUSED');
   const url = new URL(address), method = options.method ?? 'GET';
   methods.push(method);
   if (method !== 'GET') throw new Error('UNEXPECTED_PROVIDER_MUTATION');

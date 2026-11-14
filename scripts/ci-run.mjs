@@ -5,6 +5,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { command, environment, root, windows } from './lib/runtime.mjs';
 import { sanitizeTap, sanitizePlaywright, sanitizeBrowserSession, collectSurefire, copyApprovedScreenshots, regularOwnedFile, writePublicJson, requireReleaseSuccess, requireJUnitSuccess } from './ci-sanitize.mjs';
+import { readBrowserInstallSummary } from './ci-browser-install-diagnostics.mjs';
 
 export const steps = Object.freeze({ install: ['ci'], contract: ['run', 'api:check'], client: ['run', 'verify:client'], content: ['run', 'verify:content', '--', 'P19'], contrast: ['run', 'verify:contrast', '--', 'P19'], stripeConfig: ['run', 'verify:stripe-config'], lint: ['run', 'lint'], types: ['run', 'typecheck'], browserTypes: ['run', 'typecheck:browser'], web: ['run', 'build:web'], api: ['run', 'verify:api'], release: ['run', 'verify:release'], production: ['run', 'verify:production-config'] });
 const jobs = new Set(['web', 'api', 'e2e']);
@@ -67,6 +68,7 @@ export function runStep(job, step) {
   try { result = spawnSync(executable, args, { cwd: root, env, windowsHide: true, windowsVerbatimArguments: windows && executable === 'cmd.exe', stdio: ['ignore', handle, handle], timeout: 35 * 60 * 1000 }); }
   finally { closeSync(handle); }
   const summary = { schemaVersion: 1, job, step, exitCode: Number.isInteger(result.status) ? result.status : null, result: result.status === 0 && !result.error ? 'passed' : 'failed', durationMs: Math.round(performance.now() - started), ...(['content', 'contrast'].includes(step) ? { evidencePhase: 'P19' } : {}) };
+  if (step === 'browsers') summary.browserInstall = readBrowserInstallSummary(log, result);
   if (['scripts', 'client', 'stripeConfig'].includes(step)) summary.tap = sanitizeTap(readFileSync(log, 'utf8'));
   if (step === 'api' && existsSync(join(root, 'apps/api/target/surefire-reports'))) summary.junit = collectSurefire(join(root, 'apps/api/target/surefire-reports'));
   writePublicJson(join(destination, `${step}.json`), summary);

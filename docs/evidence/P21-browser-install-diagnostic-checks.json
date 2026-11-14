@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "validatedOn": "2026-11-14",
+  "result": "validated-locally",
+  "files": [
+    {
+      "path": "scripts/ci-browser-install-diagnostics.mjs",
+      "sha256": "5a158b8e854bf9e675005a8ba61d2f28844cd3f123cc9a8234a22d017ce7c39e"
+    },
+    {
+      "path": "scripts/ci-run.mjs",
+      "sha256": "460df56c3133a38bfcd463fc4966aefc389e8d26c403899b735b597a60d14637"
+    },
+    {
+      "path": "tests/scripts/ci-browser-install-diagnostics.test.mjs",
+      "sha256": "9494497f6b0754c8d826abb8dea03f257dd48e352d2d2c970a6fffed4907d91a"
+    },
+    {
+      "path": "tests/fixtures/ci-browser-install-probe.mjs",
+      "sha256": "56e50615b61f19ff1e454d84b8920512eb9ef569f16dc6d02caf83ff141fa2a1"
+    }
+  ],
+  "checks": {
+    "node": "v24.22.2",
+    "platform": "win32",
+    "playwright": "1.65.0",
+    "targetedTests": {
+      "tests": 22,
+      "passed": 22,
+      "failed": 0,
+      "skipped": 0,
+      "diagnosticTests": 7,
+      "existingCiSafetyTests": 15
+    },
+    "lint": {
+      "files": 4,
+      "errors": 0,
+      "warnings": 0,
+      "rules": "ESLint recommended with standard Node globals",
+      "rulesDisabled": false
+    },
+    "independentReview": "No blocking defect found by review_staging.",
+    "ciScriptGroup": {
+      "tests": 114,
+      "suites": 0,
+      "pass": 114,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "runtimeCollector": {
+      "tests": 8,
+      "pass": 8,
+      "fail": 0
+    }
+  },
+  "schema": {
+    "container": "browsers.json.browserInstall",
+    "format": "browser-install-summary-v1",
+    "fields": [
+      "format",
+      "logReadStatus",
+      "observedPhases",
+      "lastObservedPhase",
+      "observedCauses",
+      "observedErrnos",
+      "spawnCode",
+      "signal"
+    ],
+    "logReadStatus": [
+      "READ",
+      "HEAD_TAIL",
+      "UNAVAILABLE"
+    ],
+    "collectorValidator": "validateBrowserInstallSummary(value) from scripts/ci-browser-install-diagnostics.mjs"
+  },
+  "behavior": {
+    "onlyBrowsersStepChanged": true,
+    "privateLogReadMaximumBytes": 1048576,
+    "headTailStatusExplicit": true,
+    "observedPatternsOnly": true,
+    "freeTextExported": false,
+    "rawLogExported": false,
+    "matchCapturesExported": false,
+    "urlsPackagesPathsOrCommandsExported": false,
+    "nativeSpawnCodeAndSignalAllowlisted": true,
+    "unknownOrUnavailableLogHasNoObservations": true,
+    "cliCommandUnchanged": true,
+    "timeoutMsUnchanged": 2100000,
+    "playwrightVersionUnchanged": true,
+    "retriesAdded": false,
+    "ciVerdictPreserved": true,
+    "otherStepsUntouched": true
+  },
+  "testsScope": [
+    "Pinned Playwright lock/dependency/download messages remain in the installed source.",
+    "Real ci-run CLI executes through isolated in-memory filesystem/process adapters, with no browser/apt/Docker/network command.",
+    "Private sentinels, URLs, package names and error messages never reach public summaries or stdout.",
+    "Full/large/unreadable/symlink/hardlink/nonregular/short-read/changed log cases are covered.",
+    "Only observed fixed pattern enums survive; duration604976ms and Docker output do not infer a cause.",
+    "Closed validator refuses extra fields, unknown enums, duplicate observations and inconsistent UNAVAILABLE state."
+  ],
+  "execution": {
+    "networkUsed": false,
+    "externalMutationPerformed": false,
+    "realBrowserInstallationExecuted": false,
+    "existingSecretsRead": false,
+    "commitCreated": false,
+    "pushPerformed": false
+  },
+  "limits": [
+    "This change does not attribute the historical Chromium installation failures on PR6 run43041579035/sourcee8ef9bb or its twin push. Their raw logs are unavailable and the cause remains unknown.",
+    "Actual provider diagnosis requires a new GitHub workflow run carrying this change.",
+    "Head/tail sampling is bounded and may omit a pattern occurring only in the unexamined middle of a large log.",
+    "Pattern presence is an observation and is not proof of exclusive causality."
+  ]
+}

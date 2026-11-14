@@ -1,4 +1,4 @@
-import { readFileSync, openSync, closeSync, fstatSync, readSync, constants as F } from 'node:fs';
+import { readFileSync, openSync, closeSync, fstatSync, lstatSync, readSync, constants as F } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 // No import of release.mjs: its CLI imports this helper, including on the host.
@@ -28,6 +28,75 @@ export const imageBuildCauses = Object.freeze(['DOCKER_HUB_RATE_LIMIT', 'REGISTR
 const imageSpawnCodes = new Set(['ENOENT', 'EACCES', 'EPERM', 'ENOMEM', 'EAGAIN', 'ENOSPC', 'ETIMEDOUT']);
 const imageSignals = new Set(['SIGTERM', 'SIGKILL', 'SIGINT', 'SIGABRT', 'SIGSEGV']);
 const imagePhases = new Set(['VALIDATION', 'BUILD', 'INSPECTION', 'OUTPUT']);
+
+export const deploymentStages = Object.freeze(['GUARD', 'REGISTRY_VERIFICATION', 'LOCAL_BUNDLE', 'SSH_PREPARE', 'SCP_UPLOAD', 'REMOTE_APPLY', 'EXTERNAL_SMOKE', 'ACTIVATE', 'COMPLETE']);
+export const deploymentCommandCauses = Object.freeze(['SSH_AUTHENTICATION_REJECTED', 'SSH_HOST_KEY_REJECTED', 'SSH_CONNECTION_TIMEOUT', 'SSH_CONNECTION_REFUSED', 'SSH_DNS_FAILED', 'SCP_SUBSYSTEM_UNAVAILABLE', 'TARGET_PERMISSION_DENIED', 'DISK_FULL', 'REMOTE_COMMAND_FAILED', 'REMOTE_LOCK_ALREADY_HELD']);
+
+/** Observations of fixed patterns only; never return a line, capture or arbitrary code. */
+export function classifyDeploymentCommandLog(value) {
+  if (typeof value !== 'string' || Buffer.byteLength(value) > 1024 * 1024) return [];
+  const patterns = [
+    /Permission denied \((?:publickey|password|keyboard-interactive)(?:,[a-z-]+)*\)/iu,
+    /Host key verification failed|REMOTE HOST IDENTIFICATION HAS CHANGED/iu,
+    /(?:Connection timed out|Operation timed out)/iu,
+    /connect to host [^\r\n]{1,300} port \d{1,5}: Connection refused/iu,
+    /Could not resolve hostname/iu,
+    /subsystem request failed on channel \d+|subsystem not found/iu,
+    /(?:mkdir|scp|tar):[^\r\n]{0,1000}: Permission denied/iu,
+    /no space left on device/iu,
+    /^RELEASE_REMOTE_COMMAND_FAILED\r?$/mu,
+    /^RELEASE_REMOTE_LOCK_ALREADY_HELD\r?$/mu,
+  ];
+  return deploymentCommandCauses.filter((_cause, index) => patterns[index].test(value));
+}
+
+/** Read only the current command's bounded private log tail. Read failure is diagnostic only. */
+export function readDeploymentCommandLog(path, offset) {
+  let fd;
+  try {
+    const before = lstatSync(path);
+    if (!before.isFile() || before.isSymbolicLink() || before.nlink !== 1) return { logReadStatus: 'UNAVAILABLE', observedCauses: [] };
+    fd = openSync(path, F.O_RDONLY | (F.O_NOFOLLOW ?? 0));
+    const stat = fstatSync(fd);
+    if (!stat.isFile() || stat.nlink !== 1 || stat.dev !== before.dev || stat.ino !== before.ino || !Number.isSafeInteger(offset) || offset < 0 || stat.size < offset
+      || process.platform !== 'win32' && ((stat.mode & 0o077) !== 0 || stat.uid !== process.getuid())) return { logReadStatus: 'UNAVAILABLE', observedCauses: [] };
+    const length = Math.min(stat.size - offset, 1024 * 1024), bytes = Buffer.alloc(length);
+    if (readSync(fd, bytes, 0, length, stat.size - length) !== length || fstatSync(fd).size !== stat.size) return { logReadStatus: 'UNAVAILABLE', observedCauses: [] };
+    const after = lstatSync(path);
+    if (after.isSymbolicLink() || after.dev !== stat.dev || after.ino !== stat.ino || after.nlink !== 1 || after.size !== stat.size) return { logReadStatus: 'UNAVAILABLE', observedCauses: [] };
+    return { logReadStatus: stat.size - offset > length ? 'TAIL_ONLY' : 'READ', observedCauses: classifyDeploymentCommandLog(bytes.toString('utf8')) };
+  } catch { return { logReadStatus: 'UNAVAILABLE', observedCauses: [] }; }
+  finally { if (fd !== undefined) closeSync(fd); }
+}
+
+export function deploymentCommandFailure(stage, program, result, log) {
+  const allowedPrograms = new Set(['git', 'tar', 'ssh', 'scp', 'node']);
+  return { stage: deploymentStages.includes(stage) ? stage : 'UNKNOWN', program: allowedPrograms.has(program) ? program : 'OTHER',
+    exitCode: Number.isInteger(result?.status) && result.status >= 0 && result.status <= 255 ? result.status : null,
+    signal: imageSignals.has(result?.signal) ? result.signal : null, spawnCode: imageSpawnCodes.has(result?.error?.code) ? result.error.code : null,
+    logReadStatus: ['READ', 'TAIL_ONLY', 'UNAVAILABLE'].includes(log?.logReadStatus) ? log.logReadStatus : 'UNAVAILABLE',
+    observedCauses: deploymentCommandCauses.filter(cause => Array.isArray(log?.observedCauses) && log.observedCauses.includes(cause)) };
+}
+
+export function safeDeploymentFailure(error, stage) {
+  const raw = property(error, 'deploymentCommand'), keys = ['stage', 'program', 'exitCode', 'signal', 'spawnCode', 'logReadStatus', 'observedCauses'];
+  let command = null;
+  try {
+    if (raw && typeof raw === 'object' && !Array.isArray(raw) && Object.keys(raw).toSorted().join(',') === keys.toSorted().join(',')) {
+      const value = Object.fromEntries(keys.map(key => [key, property(raw, key)]));
+      const causes = value.observedCauses, length = property(causes, 'length');
+      value.observedCauses = Array.isArray(causes) && Number.isInteger(length) && length >= 0 && length <= deploymentCommandCauses.length
+        ? Array.from({ length }, (_unused, index) => property(causes, String(index))) : null;
+      if (value.stage === stage && deploymentStages.includes(stage) && ['git', 'tar', 'ssh', 'scp', 'node', 'OTHER'].includes(value.program)
+      && (value.exitCode === null || Number.isInteger(value.exitCode) && value.exitCode >= 0 && value.exitCode <= 255)
+      && (value.signal === null || imageSignals.has(value.signal)) && (value.spawnCode === null || imageSpawnCodes.has(value.spawnCode))
+      && ['READ', 'TAIL_ONLY', 'UNAVAILABLE'].includes(value.logReadStatus) && Array.isArray(value.observedCauses)
+      && value.observedCauses.length <= deploymentCommandCauses.length && new Set(value.observedCauses).size === value.observedCauses.length
+      && value.observedCauses.every(cause => deploymentCommandCauses.includes(cause))) command = value;
+    }
+  } catch { /* Unknown diagnostic objects are discarded, never stringified. */ }
+  return { schemaVersion: 1, result: 'failed', stage: deploymentStages.includes(stage) ? stage : 'UNKNOWN', command };
+}
 
 /** Pattern observations only: no log line, capture, URL, package name or command is returned. */
 export function classifyImageBuildLog(value) {

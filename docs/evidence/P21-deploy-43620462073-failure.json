@@ -1,0 +1,5 @@
+{
+  "result": "failed",
+  "code": "RELEASE_COMMAND_FAILED",
+  "automaticRollback": false
+}

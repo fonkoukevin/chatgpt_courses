@@ -1,0 +1,18 @@
+{
+  "result": "passed",
+  "sourceCommit": "ddaf5a51103568ac4af35ac4e1b64852dce9dacf",
+  "manifestSha256": "5b7b33e27b6e19d9beec2026be368f0b42af179924a0fac1e55d072850e625ab",
+  "registryPublicationExecuted": true,
+  "expectedImageVisibility": "public",
+  "observedImageVisibility": "public",
+  "packageMetadataPrivateVerified": false,
+  "packageMetadataPublicVerified": true,
+  "anonymousPackageReadDenied": false,
+  "anonymousPackageReadAllowed": true,
+  "anonymousDigestReadVerified": true,
+  "packageSourceLinkVerified": true,
+  "credentialMode": "ephemeral-job-token",
+  "temporaryCredentialsRemoved": true,
+  "deployed": false,
+  "tagsInformationalOnly": true
+}

@@ -22,19 +22,38 @@ beforeEach(() => clearCsrfToken());
 afterEach(() => { globalThis.fetch = originalFetch; clearCsrfToken(); });
 
 test("Checkout accepts only the exact HTTPS Stripe origin and an expiring scoped link", () => {
-  assert.equal(isStripeCheckoutUrl(open().url), true);
-  const checkoutPrefix = "https://checkout.stripe.com/c/pay/", boundedLink = checkoutPrefix + "a".repeat(4096 - checkoutPrefix.length);
-  assert.equal(isStripeCheckoutUrl(boundedLink), true);
-  assert.equal(isStripeCheckoutUrl(boundedLink + "a"), false);
-  assert.equal(isCheckoutAccess({ ...open(), url: boundedLink }), true);
-  assert.equal(isCheckoutAccess({ ...open(), url: boundedLink + "a" }), false);
-  for (const value of ["http://checkout.stripe.com/test", "https://checkout.stripe.com.evil.invalid/test", "https://checkout.stripe.com@evil.invalid/test", "https://checkout.stripe.com:444/test", "https://checkout.stripe.com\\evil.invalid/test", "//checkout.stripe.com/test", "http://127.0.0.1:1234/pay", "https://checkout.stripe.com/test\n"]) assert.equal(isStripeCheckoutUrl(value), false);
+  for (const kind of ["c", "g"]) {
+    const checkoutPrefix = `https://checkout.stripe.com/${kind}/pay/`, syntheticLink = checkoutPrefix + "synthetic-unit-only?locale=fr#synthetic-fragment%2Fverbatim", boundedLink = checkoutPrefix + "a".repeat(4096 - checkoutPrefix.length);
+    assert.equal(isStripeCheckoutUrl(syntheticLink), true);
+    assert.equal(isStripeCheckoutUrl(boundedLink), true);
+    assert.equal(isStripeCheckoutUrl(boundedLink + "a"), false);
+    assert.equal(isCheckoutAccess({ ...open(), url: boundedLink }), true);
+    assert.equal(isCheckoutAccess({ ...open(), url: boundedLink + "a" }), false);
+    for (const value of [
+      `http://checkout.stripe.com/${kind}/pay/test`, `https://checkout.stripe.com.evil.invalid/${kind}/pay/test`,
+      `https://checkout.stripe.com@evil.invalid/${kind}/pay/test`, `https://unit:only@checkout.stripe.com/${kind}/pay/test`,
+      `https://checkout.stripe.com:443/${kind}/pay/test`, `https://checkout.stripe.com:444/${kind}/pay/test`,
+      `https://checkout.stripe.com\\evil.invalid/${kind}/pay/test`, `//checkout.stripe.com/${kind}/pay/test`,
+      `https://checkout.stripe.com/${kind}/pay/test\n`, `https://checkout.stripe.com/${kind}/pay/test\u0000`,
+      `https://checkout.stripe.com/${kind}/pay/test\u007f`, `https://checkout.stripe.com/${kind}/pay/../../other`,
+      `https://checkout.stripe.com/other/../${kind}/pay/test`,
+    ]) assert.equal(isStripeCheckoutUrl(value), false);
+  }
+  for (const value of [null, 1, "", "https://checkout.stripe.com/", "https://checkout.stripe.com/test", "https://checkout.stripe.com/pay/test", "https://checkout.stripe.com/x/pay/test", "https://checkout.stripe.com/g/pay", "https://checkout.stripe.com/g/payment/test", "https://checkout.stripe.com/%67/pay/test", "https://checkout.stripe.com/G/pay/test", "http://127.0.0.1:1234/pay"]) assert.equal(isStripeCheckoutUrl(value), false);
   assert.equal(isCheckoutAccess(open()), true);
   assert.equal(isCheckoutAccess({ ...open(), retryAfterSeconds: 300 }), true);
   assert.equal(isCheckoutAccess({ ...open(), retryAfterSeconds: 301 }), false);
   for (const value of [{ ...open(), operationId: null }, { ...open(), expiresAt: null }, { ...open(), state: "UNKNOWN" }, { ...open(), url: "https://evil.invalid/pay" }]) assert.equal(isCheckoutAccess(value), false);
   // A concurrent provider completion can leave OPEN with no reusable URL.
   assert.equal(isCheckoutAccess({ ...open(), url: null, unavailableReason: "PAYMENT_PENDING" }), true);
+});
+
+test("an OPEN Checkout accepts the hosted g/pay form and preserves its raw query and fragment", async () => {
+  const hostedUrl = "https://checkout.stripe.com/g/pay/synthetic-unit-only?locale=fr&unit=%2f#synthetic-fragment%2Fverbatim";
+  globalThis.fetch = async (path) => path === "/api/v1/auth/csrf" ? Response.json(csrf) : Response.json({ ...open(), url: hostedUrl });
+  const result = await createCheckout(orderId, `"order-${orderId}-r1"`, { acceptedTermsVersion: "synthetic-v1" }, randomUUID(), actor);
+  assert.equal(result.ok, true);
+  if (result.ok) { assert.equal(result.data.state, "OPEN"); assert.equal(result.data.url, hostedUrl); }
 });
 
 test("return parameters never confirm payment or activation and email incidents do not remove ready access", () => {

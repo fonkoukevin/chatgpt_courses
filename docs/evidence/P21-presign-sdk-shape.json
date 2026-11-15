@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "result": "passed-offline-native",
+  "scope": "OFFLINE_NATIVE_APPLICATION_PRESIGN_SHAPE",
+  "observedAt": "2026-11-14T22:55:41.473Z",
+  "privateReportSha256": "062e1cc72bc35dce5e24b851910fe6e806caed88440b64a952bc1c30cd34bfad",
+  "jdkMajor": 21,
+  "sdkVersion": "2.57.11",
+  "actualApplicationStorageClass": true,
+  "credentialsSynthetic": true,
+  "privateCredentialFileRead": false,
+  "networkAttempts": 0,
+  "noProviderOrHttpUsed": true,
+  "compileExit": 0,
+  "javaExit": 0,
+  "rawOutputRetained": false,
+  "put": {
+    "cases": 3,
+    "signedHeaders": "content-length;content-type;host"
+  },
+  "get": {
+    "cases": 2,
+    "signedHeaders": "host"
+  },
+  "operationalUploadPerformed": false
+}

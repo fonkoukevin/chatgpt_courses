@@ -4,7 +4,9 @@
 
 ## Identité à conserver
 
-Une release est un JSON canonique avec ces seules clés, dans cet ordre : `schemaVersion`, `sourceCommit`, `web`, `api`, `schema`. Chaque image contient `repository` et `digest`. Le préfixe configurable `IMAGE_REPOSITORY` donne les dépôts `/web` et `/api`. Les références de déploiement sont exclusivement `repository@sha256:<64 caractères hexadécimaux>`. Le schéma testé est actuellement `{min:19,max:19}` ; il ne faut pas inventer une plage de compatibilité plus large.
+Une release est un JSON canonique avec ces seules clés, dans cet ordre : `schemaVersion`, `sourceCommit`, `web`, `api`, `schema`. Chaque image contient `repository` et `digest`. Le préfixe configurable `IMAGE_REPOSITORY` donne les dépôts `/web` et `/api`. Les références de déploiement sont exclusivement `repository@sha256:<64 caractères hexadécimaux>`. La candidate corrigée P21 exige `{min:20,max:20}` ; la CI doit encore en prouver l’upgrade depuis19 et le déploiement doit être observé. Les anciens reçus19 restent historiques ; ne pas inventer une plage de compatibilité plus large.
+
+V020 remplace seulement le CHECK du chemin Checkout par les formes Stripe C/G, sans réécrire les lignes ni les migrations appliquées. La nouvelle application exige20 pour que la base accepte `/g/pay/`. Après migration, un retour direct au manifeste19 est refusé ; une éventuelle restauration suit le runbook de sauvegarde, avec les mêmes exigences d’isolation et de conservation des données. La sauvegarde avant migration doit couvrir le schéma19 et les fixtures réellement présentes, avec copie hors hôte vérifiée.
 
 [release.mjs](../../scripts/deployment/release.mjs) définit les octets canoniques : JSON compact puis un LF final. Le SHA-256 porte sur ces octets. L’artefact `release-manifest.json` est écrit dans ce format ; sa somme peut être vérifiée avec `sha256sum release-manifest.json`. Copier ce fichier et son empreinte, sans reformater le JSON. Les tags `sha-<commit>-<run_id>-<attempt>` servent à retrouver une publication ; ils ne servent jamais de référence de déploiement. Aucun tag `latest` n’est produit.
 

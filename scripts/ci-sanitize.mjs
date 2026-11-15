@@ -98,7 +98,9 @@ const attributes = text => Object.fromEntries([...text.matchAll(/([A-Za-z][A-Za-
 const defaultJavaTestDirectory = fileURLToPath(new URL('../apps/api/src/test/java/', import.meta.url));
 function sourceTestMethods(source) {
   const methods = new Map(), capturedOutputImported = /^import\s+org\.springframework\.boot\.test\.system\.CapturedOutput\s*;/mu.test(source);
-  for (const match of source.matchAll(/@Test\b\s+(?:public\s+)?void\s+([A-Za-z_$][A-Za-z0-9_$]*)\s*\(([^()]*)\)/gu)) {
+  const order = /^import\s+org\.junit\.jupiter\.api\.Order\s*;/mu.test(source) ? '(?:@Order\\(\\s*(?:0|[1-9][0-9]{0,8})\\s*\\)\\s+)?' : '';
+  const signature = new RegExp(`@Test\\b\\s+${order}(?:public\\s+)?void\\s+([A-Za-z_$][A-Za-z0-9_$]*)\\s*\\(([^()]*)\\)`, 'gu');
+  for (const match of source.matchAll(signature)) {
     const [, method, parameters] = match;
     if (!parameters.trim()) methods.set(method, method);
     else if (capturedOutputImported && /^\s*CapturedOutput\s+[A-Za-z_$][A-Za-z0-9_$]*\s*$/u.test(parameters)) methods.set(`${method}(CapturedOutput)`, method);

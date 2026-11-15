@@ -5,3 +5,4 @@
 *.yml text eol=lf
 *.yaml text eol=lf
 Dockerfile text eol=lf
+docs/evidence/P21*.json text eol=lf

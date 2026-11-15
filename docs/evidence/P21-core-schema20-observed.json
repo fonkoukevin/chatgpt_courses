@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "result": "passed",
+  "sourceCommit": "7d9794c6f2a7d9264820904ae125cced3bb69fdf",
+  "runId": "53ac25c3-04f0-4c3e-a196-204826578f45",
+  "checksPassed": 10,
+  "finishedAt": "2026-11-15T11:50:57.405Z",
+  "contextsClosed": true,
+  "accountStoreSeparate": true,
+  "syntheticDataOnly": true,
+  "providerUsed": false,
+  "cmsProjectOrPaidAccessClaimed": false,
+  "sourceReceiptSha256": "57b0ed45ac680c150a9d1bd0a29ca840658939e91e6c9ad26af1541b84870351",
+  "captures": [
+    {
+      "filename": "fr-1440-personal-method.png",
+      "sha256": "ddc6c5b1a01f08cc0cd2f08615794e091a9d66325d92ea6a7c4473bed656d9d2",
+      "width": 1440,
+      "height": 900,
+      "visualReviewPerformed": true,
+      "blockingDefectObserved": false
+    },
+    {
+      "filename": "en-390-personal-method.png",
+      "sha256": "b0bc94c7626ae2c7f0eabc91986e82945bc7537e583eb1c4efefbe708acac83c",
+      "width": 390,
+      "height": 900,
+      "visualReviewPerformed": true,
+      "blockingDefectObserved": false
+    }
+  ],
+  "projection": "closed-allowlist"
+}

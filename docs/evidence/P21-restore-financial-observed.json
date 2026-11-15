@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "result": "five-financial-tables-preserved",
+  "restoreRunId": "72c8585f-9416-4262-ae6b-39f66a5089a7",
+  "sourceCommit": "7d9794c6f2a7d9264820904ae125cced3bb69fdf",
+  "manifestSha256": "21298e847c92b1e6671bdc62c6f6ace50ea10ed612c335a041d2db5148232cca",
+  "capturedBundleReceiptSha256": "9e08c66ee289346a0a31bb2044e3f1140472383780849f830bd2af20a191c7cf",
+  "quiescentPointPg": "2026-11-15T18:32:40.412767+00:00",
+  "tablesCompared": 5,
+  "counts": {
+    "refund_requests": 2,
+    "refund_decisions": 2,
+    "refund_operations": 2,
+    "stripe_event_inbox": 10,
+    "refund_access_decisions": 0
+  },
+  "allFiveTableFingerprintsIdentical": true,
+  "sourceEvidenceFileSha256": "8e1a8ec7c8f122a282f7f013ab4555169f84799aa2a983a8a0a3e02c662633fd",
+  "targetEvidenceFileSha256": "8d07f7c56a9453a348d54089c4fc1a201a092d4595896282755ce91cbb4b2172",
+  "comparisonEvidenceFileSha256": "78596eedb02de0035af78ceec6d5e8eb6ae3a3aa494aff6381f46ced7b4a8cf9",
+  "restoredApplicationEvidenceFileSha256": "2b23666bb2195b9197579e98d880a47a5a248785488a073187d1c41e840274b6",
+  "historicalExecutorLockPreserved": true,
+  "historicalExecutorLockSha256": "122d610934e8a6e97b1b6115c166d9379f0d4715d836a8fca3a0bb1a4b711c5f",
+  "readOnly": true,
+  "remoteMutationPerformed": false,
+  "rawRowsReturned": false,
+  "sourceRestored": false,
+  "externalEffectsEnabled": false,
+  "observedAt": "2026-11-15T18:51:44.146Z"
+}

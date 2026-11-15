@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "result": "observed-staging-controlled-incidents",
+  "sourceCommit": "7d9794c6f2a7d9264820904ae125cced3bb69fdf",
+  "runId": "53ac25c3-04f0-4c3e-a196-204826578f45",
+  "journalSha256": "193ff004f408f5b645f2a1063a222459084e05fde032489db1e7c674ed791718",
+  "checksPassed": 8,
+  "incidentChecks": [
+    {
+      "code": "RECOVERY_MAILPIT_REAL_SMTP_FAILURE",
+      "result": "passed",
+      "realMailpit": true,
+      "realSmtpOutage": true,
+      "oldSessionInvalidated": true,
+      "tokenReplayRejected": true
+    },
+    {
+      "code": "METHOD_BROWSER_TRANSPORT_FAILURE",
+      "result": "passed",
+      "injected": true,
+      "serverOutageClaimed": false,
+      "inputPreserved": true,
+      "serverUnchangedDuringFailure": true,
+      "recoverySaved": true
+    },
+    {
+      "code": "FILE_BROWSER_TRANSPORT_FAILURE",
+      "result": "passed",
+      "injected": true,
+      "mediaKind": "FILE",
+      "serverOrS3OutageClaimed": false,
+      "textRetained": true,
+      "videoProviderVerified": false
+    }
+  ],
+  "notifierDisabled": true,
+  "notifierDisableCommitted": true,
+  "contextsClosed": true,
+  "manualReviewRequired": false,
+  "smtpRestored": true,
+  "sameCoreOwnerPreserved": true,
+  "videoProviderVerified": false,
+  "financialActionsPerformed": false,
+  "projection": "closed-allowlist"
+}

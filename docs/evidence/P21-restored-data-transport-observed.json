@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "result": "data-restored-app-verification-transport-failed",
+  "restoreRunId": "72c8585f-9416-4262-ae6b-39f66a5089a7",
+  "sourceCommit": "7d9794c6f2a7d9264820904ae125cced3bb69fdf",
+  "backup": {
+    "receiptSha256": "9e08c66ee289346a0a31bb2044e3f1140472383780849f830bd2af20a191c7cf",
+    "quiescentPointPg": "2026-11-15T18:32:40.412767+00:00",
+    "captureCompletedAt": "2026-11-15T18:32:49.582Z",
+    "cipherFiles": 13,
+    "pcFiles": 15,
+    "returnedHashesVerified": true,
+    "returnedEnvelopeAuthenticatedByRestore": true
+  },
+  "source": {
+    "resumedAt": "2026-11-15T18:33:24.623Z",
+    "sameApiWebIds": true,
+    "originalCaddyRestored": true
+  },
+  "dataRestore": {
+    "observed": true,
+    "nativeState": "DATA_VERIFIED_AWAITING_APP_START",
+    "dataVerifiedAt": "2026-11-15T18:34:27.568Z",
+    "ledgerTablesCompared": 14,
+    "readyAssetsAndObjectsCompared": true,
+    "flywayInvoked": false,
+    "migrateInvoked": false,
+    "receiptSha256": "5bb68daf3659062a37f95040e0f23a68b5eaf5ec0afeacae14d418f830529176"
+  },
+  "appStart": {
+    "observed": true,
+    "sameImageDigests": true,
+    "externalEffectsDisabled": true,
+    "receiptSha256": "bc9b7f2f778c20542ffa6a81297cd4c3459e37865914b48878c3384a4719230b"
+  },
+  "appVerification": {
+    "observed": false,
+    "failurePreserved": true,
+    "diagnosticSha256": "e86218b1ac035768db0555f9ff07e35ac0ba010c27955333727f16367f329539",
+    "transportDiagnosticSha256": "192e87d6e877b5f083d76ed671ce627f7d580448e8bd456257bdd3bb33c48a93",
+    "localPortRefused": true,
+    "declaredPortNotPublished": true,
+    "privateEdgeTls": {
+      "observed": true,
+      "roles": [
+        "app",
+        "files"
+      ],
+      "normalTlsVerification": true,
+      "protocol": "TLSv1.3",
+      "applicationRequestPerformed": false,
+      "sha256": "0ad84f5e0d9815ccbb97b2baadc05c0e198c97fd58522e83348a60685cc49774"
+    }
+  },
+  "resourcesAndLocksRetained": true,
+  "rpoOrRtoClaimed": false,
+  "commerceEnabled": false,
+  "liveTransactionObserved": false
+}

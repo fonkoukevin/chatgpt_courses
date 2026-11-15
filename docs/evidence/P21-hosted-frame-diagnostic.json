@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "result": "observed",
+  "sourceCommit": "7d9794c6f2a7d9264820904ae125cced3bb69fdf",
+  "existingTestSession": true,
+  "filledFormWithoutSubmit": true,
+  "mainFrameSubmitMatches": 0,
+  "stripeFrameEligibleSubmitMatches": 1,
+  "visibleChallengeObserved": false,
+  "sessionOpenUnpaidBeforeAfter": true,
+  "newCheckoutRequested": false,
+  "financialSubmitPerformed": false,
+  "providerScreenshots": false,
+  "fieldValuesRead": false,
+  "providerUrlPublished": false,
+  "historicalFailingSelectorEstablished": true,
+  "diagnosis": "Caller searched the top-level page; the eligible submit button belongs to a Stripe iframe.",
+  "sourceReceiptSha256": "3e2dba77de992b79175df026bb37b5eea9853b0ad77eddd473a887432776f25c",
+  "providerReceiptSha256": "16ab6fa929385405bd450b75c797a9fe47a0885e3b98c33547237635c94bfa95",
+  "projection": "closed-allowlist"
+}

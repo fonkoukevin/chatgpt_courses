@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "result": "passed",
+  "observedAt": "2026-11-15T11:27:51.356179+00:00",
+  "environment": "staging",
+  "publicOrigin": "https://staging.chatgpt-courses.com",
+  "sourceCommit": "7d9794c6f2a7d9264820904ae125cced3bb69fdf",
+  "manifestSha256": "21298e847c92b1e6671bdc62c6f6ace50ea10ed612c335a041d2db5148232cca",
+  "apiImage": "ghcr.io/fonkoukevin/chatgpt_courses/api@sha256:a7af8a01be292878771f8160b0be747f11d0cd644c588f615af373c48cf80bf2",
+  "webImage": "ghcr.io/fonkoukevin/chatgpt_courses/web@sha256:151cb73a7cc3dbf65a8bfdd888a929d753ec9364fb962fa8cda87d2da415dfac",
+  "currentPointerVerified": true,
+  "schemaFacts": {
+    "successful": 20,
+    "version": 20,
+    "failed": 0
+  },
+  "healthyServices": 5,
+  "remoteMutationPerformed": false,
+  "sourceReceiptSha256": "c07212be115923aa4edb0c9513180f535155374da41398e85bb4cfa2fb99bfe0",
+  "projection": "closed-allowlist",
+  "recipeCompletionClaimed": false
+}

@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "result": "validated-private-operator-diagnostics",
+  "sourceCommit": "7d9794c6f2a7d9264820904ae125cced3bb69fdf",
+  "files": [
+    {
+      "name": "p21-restore-current-remote.mjs",
+      "previousSha256": "f9849df9506788b84e6fd9abc6f7029a9246c8377e5bc309ad65f76ceda526e9",
+      "currentSha256": "38143e52d96a654ce7c6b6e354054548f18043709829cfa6382dfadc2ac3570c"
+    },
+    {
+      "name": "p21-run-restore-current.mjs",
+      "previousSha256": "8bde7ecf6fe732018b4fba3544f828c665bc4576a9baacdd5de0bde021989353",
+      "currentSha256": "e8d9e23ef504680dd044c9da4255e03532d3b9d920de6b1dd71d89fb2b0ddecb"
+    },
+    {
+      "name": "p21-repeat-current-remote.mjs",
+      "previousSha256": "48f53584913893c324647f52b61d9904842338f1f3e9ef1577c36f428ab747e0",
+      "currentSha256": "16910b1b21fc0ca0bffb80f08d575d8b33d1bc13b78d6f6383fdc9ef1334053c"
+    },
+    {
+      "name": "p21-run-repeat-operator-current.mjs",
+      "previousSha256": "2d414a4ab221a9924fde03ec123ccced746e518eda361ff883c64607e67aa1f0",
+      "currentSha256": "fb971b427cd1bd22e943f245e2caa52f04944966032481f3e0d055d2a039c495"
+    }
+  ],
+  "archiveReceiptSha256": "e97d2d499b036cbfccbbfa7d15009a346a2963d244558f53d851537ba6e50bd2",
+  "candidateRestorationTests": 11,
+  "candidateRepetitionTests": 6,
+  "integratedOperatorTests": 50,
+  "supplementalFinancialTests": 16,
+  "skipped": 0,
+  "automaticRetryAdded": false,
+  "guardRemoved": false,
+  "fullMountRecordsCompared": true,
+  "duplicateMountDestinationsRejected": true,
+  "diagnosticsClosed": true,
+  "diagnosticMessagesOrArgumentsRetained": false,
+  "tlsPromiseRejectionVerified": true,
+  "s3CodesContainingDigitsPreserved": true,
+  "historicalFailureCauseAttributed": false,
+  "frozenRehearsalSha256": "0433167758b04b0be2873841b9c2475335c9e4b0979001b99a9527423645da1a",
+  "frozenRehearsalModified": false,
+  "applicationCodeChanged": false,
+  "dependencyAdded": false,
+  "newExternalRunResultClaimed": false,
+  "projection": "closed-allowlist",
+  "scope": "historical-diagnostic-promotion-before-materializer-fix",
+  "currentHashFieldsReferToThisHistoricalPromotionOnly": true
+}

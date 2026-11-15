@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "result": "passed",
+  "observedAt": "2026-11-15T12:03:38.459Z",
+  "scope": "private operator checkpoint persistence",
+  "platform": "win32",
+  "nodeVersion": "24.22.2",
+  "testsPassed": 40,
+  "newGuardTestsPassed": 23,
+  "existingRunnerTestsPassed": 17,
+  "nativeSyntheticWrites": 200,
+  "nativeRename": true,
+  "injectedErrnos": false,
+  "observedFilesystemRetries": 1,
+  "maximumRetriesForOneWrite": 1,
+  "retryPolicy": {
+    "platform": "win32",
+    "stage": "rename",
+    "errno": "EPERM",
+    "maximumRenameAttempts": 8,
+    "maximumWaitMs": 1030,
+    "sameTemporaryBytes": true,
+    "destinationAndParentIdentityVerified": true
+  },
+  "automaticBusinessRetry": false,
+  "networkOrProviderUsed": false,
+  "sourceSha256": "4a3e3e8b968ab25422a126ee3041207ff5798dd7db1daee405bde9baa7292cfe",
+  "nativeReportSha256": "b9624e668d0d8b56bd4092b69f4e79abcc5d87154b6345bdcca30f9a1ca9d1e9",
+  "preparationReceiptSha256": "7bb33b430417455d295cf315a351ede17f56b35e5982377d506cdeb5c33e7531",
+  "historicalErrnoRetrospectivelyClaimed": false,
+  "projection": "closed-allowlist"
+}

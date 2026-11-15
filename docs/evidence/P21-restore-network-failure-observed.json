@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "result": "backup-acquired-restore-preflight-failed",
+  "restoreRunId": "44815b9e-5f94-448b-9e01-ab8e5256b959",
+  "sourceCommit": "7d9794c6f2a7d9264820904ae125cced3bb69fdf",
+  "capture": {
+    "receiptSha256": "517e1a6bcb756ffb94f44493874b855c24e3dbd9cf1d82ed675725bd5862c1ef",
+    "cipherFiles": 13,
+    "readyObjectCount": 10,
+    "quiescentPointPg": "2026-11-15T18:13:47.446639+00:00",
+    "captureCompletedAt": "2026-11-15T18:13:56.906Z"
+  },
+  "sourceResumed": {
+    "observed": true,
+    "at": "2026-11-15T18:14:45.636Z",
+    "sameApiWebIds": true,
+    "originalCaddyRestored": true,
+    "fourLegacyHostsPreserved": true
+  },
+  "offhost": {
+    "observed": true,
+    "files": 15,
+    "windowsPcRuntime": true,
+    "plaintextRead": false,
+    "backupKeyRead": false,
+    "returnedFiles": 15,
+    "returnedHashesVerified": true
+  },
+  "financialSource": {
+    "tables": 5,
+    "sha256": "f00a4e4a8c5708653efd71431cb96a55a1ecaf8029ad8e227abaae578a015a8f",
+    "targetComparisonObserved": false
+  },
+  "restore": {
+    "observed": false,
+    "failureCode": "P21_REHEARSAL_DOCKER_OPERATION_FAILED",
+    "stage": "prepared-target-before-authentication",
+    "restoreStartedAtPresent": false,
+    "decryptedReturnPresent": false,
+    "targetUserTables": 0,
+    "missingNetwork": "app",
+    "dataAndEdgeInternalAndLabelled": true,
+    "nativeDiagnosticSha256": "6997be1ebdaccf089e08b23c1c11da2d9eedb57dbecfc262c4acc22228997e46",
+    "networkDiagnosticSha256": "4ff766e036b39c4844597a7d97ab5a4e7a1d6cee20ce1e5a3e33af9bf2944d6d",
+    "locksAndResourcesRetained": true,
+    "automaticRetry": false
+  },
+  "rpoOrRtoClaimed": false,
+  "commerceEnabled": false,
+  "liveTransactionObserved": false
+}

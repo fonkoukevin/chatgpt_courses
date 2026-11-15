@@ -124,7 +124,7 @@ export async function requireGhcrPrivatePackage(env, kind, options = {}) {
 }
 export function validateManifest(value, imageRepository) {
   const prefix = repository(imageRepository);
-  requireRelease(exact(value, ['schemaVersion', 'sourceCommit', 'web', 'api', 'schema']) && value.schemaVersion === 1 && commitPattern.test(value.sourceCommit) && exact(value.schema, ['min', 'max']) && value.schema.min === 19 && value.schema.max === 19, 'RELEASE_MANIFEST_INVALID');
+  requireRelease(exact(value, ['schemaVersion', 'sourceCommit', 'web', 'api', 'schema']) && value.schemaVersion === 1 && commitPattern.test(value.sourceCommit) && exact(value.schema, ['min', 'max']) && value.schema.min === 20 && value.schema.max === 20, 'RELEASE_MANIFEST_INVALID');
   for (const kind of ['web', 'api']) requireRelease(exact(value[kind], ['repository', 'digest']) && value[kind].repository === `${prefix}/${kind}` && /^sha256:[a-f0-9]{64}$/u.test(value[kind].digest), 'RELEASE_IMAGE_DIGEST_REQUIRED');
   return { schemaVersion: 1, sourceCommit: value.sourceCommit, web: { repository: value.web.repository, digest: value.web.digest }, api: { repository: value.api.repository, digest: value.api.digest }, schema: { min: value.schema.min, max: value.schema.max } };
 }
@@ -277,7 +277,7 @@ async function publish() {
       stage('IMAGE_BUILD');
       buildDiagnosticPath = join(root, `.runtime/deployment/build-diagnostic-${randomUUID()}.json`);
       execute(process.execPath, [join(root, 'scripts/deployment/images.mjs'), 'build', '--commit', env.GITHUB_SHA, '--source-url', sourceUrl, '--output', join(root, '.runtime/deployment/build.json'), '--diagnostic-output', buildDiagnosticPath], { env: dockerEnv });
-      const manifest = { schemaVersion: 1, sourceCommit: env.GITHUB_SHA, web: null, api: null, schema: { min: 19, max: 19 } };
+      const manifest = { schemaVersion: 1, sourceCommit: env.GITHUB_SHA, web: null, api: null, schema: { min: 20, max: 20 } };
       for (const kind of ['web', 'api']) {
         const tag = `${imageRepository}/${kind}:sha-${env.GITHUB_SHA}-${env.GITHUB_RUN_ID}-${env.GITHUB_RUN_ATTEMPT}`;
         stage(`LABEL_${kind.toUpperCase()}`);

@@ -24,20 +24,20 @@ class SchemaMigrationIntegrationTest {
     @Test void oneShotMigratesAnEmptyDatabaseAndAReplayMakesNoBusinessRows() throws Exception {
         String database = createDatabase();
         var configuration = configuration(database);
-        assertThat(SchemaMigrationMain.migrate(configuration)).isEqualTo(19);
+        assertThat(SchemaMigrationMain.migrate(configuration)).isEqualTo(20);
         assertThat(SchemaMigrationMain.migrate(configuration)).isZero();
         try (var connection = DriverManager.getConnection(url(database), POSTGRES.getUsername(), POSTGRES.getPassword()); var statement = connection.createStatement()) {
-            try (var rows = statement.executeQuery("SELECT count(*) FROM flyway_schema_history WHERE success AND type='SQL'")) { rows.next(); assertThat(rows.getInt(1)).isEqualTo(19); }
+            try (var rows = statement.executeQuery("SELECT count(*) FROM flyway_schema_history WHERE success AND type='SQL'")) { rows.next(); assertThat(rows.getInt(1)).isEqualTo(20); }
             for (String table : new String[]{"user_accounts", "spring_session", "orders", "access_grants", "notification_outbox", "content_translations"}) {
                 try (var rows = statement.executeQuery("SELECT count(*) FROM " + table)) { rows.next(); assertThat(rows.getInt(1)).isZero(); }
             }
         }
     }
 
-    @Test void concurrentUpgradeFromV018UsesFlywayLockingAndPreservesExistingRows() throws Exception {
+    @Test void concurrentUpgradeFromV019UsesFlywayLockingAndPreservesExistingRows() throws Exception {
         String database = createDatabase();
         Flyway.configure().dataSource(url(database), POSTGRES.getUsername(), POSTGRES.getPassword())
-                .locations("classpath:db/migration").target("018").cleanDisabled(true).loggers("slf4j").load().migrate();
+                .locations("classpath:db/migration").target("019").cleanDisabled(true).loggers("slf4j").load().migrate();
         String before;
         try (var connection = DriverManager.getConnection(url(database), POSTGRES.getUsername(), POSTGRES.getPassword()); var statement = connection.createStatement()) {
             statement.executeUpdate("INSERT INTO user_accounts(id,normalized_email,password_hash,status) VALUES(gen_random_uuid(),'isolated-migration@example.invalid','unusable-isolated-test-hash','ACTIVE')");

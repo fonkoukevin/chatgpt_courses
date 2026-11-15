@@ -66,7 +66,7 @@ class SchemaIntegrationTest {
 
     @Test @Order(1)
     void aFreshDatabaseMigratesAndHibernateValidatesWithoutSeedingAccountsOrCommerce() {
-        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016", "017", "018", "019");
+        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016", "017", "018", "019", "020");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_accounts", Integer.class)).isZero();
         assertThat(jdbc.queryForList("SELECT code FROM roles ORDER BY code", String.class)).containsExactly("COMMERCE_MANAGER", "EDITOR", "LEARNER", "OPERATIONS_MANAGER", "OPERATIONS_READER", "PAYMENTS_OPERATOR", "REFUND_OPERATOR", "SUPPORT_OPERATOR");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_roles", Integer.class)).isZero();
@@ -115,7 +115,7 @@ class SchemaIntegrationTest {
             var database = new JdbcTemplate(new SingleConnectionDataSourceAdapter(connection));
             assertThat(database.queryForObject("SELECT session_id FROM spring_session WHERE primary_id = ?", String.class, primaryId)).isEqualTo(sessionId);
             assertThat(database.queryForObject("SELECT encode(attribute_bytes, 'hex') FROM spring_session_attributes WHERE session_primary_id = ?", String.class, primaryId)).isEqualTo("010203");
-            assertThat(database.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016", "017", "018", "019");
+            assertThat(database.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016", "017", "018", "019", "020");
         }
     }
 
@@ -445,6 +445,83 @@ class SchemaIntegrationTest {
             assertThat(publicRows.items()).hasSize(1);assertThat(publicRows.items().getFirst().publishedAt()).isNull();assertThat(publicRows.items().getFirst().revisionId()).isEqualTo(revision);
         }
     }
+
+    @Test @Order(14)
+    void upgradingV019PreservesEveryRowAndOnlyReplacesTheRenamedHostedUrlConstraint() throws Exception {
+        String schema="upgrade_v019_checkout_urls";migrate(schema,"19");
+        try(var connection=connection(schema)){
+            var database=new JdbcTemplate(new SingleConnectionDataSourceAdapter(connection));
+            UUID owner=UUID.randomUUID();String session=UUID.randomUUID().toString();
+            database.update("INSERT INTO user_accounts(id,normalized_email,password_hash,status) VALUES(?,'v020-owner@fixture.invalid','unusable-synthetic-upgrade-hash','ACTIVE')",owner);
+            database.update("INSERT INTO user_roles(id,user_id,role_id) SELECT gen_random_uuid(),?,id FROM roles WHERE code='LEARNER'",owner);
+            database.update("INSERT INTO personal_methods(id,owner_id,title,locale,body,parameters,notes) VALUES(?,?,'Méthode conservée','fr','Production fictive antérieure','{}'::jsonb,'Note personnelle fictive conservée')",UUID.randomUUID(),owner);
+            database.update("INSERT INTO spring_session(primary_id,session_id,creation_time,last_access_time,max_inactive_interval,expiry_time) VALUES(?,?,1,2,1800,9999999999999)",session,session);
+            database.update("INSERT INTO spring_session_attributes(session_primary_id,attribute_name,attribute_bytes) VALUES(?,'before-v020',?)",session,"Synthetic retained session".getBytes(StandardCharsets.UTF_8));
+            UUID legacy=seedLegacyCheckout(database,owner,true),unknown=seedLegacyCheckout(database,owner,false);
+            String constraint=database.queryForObject("SELECT conname FROM pg_constraint WHERE conrelid='checkout_operations'::regclass AND contype='c' AND position('/c/pay/' in pg_get_expr(conbin,conrelid))>0",String.class);
+            if(!constraint.matches("[a-z_][a-z0-9_]*"))throw new IllegalStateException("Unexpected fixture constraint name");
+            database.execute("ALTER TABLE checkout_operations RENAME CONSTRAINT "+constraint+" TO v020_legacy_hosted_path");
+            var rowsBefore=allRows(database,schema);var constraintsBefore=checkoutConstraints(database);var triggersBefore=allTriggers(database,schema);
+            Integer checksum=database.queryForObject("SELECT checksum FROM flyway_schema_history WHERE version='013'",Integer.class);
+            assertThat(migrate(schema,null).validateWithResult().validationSuccessful).isTrue();
+            assertThat(allRows(database,schema)).isEqualTo(rowsBefore);
+            assertThat(database.queryForObject("SELECT checksum FROM flyway_schema_history WHERE version='013'",Integer.class)).isEqualTo(checksum);
+            var constraintsAfter=checkoutConstraints(database);constraintsBefore.remove("v020_legacy_hosted_path");String updated=constraintsAfter.remove("checkout_operations_hosted_url_v020");
+            assertThat(updated).contains("(c|g)/pay/");assertThat(constraintsAfter).isEqualTo(constraintsBefore);
+            assertThat(allTriggers(database,schema)).isEqualTo(triggersBefore);
+            assertThat(database.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE success",Integer.class)).isEqualTo(20);
+            for(String unsafe:java.util.List.of("http://checkout.stripe.com/g/pay/synthetic","https://foreign.invalid/g/pay/synthetic","https://checkout.stripe.com.foreign.invalid/g/pay/synthetic","https://synthetic@checkout.stripe.com/g/pay/synthetic","https://checkout.stripe.com:443/g/pay/synthetic","https://checkout.stripe.com/x/pay/synthetic","https://checkout.stripe.com/g/pay","https://checkout.stripe.com/g/payment/synthetic")){
+                expectState("23514",()->database.update("UPDATE checkout_operations SET state='OPEN',session_id='cs_test_SYNTHETIC_V020',session_url=?,revision=revision+1,updated_at=greatest(updated_at,clock_timestamp()) WHERE id=?",unsafe,unknown));
+            }
+            expectState("23514",()->database.update("UPDATE checkout_operations SET session_url='https://checkout.stripe.com/g/pay/synthetic',revision=revision+1,updated_at=greatest(updated_at,clock_timestamp()) WHERE id=?",unknown));
+            String hosted="https://checkout.stripe.com/g/pay/cs_test_SYNTHETIC_V020?unit=%2f#synthetic-fragment%2Fverbatim";
+            database.update("UPDATE checkout_operations SET state='OPEN',session_id='cs_test_SYNTHETIC_V020',session_url=?,revision=revision+1,updated_at=greatest(updated_at,clock_timestamp()) WHERE id=?",hosted,unknown);
+            assertThat(database.queryForObject("SELECT session_url FROM checkout_operations WHERE id=?",String.class,unknown)).isEqualTo(hosted);
+            assertThat(database.queryForObject("SELECT session_url FROM checkout_operations WHERE id=?",String.class,legacy)).startsWith("https://checkout.stripe.com/c/pay/");
+            expectState("23514",()->database.update("UPDATE checkout_operations SET session_url='https://checkout.stripe.com/c/pay/replacement',revision=revision+1 WHERE id=?",unknown));
+            expectState("23514",()->database.update("UPDATE checkout_operations SET provider_idempotency_key=?,revision=revision+1 WHERE id=?","cc-checkout-"+UUID.randomUUID(),unknown));
+            expectState("23514",()->database.update("UPDATE checkout_operations SET request_json='{}'::jsonb,revision=revision+1 WHERE id=?",unknown));
+            assertThat(database.queryForObject("SELECT count(*) FROM access_grants",Integer.class)).isZero();
+            assertThat(database.queryForObject("SELECT count(*) FROM notification_outbox",Integer.class)).isZero();
+        }
+    }
+
+    @Test @Order(15)
+    void upgradingV019RefusesChangedOrAmbiguousLegacyUrlChecksWithoutDroppingAnything() throws Exception {
+        for(String variant:java.util.List.of("changed","duplicate")){
+            String schema="upgrade_v019_url_"+variant;migrate(schema,"19");
+            try(var connection=connection(schema)){
+                var database=new JdbcTemplate(new SingleConnectionDataSourceAdapter(connection));
+                String original=database.queryForObject("SELECT conname FROM pg_constraint WHERE conrelid='checkout_operations'::regclass AND contype='c' AND position('/c/pay/' in pg_get_expr(conbin,conrelid))>0",String.class);
+                if(!original.matches("[a-z_][a-z0-9_]*"))throw new IllegalStateException("Unexpected fixture constraint name");
+                if(variant.equals("changed")){
+                    database.execute("ALTER TABLE checkout_operations DROP CONSTRAINT "+original);
+                    database.execute("ALTER TABLE checkout_operations ADD CONSTRAINT v020_changed_source CHECK(session_url IS NULL OR(session_id IS NOT NULL AND session_url ~ '^https://checkout[.]stripe[.]com/pay/'))");
+                }else database.execute("ALTER TABLE checkout_operations ADD CONSTRAINT v020_duplicate_source CHECK(session_url IS NULL OR(session_id IS NOT NULL AND session_url ~ '^https://checkout[.]stripe[.]com/c/pay/'))");
+                var before=checkoutConstraints(database);var rows=allRows(database,schema);
+                assertThat(catchThrowable(()->migrate(schema,null))).isInstanceOf(org.flywaydb.core.api.FlywayException.class);
+                assertThat(checkoutConstraints(database)).isEqualTo(before);assertThat(allRows(database,schema)).isEqualTo(rows);
+                assertThat(database.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE version='020'",Integer.class)).isZero();
+            }
+        }
+    }
+
+    private static UUID seedLegacyCheckout(JdbcTemplate database,UUID owner,boolean bound){
+        UUID product=UUID.randomUUID(),offer=UUID.randomUUID(),offerRevision=UUID.randomUUID(),order=UUID.randomUUID(),operation=UUID.randomUUID();
+        database.update("INSERT INTO products(id,code,kind) VALUES(?,?,'COURSE')",product,"v020-"+product);
+        database.update("INSERT INTO offers(id,product_id,state) VALUES(?,?,'DRAFT')",offer,product);
+        database.update("INSERT INTO offer_revisions(id,offer_id,revision_number,fields_json,author_id,reason) VALUES(?,?,1,'{}'::jsonb,?,'Synthetic V020 retained snapshot')",offerRevision,offer,owner);
+        var created=java.sql.Timestamp.from(Instant.now().minusSeconds(300).truncatedTo(java.time.temporal.ChronoUnit.SECONDS));
+        database.update("INSERT INTO orders(id,owner_id,offer_id,offer_revision,offer_revision_id,locale,total_amount,currency,order_status,payment_status,fulfillment_status,snapshot_json,accepted_terms_version,accepted_at,created_at,expires_at,active_intention_key) VALUES(?,?,?,0,?,'fr',100,'EUR','PREPARED','NOT_STARTED','NOT_STARTED','{\"total\":{\"amountMinor\":100,\"currency\":\"EUR\"},\"syntheticMarker\":\"retained\"}'::jsonb,'v020-synthetic-terms',?,?,?,?)",order,owner,offer,offerRevision,created,created,java.sql.Timestamp.from(created.toInstant().plusSeconds(1800)),"a".repeat(32)+order.toString().replace("-",""));
+        String request="{\"operationId\":\""+operation+"\",\"orderId\":\""+order+"\",\"amountMinor\":100,\"currency\":\"EUR\",\"syntheticMarker\":\"immutable request\"}";
+        database.update("INSERT INTO checkout_operations(id,order_id,owner_id,order_revision,account_id,livemode,provider_idempotency_key,request_json,request_hash,amount_minor,currency,state,session_id,session_url,checkout_expires_at,retry_until,created_at,updated_at) VALUES(?,?,?,0,'acct_SYNTHETIC_V020',false,?,?::jsonb,?,100,'EUR',?,?,?,?,?,?,?)",operation,order,owner,"cc-checkout-"+operation,request,new byte[32],bound?"OPEN":"UNKNOWN",bound?"cs_test_legacy_"+operation.toString().replace("-",""):null,bound?"https://checkout.stripe.com/c/pay/synthetic-old?unit=fr#retained":null,java.sql.Timestamp.from(created.toInstant().plusSeconds(3600)),java.sql.Timestamp.from(created.toInstant().plusSeconds(600)),created,created);
+        database.update("UPDATE orders SET payment_operation_id=?,order_status='AWAITING_PAYMENT',payment_status=?,revision=revision+1 WHERE id=?",operation,bound?"REQUIRES_PAYMENT":"UNKNOWN",order);
+        database.update("INSERT INTO checkout_idempotency_keys(owner_id,idempotency_key,order_id,operation_id,request_hash) VALUES(?,?,?,?,?)",owner,UUID.randomUUID(),order,operation,new byte[32]);return operation;
+    }
+    private static java.util.Map<String,String> checkoutConstraints(JdbcTemplate database){
+        var result=new java.util.TreeMap<String,String>();database.query("SELECT conname,pg_get_constraintdef(oid) FROM pg_constraint WHERE conrelid='checkout_operations'::regclass ORDER BY conname",rs->{result.put(rs.getString(1),rs.getString(2));});return result;
+    }
+    private static java.util.List<String> allTriggers(JdbcTemplate database,String schema){return database.queryForList("SELECT pg_get_triggerdef(t.oid) FROM pg_trigger t JOIN pg_class c ON c.oid=t.tgrelid JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname=? AND NOT t.tgisinternal ORDER BY c.relname,t.tgname",String.class,schema);}
 
     private static String[] operationTables(){return new String[]{"operations_audit","operations_action_keys","support_workspaces","support_reply_drafts","support_internal_notes","support_time_entries","support_reply_publications","editorial_cases","editorial_case_events","operations_activity_starts","operations_personal_revision_events"};}
 

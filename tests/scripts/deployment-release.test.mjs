@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { MAX_BACKUP_RECEIPT_BYTES, repository, validateSourceRepository, expectedImageVisibility, ghcrConfiguration, ghcrRemoteScript, requireGhcrAnonymousReadDenied, requireGhcrAnonymousDigestReadable, requireGhcrPackage, requireGhcrPrivatePackage, validateManifest, manifestBytes, sha256, parseManifest, protectedEnvironment, targetConfiguration, stagingPaymentTestFlag, validateBackupReceipt, validateSchemaFacts } from '../../scripts/deployment/release.mjs';
 
 const prefix='registry.invalid/team/courses';
-const candidate=()=>({schemaVersion:1,sourceCommit:'a'.repeat(40),web:{repository:prefix+'/web',digest:'sha256:'+'b'.repeat(64)},api:{repository:prefix+'/api',digest:'sha256:'+'c'.repeat(64)},schema:{min:19,max:19}});
+const candidate=()=>({schemaVersion:1,sourceCommit:'a'.repeat(40),web:{repository:prefix+'/web',digest:'sha256:'+'b'.repeat(64)},api:{repository:prefix+'/api',digest:'sha256:'+'c'.repeat(64)},schema:{min:20,max:20}});
 const ghcrEnvironment=()=>({GITHUB_REPOSITORY:'fonkoukevin/chatgpt_courses',IMAGE_REPOSITORY:'ghcr.io/fonkoukevin/chatgpt_courses-private',GITHUB_ACTOR:'fonkoukevin',GITHUB_RUN_ID:'123456',GITHUB_TOKEN:'SYNTHETIC_EPHEMERAL_JOB_TOKEN_42'});
 test('a canonical release binds both immutable images and the tested source/schema; altered pairs do not promote',()=>{
  const manifest=validateManifest(candidate(),prefix),bytes=manifestBytes(manifest),hash=sha256(bytes);
@@ -13,9 +13,14 @@ test('a canonical release binds both immutable images and the tested source/sche
  assert.throws(()=>parseManifest(bytes.toString(),prefix.replace('team','other'),hash),/DIGEST_REQUIRED/);
 });
 test('tags, URL credentials, extra private fields and invented schema compatibility are refused',()=>{
- for(const mutate of [value=>value.web.digest='latest',value=>value.api.repository+=':latest',value=>value.schema.max=20,value=>value.owner='SYNTHETIC_PRIVATE',value=>value.web.url='https://user:password@registry.invalid']){const value=candidate();mutate(value);assert.throws(()=>validateManifest(value,prefix));}
+ for(const mutate of [value=>value.web.digest='latest',value=>value.api.repository+=':latest',value=>value.schema.max=21,value=>value.owner='SYNTHETIC_PRIVATE',value=>value.web.url='https://user:password@registry.invalid']){const value=candidate();mutate(value);assert.throws(()=>validateManifest(value,prefix));}
  assert.equal(repository('registry.invalid/courses'),'registry.invalid/courses');
  for(const invalid of ['https://registry.invalid/team/courses','registry.invalid/user/../courses','user:password@registry.invalid/team/courses','registry.invalid/team/courses\nCOMMAND','-registry.invalid/courses','registry:99999/courses','ambiguous/courses'])assert.throws(()=>repository(invalid));
+});
+
+test('current releases require exactly schema20 and cannot claim old or invented schema compatibility',()=>{
+ assert.deepEqual(validateManifest(candidate(),prefix).schema,{min:20,max:20});
+ for(const schema of[{min:19,max:19},{min:21,max:21},{min:19,max:20},{min:20,max:21},{min:20,max:19}])assert.throws(()=>validateManifest({...candidate(),schema},prefix),/RELEASE_MANIFEST_INVALID/);
 });
 test('duplicate keys or noncanonical input cannot disguise a different displayed manifest',()=>{
  const value=candidate(),hash=sha256(manifestBytes(value));
@@ -165,10 +170,12 @@ test('the bounded receipt accepts the full supported object inventory instead of
  const tooLarge=Buffer.alloc(MAX_BACKUP_RECEIPT_BYTES+1);assert.throws(()=>validateBackupReceipt(tooLarge,'0'.repeat(64),target),/SIZE_INVALID/);
 });
 test('observed schema facts prevent incompatible rollback and false first-install backup exemptions',()=>{
- const manifest=candidate(),facts={historyPresent:true,version:19,failed:0,userTables:80},rollback={operation:'rollback',currentSchemaVersion:19,rollbackSchemaReviewed:true};
+ const manifest=candidate(),facts={historyPresent:true,version:20,failed:0,userTables:80},rollback={operation:'rollback',currentSchemaVersion:20,rollbackSchemaReviewed:true};
  validateSchemaFacts(facts,manifest,rollback);
- assert.throws(()=>validateSchemaFacts({...facts,version:20},manifest,rollback),/NOT_COMPATIBLE/);
- assert.throws(()=>validateSchemaFacts(facts,manifest,{...rollback,currentSchemaVersion:18}),/REVIEW_REQUIRED/);
+ assert.throws(()=>validateSchemaFacts({...facts,version:21},manifest,rollback),/NOT_COMPATIBLE/);
+ assert.throws(()=>validateSchemaFacts(facts,manifest,{...rollback,currentSchemaVersion:19}),/REVIEW_REQUIRED/);
+ validateSchemaFacts({...facts,version:19},manifest,{operation:'deploy',offHostBackupAttested:true});
+ assert.throws(()=>validateSchemaFacts({...facts,version:19},manifest,{...rollback,currentSchemaVersion:19}),/REVIEW_REQUIRED/);
  const empty={historyPresent:false,version:0,failed:0,userTables:0},first={operation:'deploy',firstInstallEmptyDatabase:true};validateSchemaFacts(empty,manifest,first);
  assert.throws(()=>validateSchemaFacts({...empty,userTables:1},manifest,first),/EMPTY_DATABASE/);
  assert.throws(()=>validateSchemaFacts(facts,manifest,first),/EMPTY_DATABASE/);

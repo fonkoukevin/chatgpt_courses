@@ -1,6 +1,6 @@
 # État réel du projet
 
-Dernière mise à jour : **15 novembre 2026** (Europe/Paris). **P20 validé localement**, **P21 en cours** : recette active, core10/10, CMS/projet/notes et apprentissage FR/EN vérifiés. Le premier Checkout TEST reste non payé : son URL `/g/pay/` est refusée par Java et le CHECK PostgreSQL. V020 corrige ce CHECK ; la nouvelle CI passe270/271 tests, dont les deux Checkout G, mais échoue sur une assertion d’upgrade de cause encore inconnue. Un PostgreSQL isolé ne reproduit pas l’écart SQL ; diagnostic filtré enrichi pour la prochaine CI. Aucun correctif encore déployé. Restauration et répétition restent à réaliser. Aucun mode LIVE.
+Dernière mise à jour : **15 novembre 2026** (Europe/Paris). **P20 validé localement**, **P21 en cours** : recette active, core10/10, CMS/projet/notes et apprentissage FR/EN vérifiés. Le premier Checkout TEST est désormais EXPIRED sans paiement ni droit, rapproché nativement. La candidate C/G ajoute V020 ; sa CI passe270/271 tests, puis le diagnostic localise un comptage Flyway incluant la création du schéma. L’attente distingue maintenant20 migrations SQL,1 marqueur et21 lignes ; nouvelle CI à observer. Sauvegarde encore arrêtée avant tout gate/arrêt applicatif sur un écart structurel Caddy diagnostiqué. Aucun correctif déployé ; restauration et répétition à réaliser. Aucun mode LIVE.
 
 ## Situation courante
 

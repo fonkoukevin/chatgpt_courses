@@ -469,7 +469,9 @@ class SchemaIntegrationTest {
             var constraintsAfter=checkoutConstraints(database);constraintsBefore.remove("v020_legacy_hosted_path");String updated=constraintsAfter.remove("checkout_operations_hosted_url_v020");
             assertThat(updated).contains("(c|g)/pay/");assertThat(constraintsAfter).isEqualTo(constraintsBefore);
             assertThat(allTriggers(database,schema)).isEqualTo(triggersBefore);
-            assertThat(database.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE success",Integer.class)).isEqualTo(20);
+            assertThat(database.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE success AND type='SQL' AND version IS NOT NULL",Integer.class)).isEqualTo(20);
+            assertThat(database.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE success AND type='SCHEMA' AND version IS NULL",Integer.class)).isEqualTo(1);
+            assertThat(database.queryForObject("SELECT count(*) FROM flyway_schema_history",Integer.class)).isEqualTo(21);
             for(String unsafe:java.util.List.of("http://checkout.stripe.com/g/pay/synthetic","https://foreign.invalid/g/pay/synthetic","https://checkout.stripe.com.foreign.invalid/g/pay/synthetic","https://synthetic@checkout.stripe.com/g/pay/synthetic","https://checkout.stripe.com:443/g/pay/synthetic","https://checkout.stripe.com/x/pay/synthetic","https://checkout.stripe.com/g/pay","https://checkout.stripe.com/g/payment/synthetic")){
                 expectState("23514",()->database.update("UPDATE checkout_operations SET state='OPEN',session_id='cs_test_SYNTHETIC_V020',session_url=?,revision=revision+1,updated_at=greatest(updated_at,clock_timestamp()) WHERE id=?",unsafe,unknown));
             }

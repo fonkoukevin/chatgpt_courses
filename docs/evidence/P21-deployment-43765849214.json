@@ -1,0 +1,22 @@
+{
+  "result": "passed",
+  "environment": "staging",
+  "operation": "deploy",
+  "sourceCommit": "7572fcf51fe51749d7eec9b9ec62f293998091d0",
+  "manifestSha256": "ad2aa976378ed3349743de05b15ef26a2a326884ef3a0608aeb319e35bc39ab4",
+  "bundleSha256": "16d6a189fa0061d7e840cdad0a1d6523c18ee285d499cd3ce495a954424dbc3c",
+  "credentialMode": "ephemeral-job-token-tmpfs",
+  "expectedImageVisibility": "public",
+  "observedImageVisibility": "public",
+  "packageMetadataPrivateVerified": false,
+  "packageMetadataPublicVerified": true,
+  "anonymousPackageReadDenied": false,
+  "anonymousPackageReadAllowed": true,
+  "anonymousDigestReadVerified": true,
+  "packageSourceLinkVerified": true,
+  "migrationInvoked": true,
+  "imageBuildInvoked": false,
+  "healthSmokePassed": true,
+  "activePointerUpdated": true,
+  "dataRestoreInvoked": false
+}

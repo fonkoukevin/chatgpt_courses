@@ -1,6 +1,6 @@
 # État réel du projet
 
-Dernière mise à jour : **15 novembre 2026** (Europe/Paris). **P20 validé localement**, **P21 en cours** : recette active, core10/10, CMS/projet/notes et apprentissage FR/EN vérifiés. Le premier Checkout TEST reste non payé : Stripe fournit une URL `/g/pay/` refusée par le validateur applicatif et la contrainte PostgreSQL. Le premier correctif échoue en CI PostgreSQL ; V020 est ajoutée et compilée, nouvelle CI attendue. Aucun correctif encore déployé. Incidents, restauration et répétition restent à réaliser. Aucun mode LIVE.
+Dernière mise à jour : **15 novembre 2026** (Europe/Paris). **P20 validé localement**, **P21 en cours** : recette active, core10/10, CMS/projet/notes et apprentissage FR/EN vérifiés. Le premier Checkout TEST reste non payé : son URL `/g/pay/` est refusée par Java et le CHECK PostgreSQL. V020 corrige ce CHECK ; la nouvelle CI passe270/271 tests, dont les deux Checkout G, mais échoue sur une assertion d’upgrade de cause encore inconnue. Un PostgreSQL isolé ne reproduit pas l’écart SQL ; diagnostic filtré enrichi pour la prochaine CI. Aucun correctif encore déployé. Restauration et répétition restent à réaliser. Aucun mode LIVE.
 
 ## Situation courante
 

@@ -120,6 +120,20 @@ test('a source-declared CapturedOutput case keeps its display name redacted but 
   }
 });
 
+test('a source-declared numeric JUnit Order exposes only the exact test caller after an assertion helper', t => {
+  const data = sourceBoundJUnitFixture(t), sourceFile = join(data.source, data.file), original = readFileSync(sourceFile, 'utf8');
+  const ordered = original.replace('class S3BoundaryTest', 'import org.junit.jupiter.api.Order;\nclass S3BoundaryTest').replace('@Test void', '@Test @Order(14) void');
+  writeFileSync(sourceFile, ordered);
+  const body = `<![CDATA[${contamination}\n at ${data.classname}.expectState(${data.file}:12)\n at ${data.classname}.${data.method}(${data.file}:10)]]>`;
+  const result = data.collect({ body });
+  assert.deepEqual(result.tests[0].diagnostic, { kind: 'ASSERTION_FAILURE', file: data.file, line: 10 });
+  assert.equal(JSON.stringify(result).includes(contamination), false);
+  for (const changed of [ordered.replace('org.junit.jupiter.api.Order', 'other.Order'), ordered.replace('@Order(14)', '@Order(PRIVATE_VALUE)'), ordered.replace('@Order(14)', '@Other(14)'), ordered.replace('@Test @Order(14)', '@Order(14)')]) {
+    writeFileSync(sourceFile, changed);
+    const refused = data.collect({ body }); assert.equal(refused.tests[0].diagnostic, undefined); assert.equal(JSON.stringify(refused).includes(contamination), false);
+  }
+});
+
 function storageFactsFixture(t, imported = false) {
   const directory = fixture(t), source = join(directory, 'sources'), reports = join(directory, 'reports'); mkdirSync(source); mkdirSync(reports);
   const file = imported ? 'ContentImportIntegrationTest.java' : 'AssetServiceIntegrationTest.java', classname = `com.chatgptcourses.${file.replace('.java', '')}`;

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { test } from 'node:test';
-import { decodeStagingPassword } from '../../scripts/container/web-entrypoint.mjs';
+import { decodeStagingPassword, loadStagingPassword, stagingBasicAuthEnabled } from '../../scripts/container/web-entrypoint.mjs';
 
 const runtime = new URL('../../scripts/container/web-entrypoint.mjs', import.meta.url).href;
 const nextLog = new URL('../../node_modules/next/dist/build/output/log.js', import.meta.url).href;
@@ -48,4 +48,23 @@ test('staging secret bytes preserve spaces and Unicode but reject NUL before pro
   for (const invalid of [Buffer.from(`${sentinel}\0not-the-same-password`), Buffer.from(`${sentinel}\nembedded`), Buffer.from(`${sentinel}:suffix`), Buffer.from('short'), Buffer.from('x'.repeat(257)), Buffer.from([0xff])]) {
     assert.throws(() => decodeStagingPassword(invalid), error => error.message.startsWith('STAGING_BASIC_PASSWORD_FILE:') && !error.message.includes(sentinel));
   }
+});
+
+test('Basic stays enabled by default and only exact false explicitly opens staging', () => {
+  for (const APP_ENV of ['local', 'test', 'staging', 'production']) {
+    assert.equal(stagingBasicAuthEnabled({ APP_ENV }), true);
+    assert.equal(stagingBasicAuthEnabled({ APP_ENV, STAGING_BASIC_AUTH_ENABLED: 'true' }), true);
+    if (APP_ENV === 'staging') assert.equal(stagingBasicAuthEnabled({ APP_ENV, STAGING_BASIC_AUTH_ENABLED: 'false' }), false);
+    else assert.throws(() => stagingBasicAuthEnabled({ APP_ENV, STAGING_BASIC_AUTH_ENABLED: 'false' }), /STAGING_BASIC_AUTH_ENABLED/);
+  }
+  for (const value of ['', 'FALSE', 'True', ' false', 'false ', '0', '1', false, true, null]) assert.throws(() => stagingBasicAuthEnabled({ APP_ENV: 'staging', STAGING_BASIC_AUTH_ENABLED: value }), /STAGING_BASIC_AUTH_ENABLED/);
+});
+
+test('public staging never accesses Basic secret settings or materializes a password', () => {
+  const env = { APP_ENV: 'staging', STAGING_BASIC_AUTH_ENABLED: 'false' };
+  for (const key of ['STAGING_BASIC_USERNAME', 'STAGING_BASIC_PASSWORD', 'STAGING_BASIC_PASSWORD_FILE']) Object.defineProperty(env, key, { get() { throw new Error('Disabled Basic must never read its credentials or file.'); } });
+  assert.doesNotThrow(() => loadStagingPassword(env));
+  assert.throws(() => loadStagingPassword({ APP_ENV: 'staging' }), /STAGING_BASIC_PASSWORD_FILE/);
+  assert.throws(() => loadStagingPassword({ APP_ENV: 'staging', STAGING_BASIC_AUTH_ENABLED: 'true' }), /STAGING_BASIC_PASSWORD_FILE/);
+  assert.doesNotThrow(() => loadStagingPassword({ APP_ENV: 'production' }));
 });

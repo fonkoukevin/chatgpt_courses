@@ -1,4 +1,4 @@
-import { installWebRuntimeLogging, loadStagingPassword } from './web-entrypoint.mjs';
+import { installWebRuntimeLogging, loadStagingPassword, stagingBasicAuthEnabled } from './web-entrypoint.mjs';
 
 installWebRuntimeLogging();
 
@@ -6,7 +6,8 @@ try {
   const textPort = process.env.PORT ?? '3000';
   if (!/^[1-9][0-9]{0,4}$/.test(textPort) || Number(textPort) > 65535) throw new Error('Invalid local web port.');
   const headers = { Accept: 'text/plain' };
-  if (process.env.APP_ENV === 'staging') {
+  const basicAuthEnabled = stagingBasicAuthEnabled();
+  if (process.env.APP_ENV === 'staging' && basicAuthEnabled) {
     loadStagingPassword();
     const username = process.env.STAGING_BASIC_USERNAME;
     if (!username || !/^[A-Za-z0-9._-]{3,80}$/.test(username)) throw new Error('Invalid staging username.');

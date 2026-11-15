@@ -1,0 +1,8 @@
+# Selected only for the explicitly validated staging flag false.
+# Spring sessions, permissions and CSRF remain the application boundary.
+services:
+  web:
+    environment:
+      APP_ENV: staging
+      STAGING_BASIC_AUTH_ENABLED: "false"
+      APP_PUBLISHED_LOCALES: ""

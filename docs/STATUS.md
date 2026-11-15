@@ -1,6 +1,6 @@
 # État réel du projet
 
-Dernière mise à jour : **15 novembre 2026** (Europe/Paris). **P21 validé en recette privée/TEST** : source `7d9794c`, cinq services sains,20 migrations. Restauration isolée depuis le PC, contrôles applicatifs et financiers, redémarrage, redéploiement identique et moniteur arrêt/reprise réussis. **Gate retiré, Caddy d’origine et24 autres conteneurs préservés.** RTO de l’exercice729051ms, diagnostic compris, sans SLA. P22 non commencé ; commerce et LIVE fermés, limites de lancement conservées.
+Dernière mise à jour : **15 novembre 2026** (Europe/Paris). **P21 validé sur la source `7d9794c`**, cinq services sains,20 migrations ; preuves historiques conservées. **Suivi en cours : retirer le garde HTTP Basic à la demande explicite de l’utilisateur**, pour tester le site directement avant P22. Nouvelle configuration et nouvelle version en préparation, pas encore déployées. Connexion applicative/permissions/CSRF et non-indexation conservées. P22 non commencé ; commerce et LIVE fermés.
 
 ## Situation courante
 
@@ -49,6 +49,6 @@ Dernière mise à jour : **15 novembre 2026** (Europe/Paris). **P21 validé en r
 
 ## Dernier lot
 
-**P21 terminé en recette**, workflow43749629915 réussi sans rebuild ni restauration source. Run19d30df4 :13 phases passées, copie PC14 fichiers, gate retiré et moniteur sain ; comparaison globale0b46d670 confirme24 autres conteneurs identiques,12 historiques inclus. Dernière observation : cinq services sains, images7d et20 migrations. Relais privé `.runtime/p21/p21-completion-ad92f68b-d2eb-4bdf-96b0-8a2f8cd0d241.private.json` (SHA04652a215f11f98fc678629ab235ea9b91a50878153b0158fb0e7cba530247f1). Acquis financiers, anciens échecs/verrous et ressources conservés ; aucune suppression de volume. **Prochaine action : préparer P22 après décisions de lancement et garde commerciale**, sans activation implicite. T17 staging partiel, vidéos, réception d’alertes externes et bypass administrateur GitHub non observés ; incidents historiques et revue humaine restent ouverts dans le verdict.
+**Suivi avant P22 : retirer le garde Basic de recette**, demandé explicitement par l’utilisateur. Code préparé avec flag staging explicite, sessions/CSRF/ACL et noindex/no-store conservés ;124 tests locaux réussis, lint/TypeScript et relecture passent. [Suivi du retrait](evidence/P21-staging-direct-access.md). Nouvelle version non encore déployée : PR/CI protégée, publication, sauvegarde actuelle/copie PC puis déploiement et vérification anonyme restent requis. La cible sert encore7d ; le relais historique `.runtime/p21/p21-completion-ad92f68b-d2eb-4bdf-96b0-8a2f8cd0d241.private.json` reste intact. Ne pas rejouer paiements/remboursements acquis. P22, commerce et LIVE restent fermés.
 
 Garder ce suivi court ; détails dans docs/evidence/Pxx.md. Repartir des fichiers et preuves réels lors d’une reprise.

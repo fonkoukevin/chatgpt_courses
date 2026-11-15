@@ -1,11 +1,31 @@
 import test from 'node:test';import assert from 'node:assert/strict';import{mkdtempSync,mkdirSync,writeFileSync,readFileSync,existsSync,unlinkSync}from'node:fs';import{resolve,join,basename}from'node:path';import{randomBytes}from'node:crypto';
-import{validateDeployment,secretFiles}from'../../scripts/deployment/config.mjs';import{sealFile,openFile}from'../../scripts/deployment/backup.mjs';
+import{validateDeployment,secretFiles,stagingBasicAuthEnabled}from'../../scripts/deployment/config.mjs';import{sealFile,openFile}from'../../scripts/deployment/backup.mjs';
+import{load as yaml}from'js-yaml';
 import{parseMonitorArgs}from'../../scripts/deployment/monitor.mjs';
 import{validateSharedIngressNetwork,deploymentComposeFiles}from'../../scripts/deployment/release-apply.mjs';
 test('monitor accepts typed thresholds and never treats the string false as loopback permission',()=>{const args=['--origin','https://courses.example.org','--backup-receipt','/safe/receipt.json'];assert.equal(parseMonitorArgs([...args,'--local-loopback','false']).localLoopback,false);assert.equal(parseMonitorArgs([...args,'--max-backup-age-seconds','900']).maxBackupAgeSeconds,900);for(const extra of [['--local-loopback','yes'],['--min-disk-free-bytes','-1'],['--max-backup-age-seconds','NaN'],['--origin','https://other.example.org'],['--unknown','true'],['--ca-file']])assert.throws(()=>parseMonitorArgs([...args,...extra]));});
 const base={APP_ENV:'production',COMPOSE_PROJECT_NAME:'courses-production',PUBLIC_DOMAIN:'courses.example.org',APP_PUBLIC_ORIGIN:'https://courses.example.org',POSTGRES_DB:'courses_production',WEB_IMAGE:'registry.example.org/courses/web@sha256:'+'a'.repeat(64),API_IMAGE:'registry.example.org/courses/api@sha256:'+'b'.repeat(64),SECRETS_DIR:resolve('.runtime/p20-fixture-secrets')};
 test('deployment rejects mutable images, wrong target/origin and inline secrets before Compose',()=>{assert.equal(validateDeployment(base,{checkFiles:false}).commerceEnabled,false);for(const change of [{WEB_IMAGE:'example/web:latest'},{APP_PUBLIC_ORIGIN:'http://courses.example.org'},{APP_PUBLIC_ORIGIN:'https://foreign.example.org'},{COMPOSE_PROJECT_NAME:'courses-staging'},{STRIPE_SECRET_KEY:'synthetic-never-accepted'},{APP_ENV:'local'}])assert.throws(()=>validateDeployment({...base,...change},{checkFiles:false}));});
 test('staging cannot be indexed or bypass its gateway configuration',()=>{const staging={...base,APP_ENV:'staging',COMPOSE_PROJECT_NAME:'courses-staging',STAGING_BASIC_USERNAME:'reviewer'};assert.equal(validateDeployment(staging,{checkFiles:false}).environment,'staging');assert.throws(()=>validateDeployment({...staging,STAGING_BASIC_USERNAME:''},{checkFiles:false}));assert.throws(()=>validateDeployment({...staging,APP_PUBLISHED_LOCALES:'fr,en'},{checkFiles:false}));});
+test('Basic remains strict by default and only exact false disables it for staging without changing indexing or secret requirements elsewhere',()=>{
+ const staging={...base,APP_ENV:'staging',COMPOSE_PROJECT_NAME:'courses-staging',STAGING_BASIC_USERNAME:'reviewer'};
+ for(const flag of [undefined,'true'])assert.equal(validateDeployment({...staging,STAGING_BASIC_AUTH_ENABLED:flag},{checkFiles:false}).stagingBasicAuthEnabled,true);
+ for(const flag of ['',true,false,null,'TRUE','False','0','no','false\n'])assert.throws(()=>stagingBasicAuthEnabled({APP_ENV:'staging',STAGING_BASIC_AUTH_ENABLED:flag}),/BASIC_AUTH_INVALID/);
+ assert.throws(()=>validateDeployment({...base,STAGING_BASIC_AUTH_ENABLED:'false'},{checkFiles:false}),/STAGING_ONLY/);
+ mkdirSync('.runtime',{recursive:true});const directory=mkdtempSync(resolve('.runtime/p21-basic-disabled-secrets-'));for(const name of secretFiles)writeFileSync(join(directory,name),name==='outbox-key'?randomBytes(32).toString('base64'):randomBytes(32).toString('hex'),{mode:0o600});
+ const open={...staging,STAGING_BASIC_AUTH_ENABLED:'false',STAGING_BASIC_USERNAME:undefined,SECRETS_DIR:directory};
+ assert.equal(validateDeployment(open).stagingBasicAuthEnabled,false);assert.throws(()=>validateDeployment({...open,STAGING_BASIC_AUTH_ENABLED:'true',STAGING_BASIC_USERNAME:'reviewer'}),/SECRET_FILE_MISSING/);
+ // A retained unusable legacy entry must never be opened in disabled mode.
+ mkdirSync(join(directory,'staging-basic-password'));assert.equal(validateDeployment(open).secretsChecked,true);
+ assert.throws(()=>validateDeployment({...open,APP_PUBLISHED_LOCALES:'fr,en'}),/INDEXING_NOT_ALLOWED/);
+});
+test('the selected anonymous Compose overlay has no Basic credentials or secret mount, and controller/target flags cannot drift',()=>{
+ const staging=validateDeployment({...base,APP_ENV:'staging',COMPOSE_PROJECT_NAME:'courses-staging',STAGING_BASIC_AUTH_ENABLED:'false'},{checkFiles:false});
+ const files=deploymentComposeFiles('/safe/release',staging,{stagingPaymentTest:false,stagingBasicAuthEnabled:false}).map(path=>basename(path));assert.deepEqual(files,['compose.deployment.yml','compose.staging-public.yml']);
+ for(const flag of [undefined,true,'false',null])assert.throws(()=>deploymentComposeFiles('/safe/release',staging,{stagingPaymentTest:false,stagingBasicAuthEnabled:flag}),/BASIC_AUTH_TARGET_MISMATCH/);
+ const baseCompose=yaml(readFileSync('infra/compose/compose.deployment.yml','utf8')),anonymous=yaml(readFileSync('infra/compose/compose.staging-public.yml','utf8')),strict=yaml(readFileSync('infra/compose/compose.staging.yml','utf8'));
+ assert.equal(baseCompose.services.web.secrets,undefined);assert.deepEqual(anonymous.services.web,{environment:{APP_ENV:'staging',STAGING_BASIC_AUTH_ENABLED:'false',APP_PUBLISHED_LOCALES:''}});assert.equal(strict.services.web.environment.STAGING_BASIC_AUTH_ENABLED,'true');assert.equal(strict.services.web.secrets[0].target,'STAGING_BASIC_PASSWORD');
+});
 test('dedicated ingress remains the default and shared ingress is restricted to its staging network',()=>{
  const defaults=validateDeployment(base,{checkFiles:false});assert.equal(defaults.ingressMode,'dedicated');assert.equal(defaults.ingressNetwork,null);
  assert.equal(validateDeployment({...base,INGRESS_MODE:'dedicated'},{checkFiles:false}).ingressMode,'dedicated');

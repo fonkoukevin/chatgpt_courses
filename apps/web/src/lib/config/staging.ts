@@ -1,6 +1,14 @@
 import "server-only";
 import { createHash, timingSafeEqual } from "node:crypto";
 
+export function stagingBasicAuthEnabled(environment = process.env.APP_ENV): boolean {
+  const value = process.env.STAGING_BASIC_AUTH_ENABLED === undefined ? "true" : process.env.STAGING_BASIC_AUTH_ENABLED;
+  if ((value !== "true" && value !== "false") || (value === "false" && environment !== "staging")) {
+    throw new Error("Configuration STAGING_BASIC_AUTH_ENABLED: use true, or explicitly false in staging only");
+  }
+  return value === "true";
+}
+
 export function stagingCredentialsMatch(authorization: string | null): boolean {
   const username = process.env.STAGING_BASIC_USERNAME;
   const password = process.env.STAGING_BASIC_PASSWORD;

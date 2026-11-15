@@ -71,6 +71,7 @@ jobs:
       RELEASE_OPERATION: ${{ inputs.operation }}
       TARGET_ENVIRONMENT: ${{ inputs.environment }}
       STAGING_PAYMENT_TEST: ${{ vars.STAGING_PAYMENT_TEST }}
+      STAGING_BASIC_AUTH_ENABLED: ${{ vars.STAGING_BASIC_AUTH_ENABLED || 'true' }}
       RELEASE_MANIFEST_JSON: ${{ inputs.manifest }}
       EXPECTED_RELEASE_SHA256: ${{ inputs.manifest_sha256 }}
       ROLLBACK_SCHEMA_REVIEWED: ${{ inputs.rollback_schema_reviewed }}
@@ -131,6 +132,7 @@ jobs:
       APPROVED_TEST_PACKAGE_CLEANUP: ${{ inputs.approved_test_package_cleanup }}
       TARGET_ENVIRONMENT: ${{ inputs.environment }}
       STAGING_PAYMENT_TEST: ${{ vars.STAGING_PAYMENT_TEST }}
+      STAGING_BASIC_AUTH_ENABLED: ${{ vars.STAGING_BASIC_AUTH_ENABLED || 'true' }}
       RELEASE_MANIFEST_JSON: ${{ inputs.manifest }}
       EXPECTED_RELEASE_SHA256: ${{ inputs.manifest_sha256 }}
       ROLLBACK_SCHEMA_REVIEWED: ${{ inputs.rollback_schema_reviewed }}
@@ -190,6 +192,7 @@ jobs:
       RELEASE_OPERATION: ${{ inputs.operation }}
       TARGET_ENVIRONMENT: ${{ inputs.environment }}
       STAGING_PAYMENT_TEST: ${{ vars.STAGING_PAYMENT_TEST }}
+      STAGING_BASIC_AUTH_ENABLED: ${{ vars.STAGING_BASIC_AUTH_ENABLED || 'true' }}
       RELEASE_MANIFEST_JSON: ${{ inputs.manifest }}
       EXPECTED_RELEASE_SHA256: ${{ inputs.manifest_sha256 }}
       ROLLBACK_SCHEMA_REVIEWED: ${{ inputs.rollback_schema_reviewed }}

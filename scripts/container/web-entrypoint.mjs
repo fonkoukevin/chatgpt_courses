@@ -42,8 +42,17 @@ export function decodeStagingPassword(bytes) {
   } catch { throw invalidSecret(); }
 }
 
+export function stagingBasicAuthEnabled(env = process.env) {
+  const value = env.STAGING_BASIC_AUTH_ENABLED === undefined ? 'true' : env.STAGING_BASIC_AUTH_ENABLED;
+  if ((value !== 'true' && value !== 'false') || (value === 'false' && env.APP_ENV !== 'staging')) {
+    throw new Error('STAGING_BASIC_AUTH_ENABLED: use true, or explicitly false in staging only.');
+  }
+  return value === 'true';
+}
+
 /** Only this web secret is materialized in process memory, never in an image. */
 export function loadStagingPassword(env = process.env) {
+  if (!stagingBasicAuthEnabled(env)) return;
   const file = env.STAGING_BASIC_PASSWORD_FILE;
   if (!file) {
     if (env.APP_ENV === 'staging') throw invalidSecret();

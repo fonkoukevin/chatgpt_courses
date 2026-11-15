@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { MAX_BACKUP_RECEIPT_BYTES, repository, validateSourceRepository, expectedImageVisibility, ghcrConfiguration, ghcrRemoteScript, requireGhcrAnonymousReadDenied, requireGhcrAnonymousDigestReadable, requireGhcrPackage, requireGhcrPrivatePackage, validateManifest, manifestBytes, sha256, parseManifest, protectedEnvironment, targetConfiguration, stagingPaymentTestFlag, validateBackupReceipt, validateSchemaFacts } from '../../scripts/deployment/release.mjs';
+import { MAX_BACKUP_RECEIPT_BYTES, repository, validateSourceRepository, expectedImageVisibility, ghcrConfiguration, ghcrRemoteScript, requireGhcrAnonymousReadDenied, requireGhcrAnonymousDigestReadable, requireGhcrPackage, requireGhcrPrivatePackage, validateManifest, manifestBytes, sha256, parseManifest, protectedEnvironment, targetConfiguration, stagingPaymentTestFlag, stagingBasicAuthFlag, deploymentBundleFiles, validateBackupReceipt, validateSchemaFacts } from '../../scripts/deployment/release.mjs';
 
 const prefix='registry.invalid/team/courses';
 const candidate=()=>({schemaVersion:1,sourceCommit:'a'.repeat(40),web:{repository:prefix+'/web',digest:'sha256:'+'b'.repeat(64)},api:{repository:prefix+'/api',digest:'sha256:'+'c'.repeat(64)},schema:{min:20,max:20}});
@@ -51,6 +51,13 @@ test('a manual payment TEST flag is false unless explicitly enabled for staging 
  assert.equal(targetConfiguration({...env,TARGET_ENVIRONMENT:'production',STAGING_PAYMENT_TEST:'false'}).stagingPaymentTest,false);
  for(const value of ['TRUE','1','yes','false\ntrue',true,false,null])assert.throws(()=>stagingPaymentTestFlag({...env,STAGING_PAYMENT_TEST:value}),/PAYMENT_TEST_INVALID/);
  assert.throws(()=>targetConfiguration({...env,TARGET_ENVIRONMENT:'production',STAGING_PAYMENT_TEST:'true'}),/PAYMENT_TEST_STAGING_ONLY/);
+});
+test('the Basic contract defaults to strict, refuses malformed or production opt-outs and preserves legacy source bundles',()=>{
+ const staging={TARGET_ENVIRONMENT:'staging'};assert.equal(stagingBasicAuthFlag(staging),true);assert.equal(stagingBasicAuthFlag({...staging,STAGING_BASIC_AUTH_ENABLED:'true'}),true);assert.equal(stagingBasicAuthFlag({...staging,STAGING_BASIC_AUTH_ENABLED:'false'}),false);
+ for(const value of ['',true,false,null,'TRUE','0','no','false\n'])assert.throws(()=>stagingBasicAuthFlag({...staging,STAGING_BASIC_AUTH_ENABLED:value}),/BASIC_AUTH_INVALID/);
+ assert.throws(()=>stagingBasicAuthFlag({TARGET_ENVIRONMENT:'production',STAGING_BASIC_AUTH_ENABLED:'false'}),/STAGING_ONLY/);
+ const oldFiles=deploymentBundleFiles({environment:'staging',stagingBasicAuthEnabled:true}),newFiles=deploymentBundleFiles({environment:'staging',stagingBasicAuthEnabled:false});
+ assert.equal(oldFiles.includes('infra/compose/compose.staging-public.yml'),false);assert.deepEqual(newFiles,[...oldFiles,'infra/compose/compose.staging-public.yml']);assert.deepEqual(deploymentBundleFiles({environment:'production',stagingBasicAuthEnabled:true}),oldFiles);assert.throws(()=>deploymentBundleFiles({environment:'production',stagingBasicAuthEnabled:false}),/STAGING_ONLY/);
 });
 test('the remote Node executable accepts an explicit user installation without accepting shell text or path traversal',()=>{
  const env={TARGET_ENVIRONMENT:'staging',DEPLOY_TARGET_AUTHORIZED:'true',DEPLOY_HOST:'host.example.com',DEPLOY_USER:'plumora',DEPLOY_PORT:'22',DEPLOY_DIRECTORY:'/home/plumora/courses/staging',DEPLOY_PUBLIC_ORIGIN:'https://courses.example.com'};

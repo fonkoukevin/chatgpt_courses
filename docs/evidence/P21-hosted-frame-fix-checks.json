@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "result": "passed",
+  "scope": "private hosted TEST submit selector",
+  "sourceCommit": "7d9794c6f2a7d9264820904ae125cced3bb69fdf",
+  "finalDriverSha256": "d911e581052f84e16de66b32144bd7813aafde5cb0d9720c4bd5b10973ef797e",
+  "testsPassed": 16,
+  "newSelectorAndPrivacyTests": 11,
+  "existingDriverTests": 5,
+  "allowedFrameOrigins": "HTTPS stripe.com and subdomains",
+  "globalUniquenessRequired": true,
+  "readinessDeadlineMs": 20000,
+  "helperClicks": 0,
+  "callerClicksAfterPersistedIntent": 1,
+  "nativeLocatorVerifiedWithoutClick": true,
+  "nativeLocatorDriverSha256": "2250a0ad1002cf5d0ed2435519d332cb51847dcd2f115c09e3426606a62fa032",
+  "onlyFinalDelta": "deadline check before returning eligible locator",
+  "nativeReceiptSha256": "5bc8a338772191f4a57e448e3a43b7e8d8661de1097d6bb75cf13f7ed4124a68",
+  "preparationReceiptSha256": "dcbc72f0a7afe45c890268a63c3998f4cd0e92b08dc456c46611ff71bd4f38cd",
+  "paymentSuccessClaimed": false,
+  "projection": "closed-allowlist"
+}

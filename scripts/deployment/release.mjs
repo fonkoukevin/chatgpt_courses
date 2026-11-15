@@ -3,6 +3,7 @@ import { closeSync, fstatSync, fsyncSync, mkdirSync, mkdtempSync, openSync, read
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { stagingBasicAuthEnabled as deploymentBasicAuthEnabled } from './config.mjs';
 import { spawnSync } from 'node:child_process';
 import { safeReleaseFailure, inspectRegistryReadOnly, readImageBuildDiagnostic, deploymentStages, deploymentCommandFailure, readDeploymentCommandLog, safeDeploymentFailure } from './release-diagnostics.mjs';
 import { cleanupApprovedTestPackage } from './approved-test-cleanup.mjs';
@@ -13,6 +14,10 @@ const shaPattern = /^[a-f0-9]{64}$/u, commitPattern = /^[a-f0-9]{40}$/u;
 // fixed files. Its pretty-printed receipt can exceed the 16 MiB inventory.
 export const MAX_BACKUP_RECEIPT_BYTES = 32 * 1024 * 1024;
 const bundleFiles = ['infra/compose/compose.deployment.yml', 'infra/compose/compose.staging.yml', 'infra/compose/compose.shared-ingress.yml', 'infra/compose/compose.staging-integrations.yml', 'infra/compose/compose.staging-payment-test.yml', 'infra/caddy/Caddyfile', 'infra/caddy/routes.caddy', 'infra/postgres/init-roles.sh', 'scripts/deployment/config.mjs', 'scripts/deployment/release.mjs', 'scripts/deployment/release-apply.mjs', 'scripts/deployment/release-diagnostics.mjs', 'scripts/deployment/approved-test-cleanup.mjs'];
+export function deploymentBundleFiles(target) {
+  requireRelease(['staging', 'production'].includes(target.environment) && typeof target.stagingBasicAuthEnabled === 'boolean' && (target.stagingBasicAuthEnabled || target.environment === 'staging'), 'RELEASE_BASIC_AUTH_STAGING_ONLY');
+  return [...bundleFiles, ...(!target.stagingBasicAuthEnabled ? ['infra/compose/compose.staging-public.yml'] : [])];
+}
 export function requireRelease(condition, code) { if (!condition) { const error = new Error(code); error.code = code; throw error; } }
 const exact = (value, keys) => value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).toSorted().join(',') === keys.toSorted().join(',');
 export function repository(value) {
@@ -163,6 +168,10 @@ export function stagingPaymentTestFlag(env) {
   requireRelease(value !== 'true' || env.TARGET_ENVIRONMENT === 'staging', 'RELEASE_PAYMENT_TEST_STAGING_ONLY');
   return value === 'true';
 }
+export function stagingBasicAuthFlag(env) {
+  try { return deploymentBasicAuthEnabled({ APP_ENV: env.TARGET_ENVIRONMENT, STAGING_BASIC_AUTH_ENABLED: env.STAGING_BASIC_AUTH_ENABLED }); }
+  catch (error) { requireRelease(false, error.message === 'DEPLOYMENT_BASIC_AUTH_STAGING_ONLY' ? 'RELEASE_BASIC_AUTH_STAGING_ONLY' : 'RELEASE_STAGING_BASIC_AUTH_INVALID'); }
+}
 export function targetConfiguration(env) {
   requireRelease(['staging', 'production'].includes(env.TARGET_ENVIRONMENT) && env.DEPLOY_TARGET_AUTHORIZED === 'true', 'RELEASE_AUTHORIZED_TARGET_REQUIRED');
   requireRelease(/^[a-zA-Z0-9][a-zA-Z0-9.-]{0,252}$/u.test(env.DEPLOY_HOST ?? '') && !env.DEPLOY_HOST.endsWith('.invalid') && !env.DEPLOY_HOST.includes('..') && /^[a-z_][a-z0-9_-]{0,31}$/u.test(env.DEPLOY_USER ?? ''), 'RELEASE_SSH_TARGET_INVALID');
@@ -172,7 +181,7 @@ export function targetConfiguration(env) {
   requireRelease(/^\/[A-Za-z0-9_-]+(?:\/[A-Za-z0-9_-]+)+$/u.test(env.DEPLOY_DIRECTORY ?? '') && !['/tmp/releases', '/var/tmp'].includes(env.DEPLOY_DIRECTORY), 'RELEASE_TARGET_DIRECTORY_INVALID');
   let origin; try { origin = new URL(env.DEPLOY_PUBLIC_ORIGIN); } catch { requireRelease(false, 'RELEASE_HTTPS_ORIGIN_REQUIRED'); }
   requireRelease(origin.protocol === 'https:' && origin.origin === env.DEPLOY_PUBLIC_ORIGIN && !origin.username && !origin.password && !origin.hostname.endsWith('.invalid'), 'RELEASE_HTTPS_ORIGIN_REQUIRED');
-  return { environment: env.TARGET_ENVIRONMENT, host: env.DEPLOY_HOST, user: env.DEPLOY_USER, port: env.DEPLOY_PORT, directory: env.DEPLOY_DIRECTORY, nodePath, stagingPaymentTest: stagingPaymentTestFlag(env) };
+  return { environment: env.TARGET_ENVIRONMENT, host: env.DEPLOY_HOST, user: env.DEPLOY_USER, port: env.DEPLOY_PORT, directory: env.DEPLOY_DIRECTORY, nodePath, stagingPaymentTest: stagingPaymentTestFlag(env), stagingBasicAuthEnabled: stagingBasicAuthFlag(env) };
 }
 function childEnvironment(extra = {}) { return { ...Object.fromEntries(Object.entries(process.env).filter(([key]) => /^(PATH|HOME|USERPROFILE|SystemRoot|TEMP|TMP|LANG|JAVA_HOME)$/u.test(key))), ...extra }; }
 function execute(file, args, options = {}) {
@@ -210,7 +219,7 @@ async function guard() {
   const env = process.env, event = JSON.parse(readFileSync(env.GITHUB_EVENT_PATH, 'utf8'));
   requireRelease(env.GITHUB_EVENT_NAME === 'workflow_dispatch' && event.repository?.fork === false && event.repository.full_name === env.GITHUB_REPOSITORY && env.GITHUB_REF === `refs/heads/${event.repository.default_branch}` && commitPattern.test(env.GITHUB_SHA ?? ''), 'RELEASE_DEFAULT_BRANCH_ONLY');
   requireRelease(['plan', 'publish', 'deploy', 'rollback'].includes(env.RELEASE_OPERATION) && ['staging', 'production'].includes(env.TARGET_ENVIRONMENT), 'RELEASE_OPERATION_INVALID');
-  const stagingPaymentTest = stagingPaymentTestFlag(env);
+  const stagingPaymentTest = stagingPaymentTestFlag(env), stagingBasicAuthEnabled = stagingBasicAuthFlag(env);
   requireRelease(env.DEPLOY_TARGET_AUTHORIZED === 'true' && /^\d+$/u.test(env.GITHUB_RUN_ID ?? ''), 'RELEASE_AUTHORIZED_TARGET_REQUIRED');
   const environment = await github(`environments/${env.TARGET_ENVIRONMENT}`);
   const workflow = await github(`actions/runs/${env.GITHUB_RUN_ID}`);
@@ -235,7 +244,7 @@ async function guard() {
     const runs = await github(`actions/workflows/ci.yml/runs?head_sha=${source}&status=success&per_page=100`);
     requireRelease(runs.workflow_runs?.some(run => run.head_sha === source && run.head_branch === event.repository.default_branch && run.head_repository?.full_name === env.GITHUB_REPOSITORY && run.event === 'push' && run.conclusion === 'success'), 'RELEASE_SUCCESSFUL_CI_REQUIRED');
   }
-  publicReceipt('guard.json', { result: 'passed', operation: env.RELEASE_OPERATION, environment: env.TARGET_ENVIRONMENT, sourceCommit: source, sourceVisibility, expectedImageVisibility: imageVisibility, stagingPaymentTest, protectedEnvironmentChecked: true, environmentPreexisting: true, defaultBranchProtected: true, defaultBranchOnly: true, ...protections, registryOrTargetMutationExecuted: false });
+  publicReceipt('guard.json', { result: 'passed', operation: env.RELEASE_OPERATION, environment: env.TARGET_ENVIRONMENT, sourceCommit: source, sourceVisibility, expectedImageVisibility: imageVisibility, stagingPaymentTest, stagingBasicAuthEnabled, protectedEnvironmentChecked: true, environmentPreexisting: true, defaultBranchProtected: true, defaultBranchOnly: true, ...protections, registryOrTargetMutationExecuted: false });
 }
 function verifiedVisibilityReceipt(imageVisibility) {
   return { expectedImageVisibility: imageVisibility, observedImageVisibility: imageVisibility,
@@ -365,22 +374,24 @@ async function applyDeployment(setStage) {
   const host = `${target.user}@${target.host}`, releaseHash = env.EXPECTED_RELEASE_SHA256;
   const ssh = (script, diagnosticStage) => execute('ssh', [...options, '-p', target.port, host, 'sh -s'], { input: script, diagnosticStage });
   try {
-    const smokeArgs = [join(root, 'scripts/deployment/smoke.mjs'), '--origin', env.DEPLOY_PUBLIC_ORIGIN, '--stripe-enabled', String(target.stagingPaymentTest)];
-    if (target.environment === 'staging') {
+    const smokeArgs = [join(root, 'scripts/deployment/smoke.mjs'), '--origin', env.DEPLOY_PUBLIC_ORIGIN, '--stripe-enabled', String(target.stagingPaymentTest), '--environment', target.environment];
+    if (target.environment === 'staging') smokeArgs.push('--staging-basic-auth-enabled', String(target.stagingBasicAuthEnabled));
+    if (target.environment === 'staging' && target.stagingBasicAuthEnabled) {
       requireRelease(/^[A-Za-z0-9._-]{3,80}$/u.test(env.STAGING_BASIC_USERNAME ?? '') && typeof env.STAGING_BASIC_PASSWORD === 'string' && env.STAGING_BASIC_PASSWORD.length >= 24 && env.STAGING_BASIC_PASSWORD.length <= 256 && !/[\r\n\0:]/u.test(env.STAGING_BASIC_PASSWORD), 'RELEASE_STAGING_SMOKE_SECRET_REQUIRED');
       const basicFile = join(work, 'staging-basic-password'); writeFileSync(basicFile, env.STAGING_BASIC_PASSWORD, { mode: 0o600 });
       smokeArgs.push('--basic-username', env.STAGING_BASIC_USERNAME, '--basic-password-file', basicFile);
     }
-    for (const path of bundleFiles) {
+    const deploymentFiles = deploymentBundleFiles(target);
+    for (const path of deploymentFiles) {
       const type = execute('git', ['ls-tree', manifest.sourceCommit, '--', path], { stdio: ['pipe', 'pipe', 'pipe'], encoding: 'utf8', diagnosticStage: 'LOCAL_BUNDLE' }).stdout;
       requireRelease(/^100(?:644|755) blob /u.test(type), 'RELEASE_SOURCE_FILE_NOT_REGULAR');
       const bytes = execute('git', ['show', `${manifest.sourceCommit}:${path}`], { stdio: ['pipe', 'pipe', 'pipe'], diagnosticStage: 'LOCAL_BUNDLE' }).stdout;
       mkdirSync(dirname(join(bundle, path)), { recursive: true }); writeFileSync(join(bundle, path), bytes, { mode: 0o644 });
     }
     writeFileSync(join(bundle, 'release-manifest.json'), manifestBytes(manifest), { mode: 0o644 });
-    const request = { operation: env.RELEASE_OPERATION, environment: target.environment, stagingPaymentTest: target.stagingPaymentTest, imageRepository: env.IMAGE_REPOSITORY, manifestSha256: releaseHash, expectedPublicOrigin: env.DEPLOY_PUBLIC_ORIGIN, currentSchemaVersion: env.CURRENT_SCHEMA_VERSION ? Number(env.CURRENT_SCHEMA_VERSION) : null, rollbackSchemaReviewed: env.ROLLBACK_SCHEMA_REVIEWED === 'true', firstInstallEmptyDatabase: env.FIRST_INSTALL_EMPTY_DATABASE === 'true', offHostBackupAttested: env.OFF_HOST_BACKUP_ATTESTED === 'true', migrationBackupReceiptSha256: env.MIGRATION_BACKUP_RECEIPT_SHA256 || null };
+    const request = { operation: env.RELEASE_OPERATION, environment: target.environment, stagingPaymentTest: target.stagingPaymentTest, stagingBasicAuthEnabled: target.stagingBasicAuthEnabled, imageRepository: env.IMAGE_REPOSITORY, manifestSha256: releaseHash, expectedPublicOrigin: env.DEPLOY_PUBLIC_ORIGIN, currentSchemaVersion: env.CURRENT_SCHEMA_VERSION ? Number(env.CURRENT_SCHEMA_VERSION) : null, rollbackSchemaReviewed: env.ROLLBACK_SCHEMA_REVIEWED === 'true', firstInstallEmptyDatabase: env.FIRST_INSTALL_EMPTY_DATABASE === 'true', offHostBackupAttested: env.OFF_HOST_BACKUP_ATTESTED === 'true', migrationBackupReceiptSha256: env.MIGRATION_BACKUP_RECEIPT_SHA256 || null };
     writeFileSync(join(bundle, 'release-request.json'), JSON.stringify(request) + '\n', { mode: 0o644 });
-    const archive = join(work, 'release.tar'); execute('tar', ['-C', bundle, '-cf', archive, '--', ...bundleFiles, 'release-manifest.json', 'release-request.json'], { diagnosticStage: 'LOCAL_BUNDLE' });
+    const archive = join(work, 'release.tar'); execute('tar', ['-C', bundle, '-cf', archive, '--', ...deploymentFiles, 'release-manifest.json', 'release-request.json'], { diagnosticStage: 'LOCAL_BUNDLE' });
     const bundleHash = sha256(readFileSync(archive)), upload = `${target.directory}/incoming/${releaseHash}-${env.GITHUB_RUN_ID}.tar`;
     setStage('SSH_PREPARE');
     ssh(`set -eu\numask 077\ntest -d ${quote(target.directory)}\ntest ! -L ${quote(target.directory)}\ntest "$(realpath ${quote(target.directory)})" = ${quote(target.directory)}\ntest ! -L ${quote(target.directory + '/incoming')}\nmkdir -p ${quote(target.directory + '/incoming')}\n`, 'SSH_PREPARE');

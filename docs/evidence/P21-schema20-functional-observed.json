@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "result": "passed",
+  "sourceCommit": "7d9794c6f2a7d9264820904ae125cced3bb69fdf",
+  "manifestSha256": "21298e847c92b1e6671bdc62c6f6ace50ea10ed612c335a041d2db5148232cca",
+  "editorial": {
+    "runId": "53ac25c3-04f0-4c3e-a196-204826578f45",
+    "coreRunId": "53ac25c3-04f0-4c3e-a196-204826578f45",
+    "launcherChecksPassed": 9,
+    "seedChecksPassed": 12,
+    "editorDisabled": true,
+    "disableCommitted": true,
+    "contextsClosed": true,
+    "originalFrenchNotePreservedInEnglishContext": true,
+    "noteFreshLoginVerified": true,
+    "sourceReceiptSha256": "b198b5a4d2de1e35eee1b27b06cd524690448ab7554d623e32ebf775789a8eb8",
+    "visualReviewPerformed": false
+  },
+  "learning": {
+    "runId": "7b7e34ee-72c0-4394-a7c6-3211d03c8429",
+    "coreRunId": "53ac25c3-04f0-4c3e-a196-204826578f45",
+    "mode": "run",
+    "browserFrEnVerified": true,
+    "contextsClosed": true,
+    "learnedDataMutationsReplayed": false,
+    "nativeNavigationVisitsObserved": true,
+    "videoConfigured": false,
+    "videoPositionVerified": false,
+    "sourceReceiptSha256": "8fe741c49c0fd22b2c4094c9f8e8a465506050dd5ae67ad93b8a56be8e7d656b"
+  },
+  "providerUsed": false,
+  "projection": "closed-allowlist"
+}

@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "result": "restart-and-same-release-redeployment-observed",
+  "runId": "19d30df4-b33e-4fd4-afee-5df9045c9a15",
+  "sourceCommit": "7d9794c6f2a7d9264820904ae125cced3bb69fdf",
+  "manifestSha256": "21298e847c92b1e6671bdc62c6f6ace50ea10ed612c335a041d2db5148232cca",
+  "phaseCount": 13,
+  "phaseReceiptSha256": {
+    "archive": "75885b3730217f7c7930c7f8a48b81992ce025d3639d116a6c1fe9a73b2d53cc",
+    "snapshot": "0a810eba78528e35d582fc7dfe602ed113505aff250cadbc72b7cba2c2d81e7d",
+    "restart": "b5d4b5bc9a2d95a167313f5cacac2537bf9c81373f443c4f5c7d3f1287b0f0c8",
+    "gate-writes": "959a58c9e071cbe6a76e3ee4f9a16991a2b4c84918bed482fb23823acc4a02de",
+    "quiesce": "966f145bdb964d5dff035ebeca51e941e6f6363acef283220cef58caf579a7b1",
+    "wait-expiry": "a5ab8b355307f4a2d190c953d0481ced8f33a5b1a06fa4c833cdd4ddaaada989",
+    "drain-s3": "ecaa71f1401cb76db04b9667b78b8afef90c03ad6921935168bfc8a21c994365",
+    "capture": "9ce46aa05d07e628d4f37191c5f867bcb9c24688e2b3ecffa13a717fb95a380d",
+    "monitor-down": "cc0d0d98cd541c2b7ec000c19e569a42bd20201c9875a98c4b57bdfb3a42c432",
+    "offhost": "bddec4b496d95b6bf3b37af01f253b027cbb3fe3c1b71fce33b09242380543ed",
+    "postdeploy": "a5b24b8f986c4fc9d270a837939f68750c47f25163786535a19f69f92c70c97a",
+    "ungate-only": "187b75e9271d94364567e89b0014dadb9fc9111f011d99adfd19b646d9da37dd",
+    "monitor-up": "c12782c3d1bbe3f4583136effb737a422a2470332a7534bdb82ed68f74a4056b"
+  },
+  "restart": {
+    "sameContainerIds": true,
+    "sameVolumeIds": true,
+    "persistence": {
+      "schemaVersion": 1,
+      "result": "passed",
+      "tablesCompared": 14,
+      "schemaUnchanged": true,
+      "dataHashesEqual": true,
+      "privateRowsReturned": false,
+      "authenticatedOwnerHttpVerifiedByThisComparison": false
+    },
+    "ownerProductions": {
+      "schemaVersion": 1,
+      "result": "passed",
+      "ownerPrivateMethodProjectNoteAndProtectedContentPreserved": true,
+      "signedFileBytesPreserved": true
+    }
+  },
+  "backup": {
+    "receiptSha256": "ea036e8a681d18dd8e47d44730fc425dffe5ed9349d304f92cf026eacdd1f8af",
+    "readyObjectsCompared": 10,
+    "cipherFiles": 13,
+    "offhostFiles": 14,
+    "windowsPcRuntime": true,
+    "plaintextRead": false,
+    "backupKeyRead": false,
+    "apiWebKeptStopped": true,
+    "validUntilPg": "2026-11-15T19:25:16.078Z"
+  },
+  "dispatch": {
+    "requests": 1,
+    "acceptanceSha256": "8a0add7f547e8b261995a28b905394566d40efb955b6a6616858487ee378a828",
+    "graphSha256": "70fa8e7f41568d2a1a654b930eef164899c77c79d45f30657051e9bac3da6288",
+    "immediateNativePreflightSha256": "665866675540d5b886c682b76900f490b74dc7587c3bb22ee3210858c26715eb",
+    "automaticRetry": false
+  },
+  "workflow": {
+    "id": 43749629915,
+    "url": "https://github.com/fonkoukevin/chatgpt_courses/actions/runs/43749629915",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "deploy",
+        "conclusion": "success",
+        "status": "completed"
+      },
+      {
+        "name": "publish",
+        "conclusion": "skipped",
+        "status": "completed"
+      },
+      {
+        "name": "plan",
+        "conclusion": "skipped",
+        "status": "completed"
+      }
+    ],
+    "artifact": {
+      "id": 14175373937,
+      "name": "manual-release-deploy-43749629915-1",
+      "sha256": "43531649ab5c62dc4ac56cb508a5420dec30bc7d7cf969b451e7c5ba5c8b9211",
+      "zipDigestVerified": true
+    },
+    "collectionSha256": "1be5885114a0884be9393680a4726187d67c49950bfba99c120b19b05d2176bd",
+    "rawLogsRead": false
+  },
+  "redeployment": {
+    "firstInstallEmptyDatabaseObserved": false,
+    "backupReceiptSha256": "ea036e8a681d18dd8e47d44730fc425dffe5ed9349d304f92cf026eacdd1f8af",
+    "sourceDataRestored": false,
+    "imageBuildInvoked": false,
+    "persistence": {
+      "schemaVersion": 1,
+      "result": "passed",
+      "tablesCompared": 14,
+      "schemaUnchanged": true,
+      "dataHashesEqual": true,
+      "privateRowsReturned": false,
+      "authenticatedOwnerHttpVerifiedByThisComparison": false
+    },
+    "ownerProductions": {
+      "schemaVersion": 1,
+      "result": "passed",
+      "ownerPrivateMethodProjectNoteAndProtectedContentPreserved": true,
+      "signedFileBytesPreserved": true
+    },
+    "schema": {
+      "successful": 20,
+      "version": 20,
+      "failed": 0
+    },
+    "healthyServices": 5
+  },
+  "gate": {
+    "removed": true,
+    "originalCaddyRestored": true,
+    "fourLegacyHostsPreserved": true
+  },
+  "monitor": {
+    "down": {
+      "exitCode": 2,
+      "observedAt": "2026-11-15T18:55:51.742Z",
+      "httpAvailable": false,
+      "backupAgeSeconds": 29,
+      "diskFreeBytes": 51968778240,
+      "alerts": [
+        "HTTP_UNAVAILABLE"
+      ],
+      "externalNotificationSent": false,
+      "externalHostLossDetectionObserved": false
+    },
+    "up": {
+      "exitCode": 0,
+      "observedAt": "2026-11-15T18:59:21.789Z",
+      "httpAvailable": true,
+      "backupAgeSeconds": 239,
+      "diskFreeBytes": 51968024576,
+      "alerts": [],
+      "externalNotificationSent": false,
+      "externalHostLossDetectionObserved": false
+    }
+  },
+  "globalPreservation": {
+    "totalContainers": 29,
+    "excludedSourceContainers": 5,
+    "observedOtherContainers": 24,
+    "historicalContainers": 12,
+    "historicalIdsPreserved": true,
+    "allOtherContainersPreserved": true,
+    "readOnly": true,
+    "remoteMutationPerformed": false,
+    "rawConfigurationReturned": false,
+    "logsRead": false,
+    "comparisonSha256": "0b46d67054811ac07b3bafa77961e07d797986ba15f5acafe4c99821d86121d1",
+    "baselineFileSha256": "c01849fd471b3f9347c8ba685a59e9c2d2f567bfb7bec64eff9df8d66fc37674"
+  },
+  "resourcesRetained": true,
+  "volumeDeletionPerformed": false,
+  "productionDeploymentObserved": false,
+  "commercialLaunchEnabled": false
+}

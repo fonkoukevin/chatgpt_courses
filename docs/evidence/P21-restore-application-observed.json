@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "result": "isolated-restored-application-observed",
+  "proofFamily": "P21_RESTORE_APP_TRANSPORT_CONTINUATION_V1",
+  "restoreRunId": "72c8585f-9416-4262-ae6b-39f66a5089a7",
+  "applicationVerificationRunId": "ae4c96c3-d039-44bd-bd8f-60951b028924",
+  "sourceCommit": "7d9794c6f2a7d9264820904ae125cced3bb69fdf",
+  "manifestSha256": "21298e847c92b1e6671bdc62c6f6ace50ea10ed612c335a041d2db5148232cca",
+  "proofSha256": "2b23666bb2195b9197579e98d880a47a5a248785488a073187d1c41e840274b6",
+  "nativeReceiptSha256": "420040a4a9bc83095ba72b679f681bdbfabe40d31fd92a1d90822a97b524448b",
+  "dataRestoreEvidence": "P21-restored-data-transport-observed.json",
+  "applicationChecks": {
+    "health": true,
+    "authenticatedSession": true,
+    "ownerSessionMatched": true,
+    "secureSessionCookie": true,
+    "restoredMethod": true,
+    "protectedDocument": true,
+    "reauthorizedFileDownload": true,
+    "unsignedPrivateObjectDenied": true,
+    "normalTlsVerification": true,
+    "hostAndSniPreserved": true
+  },
+  "preservation": {
+    "tablesCompared": 14,
+    "readyObjectsCompared": 10,
+    "dockerBeforeAfterIdentical": true,
+    "ledgerBeforeAfterIdentical": true,
+    "parentsUnchanged": true,
+    "effectsDisabled": true,
+    "internalNetworksOnly": true
+  },
+  "transport": {
+    "destination": "inspected-private-caddy-ipv4",
+    "tcpPort": 443,
+    "logicalPort": 24446,
+    "hostPublicationObserved": false,
+    "normalTlsVerification": true,
+    "logicalHostSniOriginCookiesAndSignedUrlPreserved": true
+  },
+  "timing": {
+    "restoreStartedAt": "2026-11-15T18:34:19.105Z",
+    "attemptStartedAt": "2026-11-15T18:46:25.273Z",
+    "verifiedAt": "2026-11-15T18:46:28.156Z",
+    "rtoWallClockMs": 729051,
+    "includesPriorFailureAndDiagnosis": true,
+    "slaClaimed": false
+  },
+  "recoveryPointPg": "2026-11-15T18:32:40.412767+00:00",
+  "rpoPolicyEvaluated": false,
+  "sourceDataRestored": false,
+  "parentFailureRetained": true,
+  "resourcesRetained": true,
+  "automaticRetry": false,
+  "commerceEnabled": false,
+  "liveTransactionObserved": false
+}

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "evidencePhase": "P21",
+  "purpose": "PRE_MIGRATION_BACKUP",
+  "result": "passed",
+  "sourceCommit": "ddaf5a51103568ac4af35ac4e1b64852dce9dacf",
+  "sourceSchema": 19,
+  "targetUpgradeSchema": 20,
+  "receiptSha256": "d05df349b482c724e3ad4ee7d9ba34db139187f33e99a8b71d607c8789b98be6",
+  "completedAt": "2026-11-15T00:54:21.624Z",
+  "quiescence": {
+    "apiWebStopped": true,
+    "objectWriteGateObserved": true,
+    "uploadTtlSeconds": 300,
+    "jvmAndPostgresClockBoundMeasured": true,
+    "outstandingUploadExpiryObserved": true,
+    "s3DrainedAndSameContainerRestarted": true,
+    "otherWritersStoppedOperatorConfirmed": true
+  },
+  "data": {
+    "tablesCompared": 14,
+    "countsAndHashesEqual": true,
+    "objects": 6,
+    "readyObjectsCompared": 6,
+    "objectBytesAndMetadataVerified": true,
+    "privateRowsPublished": false
+  },
+  "encryption": {
+    "authenticated": true,
+    "cipherFiles": 9,
+    "encryptedBytes": 468939,
+    "allCiphertextsAuthenticated": true,
+    "notificationKeyAuthenticated": true
+  },
+  "postgresql": {
+    "pgRestoreListSucceeded": true,
+    "listLines": 741,
+    "listContentsRetained": false
+  },
+  "offHost": {
+    "files": 10,
+    "windowsPcRuntimeConfirmed": true,
+    "allCipherHashesVerified": true,
+    "backupKeyStoredSeparately": true,
+    "plaintextReadDuringCopy": false,
+    "backupKeyReadDuringCopy": false
+  },
+  "deployment": {
+    "firstInstallEmptyDatabase": false,
+    "offHostBackupAttested": true,
+    "sourceApiWebRemainStopped": true,
+    "objectWriteGateRemains": true,
+    "newDeploymentObserved": false
+  },
+  "limits": {
+    "applicationRestorationObserved": false,
+    "isolatedRestoreRehearsalObserved": false,
+    "rpoRtoMeasured": false,
+    "validationPlaintextRetainedPrivately": true
+  }
+}

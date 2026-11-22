@@ -1,0 +1,320 @@
+{
+  "schemaVersion": 1,
+  "proofFamily": "AUD_01_05_STAGING_DEPLOYMENT_OBSERVED_V1",
+  "result": "passed",
+  "scope": "staging-deployment-and-P18-anonymous-acceptance",
+  "assembledAt": "2026-11-22T10:19:34.838Z",
+  "origin": "https://staging.chatgpt-courses.com",
+  "source": {
+    "commit": "07f4fc6e5dc38560d4a7f02358471f7ed909d663",
+    "manifestSha256": "c2e104d0db69433fe67bfdabd055c58ab495f0d98092c9fa5f045d55106087fc",
+    "manifestBytes": 399,
+    "manifestFile": "AUD-01-05-release-manifest.json",
+    "schemaVersion": 21,
+    "healthyServices": 5
+  },
+  "workflows": {
+    "ciMain": 45003601899,
+    "plan": 45003620998,
+    "publish": 45004256922,
+    "deploy": 45005512270,
+    "results": "passed"
+  },
+  "ci": {
+    "apiTests": 283,
+    "apiSuites": 42,
+    "apiFailures": 0,
+    "apiErrors": 0,
+    "apiSkipped": 0,
+    "scriptTests": 190,
+    "clientTests": 133,
+    "browserChecks": 4,
+    "isolatedProductionChecks": 12
+  },
+  "backup": {
+    "result": "passed",
+    "receiptSha256": "51a8388b47cec229281e86faeb9bc61796201af9ad041d96905995beeb1a1381",
+    "copiedPcFiles": 14,
+    "returnedFilesAuthenticated": true,
+    "restoredTables": 83,
+    "restoredObjects": 10,
+    "isolatedTargetsStopped": 2,
+    "isolatedVolumesAndEvidenceRetained": true,
+    "outboxKeyFingerprintMatched": true,
+    "outboxPayloadDecryption": "no-non-null-sample",
+    "outboxMessageDecryptionObserved": false
+  },
+  "deploymentVerification": {
+    "result": "passed",
+    "proofFamily": "AUD_STAGING_POSTDEPLOY_COMPLEMENT_V2",
+    "observedAt": "2026-11-22T09:36:42.100Z",
+    "nativeReceiptSha256": "d7ea67afe9d48ab1bbf459c57efc9bdea4ad83968b011cf395003b233686892c",
+    "globalWindowReleased": true,
+    "gateRemoved": true,
+    "caddySameInode": true,
+    "caddyReloadOnly": true,
+    "originalPhaseLocksRetained": true,
+    "originalFailedReceiptNotRewritten": true
+  },
+  "beforeP18Snapshot": {
+    "scope": "before-P18-content-import",
+    "observedAt": "2026-11-22T09:36:42.100Z",
+    "tablesObserved": 83,
+    "strictlyUnchangedTables": 81,
+    "changedTables": [
+      "flyway_schema_history",
+      "refund_reconciliation_jobs"
+    ],
+    "flyway": {
+      "oldMigrationCount": 20,
+      "oldHistorySha256": "077d1a54e715bec545451288c000019687e4c7cde4339fdcfbe935742fd5d259",
+      "oldHistoryUnchanged": true,
+      "appendedVersion": 21
+    },
+    "refundWorker": {
+      "jobsBefore": 2,
+      "jobsAfter": 2,
+      "stableFactsAttemptsAndErrorsUnchanged": true,
+      "allowedChangedFields": [
+        "state",
+        "lease_id",
+        "lease_until",
+        "next_attempt_at",
+        "updated_at"
+      ]
+    },
+    "v21SelectionTables": {
+      "editorialPublicSelections": 0,
+      "offerPublicSelections": 0
+    },
+    "s3ObjectsCompared": 10,
+    "s3BytesAndMetadataEqual": true,
+    "unrelatedContainersPreserved": 24,
+    "legacyHostsPreserved": 4
+  },
+  "observedIncident": {
+    "originalNativeDeploymentObservation": "failed",
+    "originalErrorCode": "AUD_BACKUP_COMMAND_FAILED",
+    "oldPostgresIdNoLongerExisted": true,
+    "oldWriterGuardAlsoExpectedHistoricalAppIds": true,
+    "postgresRecreatedForNewReleaseInitRolesBind": true,
+    "initRolesBytesIdentical": true,
+    "effectiveImageEnvironmentVolumeSecretsAndNetworksPreserved": true,
+    "fullPreviousConfigAndHostConfigFingerprintsReconstructed": true,
+    "postgresAdditionalDifferences": [
+      "Config.Env.order",
+      "HostConfig.Binds.order",
+      "HostConfig.Mounts.order"
+    ],
+    "apiAdditionalDifferences": [
+      "HostConfig.Mounts.order"
+    ],
+    "webHostConfigRawUnchanged": true,
+    "attributionEvidenceSha256": {
+      "postgres": "b0d37294dc9a9754a687023bdd610246b0f3ae240a72d13e2fb163feeb70c0a1",
+      "appHost": "3722e7f31bb7a931ef85862ab296a0a9d14afc3a0d89f31a2580e763c5a619cf"
+    }
+  },
+  "remoteSmoke": {
+    "result": "passed",
+    "checks": 11,
+    "tlsVerified": true,
+    "stagingBasicAuthEnabled": false,
+    "artifactSha256": "f6e0f5ff32ef8853f01f1d3ddb0b4a5bfeee10ea76543f3153c2d5990f9bd1e9"
+  },
+  "p18": {
+    "result": "passed",
+    "scope": "FR/EN staging only; temporary FREE access authorized for six modules",
+    "identities": 14,
+    "publishedTranslations": 28,
+    "readyFiles": 18,
+    "selectedTranslations": 26,
+    "catalogueCardsPerLocale": 7,
+    "remainingSelections": 0,
+    "publicCatalogueVerified": true,
+    "homeAndExactM01Verified": true,
+    "anonymousResourceFiles": {
+      "count": 14,
+      "bytesVerified": true
+    },
+    "anonymousSolutionFiles": {
+      "count": 4,
+      "denied": true,
+      "status": 404
+    },
+    "technicalActor": {
+      "status": "DISABLED",
+      "activeRoleGrants": 0,
+      "sqlDisableConfirmed": true,
+      "oldSessionRejected": true,
+      "oldSessionStatus": 401
+    },
+    "offersCreated": 0,
+    "accessGrantsCreated": 0,
+    "newCommercialActivationPerformed": false,
+    "finisher": {
+      "result": "passed",
+      "immutableJournal": true,
+      "durableSnapshots": 146,
+      "finalJournalSha256": "77b0b98d234e8b055dd27a9ebd73d99f350585a7e200a815001787e54b61112c",
+      "resultArtifactSha256": "f23243d243fb28cfbd48101652d8d968a8fd58b8a1ec3dd21822954884d2e00a",
+      "originalIncidentArtifactsRetained": true
+    },
+    "beforeFinisherReconciliation": {
+      "scope": "historical state before final eight selections",
+      "selectedTranslations": 18,
+      "selectionHistoriesObserved": 18,
+      "remainingSelections": 8,
+      "pendingIntent": {
+        "key": "module-m04",
+        "locale": "fr",
+        "decision": "NOT_APPLIED",
+        "historyCount": 0
+      },
+      "interruptedAttemptActor": {
+        "status": "DISABLED",
+        "activeRoleGrants": 0
+      },
+      "readOnlyArtifactSha256": "20ee1cd1624e4ab4002f1ae19df834ce7f660bcfd8e6a7c1973d27ec801700fe"
+    },
+    "historicalLocalJournalInterruptions": [
+      {
+        "stage": "checkpoint-persistence",
+        "errno": null,
+        "errnoAttributed": false,
+        "renameAttributed": false
+      },
+      {
+        "stage": "journal-rename",
+        "errno": "EPERM",
+        "outsideOneDrive": true
+      }
+    ]
+  },
+  "browser": {
+    "result": "passed",
+    "scope": "anonymous real staging FR/EN, home to course to M01 and local practice",
+    "completedAt": "2026-11-22T10:17:24.551Z",
+    "observationArtifactSha256": "ff372f828ffbfba3757f70103bff173677df9a2aa6c024c01de3795a2c4e61f0",
+    "contexts": 4,
+    "locales": [
+      "fr",
+      "en"
+    ],
+    "viewportWidths": [
+      1440,
+      390
+    ],
+    "captures": 20,
+    "originalCapturesReviewed": 20,
+    "visualReviewArtifactSha256": {
+      "fr": "0497a2ece3f4ba7362c2c325086bf716008550373b91fdcb6d53318a65cccc47",
+      "en": "0dc3ee3405b80aafdb29c8cce6be68506675906073a02cca5e3bc7736047d03a"
+    },
+    "actualClipboardCopies": 4,
+    "actualMarkdownDownloads": 4,
+    "downloads": [
+      {
+        "filename": "practice-fr.md",
+        "bytes": 298,
+        "sha256": "b32711e2d6d17b880092d0f88d219dba3f195b59f44c26b3a6f2dc8cf8e59678",
+        "actualBrowserDownload": true,
+        "includesCurrentSyntheticText": true,
+        "instructionOrCorrectionIncluded": false,
+        "textLocale": "fr",
+        "interfaceLocale": "fr",
+        "width": 1440,
+        "downloadFile": "fr-1440-practice-fr.md"
+      },
+      {
+        "filename": "practice-fr.md",
+        "bytes": 297,
+        "sha256": "005a7ac82287eec03655784f013f88df4ac5253572b86a631444055fb55703b6",
+        "actualBrowserDownload": true,
+        "includesCurrentSyntheticText": true,
+        "instructionOrCorrectionIncluded": false,
+        "textLocale": "fr",
+        "interfaceLocale": "fr",
+        "width": 390,
+        "downloadFile": "fr-390-practice-fr.md"
+      },
+      {
+        "filename": "practice-fr.md",
+        "bytes": 297,
+        "sha256": "f206498cbdfba44bb5125b505d88332cbfbded914412bb2d5d3948f050c4827b",
+        "actualBrowserDownload": true,
+        "includesCurrentSyntheticText": true,
+        "instructionOrCorrectionIncluded": false,
+        "textLocale": "fr",
+        "interfaceLocale": "en",
+        "width": 1440,
+        "downloadFile": "en-1440-practice-fr.md"
+      },
+      {
+        "filename": "practice-fr.md",
+        "bytes": 296,
+        "sha256": "6c92b7539dab1bdf0270e16f004733cae13244a884aa82e4cc2c536cb9f302b6",
+        "actualBrowserDownload": true,
+        "includesCurrentSyntheticText": true,
+        "instructionOrCorrectionIncluded": false,
+        "textLocale": "fr",
+        "interfaceLocale": "en",
+        "width": 390,
+        "downloadFile": "en-390-practice-fr.md"
+      }
+    ],
+    "exactCourseAndTrialLinks": true,
+    "sixProgrammeLinksPerContext": true,
+    "emptyInitialPractice": true,
+    "noHorizontalOverflowObserved": true,
+    "pageErrors": 0,
+    "consoleErrors": 0,
+    "unexpectedHttpErrors": 0,
+    "failedRequests": 0,
+    "accountCreated": false,
+    "progressionCreatedByRecipe": false,
+    "browserApiMutations": 0,
+    "browserPersistenceOfSyntheticInput": false,
+    "paymentRequested": false,
+    "priorFailure": {
+      "artifactSha256": "102fcefd1a4572ab4ba9f274c02668d7d1098d14dbeab3567ad8bf9ee1f73242",
+      "code": "P18_VISUAL_ACTUAL_CLIPBOARD_COPY_REQUIRED",
+      "diagnosticArtifactSha256": "27d3681d412635926c8357141e1e26ca2e620efde4bce0ed901d0a31c0094039",
+      "cause": "Windows clipboard CRLF versus LF input; otherwise exact text",
+      "testOnlyCorrection": true,
+      "substantialTextDifferencesStillRejected": true,
+      "productChanged": false,
+      "retained": true
+    },
+    "limits": [
+      "Anonymous acceptance does not verify durable account progression, private work or payments.",
+      "Full-page M01 screenshots were downscaled by the viewing tool; original practice viewport screenshots were also reviewed.",
+      "This visual review is separate from editorial human approval."
+    ]
+  },
+  "finalPublicReadback": {
+    "observedAt": "2026-11-22T10:20:05.270Z",
+    "result": "passed",
+    "frCatalogueStatus": 200,
+    "frCatalogueCards": 7,
+    "enCatalogueStatus": 200,
+    "enCatalogueCards": 7,
+    "springHealthStatus": 200,
+    "springHealth": "UP",
+    "tlsVerificationEnabled": true
+  },
+  "boundaries": {
+    "productionDeploymentPerformed": false,
+    "p22Started": false,
+    "newCommercialActivationPerformed": false,
+    "historicalStripeTestParametersPreserved": true,
+    "editorialHumanReviewClaimed": false,
+    "privateDataIncluded": false,
+    "signedUrlsIncluded": false
+  },
+  "evidence": {
+    "publicSourceReportSha256": "53892ad019fb01f9b4be920f1b07fe70ec20f7ce3519ae499d03d171bc27cd4c",
+    "complementaryUngateArtifactSha256": "9bd130aa50559000e74daa34ec9d6c2e03a9f63ac33c78c0e7b1b5ceab0f3faf",
+    "canonicalManifestSha256": "c2e104d0db69433fe67bfdabd055c58ab495f0d98092c9fa5f045d55106087fc"
+  }
+}

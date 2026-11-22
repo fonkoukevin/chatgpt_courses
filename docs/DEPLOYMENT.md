@@ -14,6 +14,10 @@ Les versions exactes sont vérifiées et proposées en P00 dans `VERSIONS.md`, p
 
 Le22novembre2026, l’utilisateur demande le déploiement des audits AUD-01 à AUD-05 pour ses essais sur la recette existante. Le candidat exige le schéma21, contrairement à la release P21 active historiquement en20. Publication du code/images, CI protégée, sauvegarde actuelle hors hôte et migration précèdent la mise en service. Aucun passage en production/P22, paiement LIVE ou validation éditoriale n’est déduit de cette demande. [Procédure actuelle](runbooks/deploy.md).
 
+L’utilisateur autorise aussi explicitement la mise à disposition P18 FR/EN et l’accès gratuit temporaire à ses six modules sur la recette uniquement. Conserver la source éditoriale, tracer cette adaptation de recette et ses versions, et préserver les conditions de projet/corrigé/progression. Aucun achat, prix ni droit artificiel n’est nécessaire ; les paiements ne sont pas activés par cette opération. [Décision](DECISIONS.md#recette--déploiement-des-audits-demandé-le22novembre).
+
+Livraison réellement observée le même jour : source `07f4fc6`, manifeste `c2e104d0…`, schéma21 et cinq services sains ; P18 publié et sélectionné en FR/EN, six modules gratuits sur la recette. Sauvegarde chiffrée hors hôte, restauration isolée, préservation des autres applications et retrait du gate sont vérifiés. Les quatre parcours navigateur sur1440/390px, copies et exports passent ; vingt captures sont examinées. Les incidents et limites restent dans la [preuve de livraison](evidence/AUD-01-05-staging.md).
+
 | Environnement | Données et services | Objet |
 | --- | --- | --- |
 | Local | Données fictives, PostgreSQL local, Mailpit, S3 compatible local ; Stripe test ou adaptateur contrôlé. | Développer et vérifier sans effet commercial. |

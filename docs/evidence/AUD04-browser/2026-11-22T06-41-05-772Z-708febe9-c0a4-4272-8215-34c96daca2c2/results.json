@@ -1,0 +1,353 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.tools\\node-v24.22.2-win-x64\\node.exe",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts"
+    ],
+    "configFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts",
+    "rootDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": true,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 1200000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/.runtime/browser-2026-11-22T06-41-05-772Z-708febe9-c0a4-4272-8215-34c96daca2c2/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/aud04-course.spec.ts"
+        ],
+        "timeout": 240000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-22T06-41-05-772Z-708febe9-c0a4-4272-8215-34c96daca2c2\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "snapshotDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/aud04-course.spec.ts",
+        "timeout": 240000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3101",
+          "browserName": "chromium",
+          "headless": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "actionTimeout": 10000,
+          "navigationTimeout": 20000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off",
+          "serviceWorkers": "block"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\docs\\evidence\\AUD04-browser\\2026-11-22T06-41-05-772Z-708febe9-c0a4-4272-8215-34c96daca2c2\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "aud04-course.spec.ts",
+      "file": "aud04-course.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "AUD04 course decision and exact commercial destination",
+          "file": "aud04-course.spec.ts",
+          "line": 37,
+          "column": 6,
+          "specs": [
+            {
+              "title": "FR/EN course viewport and full-page baseline and final comparison",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud04-course.spec.ts",
+                        "line": 37,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 11135,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-course-trial]')\nExpected: \u001b[32m\"/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01?resource=8c53ff53-c2af-47e6-bcd0-f3630e21b973&version=6610f384-339c-4022-a2d7-d904a492e1cd&courseVersion=b781902f-d021-4a06-98cc-ba4e73365481\"\u001b[39m\nReceived: \u001b[31m\"/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01?resource=8c53ff53-c2af-47e6-bcd0-f3630e21b973&version=6610f384-339c-4022-a2d7-d904a492e1cd&courseVersion=b781902f-d021-4a06-98cc-ba4e73365481\u001b[7m&returnTo=%2Ffr%2Fcatalogue\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('[data-course-trial]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-course-trial]')\u001b[22m\n\u001b[2m    23 × locator resolved to <a data-course-trial=\"true\" href=\"/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01?resource=8c53ff53-c2af-47e6-bcd0-f3630e21b973&version=6610f384-339c-4022-a2d7-d904a492e1cd&courseVersion=b781902f-d021-4a06-98cc-ba4e73365481&returnTo=%2Ffr%2Fcatalogue\" class=\"rounded-input underline-offset-4 hover:decoration-2 relative inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-button border px-4 py-2 text-sm font-semibold leading-5 transition-colors motion-reduce:t…>…</a>\u001b[22m\n\u001b[2m       - unexpected value \"/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01?resource=8c53ff53-c2af-47e6-bcd0-f3630e21b973&version=6610f384-339c-4022-a2d7-d904a492e1cd&courseVersion=b781902f-d021-4a06-98cc-ba4e73365481&returnTo=%2Ffr%2Fcatalogue\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-course-trial]')\nExpected: \u001b[32m\"/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01?resource=8c53ff53-c2af-47e6-bcd0-f3630e21b973&version=6610f384-339c-4022-a2d7-d904a492e1cd&courseVersion=b781902f-d021-4a06-98cc-ba4e73365481\"\u001b[39m\nReceived: \u001b[31m\"/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01?resource=8c53ff53-c2af-47e6-bcd0-f3630e21b973&version=6610f384-339c-4022-a2d7-d904a492e1cd&courseVersion=b781902f-d021-4a06-98cc-ba4e73365481\u001b[7m&returnTo=%2Ffr%2Fcatalogue\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('[data-course-trial]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-course-trial]')\u001b[22m\n\u001b[2m    23 × locator resolved to <a data-course-trial=\"true\" href=\"/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01?resource=8c53ff53-c2af-47e6-bcd0-f3630e21b973&version=6610f384-339c-4022-a2d7-d904a492e1cd&courseVersion=b781902f-d021-4a06-98cc-ba4e73365481&returnTo=%2Ffr%2Fcatalogue\" class=\"rounded-input underline-offset-4 hover:decoration-2 relative inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-button border px-4 py-2 text-sm font-semibold leading-5 transition-colors motion-reduce:t…>…</a>\u001b[22m\n\u001b[2m       - unexpected value \"/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01?resource=8c53ff53-c2af-47e6-bcd0-f3630e21b973&version=6610f384-339c-4022-a2d7-d904a492e1cd&courseVersion=b781902f-d021-4a06-98cc-ba4e73365481&returnTo=%2Ffr%2Fcatalogue\"\u001b[22m\n\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud04-course.spec.ts:65:80",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud04-course.spec.ts",
+                          "column": 80,
+                          "line": 65
+                        },
+                        "snippet": " \u001b[90m 63 |\u001b[39m         \u001b[36mconst\u001b[39m section \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-course-offers]'\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m expect(section)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m expect(section\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-course-offer]'\u001b[39m))\u001b[33m.\u001b[39mtoHaveCount(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 64 |\u001b[39m         \u001b[36mawait\u001b[39m expect(section)\u001b[33m.\u001b[39mtoContainText(locale \u001b[33m===\u001b[39m \u001b[32m'fr'\u001b[39m \u001b[33m?\u001b[39m \u001b[32m'Aucune offre publiée'\u001b[39m \u001b[33m:\u001b[39m \u001b[32m'No published offer'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 65 |\u001b[39m         \u001b[36mconst\u001b[39m trial \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-course-trial]'\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m expect(trial)\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'href'\u001b[39m\u001b[33m,\u001b[39m courseLessonHref(fixture\u001b[33m,\u001b[39m \u001b[32m'm01'\u001b[39m\u001b[33m,\u001b[39m locale))\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 66 |\u001b[39m         \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-course-member-access]'\u001b[39m)\u001b[33m.\u001b[39mgetByRole(\u001b[32m'link'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m getMemberAccessDictionary(locale)\u001b[33m.\u001b[39msignIn\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m 67 |\u001b[39m         expect((\u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mrequest\u001b[33m.\u001b[39mget(\u001b[32m'/api/v1/auth/me'\u001b[39m))\u001b[33m.\u001b[39mstatus())\u001b[33m.\u001b[39mtoBe(\u001b[35m401\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 68 |\u001b[39m         \u001b[36mconst\u001b[39m protectedLesson \u001b[33m=\u001b[39m courseRecord(fixture\u001b[33m,\u001b[39m \u001b[32m'activity-m02'\u001b[39m\u001b[33m,\u001b[39m locale)\u001b[33m.\u001b[39mvalue\u001b[33m;\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud04-course.spec.ts",
+                            "column": 80,
+                            "line": 65
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-course-trial]')\nExpected: \u001b[32m\"/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01?resource=8c53ff53-c2af-47e6-bcd0-f3630e21b973&version=6610f384-339c-4022-a2d7-d904a492e1cd&courseVersion=b781902f-d021-4a06-98cc-ba4e73365481\"\u001b[39m\nReceived: \u001b[31m\"/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01?resource=8c53ff53-c2af-47e6-bcd0-f3630e21b973&version=6610f384-339c-4022-a2d7-d904a492e1cd&courseVersion=b781902f-d021-4a06-98cc-ba4e73365481\u001b[7m&returnTo=%2Ffr%2Fcatalogue\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" locator('[data-course-trial]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-course-trial]')\u001b[22m\n\u001b[2m    23 × locator resolved to <a data-course-trial=\"true\" href=\"/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01?resource=8c53ff53-c2af-47e6-bcd0-f3630e21b973&version=6610f384-339c-4022-a2d7-d904a492e1cd&courseVersion=b781902f-d021-4a06-98cc-ba4e73365481&returnTo=%2Ffr%2Fcatalogue\" class=\"rounded-input underline-offset-4 hover:decoration-2 relative inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-button border px-4 py-2 text-sm font-semibold leading-5 transition-colors motion-reduce:t…>…</a>\u001b[22m\n\u001b[2m       - unexpected value \"/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01?resource=8c53ff53-c2af-47e6-bcd0-f3630e21b973&version=6610f384-339c-4022-a2d7-d904a492e1cd&courseVersion=b781902f-d021-4a06-98cc-ba4e73365481&returnTo=%2Ffr%2Fcatalogue\"\u001b[22m\n\n\n  63 |         const section = page.locator('[data-course-offers]'); await expect(section).toBeVisible(); await expect(section.locator('[data-course-offer]')).toHaveCount(0);\n  64 |         await expect(section).toContainText(locale === 'fr' ? 'Aucune offre publiée' : 'No published offer');\n> 65 |         const trial = page.locator('[data-course-trial]'); await expect(trial).toHaveAttribute('href', courseLessonHref(fixture, 'm01', locale));\n     |                                                                                ^\n  66 |         await expect(page.locator('[data-course-member-access]').getByRole('link', { name: getMemberAccessDictionary(locale).signIn, exact: true })).toBeVisible();\n  67 |         expect((await page.request.get('/api/v1/auth/me')).status()).toBe(401);\n  68 |         const protectedLesson = courseRecord(fixture, 'activity-m02', locale).value;\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud04-course.spec.ts:65:80"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-22T06:42:10.608Z",
+                      "annotations": [
+                        {
+                          "type": "serial",
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud04-course.spec.ts",
+                            "line": 37,
+                            "column": 6
+                          }
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-22T06-41-05-772Z-708febe9-c0a4-4272-8215-34c96daca2c2\\results\\aud04-course-AUD04-course--d8009-seline-and-final-comparison\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-22T06-41-05-772Z-708febe9-c0a4-4272-8215-34c96daca2c2\\results\\aud04-course-AUD04-course--d8009-seline-and-final-comparison\\error-context.md"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-22T06-41-05-772Z-708febe9-c0a4-4272-8215-34c96daca2c2\\results\\aud04-course-AUD04-course--d8009-seline-and-final-comparison\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud04-course.spec.ts",
+                        "column": 80,
+                        "line": 65
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "9ad8d1444b5588687736-6d6a8cd9698551510a3c",
+              "file": "aud04-course.spec.ts",
+              "line": 54,
+              "column": 3
+            },
+            {
+              "title": "one exact offer leads to explicit FR/EN consent and a local pending order without rights",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud04-course.spec.ts",
+                        "line": 37,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-22T06:43:40.946Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "9ad8d1444b5588687736-f67676334c6438db531c",
+              "file": "aud04-course.spec.ts",
+              "line": 80,
+              "column": 5
+            },
+            {
+              "title": "several exact choices retain filtering and pagination while inactive and changed offers remain honest",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud04-course.spec.ts",
+                        "line": 37,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-22T06:43:40.947Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "9ad8d1444b5588687736-ee9769498b3cfc0feb80",
+              "file": "aud04-course.spec.ts",
+              "line": 128,
+              "column": 5
+            },
+            {
+              "title": "a free first lesson never proves course access; a real temporary test origin resumes then expires",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud04-course.spec.ts",
+                        "line": 37,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-22T06:43:40.948Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "9ad8d1444b5588687736-42b60331263dc0bd098e",
+              "file": "aud04-course.spec.ts",
+              "line": 173,
+              "column": 5
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-22T06:42:08.473Z",
+    "duration": 92535.237,
+    "expected": 0,
+    "skipped": 3,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

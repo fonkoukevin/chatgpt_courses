@@ -7,6 +7,7 @@ import type { ApiError } from "@/lib/api/client";
 import { checkQuiz, listQuizAttempts, submitQuiz } from "@/lib/api/learning-client";
 import type { QuizAttemptPage, QuizAttemptView, QuizCheckResult, QuizOverview, ResourceDetail, SubmitQuiz } from "@/lib/api/generated/types.gen";
 import type { Locale } from "@/lib/i18n/locales";
+import { getActivityQuizDictionary } from "@/lib/i18n/activity-quiz";
 import { getLearningDictionary } from "@/lib/i18n/learning";
 import type { LearningAccountBoundary, LearningAccountState } from "@/lib/learning/account";
 import { ambiguousLearningError, remainingQuizAttempts } from "@/lib/learning/state";
@@ -14,11 +15,14 @@ import { LearningError, learningDate } from "./parts";
 import { useUnsavedLearningInput } from "./unsaved";
 
 export function QuizResult({ locale, value }: { locale: Locale; value: QuizAttemptView | QuizCheckResult }) {
-  const t = getLearningDictionary(locale), durable = "id" in value;
+  const t = getLearningDictionary(locale), copy = getActivityQuizDictionary(locale), durable = "id" in value;
   return <section className="space-y-5 rounded-panel border border-border bg-surface-subtle p-4 sm:p-6" data-learning-quiz-result={durable ? "attempt" : "formative"} lang={locale}>
-    <h3 className="text-xl font-semibold">{durable ? t.result : t.formativeResult}</h3><Badge tone={value.passed ? "success" : "warning"}>{value.passed ? t.quizPassed : t.quizNotPassed}</Badge>
-    {!durable && <p className="text-sm leading-relaxed">{t.formativeHelp}</p>}<dl className="space-y-2 text-sm"><div><dt className="font-medium">{t.score}</dt><dd>{value.scorePoints} / {value.maxPoints}</dd></div><div><dt className="font-medium">{t.passThreshold}</dt><dd>{value.policy.passPercent}%</dd></div><div><dt className="font-medium">{t.attemptLanguage}</dt><dd>{value.locale.toUpperCase()}</dd></div>{durable && <div><dt className="font-medium">{t.attemptedAt}</dt><dd>{learningDate(value.submittedAt, locale)}</dd></div>}</dl>
-    <ol className="space-y-5">{value.results.map((question) => <li key={question.key} className="space-y-3 border-t border-border pt-4"><h4 className="break-words font-semibold" lang={value.locale}>{question.prompt}</h4><p className="break-words text-sm"><span className="font-medium">{t.yourAnswer} : </span><span lang={value.locale}>{question.options[question.selectedOption]}</span></p><p className="break-words text-sm"><span className="font-medium">{t.correctAnswer} : </span><span lang={value.locale}>{question.options[question.correctOption]}</span></p><p className="whitespace-pre-wrap break-words text-sm leading-relaxed"><span className="font-medium">{t.explanation} : </span><span lang={value.locale}>{question.explanation}</span></p><p className="text-sm tabular-nums">{question.awardedPoints} / {question.points}</p></li>)}</ol>
+    <h3 className="text-xl font-semibold">{copy.feedback}</h3>
+    <ol className="space-y-5" data-quiz-answers>{value.results.map((question) => <li key={question.key} className="space-y-3 border-t border-border pt-4"><h4 className="break-words font-semibold" lang={value.locale}>{question.prompt}</h4><p className="break-words text-sm"><span className="font-medium">{t.yourAnswer} : </span><span lang={value.locale}>{question.options[question.selectedOption]}</span></p><p className="break-words text-sm"><span className="font-medium">{t.correctAnswer} : </span><span lang={value.locale}>{question.options[question.correctOption]}</span></p><p className="whitespace-pre-wrap break-words text-sm leading-relaxed"><span className="font-medium">{t.explanation} : </span><span lang={value.locale}>{question.explanation}</span></p><p className="text-sm tabular-nums">{question.awardedPoints} / {question.points}</p></li>)}</ol>
+    <div className="space-y-4 border-t border-border pt-4" data-quiz-summary><h4 className="font-semibold">{copy.summary}</h4><Badge tone={value.passed ? "success" : "warning"}>{value.passed ? t.quizPassed : t.quizNotPassed}</Badge>
+      <dl className="grid gap-3 text-sm sm:grid-cols-2"><div><dt className="font-medium">{t.score}</dt><dd>{value.scorePoints} / {value.maxPoints}</dd></div><div><dt className="font-medium">{t.passThreshold}</dt><dd>{value.policy.passPercent}%</dd></div><div><dt className="font-medium">{t.attemptLanguage}</dt><dd>{value.locale.toUpperCase()}</dd></div>{durable && <div><dt className="font-medium">{t.attemptedAt}</dt><dd>{learningDate(value.submittedAt, locale)}</dd></div>}</dl>
+    </div>
+    <div className="space-y-2 border-t border-border pt-4" data-quiz-conservation={durable ? "saved" : "page"}><h4 className="font-semibold">{durable ? t.result : t.formativeResult}</h4>{durable ? <p className="text-sm leading-relaxed">{copy.saved}</p> : <><p className="text-sm leading-relaxed">{t.formativeHelp}</p><p className="text-sm leading-relaxed">{copy.pageOnly}</p></>}</div>
     <p className="text-sm leading-relaxed text-muted-foreground">{t.distinctEvidence}</p>
   </section>;
 }
@@ -39,7 +43,7 @@ export function ActivityQuiz({ locale, resource, enrollmentId, overview, account
   locale: Locale; resource: ResourceDetail; enrollmentId?: string; overview?: QuizOverview | null;
   account: LearningAccountState; boundary: LearningAccountBoundary; available: boolean; contentVisible?: boolean; onAttempt?: () => void;
 }) {
-  const t = getLearningDictionary(locale), id = useId(), form = useRef<HTMLFormElement>(null), feedback = useRef<HTMLDivElement>(null), manualCopy = useRef<HTMLTextAreaElement>(null);
+  const t = getLearningDictionary(locale), copyText = getActivityQuizDictionary(locale), id = useId(), form = useRef<HTMLFormElement>(null), feedback = useRef<HTMLDivElement>(null), manualCopy = useRef<HTMLTextAreaElement>(null);
   const [answers, setAnswers] = useState<Record<string, number>>({}), [result, setResult] = useState<QuizAttemptView | QuizCheckResult | null>(null), [submittedAnswers, setSubmittedAnswers] = useState("");
   const [error, setError] = useState<ApiError | null>(null), [busy, setBusy] = useState(false), [invalid, setInvalid] = useState(false), [uncertain, setUncertain] = useState(false), [unconfirmed, setUnconfirmed] = useState(false), [copy, setCopy] = useState<"copied" | "error" | null>(null);
   const lock = useRef(false), pendingSubmission = useRef<SubmitQuiz | null>(null), copySequence = useRef(0);
@@ -75,7 +79,7 @@ export function ActivityQuiz({ locale, resource, enrollmentId, overview, account
       {durable && remaining === 0 && !uncertain ? <StatusMessage>{t.noMoreAttempts}</StatusMessage> : <Button type="submit" busy={busy} loadingLabel={durable ? t.submittingQuiz : t.checkingQuiz} disabled={blocked || result !== null && !changedAfterResult && !uncertain}>{uncertain ? t.retry : durable ? t.submitQuiz : t.checkQuiz}</Button>}
     </form>
     <div ref={feedback} tabIndex={-1} className="space-y-4 rounded-input outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus">{error && <LearningError locale={locale} error={error} />}{error?.status === 412 && <><StatusMessage tone="warning">{t.quizVersionChanged}</StatusMessage><ConfirmationDialog title={t.reloadActivity} description={t.reloadActivityDescription} confirmLabel={t.confirm} cancelLabel={t.cancel} trigger={<Button variant="secondary" className="max-w-full whitespace-normal">{t.reloadActivity}</Button>} onConfirm={() => window.location.reload()} /></>}{changedAfterResult && <StatusMessage tone="warning">{t.answersChanged}</StatusMessage>}{result && <QuizResult locale={locale} value={result} />}</div>
-    <div className="flex flex-wrap items-center gap-3">{result && (!durable || remaining !== 0) && <Button variant="secondary" disabled={blocked || busy} onClick={() => { setResult(null); setSubmittedAnswers(""); setError(null); }}>{t.tryAgain}</Button>}
+    <div className="flex flex-wrap items-center gap-3">{result && (!durable || remaining !== 0) && <Button variant="secondary" disabled={blocked || busy} onClick={() => { setResult(null); setSubmittedAnswers(""); setError(null); }}>{durable ? t.tryAgain : copyText.checkAgain}</Button>}
     <Button variant="secondary" onClick={() => void copyAnswers()}>{t.copyAnswers}</Button></div>{copy && <StatusMessage tone={copy === "copied" ? "success" : "danger"}>{copy === "copied" ? t.copied : t.copyFailed}</StatusMessage>}{copy === "error" && <div className="space-y-3"><FormField id={`${id}-copy`} label={t.localVersion}><TextArea ref={manualCopy} readOnly rows={6} value={answerText} /></FormField><Button variant="secondary" onClick={() => { manualCopy.current?.focus(); manualCopy.current?.select(); }}>{t.selectText}</Button></div>}
   </section>;
 }

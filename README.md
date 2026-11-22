@@ -316,6 +316,8 @@ Le CMS charge explicitement les préparations BR01/BR02 FR/EN depuis une route a
 
 Un anonyme peut conserver volontairement un brouillon **non sensible**, deux heures en session navigateur, puis l’importer explicitement dans le compte affiché. Les productions authentifiées sont privées, en mémoire/serveur, sans stockage navigateur persistant de leur contenu. Un changement de compte bloque la reprise implicite. Retrait d’une source n’efface pas productions et preuves personnelles ; fichiers sécurisés P10 et revue humaine restent désactivés.
 
+AUD-05 organise les activités en quatre moments : comprendre, produire, vérifier, réutiliser. Une consigne sans politique de projet (M01) permet un essai local vide, copiable et exportable sans compte ; aucun stockage ou import n’y est promis. Les projets configurés gardent leur consentement de deux heures et leur import explicite. Après les builds, `node scripts/verify-browser.mjs AUD05` ou `scripts/courses.cmd run verify:workshop` exécute la recette sur PostgreSQL/S3 éphémères, commerce et paiements désactivés. [Résultats et limites AUD-05](docs/evidence/AUD-05.md).
+
 Commandes disponibles :
 
 ```powershell

@@ -84,6 +84,11 @@ test.describe('P09 projets personnels et déclarations réelles', () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(projectSourceHref(source, locale)); await page.getByRole('button', { name: t.start, exact: true }).click();
     const preparation = page.locator('[data-project-preparation]'); await expect(preparation.getByRole('textbox', { name: t.objective, exact: true })).toBeEnabled();
+    const briefTrigger = preparation.getByRole('button', { name: t.openBrief, exact: true }); await briefTrigger.click();
+    const preparationBrief = page.getByRole('dialog', { name: t.brief, exact: true });
+    await expect(preparationBrief.getByRole('heading', { name: source.value.title, exact: true })).toBeVisible();
+    await expect(preparationBrief).toContainText(source.value.document!.exercise!.instructions);
+    await page.keyboard.press('Escape'); await expect(briefTrigger).toBeFocused();
     const marker = `P09 anonymous deliberate ${locale} ${randomUUID()}`;
     await preparation.getByRole('textbox', { name: t.title, exact: true }).fill(marker);
     await preparation.getByRole('textbox', { name: t.objective, exact: true }).fill('Ma rédaction préparée avant connexion.');
@@ -266,9 +271,14 @@ test.describe('P09 projets personnels et déclarations réelles', () => {
     const original = await createContent(editor, editorialContent('fr'));
     const cmsContext = await browser.newContext({ baseURL: process.env.COURSES_BROWSER_ORIGIN, storageState: await editor.storageState() });
     try {
-      const page = await cmsContext.newPage(); await page.goto(`/fr/admin/content/${original.value.id}/edit`);
+      const page = await cmsContext.newPage();
+      // The SSR select is visible before its React change handler is attached.
+      // This account read starts from the mounted editor's client effect.
+      const mountedAccount = page.waitForResponse((value) => value.request().method() === 'GET' && new URL(value.url()).pathname === '/api/v1/auth/me');
+      await page.goto(`/fr/admin/content/${original.value.id}/edit`); expect((await mountedAccount).status()).toBe(200);
       const policy = page.getByRole('heading', { name: t.title, exact: true }).locator('..');
-      await policy.getByRole('combobox', { name: t.reference, exact: true }).selectOption('BR02');
+      const reference = policy.getByRole('combobox', { name: t.reference, exact: true });
+      await reference.selectOption('BR02'); await expect(reference).toHaveValue('BR02');
       const loaded = page.waitForResponse((value) => value.request().method() === 'GET' && value.url().includes('/admin/project-presets/BR02?locale=fr'));
       await policy.getByRole('button', { name: t.load, exact: true }).click(); expect((await loaded).status()).toBe(200);
       await expect(page.getByRole('textbox', { name: cms.criterion, exact: true })).toHaveCount(1);

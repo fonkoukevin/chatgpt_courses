@@ -2,6 +2,8 @@ import type { MethodFields, ProjectFields } from "../api/generated/types.gen";
 import { getMethodsDictionary } from "../i18n/methods";
 import { getProjectsDictionary } from "../i18n/projects";
 import { projectSectionKeys } from "../projects/fields";
+import { getPracticeDraftDictionary } from "../i18n/practice-draft";
+import type { Locale } from "../i18n/locales";
 
 // Personal text remains literal in previews, including HTML or Markdown fences.
 function literal(value: string): string {
@@ -20,7 +22,11 @@ export function methodMarkdown(value: MethodFields): string {
   const t = getMethodsDictionary(value.locale);
   return document([[t.title, value.title], [t.textLocale, value.locale], [t.output, value.text], ...Object.entries(t.fields).map(([key, label]): [string, string] => [label, value.parameters[key as keyof typeof value.parameters]]), [t.notes, value.notes], [t.category, value.category ?? ""]]);
 }
-export function downloadMarkdown(kind: "project" | "method", locale: "fr" | "en", text: string): void {
+export function practiceMarkdown(value: { title: string; versionNumber: number; locale: Locale; text: string }): string {
+  const t = getPracticeDraftDictionary(value.locale);
+  return document([[t.activity, value.title], [t.version, String(value.versionNumber)], [t.language, value.locale], [t.response, value.text]]);
+}
+export function downloadMarkdown(kind: "project" | "method" | "practice", locale: "fr" | "en", text: string): void {
   const url = URL.createObjectURL(new Blob([text], { type: "text/markdown;charset=utf-8" }));
   const anchor = window.document.createElement("a");
   anchor.href = url; anchor.download = `${kind}-${locale}.md`; anchor.hidden = true;

@@ -106,6 +106,8 @@ Tableau de bord : « Reprendre » et dernier travail avant les indicateurs secon
 
 Leçon : programme latéral, objectif, explication textuelle/vidéo, pratique, vérification, ressources et prochaine étape. La transcription est facilement accessible. Le rendu du prompt et les zones de texte restent lisibles à largeur réduite.
 
+AUD-05 rend visibles les quatre moments comprendre/produire/vérifier/réutiliser par des ancres, sans onglets qui démontent la rédaction. Consigne et pièces restent près des champs ; la préparation précède la grille thématique. Les aides de champs guident la rédaction sans insérer un corrigé. Le résultat de quiz donne d’abord la réponse et son explication, puis le score et la conservation réelle. Les états locaux, temporaires consentis et enregistrés portent des messages différents ; les métadonnées de source quittent le début de la leçon pour un détail secondaire.
+
 Atelier : distinguer Brief, Rédiger, Vérifier et Corrigé. Le statut de sauvegarde reste visible. Lors d’un conflit, comparer/choisir de manière explicite sans écraser le travail. Ne pas masquer le brouillon derrière une pleine page d’erreur.
 
 Méthodes : recherche, catégories, cartes ou liste orientées besoin, édition lisible, source/version et copie personnelle clairement différenciées. Une mise à jour du modèle n’efface pas le texte adapté.

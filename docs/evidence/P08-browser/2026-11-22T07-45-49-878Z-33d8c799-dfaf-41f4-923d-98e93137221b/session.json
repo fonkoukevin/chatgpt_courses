@@ -1,0 +1,188 @@
+{
+  "runId": "2026-11-22T07-45-49-878Z-33d8c799-dfaf-41f4-923d-98e93137221b",
+  "completedAt": "2026-11-22T07:49:12.660Z",
+  "selection": {
+    "grep": null,
+    "repeatEach": 1
+  },
+  "result": "failed",
+  "cleanupConfirmed": true,
+  "stage": "BROWSER",
+  "playwrightStarted": true,
+  "cleanup": {
+    "format": "browser-cleanup-summary-v1",
+    "steps": [
+      {
+        "stage": "EXTERNAL_SESSIONS",
+        "result": "not-required",
+        "errorCode": "NONE",
+        "processBefore": null,
+        "processAfter": null
+      },
+      {
+        "stage": "PROCESS_API",
+        "result": "passed",
+        "errorCode": "NONE",
+        "processBefore": {
+          "leaderPresent": false,
+          "groupPresent": null,
+          "childExitObserved": true,
+          "exitCode": 1,
+          "signal": null,
+          "terminationConfirmed": true
+        },
+        "processAfter": {
+          "leaderPresent": false,
+          "groupPresent": null,
+          "childExitObserved": true,
+          "exitCode": 1,
+          "signal": null,
+          "terminationConfirmed": true
+        }
+      },
+      {
+        "stage": "PROCESS_PLAYWRIGHT",
+        "result": "passed",
+        "errorCode": "NONE",
+        "processBefore": {
+          "leaderPresent": false,
+          "groupPresent": null,
+          "childExitObserved": true,
+          "exitCode": 1,
+          "signal": null,
+          "terminationConfirmed": false
+        },
+        "processAfter": {
+          "leaderPresent": false,
+          "groupPresent": null,
+          "childExitObserved": true,
+          "exitCode": 1,
+          "signal": null,
+          "terminationConfirmed": true
+        }
+      },
+      {
+        "stage": "CONTROL_SERVER",
+        "result": "passed",
+        "errorCode": "NONE",
+        "processBefore": null,
+        "processAfter": null
+      },
+      {
+        "stage": "PROCESS_API",
+        "result": "passed",
+        "errorCode": "NONE",
+        "processBefore": {
+          "leaderPresent": true,
+          "groupPresent": null,
+          "childExitObserved": false,
+          "exitCode": null,
+          "signal": null,
+          "terminationConfirmed": false
+        },
+        "processAfter": {
+          "leaderPresent": false,
+          "groupPresent": null,
+          "childExitObserved": true,
+          "exitCode": 1,
+          "signal": null,
+          "terminationConfirmed": true
+        }
+      },
+      {
+        "stage": "PROCESS_WEB",
+        "result": "passed",
+        "errorCode": "NONE",
+        "processBefore": {
+          "leaderPresent": true,
+          "groupPresent": null,
+          "childExitObserved": false,
+          "exitCode": null,
+          "signal": null,
+          "terminationConfirmed": false
+        },
+        "processAfter": {
+          "leaderPresent": false,
+          "groupPresent": null,
+          "childExitObserved": true,
+          "exitCode": 1,
+          "signal": null,
+          "terminationConfirmed": true
+        }
+      },
+      {
+        "stage": "CONTROL_ENDPOINT",
+        "result": "passed",
+        "errorCode": "NONE",
+        "processBefore": null,
+        "processAfter": null
+      },
+      {
+        "stage": "DATABASE_DIAGNOSTIC_WRITE",
+        "result": "passed",
+        "errorCode": "NONE",
+        "processBefore": null,
+        "processAfter": null
+      },
+      {
+        "stage": "DATABASE_STOP",
+        "result": "passed",
+        "errorCode": "NONE",
+        "processBefore": null,
+        "processAfter": null
+      },
+      {
+        "stage": "PROVIDER_STOP",
+        "result": "not-required",
+        "errorCode": "NONE",
+        "processBefore": null,
+        "processAfter": null
+      }
+    ]
+  },
+  "failureCode": "HARNESS_FAILURE",
+  "initialRuntimeFlags": {
+    "stripeEnabled": false,
+    "paymentWorkerEnabled": false,
+    "refundWorkerEnabled": false,
+    "notificationWorkerEnabled": false
+  },
+  "finalRuntimeFlags": {
+    "stripeEnabled": false,
+    "paymentWorkerEnabled": false,
+    "refundWorkerEnabled": false,
+    "notificationWorkerEnabled": false
+  },
+  "databaseDiagnostic": {
+    "available": true,
+    "file": "database-diagnostic.json"
+  },
+  "isolatedPostgres": {
+    "image": "postgres:18.6@sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42",
+    "tmpfs": true,
+    "stopped": true
+  },
+  "isolatedServices": [],
+  "processes": [
+    {
+      "name": "web",
+      "pid": 38220,
+      "terminated": true
+    },
+    {
+      "name": "api",
+      "pid": 10408,
+      "terminated": true
+    },
+    {
+      "name": "playwright",
+      "pid": 39112,
+      "terminated": true
+    },
+    {
+      "name": "api",
+      "pid": 26920,
+      "terminated": true
+    }
+  ]
+}

@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 1,
+  "stage": "after",
+  "browser": "chromium",
+  "browserVersion": "158.0.8127.18",
+  "headless": true,
+  "beforeIsCaptureBaselineOnly": false,
+  "fixture": "Authored P18 course, technically published/selected only in owned PostgreSQL/S3 tmpfs.",
+  "humanEditorialApproval": false,
+  "sharedContentChanged": false,
+  "paymentOrProviderRequests": false,
+  "deployed": false,
+  "outcomes": [
+    {
+      "name": "M01 free activity FR/EN desktop/mobile baseline and final comparison",
+      "status": "passed",
+      "expectedStatus": "passed"
+    },
+    {
+      "name": "anonymous practice stays local, copies and exports real text and warns before language loss",
+      "status": "passed",
+      "expectedStatus": "passed"
+    },
+    {
+      "name": "formative quiz validates focus and explains answers before summary without saved attempts",
+      "status": "passed",
+      "expectedStatus": "passed"
+    },
+    {
+      "name": "configured FREE technical P09 workshop retains only consented two-hour draft and imports explicitly",
+      "status": "failed",
+      "expectedStatus": "passed"
+    }
+  ],
+  "observations": [
+    {
+      "check": "capture-layout",
+      "name": "m01-fr-1440",
+      "noOverflow": true,
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-fr-1440-full",
+      "noOverflow": true,
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-fr-390",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-fr-390-full",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "baseline-m01-project-policy",
+      "locale": "fr",
+      "projectPolicyPresent": false,
+      "preparationButtonPresent": false
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-en-1440",
+      "noOverflow": true,
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-en-1440-full",
+      "noOverflow": true,
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-en-390",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-en-390-full",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "baseline-m01-project-policy",
+      "locale": "en",
+      "projectPolicyPresent": false,
+      "preparationButtonPresent": false
+    },
+    {
+      "check": "capture-layout",
+      "name": "practice-fr-390-written",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "anonymous-local-practice",
+      "locale": "fr",
+      "initialTextEmpty": true,
+      "originalWritingLanguageKeptOnRefusedNavigation": "fr",
+      "realClipboardCopy": true,
+      "realMarkdownExport": true,
+      "noBrowserPersistence": true,
+      "refusalKeepsText": true,
+      "acceptedNavigationHasClearLossWarning": true,
+      "accountNotRequired": true
+    },
+    {
+      "check": "capture-layout",
+      "name": "practice-en-390-written",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "anonymous-local-practice",
+      "locale": "en",
+      "initialTextEmpty": true,
+      "originalWritingLanguageKeptOnRefusedNavigation": "fr",
+      "realClipboardCopy": true,
+      "realMarkdownExport": true,
+      "noBrowserPersistence": true,
+      "refusalKeepsText": true,
+      "acceptedNavigationHasClearLossWarning": true,
+      "accountNotRequired": true
+    },
+    {
+      "check": "capture-layout",
+      "name": "formative-fr-390-answers-explained",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "formative-quiz",
+      "locale": "fr",
+      "requiredAnswerFocus": true,
+      "explanationsBeforeScoreSummary": true,
+      "noAttemptId": true,
+      "noRecoveryPromisedAfterLogin": true
+    },
+    {
+      "check": "capture-layout",
+      "name": "formative-en-390-answers-explained",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "formative-quiz",
+      "locale": "en",
+      "requiredAnswerFocus": true,
+      "explanationsBeforeScoreSummary": true,
+      "noAttemptId": true,
+      "noRecoveryPromisedAfterLogin": true
+    }
+  ],
+  "exports": [
+    {
+      "kind": "practice",
+      "interfaceLocale": "fr",
+      "textLocale": "fr",
+      "filename": "practice-fr.md",
+      "bytes": 250,
+      "sha256": "0603d384dc562f85c1dfc039c03bbd6c290a8ab2f82c1faa33f476afc100cc32",
+      "actualBrowserDownload": true,
+      "includesCurrentText": true
+    },
+    {
+      "kind": "practice",
+      "interfaceLocale": "en",
+      "textLocale": "fr",
+      "filename": "practice-fr.md",
+      "bytes": 249,
+      "sha256": "3619a42867200139ac0bd08f4ca5fe020e928e166305fb1973a510e90a09b2e5",
+      "actualBrowserDownload": true,
+      "includesCurrentText": true
+    }
+  ],
+  "captures": [
+    "after-m01-fr-1440.png",
+    "after-m01-fr-1440-full.png",
+    "after-m01-fr-390.png",
+    "after-m01-fr-390-full.png",
+    "after-m01-en-1440.png",
+    "after-m01-en-1440-full.png",
+    "after-m01-en-390.png",
+    "after-m01-en-390-full.png",
+    "after-practice-fr-390-written.png",
+    "after-practice-en-390-written.png",
+    "after-formative-fr-390-answers-explained.png",
+    "after-formative-en-390-answers-explained.png"
+  ]
+}

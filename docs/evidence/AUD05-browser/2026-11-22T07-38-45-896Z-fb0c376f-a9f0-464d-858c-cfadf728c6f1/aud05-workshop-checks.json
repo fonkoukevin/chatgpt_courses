@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "stage": "before",
+  "browser": "chromium",
+  "browserVersion": "158.0.8127.18",
+  "headless": true,
+  "beforeIsCaptureBaselineOnly": true,
+  "fixture": "Authored P18 course, technically published/selected only in owned PostgreSQL/S3 tmpfs.",
+  "humanEditorialApproval": false,
+  "sharedContentChanged": false,
+  "paymentOrProviderRequests": false,
+  "deployed": false,
+  "outcomes": [
+    {
+      "name": "M01 free activity FR/EN desktop/mobile baseline and final comparison",
+      "status": "passed",
+      "expectedStatus": "passed"
+    }
+  ],
+  "observations": [
+    {
+      "check": "capture-layout",
+      "name": "m01-fr-1440",
+      "noOverflow": true,
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-fr-1440-full",
+      "noOverflow": true,
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-fr-390",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-fr-390-full",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "baseline-m01-project-policy",
+      "locale": "fr",
+      "projectPolicyPresent": false,
+      "preparationButtonPresent": false
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-fr-390-quiz-result",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-en-1440",
+      "noOverflow": true,
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-en-1440-full",
+      "noOverflow": true,
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-en-390",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-en-390-full",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "baseline-m01-project-policy",
+      "locale": "en",
+      "projectPolicyPresent": false,
+      "preparationButtonPresent": false
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-en-390-quiz-result",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    }
+  ],
+  "captures": [
+    "before-m01-fr-1440.png",
+    "before-m01-fr-1440-full.png",
+    "before-m01-fr-390.png",
+    "before-m01-fr-390-full.png",
+    "before-m01-fr-390-quiz-result.png",
+    "before-m01-en-1440.png",
+    "before-m01-en-1440-full.png",
+    "before-m01-en-390.png",
+    "before-m01-en-390-full.png",
+    "before-m01-en-390-quiz-result.png"
+  ]
+}

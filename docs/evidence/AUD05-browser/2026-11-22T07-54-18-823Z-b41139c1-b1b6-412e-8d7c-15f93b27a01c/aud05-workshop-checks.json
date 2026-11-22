@@ -1,0 +1,324 @@
+{
+  "schemaVersion": 1,
+  "stage": "after",
+  "browser": "chromium",
+  "browserVersion": "158.0.8127.18",
+  "headless": true,
+  "beforeIsCaptureBaselineOnly": false,
+  "fixture": "Authored P18 course, technically published/selected only in owned PostgreSQL/S3 tmpfs.",
+  "humanEditorialApproval": false,
+  "sharedContentChanged": false,
+  "paymentOrProviderRequests": false,
+  "deployed": false,
+  "outcomes": [
+    {
+      "name": "M01 free activity FR/EN desktop/mobile baseline and final comparison",
+      "status": "passed",
+      "expectedStatus": "passed"
+    },
+    {
+      "name": "anonymous practice stays local, copies and exports real text and warns before language loss",
+      "status": "passed",
+      "expectedStatus": "passed"
+    },
+    {
+      "name": "formative quiz validates focus and explains answers before summary without saved attempts",
+      "status": "passed",
+      "expectedStatus": "passed"
+    },
+    {
+      "name": "configured FREE technical P09 workshop retains only consented two-hour draft and imports explicitly",
+      "status": "passed",
+      "expectedStatus": "passed"
+    },
+    {
+      "name": "authenticated quiz and declared reading remain separate from completion and project evidence",
+      "status": "passed",
+      "expectedStatus": "passed"
+    },
+    {
+      "name": "protected configured M04 project keeps source, declared assessment and revealed solution distinct",
+      "status": "passed",
+      "expectedStatus": "passed"
+    }
+  ],
+  "observations": [
+    {
+      "check": "capture-layout",
+      "name": "m01-fr-1440",
+      "noOverflow": true,
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-fr-1440-full",
+      "noOverflow": true,
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-fr-390",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-fr-390-full",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "baseline-m01-project-policy",
+      "locale": "fr",
+      "projectPolicyPresent": false,
+      "preparationButtonPresent": false
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-en-1440",
+      "noOverflow": true,
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-en-1440-full",
+      "noOverflow": true,
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-en-390",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "capture-layout",
+      "name": "m01-en-390-full",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "baseline-m01-project-policy",
+      "locale": "en",
+      "projectPolicyPresent": false,
+      "preparationButtonPresent": false
+    },
+    {
+      "check": "capture-layout",
+      "name": "practice-fr-390-written",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "anonymous-local-practice",
+      "locale": "fr",
+      "initialTextEmpty": true,
+      "originalWritingLanguageKeptOnRefusedNavigation": "fr",
+      "realClipboardCopy": true,
+      "realMarkdownExport": true,
+      "noBrowserPersistence": true,
+      "refusalKeepsText": true,
+      "acceptedNavigationHasClearLossWarning": true,
+      "accountNotRequired": true
+    },
+    {
+      "check": "capture-layout",
+      "name": "practice-en-390-written",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "anonymous-local-practice",
+      "locale": "en",
+      "initialTextEmpty": true,
+      "originalWritingLanguageKeptOnRefusedNavigation": "fr",
+      "realClipboardCopy": true,
+      "realMarkdownExport": true,
+      "noBrowserPersistence": true,
+      "refusalKeepsText": true,
+      "acceptedNavigationHasClearLossWarning": true,
+      "accountNotRequired": true
+    },
+    {
+      "check": "capture-layout",
+      "name": "formative-fr-390-answers-explained",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "formative-quiz",
+      "locale": "fr",
+      "requiredAnswerFocus": true,
+      "explanationsBeforeScoreSummary": true,
+      "noAttemptId": true,
+      "noRecoveryPromisedAfterLogin": true
+    },
+    {
+      "check": "capture-layout",
+      "name": "formative-en-390-answers-explained",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "formative-quiz",
+      "locale": "en",
+      "requiredAnswerFocus": true,
+      "explanationsBeforeScoreSummary": true,
+      "noAttemptId": true,
+      "noRecoveryPromisedAfterLogin": true
+    },
+    {
+      "check": "capture-layout",
+      "name": "p09-technical-consent-390",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "capture-layout",
+      "name": "p09-saved-fr-text-in-en-interface-390",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "technical-free-p09-draft",
+      "technicalFixtureNotM01OrProductionM04": true,
+      "consentRequired": true,
+      "storedTtlUpperBoundMs": 7200000,
+      "sampledRemainingMs": 7199417,
+      "importDoesNotSave": true,
+      "explicitSave": true,
+      "fieldErrorFocus": true,
+      "sourceLocale": "fr",
+      "productionLocale": "fr",
+      "englishInterfaceDoesNotTranslate": true,
+      "outsiderRefused": true
+    },
+    {
+      "check": "capture-layout",
+      "name": "authenticated-quiz-reading-not-completion-1440",
+      "noOverflow": true,
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      }
+    },
+    {
+      "check": "durable-quiz-independent-facts",
+      "attemptId": "e85b8fc0-3daf-44cf-8c69-83157603516e",
+      "durableAttemptSaved": true,
+      "readDeclared": true,
+      "completionNotDeclared": true,
+      "noProjectCreatedByQuiz": true
+    },
+    {
+      "check": "capture-layout",
+      "name": "m04-declared-assessment-blocking-390",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "capture-layout",
+      "name": "m04-solution-not-project-validation-390",
+      "noOverflow": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "check": "protected-project-policy-preserved",
+      "origin": "MANUAL_TEST",
+      "exactSourceRetained": true,
+      "initialProductionEmpty": true,
+      "declarationNeedsRevisionDespitePoints": true,
+      "correctionRevealDoesNotChangeProductionRevision": true,
+      "noHumanReviewClaimed": true
+    }
+  ],
+  "exports": [
+    {
+      "kind": "practice",
+      "interfaceLocale": "fr",
+      "textLocale": "fr",
+      "filename": "practice-fr.md",
+      "bytes": 250,
+      "sha256": "200337b65dd313cd7c4fed7b149c74d9d4d86f77534b84b0c0ca231c5c9f166d",
+      "actualBrowserDownload": true,
+      "includesCurrentText": true
+    },
+    {
+      "kind": "practice",
+      "interfaceLocale": "en",
+      "textLocale": "fr",
+      "filename": "practice-fr.md",
+      "bytes": 249,
+      "sha256": "2297dd493a72cbc6030690a89d37b956b53420c2febd908330c8275f50778af1",
+      "actualBrowserDownload": true,
+      "includesCurrentText": true
+    }
+  ],
+  "captures": [
+    "after-m01-fr-1440.png",
+    "after-m01-fr-1440-full.png",
+    "after-m01-fr-390.png",
+    "after-m01-fr-390-full.png",
+    "after-m01-en-1440.png",
+    "after-m01-en-1440-full.png",
+    "after-m01-en-390.png",
+    "after-m01-en-390-full.png",
+    "after-practice-fr-390-written.png",
+    "after-practice-en-390-written.png",
+    "after-formative-fr-390-answers-explained.png",
+    "after-formative-en-390-answers-explained.png",
+    "after-p09-technical-consent-390.png",
+    "after-p09-saved-fr-text-in-en-interface-390.png",
+    "after-authenticated-quiz-reading-not-completion-1440.png",
+    "after-m04-declared-assessment-blocking-390.png",
+    "after-m04-solution-not-project-validation-390.png"
+  ]
+}

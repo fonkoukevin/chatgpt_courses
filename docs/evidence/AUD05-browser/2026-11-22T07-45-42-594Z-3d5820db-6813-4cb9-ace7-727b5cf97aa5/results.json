@@ -1,0 +1,466 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.tools\\node-v24.22.2-win-x64\\node.exe",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts"
+    ],
+    "configFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts",
+    "rootDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": true,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 1200000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/.runtime/browser-2026-11-22T07-45-42-594Z-3d5820db-6813-4cb9-ace7-727b5cf97aa5/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/aud05-workshop.spec.ts"
+        ],
+        "timeout": 240000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-22T07-45-42-594Z-3d5820db-6813-4cb9-ace7-727b5cf97aa5\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "snapshotDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/aud05-workshop.spec.ts",
+        "timeout": 240000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3101",
+          "browserName": "chromium",
+          "headless": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "actionTimeout": 10000,
+          "navigationTimeout": 20000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off",
+          "serviceWorkers": "block"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\docs\\evidence\\AUD05-browser\\2026-11-22T07-45-42-594Z-3d5820db-6813-4cb9-ace7-727b5cf97aa5\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "aud05-workshop.spec.ts",
+      "file": "aud05-workshop.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "AUD05 practical workshop with distinct local and durable facts",
+          "file": "aud05-workshop.spec.ts",
+          "line": 48,
+          "column": 6,
+          "specs": [
+            {
+              "title": "M01 free activity FR/EN desktop/mobile baseline and final comparison",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud05-workshop.spec.ts",
+                        "line": 48,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4792,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-22T07:46:40.525Z",
+                      "annotations": [
+                        {
+                          "type": "serial",
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud05-workshop.spec.ts",
+                            "line": 48,
+                            "column": 6
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "83a4cba8486657eab9c7-cbb4d6a739cb84bf2fb1",
+              "file": "aud05-workshop.spec.ts",
+              "line": 63,
+              "column": 3
+            },
+            {
+              "title": "anonymous practice stays local, copies and exports real text and warns before language loss",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud05-workshop.spec.ts",
+                        "line": 48,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4301,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-22T07:48:05.886Z",
+                      "annotations": [
+                        {
+                          "type": "serial",
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud05-workshop.spec.ts",
+                            "line": 48,
+                            "column": 6
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "83a4cba8486657eab9c7-ac5e417a8ecd7a326d60",
+              "file": "aud05-workshop.spec.ts",
+              "line": 93,
+              "column": 5
+            },
+            {
+              "title": "formative quiz validates focus and explains answers before summary without saved attempts",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud05-workshop.spec.ts",
+                        "line": 48,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5091,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-22T07:48:10.217Z",
+                      "annotations": [
+                        {
+                          "type": "serial",
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud05-workshop.spec.ts",
+                            "line": 48,
+                            "column": 6
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "83a4cba8486657eab9c7-a4ac6fd83bc7e0262b20",
+              "file": "aud05-workshop.spec.ts",
+              "line": 118,
+              "column": 5
+            },
+            {
+              "title": "configured FREE technical P09 workshop retains only consented two-hour draft and imports explicitly",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud05-workshop.spec.ts",
+                        "line": 48,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 16812,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeEditable\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-project-preparation]').getByRole('textbox', { name: 'Objectif', exact: true })\nExpected: editable\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeEditable\" locator('[data-project-preparation]').getByRole('textbox', { name: 'Objectif', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-project-preparation]').getByRole('textbox', { name: 'Objectif', exact: true })\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeEditable\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-project-preparation]').getByRole('textbox', { name: 'Objectif', exact: true })\nExpected: editable\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeEditable\" locator('[data-project-preparation]').getByRole('textbox', { name: 'Objectif', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-project-preparation]').getByRole('textbox', { name: 'Objectif', exact: true })\u001b[22m\n\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud05-workshop.spec.ts:140:154",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud05-workshop.spec.ts",
+                          "column": 154,
+                          "line": 140
+                        },
+                        "snippet": " \u001b[90m 138 |\u001b[39m       \u001b[36mconst\u001b[39m account \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m methodLearner(context\u001b[33m.\u001b[39mrequest)\u001b[33m,\u001b[39m marker \u001b[33m=\u001b[39m \u001b[32m`AUD05 préparation technique personnelle ${randomUUID()}`\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m 139 |\u001b[39m       \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39msetViewportSize({ width\u001b[33m:\u001b[39m \u001b[35m390\u001b[39m\u001b[33m,\u001b[39m height\u001b[33m:\u001b[39m \u001b[35m844\u001b[39m })\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(projectSourceHref(source\u001b[33m,\u001b[39m \u001b[32m'fr'\u001b[39m))\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39mstart\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mpress(\u001b[32m'Enter'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 140 |\u001b[39m       \u001b[36mconst\u001b[39m preparation \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-project-preparation]'\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m expect(preparation\u001b[33m.\u001b[39mgetByRole(\u001b[32m'textbox'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39mobjective\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m }))\u001b[33m.\u001b[39mtoBeEditable()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                                                                                                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 141 |\u001b[39m       \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m field \u001b[36mof\u001b[39m [\u001b[32m'objective'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'scope'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'method'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'timeline'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'budget'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'clarifications'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'nextStep'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'externalText'\u001b[39m] \u001b[36mas\u001b[39m \u001b[36mconst\u001b[39m) \u001b[36mawait\u001b[39m expect(preparation\u001b[33m.\u001b[39mgetByRole(\u001b[32m'textbox'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t[field]\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m }))\u001b[33m.\u001b[39mtoHaveValue(\u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 142 |\u001b[39m       \u001b[36mawait\u001b[39m preparation\u001b[33m.\u001b[39mgetByRole(\u001b[32m'textbox'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39mtitle\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mfill(marker)\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m preparation\u001b[33m.\u001b[39mgetByRole(\u001b[32m'textbox'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39mobjective\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mfill(\u001b[32m'Ma rédaction indépendante en français.'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 143 |\u001b[39m       \u001b[36mconst\u001b[39m briefButton \u001b[33m=\u001b[39m preparation\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39mopenBrief\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m briefButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m \u001b[36mconst\u001b[39m brief \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'dialog'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39mbrief\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m expect(brief)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mkeyboard\u001b[33m.\u001b[39mpress(\u001b[32m'Escape'\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m expect(briefButton)\u001b[33m.\u001b[39mtoBeFocused()\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m expect(preparation\u001b[33m.\u001b[39mgetByRole(\u001b[32m'textbox'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m t\u001b[33m.\u001b[39mobjective\u001b[33m,\u001b[39m exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m }))\u001b[33m.\u001b[39mtoHaveValue(\u001b[32m'Ma rédaction indépendante en français.'\u001b[39m)\u001b[33m;\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud05-workshop.spec.ts",
+                            "column": 154,
+                            "line": 140
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeEditable\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-project-preparation]').getByRole('textbox', { name: 'Objectif', exact: true })\nExpected: editable\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeEditable\" locator('[data-project-preparation]').getByRole('textbox', { name: 'Objectif', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-project-preparation]').getByRole('textbox', { name: 'Objectif', exact: true })\u001b[22m\n\n\n  138 |       const account = await methodLearner(context.request), marker = `AUD05 préparation technique personnelle ${randomUUID()}`;\n  139 |       await page.setViewportSize({ width: 390, height: 844 }); await page.goto(projectSourceHref(source, 'fr')); await page.getByRole('button', { name: t.start, exact: true }).press('Enter');\n> 140 |       const preparation = page.locator('[data-project-preparation]'); await expect(preparation.getByRole('textbox', { name: t.objective, exact: true })).toBeEditable();\n      |                                                                                                                                                          ^\n  141 |       for (const field of ['objective', 'scope', 'method', 'timeline', 'budget', 'clarifications', 'nextStep', 'externalText'] as const) await expect(preparation.getByRole('textbox', { name: t[field], exact: true })).toHaveValue('');\n  142 |       await preparation.getByRole('textbox', { name: t.title, exact: true }).fill(marker); await preparation.getByRole('textbox', { name: t.objective, exact: true }).fill('Ma rédaction indépendante en français.');\n  143 |       const briefButton = preparation.getByRole('button', { name: t.openBrief, exact: true }); await briefButton.click(); const brief = page.getByRole('dialog', { name: t.brief, exact: true }); await expect(brief).toBeVisible(); await page.keyboard.press('Escape'); await expect(briefButton).toBeFocused(); await expect(preparation.getByRole('textbox', { name: t.objective, exact: true })).toHaveValue('Ma rédaction indépendante en français.');\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud05-workshop.spec.ts:140:154"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-22T07:48:15.342Z",
+                      "annotations": [
+                        {
+                          "type": "serial",
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud05-workshop.spec.ts",
+                            "line": 48,
+                            "column": 6
+                          }
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-22T07-45-42-594Z-3d5820db-6813-4cb9-ace7-727b5cf97aa5\\results\\aud05-workshop-AUD05-pract-cba53-raft-and-imports-explicitly\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-22T07-45-42-594Z-3d5820db-6813-4cb9-ace7-727b5cf97aa5\\results\\aud05-workshop-AUD05-pract-cba53-raft-and-imports-explicitly\\error-context.md"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-22T07-45-42-594Z-3d5820db-6813-4cb9-ace7-727b5cf97aa5\\results\\aud05-workshop-AUD05-pract-cba53-raft-and-imports-explicitly\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud05-workshop.spec.ts",
+                        "column": 154,
+                        "line": 140
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "83a4cba8486657eab9c7-ecf9819aaf65b12af691",
+              "file": "aud05-workshop.spec.ts",
+              "line": 136,
+              "column": 5
+            },
+            {
+              "title": "authenticated quiz and declared reading remain separate from completion and project evidence",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud05-workshop.spec.ts",
+                        "line": 48,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-22T07:48:32.301Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "83a4cba8486657eab9c7-1349a0ec3036114fa22f",
+              "file": "aud05-workshop.spec.ts",
+              "line": 161,
+              "column": 5
+            },
+            {
+              "title": "protected configured M04 project keeps source, declared assessment and revealed solution distinct",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud05-workshop.spec.ts",
+                        "line": 48,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-22T07:48:32.302Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "83a4cba8486657eab9c7-14fd62f096777e9e33a5",
+              "file": "aud05-workshop.spec.ts",
+              "line": 174,
+              "column": 5
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-22T07:46:38.600Z",
+    "duration": 113755.299,
+    "expected": 3,
+    "skipped": 2,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

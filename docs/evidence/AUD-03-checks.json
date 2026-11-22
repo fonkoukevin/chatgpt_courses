@@ -1,0 +1,747 @@
+{
+  "schemaVersion": 1,
+  "audit": "AUD-03",
+  "result": "validated-locally",
+  "completedAt": "2026-11-22T00:43:34.133Z",
+  "clientDate": "2026-11-22",
+  "homeRuns": [
+    {
+      "schemaVersion": 1,
+      "audit": "AUD-03",
+      "stage": "before",
+      "result": "passed",
+      "exitCode": 0,
+      "startedAt": "2026-11-22T00:23:42.772Z",
+      "completedAt": "2026-11-22T00:27:16.796Z",
+      "evidence": "docs/evidence/AUD03-browser/2026-11-22T00-23-43-199Z-00b07df1-004a-4482-848a-f0bc09a2e8fc",
+      "buildId": "K2SlDqdOeOoFv3sv-PEo1",
+      "stats": {
+        "startTime": "2026-11-22T00:24:47.556Z",
+        "duration": 118683.744,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "cleanupConfirmed": true,
+      "historicalProofsPreserved": true,
+      "historicalProofHashes": {
+        "docs/evidence/AUD-02-checks.json": "19e29857c74bbbfd2e2b64802c81c68c2a80bf3b333a7a16c488bc1923f55766",
+        "docs/evidence/AUD-02-content-checks-initial.json": "96f807c91633dc476574bfdd69da4490ca37426318e3cd9e72976bc901d7176e",
+        "docs/evidence/AUD-02-content-checks.json": "b10af245862d6ae821de1c65205e5b4cabfd7bb261b27c1a010d47fb90f745ee",
+        "docs/evidence/AUD-02-content-preparation-initial.json": "1e88706a2accb6ed8f731ddae5a841c9abd1454e87bb51bf38f8a167142ad3e4",
+        "docs/evidence/AUD-02-content-preparation.json": "ecfb202b6e7ef6ca4dcdcea5ec5b481b52a35ef5397659a676f841075dc519ee",
+        "docs/evidence/P18-content-checks-first.json": "1cc80427a324f92241d7528ce0564b0e200ed69dc0f0fc297617ec07c998f741",
+        "docs/evidence/P18-content-checks.json": "24238e037c0c60353c4d5aafd2500081f07861dcffbe68d41c4afeea2d390ff9",
+        "docs/evidence/P18-content-m04-m06-checks.json": "8746f59b7d200c058e7b0c9369b82ffccac125b1fea71e88b4685ae667ca5e71",
+        "docs/evidence/P19-content-checks.json": "772c4abcdcdc229a37bdea2f516ece94c27357b2951fe586d213c7ca0288092d"
+      },
+      "userNextFilePreserved": true,
+      "userNextFileSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+      "isolatedEnvironment": true,
+      "providerCredentialsLoaded": false,
+      "deployed": false,
+      "sharedDatabaseTouched": false,
+      "receiptSha256": "b8c329cb7482bf777150d389cd02d2342028ff21aebd174b3711a6f4e52719a4"
+    },
+    {
+      "schemaVersion": 1,
+      "audit": "AUD-03",
+      "stage": "after",
+      "result": "passed",
+      "exitCode": 0,
+      "startedAt": "2026-11-22T00:29:38.039Z",
+      "completedAt": "2026-11-22T00:33:09.260Z",
+      "evidence": "docs/evidence/AUD03-browser/2026-11-22T00-29-38-993Z-c8f3b073-2d5d-4476-84be-a1378ddd6853",
+      "buildId": "EMeBBKilJY9rtD4932YY7",
+      "stats": {
+        "startTime": "2026-11-22T00:30:36.819Z",
+        "duration": 121928.086,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "cleanupConfirmed": true,
+      "historicalProofsPreserved": true,
+      "historicalProofHashes": {
+        "docs/evidence/AUD-02-checks.json": "19e29857c74bbbfd2e2b64802c81c68c2a80bf3b333a7a16c488bc1923f55766",
+        "docs/evidence/AUD-02-content-checks-initial.json": "96f807c91633dc476574bfdd69da4490ca37426318e3cd9e72976bc901d7176e",
+        "docs/evidence/AUD-02-content-checks.json": "b10af245862d6ae821de1c65205e5b4cabfd7bb261b27c1a010d47fb90f745ee",
+        "docs/evidence/AUD-02-content-preparation-initial.json": "1e88706a2accb6ed8f731ddae5a841c9abd1454e87bb51bf38f8a167142ad3e4",
+        "docs/evidence/AUD-02-content-preparation.json": "ecfb202b6e7ef6ca4dcdcea5ec5b481b52a35ef5397659a676f841075dc519ee",
+        "docs/evidence/P18-content-checks-first.json": "1cc80427a324f92241d7528ce0564b0e200ed69dc0f0fc297617ec07c998f741",
+        "docs/evidence/P18-content-checks.json": "24238e037c0c60353c4d5aafd2500081f07861dcffbe68d41c4afeea2d390ff9",
+        "docs/evidence/P18-content-m04-m06-checks.json": "8746f59b7d200c058e7b0c9369b82ffccac125b1fea71e88b4685ae667ca5e71",
+        "docs/evidence/P19-content-checks.json": "772c4abcdcdc229a37bdea2f516ece94c27357b2951fe586d213c7ca0288092d"
+      },
+      "userNextFilePreserved": true,
+      "userNextFileSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+      "isolatedEnvironment": true,
+      "providerCredentialsLoaded": false,
+      "deployed": false,
+      "sharedDatabaseTouched": false,
+      "receiptSha256": "448683662736d013cd44ef7a396bdc8cc0d8428a5a4ae0bf8b5680afe268b3f6"
+    },
+    {
+      "schemaVersion": 1,
+      "audit": "AUD-03",
+      "stage": "after",
+      "result": "passed",
+      "exitCode": 0,
+      "startedAt": "2026-11-22T00:34:54.429Z",
+      "completedAt": "2026-11-22T00:38:28.402Z",
+      "evidence": "docs/evidence/AUD03-browser/2026-11-22T00-34-54-813Z-767231c9-64f9-42ee-bc2b-24a2b5dfd8e4",
+      "buildId": "7p1OvLVUm0iC24HO4CIsK",
+      "stats": {
+        "startTime": "2026-11-22T00:35:52.531Z",
+        "duration": 121220.403,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "cleanupConfirmed": true,
+      "historicalProofsPreserved": true,
+      "historicalProofHashes": {
+        "docs/evidence/AUD-02-checks.json": "19e29857c74bbbfd2e2b64802c81c68c2a80bf3b333a7a16c488bc1923f55766",
+        "docs/evidence/AUD-02-content-checks-initial.json": "96f807c91633dc476574bfdd69da4490ca37426318e3cd9e72976bc901d7176e",
+        "docs/evidence/AUD-02-content-checks.json": "b10af245862d6ae821de1c65205e5b4cabfd7bb261b27c1a010d47fb90f745ee",
+        "docs/evidence/AUD-02-content-preparation-initial.json": "1e88706a2accb6ed8f731ddae5a841c9abd1454e87bb51bf38f8a167142ad3e4",
+        "docs/evidence/AUD-02-content-preparation.json": "ecfb202b6e7ef6ca4dcdcea5ec5b481b52a35ef5397659a676f841075dc519ee",
+        "docs/evidence/P18-content-checks-first.json": "1cc80427a324f92241d7528ce0564b0e200ed69dc0f0fc297617ec07c998f741",
+        "docs/evidence/P18-content-checks.json": "24238e037c0c60353c4d5aafd2500081f07861dcffbe68d41c4afeea2d390ff9",
+        "docs/evidence/P18-content-m04-m06-checks.json": "8746f59b7d200c058e7b0c9369b82ffccac125b1fea71e88b4685ae667ca5e71",
+        "docs/evidence/P19-content-checks.json": "772c4abcdcdc229a37bdea2f516ece94c27357b2951fe586d213c7ca0288092d"
+      },
+      "userNextFilePreserved": true,
+      "userNextFileSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+      "isolatedEnvironment": true,
+      "providerCredentialsLoaded": false,
+      "deployed": false,
+      "sharedDatabaseTouched": false,
+      "receiptSha256": "dfe099335430b1f84ac36411f2f808fd8f9ccb2a5d5feeafc46c1aff2fffa998"
+    }
+  ],
+  "finalHomeEvidence": "docs/evidence/AUD03-browser/2026-11-22T00-34-54-813Z-767231c9-64f9-42ee-bc2b-24a2b5dfd8e4",
+  "baselineHomeEvidence": "docs/evidence/AUD03-browser/2026-11-22T00-23-43-199Z-00b07df1-004a-4482-848a-f0bc09a2e8fc",
+  "comparisons": {
+    "finalBeforeAfterPng": 32,
+    "intermediatePng": 16,
+    "images": [
+      {
+        "stage": "before",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-23-43-199Z-00b07df1-004a-4482-848a-f0bc09a2e8fc/before-empty-fr-1440.png",
+        "sha256": "0bde2f708a3f9d2f54e8539531c6dbaca41734e8c588a6184c31af8997a700a7",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "before",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-23-43-199Z-00b07df1-004a-4482-848a-f0bc09a2e8fc/before-empty-fr-390.png",
+        "sha256": "2719149b21cd12fa6799589b7080497ce70e9103d781ba3053b8bd715194c456",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "before",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-23-43-199Z-00b07df1-004a-4482-848a-f0bc09a2e8fc/before-empty-fr-390-navigation.png",
+        "sha256": "8735bfacea95cfe1e36ff1e9212dfcc399bd32d1aebc2024ce4b56bb5f126d7a",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "before",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-23-43-199Z-00b07df1-004a-4482-848a-f0bc09a2e8fc/before-empty-en-1440.png",
+        "sha256": "245c8b66c20499bc4f2beddceb7938cee4d3aff56a8152c32f053d2e303e4e77",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "before",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-23-43-199Z-00b07df1-004a-4482-848a-f0bc09a2e8fc/before-empty-en-390.png",
+        "sha256": "7e0017cdfd58c0a39882f32821101c4252a2a2e3e42bc231e82e720150c01910",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "before",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-23-43-199Z-00b07df1-004a-4482-848a-f0bc09a2e8fc/before-empty-en-390-navigation.png",
+        "sha256": "1f65aa5f93cd468f2e5ae0e9c2fd6359c459e8586764287bfcf79fd78cb69545",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "before",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-23-43-199Z-00b07df1-004a-4482-848a-f0bc09a2e8fc/before-single-course-fr-1440.png",
+        "sha256": "2c0928245336b23b671d6db7a0f9d8e3ebc9cf90262b32368d00e84ba414be06",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "before",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-23-43-199Z-00b07df1-004a-4482-848a-f0bc09a2e8fc/before-single-course-fr-1440-full.png",
+        "sha256": "e82b4cc01d3994611197a42905cd0c2686db13c8c694f350dc29c6c36d149503",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "before",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-23-43-199Z-00b07df1-004a-4482-848a-f0bc09a2e8fc/before-single-course-fr-390.png",
+        "sha256": "3f8016c2ca8f2ba66faec79039309351a2ffe829903131bd7f9f9931f636e598",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "before",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-23-43-199Z-00b07df1-004a-4482-848a-f0bc09a2e8fc/before-single-course-fr-390-full.png",
+        "sha256": "ccbaee819ea9baf64a57bdffb1242a347dc7f38434a8f62a70bc890db5fc5202",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "before",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-23-43-199Z-00b07df1-004a-4482-848a-f0bc09a2e8fc/before-single-course-fr-390-navigation.png",
+        "sha256": "824eab7e3b89a5fce95491332c78f2737e00871ae9ab129bc6404aee5fa0367f",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "before",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-23-43-199Z-00b07df1-004a-4482-848a-f0bc09a2e8fc/before-single-course-en-1440.png",
+        "sha256": "d5b8baa071353da9bc7b4e259fd0779f318bb38c1a5dc18c3d504fb7352eeb45",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "before",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-23-43-199Z-00b07df1-004a-4482-848a-f0bc09a2e8fc/before-single-course-en-1440-full.png",
+        "sha256": "2e2e2cd3a956ac8fe5a3f12ed494de74e20139094e68958829a3aaa20b2345ac",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "before",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-23-43-199Z-00b07df1-004a-4482-848a-f0bc09a2e8fc/before-single-course-en-390.png",
+        "sha256": "0ff11754dd0172a9117cd0b201b49e55b15fb65b7eae7f97b4b6e01fe08f0878",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "before",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-23-43-199Z-00b07df1-004a-4482-848a-f0bc09a2e8fc/before-single-course-en-390-full.png",
+        "sha256": "1e1393942f26db482f786f5b94897587c05e87124b13a8e27b8accd3e55d81cf",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "before",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-23-43-199Z-00b07df1-004a-4482-848a-f0bc09a2e8fc/before-single-course-en-390-navigation.png",
+        "sha256": "9ea1407a319cc1e15665762fac36f10b63665eac2a0ce8c0db44434abbd0c85f",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": false,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-29-38-993Z-c8f3b073-2d5d-4476-84be-a1378ddd6853/after-empty-fr-1440.png",
+        "sha256": "ad686258cc269a2a9a48381e9e92563255b3363693b2755386c05cb0ea99c8e2",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": false,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-29-38-993Z-c8f3b073-2d5d-4476-84be-a1378ddd6853/after-empty-fr-390.png",
+        "sha256": "65c34f468e7b580895316b9a2b082b2a8b9b4e42c48690420ce353678facef40",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": false,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-29-38-993Z-c8f3b073-2d5d-4476-84be-a1378ddd6853/after-empty-fr-390-navigation.png",
+        "sha256": "f775e0d9ca910efdf8f11714bb8fee54de39f6e8c44700bbc5d2c737d83fef88",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": false,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-29-38-993Z-c8f3b073-2d5d-4476-84be-a1378ddd6853/after-empty-en-1440.png",
+        "sha256": "4a81eb43e2c23e9ebac80bc6939d71a6c9357783f9848feb54e0a29c8fb1a0e3",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": false,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-29-38-993Z-c8f3b073-2d5d-4476-84be-a1378ddd6853/after-empty-en-390.png",
+        "sha256": "af500b3b8b3a00fa3e1088a1dcc8b783c599e768e7428d133b02c7af71793da6",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": false,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-29-38-993Z-c8f3b073-2d5d-4476-84be-a1378ddd6853/after-empty-en-390-navigation.png",
+        "sha256": "a53552967e44bace862b9375c772a5165d125821c1d7dd03e6dff8474470d39f",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": false,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-29-38-993Z-c8f3b073-2d5d-4476-84be-a1378ddd6853/after-single-course-fr-1440.png",
+        "sha256": "cb87a81bf89991ff07a69a149ea62a2d1ee99861adbd1af8bcc93aa604a74123",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": false,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-29-38-993Z-c8f3b073-2d5d-4476-84be-a1378ddd6853/after-single-course-fr-1440-full.png",
+        "sha256": "8c475f31e7139a0a583b18fb0f24b88e56d3c73796a154ef7f9af2893921a261",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": false,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-29-38-993Z-c8f3b073-2d5d-4476-84be-a1378ddd6853/after-single-course-fr-390.png",
+        "sha256": "5f3bba4d98b9923da3cbb7792b2f30c3e22bde32ac971737dd26b08a7b9c604e",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": false,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-29-38-993Z-c8f3b073-2d5d-4476-84be-a1378ddd6853/after-single-course-fr-390-full.png",
+        "sha256": "7faa60ab2c9ee9a70e26b8bb6bd13edafd47487513605aea9f463e81ccade4c8",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": false,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-29-38-993Z-c8f3b073-2d5d-4476-84be-a1378ddd6853/after-single-course-fr-390-navigation.png",
+        "sha256": "c11f718eab0153fd19e46a98f01c3d8200a925e3ea92de5f05170971de843f2e",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": false,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-29-38-993Z-c8f3b073-2d5d-4476-84be-a1378ddd6853/after-single-course-en-1440.png",
+        "sha256": "42b86e73e160ef78b39fb541c68cee339405c95ed4df85780741b8c0a86ef222",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": false,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-29-38-993Z-c8f3b073-2d5d-4476-84be-a1378ddd6853/after-single-course-en-1440-full.png",
+        "sha256": "1813856fa5907eb90cf546ac2bf782a4476dfccfd7e861c30504abae21f9f0af",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": false,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-29-38-993Z-c8f3b073-2d5d-4476-84be-a1378ddd6853/after-single-course-en-390.png",
+        "sha256": "fbc5adf8ea3fc5b11206e9d09b63e4171293418475eec78f9709ec18f87095ac",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": false,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-29-38-993Z-c8f3b073-2d5d-4476-84be-a1378ddd6853/after-single-course-en-390-full.png",
+        "sha256": "bca0379731b20539ce4a8cc930ee96a6e889795827b7d78ac4e659f9f8e90b36",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": false,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-29-38-993Z-c8f3b073-2d5d-4476-84be-a1378ddd6853/after-single-course-en-390-navigation.png",
+        "sha256": "afc09f4c94a65ad04aa49db2d7bd1bf5bcb221efa1cb91525545f08465968415",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-34-54-813Z-767231c9-64f9-42ee-bc2b-24a2b5dfd8e4/after-empty-fr-1440.png",
+        "sha256": "ad686258cc269a2a9a48381e9e92563255b3363693b2755386c05cb0ea99c8e2",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-34-54-813Z-767231c9-64f9-42ee-bc2b-24a2b5dfd8e4/after-empty-fr-390.png",
+        "sha256": "65c34f468e7b580895316b9a2b082b2a8b9b4e42c48690420ce353678facef40",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-34-54-813Z-767231c9-64f9-42ee-bc2b-24a2b5dfd8e4/after-empty-fr-390-navigation.png",
+        "sha256": "f775e0d9ca910efdf8f11714bb8fee54de39f6e8c44700bbc5d2c737d83fef88",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-34-54-813Z-767231c9-64f9-42ee-bc2b-24a2b5dfd8e4/after-empty-en-1440.png",
+        "sha256": "4a81eb43e2c23e9ebac80bc6939d71a6c9357783f9848feb54e0a29c8fb1a0e3",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-34-54-813Z-767231c9-64f9-42ee-bc2b-24a2b5dfd8e4/after-empty-en-390.png",
+        "sha256": "af500b3b8b3a00fa3e1088a1dcc8b783c599e768e7428d133b02c7af71793da6",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-34-54-813Z-767231c9-64f9-42ee-bc2b-24a2b5dfd8e4/after-empty-en-390-navigation.png",
+        "sha256": "a53552967e44bace862b9375c772a5165d125821c1d7dd03e6dff8474470d39f",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-34-54-813Z-767231c9-64f9-42ee-bc2b-24a2b5dfd8e4/after-single-course-fr-1440.png",
+        "sha256": "237ca8f090b059296e3a42053b8934ef70a8cddcb08b64014b4ff2f3baeea619",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-34-54-813Z-767231c9-64f9-42ee-bc2b-24a2b5dfd8e4/after-single-course-fr-1440-full.png",
+        "sha256": "1cf772f48aea1fa1174338dcb765fbe629c585f6f16f049eba750f01b9032bb5",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-34-54-813Z-767231c9-64f9-42ee-bc2b-24a2b5dfd8e4/after-single-course-fr-390.png",
+        "sha256": "c8e646c60d8a7a8257676e43861ba768187cfc76882bbb0bf3b2ada402483e72",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-34-54-813Z-767231c9-64f9-42ee-bc2b-24a2b5dfd8e4/after-single-course-fr-390-full.png",
+        "sha256": "69ef3102f6f8ac4cf24265f81382cec46e7b7dfc3285ca3d39552be742bf540c",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-34-54-813Z-767231c9-64f9-42ee-bc2b-24a2b5dfd8e4/after-single-course-fr-390-navigation.png",
+        "sha256": "c11f718eab0153fd19e46a98f01c3d8200a925e3ea92de5f05170971de843f2e",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-34-54-813Z-767231c9-64f9-42ee-bc2b-24a2b5dfd8e4/after-single-course-en-1440.png",
+        "sha256": "72ce5f2f26a484453cd56b168fe6f8d20d3d6cc08191a3d3aa45de1026a60225",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-34-54-813Z-767231c9-64f9-42ee-bc2b-24a2b5dfd8e4/after-single-course-en-1440-full.png",
+        "sha256": "031591f70449ada439f35cb822f2e3fd8a0fc6bf1588949a6913a02f80ec9853",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-34-54-813Z-767231c9-64f9-42ee-bc2b-24a2b5dfd8e4/after-single-course-en-390.png",
+        "sha256": "efcbcef1f2a972bd42397fbca1c0f761fdb83f3966023355eda921132304ab98",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-34-54-813Z-767231c9-64f9-42ee-bc2b-24a2b5dfd8e4/after-single-course-en-390-full.png",
+        "sha256": "8c24eddd8a1d246f502ebdd0b3bffd61d1e147cf465f19fd39429f6f03d34603",
+        "visuallyInspected": true
+      },
+      {
+        "stage": "after",
+        "final": true,
+        "file": "docs/evidence/AUD03-browser/2026-11-22T00-34-54-813Z-767231c9-64f9-42ee-bc2b-24a2b5dfd8e4/after-single-course-en-390-navigation.png",
+        "sha256": "aaac815a5373d9aaf1087cb09d1768fcb94aaa61405500ad187669df1f4cd0f2",
+        "visuallyInspected": true
+      }
+    ],
+    "viewports": [
+      1440,
+      390
+    ],
+    "locales": [
+      "fr",
+      "en"
+    ],
+    "findings": [
+      "Single-course home replaces generic catalogue presentation with actual title, audience, objective, programme and linked actions.",
+      "Both CTAs visible in the tested first mobile and desktop viewports; menu and footer remain readable.",
+      "Final polish keeps French thousands together and replaces opaque BR02 in the course introduction with another case."
+    ],
+    "limits": [
+      "Screenshots do not prove keyboard or destinations; those are separately asserted.",
+      "No physical phone, accessibility certification, performance score or remote production browser observation."
+    ]
+  },
+  "linkedDestinations": [
+    {
+      "locale": "fr",
+      "courseId": "8515500d-6edf-4337-9d9f-70905fdad004",
+      "courseVersionId": "4535e685-cda8-4558-a504-f86a1b66cff4",
+      "activityId": "0cd22203-9aa8-40ee-9331-c37bd0241b7c",
+      "activityVersionId": "0aa70fbd-17d8-4863-b79c-463248bfd572",
+      "linkedInActualCurriculum": true,
+      "trialHref": "/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01?resource=0cd22203-9aa8-40ee-9331-c37bd0241b7c&version=0aa70fbd-17d8-4863-b79c-463248bfd572&courseVersion=4535e685-cda8-4558-a504-f86a1b66cff4",
+      "courseHref": "/fr/parcours/du-brief-a-la-proposition-commerciale?version=4535e685-cda8-4558-a504-f86a1b66cff4",
+      "keyboardActivated": true,
+      "anonymousTrial": true,
+      "actualFreeDocument": true
+    },
+    {
+      "locale": "en",
+      "courseId": "8515500d-6edf-4337-9d9f-70905fdad004",
+      "courseVersionId": "4535e685-cda8-4558-a504-f86a1b66cff4",
+      "activityId": "0cd22203-9aa8-40ee-9331-c37bd0241b7c",
+      "activityVersionId": "0aa70fbd-17d8-4863-b79c-463248bfd572",
+      "linkedInActualCurriculum": true,
+      "trialHref": "/en/learn/client-brief-to-proposal/proposal-m01?resource=0cd22203-9aa8-40ee-9331-c37bd0241b7c&version=0aa70fbd-17d8-4863-b79c-463248bfd572&courseVersion=4535e685-cda8-4558-a504-f86a1b66cff4",
+      "courseHref": "/en/courses/client-brief-to-proposal?version=4535e685-cda8-4558-a504-f86a1b66cff4",
+      "keyboardActivated": true,
+      "anonymousTrial": true,
+      "actualFreeDocument": true
+    }
+  ],
+  "regressions": [
+    {
+      "audit": "AUD-03",
+      "phase": "P06",
+      "result": "passed",
+      "exitCode": 0,
+      "startedAt": "2026-11-22T00:38:03.346Z",
+      "completedAt": "2026-11-22T00:41:09.986Z",
+      "evidence": "docs/evidence/P06-browser/2026-11-22T00-38-03-895Z-5d451465-b42f-48d4-bbc3-e646e9f2be55",
+      "stats": {
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0,
+        "flaky": 0
+      },
+      "retried": false,
+      "cleanupConfirmed": true,
+      "isolatedEnvironment": true,
+      "dedicatedLoopbackPorts": true,
+      "providerCredentialsLoaded": false,
+      "deployed": false,
+      "receiptSha256": "39f064b7cebecbc6de0f72cdacc9eef97915af9ba1e6904b29a63517a1356ec9"
+    },
+    {
+      "audit": "AUD-03",
+      "phase": "AUD01",
+      "result": "passed",
+      "exitCode": 0,
+      "startedAt": "2026-11-22T00:38:03.338Z",
+      "completedAt": "2026-11-22T00:40:11.224Z",
+      "evidence": "docs/evidence/AUD01-browser/2026-11-22T00-38-03-877Z-9dae4f74-3ed3-42aa-a70c-57c896528ee8",
+      "stats": {
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "flaky": 0
+      },
+      "retried": false,
+      "cleanupConfirmed": true,
+      "isolatedEnvironment": true,
+      "dedicatedLoopbackPorts": true,
+      "providerCredentialsLoaded": false,
+      "deployed": false,
+      "receiptSha256": "bd47ac56ee54da1880ce5d4f3a025ff75f9a92960be43e46acf7fa72e2e37300"
+    }
+  ],
+  "scriptChecks": {
+    "result": "passed",
+    "counts": {
+      "tests": 159,
+      "suites": 0,
+      "pass": 159,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "source": "docs/evidence/AUD-03-script-checks.json"
+  },
+  "focusedRenderAndSelection": {
+    "tests": 17,
+    "passed": 17,
+    "includedInScriptSuite": true,
+    "rerunAfterCopyPolish": true
+  },
+  "contrast": {
+    "evidence": "docs/evidence/AUD-03-contrast.json",
+    "measuredPairs": 21,
+    "allPassed": true,
+    "reference": "https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html",
+    "referenceReadOn": "2026-11-22",
+    "wholeSiteCertificationClaimed": false
+  },
+  "finalBuild": {
+    "receipt": ".runtime/aud01/web-build-a1973b1f-b9ab-4954-b8ed-15c36b85cbd6.private.json",
+    "schemaVersion": 1,
+    "runId": "a1973b1f-b9ab-4954-b8ed-15c36b85cbd6",
+    "command": "node scripts/web.mjs build",
+    "startedAt": "2026-11-22T00:33:51.874Z",
+    "completedAt": "2026-11-22T00:34:16.699Z",
+    "result": "passed",
+    "exitCode": 0,
+    "isolatedEnvironment": true,
+    "providerCredentialsLoaded": false,
+    "userNextFilePreserved": true,
+    "rawLogsPublished": false,
+    "webBuildId": "7p1OvLVUm0iC24HO4CIsK"
+  },
+  "checks": {
+    "lint": "passed",
+    "applicationTypes": "passed-during-build",
+    "browserTypes": "passed",
+    "diffCheck": "passed"
+  },
+  "sharedPreservation": {
+    "result": "passed",
+    "observedAtPg": "2026-11-22T00:41:39.390942+00:00",
+    "tablesCompared": 83,
+    "changedTables": [],
+    "readOnly": true,
+    "sessionsExcluded": true,
+    "baselineSha256": "30ac127123a72578675f8d71e2c749d18b7770df3ced69842fcabb6e22a187ca",
+    "receiptSha256": "d1f76e3c9e7aa5b98cbcf7fe20e23ba39d9983eb529e5cc1d4a82fc3cb0c12fe",
+    "privateRowsPublished": false
+  },
+  "historicalProofsPreserved": true,
+  "historicalProofHashes": {
+    "docs/evidence/AUD-02-checks.json": "19e29857c74bbbfd2e2b64802c81c68c2a80bf3b333a7a16c488bc1923f55766",
+    "docs/evidence/AUD-02-content-checks-initial.json": "96f807c91633dc476574bfdd69da4490ca37426318e3cd9e72976bc901d7176e",
+    "docs/evidence/AUD-02-content-checks.json": "b10af245862d6ae821de1c65205e5b4cabfd7bb261b27c1a010d47fb90f745ee",
+    "docs/evidence/AUD-02-content-preparation-initial.json": "1e88706a2accb6ed8f731ddae5a841c9abd1454e87bb51bf38f8a167142ad3e4",
+    "docs/evidence/AUD-02-content-preparation.json": "ecfb202b6e7ef6ca4dcdcea5ec5b481b52a35ef5397659a676f841075dc519ee",
+    "docs/evidence/P18-content-checks-first.json": "1cc80427a324f92241d7528ce0564b0e200ed69dc0f0fc297617ec07c998f741",
+    "docs/evidence/P18-content-checks.json": "24238e037c0c60353c4d5aafd2500081f07861dcffbe68d41c4afeea2d390ff9",
+    "docs/evidence/P18-content-m04-m06-checks.json": "8746f59b7d200c058e7b0c9369b82ffccac125b1fea71e88b4685ae667ca5e71",
+    "docs/evidence/P19-content-checks.json": "772c4abcdcdc229a37bdea2f516ece94c27357b2951fe586d213c7ca0288092d"
+  },
+  "userNextFilePreserved": true,
+  "userNextFileSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+  "sourceFiles": [
+    {
+      "file": "apps/web/src/components/layouts/public-layout.tsx",
+      "sha256": "897669a55369c55be64625e9bc27d34d911cfc15588dc8cd88e60a82c56598e9"
+    },
+    {
+      "file": "apps/web/src/components/public/home-featured.tsx",
+      "sha256": "5622907ab7fcfb747d0faf79bfa0b596291ee28dc0e5bf2100a1cdeeec740acc"
+    },
+    {
+      "file": "apps/web/src/components/public/home.tsx",
+      "sha256": "a720ec7d2909d860469226c1ed543ecdbf90e63d2965ea2bd6952f81b9037530"
+    },
+    {
+      "file": "apps/web/src/components/public/server-pages.tsx",
+      "sha256": "7b4615238882125119f1682bc385eb8a9ad53c0275f802e72c3a0d40bbcb8036"
+    },
+    {
+      "file": "apps/web/src/lib/i18n/home.ts",
+      "sha256": "272b8c87271bf95b53912141dcd9434403800f16b15e052922bd3ce762d3e898"
+    },
+    {
+      "file": "apps/web/src/lib/i18n/public-trust.ts",
+      "sha256": "31b9aed1db21fac92e416a51f997a34308e3b374c3df5c06928676f539d379b4"
+    },
+    {
+      "file": "apps/web/src/lib/public/home-course.ts",
+      "sha256": "e44f7596cf078c894db4160d9b5011af507dd223df3ed4c93817d12a1c257d90"
+    },
+    {
+      "file": "apps/web/src/lib/public/navigation.ts",
+      "sha256": "6c7ba9bc66aef3b7f39eee790f8e26990f7556fea51b12f1c51829f4b5501350"
+    },
+    {
+      "file": "scripts/ci-run.mjs",
+      "sha256": "a0455c1c038199b414f9726bf604375c898b535305a750bc1ae9a390c170993f"
+    },
+    {
+      "file": "scripts/prepare-course-content.mjs",
+      "sha256": "602be0f0676e9aff3aabe6da8ed11df485748c76afa1e325b6803dd6db45ebb0"
+    },
+    {
+      "file": "scripts/verify-browser.mjs",
+      "sha256": "1721dd2c7d3e45aca3865c01d776586bf8a7e5652d49b3c17baacb30543de880"
+    },
+    {
+      "file": "scripts/verify-contrast.mjs",
+      "sha256": "10c08133515d5709ff5f0d357a97801c4f3c5a81694a075dee2dfd570ec26f66"
+    },
+    {
+      "file": "scripts/verify-course-content.mjs",
+      "sha256": "6f9def35dd95eb2383412b77ba6e66be565c31a3a6386be04d3498ac08904ca6"
+    },
+    {
+      "file": "tests/browser/aud01-showcase.spec.ts",
+      "sha256": "f4361b640bc03e80c3c55c375f0c581735a0038a174437123dad24cb6554d775"
+    },
+    {
+      "file": "tests/browser/aud03-home.spec.ts",
+      "sha256": "31ac728c921aeefd1a7650d4f66fd9c11423ef65035568d820f14b81ea1d7568"
+    },
+    {
+      "file": "tests/browser/course-content-fixture.ts",
+      "sha256": "1496e5da88b6e975046c35ab0e98be265b7c621a8196e7a989e07da30cd249fa"
+    },
+    {
+      "file": "tests/browser/public-site.spec.ts",
+      "sha256": "399f775fc9e28a891e9ae0d7e6bba740276dd7fa7010bf61fa2123ce80989e87"
+    },
+    {
+      "file": "tests/scripts/aud01-public-ui.test.mjs",
+      "sha256": "711a0ca4a442aaedc1f65ab5836ff258e5cabd969cae596b39f58f04fa08a22a"
+    },
+    {
+      "file": "tests/scripts/aud03-home-course.test.mjs",
+      "sha256": "042b95f195b266910941d28b2f1d953338f547a36bd2bde9c59e12d314576d70"
+    },
+    {
+      "file": "playwright.config.ts",
+      "sha256": "c57e41cfe8f373c7fff7acf8eaffa9e76be4d43b2a1d614f295f86e0cfc7456a"
+    },
+    {
+      "file": "references/design-tokens.css",
+      "sha256": "5d55c543955436406368ea50c181a6a6e28014c67a0c32b352476c2432c66b71"
+    },
+    {
+      "file": "content/course-client-proposal/HOME_PRESENTATION_DRAFT.md",
+      "sha256": "5b5787591635fd77a0bc82ee4767aa9320642ed04d21caac70d7a9ec20550e95"
+    },
+    {
+      "file": "content/course-client-proposal/PUBLIC_INFORMATION_DRAFT.md",
+      "sha256": "d62bd9383594978df02872101e1a237d882985ef329b846d866199b351cf623a"
+    }
+  ],
+  "boundaries": {
+    "editorialCase": "BR01 example proposed for local/test only; staging/production use actual course data without this draft example.",
+    "serverEnvironmentGuardReviewed": true,
+    "uiWithoutPreviewFlagTested": true,
+    "productionEnvironmentWithSelectedCourseObserved": false,
+    "sharedContentImported": false,
+    "actualEditorialApproval": false,
+    "publicContentPublished": false,
+    "pushed": false,
+    "deployed": false,
+    "commerceActivated": false,
+    "paidAiApiCalled": false
+  },
+  "remaining": [
+    "Owner editorial review and audience confirmation.",
+    "Public author/contact/identity/terms/privacy facts in the dedicated draft.",
+    "AUD-04 course page and relevant offer link.",
+    "Existing P12/P15/P19 and production launch limits remain open."
+  ]
+}

@@ -1,0 +1,448 @@
+AUDIT DU SITE CHATGPT COURSES ET PLAN DE CORRECTION POUR CODEX
+Visite : 15 novembre 2026 (UTC)
+Site examiné : https://staging.chatgpt-courses.com/fr
+Nature : audit de la préproduction, recommandations et prompts de travail.
+
+MODE D’EMPLOI POUR KEVIN
+
+1. Place ce fichier dans le dépôt actuel, par exemple dans docs/audits/.
+2. Ouvre ce dépôt dans Codex. Le dépôt actuel est la référence ; cet audit ne remplace pas son état réel ni ses preuves.
+3. Envoie le message de démarrage ci-dessous, puis travaille lot par lot dans l’ordre AUD-01 à AUD-07.
+4. Ne colle pas tous les lots dans une seule demande de modification. Après chaque lot, examine le résultat, les preuves et les décisions de contenu encore nécessaires.
+5. Ces lots complètent le programme P00–P23 existant. Ils ne permettent pas de déclarer un ancien lot validé sans ses propres preuves.
+
+MESSAGE DE DÉMARRAGE À COPIER DANS CODEX
+
+Lis docs/audits/Audit_et_plan_Codex_ChatGPT_Courses_2026-11-15.txt, puis AGENTS.md et les documents actuels de statut, architecture, contrats API, écrans, design et recette du dépôt. Vérifie les constats de l’audit par rapport au code et aux données réellement disponibles. Commence uniquement le lot AUD-01. Applique les corrections locales justifiées et prépare leurs preuves. Préserve les commandes, paiements, droits, progressions, contenus versionnés et scénarios de recette existants. Ne purge pas les données de test, ne crée pas de promesse commerciale fictive et ne déploie pas automatiquement. Distingue clairement ce qui est observé, ce qui est supposé, ce qui est corrigé et ce qui reste bloqué par une décision éditoriale. N’attends pas une confirmation pour les inspections et corrections locales réversibles déjà demandées ; traite les inconnues par des brouillons et une liste précise de décisions à prendre.
+
+Si tu choisis un autre emplacement pour ce fichier, adapte son chemin dans le message.
+
+
+1. CONCLUSION DE L’AUDIT
+
+La base visuelle est cohérente : couleurs sobres, hiérarchie lisible, composants homogènes. Plusieurs interactions publiques fonctionnent. Le problème le plus urgent est la présentation de contenus et d’offres de recette technique dans la vitrine. Cette version ne permet pas encore à un prospect de juger une véritable formation et son prix.
+
+L’ordre recommandé est : contenu réel cohérent, promesse précise, démonstration gratuite, fiche de formation et offre compréhensibles, présentation visuelle, puis acquisition mesurée.
+
+Une refonte de la stack ou l’ajout immédiat d’un assistant IA, d’une communauté ou de nombreux abonnements ne répondrait pas aux principaux problèmes observés.
+
+Les prix de 1 € et 2 € sont explicitement des valeurs TEST. Cet audit ne les traite pas comme des prix commerciaux et ne conclut pas à un incident de facturation.
+
+
+2. PÉRIMÈTRE ET NIVEAU DE PREUVE
+
+Visite réelle dans le navigateur après retrait de la protection extérieure :
+- Accueil français et anglais.
+- Catalogue, filtre gratuit, rubriques Méthodes et Guides.
+- Liste des offres, détail d’une offre TEST, fiches de parcours protégés et libres.
+- Activité gratuite, espace de préparation du projet, quiz et support téléchargé.
+- Changement de langue et retour au catalogue.
+- Formulaires de connexion et d’inscription, sans soumission.
+- Affichage étroit obtenu par zoom navigateur à 400 %, correspondant à 340 pixels CSS de large. Menu et filtres ouverts et examinés.
+- Quelques métadonnées de l’accueil français : langue, titre, description, canonical et robots.
+
+Résultats positifs effectivement observés :
+- L’activité gratuite est accessible sans inscription.
+- La préparation du projet ouvre un formulaire structuré.
+- La réponse « Non » au quiz sur le logo produit 1/1 et une explication cohérente.
+- Le téléchargement fonctionne ; le support reçu est un petit fichier synthétique P21.
+- Le filtre gratuit fait passer le catalogue de 22 à 6 ressources.
+- Le contenu de l’activité, et pas uniquement son menu, passe en anglais.
+- Le menu et les filtres restent utilisables dans l’affichage étroit contrôlé ; aucun débordement horizontal n’a été mesuré dans les états inspectés.
+
+Ce qui n’a pas été validé dans cette visite :
+- Compte apprenant authentifié, progression persistante, administration.
+- Paiement Stripe externe, attribution de droits après achat, remboursement et envoi des e-mails.
+- Affichage sur un véritable téléphone, interactions tactiles et navigateurs mobiles.
+- Performances réelles, Core Web Vitals, audit complet d’accessibilité ou de sécurité.
+- Code source et base de données du dépôt déployé.
+
+Les anciens incidents P12 rapportés dans la conversation ne sont ni confirmés ni invalidés par cet audit public. Les vérifier dans les preuves actuelles du dépôt si ce lot reste ouvert.
+
+
+3. CONSTATS PRIORISÉS
+
+P0 signifie à traiter avant de présenter une offre commerciale à des prospects. P1 signifie amélioration importante du parcours. P2 signifie optimisation après mise en cohérence de l’offre. Ces priorités ne déclarent pas le staging en panne.
+
+F01 — P0 — Contenus synthétiques dans la vitrine.
+L’accueil affiche six cartes de recette P21. Le catalogue annonce 22 ressources ; les éléments inspectés portent des noms techniques, des doublons apparents et des informations incomplètes. Ce nombre ne représente pas 22 formations commerciales vérifiées.
+Action : distinguer explicitement les contenus de recette des publications éditoriales. Conserver les données nécessaires aux tests et à l’historique ; exclure les fixtures des sélections destinées aux prospects. Ne pas se contenter de filtrer un titre contenant P21.
+Preuve attendue : accueil, recherche, suggestions et fiches commerciales montrent uniquement des ressources éditoriales approuvées ; les scénarios de recette restent disponibles dans leur périmètre prévu.
+
+F02 — P0 — Offre commerciale réelle non démontrée.
+La page des offres présente trois offres individuelles TEST à 1 € et un pack TEST à 2 €. L’offre détaillée inspectée indique notamment un accès de deux jours et des conditions fictives de recette. Cela ne permet pas d’évaluer l’offre finale.
+Action : établir les véritables contenus inclus, prix, durée d’accès, mises à jour et éventuel accompagnement. Les valeurs doivent venir des données serveur et de décisions du propriétaire. Ne pas transformer les prix TEST en prix définitifs par une simple réécriture des libellés.
+Preuve attendue : même offre, mêmes inclusions, mêmes montants et mêmes conditions entre fiche, récapitulatif et commande.
+
+F03 — P0 — Incohérence du dossier pédagogique de démonstration.
+La grille de l’exercice demande de reprendre cinq tarifs. Le brief complet consulté et le support téléchargé ne fournissent pas ces cinq tarifs. Le dossier présente notamment un total de rédaction, un plafond et des prestations non chiffrées. Le fichier téléchargé contient deux lignes de recette, pas un dossier exploitable complet.
+Action : aligner brief, pièces, consignes, grille, quiz et correction. Si un détail de cinq lignes est nécessaire, l’établir dans le dossier validé ; sinon adapter le critère. Ne pas inventer des tarifs pour faire réussir artificiellement l’exercice. Les montants de l’exemple sont fictifs et ne sont pas le prix de la formation.
+Preuve attendue : un testeur peut accomplir chaque consigne à partir des seules pièces fournies et expliquer chaque réponse du corrigé.
+
+F04 — P1 — Promesse d’accueil trop générale.
+Le premier écran parle de transformer une demande floue en travail explicable. Il exprime une méthode, mais identifie difficilement la cible, la formation et le livrable. Le grand encadré contient surtout du texte explicatif, sans montrer la production obtenue.
+Action : choisir un cas d’usage concret pour le premier produit et montrer un extrait de livrable annoté. Proposition de positionnement : apprendre aux indépendants de services à préparer une proposition commerciale avec ChatGPT. C’est une hypothèse à confronter au contenu réellement prêt et aux retours clients.
+Preuve attendue : un visiteur peut dire à qui s’adresse le parcours, ce qu’il va produire et quelle action faire ensuite.
+
+F05 — P1 — Orientation vide et navigation trop large pour le contenu disponible.
+La section d’orientation par tâche est vide alors que des cartes apparaissent plus bas. Méthodes et Guides mènent chacun à zéro résultat. Dans le catalogue, les filtres tâche et niveau ne proposent que la valeur générale.
+Action : contrôler les associations et les sélections de publication ; masquer les entrées sans contenu utile dans la vitrine normale. Ne pas déduire la cause technique de la seule observation. Garder une navigation proportionnée au nombre de vraies offres.
+Preuve attendue : chaque entrée mise en avant aboutit à une ressource pertinente, ou n’est pas présentée comme une destination déjà disponible.
+
+F06 — P1 — Fiches de parcours insuffisantes pour décider.
+Sur les fiches inspectées, plusieurs informations sur le public, les prérequis, les outils et la vérification du travail sont absentes. Durée et niveau ne sont pas renseignés. Le programme observé est un module synthétique avec une activité. La fiche protégée renvoie vers la liste générale des offres.
+Action : renseigner les informations essentielles d’un vrai parcours et relier directement la fiche à l’offre pertinente. Un champ secondaire absent peut être omis ; une information indispensable à la vente doit être établie avant commercialisation. Ne pas promettre des vidéos ou une correction humaine inexistantes.
+Preuve attendue : résultat, programme, prérequis, format, outil nécessaire, auteur, langue, inclusions et conditions sont compréhensibles avant l’achat.
+
+F07 — P1 — Charge cognitive de l’atelier.
+La leçon combine navigation publique, bloc de langues, programme, dossier, média, pratique, vingt critères puis un éditeur de huit champs. La préparation du travail arrive tard dans cette longue page. Les critères ne sont pas à supprimer sans analyse ; leur présentation doit suivre le moment où ils servent.
+Action : organiser l’apprentissage en quatre étapes : comprendre le dossier, produire, vérifier, réutiliser. Mettre la consigne et les pièces près de l’éditeur. Présenter les critères par groupes après une première production. Ajouter un exemple commenté ou corrigé lorsque le contenu est établi.
+Preuve attendue : un débutant sait quoi faire d’abord, où travailler, comment contrôler son résultat et comment le conserver.
+
+F08 — P1 — Formulations techniques trop présentes.
+Plusieurs messages expliquent le stockage, les versions, les tentatives et les règles internes avant d’expliquer le bénéfice de l’action. Le résultat du quiz met particulièrement en avant l’absence de conservation. Le pied de page décrit le fonctionnement des publications plutôt que le projet et l’aide disponible.
+Action : conserver toutes les distinctions importantes, mais les expliquer au moment utile avec des mots courants. La réussite du quiz ne doit toujours pas devenir une validation automatique du projet ou une certification.
+Exemple : « Bonne réponse. Le logo doit être chiffré séparément. » puis « Connectez-vous pour retrouver votre résultat. » Cette seconde phrase n’est utilisable que si le mécanisme proposé conserve effectivement ce résultat, sinon proposer de refaire le quiz après connexion.
+Preuve attendue : l’utilisateur comprend son résultat, la prochaine action et l’état de sauvegarde sans apprendre l’architecture.
+
+F09 — P1 — Langue perdue au retour au catalogue.
+Depuis l’activité gratuite française, le passage à English traduit le contenu. Le lien de retour conserve néanmoins returnTo=/fr/catalogue. Son activation ramène effectivement au catalogue français.
+Action : recalculer la destination interne dans la langue choisie en conservant les filtres compatibles. Garder les protections contre les redirections externes. Ne pas traduire automatiquement le texte personnel saisi par l’apprenant.
+Preuve attendue : aller et retour cohérents en FR et EN, avec une réponse explicite si une traduction n’existe pas.
+
+F10 — P1 — Éléments de confiance peu accessibles dans le périmètre visité.
+Le pied de page inspecté ne rend pas visibles un contact, une présentation de l’auteur, les conditions, la confidentialité ou une précision d’indépendance. Cela ne prouve pas que ces pages n’existent nulle part.
+Action : rechercher les pages existantes avant d’en créer ; relier les destinations utiles et compléter avec les informations exactes du propriétaire. Présenter la formation comme indépendante si c’est son statut réel, sans laisser entendre une accréditation OpenAI ou Anthropic inexistante. Le choix juridique de la marque n’a pas été analysé.
+Preuve attendue : un visiteur sait qui propose le cours, où demander de l’aide, ce qu’il achète et où lire les conditions pertinentes.
+
+F11 — P2 — SEO de production à contrôler séparément.
+L’accueil français du staging possède une canonical vers lui-même et robots=noindex,nofollow. C’est cohérent avec une préproduction. Aucun lien hreflang HTML n’a été observé sur cet accueil ; les en-têtes HTTP et le sitemap n’ont pas été examinés.
+Action : vérifier la configuration du domaine de production, les URL canoniques, titres et descriptions par langue, et les variantes réellement publiées. Google accepte les variantes déclarées en HTML, en en-têtes HTTP ou en sitemap ; l’absence dans le HTML seule ne suffit pas à déclarer l’implémentation défaillante.
+Preuve attendue : la préproduction garde sa politique d’indexation prévue, les vraies pages de production peuvent être indexées, et les variantes équivalentes se déclarent réciproquement selon une méthode cohérente.
+
+F12 — P2 — Recette responsive et accessibilité à compléter.
+L’affichage étroit de 340 pixels CSS a été examiné par zoom à 400 %. Le menu et les filtres fonctionnent dans les états contrôlés. L’en-tête occupe environ 125 pixels CSS, ce qui laisse peu de place au contenu dans ce test. Ce n’est ni une violation démontrée ni une mesure sur téléphone.
+Action : tester de vrais viewports mobiles, clavier, focus, zoom, contrastes, débordements et retours d’erreur. Affiner la hauteur de l’en-tête sur petit écran sans supprimer l’accès à la langue. Mesurer les performances avant d’annoncer un score ou un problème de lenteur.
+Preuve attendue : captures et comportements sur les dimensions prévues, erreurs corrigées et limites restantes explicites.
+
+
+4. DIRECTION PRODUIT ET PRÉSENTATION PROPOSÉES
+
+Positionnement initial à valider :
+Un parcours pratique pour les indépendants de services qui veulent préparer une proposition commerciale fiable à partir d’un brief client avec ChatGPT.
+
+Cette proposition s’appuie sur le cas déjà visible. Elle peut être remplacée par un autre problème précis si le premier contenu réellement terminé répond à une autre cible. L’objectif est de rendre une première offre vérifiable, pas d’enfermer définitivement le catalogue dans une seule tâche.
+
+Texte d’accueil proposé, à utiliser seulement si le parcours livré le justifie :
+Titre : Transformez un brief client en proposition commerciale avec ChatGPT.
+Sous-titre : Un parcours pratique pour clarifier la demande, préparer votre proposition et vérifier les engagements avant de l’envoyer.
+Action principale : Essayer la première activité.
+Action secondaire : Voir la formation.
+Information sous le bouton : Gratuite, sans inscription pour commencer.
+
+La mention sur l’inscription doit rester conforme au fonctionnement réel. N’ajouter ni durée chiffrée ni gain de temps non mesuré.
+
+Structure d’accueil cible :
+1. Cible, problème, résultat et action principale.
+2. Exemple pédagogique clairement fictif : court brief, extrait de proposition, annotations de vérification.
+3. Présentation du premier parcours réellement disponible, avec son extrait gratuit.
+4. Méthode pédagogique en quatre actions : comprendre, pratiquer, vérifier, réutiliser.
+5. Programme décrit par résultats produits.
+6. Auteur et éléments de preuve vérifiables ; démonstration et corrigé avant d’avoir des témoignages.
+7. Offre et inclusions réelles, si prêtes à être commercialisées.
+8. Questions utiles : niveau, outil requis, format, accès, aide, langue.
+9. Invitation à essayer et pied de page pratique.
+
+Navigation de départ suggérée : Formation / Essai gratuit / Ressources / Connexion.
+Elle doit s’adapter au contenu existant ; ne pas créer quatre nouvelles pages vides pour suivre cette suggestion. Le catalogue complet peut rester disponible lorsqu’il apporte un choix réel. La recherche devient secondaire tant que l’offre est très réduite.
+
+Fiche de formation cible :
+- Titre orienté résultat et public.
+- Extrait du document que l’apprenant saura préparer.
+- Niveau et prérequis établis.
+- Durée estimée mesurée sur le contenu, si connue ; distinguer vidéo, lecture et pratique.
+- Outil nécessaire et éventuel abonnement requis, après vérification de l’exercice réel.
+- Programme avec livrables et critères de réussite.
+- Exemple de consigne et correction expliquée.
+- Auteur et date de révision vérifiables.
+- Formats et langues effectivement disponibles, y compris les fichiers et vidéos.
+- Offre liée : prix, accès, inclusions et exclusions provenant du serveur.
+- Action adaptée : essayer, acheter l’offre liée ou reprendre pour un apprenant ayant déjà accès.
+
+Atelier cible :
+- Conserver la lecture et l’essai sans compte.
+- Réduire la place des informations de version et du second sélecteur de langue.
+- Proposer une progression lisible sans prétendre valider automatiquement une compétence.
+- Rendre le dossier consultable à côté de la rédaction sur ordinateur et dans un panneau accessible sur mobile.
+- Accompagner les champs vides avec une consigne ou un exemple identifié comme tel.
+- Regrouper les critères, par exemple périmètre, budget, calendrier et qualité.
+- Présenter un corrigé commenté au moment pédagogique approprié.
+- Garder copie, export, règles de conservation et protection des saisies.
+
+Direction visuelle :
+- Conserver une base claire et le bleu foncé déjà utilisés.
+- Renforcer le contraste entre trois zones : présentation de l’offre, exemple du livrable, action principale.
+- Réserver les cartes aux contenus comparables ; éviter de tout transformer en cartes identiques.
+- Montrer de vrais extraits de cours et documents, pas seulement des illustrations décoratives.
+- Utiliser une échelle d’espacement cohérente et une largeur de lecture confortable.
+- Point de départ proposé : contenu global autour de 1 120–1 200 px maximum, texte continu autour de 65–75 caractères par ligne, titre d’accueil de 48–56 px sur grand écran et 32–36 px sur téléphone. Ce sont des paramètres de conception à ajuster, pas des mesures actuelles ni des exigences normatives.
+- Réutiliser les tokens et composants existants. Éviter les effets animés lourds et les nouvelles dépendances pour une simple mise en page.
+- Vérifier les contrastes, états de focus et composants interactifs ; une impression visuelle seule ne prouve pas leur conformité.
+
+
+5. CE QU’IL FAUT RETENIR DES RÉFÉRENCES
+
+ChatGPT.fr : sa page de formation montre rapidement le périmètre, le programme, un extrait pratique et les conditions de l’offre. Reprendre la clarté de présentation et la démonstration ; ne pas reprendre ses promesses chiffrées, témoignages, prix ou volumes comme s’ils étaient établis pour ChatGPT Courses.
+
+Claude Academy : orientation par apprentissage et produit, ressources identifiables, métadonnées utiles. Reprendre la facilité de choix et la lisibilité des cours disponibles.
+
+OpenAI Academy : cours gratuits organisés par objectifs et profils. La présence de ressources officielles gratuites renforce, à mon avis, l’intérêt de vendre un cas métier bien accompagné, avec pièces, correction et méthode réutilisable. Un catalogue générique de vidéos, prompts et quiz n’est pas une différenciation suffisante à lui seul.
+
+Pour le terme « ChatGPT Academy », cet audit utilise OpenAI Academy comme référence. L’analyse ne mesure pas les ventes ou le taux de conversion de ces sites et ne certifie pas leurs témoignages.
+
+
+6. PROMPTS DE CORRECTION POUR CODEX
+
+RÈGLES COMMUNES À TOUS LES LOTS
+
+- Lire les instructions actuelles du dépôt et la preuve du lot précédent. Ne pas supposer que le kit initial décrit le code déployé.
+- Cartographier les pages et composants concernés avant de modifier. Préserver les changements locaux du propriétaire et les conventions déjà utilisées.
+- Garder Next.js/TypeScript, Tailwind, shadcn/Radix, Spring Boot et PostgreSQL, sauf incompatibilité démontrée distincte. Aucune refonte de stack demandée.
+- Ne pas changer les services de paiement, les invariants d’accès, les contrats de commande, les règles de progression ou la conservation de données pour résoudre un problème visuel.
+- Ne pas inventer de durée, prix, avis, diplôme reconnu, relation avec un éditeur, expérience d’auteur, nombre de clients, fonctionnalité disponible ou gain de revenu.
+- Préparer les données éditoriales non établies en brouillon. Une décision manquante peut bloquer la publication d’une offre sans empêcher les corrections techniques indépendantes.
+- Utiliser la base et les outils de recette autorisés. Les modifications de présentation et les corrections locales sont demandées ; aucun débit réel ou déploiement de production n’est demandé par ces prompts.
+- Choisir des tests qui prouvent le comportement affecté. Ne pas multiplier des tests de texte qui ne font que recopier l’implémentation. Ne relancer les suites globales que si un risque concret ou une règle du dépôt l’exige.
+- À la fin, préciser : fichiers modifiés, comportements vérifiés, limites, décisions restantes, captures utiles et chemin des preuves. Mettre à jour docs/STATUS.md selon sa structure actuelle, sans écraser l’historique.
+- Créer des preuves séparées sous docs/evidence/AUD-01.md à AUD-07.md, ou dans l’emplacement équivalent existant. Une vérification non exécutée doit être indiquée comme telle.
+
+
+AUD-01 — PUBLICATIONS RÉELLES ET DONNÉES DE RECETTE
+
+Objectif
+Rendre la vitrine cohérente sans perdre les données, les droits ou les scénarios de test.
+
+Travail
+1. Lis les documents de statut, architecture, contenu, publication, accès, commandes et recettes existants. Identifie les sources exactes des cartes d’accueil, tâches, résultats, suggestions, offres et liens de fiches.
+2. Inventorie les objets synthétiques et leur provenance. Identifie leurs liens vers versions, médias, offres, commandes, droits, progression et preuves. N’effectue aucune suppression globale.
+3. Vérifie comment la visibilité publique est déjà modélisée. Réutilise ce mécanisme s’il suffit. Sinon propose et applique une extension minimale explicitant provenance/visibilité, avec migration compatible et conservation des historiques. Ne filtre pas durablement sur un préfixe de titre.
+4. Sépare la sélection commerciale des contenus de recette. Applique la règle de manière cohérente aux entrées publiques ordinaires, résultats, suggestions et navigation. Traite les URL directes selon le périmètre de recette autorisé existant ; l’absence d’une carte n’est pas une protection d’accès.
+5. Détermine pourquoi les tâches sont vides alors que les cartes existent. Corrige une association ou une requête uniquement si le défaut est démontré. Sinon adapte la composition éditoriale pour ne pas promouvoir une section vide.
+6. Vérifie les rubriques Méthodes/Guides et les filtres sans choix. Retire de la navigation mise en avant les catégories sans contenu utile ; préserve les routes et liens existants quand cela évite une régression.
+7. En l’absence de contenu commercial validé, rends l’état de préproduction honnête et sobre. Ne crée pas de faux parcours publiés pour remplir les espaces.
+
+Vérification
+- Les jeux de recette restent accessibles aux scénarios autorisés et conservent leurs relations.
+- Aucune fixture n’est présentée comme un produit commercial dans les sélections ordinaires contrôlées.
+- Les comptes, commandes, droits et progressions existants ne sont pas modifiés par effet de bord.
+- Les filtres gratuits/protégés et les deux langues continuent de fonctionner sur le jeu prévu.
+- Un visiteur ne voit pas une section qui promet des choix sans destination utile.
+
+Fin
+Documente l’inventaire, la règle de sélection, le traitement des liens directs, les migrations éventuelles et les preuves. Donne la liste des contenus réels encore nécessaires pour AUD-02.
+
+
+AUD-02 — PREMIER PARCOURS ET DOSSIER PÉDAGOGIQUE COHÉRENTS
+
+Objectif
+Préparer un premier parcours démontrable et une activité gratuite correspondant à un problème réel. La commercialisation dépend d’une revue éditoriale réelle.
+
+Travail
+1. Lis les spécifications produit et références de contenu actuelles. Retrouve le parcours prévu et les décisions déjà prises par Kevin ; ne les remplace pas arbitrairement.
+2. Rédige une fiche éditoriale de préparation : cible, difficulté rencontrée, livrable, prérequis, outil, formats, structure, pièces fournies, critères et correction. Sépare les faits établis des propositions.
+3. Pour le cas de brief client observé, rapproche chaque critère des pièces livrées. Corrige le décalage concernant les cinq tarifs. N’ajoute pas des chiffres supposés ; utilise un dossier approuvé ou ajuste le critère aux données disponibles.
+4. Prépare un vrai support téléchargeable correspondant à la consigne, versionné et dans la langue annoncée. Vérifie son contenu téléchargé, pas seulement son URL.
+5. Prépare un exemple ou corrigé pédagogique explicitement fictif, avec explication du périmètre, des prestations non chiffrées et des conditions de calendrier. Vérifie sa cohérence avec le brief.
+6. Pour chaque module, décris l’action de l’apprenant et le résultat produit. Les exercices doivent enseigner effectivement l’usage de l’outil annoncé : contexte à fournir, consigne ou prompt, résultat à examiner et contrôle à réaliser.
+7. Renseigne les métadonnées établies. Mesure une estimation de durée sur le contenu prêt avant de l’afficher ; ne remplace pas un champ manquant par une valeur inventée.
+8. Prépare la variante anglaise uniquement pour le périmètre réellement traduit, y compris fichiers, consignes, correction et quiz. Signale précisément les éléments restant en français.
+9. Conserve les nouveaux contenus en brouillon tant que les informations essentielles ou la revue du propriétaire manquent. Ne publie pas automatiquement sur la production.
+
+Vérification
+- Toutes les consignes sont réalisables à partir du dossier fourni.
+- Chaque correction et chaque question peut être justifiée par ce dossier ou l’enseignement associé.
+- Les informations du parcours et des fichiers correspondent à leur langue et leur version.
+- L’extrait gratuit apporte un résultat utile et mène logiquement au parcours complet.
+- Les éventuelles règles sur une correction humaine, une attestation ou l’accès ne sont pas inventées.
+
+Fin
+Livre la fiche de contenu, les brouillons exploitables, la matrice consigne/pièce/critère/correction, et une liste courte des décisions à prendre par Kevin. Distingue « prêt techniquement » de « approuvé pour publication ».
+
+
+AUD-03 — ACCUEIL, NAVIGATION ET PRÉSENTATION VISUELLE
+
+Objectif
+Présenter la véritable offre en un parcours de découverte court, cohérent et visuellement soigné.
+
+Travail
+1. Réutilise les tokens, composants, routes et mécanismes d’internationalisation existants. Inspecte le design actuel avant de changer les styles partagés.
+2. Adapte le premier écran à la cible et au parcours établis dans AUD-02. Si ce choix reste ouvert, prépare une variante locale de texte clairement signalée comme proposition.
+3. Place un CTA principal vers l’activité gratuite prête et un secondaire vers la fiche de formation. Vérifie la destination réelle de chacun. Garde l’essai sans compte.
+4. Remplace le long encadré de présentation par une démonstration originale : extrait de brief, extrait du livrable et contrôle important. Utilise du vrai contenu de cours validé, ou un brouillon non publié. Identifie le cas comme fictif.
+5. Compose les sections à partir des publications réelles. Avec un seul parcours prêt, présente-le directement au lieu d’imiter un grand catalogue. Réduis la place de la recherche si elle ne sert pas encore le choix.
+6. Harmonise espacements, titres, bordures, boutons, badges et cartes. Garde le bleu foncé et la sobriété de l’identité existante si les contrastes mesurés sont satisfaisants. N’ajoute pas de bibliothèque d’animations pour cette opération.
+7. Réécris les textes de système visibles dans la vitrine en langage utilisateur. Déplace les détails de version ou de fonctionnement vers des zones secondaires lorsqu’ils restent nécessaires.
+8. Recherche et relie les pages existantes de contact, présentation, aide, conditions et confidentialité. Prépare les informations manquantes en brouillon avec les champs exacts attendus du propriétaire. N’invente pas une entreprise, une adresse ou un statut fiscal.
+9. Adapte les mêmes composants en anglais avec une rédaction naturelle. Ne remplace pas une traduction de contenu manquante par une simple traduction du menu.
+
+Vérification
+- Le premier écran explique cible, tâche, résultat et prochaine action.
+- Chaque section mise en avant a une destination utile et prête.
+- Aucune donnée, preuve sociale, durée, vidéo ou offre n’est annoncée si elle n’existe pas.
+- Les CTA fonctionnent au clavier et les états de focus restent lisibles.
+- Les pages modifiées sont relues en FR et EN, sans débordement sur les dimensions testées.
+
+Fin
+Fournis des captures avant/après de l’accueil et de la navigation, les textes retenus et les limites de contenu restantes.
+
+
+AUD-04 — FICHE DE FORMATION ET LIEN VERS L’OFFRE PERTINENTE
+
+Objectif
+Permettre au visiteur de décider avec les bonnes informations et d’atteindre la bonne offre.
+
+Travail
+1. Identifie le modèle qui relie parcours, version, langue, offre et droits. Réutilise les contrats existants.
+2. Réorganise la fiche : résultat, aperçu, public, prérequis, programme, pratique et vérification, auteur, formats/langues, offre et questions utiles.
+3. Présente le programme par livrables et objectifs. Évite une liste purement technique de types ou d’identifiants.
+4. Fais pointer l’action commerciale vers l’offre réellement associée au parcours et à la version concernée. Si plusieurs offres conviennent, rends le choix explicite. Si aucune n’est prête, ne simule pas un achat.
+5. Affiche montants, devise, inclusions et conditions depuis le serveur. Conserve leur traçabilité avec les conditions présentées au récapitulatif et enregistrées par le système existant.
+6. Affiche les actions adaptées : essai gratuit, connexion utile, achat disponible, reprise pour accès actif, état d’expiration ou indisponibilité. Ne révèle pas de contenu protégé à un visiteur sans droit.
+7. Réduis les répétitions de métadonnées et du bloc de langues. Les informations utiles sur les versions achetées restent consultables.
+8. Conserve les états d’attente et d’erreur existants de paiement et d’activation. Une page de retour réussie ne doit pas accorder des droits par elle-même.
+
+Vérification
+- Fiche et offre liées correspondent réellement au contenu choisi.
+- Une offre modifiée ou indisponible produit un état correct, sans prix figé dans le frontend.
+- Un apprenant ayant accès retrouve le bon parcours ; un visiteur non autorisé ne lit pas les ressources protégées.
+- Les règles de commande, conditions acceptées, idempotence et attribution existantes ne sont pas réécrites pour cette refonte de présentation.
+- Aucun paiement externe n’est déclaré testé sans exécution réelle et références correspondantes.
+
+Fin
+Présente les états vérifiés et les liens entre fiche, offre, récapitulatif et accès. Si la recette P12 demeure ouverte, indique-le séparément au lieu de la clôturer par ce lot.
+
+
+AUD-05 — ATELIER GUIDÉ, CRITÈRES ET RÉSULTATS COMPRÉHENSIBLES
+
+Objectif
+Rendre l’activité facile à commencer et à terminer, tout en préservant les distinctions entre lecture, essai, quiz, projet et compétence.
+
+Travail
+1. Cartographie les états invité/connecté, brouillon local/temporaire/persisté, copie/export, quiz formatif/tentative conservée et progression. Réutilise ces règles.
+2. Réorganise l’écran autour de quatre moments : comprendre, produire, vérifier, réutiliser. Cela peut être une mise en page progressive simple ; une nouvelle machine à états complexe n’est pas demandée si le modèle existant suffit.
+3. Rends la consigne et les pièces faciles à consulter pendant la rédaction. Réduis les blocs répétés de version et de langue.
+4. Place l’action de préparation avant la longue grille. Regroupe les critères par thèmes, sans supprimer une exigence utile et sans en ajouter une impossible à vérifier.
+5. Fournis des aides courtes par champ et un exemple identifié lorsque le contenu est validé. Ne préremplis pas un corrigé qui serait comptabilisé comme un travail de l’apprenant.
+6. Présente le résultat du quiz d’abord par la réponse et son explication. Indique ensuite ce qui est ou non enregistré et l’action réellement disponible. Ne promets pas de récupérer une tentative invitée après connexion si l’architecture ne le permet pas.
+7. Conserve les avertissements nécessaires de perte de saisie, les consentements à la conservation temporaire et la durée effectivement implémentée. Évite de multiplier les paragraphes techniques.
+8. Garde l’essai sans compte, la copie et l’export. Préserve la langue originale de la production personnelle lors d’un changement de langue de navigation.
+9. Présente le corrigé et la grille au moment pédagogique retenu ; distingue auto-vérification, résultat automatique et éventuel retour humain réellement fourni.
+
+Vérification
+- Un visiteur ouvre l’activité, comprend la consigne, prépare son travail, l’exporte et obtient une explication au quiz.
+- Les saisies ne disparaissent pas silencieusement lors d’une navigation ou d’un changement de langue.
+- L’inscription n’est pas imposée avant la première pratique.
+- Aucun état visuel n’accorde un droit ni ne valide une compétence sans la règle prévue.
+- Clavier, focus, erreurs de champ et mobile sont vérifiés sur ce parcours modifié.
+
+Fin
+Fournis le parcours démontré, les messages retenus, les captures et les limites de conservation réellement maintenues.
+
+
+AUD-06 — COHÉRENCE FR/EN ET RETOURS DE NAVIGATION
+
+Objectif
+Préserver la langue choisie dans les déplacements et rendre explicite la disponibilité des traductions.
+
+Reproduction à confirmer
+Depuis l’accueil FR, ouvrir l’activité gratuite, sélectionner English, puis Back to catalogue. Lors de l’audit, le lien contenait returnTo=/fr/catalogue et ramenait effectivement au catalogue FR.
+
+Travail
+1. Reproduis le problème et identifie le calcul de returnTo, le mapping des routes localisées et la résolution des variantes de contenu.
+2. Corrige la destination avec les utilitaires existants. Préserve les filtres compatibles et normalise les paramètres invalides. N’effectue pas une substitution de texte aveugle dans une URL arbitraire.
+3. Conserve la validation des destinations internes : aucun protocole externe, autre hôte, URL malformée ou valeur encodée dangereuse ne doit devenir une redirection libre.
+4. Vérifie les liens équivalents depuis catalogue, fiche, activité, leçon et connexion. Résous les variantes publiées ; n’invente pas une version anglaise inexistante.
+5. Vérifie les libellés des fichiers, consignes, quiz, résultats et conditions. Une interface en anglais ne signifie pas que tous les médias sont traduits.
+6. Ne traduis pas automatiquement les productions personnelles. Affiche leur langue lorsque cela aide à les retrouver.
+
+Vérification
+- FR vers EN puis retour conserve EN ; le trajet inverse conserve FR.
+- Les filtres et la ressource pertinente restent cohérents.
+- Une traduction manquante produit un choix compréhensible, sans page vide ni boucle.
+- Les destinations externes ou malformées sont refusées selon la politique existante.
+- Les tests ciblés prouvent le comportement de navigation et pas seulement une chaîne de traduction.
+
+Fin
+Documente la cause confirmée, les routes concernées et les preuves des cas de retour, traduction absente et redirection refusée.
+
+
+AUD-07 — RECETTE PUBLIQUE, SEO PAR ENVIRONNEMENT ET MESURE
+
+Objectif
+Préparer une décision de lancement fondée sur les preuves du site réel et de son contenu.
+
+Travail
+1. Réexamine les parcours publics modifiés sur ordinateur et de vrais viewports mobiles, par exemple 320, 390, 768 et 1440 pixels de large. Documente la hauteur, le navigateur et le mode de test. Le contrôle par zoom reste un test distinct.
+2. Vérifie menu, langues, filtres, accordéons, formulaires, étapes de l’atelier et appels à l’action. Contrôle clavier, focus, absence de piège, erreurs explicites et contrastes mesurés. Ne déclare pas une certification d’accessibilité après une simple recette visuelle.
+3. Vérifie le fonctionnement du téléchargement et le contenu reçu, la cohérence du dossier et le chemin complet d’essai. Recherche des textes de recette encore visibles dans les parcours destinés aux prospects.
+4. Inspecte la politique robots et canonical dans chaque environnement. Le staging observé est en noindex ; ne retire pas cette règle pour améliorer son SEO. Vérifie que la production ne l’hérite pas par erreur et qu’elle ne référence pas le domaine staging comme canonical.
+5. Contrôle les titres, descriptions, langue HTML et variantes équivalentes réellement publiées. Vérifie la méthode hreflang déjà retenue : HTML, en-têtes HTTP ou sitemap. Les paires doivent se déclarer réciproquement et inclure leur propre variante avec des URL absolues. Ne crée pas trois systèmes concurrents sans nécessité.
+6. Mesure la vitesse et la stabilité des pages principales dans les conditions documentées. Distingue diagnostic de laboratoire et données utilisateurs réelles. N’annonce aucun score ou gain non mesuré.
+7. S’il existe déjà un dispositif de mesure, prépare un entonnoir limité : visite de formation, début d’essai, fin d’essai, création de compte, début de paiement, paiement confirmé côté serveur, accès prêt et retour à la formation. Ne considère pas le simple chargement de l’URL de succès comme un paiement confirmé.
+8. Évite d’envoyer le texte des travaux, les réponses libres, mots de passe ou informations de paiement aux événements de mesure. Respecte les choix de confidentialité et les mécanismes existants. N’ajoute pas plusieurs outils d’analyse concurrents.
+9. Si aucun outil de mesure n’est décidé, livre d’abord la spécification des événements et l’endroit où les produire ; ne bloque pas les corrections précédentes sur une nouvelle dépendance externe.
+10. Recoupe la décision de lancement avec les preuves de paiement et d’accès actuelles. L’audit public ne remplace pas la recette Stripe TEST ni les scénarios durables d’attribution.
+
+Critères de revue avant acquisition
+- Une formation réellement terminée, un essai utile et leurs supports cohérents.
+- Aucun contenu de recette présenté comme un produit fini.
+- Prix, accès, auteur, aide et conditions établis et accessibles.
+- Navigation FR/EN cohérente ; périmètre de traduction honnête.
+- Parcours principal utilisable aux dimensions testées et au clavier.
+- Paiement TEST et accès validés par leurs propres preuves, lorsque le lancement comprend une vente.
+- Configuration d’indexation adaptée à chaque environnement.
+- Limites et décisions restantes explicites.
+
+Fin
+Livre un rapport « prêt / à corriger / non vérifié » avec liens vers les preuves. Ne publie pas automatiquement et ne lance pas de paiement réel. L’existence d’un fichier de preuve ne suffit pas : son contenu doit décrire les vérifications effectivement réalisées.
+
+
+7. ACQUISITION APRÈS MISE EN COHÉRENCE
+
+Proposition de validation commerciale, pas résultat déjà mesuré :
+1. Faire essayer le parcours à un petit groupe correspondant à la cible, par exemple cinq à dix indépendants de services.
+2. Observer sans guider excessivement : compréhension de l’offre, démarrage de l’activité, réalisation du livrable, hésitations et raisons d’abandon.
+3. Distinguer intérêt verbal et intention d’achat dans les conditions réellement présentées. Ne pas interpréter une adresse e-mail collectée comme une vente.
+4. Corriger les incompréhensions fréquentes avant d’acheter du trafic.
+5. Publier quelques contenus originaux correspondant au problème traité : cadrage d’un brief, préparation d’une proposition, contrôle des engagements, prompts contextualisés et exemples corrigés. Relier chaque contenu à l’activité pertinente.
+6. Mesurer le passage de l’essai à l’offre, l’achat confirmé, l’activation et l’usage réel. Analyser aussi le coût de support et les remboursements pour juger l’intérêt économique.
+7. Élargir les cours, les langues et les canaux lorsque le premier parcours apporte des preuves d’utilité et que leur coût de maintenance reste soutenable.
+
+Aucun taux de conversion, prix optimal ou volume de clients n’a été mesuré par cet audit. Les comparateurs servent à repérer des principes de présentation, pas à promettre les mêmes ventes.
+
+
+8. SOURCES ET LIENS DE REPRODUCTION
+
+Pages du site effectivement parcourues :
+- Accueil FR : https://staging.chatgpt-courses.com/fr
+- Accueil EN : https://staging.chatgpt-courses.com/en
+- Catalogue : https://staging.chatgpt-courses.com/fr/catalogue
+- Méthodes : https://staging.chatgpt-courses.com/fr/catalogue?type=METHOD_TEMPLATE&locale=fr
+- Guides : https://staging.chatgpt-courses.com/fr/catalogue?type=GUIDE&locale=fr
+- Offres : https://staging.chatgpt-courses.com/fr/offres
+- Offre détaillée inspectée : https://staging.chatgpt-courses.com/fr/offres/1b4ba9cd-e5fe-4df7-9ba9-263ac9e0c882
+- Activité de l’accueil : https://staging.chatgpt-courses.com/fr/catalogue?activity=9b877ac4-89be-4998-a334-e6e4b064f7ac&version=1e1171be-7602-4176-92f3-3e9a9e1ed179
+- Variante EN avec retour FR observé : https://staging.chatgpt-courses.com/en/catalog?activity=9b877ac4-89be-4998-a334-e6e4b064f7ac&version=1e1171be-7602-4176-92f3-3e9a9e1ed179&returnTo=%2Ffr%2Fcatalogue
+- Inscription : https://staging.chatgpt-courses.com/fr/inscription
+- Connexion : https://staging.chatgpt-courses.com/fr/connexion?notice=required
+
+Ces URL de recette peuvent changer avec les données du staging. Elles servent à reproduire les observations, pas à définir les futures routes commerciales.
+
+Références officielles consultées le 15 novembre 2026 :
+- Présentation d’une offre de formation et extrait pratique : https://chatgpt.fr/formation
+- Organisation des ressources Claude : https://academy.claude.com/fr
+- Cours et parcours OpenAI Academy : https://help.openai.com/en/articles/20001270-openai-academy-courses
+- Règle noindex et conditions de prise en compte : https://developers.google.com/search/docs/crawling-indexing/block-indexing
+- Variantes linguistiques et méthodes de déclaration : https://developers.google.com/search/docs/specialty/international/localized-versions
+
+Fin du document.

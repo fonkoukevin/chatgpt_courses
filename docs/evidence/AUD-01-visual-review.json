@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "result": "visually-reviewed-local",
+  "reviewedAt": "2026-11-15T23:14:25.114Z",
+  "browser": "chromium",
+  "browserVersion": "158.0.8127.18",
+  "headless": true,
+  "realPhoneTested": false,
+  "zoomUsed": false,
+  "source": "Actual local Chromium screenshots from AUD01 with an owned disposable PostgreSQL database",
+  "states": [
+    "No approved public selection",
+    "Explicit editorial selection simulation; no real publication approval"
+  ],
+  "viewportObservations": [
+    {
+      "state": "empty",
+      "locale": "fr",
+      "width": 320,
+      "height": 844,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": null
+    },
+    {
+      "state": "empty",
+      "locale": "fr",
+      "width": 390,
+      "height": 844,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": "aud01-empty-fr-390.png"
+    },
+    {
+      "state": "empty",
+      "locale": "fr",
+      "width": 1440,
+      "height": 1000,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": null
+    },
+    {
+      "state": "empty",
+      "locale": "en",
+      "width": 320,
+      "height": 844,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": "aud01-empty-en-320.png"
+    },
+    {
+      "state": "empty",
+      "locale": "en",
+      "width": 390,
+      "height": 844,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": "aud01-empty-en-390.png"
+    },
+    {
+      "state": "empty",
+      "locale": "en",
+      "width": 1440,
+      "height": 1000,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": null
+    },
+    {
+      "state": "editorial",
+      "locale": "fr",
+      "width": 320,
+      "height": 844,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": null
+    },
+    {
+      "state": "editorial",
+      "locale": "fr",
+      "width": 390,
+      "height": 844,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": "aud01-editorial-fr-390.png"
+    },
+    {
+      "state": "editorial",
+      "locale": "fr",
+      "width": 1440,
+      "height": 1000,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": "aud01-editorial-fr-1440.png"
+    },
+    {
+      "state": "editorial",
+      "locale": "en",
+      "width": 320,
+      "height": 844,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": null
+    },
+    {
+      "state": "editorial",
+      "locale": "en",
+      "width": 390,
+      "height": 844,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": "aud01-editorial-en-390.png"
+    },
+    {
+      "state": "editorial",
+      "locale": "en",
+      "width": 1440,
+      "height": 1000,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": null
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "docs/evidence/AUD01-browser/2026-11-15T23-05-32-236Z-a5f02001-58ca-498b-b3fc-1b0da1956fd4/aud01-empty-fr-390.png",
+      "sha256": "2719149b21cd12fa6799589b7080497ce70e9103d781ba3053b8bd715194c456",
+      "width": 390,
+      "fullPageHeight": 844,
+      "visuallyInspected": true
+    },
+    {
+      "file": "docs/evidence/AUD01-browser/2026-11-15T23-05-32-236Z-a5f02001-58ca-498b-b3fc-1b0da1956fd4/aud01-empty-en-320.png",
+      "sha256": "227772ccfaf89ba747172b077e6e1c0015eef7992dcf7da7fd87161d104dc2b8",
+      "width": 320,
+      "fullPageHeight": 844,
+      "visuallyInspected": true
+    },
+    {
+      "file": "docs/evidence/AUD01-browser/2026-11-15T23-05-32-236Z-a5f02001-58ca-498b-b3fc-1b0da1956fd4/aud01-empty-en-390.png",
+      "sha256": "7e0017cdfd58c0a39882f32821101c4252a2a2e3e42bc231e82e720150c01910",
+      "width": 390,
+      "fullPageHeight": 844,
+      "visuallyInspected": true
+    },
+    {
+      "file": "docs/evidence/AUD01-browser/2026-11-15T23-05-32-236Z-a5f02001-58ca-498b-b3fc-1b0da1956fd4/aud01-editorial-fr-390.png",
+      "sha256": "322982ea527535567686df4128df52641c645b79cb1524df5f915411ce3a30b9",
+      "width": 390,
+      "fullPageHeight": 3973,
+      "visuallyInspected": true
+    },
+    {
+      "file": "docs/evidence/AUD01-browser/2026-11-15T23-05-32-236Z-a5f02001-58ca-498b-b3fc-1b0da1956fd4/aud01-editorial-fr-1440.png",
+      "sha256": "fc81f53ae8f130a5bdfb35b07d5f538bcaa7e293075c2c8c9c4b54d5cfb00db9",
+      "width": 1440,
+      "fullPageHeight": 2112,
+      "visuallyInspected": true
+    },
+    {
+      "file": "docs/evidence/AUD01-browser/2026-11-15T23-05-32-236Z-a5f02001-58ca-498b-b3fc-1b0da1956fd4/aud01-editorial-en-390.png",
+      "sha256": "d2f6c0db10162f47b7c45612240186e472524e7a4fb64ce687885e22ab6cca4d",
+      "width": 390,
+      "fullPageHeight": 3481,
+      "visuallyInspected": true
+    }
+  ],
+  "findings": [
+    "Empty FR/EN states explain preparation without trial or resource promises.",
+    "Approved simulation keeps existing resource cards and useful navigation; no redesign claimed.",
+    "All six screenshots were inspected; no visible text overlap or clipped content was found.",
+    "At 320 CSS pixels the header wraps onto two rows; reducing its height remains outside AUD-01."
+  ],
+  "limits": [
+    "Keyboard, dialogs, links and overflow are checked automatically in the recorded 12 observations. Closed-menu screenshots alone do not demonstrate those interactions.",
+    "No accessibility certification, physical mobile device check, performance score, or production observation is claimed.",
+    "These synthetic local test states do not approve P18 content or P21 staging fixtures."
+  ]
+}

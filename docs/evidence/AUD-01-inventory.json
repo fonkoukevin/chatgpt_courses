@@ -1,0 +1,2069 @@
+{
+  "schemaVersion": 1,
+  "proofFamily": "AUD01_READ_ONLY_CONTENT_AND_RECIPE_INVENTORY_V1",
+  "result": "observed",
+  "observedAt": "2026-11-15T22:45:50.617Z",
+  "scope": "AUD-01 only; inventory before local corrections; no deployment, publication, deletion, financial replay or database mutation",
+  "observationMethods": [
+    "Anonymous HTTPS GET with normal TLS verification",
+    "SSH pinned active staging release and PostgreSQL REPEATABLE READ READ ONLY",
+    "Existing local PostgreSQL container identity checked, socket psql REPEATABLE READ READ ONLY",
+    "Exact resource/offer IDs matched against their historical creation checkpoints; no title-prefix classification"
+  ],
+  "evidenceSha256": {
+    "stagingSql": "69a4bcc3808381dbd692378be0986e09368cedde3b4b835f366d20abd739f3a0",
+    "localSharedSql": "e3a9947a0cda551132a15eb9cb485924b5b77cdde0fc7c2f5e04fe425f5de87e",
+    "publicHttp": "8eebf30538e6207d81be360b357de545b1d07c7b4cf561b5a16caf425cde83fa",
+    "publicOfferDetails": "4d78d7983997470e8a31ce10cbbfed52c0c1010e8a2dcae7ef8592c5a5d23905",
+    "exactCreationProvenance": "788e2e3b1c93cbd082808a48e1b6d968ea5be4c0f5488b67e3c28226bdacadc6",
+    "localShared83TableBaseline": "30ac127123a72578675f8d71e2c749d18b7770df3ced69842fcabb6e22a187ca",
+    "directVersionUrls": "472ad90eded8561e4ed3c99ff7bc66be631b884c838e4178a93c3e935f3b9e58"
+  },
+  "staging": {
+    "sourceCommit": "7572fcf51fe51749d7eec9b9ec62f293998091d0",
+    "manifestSha256": "ad2aa976378ed3349743de05b15ef26a2a326884ef3a0608aeb319e35bc39ab4",
+    "schemaVersion": 20,
+    "sqlObservedAt": "2026-11-15T22:41:06.135494+00:00",
+    "resources": 35,
+    "resourceKinds": {
+      "ACTIVITY": 13,
+      "COURSE": 11,
+      "MODULE": 11
+    },
+    "translationStates": {
+      "DRAFT": 1,
+      "PUBLISHED": 54,
+      "TO_REVIEW": 1
+    },
+    "technicalFixtureResourcesWithExactCreationProvenance": 35,
+    "commercialEditorialApprovalNotDemonstrated": true,
+    "editorialImportResources": 0,
+    "publishedMetadata": {
+      "metadataRowsTotal": 0,
+      "publishedWithAnyGoal": 0,
+      "publishedMetadataRows": 0,
+      "publishedTranslations": 54
+    },
+    "publicSelections": [
+      {
+        "path": "/api/v1/catalog?locale=fr&pageSize=100",
+        "status": 200,
+        "total": 22
+      },
+      {
+        "path": "/api/v1/catalog?locale=fr&pageSize=100&access=FREE",
+        "status": 200,
+        "total": 6
+      },
+      {
+        "path": "/api/v1/catalog?locale=fr&pageSize=100&type=METHOD_TEMPLATE",
+        "status": 200,
+        "total": 0
+      },
+      {
+        "path": "/api/v1/catalog?locale=fr&pageSize=100&type=GUIDE",
+        "status": 200,
+        "total": 0
+      },
+      {
+        "path": "/api/v1/catalog/facets?locale=fr",
+        "status": 200,
+        "total": null,
+        "facets": {
+          "types": [
+            {
+              "code": "ACTIVITY",
+              "label": "Activités",
+              "count": 11
+            },
+            {
+              "code": "COURSE",
+              "label": "Parcours",
+              "count": 11
+            }
+          ],
+          "goals": [],
+          "levels": [],
+          "accesses": [
+            {
+              "code": "FREE",
+              "label": "Gratuit",
+              "count": 6
+            },
+            {
+              "code": "PROTECTED",
+              "label": "Protégé",
+              "count": 16
+            }
+          ],
+          "locales": [
+            {
+              "code": "en",
+              "label": "English",
+              "count": 14
+            },
+            {
+              "code": "fr",
+              "label": "Français",
+              "count": 22
+            }
+          ]
+        }
+      },
+      {
+        "path": "/api/v1/offers?locale=fr",
+        "status": 200,
+        "total": 4
+      },
+      {
+        "path": "/api/v1/catalog?locale=en&pageSize=100",
+        "status": 200,
+        "total": 14
+      },
+      {
+        "path": "/api/v1/catalog?locale=en&pageSize=100&access=FREE",
+        "status": 200,
+        "total": 6
+      },
+      {
+        "path": "/api/v1/catalog?locale=en&pageSize=100&type=METHOD_TEMPLATE",
+        "status": 200,
+        "total": 0
+      },
+      {
+        "path": "/api/v1/catalog?locale=en&pageSize=100&type=GUIDE",
+        "status": 200,
+        "total": 0
+      },
+      {
+        "path": "/api/v1/catalog/facets?locale=en",
+        "status": 200,
+        "total": null,
+        "facets": {
+          "types": [
+            {
+              "code": "ACTIVITY",
+              "label": "Activities",
+              "count": 7
+            },
+            {
+              "code": "COURSE",
+              "label": "Courses",
+              "count": 7
+            }
+          ],
+          "goals": [],
+          "levels": [],
+          "accesses": [
+            {
+              "code": "FREE",
+              "label": "Free",
+              "count": 6
+            },
+            {
+              "code": "PROTECTED",
+              "label": "Protected",
+              "count": 8
+            }
+          ],
+          "locales": [
+            {
+              "code": "en",
+              "label": "English",
+              "count": 14
+            },
+            {
+              "code": "fr",
+              "label": "Français",
+              "count": 22
+            }
+          ]
+        }
+      },
+      {
+        "path": "/api/v1/offers?locale=en",
+        "status": 200,
+        "total": 4
+      }
+    ],
+    "publishedResources": [
+      {
+        "resourceId": "25d97cbe-069b-4447-b657-d828f3c90f85",
+        "kind": "ACTIVITY",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "85f1c0ab-121f-4523-bb70-132da59558ba",
+            "checkpointSha256": "36c4dba00c919bfb3525bfb50d5e453a1841891e5b4cc85c534e6f3a49f58540",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "2f877d96-97ad-4c81-ab64-2c68c2911c77",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "en",
+                "state": "PUBLISHED",
+                "revisionId": "90323f18-fcd7-4cdb-83cc-abc2b89ecfcf",
+                "slug": "p21-protected-85f1c0ab-121f-4523-bb70-132da59558ba-a-activity-en",
+                "goalCodes": [],
+                "level": null
+              },
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "4337e24b-cc06-4e48-a2b0-8a3192648ea6",
+                "slug": "p21-protected-85f1c0ab-121f-4523-bb70-132da59558ba-a-activity",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {}
+      },
+      {
+        "resourceId": "58781cc5-d7eb-4a88-b929-7079cc0546e2",
+        "kind": "ACTIVITY",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "656c65e0-4e1d-4d68-892f-d4de3a038c2e",
+            "checkpointSha256": "ffa2ae86cc1968446a3a82f6a41318feed3b6b4272e3083a3a6182c6fae99cc0",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "fc640043-0864-4cfc-80cc-5411c661599f",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "en",
+                "state": "PUBLISHED",
+                "revisionId": "eb3ca3c4-3c60-4b01-9377-6eccdd4c301d",
+                "slug": "p21-protected-656c65e0-4e1d-4d68-892f-d4de3a038c2e-a-activity-en",
+                "goalCodes": [],
+                "level": null
+              },
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "2413fbc0-44cc-4dd1-a724-96d535e7cb4c",
+                "slug": "p21-protected-656c65e0-4e1d-4d68-892f-d4de3a038c2e-a-activity",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {}
+      },
+      {
+        "resourceId": "5ef3368b-bcac-457d-a78a-f5bf988f5eca",
+        "kind": "ACTIVITY",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "656c65e0-4e1d-4d68-892f-d4de3a038c2e",
+            "checkpointSha256": "ffa2ae86cc1968446a3a82f6a41318feed3b6b4272e3083a3a6182c6fae99cc0",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "25086eca-3619-42c9-9085-f5e37845051f",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "fa78fa20-36d6-4ad6-aa46-6c144b42ff4f",
+                "slug": "p21-protected-656c65e0-4e1d-4d68-892f-d4de3a038c2e-b-activity",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {
+          "editorialAssets": 1
+        }
+      },
+      {
+        "resourceId": "9b877ac4-89be-4998-a334-e6e4b064f7ac",
+        "kind": "ACTIVITY",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "ac3fa832-5065-4b53-bcad-9bc84e1d3cdd",
+            "checkpointSha256": "f0c7304630ba49d251fdddd0d0be904024ebe823affbb6435ebfc1f60321e9c6",
+            "generator": "p21-remote-editorial-project.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "1e1171be-7602-4176-92f3-3e9a9e1ed179",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "en",
+                "state": "PUBLISHED",
+                "revisionId": "9a855fd1-f37a-40a4-82a7-a3a5d127df29",
+                "slug": "p21-ac3fa832-5065-4b53-bcad-9bc84e1d3cdd-en",
+                "goalCodes": [],
+                "level": null
+              },
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "114383ca-583e-40b6-b7ae-3e87f0cf2d1f",
+                "slug": "p21-ac3fa832-5065-4b53-bcad-9bc84e1d3cdd-fr",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {
+          "notes": 1,
+          "projects": 1,
+          "editorialAssets": 1,
+          "activityProgress": 1
+        }
+      },
+      {
+        "resourceId": "9f0e17dd-9c7b-484b-b9a8-3bbc2e4abb2c",
+        "kind": "ACTIVITY",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "8cdb4c7c-d5b7-4584-89d9-2da0b8820436",
+            "checkpointSha256": "3011ff9fd544a360b509bc9d54b52466f9be250e25a4d7e3c442542668584ce3",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "02095988-97df-4de2-947f-4216877499f9",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "en",
+                "state": "PUBLISHED",
+                "revisionId": "9e3da153-144a-4225-b313-54b0a7aa7337",
+                "slug": "p21-protected-8cdb4c7c-d5b7-4584-89d9-2da0b8820436-a-activity-en",
+                "goalCodes": [],
+                "level": null
+              },
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "fa2eaf40-5708-4fd3-a4b2-77946428aef1",
+                "slug": "p21-protected-8cdb4c7c-d5b7-4584-89d9-2da0b8820436-a-activity",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {}
+      },
+      {
+        "resourceId": "c6f67014-d3d0-4c6e-b774-20913b92f19c",
+        "kind": "ACTIVITY",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "41edece3-6e26-48b0-87da-268a678611d6",
+            "checkpointSha256": "320214d0b93ccf847ce3667f2290c69820f816cbaa8e2a0f5db49c0b63ff31c5",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "5fc85376-1753-4125-8e97-30802cb58832",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "en",
+                "state": "PUBLISHED",
+                "revisionId": "727b49a6-e2ae-435f-a9d5-adf7e5ed4f28",
+                "slug": "p21-protected-41edece3-6e26-48b0-87da-268a678611d6-a-activity-en",
+                "goalCodes": [],
+                "level": null
+              },
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "cc1eb470-0a07-4f4e-9932-0ed3733ea0a1",
+                "slug": "p21-protected-41edece3-6e26-48b0-87da-268a678611d6-a-activity",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {
+          "notes": 1,
+          "activityProgress": 1
+        }
+      },
+      {
+        "resourceId": "caa833ca-0563-492b-ba00-2a5464bc35ef",
+        "kind": "ACTIVITY",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "53ac25c3-04f0-4c3e-a196-204826578f45",
+            "checkpointSha256": "b198b5a4d2de1e35eee1b27b06cd524690448ab7554d623e32ebf775789a8eb8",
+            "generator": "p21-remote-editorial-project.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "2121d1dc-308e-497b-ad61-e8198a11005a",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "en",
+                "state": "PUBLISHED",
+                "revisionId": "34f25f05-3be7-40b7-b73f-1cc8e9fa369a",
+                "slug": "p21-53ac25c3-04f0-4c3e-a196-204826578f45-en",
+                "goalCodes": [],
+                "level": null
+              },
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "c79f4cfa-6e75-4e9e-ad41-2ceee0752655",
+                "slug": "p21-53ac25c3-04f0-4c3e-a196-204826578f45-fr",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {
+          "notes": 1,
+          "projects": 1,
+          "editorialAssets": 1,
+          "activityProgress": 1
+        }
+      },
+      {
+        "resourceId": "d7116cc1-2d7b-42aa-b732-995e57d023c4",
+        "kind": "ACTIVITY",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "8cdb4c7c-d5b7-4584-89d9-2da0b8820436",
+            "checkpointSha256": "3011ff9fd544a360b509bc9d54b52466f9be250e25a4d7e3c442542668584ce3",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "c9f5f656-8e11-4c5a-82cc-700aed2dd7d9",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "4f71bbf1-47b2-4609-850d-f6157ab1bd71",
+                "slug": "p21-protected-8cdb4c7c-d5b7-4584-89d9-2da0b8820436-b-activity",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {
+          "editorialAssets": 1
+        }
+      },
+      {
+        "resourceId": "f76fd71e-14e7-4a8e-b12b-2d665b19e484",
+        "kind": "ACTIVITY",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "85f1c0ab-121f-4523-bb70-132da59558ba",
+            "checkpointSha256": "36c4dba00c919bfb3525bfb50d5e453a1841891e5b4cc85c534e6f3a49f58540",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "c523eec0-8a40-4854-98dd-066212e0b266",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "87d83794-d02b-4022-a5ff-a89321377cd4",
+                "slug": "p21-protected-85f1c0ab-121f-4523-bb70-132da59558ba-b-activity",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {
+          "editorialAssets": 1
+        }
+      },
+      {
+        "resourceId": "f82bc135-a6e9-4f81-a512-39fe83cbc4ad",
+        "kind": "ACTIVITY",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "41edece3-6e26-48b0-87da-268a678611d6",
+            "checkpointSha256": "320214d0b93ccf847ce3667f2290c69820f816cbaa8e2a0f5db49c0b63ff31c5",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "b5e0965c-7352-4212-8e14-cedab14e1645",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "40a47356-edf3-4388-afd7-b90d453bedf1",
+                "slug": "p21-protected-41edece3-6e26-48b0-87da-268a678611d6-b-activity",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {
+          "notes": 1,
+          "editorialAssets": 1
+        }
+      },
+      {
+        "resourceId": "fb32a4aa-2d0d-4558-ab4f-65641c0fffe7",
+        "kind": "ACTIVITY",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "1b1b6410-8945-4452-82f3-b80bde90bb5b",
+            "checkpointSha256": "d1c9ba45538c953c87cda56a93651c34f46c60986d6a6b9c8b018a8c1705621a",
+            "generator": "p21-remote-editorial-project.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "2161b783-7da6-4855-9445-168a5da453d4",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "en",
+                "state": "PUBLISHED",
+                "revisionId": "5bc7727f-4d89-448c-af4c-cf86e7168404",
+                "slug": "p21-1b1b6410-8945-4452-82f3-b80bde90bb5b-en",
+                "goalCodes": [],
+                "level": null
+              },
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "27f0a0d5-5339-4d1b-a68f-477e1f6a9ebc",
+                "slug": "p21-1b1b6410-8945-4452-82f3-b80bde90bb5b-fr",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {
+          "notes": 1,
+          "projects": 1,
+          "editorialAssets": 1
+        }
+      },
+      {
+        "resourceId": "105ee83c-a8e0-43c3-b031-779901150da7",
+        "kind": "COURSE",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "1b1b6410-8945-4452-82f3-b80bde90bb5b",
+            "checkpointSha256": "d1c9ba45538c953c87cda56a93651c34f46c60986d6a6b9c8b018a8c1705621a",
+            "generator": "p21-remote-editorial-project.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "eacab078-80be-4c51-bb17-9da552a5d7e0",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "en",
+                "state": "PUBLISHED",
+                "revisionId": "56f56251-4fb7-482b-800e-b440cc2fc41e",
+                "slug": "p21-1b1b6410-8945-4452-82f3-b80bde90bb5b-course-en",
+                "goalCodes": [],
+                "level": null
+              },
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "901df605-7c3a-41b0-9637-a9c357a5b62a",
+                "slug": "p21-1b1b6410-8945-4452-82f3-b80bde90bb5b-course-fr",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {}
+      },
+      {
+        "resourceId": "1db2c94e-a5b7-45e4-b418-d5586572b9dd",
+        "kind": "COURSE",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "53ac25c3-04f0-4c3e-a196-204826578f45",
+            "checkpointSha256": "b198b5a4d2de1e35eee1b27b06cd524690448ab7554d623e32ebf775789a8eb8",
+            "generator": "p21-remote-editorial-project.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "9bdae9bb-f7aa-438f-8768-e34fb7908c11",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "en",
+                "state": "PUBLISHED",
+                "revisionId": "390bcb1e-caca-4efb-bfa7-861f1ee6af10",
+                "slug": "p21-53ac25c3-04f0-4c3e-a196-204826578f45-course-en",
+                "goalCodes": [],
+                "level": null
+              },
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "0d5dd60d-33ff-4eca-a554-ddf4fd741b56",
+                "slug": "p21-53ac25c3-04f0-4c3e-a196-204826578f45-course-fr",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {
+          "enrollments": 1
+        }
+      },
+      {
+        "resourceId": "43e8d00c-2a31-4286-9073-a120b9604c6e",
+        "kind": "COURSE",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "656c65e0-4e1d-4d68-892f-d4de3a038c2e",
+            "checkpointSha256": "ffa2ae86cc1968446a3a82f6a41318feed3b6b4272e3083a3a6182c6fae99cc0",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "aa67f6fb-7589-49fe-a343-a98236e6bbd2",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "b9f6ab83-8d33-4e5a-9752-f6d1d79bf7b5",
+                "slug": "p21-protected-656c65e0-4e1d-4d68-892f-d4de3a038c2e-b-course",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {}
+      },
+      {
+        "resourceId": "473a309e-9a9e-4a80-ab92-9aa0938172b8",
+        "kind": "COURSE",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "41edece3-6e26-48b0-87da-268a678611d6",
+            "checkpointSha256": "320214d0b93ccf847ce3667f2290c69820f816cbaa8e2a0f5db49c0b63ff31c5",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "21a09e00-9c15-4b55-af7f-bd3818d6a3cc",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "62198e6a-2415-4a7f-afe1-4ab4559afd31",
+                "slug": "p21-protected-41edece3-6e26-48b0-87da-268a678611d6-b-course",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {
+          "orderLines": 1,
+          "accessGrants": 1,
+          "offerRevisionInclusions": 1
+        }
+      },
+      {
+        "resourceId": "5de1767e-13ae-4d15-bb0a-aff9ce2e4031",
+        "kind": "COURSE",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "85f1c0ab-121f-4523-bb70-132da59558ba",
+            "checkpointSha256": "36c4dba00c919bfb3525bfb50d5e453a1841891e5b4cc85c534e6f3a49f58540",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "7963f7f5-6392-4336-b75a-9c4411674d32",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "en",
+                "state": "PUBLISHED",
+                "revisionId": "2fb36ca0-f678-491a-be85-6091ee16ee72",
+                "slug": "p21-protected-85f1c0ab-121f-4523-bb70-132da59558ba-a-course-en",
+                "goalCodes": [],
+                "level": null
+              },
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "c37ea9f5-61bd-4f7c-a330-b2e2d9a99bb2",
+                "slug": "p21-protected-85f1c0ab-121f-4523-bb70-132da59558ba-a-course",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {}
+      },
+      {
+        "resourceId": "67fa8d5c-199d-4a46-9125-b47596fe7fe2",
+        "kind": "COURSE",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "ac3fa832-5065-4b53-bcad-9bc84e1d3cdd",
+            "checkpointSha256": "f0c7304630ba49d251fdddd0d0be904024ebe823affbb6435ebfc1f60321e9c6",
+            "generator": "p21-remote-editorial-project.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "a91b1353-d8df-4973-9c88-6c49ee7596cb",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "en",
+                "state": "PUBLISHED",
+                "revisionId": "c6dcfb39-f67d-48e5-b7ba-48d92e69d67f",
+                "slug": "p21-ac3fa832-5065-4b53-bcad-9bc84e1d3cdd-course-en",
+                "goalCodes": [],
+                "level": null
+              },
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "80eb4b5b-5c8c-4049-bb5a-21774feb2938",
+                "slug": "p21-ac3fa832-5065-4b53-bcad-9bc84e1d3cdd-course-fr",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {
+          "enrollments": 1
+        }
+      },
+      {
+        "resourceId": "81d91230-2420-4f3c-afa7-632dea997d91",
+        "kind": "COURSE",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "85f1c0ab-121f-4523-bb70-132da59558ba",
+            "checkpointSha256": "36c4dba00c919bfb3525bfb50d5e453a1841891e5b4cc85c534e6f3a49f58540",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "86cb5c8e-63f6-4676-80f3-0018cfda6f5e",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "7374a0b1-6225-4e94-91b8-6622e9923aad",
+                "slug": "p21-protected-85f1c0ab-121f-4523-bb70-132da59558ba-b-course",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {}
+      },
+      {
+        "resourceId": "90c9cebd-5451-4a9e-9722-e74ec5e7b6d5",
+        "kind": "COURSE",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "8cdb4c7c-d5b7-4584-89d9-2da0b8820436",
+            "checkpointSha256": "3011ff9fd544a360b509bc9d54b52466f9be250e25a4d7e3c442542668584ce3",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "0a4fb324-72a6-4b0d-843b-5d8ba789c3dc",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "a62aabad-b403-438d-9e94-6b7257457242",
+                "slug": "p21-protected-8cdb4c7c-d5b7-4584-89d9-2da0b8820436-b-course",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {}
+      },
+      {
+        "resourceId": "acfdc155-1ccb-4fb9-a713-0ba221d91949",
+        "kind": "COURSE",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "41edece3-6e26-48b0-87da-268a678611d6",
+            "checkpointSha256": "320214d0b93ccf847ce3667f2290c69820f816cbaa8e2a0f5db49c0b63ff31c5",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "af3edd69-b73b-4be6-94ea-dcb0c526dbc7",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "en",
+                "state": "PUBLISHED",
+                "revisionId": "94dc5157-fb3e-4fee-841b-6e1ffa42dca3",
+                "slug": "p21-protected-41edece3-6e26-48b0-87da-268a678611d6-a-course-en",
+                "goalCodes": [],
+                "level": null
+              },
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "8b5bdef6-ba3c-4e15-9378-41519de5a620",
+                "slug": "p21-protected-41edece3-6e26-48b0-87da-268a678611d6-a-course",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {
+          "orderLines": 2,
+          "enrollments": 1,
+          "accessGrants": 2,
+          "offerRevisionInclusions": 2
+        }
+      },
+      {
+        "resourceId": "ddab0e6e-99d7-45f0-9fcf-1cf793c3a383",
+        "kind": "COURSE",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "8cdb4c7c-d5b7-4584-89d9-2da0b8820436",
+            "checkpointSha256": "3011ff9fd544a360b509bc9d54b52466f9be250e25a4d7e3c442542668584ce3",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "0e9528d2-801a-4dce-9167-3ab469c7c6b1",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "en",
+                "state": "PUBLISHED",
+                "revisionId": "90bc263f-7fef-440d-aa95-ac0b77145b92",
+                "slug": "p21-protected-8cdb4c7c-d5b7-4584-89d9-2da0b8820436-a-course-en",
+                "goalCodes": [],
+                "level": null
+              },
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "2cf106a1-9a32-42cb-b276-a72d39628562",
+                "slug": "p21-protected-8cdb4c7c-d5b7-4584-89d9-2da0b8820436-a-course",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {
+          "orderLines": 1,
+          "offerRevisionInclusions": 1
+        }
+      },
+      {
+        "resourceId": "df57baef-95a3-445f-acde-93a891950f98",
+        "kind": "COURSE",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "656c65e0-4e1d-4d68-892f-d4de3a038c2e",
+            "checkpointSha256": "ffa2ae86cc1968446a3a82f6a41318feed3b6b4272e3083a3a6182c6fae99cc0",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "2430a453-f2cc-4e0a-b9d0-64d26500737e",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "en",
+                "state": "PUBLISHED",
+                "revisionId": "810d9ef6-313c-4cb7-a000-bfa085f57ec0",
+                "slug": "p21-protected-656c65e0-4e1d-4d68-892f-d4de3a038c2e-a-course-en",
+                "goalCodes": [],
+                "level": null
+              },
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "9b1c0849-90c4-412c-ae87-dc0dea334017",
+                "slug": "p21-protected-656c65e0-4e1d-4d68-892f-d4de3a038c2e-a-course",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {
+          "orderLines": 1,
+          "offerRevisionInclusions": 1
+        }
+      },
+      {
+        "resourceId": "066fdc6d-6471-4df9-906f-54f48531af18",
+        "kind": "MODULE",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "85f1c0ab-121f-4523-bb70-132da59558ba",
+            "checkpointSha256": "36c4dba00c919bfb3525bfb50d5e453a1841891e5b4cc85c534e6f3a49f58540",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "7e5fd6b2-02fb-4fb9-8d79-a4c7a18e636b",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "04958f7a-465d-415c-823b-0a418d1eca9e",
+                "slug": "p21-protected-85f1c0ab-121f-4523-bb70-132da59558ba-b-module",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {}
+      },
+      {
+        "resourceId": "0925bdbd-dc7c-461f-b8c8-d65925ae622f",
+        "kind": "MODULE",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "656c65e0-4e1d-4d68-892f-d4de3a038c2e",
+            "checkpointSha256": "ffa2ae86cc1968446a3a82f6a41318feed3b6b4272e3083a3a6182c6fae99cc0",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "7f7021dc-6211-4f33-a3b1-042e06da22b7",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "9342d163-2924-40c3-933b-82f59fc114c4",
+                "slug": "p21-protected-656c65e0-4e1d-4d68-892f-d4de3a038c2e-b-module",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {}
+      },
+      {
+        "resourceId": "0e38c2a4-337c-454d-856d-d32ef7812a90",
+        "kind": "MODULE",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "53ac25c3-04f0-4c3e-a196-204826578f45",
+            "checkpointSha256": "b198b5a4d2de1e35eee1b27b06cd524690448ab7554d623e32ebf775789a8eb8",
+            "generator": "p21-remote-editorial-project.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "b4ec0b32-aac6-4769-a5b3-0b29f8115c46",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "en",
+                "state": "PUBLISHED",
+                "revisionId": "e7cbe0eb-1ad5-49f9-aa56-d1eadd62eebe",
+                "slug": "p21-53ac25c3-04f0-4c3e-a196-204826578f45-module-en",
+                "goalCodes": [],
+                "level": null
+              },
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "74c97f7f-4ca0-4bba-8520-164aa1ae5b4c",
+                "slug": "p21-53ac25c3-04f0-4c3e-a196-204826578f45-module-fr",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {}
+      },
+      {
+        "resourceId": "14c3ca12-803d-4134-8d44-ca59be9829ba",
+        "kind": "MODULE",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "41edece3-6e26-48b0-87da-268a678611d6",
+            "checkpointSha256": "320214d0b93ccf847ce3667f2290c69820f816cbaa8e2a0f5db49c0b63ff31c5",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "637c9dca-9289-42a3-b239-47dba6be4b2e",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "8cec164d-3711-47ec-8a28-f6a5cf33a465",
+                "slug": "p21-protected-41edece3-6e26-48b0-87da-268a678611d6-b-module",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {}
+      },
+      {
+        "resourceId": "30588abe-d451-44ad-97cb-ec18b57ce923",
+        "kind": "MODULE",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "8cdb4c7c-d5b7-4584-89d9-2da0b8820436",
+            "checkpointSha256": "3011ff9fd544a360b509bc9d54b52466f9be250e25a4d7e3c442542668584ce3",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "9fec0d65-9541-4245-9679-741b1f90fb20",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "en",
+                "state": "PUBLISHED",
+                "revisionId": "4232bf73-b390-4b3d-b941-b71330145739",
+                "slug": "p21-protected-8cdb4c7c-d5b7-4584-89d9-2da0b8820436-a-module-en",
+                "goalCodes": [],
+                "level": null
+              },
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "13918a3d-577c-4beb-88c9-42c3143fab23",
+                "slug": "p21-protected-8cdb4c7c-d5b7-4584-89d9-2da0b8820436-a-module",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {}
+      },
+      {
+        "resourceId": "563d272e-6e76-402b-b531-f5d0b636cca9",
+        "kind": "MODULE",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "85f1c0ab-121f-4523-bb70-132da59558ba",
+            "checkpointSha256": "36c4dba00c919bfb3525bfb50d5e453a1841891e5b4cc85c534e6f3a49f58540",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "51f42bba-0201-440e-b1dd-9febd4bff222",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "en",
+                "state": "PUBLISHED",
+                "revisionId": "ab23b587-ac2a-475c-af5e-7cf91c3149fc",
+                "slug": "p21-protected-85f1c0ab-121f-4523-bb70-132da59558ba-a-module-en",
+                "goalCodes": [],
+                "level": null
+              },
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "30dc520a-4a5a-45d0-87ba-86c1c519a591",
+                "slug": "p21-protected-85f1c0ab-121f-4523-bb70-132da59558ba-a-module",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {}
+      },
+      {
+        "resourceId": "8326dd9e-48e7-495b-80dd-8218e7ce613b",
+        "kind": "MODULE",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "8cdb4c7c-d5b7-4584-89d9-2da0b8820436",
+            "checkpointSha256": "3011ff9fd544a360b509bc9d54b52466f9be250e25a4d7e3c442542668584ce3",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "969e4482-04ce-4ec8-90e9-df0a3ab89837",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "7c96f939-df16-4403-a621-b0fa20b38505",
+                "slug": "p21-protected-8cdb4c7c-d5b7-4584-89d9-2da0b8820436-b-module",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {}
+      },
+      {
+        "resourceId": "b14341db-23d8-4fbe-85a1-b5c045fb1cb1",
+        "kind": "MODULE",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "1b1b6410-8945-4452-82f3-b80bde90bb5b",
+            "checkpointSha256": "d1c9ba45538c953c87cda56a93651c34f46c60986d6a6b9c8b018a8c1705621a",
+            "generator": "p21-remote-editorial-project.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "1a63e6f3-afd7-45fe-b563-ddc7c5a1c5f8",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "en",
+                "state": "PUBLISHED",
+                "revisionId": "20347c87-8ab0-4300-8c91-3230b56214a6",
+                "slug": "p21-1b1b6410-8945-4452-82f3-b80bde90bb5b-module-en",
+                "goalCodes": [],
+                "level": null
+              },
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "44d86f36-5ef3-42a7-89eb-7cd9b9b6925f",
+                "slug": "p21-1b1b6410-8945-4452-82f3-b80bde90bb5b-module-fr",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {}
+      },
+      {
+        "resourceId": "c7dbc393-eab1-46bf-9094-b565a4c6b156",
+        "kind": "MODULE",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "41edece3-6e26-48b0-87da-268a678611d6",
+            "checkpointSha256": "320214d0b93ccf847ce3667f2290c69820f816cbaa8e2a0f5db49c0b63ff31c5",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "ad01c444-8077-4e1e-8643-d0b2d2a48717",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "en",
+                "state": "PUBLISHED",
+                "revisionId": "4ac85da0-0211-4b42-be7c-47934ad565c5",
+                "slug": "p21-protected-41edece3-6e26-48b0-87da-268a678611d6-a-module-en",
+                "goalCodes": [],
+                "level": null
+              },
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "2f2eb372-0db4-40f7-9976-90888c2abd5f",
+                "slug": "p21-protected-41edece3-6e26-48b0-87da-268a678611d6-a-module",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {}
+      },
+      {
+        "resourceId": "cb2b984a-cb20-48d2-8261-437884156acd",
+        "kind": "MODULE",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "656c65e0-4e1d-4d68-892f-d4de3a038c2e",
+            "checkpointSha256": "ffa2ae86cc1968446a3a82f6a41318feed3b6b4272e3083a3a6182c6fae99cc0",
+            "generator": "p21-remote-protected-payment-sources.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "39ed3359-768d-4721-b0ab-af26f0e9bc6f",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "en",
+                "state": "PUBLISHED",
+                "revisionId": "15006e5c-500b-465b-a938-fb4b7da7f1e9",
+                "slug": "p21-protected-656c65e0-4e1d-4d68-892f-d4de3a038c2e-a-module-en",
+                "goalCodes": [],
+                "level": null
+              },
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "625acd4f-aaf8-45c2-a0ce-db1a3ac2f57d",
+                "slug": "p21-protected-656c65e0-4e1d-4d68-892f-d4de3a038c2e-a-module",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {}
+      },
+      {
+        "resourceId": "dd3c096c-e855-4ea9-b91d-73fdefea50b7",
+        "kind": "MODULE",
+        "provenance": "P21_TECHNICAL_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "ac3fa832-5065-4b53-bcad-9bc84e1d3cdd",
+            "checkpointSha256": "f0c7304630ba49d251fdddd0d0be904024ebe823affbb6435ebfc1f60321e9c6",
+            "generator": "p21-remote-editorial-project.mjs"
+          }
+        ],
+        "versions": [
+          {
+            "versionId": "30d93d63-5cb5-4c57-873b-c9d3ae1e837d",
+            "versionNumber": 1,
+            "publishedTranslations": [
+              {
+                "locale": "en",
+                "state": "PUBLISHED",
+                "revisionId": "021e042b-8500-479a-a066-7c1be4f32a8a",
+                "slug": "p21-ac3fa832-5065-4b53-bcad-9bc84e1d3cdd-module-en",
+                "goalCodes": [],
+                "level": null
+              },
+              {
+                "locale": "fr",
+                "state": "PUBLISHED",
+                "revisionId": "0fd855e5-34f8-4589-8fd6-1434ae38a0f6",
+                "slug": "p21-ac3fa832-5065-4b53-bcad-9bc84e1d3cdd-module-fr",
+                "goalCodes": [],
+                "level": null
+              }
+            ]
+          }
+        ],
+        "existingRelations": {}
+      }
+    ],
+    "unpublishedFixtureResources": 2,
+    "compositions": [
+      {
+        "position": 1,
+        "childVersionId": "969e4482-04ce-4ec8-90e9-df0a3ab89837",
+        "parentVersionId": "0a4fb324-72a6-4b0d-843b-5d8ba789c3dc"
+      },
+      {
+        "position": 1,
+        "childVersionId": "9fec0d65-9541-4245-9679-741b1f90fb20",
+        "parentVersionId": "0e9528d2-801a-4dce-9167-3ab469c7c6b1"
+      },
+      {
+        "position": 1,
+        "childVersionId": "2161b783-7da6-4855-9445-168a5da453d4",
+        "parentVersionId": "1a63e6f3-afd7-45fe-b563-ddc7c5a1c5f8"
+      },
+      {
+        "position": 1,
+        "childVersionId": "637c9dca-9289-42a3-b239-47dba6be4b2e",
+        "parentVersionId": "21a09e00-9c15-4b55-af7f-bd3818d6a3cc"
+      },
+      {
+        "position": 1,
+        "childVersionId": "39ed3359-768d-4721-b0ab-af26f0e9bc6f",
+        "parentVersionId": "2430a453-f2cc-4e0a-b9d0-64d26500737e"
+      },
+      {
+        "position": 1,
+        "childVersionId": "1e1171be-7602-4176-92f3-3e9a9e1ed179",
+        "parentVersionId": "30d93d63-5cb5-4c57-873b-c9d3ae1e837d"
+      },
+      {
+        "position": 1,
+        "childVersionId": "fc640043-0864-4cfc-80cc-5411c661599f",
+        "parentVersionId": "39ed3359-768d-4721-b0ab-af26f0e9bc6f"
+      },
+      {
+        "position": 1,
+        "childVersionId": "2f877d96-97ad-4c81-ab64-2c68c2911c77",
+        "parentVersionId": "51f42bba-0201-440e-b1dd-9febd4bff222"
+      },
+      {
+        "position": 1,
+        "childVersionId": "b5e0965c-7352-4212-8e14-cedab14e1645",
+        "parentVersionId": "637c9dca-9289-42a3-b239-47dba6be4b2e"
+      },
+      {
+        "position": 1,
+        "childVersionId": "51f42bba-0201-440e-b1dd-9febd4bff222",
+        "parentVersionId": "7963f7f5-6392-4336-b75a-9c4411674d32"
+      },
+      {
+        "position": 1,
+        "childVersionId": "c523eec0-8a40-4854-98dd-066212e0b266",
+        "parentVersionId": "7e5fd6b2-02fb-4fb9-8d79-a4c7a18e636b"
+      },
+      {
+        "position": 1,
+        "childVersionId": "25086eca-3619-42c9-9085-f5e37845051f",
+        "parentVersionId": "7f7021dc-6211-4f33-a3b1-042e06da22b7"
+      },
+      {
+        "position": 1,
+        "childVersionId": "7e5fd6b2-02fb-4fb9-8d79-a4c7a18e636b",
+        "parentVersionId": "86cb5c8e-63f6-4676-80f3-0018cfda6f5e"
+      },
+      {
+        "position": 1,
+        "childVersionId": "c9f5f656-8e11-4c5a-82cc-700aed2dd7d9",
+        "parentVersionId": "969e4482-04ce-4ec8-90e9-df0a3ab89837"
+      },
+      {
+        "position": 1,
+        "childVersionId": "b4ec0b32-aac6-4769-a5b3-0b29f8115c46",
+        "parentVersionId": "9bdae9bb-f7aa-438f-8768-e34fb7908c11"
+      },
+      {
+        "position": 1,
+        "childVersionId": "02095988-97df-4de2-947f-4216877499f9",
+        "parentVersionId": "9fec0d65-9541-4245-9679-741b1f90fb20"
+      },
+      {
+        "position": 1,
+        "childVersionId": "30d93d63-5cb5-4c57-873b-c9d3ae1e837d",
+        "parentVersionId": "a91b1353-d8df-4973-9c88-6c49ee7596cb"
+      },
+      {
+        "position": 1,
+        "childVersionId": "7f7021dc-6211-4f33-a3b1-042e06da22b7",
+        "parentVersionId": "aa67f6fb-7589-49fe-a343-a98236e6bbd2"
+      },
+      {
+        "position": 1,
+        "childVersionId": "5fc85376-1753-4125-8e97-30802cb58832",
+        "parentVersionId": "ad01c444-8077-4e1e-8643-d0b2d2a48717"
+      },
+      {
+        "position": 1,
+        "childVersionId": "ad01c444-8077-4e1e-8643-d0b2d2a48717",
+        "parentVersionId": "af3edd69-b73b-4be6-94ea-dcb0c526dbc7"
+      },
+      {
+        "position": 1,
+        "childVersionId": "2121d1dc-308e-497b-ad61-e8198a11005a",
+        "parentVersionId": "b4ec0b32-aac6-4769-a5b3-0b29f8115c46"
+      },
+      {
+        "position": 1,
+        "childVersionId": "1a63e6f3-afd7-45fe-b563-ddc7c5a1c5f8",
+        "parentVersionId": "eacab078-80be-4c51-bb17-9da552a5d7e0"
+      }
+    ],
+    "offers": [
+      {
+        "offerId": "1b4ba9cd-e5fe-4df7-9ba9-263ac9e0c882",
+        "kind": "COURSE",
+        "state": "ACTIVE",
+        "currentRevisionId": "89ed8f0e-160b-4c89-bb34-2a9a7957fa21",
+        "revision": 2,
+        "provenance": "P21_STRIPE_TEST_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "8cdb4c7c-d5b7-4584-89d9-2da0b8820436",
+            "checkpointSha256": "d2b770242c7e8b3ae71822f7725336faf7d238dbc4e361e60d491e4ada82cc23",
+            "generator": "p21-remote-payments.mjs",
+            "testMode": true,
+            "amountMinor": 100
+          }
+        ],
+        "priceFromServer": {
+          "amountMinor": 100,
+          "currency": "EUR"
+        },
+        "localesFromServer": [
+          "fr",
+          "en"
+        ],
+        "accessFromServer": {
+          "mode": "FIXED",
+          "days": 2
+        },
+        "inclusions": [
+          {
+            "position": 0,
+            "versionId": "0e9528d2-801a-4dce-9167-3ab469c7c6b1",
+            "resourceId": "ddab0e6e-99d7-45f0-9fcf-1cf793c3a383"
+          }
+        ],
+        "orderCount": 1
+      },
+      {
+        "offerId": "22d915dd-6fa8-47f9-aee2-04c478770a4a",
+        "kind": "PACK",
+        "state": "ACTIVE",
+        "currentRevisionId": "23993479-c9c9-44b7-89b7-3f7394de01cb",
+        "revision": 2,
+        "provenance": "P21_STRIPE_TEST_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "9b3e199a-9dd8-4c54-8d02-280180014b7b",
+            "checkpointSha256": "06551548811192f2cf095c2a33f8565b6e1326712d3a2309980c2d63edee1e11",
+            "generator": "p21-remote-payments.mjs",
+            "testMode": true,
+            "amountMinor": 200
+          }
+        ],
+        "priceFromServer": {
+          "amountMinor": 200,
+          "currency": "EUR"
+        },
+        "localesFromServer": [
+          "fr"
+        ],
+        "accessFromServer": {
+          "mode": "FIXED",
+          "days": 2
+        },
+        "inclusions": [
+          {
+            "position": 0,
+            "versionId": "af3edd69-b73b-4be6-94ea-dcb0c526dbc7",
+            "resourceId": "acfdc155-1ccb-4fb9-a713-0ba221d91949"
+          },
+          {
+            "position": 1,
+            "versionId": "21a09e00-9c15-4b55-af7f-bd3818d6a3cc",
+            "resourceId": "473a309e-9a9e-4a80-ab92-9aa0938172b8"
+          }
+        ],
+        "orderCount": 1
+      },
+      {
+        "offerId": "68eb5afa-3783-4bad-ba29-2a3e464c89c3",
+        "kind": "COURSE",
+        "state": "ACTIVE",
+        "currentRevisionId": "1ac7f736-b055-4e6f-9af1-5b5abd4ce69c",
+        "revision": 2,
+        "provenance": "P21_STRIPE_TEST_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "41edece3-6e26-48b0-87da-268a678611d6",
+            "checkpointSha256": "9b3372f509f85c7e5b2ed4d98dd53959977e070acd36cf0233db656d47833970",
+            "generator": "p21-remote-payments.mjs",
+            "testMode": true,
+            "amountMinor": 100
+          }
+        ],
+        "priceFromServer": {
+          "amountMinor": 100,
+          "currency": "EUR"
+        },
+        "localesFromServer": [
+          "fr",
+          "en"
+        ],
+        "accessFromServer": {
+          "mode": "FIXED",
+          "days": 2
+        },
+        "inclusions": [
+          {
+            "position": 0,
+            "versionId": "af3edd69-b73b-4be6-94ea-dcb0c526dbc7",
+            "resourceId": "acfdc155-1ccb-4fb9-a713-0ba221d91949"
+          }
+        ],
+        "orderCount": 1
+      },
+      {
+        "offerId": "6dc04d84-c61f-41c6-9049-2994d658c870",
+        "kind": "COURSE",
+        "state": "ACTIVE",
+        "currentRevisionId": "2b387633-44e6-438a-bbbb-e9dc7846d217",
+        "revision": 2,
+        "provenance": "P21_STRIPE_TEST_RECIPE",
+        "creationCheckpoints": [
+          {
+            "runId": "656c65e0-4e1d-4d68-892f-d4de3a038c2e",
+            "checkpointSha256": "98dbf51a127011d457d0d4504b6366dbb2389b93ac7a56b76955fd6e82065898",
+            "generator": "p21-remote-payments.mjs",
+            "testMode": true,
+            "amountMinor": 100
+          }
+        ],
+        "priceFromServer": {
+          "amountMinor": 100,
+          "currency": "EUR"
+        },
+        "localesFromServer": [
+          "fr",
+          "en"
+        ],
+        "accessFromServer": {
+          "mode": "FIXED",
+          "days": 2
+        },
+        "inclusions": [
+          {
+            "position": 0,
+            "versionId": "2430a453-f2cc-4e0a-b9d0-64d26500737e",
+            "resourceId": "df57baef-95a3-445f-acde-93a891950f98"
+          }
+        ],
+        "orderCount": 1
+      }
+    ],
+    "businessCounts": {
+      "assets": 11,
+      "orders": 4,
+      "projects": 3,
+      "access_grants": 3,
+      "user_accounts": 28,
+      "order_resources": 5,
+      "refund_requests": 2,
+      "personal_methods": 2,
+      "refund_decisions": 2,
+      "user_preferences": 28,
+      "project_revisions": 6,
+      "refund_operations": 2,
+      "stripe_event_inbox": 10,
+      "notification_outbox": 33,
+      "learning_enrollments": 3,
+      "flyway_schema_history": 20,
+      "learning_quiz_attempts": 6,
+      "learning_activity_notes": 5,
+      "refund_access_decisions": 0,
+      "project_self_assessments": 3,
+      "learning_activity_progress": 3,
+      "learning_enrollment_activities": 3
+    },
+    "privateRowFingerprintsComputedInsideDatabase": 22,
+    "assetsByState": [
+      {
+        "kind": "FILE",
+        "count": 1,
+        "scope": "EDITORIAL",
+        "state": "EXPIRED",
+        "locale": "fr"
+      },
+      {
+        "kind": "FILE",
+        "count": 7,
+        "scope": "EDITORIAL",
+        "state": "READY",
+        "locale": "fr"
+      },
+      {
+        "kind": "FILE",
+        "count": 3,
+        "scope": "PROJECT_FILE",
+        "state": "READY",
+        "locale": null
+      }
+    ],
+    "directVersionUrls": [
+      {
+        "path": "/api/v1/catalog/resources/9b877ac4-89be-4998-a334-e6e4b064f7ac/versions/1e1171be-7602-4176-92f3-3e9a9e1ed179?locale=fr",
+        "status": 200,
+        "resourceId": "9b877ac4-89be-4998-a334-e6e4b064f7ac",
+        "versionId": "1e1171be-7602-4176-92f3-3e9a9e1ed179",
+        "locale": "fr",
+        "availability": "PUBLISHED",
+        "access": "FREE",
+        "publicDocumentPresent": true,
+        "passed": true
+      },
+      {
+        "path": "/api/v1/catalog/resources/9b877ac4-89be-4998-a334-e6e4b064f7ac/versions/1e1171be-7602-4176-92f3-3e9a9e1ed179?locale=en",
+        "status": 200,
+        "resourceId": "9b877ac4-89be-4998-a334-e6e4b064f7ac",
+        "versionId": "1e1171be-7602-4176-92f3-3e9a9e1ed179",
+        "locale": "en",
+        "availability": "PUBLISHED",
+        "access": "FREE",
+        "publicDocumentPresent": true,
+        "passed": true
+      },
+      {
+        "path": "/api/v1/catalog/resources/ddab0e6e-99d7-45f0-9fcf-1cf793c3a383/versions/0e9528d2-801a-4dce-9167-3ab469c7c6b1?locale=fr",
+        "status": 200,
+        "resourceId": "ddab0e6e-99d7-45f0-9fcf-1cf793c3a383",
+        "versionId": "0e9528d2-801a-4dce-9167-3ab469c7c6b1",
+        "locale": "fr",
+        "availability": "PUBLISHED",
+        "access": "PROTECTED",
+        "publicDocumentPresent": false,
+        "passed": true
+      },
+      {
+        "path": "/api/v1/catalog/resources/ddab0e6e-99d7-45f0-9fcf-1cf793c3a383/versions/0e9528d2-801a-4dce-9167-3ab469c7c6b1?locale=en",
+        "status": 200,
+        "resourceId": "ddab0e6e-99d7-45f0-9fcf-1cf793c3a383",
+        "versionId": "0e9528d2-801a-4dce-9167-3ab469c7c6b1",
+        "locale": "en",
+        "availability": "PUBLISHED",
+        "access": "PROTECTED",
+        "publicDocumentPresent": false,
+        "passed": true
+      }
+    ]
+  },
+  "localShared": {
+    "schemaVersion": 19,
+    "sqlObservedAt": "2026-11-15T22:41:49.526557+00:00",
+    "resources": 17,
+    "resourceKinds": {
+      "ACTIVITY": 7,
+      "COURSE": 2,
+      "METHOD_TEMPLATE": 1,
+      "MODULE": 7
+    },
+    "translationStates": {
+      "DRAFT": 34
+    },
+    "publishedTranslations": 0,
+    "editorialImportResources": 14,
+    "importNamespaces": [
+      "course-client-proposal"
+    ],
+    "importedEditorialDrafts": [
+      {
+        "logicalKey": "activity-m02",
+        "kind": "ACTIVITY",
+        "namespace": "course-client-proposal",
+        "translationStates": [
+          {
+            "locale": "en",
+            "state": "DRAFT",
+            "published": false
+          },
+          {
+            "locale": "fr",
+            "state": "DRAFT",
+            "published": false
+          }
+        ]
+      },
+      {
+        "logicalKey": "activity-m04",
+        "kind": "ACTIVITY",
+        "namespace": "course-client-proposal",
+        "translationStates": [
+          {
+            "locale": "en",
+            "state": "DRAFT",
+            "published": false
+          },
+          {
+            "locale": "fr",
+            "state": "DRAFT",
+            "published": false
+          }
+        ]
+      },
+      {
+        "logicalKey": "activity-m05",
+        "kind": "ACTIVITY",
+        "namespace": "course-client-proposal",
+        "translationStates": [
+          {
+            "locale": "en",
+            "state": "DRAFT",
+            "published": false
+          },
+          {
+            "locale": "fr",
+            "state": "DRAFT",
+            "published": false
+          }
+        ]
+      },
+      {
+        "logicalKey": "activity-m03",
+        "kind": "ACTIVITY",
+        "namespace": "course-client-proposal",
+        "translationStates": [
+          {
+            "locale": "en",
+            "state": "DRAFT",
+            "published": false
+          },
+          {
+            "locale": "fr",
+            "state": "DRAFT",
+            "published": false
+          }
+        ]
+      },
+      {
+        "logicalKey": "activity-m06",
+        "kind": "ACTIVITY",
+        "namespace": "course-client-proposal",
+        "translationStates": [
+          {
+            "locale": "en",
+            "state": "DRAFT",
+            "published": false
+          },
+          {
+            "locale": "fr",
+            "state": "DRAFT",
+            "published": false
+          }
+        ]
+      },
+      {
+        "logicalKey": "activity-m01",
+        "kind": "ACTIVITY",
+        "namespace": "course-client-proposal",
+        "translationStates": [
+          {
+            "locale": "en",
+            "state": "DRAFT",
+            "published": false
+          },
+          {
+            "locale": "fr",
+            "state": "DRAFT",
+            "published": false
+          }
+        ]
+      },
+      {
+        "logicalKey": "course-client-proposal",
+        "kind": "COURSE",
+        "namespace": "course-client-proposal",
+        "translationStates": [
+          {
+            "locale": "en",
+            "state": "DRAFT",
+            "published": false
+          },
+          {
+            "locale": "fr",
+            "state": "DRAFT",
+            "published": false
+          }
+        ]
+      },
+      {
+        "logicalKey": "method-client-proposal",
+        "kind": "METHOD_TEMPLATE",
+        "namespace": "course-client-proposal",
+        "translationStates": [
+          {
+            "locale": "en",
+            "state": "DRAFT",
+            "published": false
+          },
+          {
+            "locale": "fr",
+            "state": "DRAFT",
+            "published": false
+          }
+        ]
+      },
+      {
+        "logicalKey": "module-m01",
+        "kind": "MODULE",
+        "namespace": "course-client-proposal",
+        "translationStates": [
+          {
+            "locale": "en",
+            "state": "DRAFT",
+            "published": false
+          },
+          {
+            "locale": "fr",
+            "state": "DRAFT",
+            "published": false
+          }
+        ]
+      },
+      {
+        "logicalKey": "module-m03",
+        "kind": "MODULE",
+        "namespace": "course-client-proposal",
+        "translationStates": [
+          {
+            "locale": "en",
+            "state": "DRAFT",
+            "published": false
+          },
+          {
+            "locale": "fr",
+            "state": "DRAFT",
+            "published": false
+          }
+        ]
+      },
+      {
+        "logicalKey": "module-m06",
+        "kind": "MODULE",
+        "namespace": "course-client-proposal",
+        "translationStates": [
+          {
+            "locale": "en",
+            "state": "DRAFT",
+            "published": false
+          },
+          {
+            "locale": "fr",
+            "state": "DRAFT",
+            "published": false
+          }
+        ]
+      },
+      {
+        "logicalKey": "module-m02",
+        "kind": "MODULE",
+        "namespace": "course-client-proposal",
+        "translationStates": [
+          {
+            "locale": "en",
+            "state": "DRAFT",
+            "published": false
+          },
+          {
+            "locale": "fr",
+            "state": "DRAFT",
+            "published": false
+          }
+        ]
+      },
+      {
+        "logicalKey": "module-m04",
+        "kind": "MODULE",
+        "namespace": "course-client-proposal",
+        "translationStates": [
+          {
+            "locale": "en",
+            "state": "DRAFT",
+            "published": false
+          },
+          {
+            "locale": "fr",
+            "state": "DRAFT",
+            "published": false
+          }
+        ]
+      },
+      {
+        "logicalKey": "module-m05",
+        "kind": "MODULE",
+        "namespace": "course-client-proposal",
+        "translationStates": [
+          {
+            "locale": "en",
+            "state": "DRAFT",
+            "published": false
+          },
+          {
+            "locale": "fr",
+            "state": "DRAFT",
+            "published": false
+          }
+        ]
+      }
+    ],
+    "assetsByState": [
+      {
+        "kind": "FILE",
+        "count": 9,
+        "scope": "EDITORIAL",
+        "state": "READY",
+        "locale": "en"
+      },
+      {
+        "kind": "FILE",
+        "count": 9,
+        "scope": "EDITORIAL",
+        "state": "READY",
+        "locale": "fr"
+      }
+    ],
+    "businessCounts": {
+      "assets": 18,
+      "orders": 0,
+      "projects": 0,
+      "access_grants": 0,
+      "user_accounts": 15,
+      "order_resources": 0,
+      "refund_requests": 0,
+      "personal_methods": 0,
+      "refund_decisions": 0,
+      "user_preferences": 15,
+      "project_revisions": 0,
+      "refund_operations": 0,
+      "stripe_event_inbox": 0,
+      "notification_outbox": 1,
+      "learning_enrollments": 0,
+      "flyway_schema_history": 19,
+      "learning_quiz_attempts": 0,
+      "learning_activity_notes": 0,
+      "refund_access_decisions": 0,
+      "project_self_assessments": 0,
+      "learning_activity_progress": 0,
+      "learning_enrollment_activities": 0
+    },
+    "baselineTables": 83,
+    "sessionTablesExcluded": true
+  },
+  "confirmedFindings": [
+    {
+      "id": "F01",
+      "finding": "All 35 staging resource identities match P21 technical creation checkpoints. Published does not imply editorial/commercial selection approval."
+    },
+    {
+      "id": "F02",
+      "finding": "Four ACTIVE offers are exact historical Stripe TEST creations; current public server prices are three EUR100-minor individual offers and one EUR200-minor pack. This is not a demonstrated billing incident."
+    },
+    {
+      "id": "F05-goals",
+      "finding": "Staging has zero editorial_public_metadata rows for 54 published translations. PublicCatalogueService facets enumerate published-revision metadata.goalCodes/level; the absent goals/levels are expected from this fixture data, not a proven faulty association query."
+    },
+    {
+      "id": "F05-categories",
+      "finding": "Staging contains only COURSE/MODULE/ACTIVITY; public METHOD_TEMPLATE/GUIDE counts are zero in both languages. Local shared has a METHOD_TEMPLATE draft from P18, which is neither published nor present on staging."
+    },
+    {
+      "id": "P18",
+      "finding": "The real course sources and 14 durable local import bindings/28 draft translations/18 READY files exist locally. Staging has zero import bindings. Local import does not prove staging publication or editorial approval."
+    }
+  ],
+  "existingContentForAUD02": {
+    "source": "content/course-client-proposal/README.md",
+    "reference": "docs/CONTENT_REFERENCE.md",
+    "lessonJsonFiles": 12,
+    "markdownResourceFiles": 18,
+    "logicalImportObjects": 14,
+    "localDraftTranslations": 28,
+    "alreadyProvided": "Six developed modules in FR/EN, BR01/TR01 with five pricing lines, BR02, templates, grids and commented solutions",
+    "stillRequiredBeforeCommercialPublication": [
+      "Owner editorial approval and FR/EN equivalence review",
+      "Validate the deliverable and downloadable materials together in AUD-02",
+      "Actual learner trial and measured duration before making a duration claim",
+      "Decide the actually sold formats, launch languages, price, access, support and terms",
+      "Videos, voice and actual ChatGPT captures only if these formats are retained and produced"
+    ]
+  },
+  "limits": [
+    "No authenticated owner session was opened and no private note/project text returned",
+    "No payment/refund/entitlement scenario replayed",
+    "No visual browser review, performance or accessibility certification claimed",
+    "Old prototype inventory relation counters for notes/progress are retained privately but superseded by the corrected version linked above",
+    "No staging/local-shared schema migration or data write was executed"
+  ]
+}

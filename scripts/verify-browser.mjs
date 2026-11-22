@@ -13,6 +13,7 @@ import { createBrowserControlEndpoint } from './lib/browser-control-endpoint.mjs
 
 const env = environment();
 const phase = process.argv[2] ?? 'P01';
+const courseContentPhase = phase === 'P18' || phase === 'AUD02';
 const externalStripe = phase === 'P12_EXTERNAL' || phase === 'P19_EXTERNAL';
 const externalRefunds = phase === 'P19_EXTERNAL';
 const refundPhase = phase === 'P13' || phase === 'P15';
@@ -29,10 +30,10 @@ for (let index = 3; index < process.argv.length; index += 2) {
   else throw new Error('Diagnostic permis : --grep expression et --repeat-each 1..20.');
   diagnosticArgs.push(flag, value);
 }
-if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14', 'P15', 'P16', 'P16_SEO', 'P17', 'P18', 'P19', 'P19_EXTERNAL', 'AUD01'].includes(phase)) throw new Error('Phase de recette inconnue.');
+if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14', 'P15', 'P16', 'P16_SEO', 'P17', 'P18', 'P19', 'P19_EXTERNAL', 'AUD01', 'AUD02'].includes(phase)) throw new Error('Phase de recette inconnue.');
 if (externalRefunds && selected.repeatEach !== 1) throw new Error('External TEST refund recipe runs once; repeated financial scenarios require explicit separate authorization.');
 const needsApi = phase !== 'P02';
-const isolatedDatabase = ['P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14', 'P15', 'P16', 'P16_SEO', 'P17', 'P18', 'P19', 'P19_EXTERNAL', 'AUD01'].includes(phase);
+const isolatedDatabase = ['P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14', 'P15', 'P16', 'P16_SEO', 'P17', 'P18', 'P19', 'P19_EXTERNAL', 'AUD01', 'AUD02'].includes(phase);
 if (!['local', 'test'].includes(env.APP_ENV)) throw new Error('Vérification navigateur réservée à local/test.');
 const port = (value, fallback) => {
   const text = value ?? String(fallback);
@@ -239,7 +240,7 @@ try {
     // no Checkout, provider secret or financial operation is enabled.
     env.COMMERCE_ENABLED = 'true'; env.COMMERCE_ALLOWED_CURRENCIES = 'EUR';
   }
-  if (phase === 'P16' || phase === 'P16_SEO' || phase === 'P17' || phase === 'P18') {
+  if (phase === 'P16' || phase === 'P16_SEO' || phase === 'P17' || courseContentPhase) {
     for (const key of Object.keys(env)) if (key.startsWith('STRIPE_')) delete env[key];
     env.STRIPE_ENABLED = 'false'; env.PAYMENT_INBOX_ENABLED = 'false'; env.REFUND_WORKER_ENABLED = 'false';
     env.COMMERCE_ENABLED = 'false'; env.APP_PUBLISHED_LOCALES = '';
@@ -249,7 +250,7 @@ try {
     env.COMMERCE_ENABLED = 'true'; env.COMMERCE_ALLOWED_CURRENCIES = 'EUR';
     env.STRIPE_ENABLED = 'false'; delete env.STRIPE_SECRET_KEY; delete env.STRIPE_WEBHOOK_SECRET;
   }
-  if (['P10','P12','P12_EXTERNAL','P13','P14','P15','P16','P16_SEO','P17','P18','P19','P19_EXTERNAL'].includes(phase)) {
+  if (['P10','P12','P12_EXTERNAL','P13','P14','P15','P16','P16_SEO','P17','P18','P19','P19_EXTERNAL','AUD02'].includes(phase)) {
     stage = 'SERVICES';
     services = await createBrowserServices(env, runDirectory, runId, (records) => { services = records; save(); });
     if (phase === 'P10' || phase === 'P16') {
@@ -266,7 +267,7 @@ try {
   if (externalStripe) { Object.assign(env, externalStripeConfiguration); payments = await createBrowserExternalStripe(env, { refunds: externalRefunds }); }
   // Service setup enables its outbox by default; this recipe explicitly keeps
   // the effective worker off after setup, before recording flags or starting API.
-  if (phase === 'P18') env.NOTIFICATION_OUTBOX_ENABLED = 'false';
+  if (courseContentPhase) env.NOTIFICATION_OUTBOX_ENABLED = 'false';
   if (controlledRelease) { env.API_TIMEOUT_MS = '30000'; payments = await createBrowserPayments(env, { refundsEnabled: true }); Object.assign(env, { COMMERCE_ALLOWED_CURRENCIES: 'EUR', PAYMENT_INBOX_ENABLED: 'true', REFUND_WORKER_ENABLED: 'true', NOTIFICATION_OUTBOX_ENABLED: 'true' }); }
   if (externalRefunds) Object.assign(env, { PAYMENT_INBOX_ENABLED: 'false', REFUND_WORKER_ENABLED: 'false', NOTIFICATION_OUTBOX_ENABLED: 'true' });
   initialRuntimeFlags = runtimeFlags();
@@ -295,7 +296,7 @@ try {
     env: { ...browserEnvironment, COURSES_BROWSER_PHASE: phase, COURSES_BROWSER_ORIGIN: env.APP_PUBLIC_ORIGIN, COURSES_BROWSER_IPC: ipc,
       COURSES_BROWSER_TOKEN: token, COURSES_BROWSER_EVIDENCE: evidence, COURSES_BROWSER_RESULTS: join(runDirectory, 'results'),
       COURSES_BROWSER_LOGS: runDirectory,
-      ...(['P18','P19'].includes(phase) ? { COURSES_BROWSER_API_JAR: recipeJar } : {}),
+      ...(courseContentPhase || phase === 'P19' ? { COURSES_BROWSER_API_JAR: recipeJar } : {}),
       ...(database ? { COURSES_BROWSER_DB_ID: database.id, COURSES_BROWSER_RUN_ID: runId } : {}),
       COURSES_MAILPIT_ORIGIN: `http://127.0.0.1:${port(env.MAIL_HTTP_PORT, 8025)}` },
   });

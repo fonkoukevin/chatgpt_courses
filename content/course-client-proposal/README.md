@@ -2,6 +2,8 @@
 
 `v1/fr` et `v1/en` contiennent chacun les six leçons développées M01–M06. `v1/resources` contient les dix-huit fichiers Markdown éditables. Les cas R/S et leurs montants sont fictifs ; ils ne fixent aucun prix de formation.
 
+La [fiche éditoriale](EDITORIAL_PREPARATION.md) précise cible, productions, outils, formats et décisions avant publication. La [matrice d’alignement](ALIGNMENT_MATRIX.md) relie les six consignes, vingt critères BR01 et dix-huit questions de quiz aux pièces et corrections. La reprise AUD-02 conserve les cinq tarifs existants, rend les corrections de M05 conditionnelles aux écarts réels et ajoute des essais ChatGPT guidés au support de méthode FR/EN. Les corrigés sont explicitement fictifs et ne sont pas attribués à une exécution d’IA.
+
 Les JSON sont les sources de rédaction. `scripts/prepare-course-content.mjs` les assemble en documents CMS et manifeste dans `.runtime/content-course-client-proposal`, avec les grilles serveur versionnées BR01/BR02 et les empreintes des fichiers. Ce répertoire généré n’est pas un catalogue parallèle utilisé par le frontend. Le site lit les publications du CMS Spring.
 
 L’import explicite local/test crée des brouillons, avec des clés logiques durables et détection des changements humains. Il ne publie pas, ne marque pas une traduction relue par un humain, ne crée aucun compte ou rôle et n’active aucune offre. Un acteur actif possédant les permissions éditoriales est indispensable. Ne pas substituer un UUID d’apprenant.
@@ -14,6 +16,15 @@ Depuis la racine, après build API et préparation du stockage local :
 .\scripts\courses.cmd run content:import -- --plan --actor <UUID_EDITEUR_LOCAL> --manifest .runtime/content-course-client-proposal/manifest.json
 .\scripts\courses.cmd run content:import -- --apply --actor <UUID_EDITEUR_LOCAL> --manifest .runtime/content-course-client-proposal/manifest.json
 ```
+
+Pour préparer et vérifier les sources de la reprise sans réécrire les rapports P18/P19 :
+
+```powershell
+.\scripts\courses.cmd run content:prepare -- AUD-02
+.\scripts\courses.cmd run verify:content -- AUD-02
+```
+
+Ces deux commandes n’importent rien et ne publient rien. La recette navigateur `scripts/verify-browser.mjs AUD02` utilise le scénario de parcours P18 avec ses propres bases/services éphémères ; ses preuves sont séparées dans `docs/evidence/AUD02-browser`. Son lancement et ses résultats effectifs sont décrits dans [AUD-02](../../docs/evidence/AUD-02.md). Les brouillons P18 partagés restent inchangés tant qu’un import distinct n’est pas exécuté.
 
 La classification des fichiers de corrigé est distincte des ressources de dossier : les deux corrigés par langue exigent une révélation explicite P09, puis une autorisation courante de téléchargement. Ils ne sont pas ajoutés à `PublicDocument`. Modifier le rôle d’un fichier existant est interdit ; préparer un nouvel asset si sa nature change.
 

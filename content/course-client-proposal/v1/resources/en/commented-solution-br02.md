@@ -8,7 +8,7 @@ classification: SOLUTION
 
 # BR02 — Commented calculation and decision
 
-A learning solution to open explicitly after an attempt. It is neither an accepted offer nor human validation of your work.
+A fictional learning example: Client S and the amounts are case data, never course prices. This solution is written for teaching and is not presented as a response obtained from ChatGPT. Open it explicitly after an attempt. It is neither an accepted offer nor human validation of your work.
 
 ## 1. Compare the actual constraints
 

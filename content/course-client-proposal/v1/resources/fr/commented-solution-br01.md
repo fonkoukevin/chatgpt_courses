@@ -8,7 +8,7 @@ classification: SOLUTION
 
 # BR01 — Proposition possible et commentaires
 
-Corrigé pédagogique à consulter explicitement. Sa lecture ne valide aucune production. Plusieurs formulations sont recevables si elles respectent les faits.
+Exemple pédagogique fictif : Client R et les montants sont des données d’exercice, jamais un prix de formation. Ce corrigé est rédigé pour l’apprentissage ; il n’est pas présenté comme une réponse obtenue de ChatGPT. Sa lecture ne valide aucune production. Plusieurs formulations sont recevables si elles respectent les faits.
 
 ## Une proposition possible
 
@@ -40,6 +40,6 @@ Jours 1–2 : cadrage et plan ; 3–7 : rédaction ; 8–10 : lecture et retours
 
 ## Comparer sans recopier
 
-Choisissez trois différences avec votre texte et expliquez si chacune touche un fait, un engagement ou seulement la formulation. Une autre organisation est acceptable si le calcul, les conditions et la décision suivante restent explicites. Enregistrez la version corrigée puis renseignez sa propre grille : l’ancienne preuve ne change pas de révision.
+Comparez trois passages avec votre texte et justifiez pour chacun une correction ou un maintien à partir du dossier. Ne créez pas de différence si le passage est déjà fidèle. Une autre organisation est acceptable si le calcul, les conditions et la décision suivante restent explicites. Si vous modifiez le texte, enregistrez une nouvelle révision puis renseignez sa propre grille : l’ancienne preuve ne change pas de révision.
 
 La proposition destinée au client doit tenir sur deux pages maximum après mise en page. Ce fichier inclut des commentaires pédagogiques à retirer ; sa pagination n’a pas été annoncée comme vérifiée et aucun PDF n’est fourni.

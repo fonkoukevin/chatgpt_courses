@@ -43,7 +43,8 @@ function runImport(mode: '--plan' | '--apply', actor: string, manifest: string):
 
 export async function prepareCourseFixture(request: APIRequestContext) {
   const editor = await loginEditor(request);
-  const prepared = spawnSync(process.execPath, [join(process.cwd(), 'scripts/prepare-course-content.mjs')], { cwd: process.cwd(), env: process.env,
+  const preparationPhase = process.env.COURSES_BROWSER_PHASE === 'AUD02' ? ['AUD-02'] : [];
+  const prepared = spawnSync(process.execPath, [join(process.cwd(), 'scripts/prepare-course-content.mjs'), ...preparationPhase], { cwd: process.cwd(), env: process.env,
     windowsHide: true, encoding: 'utf8', timeout: 20000, maxBuffer: 1024 * 1024 });
   if (prepared.status !== 0) throw new Error('Real course preparation failed; no source content or private environment is printed.');
   const directory = realpathSync(join(process.cwd(), '.runtime/content-course-client-proposal')), manifest = join(directory, 'manifest.json');

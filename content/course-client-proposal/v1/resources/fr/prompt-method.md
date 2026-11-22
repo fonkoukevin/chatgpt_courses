@@ -24,6 +24,21 @@ Prévois quinze jours ouvrés après réception des éléments nécessaires ET v
 
 Données à insérer réellement : [recopier BR01/TR01 et votre périmètre ; ne pas laisser cet emplacement vide avant une exécution].
 
+## Essayer la méthode dans ChatGPT
+
+Le cadrage manuel de M01–M02 reste réalisable sans IA. Pour vous entraîner avec ChatGPT, copiez le dossier fictif complet et la demande de l’étape choisie dans une conversation. Remplacez les emplacements par vos données avant envoi. Conservez la demande et la réponse réellement reçue dans votre éditeur ; si vous ne l’exécutez pas, notez « prompt préparé, non exécuté ». Aucun modèle ou bouton particulier n’est requis par cette méthode.
+
+| Étape | Données à fournir et demande à adapter | Résultat à examiner et contrôle personnel |
+| --- | --- | --- |
+| M01 Comprendre | BR01/TR01 : « Classe les faits et leurs sources, les inconnues et leurs conséquences en huit lignes. Propose trois questions prioritaires sans compléter les données manquantes. » | Comparer le tableau au dossier ; retirer toute affirmation sur des textes non reçus ou des performances absentes. |
+| M02 Définir | BR01/TR01 et votre tableau : « Distingue inclus, à confirmer et non chiffré. Justifie chaque statut et montre les cinq postes tarifaires. » | Retrouver quatre pages, remise éditable et cycle unique ; refaire la somme, séparer logo et intégration. |
+| M03 Préparer | Compléter les sept paramètres et l’instruction ci-dessus ; fournir les données derrière BR01/TR01. | Vérifier que chaque engagement demandé peut être contrôlé et qu’aucun emplacement de données n’est vide. |
+| M04 Produire | Dossier et périmètre retenu : « Rédige en sept rubriques : objectif, périmètre et livrables, méthode, calendrier conditionnel, budget détaillé, points à confirmer, prochaine étape. N’ajoute aucun fait. » | Relire chaque rubrique, recalculer et vérifier la longueur dans votre éditeur ; la réponse reçue n’est qu’un brouillon. |
+| M05 Vérifier | Votre brouillon et la source exacte : « Compare ce passage au dossier. Signale les écarts justifiés, puis propose une correction ciblée en conservant les autres faits. Si aucun écart n’est établi, indique-le. » | Contrôler aussi le diagnostic de l’IA ; justifier trois corrections ou maintiens, sans fabriquer d’erreur. |
+| M06 Réutiliser | Remplacer BR01 par BR02 complet : « Explique les incompatibilités de budget et de délai. Étudie une option sans À propos sous accord, sans chiffrer l’intégration. » | Refaire 1 400 et 1 180 € HT ; conserver le plafond global et dix jours ouvrés minimum. Adapter les emails sans les envoyer. |
+
+Si la sortie contient une invention, citez le passage et le fait contradictoire dans une demande de correction ciblée, puis refaites le contrôle. Gardez une trace des modifications dans votre production, pas une simple déclaration de l’outil affirmant avoir vérifié.
+
 ## Contrôles après une réponse éventuelle
 
 1. Refaire la somme : 180 + 320 + 360 + 220 + 120 = 1 200 € HT.

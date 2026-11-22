@@ -11,7 +11,7 @@ Copy the table. Keep each fact’s source and complete the bracketed cells. Miss
 | BR01: four French pages; limits 600/800/400/250 words | Existing texts not received | [Describe deliverables without claiming to have audited them] |
 | BR01: texts, service description and questionnaire announced | Availability date unconfirmed | [Ask when materials can be supplied] |
 | BR01/TR01: €1,400 ceiling; prices total €1,200 excluding tax | No logo/integration budget assigned | [Separate fee and ceiling without spending the difference] |
-| TR01: fifteen business days after materials AND brief approval | Starting conditions not met | [Relative schedule, no fixed date] |
+| TR01: fifteen business days after materials AND brief approval | Whether starting conditions have been met is unconfirmed | [Relative schedule, no fixed date] |
 | BR01/TR01: one consolidator; one round; feedback within three business days | Approver’s identity unconfirmed | [Describe the process and ask who approves] |
 | BR01: clearer services and preparation for contact | No verified performance or business history | [Avoid invented results and references] |
 | BR01: possible logo request | Scope and price absent | [Clarify separately] |

@@ -11,7 +11,7 @@ Copiez le tableau. Gardez la source de chaque fait, puis complétez les cellules
 | BR01 : quatre pages françaises, plafonds 600/800/400/250 mots | Textes existants non reçus | [Décrire les livrables sans prétendre les avoir audités] |
 | BR01 : textes, présentation et questionnaire annoncés | Date de disponibilité à confirmer | [Question sur la remise des éléments] |
 | BR01/TR01 : plafond 1 400 € HT ; tarifs totalisant 1 200 € HT | Aucun budget affecté au logo ou à l’intégration | [Séparer prix et plafond, sans consommer l’écart] |
-| TR01 : quinze jours ouvrés après éléments reçus ET brief validé | Conditions de départ non réalisées | [Calendrier relatif, pas de date ferme] |
+| TR01 : quinze jours ouvrés après éléments reçus ET brief validé | Réalisation des conditions de départ à confirmer | [Calendrier relatif, pas de date ferme] |
 | BR01/TR01 : une personne centralise ; un cycle ; retours sous trois jours ouvrés | Identité du validateur à confirmer | [Décrire le circuit et poser une question] |
 | BR01 : besoin de clarté et de préparation au contact | Aucune preuve de performance ou d’ancienneté | [Éviter tout résultat commercial ou référence inventé] |
 | BR01 : logo évoqué éventuellement | Périmètre et tarif absents | [Demande à préciser séparément] |

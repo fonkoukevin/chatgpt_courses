@@ -96,6 +96,8 @@ Catalogue : titre et recherche, filtres compréhensibles, résultats de densité
 
 Fiche : résultat, bénéficiaire, aperçu, programme, prérequis, outils, vérification, langues, conditions d’offre, FAQ. La carte d’offre ne cache pas le programme. Un client possédant un accès voit d’abord « Reprendre ».
 
+AUD-04 poursuit la présentation de l’accueil : titre et livrable dominants, aperçu provenant d’une activité réellement gratuite, programme numéroté en liste et informations de version repliables. Sur grand écran, l’encart d’accès et d’offre occupe la colonne latérale ; sur mobile il suit l’aperçu, avant le programme. Les langues sont regroupées une seule fois. Les informations d’auteur, de format ou de durée absentes restent explicites, sans valeur de remplacement.
+
 Guide : lecture confortable, table des matières si longueur utile, exemples originaux, contrôles et lien vers une activité du même sujet. Les informations de source/date reflètent une vraie revue.
 
 ## Composition de l’espace apprenant

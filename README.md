@@ -254,6 +254,10 @@ Recette dédiée, après builds, avec Docker et les ports 3101/8181 libres :
 
 Le superviseur crée un PostgreSQL isolé en tmpfs pour les publications fictives de recette. Il conserve le volume Compose et nettoie ses seuls processus. Résultats observés et limites : [P06](docs/evidence/P06.md).
 
+AUD-04 raccorde la fiche aux offres approuvées qui incluent exactement son parcours, sa version et la langue vendue. Les trois aperçus au plus ouvrent les détails réels ; une liste complète conserve ces filtres dans sa pagination. Prix, inclusions et conditions viennent de Spring. La reprise vérifie le parcours lui-même, indépendamment de son premier extrait gratuit.
+
+Après les builds, `node scripts/verify-browser.mjs AUD04` (ou `scripts/courses.cmd run verify:course-offers`) prépare le cours FR/EN et des offres fictives dans PostgreSQL/S3 éphémères. La recette prépare seulement des commandes locales et observe les accès de test ; Stripe et les workers de paiement restent désactivés. Elle ne doit jamais être lancée contre une base partagée. [Résultats et limites AUD-04](docs/evidence/AUD-04.md).
+
 ## Méthodes et générateur P07
 
 Une méthode publiée possède une définition éditoriale FR/EN : entrées, étapes, instruction, exemple, contrôles et limites. Le générateur assemble sept champs localement ; aucun appel IA ni instruction exécutée automatiquement. Le texte final reste modifiable indépendamment des paramètres ; reconstruction et réinitialisation demandent confirmation.

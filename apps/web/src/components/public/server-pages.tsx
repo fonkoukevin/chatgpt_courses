@@ -23,6 +23,7 @@ import { PublicUnavailable } from "./unavailable";
 import { PublicContextUnavailable } from "./context-unavailable";
 import { PublicMethodSource } from "@/components/methods/source";
 import { readLearningDashboard, readSavedLearningActivity } from "@/lib/api/learning-server";
+import { readCourseOffers } from "@/lib/api/commerce-server";
 
 export type PublicPageProps = { params: Promise<{ locale: string; slug?: string; courseSlug?: string; activitySlug?: string }>; searchParams: Promise<PublicParameters> };
 export function forLocale<T>(page: (props: PublicPageProps) => Promise<T>, expected: Locale) {
@@ -148,7 +149,9 @@ async function resourcePageData(props: PublicPageProps, kind: Exclude<ResourceCa
 }
 export async function PublicCoursePage(props: PublicPageProps) {
   const data = await resourcePageData(props, "COURSE");
-  return <PublicCourse {...data} activityHrefs={data.result.ok ? programmeLinks(data.locale, data.result.data, data.returnTo) : {}} />;
+  const offersResult = data.result.ok && data.result.data.availability === "PUBLISHED"
+    ? await readCourseOffers({ resourceId: data.result.data.resourceId, versionId: data.result.data.versionId }, data.locale) : undefined;
+  return <PublicCourse {...data} offersResult={offersResult} activityHrefs={data.result.ok ? programmeLinks(data.locale, data.result.data, data.returnTo) : {}} />;
 }
 export async function PublicGuidePage(props: PublicPageProps) { return <PublicGuide {...await resourcePageData(props, "GUIDE")} />; }
 export async function PublicMethodPage(props: PublicPageProps) { return <PublicMethodSource {...await resourcePageData(props, "METHOD_TEMPLATE")} />; }

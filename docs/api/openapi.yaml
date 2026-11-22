@@ -4533,6 +4533,7 @@ paths:
       tags:
         - Commerce
       summary: Lister les offres visibles sans personnalisation.
+      description: Les filtres resourceId et versionId sont optionnels et doivent être fournis ensemble. Ils limitent le résultat aux offres approuvées incluant exactement ce parcours et cette version, dans une langue annoncée par l’offre. Sans ces filtres, la liste existante est conservée. Une offre inactive peut être visible ; la disponibilité de commande et de paiement reste celle du détail serveur.
       security: []
       parameters:
         - name: locale
@@ -4540,6 +4541,18 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/Locale'
+        - name: resourceId
+          in: query
+          required: false
+          description: Identité du parcours inclus, avec versionId obligatoire.
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - name: versionId
+          in: query
+          required: false
+          description: Version pédagogique exacte du parcours, avec resourceId obligatoire. La politique de mises à jour ne remplace pas cette correspondance.
+          schema:
+            $ref: '#/components/schemas/UUID'
         - name: page
           in: query
           required: false

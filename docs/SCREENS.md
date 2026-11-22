@@ -102,11 +102,15 @@ Composants : SearchField, FilterGroup, ActiveFilters, ResultCard, Pagination, Em
 
 Routes : /fr/parcours/{slug} et /en/courses/{slug}. Phase P06, raccord commercial P11/P12.
 
-P06 lit la fiche publiée et son programme de métadonnées. Chaque module/activité conserve la version enregistrée dans la composition, même si une version plus récente existe. Les contenus PROTECTED ne livrent aucun bloc, corrigé ou quiz au HTML public. L’encart d’accès explique l’absence d’offre/paiement ; aucun tarif ou droit n’est inventé. Les langues manquantes, dépassées ou retirées sont présentées comme telles, sans remplacer la ressource.
+P06 lit la fiche publiée et son programme de métadonnées. Chaque module/activité conserve la version enregistrée dans la composition, même si une version plus récente existe. Les contenus PROTECTED ne livrent aucun bloc, corrigé ou quiz au HTML public. Les langues manquantes, dépassées ou retirées sont présentées comme telles, sans remplacer la ressource.
 
-Ordre : livrable attendu, bénéficiaire, aperçu, programme, prérequis, outils nécessaires, modalités de vérification, langues, conditions de l’offre, FAQ. Le programme expose activités ouvertes, accessibles, verrouillées et prérequis.
+AUD-04 présente le titre et le résultat attendu, puis une activité FREE publiée du programme avec son titre, son résumé et son lien exact. Public/prérequis, étapes et activités, vérification, outils, format/langues et FAQ suivent. Le programme conserve ses versions ; leurs numéros et la date de revue restent consultables dans un détail secondaire. Auteur et format restent indiqués non renseignés tant que ces informations ne sont pas exposées par une source publique. Une durée absente n’est pas estimée par l’interface.
 
-L’action dépend du contexte : commencer gratuitement, voir l’offre ou reprendre. L’accès existant rend la reprise prioritaire. Une ressource peut rester consultable par un client existant alors que sa vente est suspendue. Version remplacée et modifications pédagogiques ont une explication et un lien appropriés.
+Le bouton d’essai est disponible dès le héros et l’aperçu conserve un lien secondaire vers la même activité. Lorsqu’un module publié ne contient qu’une activité publiée aux titre/résumé strictement identiques, une seule ligne de programme présente son lien et son statut d’accès ; toutes les versions restent dans le détail secondaire. Les autres compositions restent développées.
+
+L’encart regroupe le contexte du compte et les offres approuvées qui incluent exactement le parcours, sa version et la langue vendue. Prix/devise, inclusions et conditions proviennent de Spring. Plusieurs offres donnent un choix, avec trois aperçus au plus et une liste filtrée complète paginée ; absence, suspension et panne ont des états distincts. Le lien ouvre l’offre pour revue et parcours de commande existant. Sur mobile, l’encart suit l’aperçu avant le programme ; sur grand écran, il occupe la colonne latérale.
+
+L’action dépend du contexte : commencer gratuitement, se connecter, consulter l’offre ou reprendre. L’accès existant rend la reprise prioritaire : le contrôle privé porte sur le parcours exact, jamais sur son seul extrait gratuit ; l’inscription ne prouve aucun droit. La reprise conserve l’inscription et la composition correspondantes. Un refus d’accès renvoie vers les accès du compte sans inventer sa cause depuis un simple403. Une ressource peut rester consultable par un client existant alors que sa vente est suspendue. Version remplacée et modifications pédagogiques ont une explication et un lien appropriés.
 
 La durée estimée vient d’un champ éditorial vérifié ; elle n’est pas fabriquée pour remplir une carte. Les langues et services disponibles reflètent la configuration réelle.
 

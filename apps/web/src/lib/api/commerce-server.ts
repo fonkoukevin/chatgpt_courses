@@ -3,7 +3,9 @@ import { cookies } from "next/headers";
 import { getServerConfig } from "../config/server";
 import type { AuthResult } from "./auth-client";
 import type { Locale } from "../i18n/locales";
-import { checkedOrder, offerListPath, offerPath, orderListPath, orderPath } from "./commerce-client";
+import { checkedOrder, offerListPath, offerPath, orderListPath, orderPath, type CourseOfferFilter } from "./commerce-client";
+import { matchesCourseOffer, type CourseOfferSelection } from "../commerce/course-offers";
+import { offersHref } from "../commerce/routes";
 import { decodeAssetResponse } from "./assets-response";
 import { isOfferPage, isPublicOffer } from "./offers-validation";
 import { isOrderPage, isOrderView } from "./orders-validation";
@@ -20,8 +22,22 @@ async function read<T>(path: string, decode: (value: unknown) => value is T, per
     return await decodeAssetResponse(response, decode);
   } catch { return { ok: false, error: { kind: "unavailable" } }; }
 }
-export const readOffers = (locale: Locale, page = 0, pageSize = 20) => read(offerListPath(locale, page, pageSize), matching(isOfferPage, (value) => value.page === page && value.pageSize === pageSize && value.items.every((item) => item.locale === locale)), false);
+export const readOffers = (locale: Locale, page = 0, pageSize = 20, course?: CourseOfferFilter) => read(offerListPath(locale, page, pageSize, course), matching(isOfferPage, (value) => value.page === page && value.pageSize === pageSize && value.items.every((item) => item.locale === locale)), false);
 export const readOffer = (offerId: string, locale: Locale) => read(offerPath(offerId, locale), matching(isPublicOffer, (value) => value.id === offerId && value.locale === locale), false);
+export async function readCourseOffers(course: CourseOfferFilter, locale: Locale): Promise<AuthResult<CourseOfferSelection>> {
+  const list = await readOffers(locale, 0, 3, course);
+  if (!list.ok) return list;
+  if (list.data.items.length !== Math.min(list.data.total, list.data.pageSize)) return { ok: false, error: { kind: "invalid-response", status: list.status } };
+  const details = await Promise.all(list.data.items.map(item => readOffer(item.id, locale)));
+  const items = [];
+  for (let index = 0; index < details.length; index++) {
+    const detail = details[index];
+    if (!detail.ok) return detail;
+    if (!matchesCourseOffer(detail.data, list.data.items[index], course, locale)) return { ok: false, error: { kind: "invalid-response", status: detail.status } };
+    items.push(detail.data);
+  }
+  return { ok: true, status: list.status, data: { items, total: list.data.total, moreHref: offersHref(locale, {}, course) } };
+}
 export const readOrders = (page = 0, pageSize = 20) => read(orderListPath(page, pageSize), matching(isOrderPage, (value) => value.page === page && value.pageSize === pageSize), true);
 export const readOrder = (orderId: string) => checkedOrder(read(orderPath(orderId), matching(isOrderView, (value) => value.id === orderId), true));
 export const readOrderPaymentStatus = (orderId: string) => read(paymentStatusPath(orderId), matching(isOrderPaymentStatus, (value) => value.orderId === orderId), true);

@@ -1307,6 +1307,8 @@ export const setMediaProgress = <ThrowOnError extends boolean = false>(options: 
 
 /**
  * Lister les offres visibles sans personnalisation.
+ *
+ * Les filtres resourceId et versionId sont optionnels et doivent être fournis ensemble. Ils limitent le résultat aux offres approuvées incluant exactement ce parcours et cette version, dans une langue annoncée par l’offre. Sans ces filtres, la liste existante est conservée. Une offre inactive peut être visible ; la disponibilité de commande et de paiement reste celle du détail serveur.
  */
 export const listPublicOffers = <ThrowOnError extends boolean = false>(options: Options<ListPublicOffersData, ThrowOnError>): RequestResult<ListPublicOffersResponses, ListPublicOffersErrors, ThrowOnError> => (options.client ?? client).get<ListPublicOffersResponses, ListPublicOffersErrors, ThrowOnError>({ url: '/offers', ...options });
 

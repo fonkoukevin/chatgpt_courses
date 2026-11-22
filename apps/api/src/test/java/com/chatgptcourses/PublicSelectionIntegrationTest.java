@@ -203,6 +203,106 @@ class PublicSelectionIntegrationTest {
         assertThat(catchThrowable(()->jdbc.update("DELETE FROM offer_public_selections WHERE revision_id=?",offer.currentRevisionId()))).isInstanceOf(DataIntegrityViolationException.class);
     }
 
+    @Test void courseOfferDiscoveryHttpMatchesExactInclusionsAdvertisedLocalesAndApprovedRevisions() throws Exception {
+        UUID editor=actor("EDITOR"),merchant=actor("COMMERCE_MANAGER");
+        var course=approvedCourse(editor,true);var foreign=approvedCourse(editor,true);var visitor=browser(null);
+        String fr=courseOffers(course.course(),"fr"),en=courseOffers(course.course(),"en");
+        assertThat(tree(get(visitor,fr)).path("total").asLong()).isZero();
+
+        var individual=courseOffer(merchant,List.of(course.course()),List.of("fr"),false);approveOffer(merchant,individual);
+        assertThat(ids(get(visitor,fr))).containsExactly(individual.id());
+        // An English copy alone is not an inclusion of English in the commercial terms.
+        assertThat(offers.publicOffer(individual.id(),"en").translationAvailable()).isTrue();
+        assertThat(tree(get(visitor,en)).path("total").asLong()).isZero();
+        assertThat(offers.listPublic(new OfferQuery(individual.code(),null,null,"en",0,20)).items()).hasSize(1);
+
+        var pack=courseOffer(merchant,List.of(course.course(),foreign.course()),List.of("fr","en"),false);approveOffer(merchant,pack);
+        var inactive=courseOffer(merchant,List.of(course.course()),List.of("fr"),false);approveOffer(merchant,inactive);
+        inactive=offers.deactivate(merchant,merchant,inactive.id(),EntityTags.forRevision("offer",inactive.id(),inactive.revision()),new ChangeOfferState("Suspend isolated course offer"));
+        var unreviewed=courseOffer(merchant,List.of(course.course()),List.of("fr"),false);
+        var recipe=courseOffer(merchant,List.of(course.course()),List.of("fr"),false);
+        var recipeSelection=selections.offer(merchant,recipe.id());selections.selectOffer(merchant,merchant,recipe.id(),PublicSelectionService.tag("offer-selection",recipeSelection),new PublicSelectionService.ChangeSelection(recipe.currentRevisionId(),"RECIPE",false,"Recipe must not become a course recommendation"));
+        var unrelated=courseOffer(merchant,List.of(foreign.course()),List.of("fr"),false);approveOffer(merchant,unrelated);
+        var draft=offers.create(merchant,merchant,new CreateOffer("aud04-draft-"+UUID.randomUUID(),"COURSE",courseOfferFields(List.of(course.course()),List.of("fr"),false),"Draft must not enter public discovery"));
+
+        var current=editorial.get(editor,course.course().id());
+        var next=publish(editor,editorial.newVersion(editor,current.id(),tag(current),new NewVersion("Distinct learning objective","Distinct evaluation","Another pedagogical version","Synthetic version fixture",current.document(),List.of(course.module().versionId()),"Keep commercial version matching exact")));
+        classify(editor,next,"EDITORIAL",true);
+        var pinnedNext=courseOffer(merchant,List.of(next),List.of("fr"),false);approveOffer(merchant,pinnedNext);
+        var updatesNext=courseOffer(merchant,List.of(next),List.of("fr"),true);approveOffer(merchant,updatesNext);
+
+        var matched=get(visitor,fr);assertThat(matched.statusCode()).isEqualTo(200);
+        assertThat(matched.headers().firstValue("Cache-Control")).hasValueSatisfying(value->assertThat(value).contains("no-store"));
+        assertThat(ids(matched)).containsExactlyInAnyOrder(individual.id(),pack.id(),inactive.id());
+        assertThat(ids(matched)).doesNotContain(unreviewed.id(),recipe.id(),unrelated.id(),draft.id(),pinnedNext.id(),updatesNext.id());
+        assertThat(tree(matched).path("total").asLong()).isEqualTo(3);
+        assertThat(ids(get(visitor,en))).containsExactly(pack.id());
+        assertThat(ids(get(visitor,courseOffers(next,"fr")))).containsExactlyInAnyOrder(pinnedNext.id(),updatesNext.id());
+        assertThat(tree(get(visitor,fr.replace(course.course().versionId().toString(),foreign.course().versionId().toString()))).path("total").asLong()).isZero();
+        assertThat(tree(get(visitor,courseOffers(course.course(),"fr").replace(course.course().resourceId().toString(),UUID.randomUUID().toString()))).path("total").asLong()).isZero();
+        var pages=new ArrayList<UUID>();for(int page=0;page<3;page++){
+            var response=get(visitor,fr+"&page="+page+"&pageSize=1");assertThat(tree(response).path("total").asLong()).isEqualTo(3);assertThat(tree(response).path("page").asInt()).isEqualTo(page);pages.addAll(ids(response));
+        }
+        assertThat(pages).containsExactlyElementsOf(ids(matched));assertThat(ids(get(visitor,fr+"&page=3&pageSize=1"))).isEmpty();
+        var suspended=offers.publicOffer(inactive.id(),"fr");assertThat(suspended.state()).isEqualTo("INACTIVE");assertThat(suspended.readiness().checkoutUnavailableReason()).isEqualTo("OFFER_INACTIVE");
+        assertThat(catalogue.version(course.course().resourceId(),course.course().versionId(),"fr").document()).isNull();
+    }
+
+    @Test void courseOfferDiscoveryHttpRejectsMissingOrMalformedFilterPartners() throws Exception {
+        String resource=UUID.randomUUID().toString(),version=UUID.randomUUID().toString();var visitor=browser(null);
+        for(String query:List.of("resourceId="+resource,"versionId="+version,"resourceId=invalid&versionId="+version,"resourceId="+resource+"&versionId=invalid","resourceId=1-1-1-1-1&versionId="+version,"resourceId=&versionId=")){
+            assertThat(get(visitor,"/api/v1/offers?locale=fr&"+query).statusCode()).as(query).isEqualTo(400);
+        }
+        var query=new OfferQuery(null,null,null,"fr",0,20);
+        expect(ApiError.VALIDATION_FAILED,()->offers.listPublic(query,UUID.fromString(resource),null));
+        expect(ApiError.VALIDATION_FAILED,()->offers.listPublic(query,null,UUID.fromString(version)));
+    }
+
+    @Test void changedCourseOfferDisappearsUntilFreshApprovalAndKeepsAcceptedOrderSnapshot() throws Exception {
+        UUID editor=actor("EDITOR"),merchant=actor("COMMERCE_MANAGER"),owner=actor("LEARNER");var course=approvedCourse(editor,false);
+        var original=courseOffer(merchant,List.of(course.course()),List.of("fr"),false);approveOffer(merchant,original);
+        String path=courseOffers(course.course(),"fr"),key=UUID.randomUUID().toString();var visitor=browser(null);
+        var command=new CreateOrder(original.id(),original.revision(),"fr",original.fields().conditions().termsVersion());
+        var prepared=orders.create(owner,owner,key,command).value();var snapshot=prepared.snapshot();
+        assertThat(ids(get(visitor,path))).containsExactly(original.id());
+        assertThat(snapshot.resources()).singleElement().satisfies(resource->{assertThat(resource.resourceId()).isEqualTo(course.course().resourceId());assertThat(resource.versionId()).isEqualTo(course.course().versionId());});
+        var old=original.fields();var conditions=old.conditions();
+        var revisedConditions=new OfferConditions(conditions.access(),conditions.updates(),conditions.versionPolicy(),conditions.support(),conditions.humanReviewIncluded(),"aud04-revised-terms",conditions.terms());
+        var changed=offers.save(merchant,merchant,original.id(),EntityTags.forRevision("offer",original.id(),original.revision()),new SaveOffer(new OfferFields(old.copies(),old.resources(),old.locales(),new Money(345,"EUR"),old.tax(),revisedConditions),"Explicit new price and terms revision"));
+        assertThat(changed.state()).isEqualTo("INACTIVE");assertThat(ids(get(visitor,path))).isEmpty();
+        assertThat(orders.get(owner,prepared.id()).snapshot()).isEqualTo(snapshot);
+        assertThat(orders.create(owner,owner,key,command).value().id()).isEqualTo(prepared.id());
+        var active=offers.activate(merchant,merchant,changed.id(),EntityTags.forRevision("offer",changed.id(),changed.revision()),new ChangeOfferState("Explicitly reactivate revised isolated terms"));
+        assertThat(ids(get(visitor,path))).isEmpty();assertThat(selections.offer(merchant,active.id()).selectionRevision()).isZero();
+        approveOffer(merchant,active);
+        var current=get(visitor,path);assertThat(ids(current)).containsExactly(active.id());
+        assertThat(tree(current).path("items").get(0).path("revision").asLong()).isEqualTo(active.revision());
+        assertThat(tree(current).path("items").get(0).path("price").path("amountMinor").asLong()).isEqualTo(345);
+        assertThat(orders.get(owner,prepared.id()).snapshot()).isEqualTo(snapshot);assertThat(orders.get(owner,prepared.id()).acceptedTermsVersion()).isEqualTo(original.fields().conditions().termsVersion());
+        expect(ApiError.OFFER_CHANGED,()->orders.create(owner,owner,UUID.randomUUID().toString(),command));
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM access_grants WHERE owner_id=?",Integer.class,owner)).isZero();
+    }
+
+    private record ApprovedCourse(ContentView course,ContentView module,ContentView activity) { }
+    private ApprovedCourse approvedCourse(UUID editor,boolean translated){
+        var activity=publish(editor,create(editor,ResourceKind.ACTIVITY,"fr","PROTECTED","AUD04 activity "+UUID.randomUUID(),List.of(),List.of()));classify(editor,activity,"EDITORIAL",true);if(translated)classify(editor,translate(editor,activity),"EDITORIAL",true);
+        var module=publish(editor,create(editor,ResourceKind.MODULE,"fr","PROTECTED","AUD04 module "+UUID.randomUUID(),List.of(activity.versionId()),List.of()));classify(editor,module,"EDITORIAL",true);if(translated)classify(editor,translate(editor,module),"EDITORIAL",true);
+        var course=publish(editor,create(editor,ResourceKind.COURSE,"fr","PROTECTED","AUD04 course "+UUID.randomUUID(),List.of(module.versionId()),List.of()));classify(editor,course,"EDITORIAL",true);if(translated)classify(editor,translate(editor,course),"EDITORIAL",true);
+        return new ApprovedCourse(course,module,activity);
+    }
+    private static OfferFields courseOfferFields(List<ContentView> courses,List<String> locales,boolean updates){
+        var base=fields(courses.getFirst(),locales);var conditions=base.conditions();
+        if(updates)conditions=new OfferConditions(conditions.access(),new OfferPeriod("PERIOD",2),"UPDATES_DURING_PERIOD",conditions.support(),false,conditions.termsVersion(),conditions.terms());
+        return new OfferFields(base.copies(),courses.stream().map(course->new OfferResourceInput(course.resourceId(),course.versionId())).toList(),locales,base.price(),base.tax(),conditions);
+    }
+    private OfferView courseOffer(UUID merchant,List<ContentView> courses,List<String> locales,boolean updates){
+        var draft=offers.create(merchant,merchant,new CreateOffer("aud04-"+UUID.randomUUID(),courses.size()>1?"PACK":"COURSE",courseOfferFields(courses,locales,updates),"Explicit isolated course discovery fixture"));
+        return offers.activate(merchant,merchant,draft.id(),EntityTags.forRevision("offer",draft.id(),draft.revision()),new ChangeOfferState("Activate isolated fixture without payment provider"));
+    }
+    private void approveOffer(UUID merchant,OfferView offer){var selection=selections.offer(merchant,offer.id());selections.selectOffer(merchant,merchant,offer.id(),PublicSelectionService.tag("offer-selection",selection),new PublicSelectionService.ChangeSelection(offer.currentRevisionId(),"EDITORIAL",true,"Approve exact isolated course offer revision"));}
+    private static String courseOffers(ContentView course,String locale){return "/api/v1/offers?locale="+locale+"&resourceId="+course.resourceId()+"&versionId="+course.versionId();}
+    private List<UUID> ids(HttpResponse<String> response){assertThat(response.statusCode()).isEqualTo(200);var values=new ArrayList<UUID>();for(var item:tree(response).path("items"))values.add(UUID.fromString(item.path("id").asText()));return values;}
+
     private ContentView create(UUID actor,ResourceKind kind,String locale,String access,String title,List<UUID> children,List<UUID> related){return editorial.create(actor,new CreateContent(kind,locale,"aud01-"+UUID.randomUUID(),title,"Synthetic isolated metadata","Observable task","Declared evaluation",document(access,related),children,"Explicit unreviewed test publication"));}
     private static ContentDocument document(String access,List<UUID> related){return new ContentDocument("Use supplied facts","A checked result",List.of(),List.of(new ContentBlock("PARAGRAPH","Synthetic teaching body",null)),null,new Exercise("Prepare the result","Private correction"),List.of(),List.of(new RubricCriterion("facts","No invented facts",1,true)),access,List.of(),related);}
     private ContentView publish(UUID actor,ContentView input){var v=editorial.get(actor,input.id());v=editorial.transition(actor,v.id(),tag(v),new TransitionContent(EditorialState.TO_REVIEW,"Request exact review",null));UUID source=v.sourceTranslationId()==null?null:editorial.get(actor,v.sourceTranslationId()).currentRevisionId();v=editorial.transition(actor,v.id(),tag(v),new TransitionContent(EditorialState.READY,"Review exact revision",source));return editorial.publish(actor,v.id(),tag(v),new PublishContent(v.currentRevisionId(),"Publish without discovery approval"));}

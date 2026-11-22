@@ -37,9 +37,14 @@ public class OfferService {
     }
 
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
-    public OfferPage listPublic(OfferQuery query){return list(query,false);}
+    public OfferPage listPublic(OfferQuery query){return list(query,false,null,null);}
+    /** Discovery can narrow to an exact advertised course version without changing sales or rights. */
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
-    public OfferPage listAdmin(UUID actor,OfferQuery query){auth.require(actor,"commerce.offers.read");return list(query,true);}
+    public OfferPage listPublic(OfferQuery query,UUID resourceId,UUID versionId){
+        check((resourceId==null)==(versionId==null));return list(query,false,resourceId,versionId);
+    }
+    @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
+    public OfferPage listAdmin(UUID actor,OfferQuery query){auth.require(actor,"commerce.offers.read");return list(query,true,null,null);}
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
     public PublicOffer publicOffer(UUID id,String locale){locale(locale);var offer=load(id,false);if("DRAFT".equals(offer.state()))throw missing();return project(offer,locale);}
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
@@ -99,10 +104,14 @@ public class OfferService {
         if(state.equals(offer.state()))return offer;
         jdbc.update("UPDATE offers SET state=?,revision=revision+1,updated_at=greatest(updated_at,clock_timestamp()) WHERE id=?",state,id);event(id,offer.currentRevisionId(),actor,activate?"ACTIVATE":"DEACTIVATE",command.reason());return load(id,false);
     }
-    private OfferPage list(OfferQuery q,boolean admin){
+    private OfferPage list(OfferQuery q,boolean admin,UUID resourceId,UUID versionId){
         check(q!=null&&q.page()>=0&&q.page()<=1_000_000&&q.pageSize()>=1&&q.pageSize()<=100);locale(q.locale());
         check(q.q()==null||q.q().length()<=240);check(q.state()==null||List.of("DRAFT","ACTIVE","INACTIVE").contains(q.state()));check(q.kind()==null||List.of("COURSE","PACK").contains(q.kind()));
         var args=new ArrayList<Object>();StringBuilder where=new StringBuilder(admin?" WHERE true":" WHERE o.state<>'DRAFT' AND "+PublicSelectionSql.OFFER_SELECTED);
+        if(resourceId!=null){
+            where.append(" AND EXISTS(SELECT 1 FROM offer_revision_resources included WHERE included.revision_id=r.id AND included.resource_id=? AND included.version_id=?) AND (r.fields_json->'locales') @> ?::jsonb");
+            args.add(resourceId);args.add(versionId);args.add("[\""+q.locale()+"\"]");
+        }
         if(q.state()!=null){where.append(" AND o.state=?");args.add(q.state());}if(q.kind()!=null){where.append(" AND p.kind=?");args.add(q.kind());}
         if(q.q()!=null&&!q.q().isBlank()){where.append(" AND (p.code ILIKE ? OR EXISTS(SELECT 1 FROM jsonb_array_elements(r.fields_json->'copies') c WHERE c->>'locale'=? AND (c->>'title' ILIKE ? OR c->>'summary' ILIKE ?)))");String pattern="%"+q.q().strip().replace("\\","\\\\").replace("%","\\%").replace("_","\\_")+"%";args.add(pattern);args.add(q.locale());args.add(pattern);args.add(pattern);}
         String base=" FROM offers o JOIN products p ON p.id=o.product_id JOIN offer_revisions r ON r.id=o.current_revision_id";

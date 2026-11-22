@@ -7963,6 +7963,14 @@ export type ListPublicOffersData = {
     path?: never;
     query: {
         locale: Locale;
+        /**
+         * Identité du parcours inclus, avec versionId obligatoire.
+         */
+        resourceId?: Uuid;
+        /**
+         * Version pédagogique exacte du parcours, avec resourceId obligatoire. La politique de mises à jour ne remplace pas cette correspondance.
+         */
+        versionId?: Uuid;
         page?: number;
         pageSize?: number;
     };

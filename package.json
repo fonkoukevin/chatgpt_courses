@@ -62,6 +62,7 @@
     "verify:identity": "node scripts/verify-browser.mjs P04",
     "verify:editorial": "node scripts/verify-browser.mjs P05",
     "verify:public": "node scripts/verify-browser.mjs P06",
+    "verify:course-offers": "node scripts/verify-browser.mjs AUD04",
     "verify:methods": "node scripts/verify-browser.mjs P07",
     "verify:learning": "node scripts/verify-browser.mjs P08",
     "verify:projects": "node scripts/verify-browser.mjs P09",

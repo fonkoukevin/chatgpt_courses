@@ -39,19 +39,33 @@ test.describe('P06 public publications', () => {
 
   for (const locale of ['fr', 'en'] as const) test(`${locale} : accueil utile, filtres combinés, retour et mobile`, async ({ page }) => {
     const t = getPublicDictionary(locale), errors: string[] = [];
+    const course = fixture.resources.course[locale].value, activity = fixture.resources.activity[locale].value;
+    const trialHref = courseActivityHref(locale, course.slug, activity.slug, activity.resourceId, activity.versionId, course.versionId);
     page.on('pageerror', () => errors.push('pageerror'));
     await page.goto(`/${locale}`);
-    await expect(page.getByRole('heading', { level: 1, name: t.headline })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: course.title, exact: true })).toBeVisible();
     await page.keyboard.press('Tab');
     await expect(page.locator('.skip-link')).toBeFocused();
     await page.keyboard.press('Enter');
     await expect(page.getByRole('main')).toBeFocused();
-    await expect(page.getByRole('link', { name: t.try, exact: true })).toBeVisible();
+    const homeTrial = page.getByRole('main').locator('a[data-home-primary]');
+    await expect(homeTrial).toBeVisible();
+    await expect(homeTrial).toHaveAttribute('href', trialHref);
+    await expect(page.getByRole('main').locator('a[data-home-course]')).toHaveAttribute('href', resourceHref(course));
+    expect((await page.request.get('/api/v1/auth/me')).status()).toBe(401);
     await capture(page, `${locale}-1440-home`);
     await page.setViewportSize({ width: 390, height: 844 });
     await noOverflow(page); await capture(page, `${locale}-390-home`);
     await page.setViewportSize({ width: 1440, height: 1000 });
-    await page.getByRole('link', { name: t.try, exact: true }).click();
+    await homeTrial.focus(); await page.keyboard.press('Enter');
+    await expect(page.getByRole('heading', { level: 1, name: activity.title, exact: true })).toBeVisible();
+    expect(new URL(page.url()).searchParams.get('resource')).toBe(activity.resourceId);
+    expect(new URL(page.url()).searchParams.get('version')).toBe(activity.versionId);
+    expect(new URL(page.url()).searchParams.get('courseVersion')).toBe(course.versionId);
+    expect((await page.request.get('/api/v1/auth/me')).status()).toBe(401);
+    const freeResponse = await page.request.get(`/api/v1/catalog/resources/${activity.resourceId}/versions/${activity.versionId}?locale=${locale}`);
+    expect(freeResponse.status()).toBe(200);
+    expect((await freeResponse.json() as { document: unknown }).document).not.toBeNull();
     await expect(page.getByText(getLearningDictionary(locale).signInHelp, { exact: true })).toBeVisible();
     await expect(page.getByRole('checkbox').first()).toBeVisible();
     await page.goto(catalogueHref(locale));
@@ -65,7 +79,6 @@ test.describe('P06 public publications', () => {
     await page.getByLabel(t.access, { exact: true }).selectOption('FREE');
     await page.getByRole('button', { name: t.apply, exact: true }).click();
     await expect(page).toHaveURL(/type=COURSE/);
-    const course = fixture.resources.course[locale].value;
     await page.getByRole('link', { name: course.title, exact: true }).click();
     await expect(page.getByRole('heading', { level: 1, name: course.title })).toBeVisible();
     expect(new URL(page.url()).searchParams.get('version')).toBe(course.versionId);
@@ -127,7 +140,7 @@ test.describe('P06 public publications', () => {
     await page.goto(catalogueHref(locale));
     await noOverflow(page); await capture(page, `${locale}-320-catalogue`);
     await page.goto(`/${locale}`);
-    await expect(page.getByRole('heading', { level: 1, name: t.headline })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: course.title, exact: true })).toBeVisible();
     await noOverflow(page); await capture(page, `${locale}-320-home`);
     expect(errors).toEqual([]);
   });
@@ -210,6 +223,18 @@ test.describe('P06 public publications', () => {
     await contentAction(editorRequest, publishedVersion, 'archive', { reason: 'P06 latest guide withdrawn without historical fallback' });
     const response = await context.request.get(`/api/v1/catalog/resources/${guide.value.resourceId}?locale=fr`);
     expect((await response.json() as { availability: string }).availability).toBe('WITHDRAWN');
+    const remainingCourses = await context.request.get('/api/v1/catalog?locale=fr&type=COURSE');
+    expect(remainingCourses.status()).toBe(200);
+    expect((await remainingCourses.json() as { total: number }).total).toBe(0);
+    await page.goto('/fr');
+    await expect(page.getByRole('heading', { level: 1, name: fr.headline, exact: true })).toBeVisible();
+    await expect(page.locator('[data-home-single-course]')).toHaveCount(0);
+    const fallbackTrial = page.getByRole('main').getByRole('link', { name: fr.try, exact: true });
+    const fallbackHref = new URL((await fallbackTrial.getAttribute('href'))!, page.url());
+    expect(fallbackHref.searchParams.get('activity')).toBe(activity2.value.resourceId);
+    expect(fallbackHref.searchParams.get('version')).toBe(activity2.value.versionId);
+    const fallbackFree = await context.request.get(`/api/v1/catalog/resources/${activity2.value.resourceId}/versions/${activity2.value.versionId}?locale=fr`);
+    expect(fallbackFree.status()).toBe(200); expect((await fallbackFree.json() as { document: unknown }).document).not.toBeNull();
   });
 
   test('zéro résultat distinct de panne réelle et reprise sans catalogue simulé', async ({ page }) => {

@@ -11,6 +11,8 @@ import { publicCatalogueHref, type LanguageLinks } from "@/lib/public/routes";
 import { offersPath } from "@/lib/commerce/routes";
 import { getCommerceDictionary } from "@/lib/i18n/commerce";
 import { usePublicNavigationAvailability } from "./public-navigation";
+import { helpPath, dataRequestsPath } from "@/lib/account/routes";
+import { getPublicTrustDictionary } from "@/lib/i18n/public-trust";
 
 export function PublicLayout({ locale, children, product }: { locale: Locale; children: ReactNode; product?: { languageLinks: LanguageLinks } }) {
   if (product) return <ProductPublicLayout locale={locale} languageLinks={product.languageLinks}>{children}</ProductPublicLayout>;
@@ -44,8 +46,14 @@ export function PublicLayout({ locale, children, product }: { locale: Locale; ch
 
 function ProductPublicLayout({ locale, languageLinks, children }: { locale: Locale; languageLinks: LanguageLinks; children: ReactNode }) {
   const t = getPublicDictionary(locale);
+  const trust = getPublicTrustDictionary(locale);
   const available = usePublicNavigationAvailability();
-  const nav = [{ label: t.catalogue, href: publicCatalogueHref(locale) },
+  const nav = available.homeCourse ? [
+    { label: trust.course, href: available.homeCourse.courseHref },
+    ...(available.homeCourse.trialHref ? [{ label: trust.trial, href: available.homeCourse.trialHref }] : []),
+    ...(available.methods || available.guides ? [{ label: trust.resources, href: publicCatalogueHref(locale) }] : []),
+    { label: t.account, href: locale === "fr" ? "/fr/compte" : "/en/account" },
+  ] : [{ label: t.catalogue, href: publicCatalogueHref(locale) },
     ...(available.methods ? [{ label: t.methods, href: `${publicCatalogueHref(locale)}?type=METHOD_TEMPLATE&locale=${locale}` }] : []),
     ...(available.guides ? [{ label: t.guides, href: `${publicCatalogueHref(locale)}?type=GUIDE&locale=${locale}` }] : []),
     ...(available.offers ? [{ label: getCommerceDictionary(locale).offers, href: offersPath(locale) }] : []),
@@ -58,6 +66,6 @@ function ProductPublicLayout({ locale, languageLinks, children }: { locale: Loca
       <div className="flex flex-wrap items-center gap-1"><nav aria-label={t.language} className="flex gap-1">{(["fr", "en"] as const).map((language) => <NextLink key={language} data-language-switch={language} data-language-available={languageLinks[language].available} href={languageLinks[language].href} lang={language} hrefLang={language} aria-current={locale === language ? "page" : undefined} aria-label={`${localeName(language)}${languageLinks[language].available ? "" : ` · ${t.missingLanguage}`}`} className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-input px-2 text-sm font-medium no-underline ${locale === language ? "bg-brand-soft text-brand" : "text-muted-foreground hover:bg-surface-hover"}`}>{localeName(language)}{!languageLinks[language].available && <span aria-hidden="true">*</span>}</NextLink>)}</nav><MobileNavigation locale={locale} title={t.navigation} description={t.footer}>{navigation}</MobileNavigation></div>
     </div></header>
     <main id="main-content" tabIndex={-1} className="mx-auto max-w-[var(--content-max)] px-4 outline-none sm:px-6 lg:px-8">{children}</main>
-    <footer className="mt-16 border-t border-border bg-surface-subtle"><div className="mx-auto grid max-w-[var(--content-max)] gap-6 px-4 py-8 sm:px-6 md:grid-cols-2 lg:px-8"><div>{brand}<p className="mt-2 max-w-lg text-sm text-muted-foreground">{t.footer}</p></div><p className="max-w-lg text-sm leading-relaxed text-muted-foreground">{t.footerNote}</p></div></footer>
+    <footer className="mt-16 border-t border-border bg-surface-subtle"><div className="mx-auto flex max-w-[var(--content-max)] flex-col gap-5 px-4 py-8 sm:px-6 md:flex-row md:justify-between md:gap-10 lg:px-8"><div>{brand}<p className="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">{trust.benefit}</p></div><nav aria-label={trust.navigation}><ul className="flex flex-col items-start gap-1"><li><NextLink href={helpPath(locale)} prefetch={false} className="inline-flex min-h-11 items-center text-sm text-link underline-offset-4 hover:underline">{trust.help}</NextLink></li><li><NextLink href={dataRequestsPath(locale)} prefetch={false} className="inline-flex min-h-11 items-center text-sm text-link underline-offset-4 hover:underline">{trust.dataRequests}</NextLink></li></ul></nav></div></footer>
   </div>;
 }

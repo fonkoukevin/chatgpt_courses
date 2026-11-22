@@ -90,6 +90,8 @@ Accueil : en-tête sobre, promesse liée à une tâche, explication courte, acc�
 
 Le premier écran doit permettre de comprendre le produit et d’agir. Une illustration est utile uniquement si elle explique un résultat réel. La fiche de formation ne devient pas un grand visuel décoratif. Une barre de chiffres n’apparaît qu’avec des données justifiables.
 
+AUD-03 conserve les tokens, la police système et Lucide existants. Pour un seul parcours, le titre/objectif et les actions précèdent un exemple de document annoté dans l’aperçu local ; le programme devient une liste de résultats séparés par des traits, sans multiplier les cartes. Le bleu nuit reste réservé aux actions et repères. Les informations de provenance technique quittent le pied de page public ; les états de version et droits restent disponibles dans leurs écrans de travail. Aucun média bitmap, dégradé ou bibliothèque d’animation n’est ajouté. [Proposition et revue](evidence/AUD-03.md).
+
 Catalogue : titre et recherche, filtres compréhensibles, résultats de densité régulière, état des filtres partageable. Sur mobile, bouton « Filtres » avec nombre actif ; garder accès au reset et aux résultats.
 
 Fiche : résultat, bénéficiaire, aperçu, programme, prérequis, outils, vérification, langues, conditions d’offre, FAQ. La carte d’offre ne cache pas le programme. Un client possédant un accès voit d’abord « Reprendre ».

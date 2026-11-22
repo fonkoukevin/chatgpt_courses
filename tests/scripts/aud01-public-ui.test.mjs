@@ -24,6 +24,7 @@ const { PublicCatalogue } = require(resolve(sources, 'components/public/catalogu
 const { PublicNavigationProvider } = require(resolve(sources, 'components/layouts/public-navigation.tsx'));
 const { publicNavigationAvailability } = require(resolve(sources, 'lib/public/navigation.ts'));
 const { getPublicDictionary } = require(resolve(sources, 'lib/i18n/public.ts'));
+const { getHomeDictionary } = require(resolve(sources, 'lib/i18n/home.ts'));
 const { publicCatalogueHref } = require(resolve(sources, 'lib/public/routes.ts'));
 const emptyNavigation = { methods: false, guides: false, offers: false };
 const success = data => ({ ok: true, data, status: 200 }), unavailable = { ok: false, error: { kind: 'unavailable' } };
@@ -120,4 +121,34 @@ test('an unavailable public service remains an error with a retry action, distin
   const t = getPublicDictionary('fr'), output = render(PublicHome, homeProps('fr', { catalogue: unavailable, facets: unavailable, featuredActivityResult: unavailable }));
   assert.ok(output.includes(html(t.serviceUnavailable)) && output.includes(html(t.retry)));
   assert.ok(!output.includes(html(t.preparationTitle)));
+});
+
+const focused = locale => ({ title: 'A reviewed course', summary: 'A public summary', objective: 'Prepare a checkable proposal.', expectedResult: 'A proposal and its checks.',
+  audience: ['Independent service providers'], prerequisites: ['Read the supplied brief'], href: `/${locale}/${locale === 'fr' ? 'parcours' : 'courses'}/reviewed-course?version=aa10a688-c37d-4312-932e-282e1e846d36`,
+  trial: { title: 'Read the brief', href: `/${locale}/${locale === 'fr' ? 'apprendre' : 'learn'}/reviewed-course/read-the-brief?resource=b8e3e854-f017-4d07-859f-aac6423600b2&version=aa10a688-c37d-4312-932e-282e1e846d36&courseVersion=852b8c6a-f3e7-4686-b580-de379a790b27` },
+  modules: [{ title: 'Understand the brief', summary: 'Make a factual scoping table.' }] });
+
+test('a focused course promotes its linked trial and course instead of an unrelated activity or catalogue search', () => {
+  for (const locale of ['fr', 'en']) {
+    const course = focused(locale), unrelated = { ...card(locale), kind: 'ACTIVITY', resourceId: 'e590b4bb-7662-4a03-afab-735fe53cd231' };
+    const output = render(PublicHome, homeProps(locale, { catalogue: page([card(locale)]), featuredActivityResult: page([unrelated]), focusedCourse: course }), { methods: true, guides: false, offers: false });
+    assert.ok(output.includes('data-home-single-course') && output.includes('A reviewed course'));
+    assert.ok(output.includes(html(course.trial.href)) && output.includes(html(course.href)));
+    assert.ok(!output.includes(unrelated.resourceId));
+    assert.doesNotMatch(output, /<form\b|type="search"/);
+    assert.ok(output.includes(html(getHomeDictionary(locale).anonymous)));
+  }
+});
+
+test('a course with no open trial makes no free-start promise and local editorial example is explicit and optional', () => {
+  for (const locale of ['fr', 'en']) {
+    const t = getHomeDictionary(locale), course = { ...focused(locale), trial: null };
+    const props = homeProps(locale, { catalogue: page([card(locale)]), focusedCourse: course });
+    const ordinary = render(PublicHome, props);
+    assert.ok(ordinary.includes('data-home-course') && !ordinary.includes('data-home-primary'));
+    assert.ok(!ordinary.includes(html(t.anonymous)) && !ordinary.includes('data-home-demo'));
+    const proposed = render(PublicHome, { ...props, editorialPreview: true });
+    assert.ok(proposed.includes('data-home-demo') && proposed.includes(html(t.preview)) && proposed.includes(html(t.demoLabel)));
+    assert.ok(proposed.includes(html(t.brief)) && proposed.includes(html(t.output)) && proposed.includes(html(t.check)));
+  }
 });

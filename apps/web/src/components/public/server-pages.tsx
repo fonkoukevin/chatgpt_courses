@@ -8,6 +8,7 @@ import { readCatalogue, readCatalogueFacets, readPublicActivityContext, readReso
 import { getServerConfig } from "@/lib/config/server";
 import { publicMetadata } from "@/lib/public/seo";
 import { absolutePublicUrl, localeIsIndexable, publicResourcePath } from "@/lib/public/seo-policy";
+import { resolveHomeCourse, singleHomeCourseCard } from "@/lib/public/home-course";
 import type { BreadcrumbTrail } from "./breadcrumbs";
 import { isLocale, type Locale } from "@/lib/i18n/locales";
 import { getPublicPageDictionary } from "@/lib/i18n/public-pages";
@@ -60,16 +61,22 @@ const seo = publicMetadata;
 
 export async function PublicHomePage({ params }: PublicPageProps) {
   const locale = localeFrom((await params).locale);
-  const [catalogue, facets, featuredActivityResult] = await Promise.all([
+  const [catalogue, facets, featuredActivityResult, courses] = await Promise.all([
     readCatalogue({ locale, pageSize: 6, sort: "RECENT" }), readCatalogueFacets(locale),
     readCatalogue({ locale, type: "ACTIVITY", access: "FREE", pageSize: 1, sort: "TITLE" }),
+    readCatalogue({ locale, type: "COURSE", pageSize: 2, sort: "TITLE" }),
   ]);
-  const faqCard = catalogue.ok ? catalogue.data.items.find((item) => item.kind === "COURSE")
+  const courseCard = singleHomeCourseCard(locale, courses);
+  const courseResource = courseCard ? await readResourceVersion(courseCard.resourceId, courseCard.versionId, locale) : undefined;
+  const focusedCourse = resolveHomeCourse(locale, courses, courseResource);
+  const faqCard = focusedCourse && courseCard ? courseCard : catalogue.ok ? catalogue.data.items.find((item) => item.kind === "COURSE")
     ?? catalogue.data.items.find((item) => item.kind === "GUIDE") ?? catalogue.data.items[0] : undefined;
-  const faqResource = faqCard ? await readResourceVersion(faqCard.resourceId, faqCard.versionId, locale) : undefined;
-  const faq = faqResource?.ok && faqResource.data.availability === "PUBLISHED" ? faqResource.data.metadata.faq : [];
+  const sameCourse = faqCard && courseCard && faqCard.resourceId === courseCard.resourceId && faqCard.versionId === courseCard.versionId && faqCard.revisionId === courseCard.revisionId;
+  const faqResource = sameCourse ? courseResource : faqCard ? await readResourceVersion(faqCard.resourceId, faqCard.versionId, locale) : undefined;
+  const faq = faqCard && faqResource?.ok && faqResource.data.availability === "PUBLISHED" && faqResource.data.revisionId === faqCard.revisionId ? faqResource.data.metadata.faq : [];
   const faqSource = faqCard && faq.length > 0 ? { title: faqCard.title, href: resourceHref(faqCard) } : undefined;
-  return <PublicHome locale={locale} catalogue={catalogue} facets={facets} featuredActivityResult={featuredActivityResult} languageLinks={defaultLanguages()} faq={faq} faqSource={faqSource} />;
+  const environment = getServerConfig().environment;
+  return <PublicHome locale={locale} catalogue={catalogue} facets={facets} featuredActivityResult={featuredActivityResult} focusedCourse={focusedCourse} editorialPreview={environment === "local" || environment === "test"} languageLinks={defaultLanguages()} faq={faq} faqSource={faqSource} />;
 }
 export async function homeMetadata({ params }: PublicPageProps): Promise<Metadata> {
   const locale = localeFrom((await params).locale), copy = getPublicPageDictionary(locale);

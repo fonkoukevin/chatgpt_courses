@@ -4,8 +4,9 @@ import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { getPublicDictionary } from '../../apps/web/src/lib/i18n/public';
 import { getShowcaseDictionary } from '../../apps/web/src/lib/i18n/showcase';
-import { catalogueHref } from '../../apps/web/src/lib/public/routes';
-import type { CatalogueFacets, CataloguePage } from '../../apps/web/src/lib/api/generated/types.gen';
+import { getPublicTrustDictionary } from '../../apps/web/src/lib/i18n/public-trust';
+import { catalogueHref, courseActivityHref, resourceHref } from '../../apps/web/src/lib/public/routes';
+import type { CatalogueFacets, CataloguePage, ContentView } from '../../apps/web/src/lib/api/generated/types.gen';
 import { csrfHeaders, loginEditor } from './editorial-fixture';
 import { contentAction, createContent, currentContent } from './editorial-api';
 import { editorialContent } from './editorial-content';
@@ -18,37 +19,53 @@ const selectedCaptures = new Set(['empty-fr-390', 'empty-en-390', 'empty-en-320'
 const observations: Array<{ state: string; locale: Locale; width: number; height: number; keyboard: boolean; menu: boolean; noOverflow: boolean; capture: string | null }> = [];
 
 async function noOverflow(page: Page) { expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true); }
-async function navigation(page: Page, locale: Locale, populated: boolean, width: number) {
+type FocusedHome = { course: ContentView; activity: ContentView };
+async function navigation(page: Page, locale: Locale, focused: FocusedHome | null, width: number) {
   const t = getPublicDictionary(locale), catalogue = locale === 'fr' ? '/fr/catalogue' : '/en/catalog';
+  const trust = getPublicTrustDictionary(locale);
+  const expected = focused ? [
+    { name: trust.course, href: resourceHref({ ...focused.course, kind: 'COURSE' }) },
+    { name: trust.trial, href: courseActivityHref(locale, focused.course.slug, focused.activity.slug, focused.activity.resourceId, focused.activity.versionId, focused.course.versionId) },
+    { name: trust.resources, href: catalogue },
+  ] : [{ name: t.catalogue, href: catalogue }];
+  const checkDestinations = async (menu: ReturnType<Page['getByRole']>) => {
+    for (const destination of expected) await expect(menu.getByRole('link', { name: destination.name, exact: true })).toHaveAttribute('href', destination.href);
+    await expect(menu.getByRole('link', { name: t.account, exact: true })).toHaveAttribute('href', locale === 'fr' ? '/fr/compte' : '/en/account');
+    for (const name of [t.methods, t.guides]) await expect(menu.getByRole('link', { name, exact: true })).toHaveCount(0);
+  };
   await expect(page.locator(`header a[href="/${locale}/${locale === 'fr' ? 'offres' : 'offers'}"]`)).toHaveCount(0);
   if (width < 1024) {
     const trigger = page.getByRole('button', { name: getShowcaseDictionary(locale).common.openMenu, exact: true });
     await trigger.focus(); await page.keyboard.press('Enter');
     const menu = page.getByRole('dialog', { name: t.navigation, exact: true });
     await expect(menu).toBeVisible();
-    await expect(menu.getByRole('link', { name: t.catalogue, exact: true })).toHaveAttribute('href', catalogue);
-    await expect(menu.getByRole('link', { name: t.account, exact: true })).toBeVisible();
-    for (const name of [t.methods, t.guides]) await expect(menu.getByRole('link', { name, exact: true })).toHaveCount(populated ? 1 : 0);
+    await checkDestinations(menu);
     await noOverflow(page); await page.keyboard.press('Escape');
     await expect(menu).toHaveCount(0); await expect(trigger).toBeFocused();
   } else {
     const menu = page.getByRole('navigation', { name: t.navigation, exact: true });
-    for (const name of [t.methods, t.guides]) await expect(menu.getByRole('link', { name, exact: true })).toHaveCount(populated ? 1 : 0);
+    await checkDestinations(menu);
   }
 }
-async function observeHome(page: Page, locale: Locale, state: 'empty' | 'editorial') {
+async function observeHome(page: Page, locale: Locale, state: 'empty' | 'editorial', focused: FocusedHome | null = null) {
   const t = getPublicDictionary(locale);
   for (const viewport of viewports) {
     await page.setViewportSize(viewport); await page.goto(`/${locale}`);
-    await expect(page.getByRole('heading', { level: 1, name: state === 'empty' ? t.preparationTitle : t.headline, exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: state === 'empty' ? t.preparationTitle : focused?.course.title ?? t.headline, exact: true })).toBeVisible();
     if (state === 'empty') {
       await expect(page.locator('form')).toHaveCount(0);
       await expect(page.getByRole('link', { name: t.try, exact: true })).toHaveCount(0);
+      await expect(page.locator('[data-home-primary]')).toHaveCount(0);
       await expect(page.getByRole('heading', { name: t.goalsTitle, exact: true })).toHaveCount(0);
     }
     await page.keyboard.press('Tab'); await expect(page.locator('.skip-link')).toBeFocused();
     await page.keyboard.press('Enter'); await expect(page.getByRole('main')).toBeFocused();
-    await navigation(page, locale, state === 'editorial', viewport.width); await noOverflow(page);
+    if (focused) {
+      await expect(page.getByRole('main').locator('a[data-home-primary]')).toHaveAttribute('href', courseActivityHref(locale, focused.course.slug, focused.activity.slug, focused.activity.resourceId, focused.activity.versionId, focused.course.versionId));
+      await expect(page.getByRole('main').locator('a[data-home-course]')).toHaveAttribute('href', resourceHref({ ...focused.course, kind: 'COURSE' }));
+      await expect(page.getByRole('main').locator('input[type="search"]')).toHaveCount(0);
+    }
+    await navigation(page, locale, focused, viewport.width); await noOverflow(page);
     const label = `${state}-${locale}-${viewport.width}`, capture = selectedCaptures.has(label) ? `aud01-${label}.png` : null;
     if (capture) {
       await page.getByRole('main').focus();
@@ -151,7 +168,7 @@ test.describe('AUD01 — discovery selection and preserved direct recipe routes'
       expect(retained.status()).toBe(200); expect((await retained.json() as { document: unknown }).document).not.toBeNull();
       const recipe = await editor.get(`/api/v1/admin/contents/${free[locale].value.id}/public-selection`);
       expect(recipe.status()).toBe(200); expect(await recipe.json()).toMatchObject({ provenance: 'RECIPE', approved: false });
-      await observeHome(page, locale, 'editorial');
+      await observeHome(page, locale, 'editorial', { course: fixture.resources.course[locale].value, activity: fixture.resources.activity[locale].value });
     }
     expect(observations.filter(item => item.capture)).toHaveLength(6);
   });

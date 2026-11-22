@@ -1,7 +1,7 @@
 import type { AuthResult } from "../api/auth-client";
 import type { CatalogueFacets, OfferPage } from "../api/generated/types.gen";
 
-export type PublicNavigationAvailability = { methods: boolean; guides: boolean; offers: boolean };
+export type PublicNavigationAvailability = { methods: boolean; guides: boolean; offers: boolean; homeCourse?: { courseHref: string; trialHref: string | null } };
 
 export const emptyPublicNavigation: PublicNavigationAvailability = { methods: false, guides: false, offers: false };
 

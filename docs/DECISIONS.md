@@ -168,3 +168,9 @@ V021 ajoute les deux historiques de sélection sans réécrire les contenus, off
 La sélection n’est pas une ACL : les liens directs de recette conservent leurs règles existantes de publication, langue et accès ; l’accès acheté reste indépendant de la présence dans une liste. Les scénarios de vitrine utilisent des sélections éditoriales simulées explicitement dans leur base éphémère isolée, jamais dans les données de recette partagées. Sans publication approuvée, la vitrine affiche un état de préparation et ne met pas en avant les rubriques vides.
 
 Ce lot est autorisé **localement seulement**, sans purge, push ni déploiement automatique. Le staging actuel garde son schéma20 ; une future candidate avec V021 annoncera le schéma21. Les contenus et décisions réelles encore nécessaires relèvent d’AUD-02 et de la revue du propriétaire, sans création de promesse commerciale pour remplir les pages.
+
+## Recette — déploiement des audits demandé le22novembre
+
+Après validation locale d’AUD-05, l’utilisateur demande : « tu peux faire le déploiement et après je vais tester tout ça ». Cette instruction autorise la publication du code et des images, la PR/intégration protégée et le déploiement nécessaires des audits AUD-01 à AUD-05 sur la cible staging existante. Elle remplace leur restriction antérieure au travail local pour cette livraison seulement. Sauvegarde actuelle chiffrée hors hôte, quiescence, migration20→21, sessions/CSRF et isolation des autres applications restent obligatoires.
+
+La recette garde son accès direct sans Basic et sa non-indexation ; P22, la production et le commerce LIVE ne sont pas autorisés. Les sources P18 prêtes localement ne sont pas importées, publiées ou sélectionnées par cette seule instruction de code ; leur éventuelle présentation pour les essais fait l’objet d’une clarification distincte.

@@ -24,11 +24,11 @@ class SchemaMigrationIntegrationTest {
     @Test void oneShotMigratesAnEmptyDatabaseAndAReplayMakesNoBusinessRows() throws Exception {
         String database = createDatabase();
         var configuration = configuration(database);
-        assertThat(SchemaMigrationMain.migrate(configuration)).isEqualTo(20);
+        assertThat(SchemaMigrationMain.migrate(configuration)).isEqualTo(21);
         assertThat(SchemaMigrationMain.migrate(configuration)).isZero();
         try (var connection = DriverManager.getConnection(url(database), POSTGRES.getUsername(), POSTGRES.getPassword()); var statement = connection.createStatement()) {
-            try (var rows = statement.executeQuery("SELECT count(*) FROM flyway_schema_history WHERE success AND type='SQL'")) { rows.next(); assertThat(rows.getInt(1)).isEqualTo(20); }
-            for (String table : new String[]{"user_accounts", "spring_session", "orders", "access_grants", "notification_outbox", "content_translations"}) {
+            try (var rows = statement.executeQuery("SELECT count(*) FROM flyway_schema_history WHERE success AND type='SQL'")) { rows.next(); assertThat(rows.getInt(1)).isEqualTo(21); }
+            for (String table : new String[]{"user_accounts", "spring_session", "orders", "access_grants", "notification_outbox", "content_translations", "editorial_public_selections", "offer_public_selections"}) {
                 try (var rows = statement.executeQuery("SELECT count(*) FROM " + table)) { rows.next(); assertThat(rows.getInt(1)).isZero(); }
             }
         }
@@ -47,7 +47,7 @@ class SchemaMigrationIntegrationTest {
         Callable<Integer> migrate = () -> { barrier.await(10, TimeUnit.SECONDS); return SchemaMigrationMain.migrate(configuration(database)); };
         try (var threads = Executors.newFixedThreadPool(2)) {
             var a = threads.submit(migrate); var b = threads.submit(migrate);
-            assertThat(a.get(60, TimeUnit.SECONDS) + b.get(60, TimeUnit.SECONDS)).isEqualTo(1);
+            assertThat(a.get(60, TimeUnit.SECONDS) + b.get(60, TimeUnit.SECONDS)).isEqualTo(2);
         }
         try (var connection = DriverManager.getConnection(url(database), POSTGRES.getUsername(), POSTGRES.getPassword()); var statement = connection.createStatement(); var rows = statement.executeQuery("SELECT row_to_json(u)::text FROM user_accounts u")) {
             rows.next(); assertThat(rows.getString(1).equals(before)).isTrue(); assertThat(rows.next()).isFalse();

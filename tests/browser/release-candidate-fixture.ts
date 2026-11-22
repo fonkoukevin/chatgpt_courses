@@ -8,7 +8,7 @@ import { offersPath } from '../../apps/web/src/lib/commerce/routes';
 import { isMemberResourceDetail } from '../../apps/web/src/lib/api/member-content-validation';
 import { isLearningActivity, isVisitView } from '../../apps/web/src/lib/api/learning-validation';
 import { commerceHeaders, commerceSql, checkedUuid, fixtureOfferFields } from './commerce-fixture';
-import { prepareCourseFixture, publishCourseFixture, courseRecord, preparedActivity, sha256, type CourseFixture, type CourseLocale } from './course-content-fixture';
+import { prepareCourseFixture, publishCourseFixture, approveCourseShowcaseFixture, courseRecord, preparedActivity, sha256, type CourseFixture, type CourseLocale } from './course-content-fixture';
 import { methodLearner, loginMethodAccount } from './methods-fixture';
 import { projectRecord } from './projects-fixture';
 import { openLesson } from './course-content-flow';
@@ -20,6 +20,7 @@ export async function pressEnabled(button: Locator) { await expect(button).toBeE
 
 export async function prepareReleaseFixture(editor: APIRequestContext) {
   const course = await prepareCourseFixture(editor); await publishCourseFixture(editor, course);
+  await approveCourseShowcaseFixture(editor, course);
   const role = randomUUID(), actor = checkedUuid(course.editor.id);
   expect(commerceSql(`BEGIN; INSERT INTO roles(id,code) VALUES('${role}','P19_OFFERS_${role.replaceAll('-', '').toUpperCase()}');
     INSERT INTO role_permissions(id,role_id,permission_id) SELECT gen_random_uuid(),'${role}',id FROM permissions WHERE code IN('commerce.offers.read','commerce.offers.write','commerce.offers.activate');

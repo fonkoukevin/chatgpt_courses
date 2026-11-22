@@ -9,7 +9,7 @@ import { createContent, type RecordedContent } from './editorial-api';
 import { editorialContent } from './editorial-content';
 import { loginEditor } from './editorial-fixture';
 import { loginMethodAccount, methodLearner } from './methods-fixture';
-import { publishPublicContent } from './public-content-fixture';
+import { publishShowcaseContent } from './public-content-fixture';
 
 export type StripeExternalFixtureInput = {
   locale: 'fr' | 'en';
@@ -66,7 +66,7 @@ export async function createStripeExternalFixture(editorRequest: APIRequestConte
     command.childVersionIds = children.map(child => child.value.versionId);
     command.document.blocks = [{ type: 'PARAGRAPH', text: secret, url: null }];
     command.reason = 'Explicit disposable Stripe TEST fixture in the supervisor-owned tmpfs database';
-    return publishPublicContent(editorRequest, await createContent(editorRequest, command));
+    return publishShowcaseContent(editorRequest, await createContent(editorRequest, command));
   }
   const activity = await publish('ACTIVITY'), module = await publish('MODULE', [activity]), course = await publish('COURSE', [module]);
   const fields: OfferFields = {

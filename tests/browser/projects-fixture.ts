@@ -7,7 +7,7 @@ import { csrfHeaders, loginEditor } from './editorial-fixture';
 import { contentAction, createContent, currentContent, type RecordedContent } from './editorial-api';
 import { editorialContent } from './editorial-content';
 import { learningContent } from './learning-fixture';
-import { publishPublicContent } from './public-content-fixture';
+import { publishShowcaseContent } from './public-content-fixture';
 
 type Locale = 'fr' | 'en';
 type Pair = Record<Locale, RecordedContent>;
@@ -33,9 +33,9 @@ export async function createProjectFixture(request: APIRequestContext) {
   await loginEditor(request);
   async function pair(caseCode: 'BR01' | 'BR02'): Promise<Pair> {
     const command = await projectContent(request, 'fr', caseCode);
-    let fr = await publishPublicContent(request, await createContent(request, command));
+    let fr = await publishShowcaseContent(request, await createContent(request, command));
     const translated = await projectContent(request, 'en', caseCode);
-    const en = await publishPublicContent(request, await contentAction(request, fr, 'translations', { locale: 'en', slug: `p09-${caseCode.toLowerCase()}-${randomUUID()}`, title: translated.title,
+    const en = await publishShowcaseContent(request, await contentAction(request, fr, 'translations', { locale: 'en', slug: `p09-${caseCode.toLowerCase()}-${randomUUID()}`, title: translated.title,
       summary: translated.summary, document: translated.document, reason: 'P09 explicit English equivalent with adapted reference rubric' }, 201));
     fr = await currentContent(request, fr.value.id); return { fr, en };
   }

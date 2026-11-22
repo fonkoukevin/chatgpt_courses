@@ -72,7 +72,7 @@ try {
   const counts = JSON.parse(queried.stdout.trim());
   requireCheck('no-demo-account-content-offer-order-or-grant', ['users', 'resources', 'offers', 'orders', 'grants'].every(key => counts[key] === 0), counts);
   requireCheck('Next-started-without-database-mail-storage-or-payment-secrets', !Object.keys(webEnv).some(key => /^(STRIPE_|S3_|MAIL_|POSTGRES_|NOTIFICATION_)/u.test(key)));
-  requireCheck('all-Flyway-migrations-applied', counts.migrations === 20, counts.migrations);
+  requireCheck('all-Flyway-migrations-applied', counts.migrations === 21, counts.migrations);
   if (interrupted) throw new Error('PRODUCTION_CONFIG_INTERRUPTED');
   report.result = 'passed';
 } catch (error) { failure = error; report.result = 'failed'; report.errorCode = 'PRODUCTION_CONFIG_NOT_VALIDATED'; }

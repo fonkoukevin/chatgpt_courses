@@ -2,6 +2,7 @@ package com.chatgptcourses.commerce.service;
 
 import static com.chatgptcourses.commerce.service.CommerceTypes.*;
 import static com.chatgptcourses.commerce.service.OfferValidation.*;
+import com.chatgptcourses.catalog.service.PublicSelectionSql;
 import com.chatgptcourses.editorial.service.ContentTypes.ContentDocument;
 import com.chatgptcourses.editorial.service.EditorialMediaRegistry;
 import com.chatgptcourses.shared.http.ApiError;
@@ -45,6 +46,14 @@ public class OfferService {
     public OfferView get(UUID actor,UUID id){auth.require(actor,"commerce.offers.read");return load(id,false);}
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
     public OfferReadiness readiness(UUID actor,UUID id){auth.require(actor,"commerce.offers.read");return readiness(load(id,false));}
+
+    /** Internal curation check: operational commerce/Checkout switches never approve or sell anything. */
+    @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
+    public boolean discoveryReady(UUID id){
+        var offer=load(id,false);
+        try{fields(offer.fields(),mapper);}catch(ApiException invalid){if(invalid.error()==ApiError.VALIDATION_FAILED)return false;throw invalid;}
+        return readiness(offer).blockingIssues().stream().allMatch(issue->"COMMERCE_NOT_CONFIGURED".equals(issue.code()));
+    }
 
     @Transactional
     public OfferView create(UUID actor,UUID context,CreateOffer command){
@@ -93,7 +102,7 @@ public class OfferService {
     private OfferPage list(OfferQuery q,boolean admin){
         check(q!=null&&q.page()>=0&&q.page()<=1_000_000&&q.pageSize()>=1&&q.pageSize()<=100);locale(q.locale());
         check(q.q()==null||q.q().length()<=240);check(q.state()==null||List.of("DRAFT","ACTIVE","INACTIVE").contains(q.state()));check(q.kind()==null||List.of("COURSE","PACK").contains(q.kind()));
-        var args=new ArrayList<Object>();StringBuilder where=new StringBuilder(admin?" WHERE true":" WHERE o.state<>'DRAFT'");
+        var args=new ArrayList<Object>();StringBuilder where=new StringBuilder(admin?" WHERE true":" WHERE o.state<>'DRAFT' AND "+PublicSelectionSql.OFFER_SELECTED);
         if(q.state()!=null){where.append(" AND o.state=?");args.add(q.state());}if(q.kind()!=null){where.append(" AND p.kind=?");args.add(q.kind());}
         if(q.q()!=null&&!q.q().isBlank()){where.append(" AND (p.code ILIKE ? OR EXISTS(SELECT 1 FROM jsonb_array_elements(r.fields_json->'copies') c WHERE c->>'locale'=? AND (c->>'title' ILIKE ? OR c->>'summary' ILIKE ?)))");String pattern="%"+q.q().strip().replace("\\","\\\\").replace("%","\\%").replace("_","\\_")+"%";args.add(pattern);args.add(q.locale());args.add(pattern);args.add(pattern);}
         String base=" FROM offers o JOIN products p ON p.id=o.product_id JOIN offer_revisions r ON r.id=o.current_revision_id";

@@ -9,7 +9,7 @@ import { activityDiscoveryHref } from '../../apps/web/src/lib/public/routes';
 import { csrfHeaders, loginEditor } from './editorial-fixture';
 import { contentAction, createContent, currentContent, type RecordedContent } from './editorial-api';
 import { editorialContent } from './editorial-content';
-import { publishPublicContent } from './public-content-fixture';
+import { publishShowcaseContent } from './public-content-fixture';
 import { loginMethodAccount, methodLearner } from './methods-fixture';
 
 type Locale = 'fr' | 'en';
@@ -35,8 +35,8 @@ async function fixture(request: APIRequestContext): Promise<VideoFixture> {
     const imported = spawnSync(process.execPath, [join(process.cwd(), 'scripts/video-import.mjs'), manifest], { windowsHide: true, encoding: 'utf8', timeout: 60000 });
     expect(imported.status === 0, 'The real local importer succeeds, including an identical replay; private output is not printed').toBe(true);
   }
-  fr = await publishPublicContent(request, await currentContent(request, fr.value.id));
-  en = await publishPublicContent(request, await currentContent(request, en.value.id));
+  fr = await publishShowcaseContent(request, await currentContent(request, fr.value.id));
+  en = await publishShowcaseContent(request, await currentContent(request, en.value.id));
   return Object.fromEntries((['fr', 'en'] as const).map((locale) => [locale, { id: ids[locale], content: locale === 'fr' ? fr : en, context: { locale, resourceId: fr.value.resourceId, versionId: fr.value.versionId, enrollmentId: null } }])) as VideoFixture;
 }
 async function progress(request: APIRequestContext, item: VideoFixture[Locale]) {

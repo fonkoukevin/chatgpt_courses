@@ -74,6 +74,10 @@ Présenter le résultat utile de la plateforme, une recherche et des entrées pa
 
 Le contenu provient des ressources publiées ; les catégories vides ne doivent pas paraître alimentées. Les annonces commerciales viennent de l’offre configurée, pas d’un texte indépendant. En cas de service indisponible, conserver une navigation utile sans inventer des résultats.
 
+AUD-01 distingue désormais la sélection de vitrine des publications utilisables par lien direct en recette. Sans ressource sélectionnée dans la langue demandée, l’accueil montre un état de préparation sobre, sans activité proposée, recherche vide, exemple de produit ou section de tâches sans destination. Une panne de lecture reste un état d’erreur distinct. Les tâches sont affichées seulement lorsque leur facette a un nombre positif.
+
+La navigation publique desktop et mobile utilise les mêmes disponibilités serveur : Méthodes, Guides et Offres apparaissent seulement si leur sélection contient des résultats. Catalogue et compte gardent leurs routes. Les lectures de disponibilité ne transmettent aucun cookie ; l’absence de réponse n’invente pas une catégorie disponible. La lecture des facettes est dédupliquée dans le rendu serveur courant, sans cache partagé entre visiteurs.
+
 Composants : PublicHeader, TaskNavigation, CourseCard, ExampleResult, FAQ et Footer. Le mobile donne accès rapidement à la recherche et à l’essai, sans dépendre d’un grand visuel décoratif.
 
 ## E02 Catalogue et recherche transversale
@@ -85,6 +89,8 @@ Une activité autonome réellement publiée se consulte dans cette famille avec 
 Résultats de parcours, exercices, méthodes et guides avec type, objectif, niveau, durée estimée si connue, langue et accès. Filtres combinables et réinitialisables ; tri déterministe ; retour à la liste préservant les paramètres. La recherche initiale peut utiliser PostgreSQL ; aucun moteur externe ni recherche sémantique n’est requis.
 
 Prévoir chargement, résultat, zéro résultat et panne. La panne n’affiche pas un catalogue fictif comme résultat de recherche. Proposer catégories et nouvelle tentative. Les résultats privés/non publiés sont exclus du service public, et non seulement masqués par CSS.
+
+AUD-01 masque les filtres sans option réelle, tout en gardant un filtre déjà présent dans l’URL visible et réinitialisable. Une langue sans autre choix reste portée par le formulaire, même quand son sélecteur est omis. Si la seule langue de contenu disponible diffère de la langue demandée, le sélecteur reste accessible sur ordinateur et mobile : un visiteur de l’interface EN peut ainsi choisir les ressources FR sans changer d’interface. Un catalogue sans sélection éditoriale affiche l’état de préparation ; une recherche sans correspondance et une panne conservent leurs états propres. Les routes filtrées existantes ne sont pas supprimées.
 
 Composants : SearchField, FilterGroup, ActiveFilters, ResultCard, Pagination, EmptyState et RetryState. Panneau de filtres sur mobile.
 

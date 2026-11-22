@@ -29,6 +29,9 @@ Depuis P06, ces contrôles techniques ouvrent `/{locale}/dev/foundations` ; l’
 | P16 langues | `run verify:bilingual` | PostgreSQL/S3/Mailpit propres, publications et historiques FR/EN, clips CC0 locaux explicitement techniques |
 | P16 SEO | `run verify:seo` | Même build Next servi avec configurations production/recette sur3111/3112 en boucle locale ; API et données TEST, aucune publication distante |
 | P17 qualité | `run verify:quality` | Neuf scénarios sur PostgreSQL/S3/Mailpit isolés : robustesse, frontières, clavier et mesures catalogue/atelier FR/EN ; cinq largeurs et texte200%, budgets fixes dans `docs/performance-budgets.json` |
+| AUD-01 vitrine | `run verify:browser -- AUD01` | PostgreSQL tmpfs neuf : vitrine vide, publications RECIPE/non revues consultables directement, puis sélection EDITORIAL simulée explicitement ; aucun achat ou appel Stripe |
+
+AUD-01 possède sa phase isolée et ne change pas le nombre de scénarios P06/P11. Elle compare les états vide et alimenté sur de vrais viewports Chromium headless :320×844,390×844 et1440×1000, en FR/EN. Six captures synthétiques ciblées et les dimensions/version du navigateur sont enregistrées dans `docs/evidence/AUD01-browser/<session>/`. Les assertions couvrent clavier, restitution du focus du menu, absence de débordement, filtres gratuits/protégés, langue du contenu et maintien des liens directs de recette. Le marquage éditorial simulé exige la boucle locale, `APP_ENV=test` et l’étiquette de propriété de la base temporaire ; il ne peut pas promouvoir les données de staging. Les captures restent à examiner avant toute conclusion visuelle.
 
 P09 a réussi ses huit scénarios finaux ; P10 ses douze scénarios complets. Les résultats et limites restent dans [P09](../../docs/evidence/P09.md) et [P10](../../docs/evidence/P10.md), sans validation de stockage, de courrier ou de fournisseur vidéo en production.
 

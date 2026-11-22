@@ -29,10 +29,10 @@ for (let index = 3; index < process.argv.length; index += 2) {
   else throw new Error('Diagnostic permis : --grep expression et --repeat-each 1..20.');
   diagnosticArgs.push(flag, value);
 }
-if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14', 'P15', 'P16', 'P16_SEO', 'P17', 'P18', 'P19', 'P19_EXTERNAL'].includes(phase)) throw new Error('Phase de recette inconnue.');
+if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14', 'P15', 'P16', 'P16_SEO', 'P17', 'P18', 'P19', 'P19_EXTERNAL', 'AUD01'].includes(phase)) throw new Error('Phase de recette inconnue.');
 if (externalRefunds && selected.repeatEach !== 1) throw new Error('External TEST refund recipe runs once; repeated financial scenarios require explicit separate authorization.');
 const needsApi = phase !== 'P02';
-const isolatedDatabase = ['P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14', 'P15', 'P16', 'P16_SEO', 'P17', 'P18', 'P19', 'P19_EXTERNAL'].includes(phase);
+const isolatedDatabase = ['P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14', 'P15', 'P16', 'P16_SEO', 'P17', 'P18', 'P19', 'P19_EXTERNAL', 'AUD01'].includes(phase);
 if (!['local', 'test'].includes(env.APP_ENV)) throw new Error('Vérification navigateur réservée à local/test.');
 const port = (value, fallback) => {
   const text = value ?? String(fallback);
@@ -227,6 +227,11 @@ const interrupted = new Promise((_, reject) => {
 interrupted.catch(() => {}); // Also handle interruption during IPC initialization.
 try {
   if (isolatedDatabase) { database = await createBrowserDatabase(env, runDirectory, runId, (record) => { database = record; save(); }); save(); }
+  if (phase === 'AUD01') {
+    for (const key of Object.keys(env)) if (key.startsWith('STRIPE_')) delete env[key];
+    Object.assign(env, { STRIPE_ENABLED: 'false', PAYMENT_INBOX_ENABLED: 'false', REFUND_WORKER_ENABLED: 'false',
+      NOTIFICATION_OUTBOX_ENABLED: 'false', COMMERCE_ENABLED: 'false', APP_PUBLISHED_LOCALES: '' });
+  }
   if (phase === 'P14') {
     for (const key of Object.keys(env)) if (key.startsWith('STRIPE_')) delete env[key];
     env.STRIPE_ENABLED = 'false'; env.PAYMENT_INBOX_ENABLED = 'false'; env.REFUND_WORKER_ENABLED = 'false';

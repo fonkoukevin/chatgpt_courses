@@ -13,7 +13,7 @@ import { activityDiscoveryHref } from '../../apps/web/src/lib/public/routes';
 import { csrfHeaders, loginEditor } from './editorial-fixture';
 import { createContent, currentContent } from './editorial-api';
 import { editorialContent } from './editorial-content';
-import { publishPublicContent } from './public-content-fixture';
+import { publishShowcaseContent } from './public-content-fixture';
 import { loginMethodAccount, methodLearner } from './methods-fixture';
 
 async function capture(page: Page, name: string) {
@@ -99,7 +99,7 @@ export function registerMediaUiScenarios() {
     await page.getByRole('button', { name: cms.save, exact: true }).click(); expect((await saved).status()).toBe(200); await expect(page.locator('[data-cms-save-state]')).toHaveAttribute('data-cms-save-state', 'saved');
     const draft = await currentContent(context.request, original.value.id); expect(draft.value.state).toBe('DRAFT'); expect(draft.value.publishedRevisionId).toBeNull(); expect(draft.value.document!.media[0]).toEqual({ assetId: ready.id, kind: 'IMAGE', label, required: false });
     for (const width of [1440, 390]) { await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 }); await captureRegion(page, container, `${locale}-${width}-cms-image-ready-reference`); }
-    const published = await publishPublicContent(context.request, draft), visitor = await browser.newContext({ baseURL: process.env.COURSES_BROWSER_ORIGIN });
+    const published = await publishShowcaseContent(context.request, draft), visitor = await browser.newContext({ baseURL: process.env.COURSES_BROWSER_ORIGIN });
     try {
       const publicPage = await visitor.newPage(), requests: Promise<boolean>[] = [];
       publicPage.on('request', (request) => { if (request.url().startsWith(process.env.S3_EXTERNAL_ENDPOINT!)) requests.push(request.allHeaders().then((headers) => !headers.cookie && !headers['x-csrf-token'] && !headers['x-account-context'])); });
@@ -116,7 +116,7 @@ export function registerMediaUiScenarios() {
   for (const locale of ['fr', 'en'] as const) test(`${locale} · référence vidéo absente : texte utile sans lecteur ou durée inventés`, async ({ page, context }) => {
     await loginEditor(context.request); const command = editorialContent(locale);
     command.document.media = [{ assetId: randomUUID(), kind: 'VIDEO', required: false, label: locale === 'fr' ? 'Vidéo absente du dossier de test' : 'Missing video in the test case' }];
-    const published = await publishPublicContent(context.request, await createContent(context.request, command));
+    const published = await publishShowcaseContent(context.request, await createContent(context.request, command));
     await page.goto(activityDiscoveryHref(locale, published.value.resourceId, published.value.versionId));
     await expect(page.getByText(getVideoDictionary(locale).unavailable, { exact: true })).toBeVisible(); await expect(page.getByText(command.document.objective, { exact: true })).toBeVisible(); await expect(page.locator('video')).toHaveCount(0);
     for (const width of [1440, 390, 320]) { await page.setViewportSize({ width, height: width >= 768 ? 1000 : 844 }); await captureRegion(page, page.locator('[data-learning-media]'), `${locale}-${width}-video-absent-text-fallback`); }

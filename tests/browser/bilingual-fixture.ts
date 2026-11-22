@@ -7,7 +7,7 @@ import type { ActivityNoteView, ActivityProgressView, CreateContent, EnrollmentV
 import { loginEditor } from './editorial-fixture';
 import { contentAction, createContent, currentContent, type RecordedContent } from './editorial-api';
 import { learningContent, br01Answers, learningHeaders } from './learning-fixture';
-import { publishPublicContent } from './public-content-fixture';
+import { publishShowcaseContent } from './public-content-fixture';
 import { courseActivityHref, resourceHref } from '../../apps/web/src/lib/public/routes';
 
 export type Locale = 'fr' | 'en';
@@ -32,15 +32,15 @@ export async function createBilingualFixture(request: APIRequestContext) {
       title: `P16 check · ${name.en}`, summary: `Fictional English P16 verification resource: ${name.en}.`, document: translated.document,
       reason: 'P16 explicit equivalent translation; case facts stay unchanged' }, 201);
     if (video) importClips(editor.id, fr.value.resourceId, fr.value.versionId, mediaIds);
-    fr = await publishPublicContent(request, fr);
-    if (publishEnglish) en = await publishPublicContent(request, en);
+    fr = await publishShowcaseContent(request, fr);
+    if (publishEnglish) en = await publishShowcaseContent(request, en);
     return { fr: await currentContent(request, fr.value.id), en: await currentContent(request, en.value.id) };
   }
   async function onlyFrench(kind: CreateContent['kind'], name: string, children: string[] = []) {
     const command = learningContent('fr'); command.kind = kind; command.title = `Recette P16 · ${name}`;
     command.slug = `${marker}-${kind.toLowerCase()}-${randomUUID()}`; command.childVersionIds = children;
     command.reason = 'P16 missing English translation fixture, never implicitly translated';
-    return publishPublicContent(request, await createContent(request, command));
+    return publishShowcaseContent(request, await createContent(request, command));
   }
   const activity = await pair('ACTIVITY', { fr: 'activité équivalente', en: 'equivalent activity' }, [], true);
   const module = await pair('MODULE', { fr: 'module commun', en: 'shared module' }, [activity.fr.value.versionId]);

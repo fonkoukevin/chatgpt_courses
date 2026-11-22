@@ -342,3 +342,11 @@ Sources officielles consultées le 7 novembre 2026 ; vérifier les pages de la v
 Complément P05 consulté le 8 novembre 2026 : [PostgreSQL 18 — isolation des transactions](https://www.postgresql.org/docs/18/transaction-iso.html) et [Spring — `@Transactional`](https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html). La page Spring flottante affichait 7.0.10 ; les versions installées restent celles de VERSIONS.md et du BOM, sans changement de dépendance induit par cette lecture.
 
 Complément P10 consulté le 8 novembre 2026 : [AWS SDK 2.57.11, release du 6 novembre](https://github.com/aws/aws-sdk-java-v2/releases/tag/2.57.11), [présignatures S3](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/examples-s3-presign.html) et [endpoints du SDK Java](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/endpoint-config.html). Les exemples qui journalisent une URL signée n’ont pas été repris.
+
+## AUD-01 — découverte éditoriale distincte des accès
+
+Le service `PublicSelectionService` et deux journaux append-only V021 explicitent les décisions de vitrine par révision. L’absence de décision est non revue et invisible ; une recette identifiée ne peut pas être approuvée. Les mutations reprennent les permissions d’édition/commerce existantes, CSRF et contexte de compte, avec ETag de curation distinct, raison et acteur. Elles n’écrivent aucune ligne pédagogique ou financière existante.
+
+`PublicSelectionSql` est employé uniquement pour la découverte ordinaire : catalogue et facettes, recommandations, publications/variantes SEO et offres listées. Ses requêtes vérifient la publication courante, l’approbation exacte et la fermeture du programme/des inclusions dans les langues concernées. Les URL directes de recette publiées et les liens historiques conservent leur logique ; ce filtre n’accorde et ne révoque aucun accès. Les services de commande, Checkout, remboursement, apprentissage, entitlement et stockage n’en dépendent pas.
+
+Le schéma cible des corrections locales devient21. Le staging observé antérieurement reste celui documenté dans STATUS tant qu’un déploiement séparément autorisé n’est pas réalisé. L’approbation de contenus réels requiert une décision éditoriale explicite ; aucun remplissage commercial ou déclenchement de déploiement n’est inclus dans AUD-01.

@@ -66,7 +66,7 @@ class SchemaIntegrationTest {
 
     @Test @Order(1)
     void aFreshDatabaseMigratesAndHibernateValidatesWithoutSeedingAccountsOrCommerce() {
-        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016", "017", "018", "019", "020");
+        assertThat(jdbc.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016", "017", "018", "019", "020", "021");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_accounts", Integer.class)).isZero();
         assertThat(jdbc.queryForList("SELECT code FROM roles ORDER BY code", String.class)).containsExactly("COMMERCE_MANAGER", "EDITOR", "LEARNER", "OPERATIONS_MANAGER", "OPERATIONS_READER", "PAYMENTS_OPERATOR", "REFUND_OPERATOR", "SUPPORT_OPERATOR");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_roles", Integer.class)).isZero();
@@ -115,7 +115,7 @@ class SchemaIntegrationTest {
             var database = new JdbcTemplate(new SingleConnectionDataSourceAdapter(connection));
             assertThat(database.queryForObject("SELECT session_id FROM spring_session WHERE primary_id = ?", String.class, primaryId)).isEqualTo(sessionId);
             assertThat(database.queryForObject("SELECT encode(attribute_bytes, 'hex') FROM spring_session_attributes WHERE session_primary_id = ?", String.class, primaryId)).isEqualTo("010203");
-            assertThat(database.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016", "017", "018", "019", "020");
+            assertThat(database.queryForList("SELECT version FROM flyway_schema_history WHERE type = 'SQL' AND success ORDER BY installed_rank", String.class)).containsExactly("001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016", "017", "018", "019", "020", "021");
         }
     }
 
@@ -442,6 +442,9 @@ class SchemaIntegrationTest {
             assertThat(database.queryForObject("SELECT count(*) FROM resource_slug_changes",Integer.class)).isZero();
             assertThat(database.queryForObject("SELECT count(*) FROM user_accounts",Integer.class)).isEqualTo(1);
             var publicRows=new com.chatgptcourses.catalog.service.PublicRouteService(database).publications("fr",0,100);
+            assertThat(publicRows.items()).isEmpty();
+            database.update("INSERT INTO editorial_public_selections(revision_id,selection_revision,provenance,approved,actor_id,reason) VALUES(?,1,'EDITORIAL',true,?,'Explicit post-upgrade editorial discovery fixture')",revision,actor);
+            publicRows=new com.chatgptcourses.catalog.service.PublicRouteService(database).publications("fr",0,100);
             assertThat(publicRows.items()).hasSize(1);assertThat(publicRows.items().getFirst().publishedAt()).isNull();assertThat(publicRows.items().getFirst().revisionId()).isEqualTo(revision);
         }
     }
@@ -463,7 +466,7 @@ class SchemaIntegrationTest {
             database.execute("ALTER TABLE checkout_operations RENAME CONSTRAINT "+constraint+" TO v020_legacy_hosted_path");
             var rowsBefore=allRows(database,schema);var constraintsBefore=checkoutConstraints(database);var triggersBefore=allTriggers(database,schema);
             Integer checksum=database.queryForObject("SELECT checksum FROM flyway_schema_history WHERE version='013'",Integer.class);
-            assertThat(migrate(schema,null).validateWithResult().validationSuccessful).isTrue();
+            assertThat(migrate(schema,"20").validateWithResult().validationSuccessful).isTrue();
             assertThat(allRows(database,schema)).isEqualTo(rowsBefore);
             assertThat(database.queryForObject("SELECT checksum FROM flyway_schema_history WHERE version='013'",Integer.class)).isEqualTo(checksum);
             var constraintsAfter=checkoutConstraints(database);constraintsBefore.remove("v020_legacy_hosted_path");String updated=constraintsAfter.remove("checkout_operations_hosted_url_v020");
@@ -505,6 +508,37 @@ class SchemaIntegrationTest {
                 assertThat(checkoutConstraints(database)).isEqualTo(before);assertThat(allRows(database,schema)).isEqualTo(rows);
                 assertThat(database.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE version='020'",Integer.class)).isZero();
             }
+        }
+    }
+
+    @Test @Order(16)
+    void upgradingV020AddsOnlyEmptyDiscoveryHistoryAndPreservesEveryExistingRowAndTrigger() throws Exception {
+        String schema="upgrade_v020_discovery";migrate(schema,"4");
+        try(var connection=connection(schema)){
+            var database=new JdbcTemplate(new SingleConnectionDataSourceAdapter(connection));UUID owner=UUID.randomUUID();
+            database.execute(new String(getClass().getResourceAsStream("/devdata/p03-demo.sql").readAllBytes(),StandardCharsets.UTF_8));
+            migrate(schema,"20");
+            database.update("INSERT INTO user_accounts(id,normalized_email,password_hash,status) VALUES(?,'aud01-upgrade@fixture.invalid','unusable-synthetic-upgrade-hash','ACTIVE')",owner);
+            database.update("INSERT INTO user_roles(id,user_id,role_id) SELECT gen_random_uuid(),?,id FROM roles WHERE code='LEARNER'",owner);
+            database.update("INSERT INTO personal_methods(id,owner_id,title,locale,body,parameters,notes) VALUES(?,?,'Retained method','fr','Synthetic retained body','{}'::jsonb,'Synthetic retained note')",UUID.randomUUID(),owner);
+            UUID enrollment=UUID.randomUUID();
+            database.update("INSERT INTO learning_enrollments(id,owner_id,course_resource_id,course_version_id,course_version_number,course_title,enrolled_locale,activity_count) VALUES(?,?,'03000000-0000-4000-8000-000000000001','03100000-0000-4000-8000-000000000001',1,'Synthetic retained course','fr',1)",enrollment,owner);
+            database.update("INSERT INTO learning_enrollment_activities(id,enrollment_id,course_version_id,module_id,module_version_id,activity_id,activity_version_id,position,activity_title) VALUES(?,?,'03100000-0000-4000-8000-000000000001','03000000-0000-4000-8000-000000000002','03100000-0000-4000-8000-000000000002','03000000-0000-4000-8000-000000000003','03100000-0000-4000-8000-000000000003',1,'Synthetic retained activity')",UUID.randomUUID(),enrollment);
+            database.update("INSERT INTO learning_activity_progress(id,enrollment_id,activity_version_id,read_at) VALUES(?,?,'03100000-0000-4000-8000-000000000003',CURRENT_TIMESTAMP)",UUID.randomUUID(),enrollment);
+            database.update("INSERT INTO learning_activity_notes(id,owner_id,activity_id,activity_version_id,locale,body) VALUES(?,?,'03000000-0000-4000-8000-000000000003','03100000-0000-4000-8000-000000000003','en','Synthetic personal note in original language')",UUID.randomUUID(),owner);
+            database.update("INSERT INTO access_grants(id,owner_id,resource_id,version_id,origin_type,manual_origin_id,locales,version_policy,starts_at) VALUES(?,?,'03000000-0000-4000-8000-000000000001','03100000-0000-4000-8000-000000000001','MANUAL_TEST',?,'[\"fr\",\"en\"]'::jsonb,'PINNED',clock_timestamp())",UUID.randomUUID(),owner,UUID.randomUUID());
+            String session=UUID.randomUUID().toString();database.update("INSERT INTO spring_session(primary_id,session_id,creation_time,last_access_time,max_inactive_interval,expiry_time) VALUES(?,?,1,2,1800,9999999999999)",session,session);
+            database.update("INSERT INTO spring_session_attributes(session_primary_id,attribute_name,attribute_bytes) VALUES(?,'before-aud01',?)",session,"Synthetic retained session".getBytes(StandardCharsets.UTF_8));
+            seedLegacyCheckout(database,owner,true);seedLegacyCheckout(database,owner,false);
+            var before=allRows(database,schema);var triggers=allTriggers(database,schema);
+            assertThat(before.size()).isGreaterThanOrEqualTo(83);
+            assertThat(migrate(schema,null).validateWithResult().validationSuccessful).isTrue();var after=allRows(database,schema);
+            assertThat(after.keySet()).containsAll(before.keySet());for(var entry:before.entrySet())assertThat(after.get(entry.getKey())).as("AUD-01 preserves every row in %s",entry.getKey()).containsExactlyElementsOf(entry.getValue());
+            assertThat(after.keySet()).containsExactlyInAnyOrderElementsOf(java.util.stream.Stream.concat(before.keySet().stream(),java.util.stream.Stream.of("editorial_public_selections","offer_public_selections")).toList());
+            assertThat(after.get("editorial_public_selections")).isEmpty();assertThat(after.get("offer_public_selections")).isEmpty();
+            assertThat(allTriggers(database,schema)).containsAll(triggers).hasSize(triggers.size()+2);
+            assertThat(database.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE type='SQL' AND success",Integer.class)).isEqualTo(21);
+            System.out.println("AUD01_UPGRADE_PRESERVATION priorTables="+before.size()+" compared="+before.size()+" newTables=2 oldRowsUnchanged=true oldTriggersUnchanged=true");
         }
     }
 

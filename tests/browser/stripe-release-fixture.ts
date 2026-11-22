@@ -6,7 +6,7 @@ import { courseActivityHref } from '../../apps/web/src/lib/public/routes';
 import { commerceHeaders, commerceSql, checkedUuid } from './commerce-fixture';
 import { createContent, contentAction, type RecordedContent } from './editorial-api';
 import { editorialContent } from './editorial-content';
-import { publishPublicContent } from './public-content-fixture';
+import { publishShowcaseContent } from './public-content-fixture';
 import { assertStripeExternalFixtureIsolation, createStripeExternalFixture } from './stripe-external-fixture';
 
 export type ExternalCourse = { course: RecordedContent; activity: RecordedContent; secret: string; memberPath: string; activityHref: string };
@@ -37,7 +37,7 @@ export async function createStripeReleaseFixture(editor: APIRequestContext, lear
       const ready = await editor.post(`/api/v1/admin/assets/${fileId}/confirmations`, { headers: await commerceHeaders(editor, actor) }); expect(ready.status()).toBe(200); expect((await ready.json() as { state: string }).state).toBe('READY');
       draft = await contentAction(editor, draft, 'revisions', { title: draft.value.title, summary: draft.value.summary, document: { ...draft.value.document!, media: [{ assetId: fileId, kind: 'FILE', required: true, label: 'Ressource Markdown fictive B' }] }, reason: 'Lier le vrai fichier de la seule fixture S3 privée' });
     }
-    return publishPublicContent(editor, draft);
+    return publishShowcaseContent(editor, draft);
   }
   const activity = await publish('ACTIVITY'), module = await publish('MODULE', [activity]), course = await publish('COURSE', [module]);
   const a: ExternalCourse = { course: individual.course, activity: individual.activity, secret: individual.secret, memberPath: individual.memberActivityPath, activityHref: individual.activityHref };

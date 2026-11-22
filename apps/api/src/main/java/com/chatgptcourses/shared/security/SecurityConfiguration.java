@@ -142,7 +142,8 @@ class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/v1/offers", "/api/v1/offers/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/me/offers/*/purchase-context", "/api/v1/me/orders", "/api/v1/me/orders/*").hasAuthority("commerce.orders.read")
                         .requestMatchers(HttpMethod.POST, "/api/v1/me/orders").hasAuthority("commerce.orders.write")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/admin/offers", "/api/v1/admin/offers/*", "/api/v1/admin/offers/*/readiness").hasAuthority("commerce.offers.read")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/admin/offers", "/api/v1/admin/offers/*", "/api/v1/admin/offers/*/readiness", "/api/v1/admin/offers/*/public-selection").hasAuthority("commerce.offers.read")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/admin/offers/*/public-selection").hasAuthority("commerce.offers.activate")
                         .requestMatchers(HttpMethod.POST, "/api/v1/admin/offers").hasAuthority("commerce.offers.write")
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/admin/offers/*").hasAuthority("commerce.offers.write")
                         .requestMatchers(HttpMethod.POST, "/api/v1/admin/offers/*/activate", "/api/v1/admin/offers/*/deactivate").hasAuthority("commerce.offers.activate")
@@ -156,6 +157,7 @@ class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/v1/admin/contents", "/api/v1/admin/contents/**")
                             .hasAuthority("content.read")
                         .requestMatchers(HttpMethod.POST, "/api/v1/admin/contents/*/publish").hasAuthority("content.publish")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/admin/contents/*/public-selection").hasAuthority("content.publish")
                         .requestMatchers(HttpMethod.POST, "/api/v1/admin/contents/*/archive").hasAuthority("content.archive")
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/admin/contents/*/slug").hasAuthority("content.write")
                         // READY needs review permission; other transitions need write. The service checks the target.

@@ -4,6 +4,23 @@ export type ClientOptions = {
     baseUrl: `${string}://${string}/api/v1` | (string & {});
 };
 
+export type PublicSelection = {
+    revisionId: Uuid;
+    provenance: 'UNREVIEWED' | 'EDITORIAL' | 'RECIPE';
+    approved: boolean;
+    selectionRevision: Revision;
+    actorId: Uuid | null;
+    reason: string | null;
+    decidedAt: string | null;
+};
+
+export type PublicSelectionChange = {
+    revisionId: Uuid;
+    provenance: 'EDITORIAL' | 'RECIPE';
+    approved: boolean;
+    reason: string;
+};
+
 export type SystemHealth = {
     status: 'UP';
 };
@@ -12364,3 +12381,139 @@ export type GetPublicActivityContextResponses = {
 };
 
 export type GetPublicActivityContextResponse = GetPublicActivityContextResponses[keyof GetPublicActivityContextResponses];
+
+export type GetContentPublicSelectionData = {
+    body?: never;
+    path: {
+        contentId: Uuid;
+    };
+    query?: never;
+    url: '/admin/contents/{contentId}/public-selection';
+};
+
+export type GetContentPublicSelectionErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetContentPublicSelectionError = GetContentPublicSelectionErrors[keyof GetContentPublicSelectionErrors];
+
+export type GetContentPublicSelectionResponses = {
+    /**
+     * Absence de decision exprimee par UNREVIEWED, approved false et revision zero.
+     */
+    200: PublicSelection;
+};
+
+export type GetContentPublicSelectionResponse = GetContentPublicSelectionResponses[keyof GetContentPublicSelectionResponses];
+
+export type ChangeContentPublicSelectionData = {
+    body: PublicSelectionChange;
+    headers: {
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+    };
+    path: {
+        contentId: Uuid;
+    };
+    query?: never;
+    url: '/admin/contents/{contentId}/public-selection';
+};
+
+export type ChangeContentPublicSelectionErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ChangeContentPublicSelectionError = ChangeContentPublicSelectionErrors[keyof ChangeContentPublicSelectionErrors];
+
+export type ChangeContentPublicSelectionResponses = {
+    /**
+     * Decision ajoutee, nouvel ETag de selection sans mutation des faits metier.
+     */
+    200: PublicSelection;
+};
+
+export type ChangeContentPublicSelectionResponse = ChangeContentPublicSelectionResponses[keyof ChangeContentPublicSelectionResponses];
+
+export type GetOfferPublicSelectionData = {
+    body?: never;
+    path: {
+        offerId: Uuid;
+    };
+    query?: never;
+    url: '/admin/offers/{offerId}/public-selection';
+};
+
+export type GetOfferPublicSelectionErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type GetOfferPublicSelectionError = GetOfferPublicSelectionErrors[keyof GetOfferPublicSelectionErrors];
+
+export type GetOfferPublicSelectionResponses = {
+    /**
+     * Absence de decision exprimee par UNREVIEWED, approved false et revision zero.
+     */
+    200: PublicSelection;
+};
+
+export type GetOfferPublicSelectionResponse = GetOfferPublicSelectionResponses[keyof GetOfferPublicSelectionResponses];
+
+export type ChangeOfferPublicSelectionData = {
+    body: PublicSelectionChange;
+    headers: {
+        /**
+         * Reprendre l’ETag fort reçu, sans le reconstruire. Absent ou * seul : 428 ; révision dépassée ou tag faible : 412 ; syntaxe invalide : 400. Comparaison et écriture atomiques dans le service ; aucune répétition écrasante automatique.
+         */
+        'If-Match': string;
+        /**
+         * Jeton fourni par GET /auth/csrf pour cette session. Renouveler après login/logout ou expiration ; conserver en mémoire seulement.
+         */
+        'X-CSRF-TOKEN': string;
+        /**
+         * UUID du compte que l’interface attend lors de cette action explicite. Comparé à la session côté serveur, jamais utilisé comme propriétaire. Absent428 ACCOUNT_CONTEXT_REQUIRED ; compte différent409 ACCOUNT_CONTEXT_CHANGED ; syntaxe invalide400 VALIDATION_FAILED. Renouveler le contexte après changement de compte ; aucun import automatique du brouillon précédent.
+         */
+        'X-Account-Context': Uuid;
+    };
+    path: {
+        offerId: Uuid;
+    };
+    query?: never;
+    url: '/admin/offers/{offerId}/public-selection';
+};
+
+export type ChangeOfferPublicSelectionErrors = {
+    /**
+     * Erreur explicite ; aucune donnée de remplacement.
+     */
+    default: Problem;
+};
+
+export type ChangeOfferPublicSelectionError = ChangeOfferPublicSelectionErrors[keyof ChangeOfferPublicSelectionErrors];
+
+export type ChangeOfferPublicSelectionResponses = {
+    /**
+     * Decision ajoutee, nouvel ETag de selection sans mutation des faits metier.
+     */
+    200: PublicSelection;
+};
+
+export type ChangeOfferPublicSelectionResponse = ChangeOfferPublicSelectionResponses[keyof ChangeOfferPublicSelectionResponses];

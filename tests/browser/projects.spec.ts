@@ -14,7 +14,7 @@ import { sameProjectFields } from '../../apps/web/src/lib/projects/fields';
 import { authPath, fillMethodLogin, loginMethodAccount, methodLearner } from './methods-fixture';
 import { contentAction, createContent, currentContent } from './editorial-api';
 import { editorialContent } from './editorial-content';
-import { publishPublicContent } from './public-content-fixture';
+import { publishShowcaseContent } from './public-content-fixture';
 import { csrfHeaders } from './editorial-fixture';
 import { controlApi } from './control';
 import { createPersonalProject, createProjectFixture, patchProject, projectRecord, projectSourceHref, type ProjectFixture } from './projects-fixture';
@@ -110,9 +110,9 @@ test.describe('P09 projets personnels et déclarations réelles', () => {
     if (locale === 'fr') {
       // Real publication change after the temporary preparation was read.
       const prior = await currentContent(editor, source.value.id), revisedBrief = 'P09 dossier révisé : confirmez la disponibilité des éléments avant de promettre le démarrage.';
-      fixture.BR01.fr = await publishPublicContent(editor, await contentAction(editor, prior, 'revisions', { title: prior.value.title, summary: prior.value.summary,
+      fixture.BR01.fr = await publishShowcaseContent(editor, await contentAction(editor, prior, 'revisions', { title: prior.value.title, summary: prior.value.summary,
         document: { ...prior.value.document!, blocks: [...prior.value.document!.blocks, { type: 'PARAGRAPH', text: revisedBrief, url: null }] }, reason: 'P09 real source revision before explicit personal creation' }));
-      fixture.BR01.en = await publishPublicContent(editor, await currentContent(editor, fixture.BR01.en.value.id));
+      fixture.BR01.en = await publishShowcaseContent(editor, await currentContent(editor, fixture.BR01.en.value.id));
       const rejected = page.waitForResponse((value) => value.request().method() === 'POST' && value.url().endsWith('/api/v1/me/projects'));
       await page.getByRole('button', { name: t.save, exact: true }).click(); expect((await rejected).status()).toBe(412);
       await expect(page.getByText(t.sourceConflict, { exact: true })).toBeVisible(); await page.getByRole('button', { name: t.checkSource, exact: true }).click();

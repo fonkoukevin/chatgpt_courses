@@ -535,3 +535,20 @@ P03 livre le contrat machine et les commandes de validation/génération avec de
 Chaque lot qui ajoute une route fournit des tests sur le backend réel pour ses invariants, puis met à jour le client et les écrans. Les états de facture, remboursement ou autorisation ne sont jamais inventés uniquement pour faire passer un test d’interface.
 
 Références de sécurité et de paiement : consulter les liens officiels de `docs/ARCHITECTURE.md` pour la version utilisée. `docs/ACCEPTANCE.md` relie les contrats aux scénarios T01–T20 et complète les preuves au fil de leur exécution.
+
+## AUD-01 — sélection explicite de la vitrine
+
+La publication pédagogique et l’activation d’une offre ne valent pas approbation de leur présentation dans la vitrine. Recherche, facettes, suggestions, liste des publications/variantes SEO et liste d’offres ordinaires exigent une décision `EDITORIAL` approuvée pour la révision publiée exacte (ou la révision courante de l’offre). Les descendants d’un programme et les inclusions d’une offre doivent également être publiés et approuvés dans chaque langue concernée. Une absence de décision, une provenance `RECIPE` ou une nouvelle révision non revue reste hors de ces sélections. Aucun filtre de titre ou de prix TEST n’est utilisé.
+
+| Route | Lecture / mutation | Permission |
+| --- | --- | --- |
+| `GET /admin/contents/{id}/public-selection` | Sélection de la révision publiée de cette traduction | `content.read` |
+| `PUT /admin/contents/{id}/public-selection` | Nouvelle décision pour cette révision exacte | `content.publish` |
+| `GET /admin/offers/{id}/public-selection` | Sélection de la révision courante de cette offre | `commerce.offers.read` |
+| `PUT /admin/offers/{id}/public-selection` | Nouvelle décision pour cette révision exacte | `commerce.offers.activate` |
+
+`PublicSelection={revisionId,provenance,approved,selectionRevision,actorId,reason,decidedAt}`. Sans décision, la lecture renvoie `UNREVIEWED`, `false`, révision0 et les trois champs d’audit nuls. Un contenu sans révision publiée produit409 `CONTENT_NOT_READY`. Le corps PUT est `{revisionId,provenance:EDITORIAL|RECIPE,approved,reason}` ; `RECIPE` ne peut pas être approuvé. Le serveur vérifie CSRF, `X-Account-Context`, permission actuelle, cible encore publiée/courante et `If-Match`. Les tags sont propres à cette représentation : `content-selection-{revisionId}-rN` et `offer-selection-{revisionId}-rN`. Ils ne remplacent pas les ETag du CMS ou de l’offre. Une décision est ajoutée à l’historique sous verrou de la traduction/offre ; l’ancienne décision n’est jamais écrasée. Une dépendance non prête refuse l’approbation par409 `CONTENT_NOT_READY` ou `OFFER_NOT_READY`.
+
+Ces sélections ne sont pas des permissions d’accès. Les URL directes publiées de recette, historiques de versions, programmes, contextes pédagogiques et offres directes gardent leurs contrôles existants. Les parcours privés, commandes, snapshots, Checkout, droits, fichiers et progressions ne consultent pas ce nouveau filtre. Une disparition de la vitrine ne révoque donc rien. Les DTO publics existants sont conservés ; les nouveaux schémas/routes sont dans OpenAPI et le client généré. Aucune curation réelle, migration partagée ou publication externe n’est déduite de ces corrections locales.
+
+L’approbation d’une offre réutilise également sa validation/readiness existante pour les prix, conditions, langues, inclusions et médias nécessaires. Seul le bloqueur opérationnel `COMMERCE_NOT_CONFIGURED` est toléré pour cette décision de présentation ; tout autre code la refuse. Une offre complète peut ainsi être revue pendant que commerce et Checkout restent désactivés. Classer ou retirer une recette reste possible même si elle est incomplète. Les contrôles PostgreSQL/HTTP et leurs premiers échecs conservés sont détaillés dans [AUD-01 API](evidence/AUD-01-api-checks.json).

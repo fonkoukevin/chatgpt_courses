@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { expect, test, type APIRequestContext } from "@playwright/test";
 import type { PublicPublicationPage } from "../../apps/web/src/lib/api/generated/types.gen";
 import { publicResourcePath } from "../../apps/web/src/lib/public/seo-policy";
-import { createPublicFixture, publishPublicContent, type PublicFixture } from "./public-content-fixture";
+import { createPublicFixture, publishShowcaseContent, type PublicFixture } from "./public-content-fixture";
 import { createContent, currentContent, type RecordedContent } from "./editorial-api";
 import { editorialContent } from "./editorial-content";
 import { csrfHeaders, loginEditor } from "./editorial-fixture";
@@ -26,7 +26,7 @@ test.beforeAll(async ({ playwright }) => {
   await nameProfile(owner, fixture.editor.userId, ownerName);
   const second = await loginEditor(other); await nameProfile(other, second.id, otherName);
   const command = editorialContent("fr"); command.kind = "GUIDE"; command.slug = `p16-seo-fr-only-${randomUUID()}`; command.title = "P16 · guide disponible en français uniquement";
-  onlyFr = await publishPublicContent(owner, await createContent(owner, command));
+  onlyFr = await publishShowcaseContent(owner, await createContent(owner, command));
   command.slug = `p16-seo-draft-${randomUUID()}`; command.title = "P16 · brouillon privé non publiable";
   draft = await createContent(owner, command);
 });

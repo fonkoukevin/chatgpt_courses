@@ -14,7 +14,7 @@ import { accountPath, attestationsPath } from '../../apps/web/src/lib/account/ro
 import { learningHeaders } from './learning-fixture';
 import { loginMethodAccount, methodLearner } from './methods-fixture';
 import { contentAction, currentContent } from './editorial-api';
-import { publishPublicContent } from './public-content-fixture';
+import { publishShowcaseContent } from './public-content-fixture';
 import { issue, nameProfile } from './account-fixture';
 import { observeBilingualMedia } from './bilingual-diagnostics';
 import { activityHref, attemptQuiz, completeActivity, createBilingualFixture, enroll, learningState, publicContextPath, publicHref,
@@ -223,12 +223,12 @@ test.describe('P16 · équivalences publiées et histoires personnelles', () => 
     let source = await currentContent(editor, sources.activity.fr.value.id);
     const minor = structuredClone(source.value.document!); minor.blocks.push({ type: 'PARAGRAPH', text: 'Correction mineure P16 tracée, objectif et barème inchangés.', url: null });
     source = await contentAction(editor, source, 'revisions', { title: source.value.title, summary: source.value.summary, document: minor, reason: 'P16 real minor correction' });
-    source = await publishPublicContent(editor, source); expect(source.value.versionId).toBe(saved.attempt.activityVersionId);
+    source = await publishShowcaseContent(editor, source); expect(source.value.versionId).toBe(saved.attempt.activityVersionId);
     expect(source.value.publishedRevisionId).not.toBe(saved.attempt.revisionId);
-    sources.activity.en = await publishPublicContent(editor, await currentContent(editor, sources.activity.en.value.id));
+    sources.activity.en = await publishShowcaseContent(editor, await currentContent(editor, sources.activity.en.value.id));
     source = await currentContent(editor, source.value.id); sources.activity.fr = source;
     const newDocument = structuredClone(minor); newDocument.objective = 'Objectif pédagogique P16 différent, version deux explicitement distincte.';
-    const version = await publishPublicContent(editor, await contentAction(editor, source, 'versions', { objectives: newDocument.objective,
+    const version = await publishShowcaseContent(editor, await contentAction(editor, source, 'versions', { objectives: newDocument.objective,
       evaluationDefinition: 'Évaluation P16 de la nouvelle exigence, distincte de la première version.', title: 'Recette P16 · nouvelle version pédagogique',
       summary: source.value.summary, document: newDocument, childVersionIds: [], reason: 'P16 explicit new pedagogical version' }, 201));
     expect(version.value.versionId).not.toBe(saved.attempt.activityVersionId); expect(version.value.versionNumber).toBe(source.value.versionNumber + 1);

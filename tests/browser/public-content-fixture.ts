@@ -5,6 +5,7 @@ import { csrfHeaders, loginEditor } from './editorial-fixture';
 import { contentAction, createContent, currentContent, type RecordedContent } from './editorial-api';
 import { editorialContent } from './editorial-content';
 import { br01MethodDefinition } from './method-definition-fixture';
+import { approveShowcaseContent } from './showcase-selection-fixture';
 
 type Locale = 'fr' | 'en';
 export type PublicPair = Record<Locale, RecordedContent>;
@@ -28,6 +29,10 @@ export async function publishPublicContent(request: APIRequestContext, input: Re
   return contentAction(request, content, 'publish', { revisionId: content.value.currentRevisionId, reason: 'P06 fixture actual publication' });
 }
 
+export async function publishShowcaseContent(request: APIRequestContext, input: RecordedContent) {
+  return approveShowcaseContent(request, await publishPublicContent(request, input));
+}
+
 export function publicFixtureMetadata(locale: Locale, goal: PublicMetadata['goalCodes'][number] = 'understand-brief'): PublicMetadata {
   return { goalCodes: [goal], level: 'BEGINNER', audience: [locale === 'fr' ? 'Indépendants de services · exemple fictif' : 'Independent service providers · fictional example'],
     tools: [{ name: 'ChatGPT', url: 'https://chatgpt.com' }], sources: [],
@@ -45,13 +50,13 @@ export async function createPublicFixture(request: APIRequestContext, _baseURL?:
     if (kind === 'METHOD_TEMPLATE') command.document.methodDefinition = br01MethodDefinition('fr');
     let fr = await createContent(request, command);
     fr = await savePublicMetadata(request, fr, publicFixtureMetadata('fr'));
-    fr = await publishPublicContent(request, fr);
+    fr = await publishShowcaseContent(request, fr);
     const translated = editorialContent('en', access);
     if (kind === 'METHOD_TEMPLATE') translated.document.methodDefinition = br01MethodDefinition('en');
     let en = await contentAction(request, fr, 'translations', { locale: 'en', slug: `${marker}-${kind.toLowerCase().replace('_', '-')}-en`, title: names.en,
       summary: 'Fictional BR01 resource for P06 public verification.', document: translated.document, reason: 'Explicit English fixture, same learning version' }, 201);
     en = await savePublicMetadata(request, en, publicFixtureMetadata('en'));
-    en = await publishPublicContent(request, en);
+    en = await publishShowcaseContent(request, en);
     return { fr: await currentContent(request, fr.value.id), en };
   }
   const activity = await pair('ACTIVITY', { fr: 'BR01 · clarifier la demande', en: 'BR01 · clarify the request' });
@@ -63,7 +68,7 @@ export async function createPublicFixture(request: APIRequestContext, _baseURL?:
   const protectedCommand = editorialContent('fr', 'PROTECTED');
   protectedCommand.title = 'BR01 · activité protégée'; protectedCommand.slug = `${marker}-premium`;
   protectedCommand.document.blocks = [{ type: 'PARAGRAPH', text: secret, url: null }];
-  const premium = await publishPublicContent(request, await createContent(request, protectedCommand));
+  const premium = await publishShowcaseContent(request, await createContent(request, protectedCommand));
   return { editor: { email: account.address, password: account.password, userId: account.id }, marker, secret,
     resources: { course, module, activity, guide, method, premium } };
 }

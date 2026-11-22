@@ -8942,8 +8942,182 @@ paths:
                 $ref: '#/components/schemas/PublicActivityContext'
         default:
           $ref: '#/components/responses/ProblemResponse'
+  /admin/contents/{contentId}/public-selection:
+    get:
+      operationId: getContentPublicSelection
+      tags: [Editorial]
+      summary: Lire la selection de vitrine de la revision exacte, distincte de sa publication.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: contentId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Absence de decision exprimee par UNREVIEWED, approved false et revision zero.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicSelection'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    put:
+      operationId: changeContentPublicSelection
+      tags: [Editorial]
+      summary: Ajouter une decision de vitrine auditee sans modifier publication, commande ou droit.
+      description: >-
+        Permission content.publish, CSRF et contexte du compte obligatoires.
+        Le revisionId doit correspondre a la revision publiee du contenu ou courante de l'offre.
+        L'approbation EDITORIAL exige les enfants/inclusions et leurs langues publies et approuves.
+        RECIPE ne peut jamais etre approuve. Historique append-only, ETag de selection distinct.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: contentId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/IfMatch'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicSelectionChange'
+      responses:
+        '200':
+          description: Decision ajoutee, nouvel ETag de selection sans mutation des faits metier.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicSelection'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+  /admin/offers/{offerId}/public-selection:
+    get:
+      operationId: getOfferPublicSelection
+      tags: [Commerce]
+      summary: Lire la selection de vitrine de la revision exacte, distincte de sa publication.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: offerId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        '200':
+          description: Absence de decision exprimee par UNREVIEWED, approved false et revision zero.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicSelection'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
+    put:
+      operationId: changeOfferPublicSelection
+      tags: [Commerce]
+      summary: Ajouter une decision de vitrine auditee sans modifier publication, commande ou droit.
+      description: >-
+        Permission commerce.offers.activate, CSRF et contexte du compte obligatoires.
+        Le revisionId doit correspondre a la revision publiee du contenu ou courante de l'offre.
+        L'approbation EDITORIAL exige les enfants/inclusions et leurs langues publies et approuves.
+        RECIPE ne peut jamais etre approuve. Historique append-only, ETag de selection distinct.
+      security:
+        - SessionCookie: []
+      parameters:
+        - name: offerId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/IfMatch'
+        - $ref: '#/components/parameters/CsrfHeader'
+        - $ref: '#/components/parameters/AccountContext'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicSelectionChange'
+      responses:
+        '200':
+          description: Decision ajoutee, nouvel ETag de selection sans mutation des faits metier.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicSelection'
+        default:
+          $ref: '#/components/responses/ProblemResponse'
 components:
   schemas:
+    PublicSelection:
+      type: object
+      additionalProperties: false
+      required: [revisionId, provenance, approved, selectionRevision, actorId, reason, decidedAt]
+      properties:
+        revisionId:
+          $ref: '#/components/schemas/UUID'
+        provenance:
+          type: string
+          enum: [UNREVIEWED, EDITORIAL, RECIPE]
+        approved:
+          type: boolean
+        selectionRevision:
+          $ref: '#/components/schemas/Revision'
+        actorId:
+          anyOf:
+            - $ref: '#/components/schemas/UUID'
+            - type: 'null'
+        reason:
+          type: [string, 'null']
+          maxLength: 1000
+        decidedAt:
+          type: [string, 'null']
+          format: date-time
+    PublicSelectionChange:
+      type: object
+      additionalProperties: false
+      required: [revisionId, provenance, approved, reason]
+      properties:
+        revisionId:
+          $ref: '#/components/schemas/UUID'
+        provenance:
+          type: string
+          enum: [EDITORIAL, RECIPE]
+        approved:
+          type: boolean
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 1000
     SystemHealth:
       type: object
       additionalProperties: false

@@ -9,7 +9,7 @@ import { activityNoteEtag } from '../../apps/web/src/lib/api/learning-validation
 import { createLearningFixture, enrollLearning, learningActivityHref, learningHeaders, type LearningFixture } from './learning-fixture';
 import { methodLearner, loginMethodAccount, createPersonalMethod, methodFields, authPath, fillMethodLogin } from './methods-fixture';
 import { contentAction, currentContent } from './editorial-api';
-import { publishPublicContent } from './public-content-fixture';
+import { publishShowcaseContent } from './public-content-fixture';
 import { controlApi } from './control';
 import { registerLearningHistoryScenario } from './learning-history.scenario';
 
@@ -241,7 +241,7 @@ test.describe('P08 apprentissage réel', () => {
       await chooseAnswers(page, isolated, 'fr');
       let current = await currentContent(ownEditor, isolated.activity.fr.value.id);
       current = await contentAction(ownEditor, current, 'revisions', { title: current.value.title, summary: current.value.summary, document: { ...current.value.document!, blocks: [...current.value.document!.blocks, { type: 'PARAGRAPH', text: 'P08 correction éditoriale explicite, évaluation inchangée.', url: null }] }, reason: 'P08 real editorial correction preserving frozen evaluation' });
-      current = await publishPublicContent(ownEditor, current);
+      current = await publishShowcaseContent(ownEditor, current);
       const rejected = page.waitForResponse((value) => value.request().method() === 'POST' && value.url().endsWith('/quiz-attempts'));
       await page.getByRole('button', { name: t.submitQuiz, exact: true }).click(); expect((await rejected).status()).toBe(412);
       await expect(page.getByText(t.quizVersionChanged, { exact: true })).toBeVisible();

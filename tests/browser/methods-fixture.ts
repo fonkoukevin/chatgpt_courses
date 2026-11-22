@@ -6,7 +6,7 @@ import { authPath } from '../../apps/web/src/lib/auth/routes';
 import { csrfHeaders, loginEditor } from './editorial-fixture';
 import { contentAction, createContent, currentContent, type RecordedContent } from './editorial-api';
 import { editorialContent } from './editorial-content';
-import { publishPublicContent } from './public-content-fixture';
+import { publishShowcaseContent } from './public-content-fixture';
 import { br01MethodDefinition, br01Parameters } from './method-definition-fixture';
 
 export async function methodLearner(request: APIRequestContext, locale: 'fr' | 'en' = 'fr') {
@@ -28,10 +28,10 @@ export async function createMethodSources(request: APIRequestContext) {
   await loginEditor(request);
   const command = editorialContent('fr'); command.kind = 'METHOD_TEMPLATE'; command.title = 'BR01 · méthode personnelle de proposition';
   command.document.methodDefinition = br01MethodDefinition('fr');
-  let fr = await publishPublicContent(request, await createContent(request, command));
+  let fr = await publishShowcaseContent(request, await createContent(request, command));
   const translated = editorialContent('en'); translated.document.methodDefinition = br01MethodDefinition('en');
   let en = await contentAction(request, fr, 'translations', { locale: 'en', slug: `p07-method-${randomUUID()}`, title: 'BR01 · personal proposal method', summary: 'Explicit fictional BR01 method for P07 verification.', document: translated.document, reason: 'P07 explicit English method definition' }, 201);
-  en = await publishPublicContent(request, en); fr = await currentContent(request, fr.value.id);
+  en = await publishShowcaseContent(request, en); fr = await currentContent(request, fr.value.id);
   return { fr, en };
 }
 export function methodFields(locale: 'fr' | 'en', marker = `P07-${randomUUID()}`): MethodFields {

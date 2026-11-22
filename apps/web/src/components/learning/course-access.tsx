@@ -14,8 +14,10 @@ import { useLearningAccount } from "@/lib/learning/account";
 import { programmeActivities } from "@/lib/learning/programme";
 import { learningPath } from "@/lib/learning/routes";
 import { LearningError } from "./parts";
+import { usePublicNavigationAvailability } from "@/components/layouts/public-navigation";
 
 export function CourseMemberAccess({ locale, course, activityHrefs }: { locale: Locale; course: ResourceDetail; activityHrefs: Record<string, string> }) {
+  const { offers: offersAvailable } = usePublicNavigationAvailability();
   const t = getMemberAccessDictionary(locale), router = useRouter(), first = useMemo(() => programmeActivities(course.curriculum).find(({ node }) => node.availability === "PUBLISHED" && activityHrefs[node.versionId]), [course.curriculum, activityHrefs]);
   const destination = first ? activityHrefs[first.node.versionId] : learningPath(locale), { state: account, boundary } = useLearningAccount(destination);
   const [access, setAccess] = useState<{ scope: number; available: boolean; enrollmentId: string | null } | null>(null), [error, setError] = useState<ApiError | null>(null), [busy, setBusy] = useState(false), [uncertain, setUncertain] = useState(false);
@@ -46,6 +48,6 @@ export function CourseMemberAccess({ locale, course, activityHrefs }: { locale: 
   if (!first || course.availability !== "PUBLISHED") return null;
   const current = account.status === "active" && access?.scope === boundary.capture() ? access : null;
   return <section className="space-y-4" data-course-member-access><h3 className="text-lg font-semibold">{t.title}</h3>{account.status === "anonymous" ? <Link href={authHref(locale, "sign-in", destination)} prefetch={false} className="inline-flex min-h-11 items-center">{t.signIn}</Link> : account.status === "loading" || account.status === "active" && !current ? <p role="status">{t.checking}</p> : current?.available ? current.enrollmentId ? <Link href={destination} prefetch={false} variant="button" className="max-w-full whitespace-normal">{t.resume}</Link> : <Button busy={busy} loadingLabel={t.starting} className="max-w-full whitespace-normal" onClick={() => void start()}>{t.start}</Button> : <StatusMessage>{t.unavailable}</StatusMessage>}
-    {error && <LearningError locale={locale} error={error} retry={() => void boundary.refresh()} />}{uncertain && <StatusMessage tone="warning">{t.pending}</StatusMessage>}<div className="flex flex-wrap gap-3"><Link href={offersPath(locale)} prefetch={false} className="inline-flex min-h-11 items-center text-sm">{t.offers}</Link>{uncertain && <Link href={learningPath(locale)} prefetch={false} className="inline-flex min-h-11 items-center text-sm">{t.library}</Link>}</div>
+    {error && <LearningError locale={locale} error={error} retry={() => void boundary.refresh()} />}{uncertain && <StatusMessage tone="warning">{t.pending}</StatusMessage>}<div className="flex flex-wrap gap-3">{offersAvailable && <Link href={offersPath(locale)} prefetch={false} className="inline-flex min-h-11 items-center text-sm">{t.offers}</Link>}{uncertain && <Link href={learningPath(locale)} prefetch={false} className="inline-flex min-h-11 items-center text-sm">{t.library}</Link>}</div>
   </section>;
 }

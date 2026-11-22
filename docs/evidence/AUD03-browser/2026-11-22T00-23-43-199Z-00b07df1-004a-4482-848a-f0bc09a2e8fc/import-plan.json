@@ -1,0 +1,386 @@
+{
+  "mode": "PLAN",
+  "namespace": "course-client-proposal",
+  "items": [
+    {
+      "key": "activity-m01",
+      "locale": "fr",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "activity-m01",
+      "locale": "en",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "activity-m02",
+      "locale": "fr",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "activity-m02",
+      "locale": "en",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "activity-m03",
+      "locale": "fr",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "activity-m03",
+      "locale": "en",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "activity-m04",
+      "locale": "fr",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "activity-m04",
+      "locale": "en",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "activity-m05",
+      "locale": "fr",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "activity-m05",
+      "locale": "en",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "activity-m06",
+      "locale": "fr",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "activity-m06",
+      "locale": "en",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "method-client-proposal",
+      "locale": "fr",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "method-client-proposal",
+      "locale": "en",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "module-m01",
+      "locale": "fr",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "module-m01",
+      "locale": "en",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "module-m02",
+      "locale": "fr",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "module-m02",
+      "locale": "en",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "module-m03",
+      "locale": "fr",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "module-m03",
+      "locale": "en",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "module-m04",
+      "locale": "fr",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "module-m04",
+      "locale": "en",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "module-m05",
+      "locale": "fr",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "module-m05",
+      "locale": "en",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "module-m06",
+      "locale": "fr",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "module-m06",
+      "locale": "en",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "course-client-proposal",
+      "locale": "fr",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    },
+    {
+      "key": "course-client-proposal",
+      "locale": "en",
+      "state": "CREATE_DRAFT",
+      "translationId": null,
+      "resourceId": null,
+      "versionId": null,
+      "revisionId": null
+    }
+  ],
+  "files": [
+    {
+      "key": "br01-tr01",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": null,
+      "state": "CREATE_INTENT"
+    },
+    {
+      "key": "scoping-table",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": null,
+      "state": "CREATE_INTENT"
+    },
+    {
+      "key": "prompt-method",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": null,
+      "state": "CREATE_INTENT"
+    },
+    {
+      "key": "proposal-template",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": null,
+      "state": "CREATE_INTENT"
+    },
+    {
+      "key": "assessment-grid-br01",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": null,
+      "state": "CREATE_INTENT"
+    },
+    {
+      "key": "commented-solution-br01",
+      "locale": "fr",
+      "purpose": "SOLUTION",
+      "assetId": null,
+      "state": "CREATE_INTENT"
+    },
+    {
+      "key": "br02",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": null,
+      "state": "CREATE_INTENT"
+    },
+    {
+      "key": "commented-solution-br02",
+      "locale": "fr",
+      "purpose": "SOLUTION",
+      "assetId": null,
+      "state": "CREATE_INTENT"
+    },
+    {
+      "key": "presentation-emails",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": null,
+      "state": "CREATE_INTENT"
+    },
+    {
+      "key": "br01-tr01",
+      "locale": "en",
+      "purpose": "RESOURCE",
+      "assetId": null,
+      "state": "CREATE_INTENT"
+    },
+    {
+      "key": "scoping-table",
+      "locale": "en",
+      "purpose": "RESOURCE",
+      "assetId": null,
+      "state": "CREATE_INTENT"
+    },
+    {
+      "key": "prompt-method",
+      "locale": "en",
+      "purpose": "RESOURCE",
+      "assetId": null,
+      "state": "CREATE_INTENT"
+    },
+    {
+      "key": "proposal-template",
+      "locale": "en",
+      "purpose": "RESOURCE",
+      "assetId": null,
+      "state": "CREATE_INTENT"
+    },
+    {
+      "key": "assessment-grid-br01",
+      "locale": "en",
+      "purpose": "RESOURCE",
+      "assetId": null,
+      "state": "CREATE_INTENT"
+    },
+    {
+      "key": "commented-solution-br01",
+      "locale": "en",
+      "purpose": "SOLUTION",
+      "assetId": null,
+      "state": "CREATE_INTENT"
+    },
+    {
+      "key": "br02",
+      "locale": "en",
+      "purpose": "RESOURCE",
+      "assetId": null,
+      "state": "CREATE_INTENT"
+    },
+    {
+      "key": "commented-solution-br02",
+      "locale": "en",
+      "purpose": "SOLUTION",
+      "assetId": null,
+      "state": "CREATE_INTENT"
+    },
+    {
+      "key": "presentation-emails",
+      "locale": "en",
+      "purpose": "RESOURCE",
+      "assetId": null,
+      "state": "CREATE_INTENT"
+    }
+  ]
+}

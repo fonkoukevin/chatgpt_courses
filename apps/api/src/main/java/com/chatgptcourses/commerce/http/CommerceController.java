@@ -23,7 +23,7 @@ class CommerceController {
     private final OfferService offers;private final OrderService orders;
     CommerceController(OfferService offers,OrderService orders){this.offers=offers;this.orders=orders;}
     @GetMapping("/offers")
-    ResponseEntity<CommerceDtos.OfferPage> publicList(@RequestParam @Pattern(regexp="fr|en")String locale,@RequestParam(defaultValue="0")@Min(0)@Max(1000000)int page,@RequestParam(defaultValue="20")@Min(1)@Max(100)int pageSize){return response(CommerceDtos.OfferPage.from(offers.listPublic(new CommerceTypes.OfferQuery(null,null,null,locale,page,pageSize))));}
+    ResponseEntity<CommerceDtos.OfferPage> publicList(@RequestParam @Pattern(regexp="fr|en")String locale,@RequestParam(required=false)@Pattern(regexp=MethodDtos.ACCOUNT_CONTEXT_PATTERN)String resourceId,@RequestParam(required=false)@Pattern(regexp=MethodDtos.ACCOUNT_CONTEXT_PATTERN)String versionId,@RequestParam(defaultValue="0")@Min(0)@Max(1000000)int page,@RequestParam(defaultValue="20")@Min(1)@Max(100)int pageSize){return response(CommerceDtos.OfferPage.from(offers.listPublic(new CommerceTypes.OfferQuery(null,null,null,locale,page,pageSize),resourceId==null?null:UUID.fromString(resourceId),versionId==null?null:UUID.fromString(versionId))));}
     @GetMapping("/offers/{id}")
     ResponseEntity<CommerceDtos.PublicOffer> publicOffer(@PathVariable UUID id,@RequestParam @Pattern(regexp="fr|en")String locale){return response(CommerceDtos.PublicOffer.from(offers.publicOffer(id,locale)));}
     @GetMapping("/admin/offers")

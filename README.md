@@ -254,6 +254,10 @@ Recette dédiée, après builds, avec Docker et les ports 3101/8181 libres :
 
 Le superviseur crée un PostgreSQL isolé en tmpfs pour les publications fictives de recette. Il conserve le volume Compose et nettoie ses seuls processus. Résultats observés et limites : [P06](docs/evidence/P06.md).
 
+AUD-04 raccorde la fiche aux offres approuvées qui incluent exactement son parcours, sa version et la langue vendue. Les trois aperçus au plus ouvrent les détails réels ; une liste complète conserve ces filtres dans sa pagination. Prix, inclusions et conditions viennent de Spring. La reprise vérifie le parcours lui-même, indépendamment de son premier extrait gratuit.
+
+Après les builds, `node scripts/verify-browser.mjs AUD04` (ou `scripts/courses.cmd run verify:course-offers`) prépare le cours FR/EN et des offres fictives dans PostgreSQL/S3 éphémères. La recette prépare seulement des commandes locales et observe les accès de test ; Stripe et les workers de paiement restent désactivés. Elle ne doit jamais être lancée contre une base partagée. [Résultats et limites AUD-04](docs/evidence/AUD-04.md).
+
 ## Méthodes et générateur P07
 
 Une méthode publiée possède une définition éditoriale FR/EN : entrées, étapes, instruction, exemple, contrôles et limites. Le générateur assemble sept champs localement ; aucun appel IA ni instruction exécutée automatiquement. Le texte final reste modifiable indépendamment des paramètres ; reconstruction et réinitialisation demandent confirmation.
@@ -311,6 +315,8 @@ La liste et les productions privées sont disponibles sous `/fr/espace/projets` 
 Le CMS charge explicitement les préparations BR01/BR02 FR/EN depuis une route administrateur protégée ; remplacer une grille exige confirmation. Cette préparation ne publie aucun contenu. Les vingt critères à un point et les quatre déclarations d’erreurs produisent un **score déclaré**, avec seuil éditorial configurable, sans vérification automatique de la vérité du texte ni revue humaine. Les anciennes révisions et évaluations restent intactes après édition. Le corrigé est réautorisé à chaque livraison et ne valide jamais le projet.
 
 Un anonyme peut conserver volontairement un brouillon **non sensible**, deux heures en session navigateur, puis l’importer explicitement dans le compte affiché. Les productions authentifiées sont privées, en mémoire/serveur, sans stockage navigateur persistant de leur contenu. Un changement de compte bloque la reprise implicite. Retrait d’une source n’efface pas productions et preuves personnelles ; fichiers sécurisés P10 et revue humaine restent désactivés.
+
+AUD-05 organise les activités en quatre moments : comprendre, produire, vérifier, réutiliser. Une consigne sans politique de projet (M01) permet un essai local vide, copiable et exportable sans compte ; aucun stockage ou import n’y est promis. Les projets configurés gardent leur consentement de deux heures et leur import explicite. Après les builds, `node scripts/verify-browser.mjs AUD05` ou `scripts/courses.cmd run verify:workshop` exécute la recette sur PostgreSQL/S3 éphémères, commerce et paiements désactivés. [Résultats et limites AUD-05](docs/evidence/AUD-05.md).
 
 Commandes disponibles :
 

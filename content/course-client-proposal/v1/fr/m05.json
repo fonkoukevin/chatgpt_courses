@@ -4,7 +4,7 @@
   "title": "Contrôler la proposition et justifier ses corrections",
   "summary": "Relire une révision avec vingt critères, traiter les erreurs bloquantes et conserver les raisons des changements.",
   "objective": "Repérer puis corriger les écarts aux faits de BR01 sans confondre score déclaré et validation.",
-  "expectedResult": "Une grille BR01 renseignée sur une révision précise, une production corrigée et une justification des corrections.",
+  "expectedResult": "Une grille BR01 renseignée sur une révision précise, une production contrôlée et des corrections éventuelles justifiées.",
   "prerequisites": [
     "Disposer de sa proposition BR01 enregistrée.",
     "Garder le brief, TR01 et les conditions de démarrage accessibles."
@@ -112,12 +112,12 @@
     },
     {
       "type": "PARAGRAPH",
-      "text": "Pour terminer, relevez trois décisions modifiées et leur justification, puis relisez la nouvelle version. Le module suivant transforme cette proposition en email et en méthode personnelle, avant de tester le raisonnement sur BR02. Vous y réutiliserez vos questions et vos contrôles, sans transporter automatiquement les montants ni les délais de BR01.",
+      "text": "Justifiez les écarts corrigés ou les contrôles qui confirment la fidélité du texte. Le module suivant prépare email et méthode personnelle, puis teste BR02. Réutilisez les questions et les contrôles, sans recopier montants ou délais de BR01.",
       "url": null
     }
   ],
   "exercise": {
-    "instructions": "Renseignez les vingt contrôles sur votre révision BR01 et déclarez les blocages présents. Corrigez les écarts dans une nouvelle version. Pour trois corrections, notez le passage concerné, le fait de référence et la décision changée. Enregistrez puis réévaluez la révision corrigée.",
+    "instructions": "Renseignez les vingt contrôles sur votre révision BR01 et déclarez les blocages présents. Corrigez seulement les écarts constatés. Pour trois éléments contrôlés, notez passage, fait de référence et correction ou maintien justifié. N’inventez aucune erreur pour atteindre trois. Si le texte change, enregistrez une nouvelle révision et réévaluez-la ; sinon conservez la révision contrôlée.",
     "correction": "Les vingt critères sont répartis en cinq catégories de quatre points. Le seuil de conception est 16/20 sans blocage ; un score élevé ne neutralise aucune des quatre erreurs bloquantes. Les cinq tarifs donnent 1 200 € HT. La durée BR01 est de quinze jours ouvrés sous les deux conditions de démarrage, avec retours sous trois jours ouvrés. L’évaluation d’une ancienne révision et le corrigé consulté ne valident pas le nouveau texte."
   },
   "quiz": [

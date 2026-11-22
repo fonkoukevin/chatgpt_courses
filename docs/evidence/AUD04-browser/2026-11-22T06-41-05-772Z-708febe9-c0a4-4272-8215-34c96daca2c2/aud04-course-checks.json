@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "stage": "after",
+  "browser": "chromium",
+  "browserVersion": "158.0.8127.18",
+  "headless": true,
+  "beforeStageIsCaptureBaselineOnly": false,
+  "finalAssertionsApplied": true,
+  "fixture": "P18 authored FR/EN course, published and explicitly selected only in owned PostgreSQL/S3 tmpfs.",
+  "humanEditorialApproval": false,
+  "sharedContentChanged": false,
+  "providerRequestsExecuted": false,
+  "deployed": false,
+  "localPreparedOrdersOnly": [],
+  "observations": [],
+  "captures": []
+}

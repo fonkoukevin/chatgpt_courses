@@ -40,7 +40,11 @@ export function offerMetadata(locale: Locale) { return async function generateMe
     [other]: { href: offersPath(other, params.offerId), available: counterpart.ok && counterpart.data.state === "ACTIVE" && counterpart.data.translationAvailable && counterpart.data.locales.includes(other) } } as LanguageLinks;
   return publicMetadata(locale, result.ok && result.data.title ? result.data.title : copy.offers, result.ok && result.data.summary ? result.data.summary : copy.offersHelp, offersPath(locale, params.offerId), links, published);
 }; }
-export function offersPage(locale: Locale) { return async function Page(props: Props) { await route(props, locale); const query = await pagination(props, locale, false); return <PublicOffers locale={locale} result={await readOffers(locale, query.page, query.pageSize)} />; }; }
+export function offersPage(locale: Locale) { return async function Page(props: Props) {
+  await route(props, locale); const query = await pagination(props, locale, false), input = await props.searchParams;
+  const course = typeof input.resourceId === "string" && typeof input.versionId === "string" ? { resourceId: input.resourceId, versionId: input.versionId } : undefined;
+  return <PublicOffers locale={locale} course={course} result={await readOffers(locale, query.page, query.pageSize, course)} />;
+}; }
 export function offerPage(locale: Locale) { return async function Page(props: Props) { const params = await route(props, locale); if (!isUuid(params.offerId)) notFound(); const result = await readOffer(params.offerId, locale); if (!result.ok && result.error.kind === "http" && result.error.status === 404) notFound(); return <PublicOfferDetails key={`${params.offerId}:${result.ok ? result.data.revision : "error"}`} locale={locale} id={params.offerId} result={result} />; }; }
 export function ordersPage(locale: Locale) { return async function Page(props: Props) {
   await route(props, locale); const query = await pagination(props, locale, true), current = await user(locale, ordersHref(locale, query));

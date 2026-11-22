@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "stage": "before",
+  "browser": "chromium",
+  "browserVersion": "158.0.8127.18",
+  "headless": true,
+  "beforeStageIsCaptureBaselineOnly": true,
+  "finalAssertionsApplied": false,
+  "fixture": "P18 authored FR/EN course, published and explicitly selected only in owned PostgreSQL/S3 tmpfs.",
+  "humanEditorialApproval": false,
+  "sharedContentChanged": false,
+  "providerRequestsExecuted": false,
+  "deployed": false,
+  "observations": [
+    {
+      "check": "course-comparison",
+      "locale": "fr",
+      "width": 1440,
+      "height": 1000,
+      "noOverflow": true,
+      "courseId": "d6a03914-c753-4a38-b50d-37f7e3097d27",
+      "versionId": "1f00a451-fd76-4f4f-b6cc-a1a7b624b645",
+      "courseHref": "/fr/parcours/du-brief-a-la-proposition-commerciale?version=1f00a451-fd76-4f4f-b6cc-a1a7b624b645"
+    },
+    {
+      "check": "course-comparison",
+      "locale": "fr",
+      "width": 390,
+      "height": 844,
+      "noOverflow": true,
+      "courseId": "d6a03914-c753-4a38-b50d-37f7e3097d27",
+      "versionId": "1f00a451-fd76-4f4f-b6cc-a1a7b624b645",
+      "courseHref": "/fr/parcours/du-brief-a-la-proposition-commerciale?version=1f00a451-fd76-4f4f-b6cc-a1a7b624b645"
+    },
+    {
+      "check": "course-comparison",
+      "locale": "en",
+      "width": 1440,
+      "height": 1000,
+      "noOverflow": true,
+      "courseId": "d6a03914-c753-4a38-b50d-37f7e3097d27",
+      "versionId": "1f00a451-fd76-4f4f-b6cc-a1a7b624b645",
+      "courseHref": "/en/courses/client-brief-to-proposal?version=1f00a451-fd76-4f4f-b6cc-a1a7b624b645"
+    },
+    {
+      "check": "course-comparison",
+      "locale": "en",
+      "width": 390,
+      "height": 844,
+      "noOverflow": true,
+      "courseId": "d6a03914-c753-4a38-b50d-37f7e3097d27",
+      "versionId": "1f00a451-fd76-4f4f-b6cc-a1a7b624b645",
+      "courseHref": "/en/courses/client-brief-to-proposal?version=1f00a451-fd76-4f4f-b6cc-a1a7b624b645"
+    }
+  ],
+  "captures": [
+    "before-course-fr-1440.png",
+    "before-course-fr-1440-full.png",
+    "before-course-fr-390.png",
+    "before-course-fr-390-full.png",
+    "before-course-en-1440.png",
+    "before-course-en-1440-full.png",
+    "before-course-en-390.png",
+    "before-course-en-390-full.png"
+  ]
+}

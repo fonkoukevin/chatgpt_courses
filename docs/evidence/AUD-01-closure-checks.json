@@ -1,0 +1,296 @@
+{
+  "schemaVersion": 1,
+  "audit": "AUD-01",
+  "result": "passed-locally",
+  "completedAt": "2026-11-22T00:04:15.232Z",
+  "clientDate": "2026-11-22",
+  "scope": "Local correction and evidence consolidation only; no editorial approval of existing data or deployment",
+  "api": {
+    "evidence": "docs/evidence/AUD-01-api-checks.json",
+    "evidenceSha256": "659fd2d0ae819fa523aeaefa197015fc49d3255c2d72098ae887125b85f7b08b",
+    "distinctTests": 61,
+    "suites": 8,
+    "recordedAt": "2026-11-15T23:04:32.168Z",
+    "sourceHashesRechecked": 11,
+    "allSourceHashesMatch": true,
+    "casesReexecutedOnResumption": false,
+    "migrationPreviousTablesExactlyPreserved": 84
+  },
+  "pinnedChecks": {
+    "schemaVersion": 1,
+    "startedAt": "2026-11-21T23:59:33.331Z",
+    "completedAt": "2026-11-22T00:00:00.954Z",
+    "node": "24.22.2",
+    "npm": "11.19.1",
+    "isolatedEnvironment": true,
+    "providerCredentialsLoaded": false,
+    "checks": [
+      {
+        "command": "scripts/courses.cmd run lint",
+        "exitCode": 0,
+        "result": "passed",
+        "logSha256": "d5de36c5d73e8a83781b868e196186a0511c69f73f8cba7b47c8efa9f0aa63fc"
+      },
+      {
+        "command": "scripts/courses.cmd run typecheck",
+        "exitCode": 0,
+        "result": "passed",
+        "logSha256": "940feb84a3e46eb532dc553022266fae34e8f05b83a467b695dd341b5671b346"
+      },
+      {
+        "command": "scripts/courses.cmd run typecheck:browser",
+        "exitCode": 0,
+        "result": "passed",
+        "logSha256": "5e5d6c35c420160d8773e507c758bceb6062eb69d44e33381651d8cb41daf4ff"
+      },
+      {
+        "command": "scripts/courses.cmd run api:check",
+        "exitCode": 0,
+        "result": "passed",
+        "logSha256": "c6f6847d72ad500a23d5ae6350235827eac00b3b3407c05d91f64ac9a1571689"
+      }
+    ],
+    "userNextFilePreserved": true,
+    "userNextFileSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+    "result": "passed"
+  },
+  "postFixChecks": {
+    "lint": {
+      "command": "scripts/courses.cmd run lint",
+      "exitCode": 0
+    },
+    "browserTypes": {
+      "command": "scripts/courses.cmd run typecheck:browser",
+      "exitCode": 0
+    },
+    "actualComponentRendering": {
+      "command": ".tools/node-v24.22.2-win-x64/node.exe --test --test-reporter=tap tests/scripts/aud01-public-ui.test.mjs",
+      "tests": 8,
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "exitCode": 0,
+      "regressionObservedBeforeFix": "7/8; English catalogue omitted the only available French content-language choice"
+    }
+  },
+  "webBuild": {
+    "schemaVersion": 1,
+    "runId": "159c4abe-cc47-4ca2-8865-0013180a14b3",
+    "command": "node scripts/web.mjs build",
+    "startedAt": "2026-11-22T00:00:39.654Z",
+    "completedAt": "2026-11-22T00:00:56.481Z",
+    "result": "passed",
+    "exitCode": 0,
+    "isolatedEnvironment": true,
+    "providerCredentialsLoaded": false,
+    "userNextFilePreserved": true,
+    "rawLogsPublished": false,
+    "receiptSha256": "b1bb03b1b609cc5feb2055b304df2cc95870694f8d0537180a7bac6c9bbf4a38",
+    "webBuildId": "K2SlDqdOeOoFv3sv-PEo1"
+  },
+  "browser": {
+    "schemaVersion": 1,
+    "phase": "AUD01",
+    "result": "passed",
+    "exitCode": 0,
+    "command": "node scripts/verify-browser.mjs AUD01",
+    "startedAt": "2026-11-22T00:01:14.800Z",
+    "completedAt": "2026-11-22T00:02:39.513Z",
+    "evidence": "docs/evidence/AUD01-browser/2026-11-22T00-01-15-008Z-19a31db5-745f-4c55-84ca-9421e359a714",
+    "stats": {
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "flaky": 0
+    },
+    "retried": false,
+    "cleanupConfirmed": true,
+    "harnessFailureCode": "NONE",
+    "rawLogsPublished": false,
+    "providerCredentialsLoaded": false,
+    "deployed": false,
+    "receiptSha256": "a320140a3ae2a5b012c77a284c4c47f203ad48c34fcec78409506aa580238b45",
+    "actualLocalChromium": true,
+    "reportSha256": "fafbcfc2aa78b4080f5f70c734d6af243940fc10058de5883b0d01c3ace0f4a9",
+    "sessionSha256": "5f218ceb52c2601cd9e616525517b0bf8c865c400a78e8ab539829f079d55f26"
+  },
+  "previousCatalogueRegression": {
+    "evidence": "docs/evidence/P06-browser/2026-11-15T23-13-21-755Z-ac9e7539-8ff2-451f-9253-63f03709b06b",
+    "recordedAt": "2026-11-15T23:15:09.244Z",
+    "passed": 6,
+    "failed": 0,
+    "cleanupConfirmed": true,
+    "rerunOnResumption": false
+  },
+  "visualReview": {
+    "initialEvidence": "docs/evidence/AUD-01-visual-review.json",
+    "initialScreenshots": 6,
+    "initialViewportObservations": 12,
+    "inspectedAgain": [
+      "aud01-empty-fr-390.png",
+      "aud01-editorial-fr-1440.png"
+    ],
+    "additionalScreenshot": {
+      "file": "docs/evidence/AUD01-browser/2026-11-22T00-01-15-008Z-19a31db5-745f-4c55-84ca-9421e359a714/aud01-single-language-en-390.png",
+      "sha256": "b5c4a68fa23ee93962cb2bd0597828b29634677631e46f4b30bf61a7db89e0ff",
+      "width": 390,
+      "visuallyInspected": true,
+      "findings": "English filter dialog remains readable with French content selected and Apply filters visible; no clipped controls or horizontal overflow observed."
+    },
+    "realPhoneTested": false,
+    "accessibilityCertificationClaimed": false,
+    "productionBrowserObserved": false
+  },
+  "sharedDataPreservation": [
+    {
+      "environment": "local-shared",
+      "result": "passed",
+      "observedAtPg": "2026-11-21T23:58:23.202335+00:00",
+      "tablesCompared": 83,
+      "changedTables": [],
+      "readOnly": true,
+      "baselineSha256": "30ac127123a72578675f8d71e2c749d18b7770df3ced69842fcabb6e22a187ca",
+      "receiptSha256": "4900bef78aef458fc83f11b3b5f78a7a7a51d8c6e0f5563e57c5730f78fa1cc8",
+      "sessionTablesExcluded": true,
+      "privateRowsPublished": false
+    },
+    {
+      "environment": "staging",
+      "result": "passed",
+      "observedAtPg": "2026-11-21T23:58:46.867085+00:00",
+      "tablesCompared": 22,
+      "changedTables": [],
+      "readOnly": true,
+      "baselineSha256": "69a4bcc3808381dbd692378be0986e09368cedde3b4b835f366d20abd739f3a0",
+      "receiptSha256": "38625f283b42ef38d9aa83e89a4c6bb3ffc43f7b2f204822320fde28c3f31719",
+      "sessionTablesExcluded": false,
+      "privateRowsPublished": false,
+      "sourceCommit": "7572fcf51fe51749d7eec9b9ec62f293998091d0",
+      "manifestSha256": "ad2aa976378ed3349743de05b15ef26a2a326884ef3a0608aeb319e35bc39ab4"
+    },
+    {
+      "environment": "local-shared",
+      "result": "passed",
+      "observedAtPg": "2026-11-22T00:02:49.743262+00:00",
+      "tablesCompared": 83,
+      "changedTables": [],
+      "readOnly": true,
+      "baselineSha256": "30ac127123a72578675f8d71e2c749d18b7770df3ced69842fcabb6e22a187ca",
+      "receiptSha256": "a68c3666573f2b96c5cdc7c67ae15f63c4ba7306b3ac9f68bedddae6a76c6b13",
+      "sessionTablesExcluded": true,
+      "privateRowsPublished": false
+    }
+  ],
+  "userNextFile": {
+    "preserved": true,
+    "sha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+    "excludedFromCommit": true
+  },
+  "sourceFiles": [
+    {
+      "file": "apps/api/src/main/resources/db/migration/V021__explicit_public_discovery_selections.sql",
+      "sha256": "060f9b141cc0b578f15d4c3b98c7dbce5423f8d4dd0f1713a817ac0862a6cdb3"
+    },
+    {
+      "file": "apps/api/src/main/java/com/chatgptcourses/catalog/service/PublicSelectionSql.java",
+      "sha256": "c07bb7d5d6ae2adf43909716e52993aabe77159ec9a2e8e6ed75aa0c2342c4c0"
+    },
+    {
+      "file": "apps/api/src/main/java/com/chatgptcourses/catalog/service/PublicSelectionService.java",
+      "sha256": "f774ffd0d9a81ccad34769a5fe21f07d4164cd4776c7b0ce5cd66c484b3cfdb7"
+    },
+    {
+      "file": "apps/api/src/main/java/com/chatgptcourses/catalog/http/PublicSelectionController.java",
+      "sha256": "3a74b071525a44a3a3ea844f93ff3ba370076972e4ffb9936e080a7c4c9c2908"
+    },
+    {
+      "file": "apps/api/src/main/java/com/chatgptcourses/catalog/service/PublicCatalogueService.java",
+      "sha256": "bb7c9c702e3bdae055fff16343dee0c4e13db8b602c7cac7f7045630bb25dced"
+    },
+    {
+      "file": "apps/api/src/main/java/com/chatgptcourses/catalog/service/PublicRouteService.java",
+      "sha256": "3d29eb510a751f6fc0bc8ca25238c823bef7d31d0a1f482fc26595f883bb08c7"
+    },
+    {
+      "file": "apps/api/src/main/java/com/chatgptcourses/commerce/service/OfferService.java",
+      "sha256": "3e8041ab1dba2f609c6fc94d1ff1137b03cf0a14bab9806b1d25417178182929"
+    },
+    {
+      "file": "apps/api/src/main/java/com/chatgptcourses/shared/security/SecurityConfiguration.java",
+      "sha256": "7f84ada7bd9881a524cb13fe6a59a72afc4ad2a1c6f6d57dbbc3c3151dcda078"
+    },
+    {
+      "file": "apps/api/src/test/java/com/chatgptcourses/PublicSelectionIntegrationTest.java",
+      "sha256": "decad50f0023d03f082e034485633503efa6ae32a25e9b1c819a026d07a4f902"
+    },
+    {
+      "file": "apps/api/src/test/java/com/chatgptcourses/SchemaIntegrationTest.java",
+      "sha256": "1693aa4eefd9594769c8ea7ae83c12043e591d1ce0a100866a0bdd58c009d9f6"
+    },
+    {
+      "file": "docs/api/openapi.yaml",
+      "sha256": "4ef176046830d029116d96b0216efa443859c0029a45074237e871adf0bc9a40"
+    },
+    {
+      "file": "apps/web/src/components/public/catalogue.tsx",
+      "sha256": "b80968ed2d5ae47301eee5c7a8fe891302e1c6884f10b3830576401ffc3945bf"
+    },
+    {
+      "file": "apps/web/src/components/public/home.tsx",
+      "sha256": "2bb4cb69f5b3b59220eb2b60cccd2dc01328ee1d9a4268b3ee8d1b656d0b5d38"
+    },
+    {
+      "file": "apps/web/src/components/layouts/public-layout.tsx",
+      "sha256": "192a313a06899e29f57337a8e34ecddc3729026aa6bf6efed2aac5bbe0206eeb"
+    },
+    {
+      "file": "apps/web/src/components/layouts/public-navigation.tsx",
+      "sha256": "e4a88138a60384da0475af9f461c9c54bab3270f32bb59589b3729bd5fedc929"
+    },
+    {
+      "file": "apps/web/src/app/[locale]/layout.tsx",
+      "sha256": "b5538d89b29676eacd1af324a6bfb87826b7432a1fbc0c15448944979d8eb3f9"
+    },
+    {
+      "file": "apps/web/src/lib/public/navigation.ts",
+      "sha256": "02ad8e7bccffdf8f3b53640d71e6d0284fab50f32164d5f23a7146941a7e3fdb"
+    },
+    {
+      "file": "apps/web/src/components/learning/course-access.tsx",
+      "sha256": "92380343f3d62d729c9357c112475cc140b18c334975e72c2e3342cd435dd42f"
+    },
+    {
+      "file": "apps/web/src/lib/api/public-server.ts",
+      "sha256": "d74134b644d4ce661359febd4bca1d12aa7b75068bc5e68d26fa43d5b1239fb1"
+    },
+    {
+      "file": "tests/scripts/aud01-public-ui.test.mjs",
+      "sha256": "349d97c377820c1120492479b86180ae673d3499d99fc7bcccd87854f2a986d3"
+    },
+    {
+      "file": "tests/browser/aud01-showcase.spec.ts",
+      "sha256": "2dbab1587c6ac573327fc90100a27855560989c5e4ebd182e23976faa8337675"
+    },
+    {
+      "file": "tests/browser/showcase-selection-fixture.ts",
+      "sha256": "e8fb577a9bfc78edaf4265d7d5660951c0199817648e1d1483755e7bbc5c0d2e"
+    }
+  ],
+  "limitations": [
+    "Targeted API results consolidated from November 15, not a newly executed global API suite.",
+    "Production configuration 12/12 proof is the November 15 isolated local observation, not a new production deployment.",
+    "Initial Node 24.14.0 staging comparator attempt rejected before transport; pinned Node 24.22.2 then passed.",
+    "Only disposable synthetic editorial selections used in browser tests.",
+    "Existing P12/P15/P19 limitations and editorial/commercial decisions remain open."
+  ],
+  "boundaries": {
+    "pushed": false,
+    "deployed": false,
+    "existingSharedDatabaseMigrated": false,
+    "sharedDataPurged": false,
+    "existingEditorialContentApproved": false,
+    "financialFlowReplayed": false,
+    "liveCommerceEnabled": false,
+    "rawPrivateRowsPublished": false
+  }
+}

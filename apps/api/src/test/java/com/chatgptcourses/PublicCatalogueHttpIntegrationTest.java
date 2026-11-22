@@ -268,7 +268,9 @@ class PublicCatalogueHttpIntegrationTest {
         if (!current.path("sourceTranslationId").isNull()) source = text(get(editor, CMS + "/" + current.path("sourceTranslationId").asText()), "currentRevisionId");
         var reviewed = action(editor, id, "transition", transition("READY", source)); assertThat(reviewed.statusCode()).isEqualTo(200);
         var published = action(editor, id, "publish", Map.of("revisionId", text(reviewed, "currentRevisionId"), "reason", "Explicit test publication"));
-        assertThat(published.statusCode()).isEqualTo(200); return published;
+        assertThat(published.statusCode()).isEqualTo(200);
+        DiscoveryTestSelections.approveRevision(jdbc,UUID.fromString(text(published,"publishedRevisionId")));
+        return published;
     }
     private HttpResponse<String> action(Browser editor, String id, String suffix, Object body) throws Exception {
         return send(editor, "POST", CMS + "/" + id + "/" + suffix, body, csrf(editor), etag(get(editor, CMS + "/" + id)));

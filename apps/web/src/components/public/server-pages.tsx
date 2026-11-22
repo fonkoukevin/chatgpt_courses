@@ -8,6 +8,7 @@ import { readCatalogue, readCatalogueFacets, readPublicActivityContext, readReso
 import { getServerConfig } from "@/lib/config/server";
 import { publicMetadata } from "@/lib/public/seo";
 import { absolutePublicUrl, localeIsIndexable, publicResourcePath } from "@/lib/public/seo-policy";
+import { resolveHomeCourse, singleHomeCourseCard } from "@/lib/public/home-course";
 import type { BreadcrumbTrail } from "./breadcrumbs";
 import { isLocale, type Locale } from "@/lib/i18n/locales";
 import { getPublicPageDictionary } from "@/lib/i18n/public-pages";
@@ -22,6 +23,7 @@ import { PublicUnavailable } from "./unavailable";
 import { PublicContextUnavailable } from "./context-unavailable";
 import { PublicMethodSource } from "@/components/methods/source";
 import { readLearningDashboard, readSavedLearningActivity } from "@/lib/api/learning-server";
+import { readCourseOffers } from "@/lib/api/commerce-server";
 
 export type PublicPageProps = { params: Promise<{ locale: string; slug?: string; courseSlug?: string; activitySlug?: string }>; searchParams: Promise<PublicParameters> };
 export function forLocale<T>(page: (props: PublicPageProps) => Promise<T>, expected: Locale) {
@@ -60,16 +62,22 @@ const seo = publicMetadata;
 
 export async function PublicHomePage({ params }: PublicPageProps) {
   const locale = localeFrom((await params).locale);
-  const [catalogue, facets, featuredActivityResult] = await Promise.all([
+  const [catalogue, facets, featuredActivityResult, courses] = await Promise.all([
     readCatalogue({ locale, pageSize: 6, sort: "RECENT" }), readCatalogueFacets(locale),
     readCatalogue({ locale, type: "ACTIVITY", access: "FREE", pageSize: 1, sort: "TITLE" }),
+    readCatalogue({ locale, type: "COURSE", pageSize: 2, sort: "TITLE" }),
   ]);
-  const faqCard = catalogue.ok ? catalogue.data.items.find((item) => item.kind === "COURSE")
+  const courseCard = singleHomeCourseCard(locale, courses);
+  const courseResource = courseCard ? await readResourceVersion(courseCard.resourceId, courseCard.versionId, locale) : undefined;
+  const focusedCourse = resolveHomeCourse(locale, courses, courseResource);
+  const faqCard = focusedCourse && courseCard ? courseCard : catalogue.ok ? catalogue.data.items.find((item) => item.kind === "COURSE")
     ?? catalogue.data.items.find((item) => item.kind === "GUIDE") ?? catalogue.data.items[0] : undefined;
-  const faqResource = faqCard ? await readResourceVersion(faqCard.resourceId, faqCard.versionId, locale) : undefined;
-  const faq = faqResource?.ok && faqResource.data.availability === "PUBLISHED" ? faqResource.data.metadata.faq : [];
+  const sameCourse = faqCard && courseCard && faqCard.resourceId === courseCard.resourceId && faqCard.versionId === courseCard.versionId && faqCard.revisionId === courseCard.revisionId;
+  const faqResource = sameCourse ? courseResource : faqCard ? await readResourceVersion(faqCard.resourceId, faqCard.versionId, locale) : undefined;
+  const faq = faqCard && faqResource?.ok && faqResource.data.availability === "PUBLISHED" && faqResource.data.revisionId === faqCard.revisionId ? faqResource.data.metadata.faq : [];
   const faqSource = faqCard && faq.length > 0 ? { title: faqCard.title, href: resourceHref(faqCard) } : undefined;
-  return <PublicHome locale={locale} catalogue={catalogue} facets={facets} featuredActivityResult={featuredActivityResult} languageLinks={defaultLanguages()} faq={faq} faqSource={faqSource} />;
+  const environment = getServerConfig().environment;
+  return <PublicHome locale={locale} catalogue={catalogue} facets={facets} featuredActivityResult={featuredActivityResult} focusedCourse={focusedCourse} editorialPreview={environment === "local" || environment === "test"} languageLinks={defaultLanguages()} faq={faq} faqSource={faqSource} />;
 }
 export async function homeMetadata({ params }: PublicPageProps): Promise<Metadata> {
   const locale = localeFrom((await params).locale), copy = getPublicPageDictionary(locale);
@@ -141,7 +149,9 @@ async function resourcePageData(props: PublicPageProps, kind: Exclude<ResourceCa
 }
 export async function PublicCoursePage(props: PublicPageProps) {
   const data = await resourcePageData(props, "COURSE");
-  return <PublicCourse {...data} activityHrefs={data.result.ok ? programmeLinks(data.locale, data.result.data, data.returnTo) : {}} />;
+  const offersResult = data.result.ok && data.result.data.availability === "PUBLISHED"
+    ? await readCourseOffers({ resourceId: data.result.data.resourceId, versionId: data.result.data.versionId }, data.locale) : undefined;
+  return <PublicCourse {...data} offersResult={offersResult} activityHrefs={data.result.ok ? programmeLinks(data.locale, data.result.data, data.returnTo) : {}} />;
 }
 export async function PublicGuidePage(props: PublicPageProps) { return <PublicGuide {...await resourcePageData(props, "GUIDE")} />; }
 export async function PublicMethodPage(props: PublicPageProps) { return <PublicMethodSource {...await resourcePageData(props, "METHOD_TEMPLATE")} />; }
@@ -203,7 +213,7 @@ async function activityData(props: PublicPageProps) {
             ? { available: true, href: courseActivityHref(target, equivalent.courseSlug, equivalent.activitySlug, resource, version, course.data.versionId, catalogueReturnTo) }
             : { available: false, href: catalogueHref(target, { locale: target, type: "ACTIVITY" }), reason: "COURSE_CONTEXT_UNAVAILABLE", ...(standalone.ok && alternative.available ? { alternativeHref: alternative.href } : {}) };
         }
-        return { locale, result: standalone, languageLinks: links, returnTo: catalogueReturnTo, contextUnavailable: true, canonical: courseActivityHref(locale, courseSlug, activitySlug, resource, version, course.data.versionId) };
+        return { locale, result: standalone, languageLinks: links, returnTo: catalogueReturnTo, contextUnavailable: true, contextAvailability: context.data.availability, canonical: courseActivityHref(locale, courseSlug, activitySlug, resource, version, course.data.versionId) };
       }
     }
     const saved = isUuid(resource) && isUuid(version) ? await retainedActivity(course.data, resource, version, locale) : null;
@@ -215,11 +225,12 @@ async function activityData(props: PublicPageProps) {
   if (result.ok && result.data.kind !== "ACTIVITY") notFound();
   const back = `/${locale}/${locale === "fr" ? "parcours" : "courses"}/${courseSlug}?${new URLSearchParams({ version: course.data.versionId, returnTo: catalogueReturnTo })}`;
   const languageLinks = result.ok ? resourceLanguages(result.data, catalogueReturnTo, true) : defaultLanguages({ locale, type: "ACTIVITY" });
-  let contextUnavailable = false;
+  let contextUnavailable = false, contextAvailability: Exclude<ResourceDetail["availability"], "PUBLISHED"> | undefined;
   if (result.ok) {
     const context = await readPublicActivityContext(course.data.resourceId, course.data.versionId, child.resourceId, child.versionId, locale);
     if (!context.ok) return { locale, result: context, languageLinks: defaultLanguages({ locale, type: "ACTIVITY" }), returnTo: back, canonical: publicCatalogueHref(locale) };
     contextUnavailable = context.data.availability !== "PUBLISHED";
+    if (context.data.availability !== "PUBLISHED") contextAvailability = context.data.availability;
     if (!contextUnavailable && context.data.courseSlug && context.data.activitySlug && (context.data.courseSlug !== courseSlug || context.data.activitySlug !== activitySlug)) {
       permanentRedirect(courseActivityHref(locale, context.data.courseSlug, context.data.activitySlug, child.resourceId, child.versionId, course.data.versionId, input.returnTo === undefined ? undefined : catalogueReturnTo));
     }
@@ -234,11 +245,13 @@ async function activityData(props: PublicPageProps) {
       }
     }
   }
-  return { locale, result, languageLinks, returnTo: back, contextUnavailable, programme: { course: course.data, activityHrefs: programmeLinks(locale, course.data, catalogueReturnTo) }, canonical: courseActivityHref(locale, courseSlug, activitySlug, child.resourceId, child.versionId, course.data.versionId) };
+  return { locale, result, languageLinks, returnTo: back, contextUnavailable, contextAvailability, programme: { course: course.data, activityHrefs: programmeLinks(locale, course.data, catalogueReturnTo) }, canonical: courseActivityHref(locale, courseSlug, activitySlug, child.resourceId, child.versionId, course.data.versionId) };
 }
 export async function PublicActivityPage(props: PublicPageProps) {
   const data = await activityData(props);
-  return data.contextUnavailable ? <PublicContextUnavailable locale={data.locale} languageLinks={data.languageLinks} returnTo={data.returnTo} /> : <PublicActivity {...data} />;
+  const personal = data.contextUnavailable && data.result.ok && data.result.data.kind === "ACTIVITY"
+    ? { resourceId: data.result.data.resourceId, versionId: data.result.data.versionId, contentLocale: data.locale } : undefined;
+  return data.contextUnavailable ? <PublicContextUnavailable locale={data.locale} languageLinks={data.languageLinks} returnTo={data.returnTo} availability={data.contextAvailability} personal={personal} /> : <PublicActivity {...data} />;
 }
 export async function activityMetadata(props: PublicPageProps): Promise<Metadata> {
   const data = await activityData(props), copy = getPublicPageDictionary(data.locale), value = data.result.ok ? data.result.data : null;

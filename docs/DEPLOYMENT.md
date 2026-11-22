@@ -12,6 +12,8 @@ Les versions exactes sont vérifiées et proposées en P00 dans `VERSIONS.md`, p
 
 ## Trois environnements distincts
 
+Le22novembre2026, l’utilisateur demande le déploiement des audits AUD-01 à AUD-05 pour ses essais sur la recette existante. Le candidat exige le schéma21, contrairement à la release P21 active historiquement en20. Publication du code/images, CI protégée, sauvegarde actuelle hors hôte et migration précèdent la mise en service. Aucun passage en production/P22, paiement LIVE ou validation éditoriale n’est déduit de cette demande. [Procédure actuelle](runbooks/deploy.md).
+
 | Environnement | Données et services | Objet |
 | --- | --- | --- |
 | Local | Données fictives, PostgreSQL local, Mailpit, S3 compatible local ; Stripe test ou adaptateur contrôlé. | Développer et vérifier sans effet commercial. |

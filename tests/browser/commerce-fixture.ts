@@ -5,7 +5,8 @@ import type { CreateOffer, OfferFields, OfferView, OrderView } from '../../apps/
 import { csrfHeaders } from './editorial-fixture';
 import { createLearningFixture, learningContent } from './learning-fixture';
 import { contentAction, createContent, currentContent, type RecordedContent } from './editorial-api';
-import { publishPublicContent } from './public-content-fixture';
+import { publishShowcaseContent } from './public-content-fixture';
+import { approveShowcaseOffer } from './showcase-selection-fixture';
 
 export const checkedUuid = (value: string) => { if (!/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/.test(value)) throw new Error('Fixture UUID required.'); return value; };
 // This test privilege exists only against the supervisor-owned disposable PostgreSQL.
@@ -27,9 +28,9 @@ export async function createCommerceSources(request:APIRequestContext) {
   const role=randomUUID();
   expect(commerceSql(`BEGIN; INSERT INTO roles(id,code) VALUES('${role}','P11_TEST_${role.replaceAll('-','').toUpperCase()}'); INSERT INTO role_permissions(id,role_id,permission_id) SELECT gen_random_uuid(),'${role}',id FROM permissions WHERE code IN('commerce.offers.read','commerce.offers.write','commerce.offers.activate'); INSERT INTO user_roles(id,user_id,role_id) VALUES(gen_random_uuid(),'${actor}','${role}'); COMMIT; SELECT count(*) FROM role_permissions WHERE role_id='${role}';`)).toBe('3');
   const command=learningContent('fr','PROTECTED'); command.kind='COURSE';command.title='P11 · second parcours fictif';command.slug=`p11-course-${randomUUID()}`;command.childVersionIds=[learning.module.fr.value.versionId];
-  let fr=await publishPublicContent(request,await createContent(request,command));
+  let fr=await publishShowcaseContent(request,await createContent(request,command));
   const translated=learningContent('en','PROTECTED');
-  const en=await publishPublicContent(request,await contentAction(request,fr,'translations',{locale:'en',slug:`p11-course-${randomUUID()}-en`,title:'P11 · second fictional course',summary:'Fictional integration content only.',document:translated.document,reason:'P11 disposable English fixture'},201));
+  const en=await publishShowcaseContent(request,await contentAction(request,fr,'translations',{locale:'en',slug:`p11-course-${randomUUID()}-en`,title:'P11 · second fictional course',summary:'Fictional integration content only.',document:translated.document,reason:'P11 disposable English fixture'},201));
   fr=await currentContent(request,fr.value.id);
   return {actor,learning,second:{fr,en}};
 }
@@ -48,6 +49,9 @@ export async function createFixtureOffer(request:APIRequestContext,actor:string,
   const ready=await request.get(`/api/v1/admin/offers/${value.id}/readiness`);expect(ready.status()).toBe(200);expect((await ready.json() as {summaryReady:boolean}).summaryReady).toBe(true);
   const activate=await request.post(`/api/v1/admin/offers/${value.id}/activate`,{headers:await commerceHeaders(request,actor,response.headers().etag),data:{reason:'P11 explicit test-only activation, no checkout'}});expect(activate.status()).toBe(200);
   return {value:await activate.json() as OfferView,etag:activate.headers().etag};
+}
+export async function createShowcaseOffer(request:APIRequestContext,actor:string,resources:RecordedContent[],amountMinor=1299) {
+  return approveShowcaseOffer(request,await createFixtureOffer(request,actor,resources,amountMinor));
 }
 export async function prepareOrder(request:APIRequestContext,actor:string,offer:OfferView,locale:'fr'|'en',key=randomUUID()) {
   const response=await request.post('/api/v1/me/orders',{headers:{...await commerceHeaders(request,actor),'Idempotency-Key':key},data:{offerId:offer.id,offerRevision:offer.revision,locale,acceptedTermsVersion:'p11-test-v1'}});

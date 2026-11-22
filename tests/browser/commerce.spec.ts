@@ -5,7 +5,7 @@ import type { OfferView,OrderView,PurchaseContext } from '../../apps/web/src/lib
 import { getCommerceDictionary } from '../../apps/web/src/lib/i18n/commerce';
 import { offersPath,ordersPath } from '../../apps/web/src/lib/commerce/routes';
 import { methodLearner,loginMethodAccount,fillMethodLogin } from './methods-fixture';
-import { commerceHeaders,commerceSql,checkedUuid,createCommerceSources,createFixtureOffer,prepareOrder,type CommerceSources } from './commerce-fixture';
+import { commerceHeaders,commerceSql,checkedUuid,createCommerceSources,createShowcaseOffer,prepareOrder,type CommerceSources } from './commerce-fixture';
 import { controlApi } from './control';
 
 type Locale='fr'|'en';
@@ -28,7 +28,7 @@ test.describe('P11 offres et commandes sans paiement fictif',()=>{
   test.afterAll(async()=>{await editor?.dispose();});
 
   for(const locale of ['fr','en'] as const)test(`${locale} · connexion conservée, consentement explicite et commande privée réelle`,async({page,context,browser})=>{
-    const t=getCommerceDictionary(locale),offer=await createFixtureOffer(editor,sources.actor,[sources.learning.course.fr]);
+    const t=getCommerceDictionary(locale),offer=await createShowcaseOffer(editor,sources.actor,[sources.learning.course.fr]);
     const account=await methodLearner(context.request,locale);
     await page.goto(offersPath(locale,offer.value.id));
     await expect(page.getByRole('heading',{level:1})).toContainText(locale==='fr'?'offre fictive':'fictional');
@@ -55,7 +55,7 @@ test.describe('P11 offres et commandes sans paiement fictif',()=>{
   });
 
   test('fr · offre modifiée après lecture : revue exigée sans commande au nouveau prix',async({page,context})=>{
-    const t=getCommerceDictionary('fr'),offer=await createFixtureOffer(editor,sources.actor,[sources.learning.course.fr]);const account=await methodLearner(context.request);await loginMethodAccount(context.request,account);
+    const t=getCommerceDictionary('fr'),offer=await createShowcaseOffer(editor,sources.actor,[sources.learning.course.fr]);const account=await methodLearner(context.request);await loginMethodAccount(context.request,account);
     await page.goto(offersPath('fr',offer.value.id));await page.getByRole('checkbox',{name:t.acceptTerms,exact:true}).check();
     await revise(editor,sources.actor,offer.value);
     await page.getByRole('button',{name:t.prepare,exact:true}).click();await expect(page.getByText(t.offerChanged,{exact:true})).toBeVisible();
@@ -65,7 +65,7 @@ test.describe('P11 offres et commandes sans paiement fictif',()=>{
   });
 
   test('fr · instantané conservé après révision du prix de l’offre',async({page,context})=>{
-    const offer=await createFixtureOffer(editor,sources.actor,[sources.learning.course.fr]);const account=await methodLearner(context.request);await loginMethodAccount(context.request,account);
+    const offer=await createShowcaseOffer(editor,sources.actor,[sources.learning.course.fr]);const account=await methodLearner(context.request);await loginMethodAccount(context.request,account);
     const created=await prepareOrder(context.request,account.id,offer.value,'fr');await revise(editor,sources.actor,offer.value,2399);
     const read=await context.request.get(`/api/v1/me/orders/${created.value.id}`);expect(read.status()).toBe(200);const after=await read.json() as OrderView;
     expect(after.snapshot).toEqual(created.value.snapshot);expect(after.acceptedAt).toBe(created.value.acceptedAt);
@@ -78,7 +78,7 @@ test.describe('P11 offres et commandes sans paiement fictif',()=>{
   });
 
   test('fr · offre incomplète suspendue, prix absent et action bloquée',async({page,context})=>{
-    const t=getCommerceDictionary('fr'),offer=await createFixtureOffer(editor,sources.actor,[sources.learning.course.fr]);
+    const t=getCommerceDictionary('fr'),offer=await createShowcaseOffer(editor,sources.actor,[sources.learning.course.fr]);
     const save=await editor.patch(`/api/v1/admin/offers/${offer.value.id}`,{headers:await commerceHeaders(editor,sources.actor,offer.etag),data:{fields:{...offer.value.fields,price:null},reason:'P11 explicit incomplete configuration fixture'}});expect(save.status()).toBe(200);
     const account=await methodLearner(context.request);await loginMethodAccount(context.request,account);await page.goto(offersPath('fr',offer.value.id));
     await expect(page.getByText(t.priceUnknown,{exact:true})).toBeVisible();await expect(page.getByText(t.notReady,{exact:true})).toBeVisible();await expect(page.getByRole('button',{name:t.prepare,exact:true})).toBeDisabled();
@@ -86,7 +86,7 @@ test.describe('P11 offres et commandes sans paiement fictif',()=>{
   });
 
   for(const locale of ['fr','en'] as const)test(`${locale} · pack partiellement acquis sans réduction, parcours détenu à reprendre`,async({page,context})=>{
-    const t=getCommerceDictionary(locale),single=await createFixtureOffer(editor,sources.actor,[sources.learning.course.fr]),pack=await createFixtureOffer(editor,sources.actor,[sources.learning.course.fr,sources.second.fr],2599);
+    const t=getCommerceDictionary(locale),single=await createShowcaseOffer(editor,sources.actor,[sources.learning.course.fr]),pack=await createShowcaseOffer(editor,sources.actor,[sources.learning.course.fr,sources.second.fr],2599);
     const account=await methodLearner(context.request,locale);await loginMethodAccount(context.request,account);
     const course=sources.learning.course.fr.value;
     commerceSql(`INSERT INTO access_grants(id,owner_id,resource_id,version_id,origin_type,manual_origin_id,locales,version_policy,starts_at,expires_at) VALUES(gen_random_uuid(),'${checkedUuid(account.id)}','${checkedUuid(course.resourceId)}','${checkedUuid(course.versionId)}','MANUAL_TEST',gen_random_uuid(),'["fr","en"]'::jsonb,'PINNED',clock_timestamp()-interval '1 minute',clock_timestamp()+interval '1 day');`);

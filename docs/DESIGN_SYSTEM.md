@@ -90,9 +90,13 @@ Accueil : en-tête sobre, promesse liée à une tâche, explication courte, acc�
 
 Le premier écran doit permettre de comprendre le produit et d’agir. Une illustration est utile uniquement si elle explique un résultat réel. La fiche de formation ne devient pas un grand visuel décoratif. Une barre de chiffres n’apparaît qu’avec des données justifiables.
 
+AUD-03 conserve les tokens, la police système et Lucide existants. Pour un seul parcours, le titre/objectif et les actions précèdent un exemple de document annoté dans l’aperçu local ; le programme devient une liste de résultats séparés par des traits, sans multiplier les cartes. Le bleu nuit reste réservé aux actions et repères. Les informations de provenance technique quittent le pied de page public ; les états de version et droits restent disponibles dans leurs écrans de travail. Aucun média bitmap, dégradé ou bibliothèque d’animation n’est ajouté. [Proposition et revue](evidence/AUD-03.md).
+
 Catalogue : titre et recherche, filtres compréhensibles, résultats de densité régulière, état des filtres partageable. Sur mobile, bouton « Filtres » avec nombre actif ; garder accès au reset et aux résultats.
 
 Fiche : résultat, bénéficiaire, aperçu, programme, prérequis, outils, vérification, langues, conditions d’offre, FAQ. La carte d’offre ne cache pas le programme. Un client possédant un accès voit d’abord « Reprendre ».
+
+AUD-04 poursuit la présentation de l’accueil : titre et livrable dominants, aperçu provenant d’une activité réellement gratuite, programme numéroté en liste et informations de version repliables. Sur grand écran, l’encart d’accès et d’offre occupe la colonne latérale ; sur mobile il suit l’aperçu, avant le programme. Les langues sont regroupées une seule fois. Les informations d’auteur, de format ou de durée absentes restent explicites, sans valeur de remplacement.
 
 Guide : lecture confortable, table des matières si longueur utile, exemples originaux, contrôles et lien vers une activité du même sujet. Les informations de source/date reflètent une vraie revue.
 
@@ -101,6 +105,8 @@ Guide : lecture confortable, table des matières si longueur utile, exemples ori
 Tableau de bord : « Reprendre » et dernier travail avant les indicateurs secondaires. Montrer des compteurs observables, pas un score de compétence déduit arbitrairement.
 
 Leçon : programme latéral, objectif, explication textuelle/vidéo, pratique, vérification, ressources et prochaine étape. La transcription est facilement accessible. Le rendu du prompt et les zones de texte restent lisibles à largeur réduite.
+
+AUD-05 rend visibles les quatre moments comprendre/produire/vérifier/réutiliser par des ancres, sans onglets qui démontent la rédaction. Consigne et pièces restent près des champs ; la préparation précède la grille thématique. Les aides de champs guident la rédaction sans insérer un corrigé. Le résultat de quiz donne d’abord la réponse et son explication, puis le score et la conservation réelle. Les états locaux, temporaires consentis et enregistrés portent des messages différents ; les métadonnées de source quittent le début de la leçon pour un détail secondaire.
 
 Atelier : distinguer Brief, Rédiger, Vérifier et Corrigé. Le statut de sauvegarde reste visible. Lors d’un conflit, comparer/choisir de manière explicite sans écraser le travail. Ne pas masquer le brouillon derrière une pleine page d’erreur.
 

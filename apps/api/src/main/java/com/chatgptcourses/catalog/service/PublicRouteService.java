@@ -33,7 +33,7 @@ public class PublicRouteService {
           AND(t.source_translation_id IS NULL OR(t.published_source_revision_id=source.current_revision_id AND source.editorial_state NOT IN('ARCHIVED','STALE')))
           AND v.version_number=(SELECT max(n.version_number) FROM pedagogical_versions n WHERE n.resource_id=r.id
             AND EXISTS(SELECT 1 FROM content_translations p WHERE p.pedagogical_version_id=n.id AND p.published_revision_id IS NOT NULL))
-        """;
+        """ + " AND " + PublicSelectionSql.CONTENT_SELECTED;
     public PublicPublicationPage publications(String locale,int page,int size){
         locale(locale);check(page>=0&&page<=1_000_000&&size>=1&&size<=100);
         long total=jdbc.queryForObject("SELECT count(*) "+PUBLICATIONS,Long.class,locale);
@@ -80,8 +80,8 @@ public class PublicRouteService {
             LEFT JOIN content_translations source ON source.id=t.source_translation_id
             WHERE t.pedagogical_version_id IN(
             """+slots+") AND t.editorial_state NOT IN('ARCHIVED','STALE') "+"""
-              AND(t.source_translation_id IS NULL OR(t.published_source_revision_id=source.current_revision_id AND source.editorial_state NOT IN('ARCHIVED','STALE'))) ORDER BY t.locale
-            """,(r,n)->Map.entry(r.getObject(1,UUID.class),new PublishedLanguage(r.getString(2),r.getString(3))),versions.toArray());
+              AND(t.source_translation_id IS NULL OR(t.published_source_revision_id=source.current_revision_id AND source.editorial_state NOT IN('ARCHIVED','STALE')))
+            """+" AND "+PublicSelectionSql.CONTENT_SELECTED+" ORDER BY t.locale",(r,n)->Map.entry(r.getObject(1,UUID.class),new PublishedLanguage(r.getString(2),r.getString(3))),versions.toArray());
         var result=new HashMap<UUID,List<PublishedLanguage>>();
         for(var row:rows)result.computeIfAbsent(row.getKey(),ignored->new ArrayList<>()).add(row.getValue());
         result.replaceAll((version,languages)->List.copyOf(languages));return result;

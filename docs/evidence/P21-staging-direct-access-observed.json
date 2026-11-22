@@ -1,0 +1,203 @@
+{
+  "schemaVersion": 1,
+  "proofFamily": "P21_STAGING_DIRECT_ACCESS_OBSERVED_V1",
+  "result": "passed",
+  "observedAt": "2026-11-15T21:54:20.071Z",
+  "origin": "https://staging.chatgpt-courses.com",
+  "sourceCommit": "7572fcf51fe51749d7eec9b9ec62f293998091d0",
+  "manifestSha256": "ad2aa976378ed3349743de05b15ef26a2a326884ef3a0608aeb319e35bc39ab4",
+  "stagingBasicAuthEnabled": false,
+  "applicationEnvironment": "staging",
+  "servicesHealthy": 5,
+  "databaseSchemaVersion": 20,
+  "ci": {
+    "runId": 43763492075,
+    "result": "passed",
+    "proof": "P21-ci-43763492075.json"
+  },
+  "publication": {
+    "runId": 43764310209,
+    "result": "passed",
+    "manifest": "P21-release-manifest-43764310209.json",
+    "collectionSha256": "9af290c9b080b808df0648f649947c9655586471acb28d21ee55087aee082bb7"
+  },
+  "deployment": {
+    "runId": 43765849214,
+    "result": "passed",
+    "collectionSha256": "c95e71cd5a68c38b6937cf871b33e955f4599e797a4573deddf1740092b2a0c2",
+    "artifactZipSha256": "70d1018316907e9a0c3bc5f6671ab1a999bad5d02f79ee66f5e79bb3446c2aad",
+    "activePointerUpdated": true,
+    "imageBuildInvoked": false,
+    "dataRestoreInvoked": false
+  },
+  "configuration": {
+    "receiptSha256": "3579f13fa6fca17beb08b5b668a0c5d32becb797969d3289054f99445db79df8",
+    "onlyAppendedExplicitStagingFalse": true,
+    "legacyConfigAndSecretFilesRetained": true
+  },
+  "backup": {
+    "runId": "02b63dff-39cd-407c-bfdc-2fbf657fedb1",
+    "result": "passed",
+    "createdAt": "2026-11-15T21:47:57.874Z",
+    "receiptSha256": "7caeba6f0c51177d923c91d3b87711e0915851456704167fbb90a9246afb09ce",
+    "authenticatedEncryption": true,
+    "readyObjectsCompared": 10,
+    "independentWindowsPcVerified": true,
+    "offHostBundleFilesVerified": 14,
+    "backupKeyTransferredWithOffHostBundle": false
+  },
+  "preservation": {
+    "schemaVersion": 1,
+    "result": "upgrade-metadata-and-persistence-preserved",
+    "runId": "02b63dff-39cd-407c-bfdc-2fbf657fedb1",
+    "oldSourceCommit": "7d9794c6f2a7d9264820904ae125cced3bb69fdf",
+    "newSourceCommit": "7572fcf51fe51749d7eec9b9ec62f293998091d0",
+    "oldManifestSha256": "21298e847c92b1e6671bdc62c6f6ace50ea10ed612c335a041d2db5148232cca",
+    "newManifestSha256": "ad2aa976378ed3349743de05b15ef26a2a326884ef3a0608aeb319e35bc39ab4",
+    "composePathDiagnosticSha256": "732954b83dd8a22058cdeaa1deaea90147538a683c086dc3a5e533574eaeabfa",
+    "parentFailureSha256": "8f5dca6354dcc9e8cd041e19c4cdc79c9fe3bd993625b48048faf86f95ce6b03",
+    "parentIntentSha256": "5aa3e3f807b1330e3bcd9472de9f87314953d1691d0ecd0407461295a378cc15",
+    "otherContainersPreserved": 24,
+    "historicalContainersPreserved": 12,
+    "domainTablesCompared": 14,
+    "financialTablesCompared": 5,
+    "databaseSchemaVersion": 20,
+    "basicAuthDisabled": true,
+    "noBasicSecretMount": true,
+    "rolesBytesUnchanged": true,
+    "rawConfigurationReturned": false,
+    "privateRowsReturned": false,
+    "readOnly": true,
+    "remoteMutationPerformed": false,
+    "authenticatedOwnerHttpVerified": false,
+    "comparisonReceiptSha256": "b25b4ace39ebb61f88bfa0fa42f44e666dc99a51306ca822449caafa10097c59"
+  },
+  "ungate": {
+    "result": "passed",
+    "receiptSha256": "299ebe460e88e4d960e94ea3d8cf0b51d66fc724ef84dd57f8c2f24036a0003c",
+    "gateRemoved": true,
+    "originalCaddyRestored": true,
+    "sameCaddyFileIdentity": true,
+    "reloadOnly": true,
+    "otherHttpsSitesPreserved": 4,
+    "historicalLocksAndProofsPreserved": true
+  },
+  "smoke": {
+    "schemaVersion": 1,
+    "sourceCommit": "7572fcf51fe51749d7eec9b9ec62f293998091d0",
+    "manifestSha256": "ad2aa976378ed3349743de05b15ef26a2a326884ef3a0608aeb319e35bc39ab4",
+    "startedAt": "2026-11-15T21:52:25.701Z",
+    "completedAt": "2026-11-15T21:52:27.309Z",
+    "event": "DEPLOYMENT_SMOKE",
+    "result": "passed",
+    "tlsVerified": true,
+    "webhookMode": "test-configured",
+    "stagingBasicAuthEnabled": false,
+    "checks": [
+      {
+        "id": "PAGE_FR",
+        "result": "passed",
+        "status": 200
+      },
+      {
+        "id": "PAGE_EN",
+        "result": "passed",
+        "status": 200
+      },
+      {
+        "id": "SPRING_HEALTH",
+        "result": "passed",
+        "status": 200,
+        "databaseReady": true
+      },
+      {
+        "id": "REFERENCED_ASSETS",
+        "result": "passed",
+        "javascript": 17,
+        "stylesheets": 1
+      },
+      {
+        "id": "CSRF_SESSION_COOKIE",
+        "result": "passed",
+        "status": 200,
+        "secure": true,
+        "httpOnly": true,
+        "sameSiteLax": true,
+        "rootPath": true
+      },
+      {
+        "id": "PRIVATE_PROFILE_UNAUTHENTICATED",
+        "result": "passed",
+        "status": 401,
+        "noStore": true
+      },
+      {
+        "id": "ADMIN_UNAUTHENTICATED",
+        "result": "passed",
+        "status": 401,
+        "noStore": true
+      },
+      {
+        "id": "LOGOUT_MISSING_CSRF",
+        "result": "passed",
+        "status": 403,
+        "noStore": true
+      },
+      {
+        "id": "WEBHOOK_EXACT_FAIL_CLOSED",
+        "result": "passed",
+        "webhookMode": "test-configured",
+        "status": 400,
+        "requestedWithoutBasic": true,
+        "hmacValidated": false
+      },
+      {
+        "id": "WEBHOOK_SHADOW_CSRF",
+        "result": "passed",
+        "status": 403,
+        "noStore": true
+      },
+      {
+        "id": "UNKNOWN_API",
+        "result": "passed",
+        "status": 404,
+        "noStore": true
+      }
+    ],
+    "receiptSha256": "f5290435af043cccda26acef794606a16db417895e0dd1618257b986bd32196f",
+    "anonymousHttpBasicChallengeAbsent": true,
+    "noindexPreserved": true,
+    "noStorePreserved": true
+  },
+  "monitor": {
+    "schemaVersion": 1,
+    "result": "passed",
+    "sourceCommit": "7572fcf51fe51749d7eec9b9ec62f293998091d0",
+    "monitorModuleSha256": "3fc136abb0d16f97d45ba58bd46020ce4e554b07ca74bba82038974fb38998f6",
+    "backupReceiptSha256": "7caeba6f0c51177d923c91d3b87711e0915851456704167fbb90a9246afb09ce",
+    "httpBasicCredentialsProvided": false,
+    "observation": {
+      "observedAt": "2026-11-15T21:53:35.118Z",
+      "httpAvailable": true,
+      "backupAgeSeconds": 337,
+      "diskFreeBytes": 51718680576,
+      "alerts": [],
+      "externalNotificationSent": false,
+      "externalHostLossDetectionObserved": false
+    },
+    "receiptSha256": "c6a04fb0aa03c0d2c4b57ba6a2f59a90b6cf5eb4e1710cd791a2e2282b36be9e"
+  },
+  "limitations": {
+    "visualBrowserReviewPerformed": false,
+    "authenticatedOwnerHttpVerified": false,
+    "financialFlowsReplayed": false,
+    "productionChanged": false,
+    "commercialLaunch": false
+  },
+  "historicalRefusalsRetained": {
+    "oldCiCollectorsIncompatibleWithCurrentCounters": 2,
+    "baselineV1ExpectedWrongComposeWorkingDirectory": true,
+    "configurationWorktreeCrLfRefusedBeforeIntent": true,
+    "ambiguousMutationRetried": false
+  }
+}

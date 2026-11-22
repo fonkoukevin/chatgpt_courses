@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "browser": "chromium",
+  "browserVersion": "158.0.8127.18",
+  "headless": true,
+  "mode": "actual browser viewport, not zoom emulation",
+  "fixtures": "disposable synthetic resources only",
+  "editorialSelectionIsSimulation": true,
+  "observations": [
+    {
+      "state": "empty",
+      "locale": "fr",
+      "width": 320,
+      "height": 844,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": null
+    },
+    {
+      "state": "empty",
+      "locale": "fr",
+      "width": 390,
+      "height": 844,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": "aud01-empty-fr-390.png"
+    },
+    {
+      "state": "empty",
+      "locale": "fr",
+      "width": 1440,
+      "height": 1000,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": null
+    },
+    {
+      "state": "empty",
+      "locale": "en",
+      "width": 320,
+      "height": 844,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": "aud01-empty-en-320.png"
+    },
+    {
+      "state": "empty",
+      "locale": "en",
+      "width": 390,
+      "height": 844,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": "aud01-empty-en-390.png"
+    },
+    {
+      "state": "empty",
+      "locale": "en",
+      "width": 1440,
+      "height": 1000,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": null
+    },
+    {
+      "state": "editorial",
+      "locale": "fr",
+      "width": 320,
+      "height": 844,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": null
+    },
+    {
+      "state": "editorial",
+      "locale": "fr",
+      "width": 390,
+      "height": 844,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": "aud01-editorial-fr-390.png"
+    },
+    {
+      "state": "editorial",
+      "locale": "fr",
+      "width": 1440,
+      "height": 1000,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": "aud01-editorial-fr-1440.png"
+    },
+    {
+      "state": "editorial",
+      "locale": "en",
+      "width": 320,
+      "height": 844,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": null
+    },
+    {
+      "state": "editorial",
+      "locale": "en",
+      "width": 390,
+      "height": 844,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": "aud01-editorial-en-390.png"
+    },
+    {
+      "state": "editorial",
+      "locale": "en",
+      "width": 1440,
+      "height": 1000,
+      "keyboard": true,
+      "menu": true,
+      "noOverflow": true,
+      "capture": null
+    }
+  ],
+  "screenshots": [
+    "aud01-empty-fr-390.png",
+    "aud01-empty-en-320.png",
+    "aud01-empty-en-390.png",
+    "aud01-editorial-fr-390.png",
+    "aud01-editorial-fr-1440.png",
+    "aud01-editorial-en-390.png"
+  ],
+  "financialOperationsExecuted": false,
+  "deployed": false
+}

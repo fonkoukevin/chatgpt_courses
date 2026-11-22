@@ -1,0 +1,134 @@
+{
+  "locale": "fr",
+  "ownerId": "b8debe7e-60bc-4053-99ab-7ea92ced2fdf",
+  "methodId": "71f71519-b14a-497b-b525-22eaa8821451",
+  "projectIds": [
+    "7ed3339e-af14-43f0-811b-dbb5f065c41b",
+    "e761f335-c062-44d1-b5ed-0c3160157992"
+  ],
+  "openedModules": 6,
+  "manualTestAccess": {
+    "origin": "MANUAL_TEST",
+    "scope": "P18 owned tmpfs only; no purchase or payment claimed",
+    "grantId": "acbbc433-fd5d-4f26-a42a-0190358b64b7"
+  },
+  "downloads": [
+    {
+      "key": "br01-tr01",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": "74ef854e-8ea5-4ea9-805e-7aed73e9cdf9",
+      "filename": "br01-tr01-fr-v1.md",
+      "bytes": 2944,
+      "sha256": "40f8e23d199e1809ff3147c14e5f343407451ea2dfbf9e977f5b17fc43ab2f93",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "scoping-table",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": "fa12c181-3874-46fb-8681-d9e89c9287d0",
+      "filename": "scoping-table-fr-v1.md",
+      "bytes": 3129,
+      "sha256": "7dba21f05507b3d2394096e574c394980129e5d27aac041d0b3ae45c6f62f07d",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "prompt-method",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": "b453161f-0411-4553-9d43-7c07bc27e4d9",
+      "filename": "prompt-method-fr-v1.md",
+      "bytes": 6336,
+      "sha256": "b8090e9d200ab1439f49135ee46aafa85ebc6067f580c6da5b7b8e4f27023a84",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "proposal-template",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": "f3fabb77-1749-434d-b81f-9b7e76d771ab",
+      "filename": "proposal-template-fr-v1.md",
+      "bytes": 2356,
+      "sha256": "143795867f87372590223b98fde740aa1c2f4f7a39c9d869ff7b3e2d1115fe22",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "commented-solution-br01",
+      "locale": "fr",
+      "purpose": "SOLUTION",
+      "assetId": "d96628f1-200d-4753-9f07-d60fba627e79",
+      "filename": "commented-solution-br01-fr-v1.md",
+      "bytes": 4169,
+      "sha256": "38580971a453ca7df070272f0f5f3e26b829db53fa081723aea9fea38241446a",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "assessment-grid-br01",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": "56ce8bdf-98c6-47d1-a36f-238ff27b118e",
+      "filename": "assessment-grid-br01-fr-v1.md",
+      "bytes": 4218,
+      "sha256": "5c8fdbc0077e69b646c589430f628cd16d3e31423586ea3e6523cde62a81b492",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "br02",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": "769c2246-c938-4999-b168-af2a2cbd43d2",
+      "filename": "br02-fr-v1.md",
+      "bytes": 2260,
+      "sha256": "351dbfb396d68d123742bcaef2d127e45b267daa5e47e09a17d8005649f6c58d",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "presentation-emails",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": "98536454-9d40-4dfc-845d-6493a9c13213",
+      "filename": "presentation-emails-fr-v1.md",
+      "bytes": 2058,
+      "sha256": "c4fb03bc242a1ec277f207538845486d19a8f5dd5a784b781b3fa143407a1069",
+      "utf8": true,
+      "actualUiDownload": true
+    },
+    {
+      "key": "commented-solution-br02",
+      "locale": "fr",
+      "purpose": "SOLUTION",
+      "assetId": "521dde5a-254e-4e39-98bb-74e6a16df99d",
+      "filename": "commented-solution-br02-fr-v1.md",
+      "bytes": 3366,
+      "sha256": "3c634d475cd01cf8596d0e602f8844bfd524ece8d223c140116f2c3931e04bd1",
+      "utf8": true,
+      "actualUiDownload": true
+    }
+  ],
+  "localExports": [
+    {
+      "kind": "method",
+      "filename": "method-fr.md",
+      "bytes": 3373,
+      "sha256": "b0409f124580f6fec219e4d0aa61ef1a839d4c9352cf976df4e9de427308fe64",
+      "currentInputObserved": true
+    },
+    {
+      "kind": "project",
+      "filename": "project-fr.md",
+      "bytes": 1429,
+      "sha256": "f5b33f921c331f8035f297e80eb365041c9ff5af65d8965308fd1b1054bbcd97",
+      "currentInputObserved": true
+    }
+  ],
+  "methodExplicitlyRebuiltForBr02": true,
+  "declaration": "Scores are learner declarations on exact saved revisions, never human or automatic validation of the proposal."
+}

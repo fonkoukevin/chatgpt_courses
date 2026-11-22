@@ -9,13 +9,14 @@ import { LearnerLayout } from "@/components/layouts/learner-layout";
 import type { ApiError } from "@/lib/api/client";
 import type { OfferConditions, OfferTax } from "@/lib/api/generated/types.gen";
 import { commerceText } from "@/lib/commerce/format";
-import { offersPath, ordersPath, orderStatusPath } from "@/lib/commerce/routes";
+import { offersHref, offersPath, ordersPath, orderStatusPath } from "@/lib/commerce/routes";
+import type { CourseOfferFilter } from "@/lib/api/commerce-client";
 import { getCommerceDictionary } from "@/lib/i18n/commerce";
 import { getPaymentDictionary } from "@/lib/i18n/payments";
 import type { Locale } from "@/lib/i18n/locales";
 
-export function CommercePublicShell({ locale, id, children }: { locale: Locale; id?: string; children: ReactNode }) {
-  return <PublicShell locale={locale} languageLinks={{ fr: { href: offersPath("fr", id), available: true }, en: { href: offersPath("en", id), available: true } }}>{children}</PublicShell>;
+export function CommercePublicShell({ locale, id, course, children }: { locale: Locale; id?: string; course?: CourseOfferFilter; children: ReactNode }) {
+  return <PublicShell locale={locale} languageLinks={{ fr: { href: course ? offersHref("fr", {}, course) : offersPath("fr", id), available: true }, en: { href: course ? offersHref("en", {}, course) : offersPath("en", id), available: true } }}>{children}</PublicShell>;
 }
 export function CommercePrivateShell({ locale, id, status = false, children }: { locale: Locale; id?: string; status?: boolean; children: ReactNode }) {
   const t = getCommerceDictionary(locale);

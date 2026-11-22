@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { getServerConfig } from "../config/server";
 import type { Locale } from "../i18n/locales";
 import type { AuthResult } from "./auth-client";
@@ -37,7 +38,9 @@ export function readCatalogue(query: CatalogueQuery) {
   for (const [key, value] of Object.entries(query)) if (value !== undefined && value !== "") params.set(key, String(value));
   return read(`/catalog?${params}`, isCataloguePage);
 }
-export function readCatalogueFacets(locale: Locale) { return read(`/catalog/facets?locale=${locale}`, isCatalogueFacets); }
+// Deduplicate the layout and page reads only during this server render.
+// The HTTP request remains no-store and never carries a visitor's session.
+export const readCatalogueFacets = cache((locale: Locale) => read(`/catalog/facets?locale=${locale}`, isCatalogueFacets));
 export function readResource(resourceId: string, locale: Locale) { return read(`/catalog/resources/${encodeURIComponent(resourceId)}?locale=${locale}`, isResourceDetail); }
 export function readResourceVersion(resourceId: string, versionId: string, locale: Locale) {
   return read(`/catalog/resources/${encodeURIComponent(resourceId)}/versions/${encodeURIComponent(versionId)}?locale=${locale}`, isResourceDetail);

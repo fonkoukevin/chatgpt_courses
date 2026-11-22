@@ -14,7 +14,7 @@ import { sameProjectFields } from '../../apps/web/src/lib/projects/fields';
 import { authPath, fillMethodLogin, loginMethodAccount, methodLearner } from './methods-fixture';
 import { contentAction, createContent, currentContent } from './editorial-api';
 import { editorialContent } from './editorial-content';
-import { publishPublicContent } from './public-content-fixture';
+import { publishShowcaseContent } from './public-content-fixture';
 import { csrfHeaders } from './editorial-fixture';
 import { controlApi } from './control';
 import { createPersonalProject, createProjectFixture, patchProject, projectRecord, projectSourceHref, type ProjectFixture } from './projects-fixture';
@@ -84,6 +84,11 @@ test.describe('P09 projets personnels et déclarations réelles', () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(projectSourceHref(source, locale)); await page.getByRole('button', { name: t.start, exact: true }).click();
     const preparation = page.locator('[data-project-preparation]'); await expect(preparation.getByRole('textbox', { name: t.objective, exact: true })).toBeEnabled();
+    const briefTrigger = preparation.getByRole('button', { name: t.openBrief, exact: true }); await briefTrigger.click();
+    const preparationBrief = page.getByRole('dialog', { name: t.brief, exact: true });
+    await expect(preparationBrief.getByRole('heading', { name: source.value.title, exact: true })).toBeVisible();
+    await expect(preparationBrief).toContainText(source.value.document!.exercise!.instructions);
+    await page.keyboard.press('Escape'); await expect(briefTrigger).toBeFocused();
     const marker = `P09 anonymous deliberate ${locale} ${randomUUID()}`;
     await preparation.getByRole('textbox', { name: t.title, exact: true }).fill(marker);
     await preparation.getByRole('textbox', { name: t.objective, exact: true }).fill('Ma rédaction préparée avant connexion.');
@@ -110,9 +115,9 @@ test.describe('P09 projets personnels et déclarations réelles', () => {
     if (locale === 'fr') {
       // Real publication change after the temporary preparation was read.
       const prior = await currentContent(editor, source.value.id), revisedBrief = 'P09 dossier révisé : confirmez la disponibilité des éléments avant de promettre le démarrage.';
-      fixture.BR01.fr = await publishPublicContent(editor, await contentAction(editor, prior, 'revisions', { title: prior.value.title, summary: prior.value.summary,
+      fixture.BR01.fr = await publishShowcaseContent(editor, await contentAction(editor, prior, 'revisions', { title: prior.value.title, summary: prior.value.summary,
         document: { ...prior.value.document!, blocks: [...prior.value.document!.blocks, { type: 'PARAGRAPH', text: revisedBrief, url: null }] }, reason: 'P09 real source revision before explicit personal creation' }));
-      fixture.BR01.en = await publishPublicContent(editor, await currentContent(editor, fixture.BR01.en.value.id));
+      fixture.BR01.en = await publishShowcaseContent(editor, await currentContent(editor, fixture.BR01.en.value.id));
       const rejected = page.waitForResponse((value) => value.request().method() === 'POST' && value.url().endsWith('/api/v1/me/projects'));
       await page.getByRole('button', { name: t.save, exact: true }).click(); expect((await rejected).status()).toBe(412);
       await expect(page.getByText(t.sourceConflict, { exact: true })).toBeVisible(); await page.getByRole('button', { name: t.checkSource, exact: true }).click();
@@ -266,9 +271,14 @@ test.describe('P09 projets personnels et déclarations réelles', () => {
     const original = await createContent(editor, editorialContent('fr'));
     const cmsContext = await browser.newContext({ baseURL: process.env.COURSES_BROWSER_ORIGIN, storageState: await editor.storageState() });
     try {
-      const page = await cmsContext.newPage(); await page.goto(`/fr/admin/content/${original.value.id}/edit`);
+      const page = await cmsContext.newPage();
+      // The SSR select is visible before its React change handler is attached.
+      // This account read starts from the mounted editor's client effect.
+      const mountedAccount = page.waitForResponse((value) => value.request().method() === 'GET' && new URL(value.url()).pathname === '/api/v1/auth/me');
+      await page.goto(`/fr/admin/content/${original.value.id}/edit`); expect((await mountedAccount).status()).toBe(200);
       const policy = page.getByRole('heading', { name: t.title, exact: true }).locator('..');
-      await policy.getByRole('combobox', { name: t.reference, exact: true }).selectOption('BR02');
+      const reference = policy.getByRole('combobox', { name: t.reference, exact: true });
+      await reference.selectOption('BR02'); await expect(reference).toHaveValue('BR02');
       const loaded = page.waitForResponse((value) => value.request().method() === 'GET' && value.url().includes('/admin/project-presets/BR02?locale=fr'));
       await policy.getByRole('button', { name: t.load, exact: true }).click(); expect((await loaded).status()).toBe(200);
       await expect(page.getByRole('textbox', { name: cms.criterion, exact: true })).toHaveCount(1);

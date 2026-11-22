@@ -1,0 +1,349 @@
+{
+  "schemaVersion": 1,
+  "result": "passed-local-targeted",
+  "observedAt": "2026-11-15T23:04:32.168Z",
+  "audit": "AUD-01",
+  "environment": {
+    "os": "Windows 11",
+    "java": "21.0.13",
+    "postgresql": "18.6",
+    "postgresImage": "postgres@sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42",
+    "persistence": "isolated Testcontainers databases only"
+  },
+  "execution": {
+    "attempt1": {
+      "result": "test-compilation-failed",
+      "testsExecuted": 0,
+      "reason": "new test used an unsupported compound var declaration",
+      "logSha256": "337d7e97e62bfb9bc157dfd577b14e19dcaa3050f087593111cdd3260ac39a7f"
+    },
+    "attempt2": {
+      "result": "failed",
+      "tests": 60,
+      "failures": 1,
+      "errors": 2,
+      "skipped": 0,
+      "suites": [
+        {
+          "suite": "PublicSelectionIntegrationTest",
+          "tests": 7,
+          "failures": 0,
+          "errors": 2,
+          "skipped": 0,
+          "sha256": "1cce4ec4a116b5169f856376d12e9331542010b5761095e7e52cbabacd3402f7",
+          "failedTests": [
+            "offerSelectionHttpUsesCommercePermissionsAndItsOwnCurrentRevisionEtag",
+            "parentCoursesAndOffersRequireApprovedExactChildrenAndEveryIncludedLanguageWithoutChangingOrders"
+          ]
+        },
+        {
+          "suite": "PublicCatalogueIntegrationTest",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "sha256": "0ecf98a380403b36f7c9f5d287f8b441f44a9d9fad6f643be2e753588ae687b5",
+          "failedTests": []
+        },
+        {
+          "suite": "PublicCatalogueHttpIntegrationTest",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "sha256": "ec4653a331f4b73d0c4402c5760a04d68336766df1c00b8ea22b9060e50e71a1",
+          "failedTests": []
+        },
+        {
+          "suite": "PublicRoutingIntegrationTest",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "sha256": "f3edff0551bf14b8675be764f36abb072cd1a55958ab440b52db95ee4b5632de",
+          "failedTests": []
+        },
+        {
+          "suite": "OfferServiceIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "sha256": "be8c67cbf28285a27634dae6a014a290ce06e72767ddea6cba5e5b8566fb45a3",
+          "failedTests": []
+        },
+        {
+          "suite": "CommerceHttpIntegrationTest",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "sha256": "89a88b58232d025e3eb843e3427ec2cc0b1293d8b7c02ba132a32b89f58e254f",
+          "failedTests": []
+        },
+        {
+          "suite": "SqlReadBudgetIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "sha256": "b40f10ee78abf1fb1a687a17b14b91e2df2c247e2e90af424f2db0e03127c1bd",
+          "failedTests": []
+        },
+        {
+          "suite": "SchemaIntegrationTest",
+          "tests": 16,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0,
+          "sha256": "ed67f2d914009f7b6f40e40491ad7cee882a445d6e55b7a051850d389740ae71",
+          "failedTests": [
+            "aFreshDatabaseMigratesAndHibernateValidatesWithoutSeedingAccountsOrCommerce"
+          ]
+        }
+      ],
+      "logSha256": "acbbf9c714fdfb9c6f1805fed0b5b950c514ac5d8ebafaad3f62dd3cc809445a",
+      "diagnosis": [
+        "fresh schema test still expected20 migrations",
+        "new isolated offer fixtures omitted explicit EUR configuration"
+      ],
+      "historicalReportsRetained": true
+    },
+    "attempt3": {
+      "result": "passed",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": [
+        {
+          "suite": "PublicSelectionIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "sha256": "a36227431337711d210f5369062a75e3248510c4b5726e5480799557206d664f"
+        },
+        {
+          "suite": "OfferServiceIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "sha256": "89a60e6e9d55dd4375532ab2dd0e353a969b451caaa5e10eb0f7cd5d1ec280aa"
+        },
+        {
+          "suite": "SchemaIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "sha256": "2e0b8b7f0c3e462abb9aacce440e5b12fe6f051345d1df3fd6b3c2f59de94c62"
+        }
+      ],
+      "logSha256": "07747590f40df8ee29416eb96cf908eb06e0f5c3f4daaa9644a39e1a45b19fc0",
+      "justifiedBy": [
+        "explicit EUR fixture configuration and fresh schema counter21 corrected",
+        "offer discovery approval now reuses existing field readiness while tolerating only COMMERCE_NOT_CONFIGURED",
+        "added case covering commerce-off complete offer approval and refusal of missing price/conditions without history append"
+      ]
+    }
+  },
+  "consolidated": {
+    "distinctTests": 61,
+    "suites": 8,
+    "allLatestCaseResultsPassed": true,
+    "suiteResults": [
+      {
+        "suite": "CommerceHttpIntegrationTest",
+        "distinctTests": 10,
+        "latestResults": "passed",
+        "evidenceAttempts": [
+          2
+        ]
+      },
+      {
+        "suite": "OfferServiceIntegrationTest",
+        "distinctTests": 8,
+        "latestResults": "passed",
+        "evidenceAttempts": [
+          3
+        ]
+      },
+      {
+        "suite": "PublicCatalogueHttpIntegrationTest",
+        "distinctTests": 6,
+        "latestResults": "passed",
+        "evidenceAttempts": [
+          2
+        ]
+      },
+      {
+        "suite": "PublicCatalogueIntegrationTest",
+        "distinctTests": 6,
+        "latestResults": "passed",
+        "evidenceAttempts": [
+          2
+        ]
+      },
+      {
+        "suite": "PublicRoutingIntegrationTest",
+        "distinctTests": 6,
+        "latestResults": "passed",
+        "evidenceAttempts": [
+          2
+        ]
+      },
+      {
+        "suite": "PublicSelectionIntegrationTest",
+        "distinctTests": 8,
+        "latestResults": "passed",
+        "evidenceAttempts": [
+          3
+        ]
+      },
+      {
+        "suite": "SchemaIntegrationTest",
+        "distinctTests": 16,
+        "latestResults": "passed",
+        "evidenceAttempts": [
+          3,
+          2
+        ]
+      },
+      {
+        "suite": "SqlReadBudgetIntegrationTest",
+        "distinctTests": 1,
+        "latestResults": "passed",
+        "evidenceAttempts": [
+          2
+        ]
+      }
+    ],
+    "notOneRepeatedGlobalSuccessClaim": true
+  },
+  "discoveryScenarios": [
+    {
+      "name": "discoveryApprovalReusesCommercialFieldReadinessWithoutEnablingCommerceOrCheckout",
+      "result": "passed"
+    },
+    {
+      "name": "incompleteInactiveOfferLocalesDoNotCrashOrEnterTheOrdinaryList",
+      "result": "passed"
+    },
+    {
+      "name": "concurrentSelectionsHaveOneWinnerAndNoLostDecision",
+      "result": "passed"
+    },
+    {
+      "name": "offerSelectionHttpUsesCommercePermissionsAndItsOwnCurrentRevisionEtag",
+      "result": "passed"
+    },
+    {
+      "name": "parentCoursesAndOffersRequireApprovedExactChildrenAndEveryIncludedLanguageWithoutChangingOrders",
+      "result": "passed"
+    },
+    {
+      "name": "exactPublishedRevisionApprovalDoesNotTransferToAChangedPublicationAndDecisionsAreAppendOnly",
+      "result": "passed"
+    },
+    {
+      "name": "realHttpRequiresPermissionCsrfAccountContextExplicitRevisionAndFreshSelectionEtag",
+      "result": "passed"
+    },
+    {
+      "name": "publicationAloneOrRecipeClassificationNeverPromotesCardsFacetsSuggestionsOrSeo",
+      "result": "passed"
+    }
+  ],
+  "migration": {
+    "target": "V020 to V021",
+    "priorTablesCompared": 84,
+    "existingRowsExactlyPreserved": true,
+    "existingTriggersPreserved": true,
+    "newTables": 2,
+    "newTablesEmpty": true,
+    "populatedFixtureDomains": [
+      "account and learner role",
+      "retained personal method",
+      "learning enrollment and activity",
+      "read progress",
+      "original English personal note",
+      "manual test access origin FR/EN",
+      "session and session attributes",
+      "two immutable order snapshots and checkout operations"
+    ],
+    "evidenceAttempt": 2,
+    "case": "SchemaIntegrationTest#upgradingV020AddsOnlyEmptyDiscoveryHistoryAndPreservesEveryExistingRowAndTrigger"
+  },
+  "sqlBudget": {
+    "evidenceAttempt": 2,
+    "result": "passed",
+    "realJdbcResults": true,
+    "publicationsQueries": 3,
+    "catalogueQueries": 2,
+    "performanceGuaranteeClaimed": false
+  },
+  "openapi": {
+    "validated": true,
+    "clientRegenerated": true,
+    "newPaths": 2,
+    "newOperations": 4,
+    "existingPublicDtoShapesChanged": false
+  },
+  "sourceFiles": [
+    {
+      "file": "apps/api/src/main/resources/db/migration/V021__explicit_public_discovery_selections.sql",
+      "sha256": "060f9b141cc0b578f15d4c3b98c7dbce5423f8d4dd0f1713a817ac0862a6cdb3"
+    },
+    {
+      "file": "apps/api/src/main/java/com/chatgptcourses/catalog/service/PublicSelectionSql.java",
+      "sha256": "c07bb7d5d6ae2adf43909716e52993aabe77159ec9a2e8e6ed75aa0c2342c4c0"
+    },
+    {
+      "file": "apps/api/src/main/java/com/chatgptcourses/catalog/service/PublicSelectionService.java",
+      "sha256": "f774ffd0d9a81ccad34769a5fe21f07d4164cd4776c7b0ce5cd66c484b3cfdb7"
+    },
+    {
+      "file": "apps/api/src/main/java/com/chatgptcourses/catalog/http/PublicSelectionController.java",
+      "sha256": "3a74b071525a44a3a3ea844f93ff3ba370076972e4ffb9936e080a7c4c9c2908"
+    },
+    {
+      "file": "apps/api/src/main/java/com/chatgptcourses/catalog/service/PublicCatalogueService.java",
+      "sha256": "bb7c9c702e3bdae055fff16343dee0c4e13db8b602c7cac7f7045630bb25dced"
+    },
+    {
+      "file": "apps/api/src/main/java/com/chatgptcourses/catalog/service/PublicRouteService.java",
+      "sha256": "3d29eb510a751f6fc0bc8ca25238c823bef7d31d0a1f482fc26595f883bb08c7"
+    },
+    {
+      "file": "apps/api/src/main/java/com/chatgptcourses/commerce/service/OfferService.java",
+      "sha256": "3e8041ab1dba2f609c6fc94d1ff1137b03cf0a14bab9806b1d25417178182929"
+    },
+    {
+      "file": "apps/api/src/main/java/com/chatgptcourses/shared/security/SecurityConfiguration.java",
+      "sha256": "7f84ada7bd9881a524cb13fe6a59a72afc4ad2a1c6f6d57dbbc3c3151dcda078"
+    },
+    {
+      "file": "apps/api/src/test/java/com/chatgptcourses/PublicSelectionIntegrationTest.java",
+      "sha256": "decad50f0023d03f082e034485633503efa6ae32a25e9b1c819a026d07a4f902"
+    },
+    {
+      "file": "apps/api/src/test/java/com/chatgptcourses/SchemaIntegrationTest.java",
+      "sha256": "1693aa4eefd9594769c8ea7ae83c12043e591d1ce0a100866a0bdd58c009d9f6"
+    },
+    {
+      "file": "docs/api/openapi.yaml",
+      "sha256": "4ef176046830d029116d96b0216efa443859c0029a45074237e871adf0bc9a40"
+    }
+  ],
+  "boundaries": {
+    "ciExecuted": false,
+    "deploymentExecuted": false,
+    "stagingMigrationExecuted": false,
+    "sharedDatabaseChanged": false,
+    "externalPaymentExecuted": false,
+    "dataPurged": false,
+    "rawPrivateBodiesPublished": false
+  }
+}

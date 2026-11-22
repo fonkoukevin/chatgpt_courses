@@ -24,6 +24,21 @@ Plan fifteen business days after receiving required materials AND approving the 
 
 Data to include: [actually copy BR01/TR01 and your scope; complete this placeholder before running the instruction].
 
+## Try the method in ChatGPT
+
+The manual scoping in M01–M02 remains possible without AI. To practise with ChatGPT, copy the complete fictional case and the request for your chosen step into a conversation. Replace placeholders with your data before sending. Keep the request and actual response in your editor; if you do not run it, record “prompt prepared, not run”. This method requires no particular model or button.
+
+| Step | Data to provide and request to adapt | Output to examine and independent check |
+| --- | --- | --- |
+| M01 Understand | BR01/TR01: “Create eight rows of sourced facts, unknowns and consequences. Suggest three priority questions without filling in missing information.” | Compare the table with the case; remove claims about unseen texts or unverified results. |
+| M02 Define | BR01/TR01 and your table: “Separate included, to confirm and unpriced items. Justify each status and show the five priced items.” | Find the four French pages, editable delivery and single round; recalculate the total and separate logo work/integration. |
+| M03 Prepare | Complete all seven parameters and the instruction above; supply the actual BR01/TR01 data. | Check that every requested commitment can be verified and no data placeholder is empty. |
+| M04 Produce | Case and selected scope: “Draft seven sections: objective, scope and deliverables, approach, conditional timeline, detailed budget, points to confirm, next step. Add no facts.” | Read every section, recalculate and check length in your editor; the response is only a draft. |
+| M05 Check | Your draft and its exact source: “Compare this passage with the case. Identify substantiated discrepancies, then suggest a focused revision preserving the other facts. If no discrepancy is established, say so.” | Check the AI’s diagnosis too; justify three changes or retained passages without inventing an error. |
+| M06 Reuse | Replace BR01 with the complete BR02 case: “Explain the budget and timing conflicts. Consider an option without About subject to agreement, without pricing integration.” | Recalculate €1,400 and €1,180 excluding tax; retain the overall ceiling and ten-business-day minimum. Adapt the emails without sending them. |
+
+If the output invents a fact, quote the passage and contradictory case fact in a focused revision request, then check again. Keep track of changes in your work rather than accepting the tool’s claim that it has checked everything.
+
 ## Checks after any eventual response
 
 1. Recalculate 180 + 320 + 360 + 220 + 120 = €1,200 excluding tax.

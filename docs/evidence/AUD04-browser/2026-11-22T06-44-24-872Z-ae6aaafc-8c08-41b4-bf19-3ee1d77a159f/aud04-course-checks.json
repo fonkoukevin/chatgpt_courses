@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "stage": "after",
+  "browser": "chromium",
+  "browserVersion": "158.0.8127.18",
+  "headless": true,
+  "beforeStageIsCaptureBaselineOnly": false,
+  "finalAssertionsApplied": true,
+  "fixture": "P18 authored FR/EN course, published and explicitly selected only in owned PostgreSQL/S3 tmpfs.",
+  "humanEditorialApproval": false,
+  "sharedContentChanged": false,
+  "providerRequestsExecuted": false,
+  "deployed": false,
+  "localPreparedOrdersOnly": [],
+  "observations": [
+    {
+      "check": "course-comparison",
+      "locale": "fr",
+      "width": 1440,
+      "height": 1000,
+      "noOverflow": true,
+      "courseId": "33a0a2dc-6640-45e3-9759-c1e8d4457e14",
+      "versionId": "c91de3b3-b403-4163-87ee-775cb06dc129",
+      "courseHref": "/fr/parcours/du-brief-a-la-proposition-commerciale?version=c91de3b3-b403-4163-87ee-775cb06dc129"
+    },
+    {
+      "check": "course-comparison",
+      "locale": "fr",
+      "width": 390,
+      "height": 844,
+      "noOverflow": true,
+      "courseId": "33a0a2dc-6640-45e3-9759-c1e8d4457e14",
+      "versionId": "c91de3b3-b403-4163-87ee-775cb06dc129",
+      "courseHref": "/fr/parcours/du-brief-a-la-proposition-commerciale?version=c91de3b3-b403-4163-87ee-775cb06dc129"
+    },
+    {
+      "check": "course-comparison",
+      "locale": "en",
+      "width": 1440,
+      "height": 1000,
+      "noOverflow": true,
+      "courseId": "33a0a2dc-6640-45e3-9759-c1e8d4457e14",
+      "versionId": "c91de3b3-b403-4163-87ee-775cb06dc129",
+      "courseHref": "/en/courses/client-brief-to-proposal?version=c91de3b3-b403-4163-87ee-775cb06dc129"
+    },
+    {
+      "check": "course-comparison",
+      "locale": "en",
+      "width": 390,
+      "height": 844,
+      "noOverflow": true,
+      "courseId": "33a0a2dc-6640-45e3-9759-c1e8d4457e14",
+      "versionId": "c91de3b3-b403-4163-87ee-775cb06dc129",
+      "courseHref": "/en/courses/client-brief-to-proposal?version=c91de3b3-b403-4163-87ee-775cb06dc129"
+    }
+  ],
+  "captures": [
+    "after-course-fr-1440.png",
+    "after-course-fr-1440-full.png",
+    "after-course-fr-390.png",
+    "after-course-fr-390-full.png",
+    "after-course-en-1440.png",
+    "after-course-en-1440-full.png",
+    "after-course-en-390.png",
+    "after-course-en-390-full.png",
+    "after-single-offer-fr-390.png"
+  ]
+}

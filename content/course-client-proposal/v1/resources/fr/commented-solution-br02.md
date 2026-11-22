@@ -8,7 +8,7 @@ classification: SOLUTION
 
 # BR02 — Corrigé du calcul et de l’arbitrage
 
-Corrigé pédagogique à consulter explicitement après une tentative. Il ne constitue ni une offre acceptée ni une validation humaine de la production.
+Exemple pédagogique fictif : Client S et les montants sont des données d’exercice, jamais un prix de formation. Ce corrigé est rédigé pour l’apprentissage ; il n’est pas présenté comme une réponse obtenue de ChatGPT. Consultez-le explicitement après une tentative. Il ne constitue ni une offre acceptée ni une validation humaine de la production.
 
 ## 1. Comparer les contraintes réelles
 

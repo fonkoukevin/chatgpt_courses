@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "stage": "after",
+  "browser": "chromium",
+  "browserVersion": "158.0.8127.18",
+  "headless": true,
+  "beforeStageIsCaptureBaselineOnly": false,
+  "finalCtaAssertionsApplied": true,
+  "fixtures": "Prepared P18 course, technically published and explicitly selected only in owned PostgreSQL/S3 tmpfs.",
+  "humanEditorialApproval": false,
+  "sharedContentChanged": false,
+  "financialOperationsExecuted": false,
+  "deployed": false,
+  "observations": [
+    {
+      "stage": "after",
+      "state": "empty",
+      "locale": "fr",
+      "width": 1440,
+      "height": 1000,
+      "keyboardSkipLink": true,
+      "noOverflow": true,
+      "mobileMenuKeyboard": false
+    },
+    {
+      "stage": "after",
+      "state": "empty",
+      "locale": "fr",
+      "width": 390,
+      "height": 844,
+      "keyboardSkipLink": true,
+      "noOverflow": true,
+      "mobileMenuKeyboard": true
+    },
+    {
+      "stage": "after",
+      "state": "empty",
+      "locale": "en",
+      "width": 1440,
+      "height": 1000,
+      "keyboardSkipLink": true,
+      "noOverflow": true,
+      "mobileMenuKeyboard": false
+    },
+    {
+      "stage": "after",
+      "state": "empty",
+      "locale": "en",
+      "width": 390,
+      "height": 844,
+      "keyboardSkipLink": true,
+      "noOverflow": true,
+      "mobileMenuKeyboard": true
+    },
+    {
+      "stage": "after",
+      "state": "single-course",
+      "locale": "fr",
+      "width": 1440,
+      "height": 1000,
+      "keyboardSkipLink": true,
+      "noOverflow": true,
+      "mobileMenuKeyboard": false
+    },
+    {
+      "stage": "after",
+      "state": "single-course",
+      "locale": "fr",
+      "width": 390,
+      "height": 844,
+      "keyboardSkipLink": true,
+      "noOverflow": true,
+      "mobileMenuKeyboard": true
+    },
+    {
+      "stage": "after",
+      "state": "single-course",
+      "locale": "en",
+      "width": 1440,
+      "height": 1000,
+      "keyboardSkipLink": true,
+      "noOverflow": true,
+      "mobileMenuKeyboard": false
+    },
+    {
+      "stage": "after",
+      "state": "single-course",
+      "locale": "en",
+      "width": 390,
+      "height": 844,
+      "keyboardSkipLink": true,
+      "noOverflow": true,
+      "mobileMenuKeyboard": true
+    }
+  ],
+  "destinations": [
+    {
+      "locale": "fr",
+      "courseId": "8515500d-6edf-4337-9d9f-70905fdad004",
+      "courseVersionId": "4535e685-cda8-4558-a504-f86a1b66cff4",
+      "activityId": "0cd22203-9aa8-40ee-9331-c37bd0241b7c",
+      "activityVersionId": "0aa70fbd-17d8-4863-b79c-463248bfd572",
+      "linkedInActualCurriculum": true,
+      "trialHref": "/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01?resource=0cd22203-9aa8-40ee-9331-c37bd0241b7c&version=0aa70fbd-17d8-4863-b79c-463248bfd572&courseVersion=4535e685-cda8-4558-a504-f86a1b66cff4",
+      "courseHref": "/fr/parcours/du-brief-a-la-proposition-commerciale?version=4535e685-cda8-4558-a504-f86a1b66cff4",
+      "keyboardActivated": true,
+      "anonymousTrial": true,
+      "actualFreeDocument": true
+    },
+    {
+      "locale": "en",
+      "courseId": "8515500d-6edf-4337-9d9f-70905fdad004",
+      "courseVersionId": "4535e685-cda8-4558-a504-f86a1b66cff4",
+      "activityId": "0cd22203-9aa8-40ee-9331-c37bd0241b7c",
+      "activityVersionId": "0aa70fbd-17d8-4863-b79c-463248bfd572",
+      "linkedInActualCurriculum": true,
+      "trialHref": "/en/learn/client-brief-to-proposal/proposal-m01?resource=0cd22203-9aa8-40ee-9331-c37bd0241b7c&version=0aa70fbd-17d8-4863-b79c-463248bfd572&courseVersion=4535e685-cda8-4558-a504-f86a1b66cff4",
+      "courseHref": "/en/courses/client-brief-to-proposal?version=4535e685-cda8-4558-a504-f86a1b66cff4",
+      "keyboardActivated": true,
+      "anonymousTrial": true,
+      "actualFreeDocument": true
+    }
+  ],
+  "captures": [
+    "after-empty-fr-1440.png",
+    "after-empty-fr-390.png",
+    "after-empty-fr-390-navigation.png",
+    "after-empty-en-1440.png",
+    "after-empty-en-390.png",
+    "after-empty-en-390-navigation.png",
+    "after-single-course-fr-1440.png",
+    "after-single-course-fr-1440-full.png",
+    "after-single-course-fr-390.png",
+    "after-single-course-fr-390-full.png",
+    "after-single-course-fr-390-navigation.png",
+    "after-single-course-en-1440.png",
+    "after-single-course-en-1440-full.png",
+    "after-single-course-en-390.png",
+    "after-single-course-en-390-full.png",
+    "after-single-course-en-390-navigation.png"
+  ]
+}

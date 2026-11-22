@@ -8,7 +8,7 @@ classification: SOLUTION
 
 # BR01 — One possible proposal with commentary
 
-A learning solution to open deliberately. Viewing it validates no work. Different wording is acceptable when it respects the supplied facts.
+A fictional learning example: Client R and the amounts are case data, never course prices. This solution is written for teaching and is not presented as a response obtained from ChatGPT. Viewing it validates no work. Different wording is acceptable when it respects the supplied facts.
 
 ## One possible proposal
 
@@ -40,6 +40,6 @@ Days 1–2: scoping and outline; 3–7: drafting; 8–10: reading and consolidat
 
 ## Compare without copying
 
-Choose three differences from your work and explain whether each changes a fact, commitment or only wording. Another structure is acceptable if the calculation, conditions and next decision remain explicit. Save your revised version and complete its own assessment; an earlier assessment does not move to the new revision.
+Compare three passages with your work and use the case to justify changing or retaining each one. Do not invent a difference when the passage is already faithful. Another structure is acceptable if the calculation, conditions and next decision remain explicit. If you change the text, save a new revision and complete its own assessment; an earlier assessment does not move to the new revision.
 
 The client-facing proposal must fit within two pages after layout. This file also contains learning commentary to remove; its pagination is not claimed as verified, and no PDF is provided.

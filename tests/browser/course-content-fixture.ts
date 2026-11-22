@@ -8,6 +8,7 @@ import { activityDiscoveryHref, courseActivityHref, resourceHref } from '../../a
 import { contentAction, currentContent, type RecordedContent } from './editorial-api';
 import { loginEditor } from './editorial-fixture';
 import { checkedUuid, commerceSql } from './commerce-fixture';
+import { approveShowcaseContent } from './showcase-selection-fixture';
 
 export type CourseLocale = 'fr' | 'en';
 type ManifestItem = { key: string; kind: string; locale: CourseLocale; sourceFile: string; childKeys: string[]; resourceFileKeys: string[]; solutionFileKeys: string[] };
@@ -42,7 +43,8 @@ function runImport(mode: '--plan' | '--apply', actor: string, manifest: string):
 
 export async function prepareCourseFixture(request: APIRequestContext) {
   const editor = await loginEditor(request);
-  const prepared = spawnSync(process.execPath, [join(process.cwd(), 'scripts/prepare-course-content.mjs')], { cwd: process.cwd(), env: process.env,
+  const preparationPhase = process.env.COURSES_BROWSER_PHASE === 'AUD05' ? ['AUD-05'] : process.env.COURSES_BROWSER_PHASE === 'AUD04' ? ['AUD-04'] : process.env.COURSES_BROWSER_PHASE === 'AUD03' ? ['AUD-03'] : process.env.COURSES_BROWSER_PHASE === 'AUD02' ? ['AUD-02'] : [];
+  const prepared = spawnSync(process.execPath, [join(process.cwd(), 'scripts/prepare-course-content.mjs'), ...preparationPhase], { cwd: process.cwd(), env: process.env,
     windowsHide: true, encoding: 'utf8', timeout: 20000, maxBuffer: 1024 * 1024 });
   if (prepared.status !== 0) throw new Error('Real course preparation failed; no source content or private environment is printed.');
   const directory = realpathSync(join(process.cwd(), '.runtime/content-course-client-proposal')), manifest = join(directory, 'manifest.json');
@@ -108,6 +110,15 @@ export async function publishCourseFixture(request: APIRequestContext, fixture: 
     expect(courseRecord(fixture, key, 'fr').value.versionId).toBe(courseRecord(fixture, key, 'en').value.versionId);
   }
   fixture.published = true;
+}
+export async function approveCourseShowcaseFixture(request: APIRequestContext, fixture: CourseFixture) {
+  if (!fixture.published) throw new Error('The isolated course must be published before its editorial selection simulation.');
+  const order: Record<string, number> = { ACTIVITY: 0, GUIDE: 0, METHOD_TEMPLATE: 0, MODULE: 1, COURSE: 2 };
+  const items = [...fixture.input.items].sort((a, b) => {
+    if (order[a.kind] === undefined || order[b.kind] === undefined) throw new Error('Known isolated course kind required.');
+    return order[a.kind] - order[b.kind] || a.key.localeCompare(b.key) || (a.locale === b.locale ? 0 : a.locale === 'fr' ? -1 : 1);
+  });
+  for (const item of items) await approveShowcaseContent(request, courseRecord(fixture, item.key, item.locale));
 }
 export function grantCourseTestAccess(ownerId: string, fixture: CourseFixture) {
   const course = courseRecord(fixture, 'course-client-proposal', 'fr').value, id = randomUUID(), origin = randomUUID();

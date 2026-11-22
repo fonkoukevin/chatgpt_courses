@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 1,
+  "stage": "after",
+  "browser": "chromium",
+  "browserVersion": "158.0.8127.18",
+  "headless": true,
+  "beforeStageIsCaptureBaselineOnly": false,
+  "finalAssertionsApplied": true,
+  "fixture": "P18 authored FR/EN course, published and explicitly selected only in owned PostgreSQL/S3 tmpfs.",
+  "humanEditorialApproval": false,
+  "sharedContentChanged": false,
+  "providerRequestsExecuted": false,
+  "deployed": false,
+  "localPreparedOrdersOnly": [
+    {
+      "id": "f84a83ee-361c-400c-96a3-dae9620445d9",
+      "offerId": "ddd620ed-d216-46dc-aca2-ff6b4b123ffa",
+      "offerRevision": 2,
+      "acceptedTermsVersion": "p11-test-v1"
+    },
+    {
+      "id": "3842fa48-198d-47ba-9f91-c34b40463175",
+      "offerId": "ddd620ed-d216-46dc-aca2-ff6b4b123ffa",
+      "offerRevision": 2,
+      "acceptedTermsVersion": "p11-test-v1"
+    }
+  ],
+  "testOutcomes": [
+    {
+      "name": "FR/EN course viewport and full-page baseline and final comparison",
+      "status": "passed",
+      "expectedStatus": "passed"
+    },
+    {
+      "name": "one exact offer leads to explicit FR/EN consent and a local pending order without rights",
+      "status": "passed",
+      "expectedStatus": "passed"
+    },
+    {
+      "name": "several exact choices retain filtering and pagination while inactive and changed offers remain honest",
+      "status": "passed",
+      "expectedStatus": "passed"
+    },
+    {
+      "name": "a free first lesson never proves course access; a real temporary test origin resumes then expires",
+      "status": "passed",
+      "expectedStatus": "passed"
+    }
+  ],
+  "observations": [
+    {
+      "check": "course-comparison",
+      "locale": "fr",
+      "width": 1440,
+      "height": 1000,
+      "noOverflow": true,
+      "trialBottom": 498,
+      "courseId": "21e42b40-d199-4ba8-ba5f-2ce4903dd8aa",
+      "versionId": "4e4a28b2-8ac2-49fe-8298-e9263d1dc474",
+      "courseHref": "/fr/parcours/du-brief-a-la-proposition-commerciale?version=4e4a28b2-8ac2-49fe-8298-e9263d1dc474",
+      "activityTitlesAndSummariesPresentedOnce": true
+    },
+    {
+      "check": "keyboard-trial",
+      "locale": "fr",
+      "keyboardActivated": true,
+      "anonymousTrialReadable": true
+    },
+    {
+      "check": "course-comparison",
+      "locale": "fr",
+      "width": 390,
+      "height": 844,
+      "noOverflow": true,
+      "trialBottom": 584.484375,
+      "courseId": "21e42b40-d199-4ba8-ba5f-2ce4903dd8aa",
+      "versionId": "4e4a28b2-8ac2-49fe-8298-e9263d1dc474",
+      "courseHref": "/fr/parcours/du-brief-a-la-proposition-commerciale?version=4e4a28b2-8ac2-49fe-8298-e9263d1dc474",
+      "activityTitlesAndSummariesPresentedOnce": true
+    },
+    {
+      "check": "course-comparison",
+      "locale": "en",
+      "width": 1440,
+      "height": 1000,
+      "noOverflow": true,
+      "trialBottom": 498,
+      "courseId": "21e42b40-d199-4ba8-ba5f-2ce4903dd8aa",
+      "versionId": "4e4a28b2-8ac2-49fe-8298-e9263d1dc474",
+      "courseHref": "/en/courses/client-brief-to-proposal?version=4e4a28b2-8ac2-49fe-8298-e9263d1dc474",
+      "activityTitlesAndSummariesPresentedOnce": true
+    },
+    {
+      "check": "course-comparison",
+      "locale": "en",
+      "width": 390,
+      "height": 844,
+      "noOverflow": true,
+      "trialBottom": 535.234375,
+      "courseId": "21e42b40-d199-4ba8-ba5f-2ce4903dd8aa",
+      "versionId": "4e4a28b2-8ac2-49fe-8298-e9263d1dc474",
+      "courseHref": "/en/courses/client-brief-to-proposal?version=4e4a28b2-8ac2-49fe-8298-e9263d1dc474",
+      "activityTitlesAndSummariesPresentedOnce": true
+    },
+    {
+      "check": "exact-offer-and-local-order",
+      "locale": "fr",
+      "offerId": "ddd620ed-d216-46dc-aca2-ff6b4b123ffa",
+      "offerRevision": 2,
+      "orderId": "f84a83ee-361c-400c-96a3-dae9620445d9",
+      "exactCourseVersion": true,
+      "explicitConsent": true,
+      "keyboardTermsAndOffer": true,
+      "idempotentReplay": true,
+      "noPayment": true,
+      "noRights": true,
+      "returnParameterDoesNotGrant": true
+    },
+    {
+      "check": "exact-offer-and-local-order",
+      "locale": "en",
+      "offerId": "ddd620ed-d216-46dc-aca2-ff6b4b123ffa",
+      "offerRevision": 2,
+      "orderId": "3842fa48-198d-47ba-9f91-c34b40463175",
+      "exactCourseVersion": true,
+      "explicitConsent": true,
+      "keyboardTermsAndOffer": true,
+      "idempotentReplay": true,
+      "noPayment": true,
+      "noRights": true,
+      "returnParameterDoesNotGrant": true
+    },
+    {
+      "check": "explicit-commercial-choice",
+      "locale": "fr",
+      "exactMatchingOffers": 4,
+      "inlineMaximum": 3,
+      "unrelatedExcluded": true,
+      "filteredListAndPaginationPreserved": true
+    },
+    {
+      "check": "explicit-commercial-choice",
+      "locale": "en",
+      "exactMatchingOffers": 4,
+      "inlineMaximum": 3,
+      "unrelatedExcluded": true,
+      "filteredListAndPaginationPreserved": true
+    },
+    {
+      "check": "inactive-and-revised-offers",
+      "inactiveOfferId": "22fdedfe-185b-4a41-9967-2b66ea016ecb",
+      "changedOfferId": "ddd620ed-d216-46dc-aca2-ff6b4b123ffa",
+      "oldRevision": 2,
+      "newRevision": 4,
+      "newPriceMinor": 4599,
+      "changedDisappearsUntilCurrentApproval": true,
+      "oldOrderSnapshotsPreserved": true,
+      "otherIds": [
+        "22fdedfe-185b-4a41-9967-2b66ea016ecb",
+        "594eec47-0c04-4eb5-b609-9db9b3920781"
+      ]
+    },
+    {
+      "check": "access-authority",
+      "locale": "fr",
+      "enrollmentId": "22beba85-9c65-4aa2-8ac6-84c4bdc76e25",
+      "initialFreeActivityReadable": true,
+      "freeActivityNeverProvesCourseRight": true,
+      "origin": "MANUAL_TEST",
+      "grantId": "331dfa2c-601d-4904-968b-5e65a4832f89",
+      "realProtectedDocumentWithActiveGrant": true,
+      "resumeHref": "/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01?resource=8b4a285f-2def-4a3d-88eb-4b49761a86d0&version=02732b85-f59e-4e30-a4c1-db28f87ddf80&courseVersion=4e4a28b2-8ac2-49fe-8298-e9263d1dc474&returnTo=%2Ffr%2Fcatalogue",
+      "naturalExpiryObserved": true,
+      "protectedReadRefusedAfterExpiry": true
+    }
+  ],
+  "captures": [
+    "after-course-fr-1440.png",
+    "after-course-fr-1440-full.png",
+    "after-course-fr-390.png",
+    "after-course-fr-390-full.png",
+    "after-course-en-1440.png",
+    "after-course-en-1440-full.png",
+    "after-course-en-390.png",
+    "after-course-en-390-full.png",
+    "after-single-offer-fr-390.png",
+    "after-local-order-fr-390.png",
+    "after-unpaid-return-fr-390.png",
+    "after-single-offer-en-390.png",
+    "after-local-order-en-390.png",
+    "after-unpaid-return-en-390.png",
+    "after-multiple-choice-fr-390.png",
+    "after-multiple-choice-fr-1440.png",
+    "after-multiple-choice-fr-1440-full.png",
+    "after-filtered-pagination-fr-390.png",
+    "after-multiple-choice-en-390.png",
+    "after-multiple-choice-en-1440.png",
+    "after-multiple-choice-en-1440-full.png",
+    "after-filtered-pagination-en-390.png",
+    "after-inactive-offer-fr-390.png",
+    "after-reapproved-new-price-original-snapshots-fr-390.png",
+    "after-connected-free-preview-no-course-right-fr-1440.png",
+    "after-expired-test-origin-fr-1440.png"
+  ]
+}

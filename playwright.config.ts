@@ -5,7 +5,7 @@ const origin = process.env.COURSES_BROWSER_ORIGIN;
 const evidence = process.env.COURSES_BROWSER_EVIDENCE;
 const results = process.env.COURSES_BROWSER_RESULTS;
 const phase = process.env.COURSES_BROWSER_PHASE ?? 'P01';
-if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14', 'P15', 'P16', 'P16_SEO', 'P17', 'P18', 'P19', 'P19_EXTERNAL'].includes(phase)) throw new Error('Phase navigateur inconnue.');
+if (!['P01', 'P02', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12', 'P12_EXTERNAL', 'P13', 'P14', 'P15', 'P16', 'P16_SEO', 'P17', 'P18', 'P19', 'P19_EXTERNAL', 'AUD01', 'AUD02', 'AUD03', 'AUD04', 'AUD05'].includes(phase)) throw new Error('Phase navigateur inconnue.');
 if (!origin || !evidence || !results || !process.env.COURSES_BROWSER_IPC || !process.env.COURSES_BROWSER_TOKEN) {
   throw new Error('Utiliser scripts/verify-browser.mjs pour réserver les ports et superviser les processus.');
 }
@@ -21,12 +21,12 @@ for (const [base, path] of [[resolve(`docs/evidence/${phase}-browser`), evidence
 export default defineConfig({
   forbidOnly: Boolean(process.env.CI),
   testDir: './tests/browser',
-  testMatch: phase === 'P19' ? '**/release-candidate.spec.ts' : phase === 'P19_EXTERNAL' ? '**/stripe-release-external.spec.ts' : phase === 'P18' ? '**/course-content.spec.ts' : phase === 'P17' ? ['**/quality.spec.ts', '**/quality-performance.spec.ts'] : phase === 'P16_SEO' ? '**/seo.spec.ts' : phase === 'P16' ? '**/bilingual.spec.ts' : phase === 'P15' ? '**/operations.spec.ts' : phase === 'P14' ? '**/account.spec.ts' : phase === 'P13' ? '**/refunds.spec.ts' : phase === 'P12_EXTERNAL' ? '**/stripe-external.spec.ts' : phase === 'P01' ? '**/foundations.spec.ts' : phase === 'P02' ? '**/design-system.spec.ts' : phase === 'P04' ? '**/identity.spec.ts' : phase === 'P05' ? '**/editorial.spec.ts' : phase === 'P06' ? '**/public-site.spec.ts' : phase === 'P07' ? '**/methods.spec.ts' : phase === 'P08' ? '**/learning.spec.ts' : phase === 'P09' ? '**/projects.spec.ts' : phase === 'P10' ? '**/media-storage.spec.ts' : phase === 'P11' ? '**/commerce.spec.ts' : '**/payments.spec.ts',
+  testMatch: phase === 'AUD05' ? '**/aud05-workshop.spec.ts' : phase === 'AUD04' ? '**/aud04-course.spec.ts' : phase === 'AUD03' ? '**/aud03-home.spec.ts' : phase === 'AUD01' ? '**/aud01-showcase.spec.ts' : phase === 'P19' ? '**/release-candidate.spec.ts' : phase === 'P19_EXTERNAL' ? '**/stripe-release-external.spec.ts' : ['P18', 'AUD02'].includes(phase) ? '**/course-content.spec.ts' : phase === 'P17' ? ['**/quality.spec.ts', '**/quality-performance.spec.ts'] : phase === 'P16_SEO' ? '**/seo.spec.ts' : phase === 'P16' ? '**/bilingual.spec.ts' : phase === 'P15' ? '**/operations.spec.ts' : phase === 'P14' ? '**/account.spec.ts' : phase === 'P13' ? '**/refunds.spec.ts' : phase === 'P12_EXTERNAL' ? '**/stripe-external.spec.ts' : phase === 'P01' ? '**/foundations.spec.ts' : phase === 'P02' ? '**/design-system.spec.ts' : phase === 'P04' ? '**/identity.spec.ts' : phase === 'P05' ? '**/editorial.spec.ts' : phase === 'P06' ? '**/public-site.spec.ts' : phase === 'P07' ? '**/methods.spec.ts' : phase === 'P08' ? '**/learning.spec.ts' : phase === 'P09' ? '**/projects.spec.ts' : phase === 'P10' ? '**/media-storage.spec.ts' : phase === 'P11' ? '**/commerce.spec.ts' : '**/payments.spec.ts',
   fullyParallel: false,
   workers: 1, // The outage scenario owns the dedicated API process.
   retries: 0,
-  timeout: ['P18','P19','P19_EXTERNAL'].includes(phase) ? 240_000 : 120_000,
-  globalTimeout: phase.startsWith('P12') || phase === 'P13' || phase === 'P15' || ['P18','P19','P19_EXTERNAL'].includes(phase) ? 1_200_000 : 600_000,
+  timeout: ['P18','P19','P19_EXTERNAL','AUD02','AUD03','AUD04','AUD05'].includes(phase) ? 240_000 : 120_000,
+  globalTimeout: phase.startsWith('P12') || phase === 'P13' || phase === 'P15' || ['P18','P19','P19_EXTERNAL','AUD02','AUD03','AUD04','AUD05'].includes(phase) ? 1_200_000 : 600_000,
   expect: { timeout: 10_000 },
   outputDir: results,
   reporter: ['P12_EXTERNAL','P19_EXTERNAL'].includes(phase)

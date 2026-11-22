@@ -17,7 +17,7 @@ import { editorialContent } from './editorial-content';
 import { csrfHeaders, loginEditor } from './editorial-fixture';
 import { fillMethodLogin, loginMethodAccount, methodLearner } from './methods-fixture';
 import { patchProject, projectRecord } from './projects-fixture';
-import { publishPublicContent } from './public-content-fixture';
+import { publishShowcaseContent } from './public-content-fixture';
 import { privateTextNotStored, qualityCapture, qualityLearner } from './quality-fixture';
 
 const t = getProjectsDictionary('fr');
@@ -192,7 +192,7 @@ test.describe('P17 qualité transversale avec services réels', () => {
     await loginEditor(context.request);
     const command = editorialContent('fr'), payload = '<img src=x onerror="window.__qualityPwned=1">';
     command.kind = 'GUIDE'; command.title = 'P17 texte éditorial littéral'; command.document!.blocks = [{ type: 'PARAGRAPH', text: payload, url: null }];
-    const guide = await publishPublicContent(context.request, await createContent(context.request, command));
+    const guide = await publishShowcaseContent(context.request, await createContent(context.request, command));
     const unsafe = await context.request.post(`/api/v1/admin/contents/${guide.value.id}/revisions`, { headers: { ...await csrfHeaders(context.request), 'If-Match': guide.etag }, data: {
       title: guide.value.title, summary: guide.value.summary, document: { ...guide.value.document!, blocks: [{ type: 'LINK', text: 'Unsafe URL rejected', url: 'javascript:alert(1)' }] }, reason: 'P17 input validation verification',
     } }); expect(unsafe.status()).toBe(400); expect((await currentContent(context.request, guide.value.id)).value.revision).toBe(guide.value.revision);

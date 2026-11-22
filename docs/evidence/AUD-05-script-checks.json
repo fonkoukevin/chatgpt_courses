@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "job": "web",
+  "step": "scripts",
+  "exitCode": 0,
+  "result": "passed",
+  "durationMs": 21687,
+  "tap": {
+    "format": "tap-summary-v1",
+    "counts": {
+      "tests": 188,
+      "suites": 0,
+      "pass": 188,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "durationMs": 21498.3767
+  }
+}

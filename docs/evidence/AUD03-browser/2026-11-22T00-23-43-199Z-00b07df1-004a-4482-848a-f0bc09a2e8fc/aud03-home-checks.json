@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "stage": "before",
+  "browser": "chromium",
+  "browserVersion": "158.0.8127.18",
+  "headless": true,
+  "beforeStageIsCaptureBaselineOnly": true,
+  "finalCtaAssertionsApplied": false,
+  "fixtures": "Prepared P18 course, technically published and explicitly selected only in owned PostgreSQL/S3 tmpfs.",
+  "humanEditorialApproval": false,
+  "sharedContentChanged": false,
+  "financialOperationsExecuted": false,
+  "deployed": false,
+  "observations": [
+    {
+      "stage": "before",
+      "state": "empty",
+      "locale": "fr",
+      "width": 1440,
+      "height": 1000,
+      "keyboardSkipLink": true,
+      "noOverflow": true,
+      "mobileMenuKeyboard": false
+    },
+    {
+      "stage": "before",
+      "state": "empty",
+      "locale": "fr",
+      "width": 390,
+      "height": 844,
+      "keyboardSkipLink": true,
+      "noOverflow": true,
+      "mobileMenuKeyboard": true
+    },
+    {
+      "stage": "before",
+      "state": "empty",
+      "locale": "en",
+      "width": 1440,
+      "height": 1000,
+      "keyboardSkipLink": true,
+      "noOverflow": true,
+      "mobileMenuKeyboard": false
+    },
+    {
+      "stage": "before",
+      "state": "empty",
+      "locale": "en",
+      "width": 390,
+      "height": 844,
+      "keyboardSkipLink": true,
+      "noOverflow": true,
+      "mobileMenuKeyboard": true
+    },
+    {
+      "stage": "before",
+      "state": "single-course",
+      "locale": "fr",
+      "width": 1440,
+      "height": 1000,
+      "keyboardSkipLink": true,
+      "noOverflow": true,
+      "mobileMenuKeyboard": false
+    },
+    {
+      "stage": "before",
+      "state": "single-course",
+      "locale": "fr",
+      "width": 390,
+      "height": 844,
+      "keyboardSkipLink": true,
+      "noOverflow": true,
+      "mobileMenuKeyboard": true
+    },
+    {
+      "stage": "before",
+      "state": "single-course",
+      "locale": "en",
+      "width": 1440,
+      "height": 1000,
+      "keyboardSkipLink": true,
+      "noOverflow": true,
+      "mobileMenuKeyboard": false
+    },
+    {
+      "stage": "before",
+      "state": "single-course",
+      "locale": "en",
+      "width": 390,
+      "height": 844,
+      "keyboardSkipLink": true,
+      "noOverflow": true,
+      "mobileMenuKeyboard": true
+    }
+  ],
+  "destinations": [],
+  "captures": [
+    "before-empty-fr-1440.png",
+    "before-empty-fr-390.png",
+    "before-empty-fr-390-navigation.png",
+    "before-empty-en-1440.png",
+    "before-empty-en-390.png",
+    "before-empty-en-390-navigation.png",
+    "before-single-course-fr-1440.png",
+    "before-single-course-fr-1440-full.png",
+    "before-single-course-fr-390.png",
+    "before-single-course-fr-390-full.png",
+    "before-single-course-fr-390-navigation.png",
+    "before-single-course-en-1440.png",
+    "before-single-course-en-1440-full.png",
+    "before-single-course-en-390.png",
+    "before-single-course-en-390-full.png",
+    "before-single-course-en-390-navigation.png"
+  ]
+}

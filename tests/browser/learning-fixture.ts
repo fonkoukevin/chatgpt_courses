@@ -4,7 +4,7 @@ import type { CreateContent, EnrollmentView, QuizAttemptView, QuizCheckResult } 
 import { editorialContent } from './editorial-content';
 import { csrfHeaders, loginEditor } from './editorial-fixture';
 import { contentAction, createContent, currentContent, type RecordedContent } from './editorial-api';
-import { publishPublicContent } from './public-content-fixture';
+import { publishShowcaseContent } from './public-content-fixture';
 import { courseActivityHref } from '../../apps/web/src/lib/public/routes';
 
 type Locale = 'fr' | 'en';
@@ -34,10 +34,10 @@ export async function createLearningFixture(request: APIRequestContext) {
     const command = learningContent('fr', protectedBody ? 'PROTECTED' : 'FREE');
     command.kind = kind; command.title = title.fr; command.slug = `${marker}-${kind.toLowerCase().replace('_', '-')}-${randomUUID()}-fr`; command.childVersionIds = children;
     if (protectedBody) command.document.blocks = [{ type: 'PARAGRAPH', text: secret, url: null }];
-    let fr = await publishPublicContent(request, await createContent(request, command));
+    let fr = await publishShowcaseContent(request, await createContent(request, command));
     const enCommand = learningContent('en', protectedBody ? 'PROTECTED' : 'FREE');
     if (protectedBody) enCommand.document.blocks = [{ type: 'PARAGRAPH', text: secret, url: null }];
-    const en = await publishPublicContent(request, await contentAction(request, fr, 'translations', { locale: 'en', slug: `${marker}-${kind.toLowerCase().replace('_', '-')}-${randomUUID()}-en`, title: title.en,
+    const en = await publishShowcaseContent(request, await contentAction(request, fr, 'translations', { locale: 'en', slug: `${marker}-${kind.toLowerCase().replace('_', '-')}-${randomUUID()}-en`, title: title.en,
       summary: 'P08 fictional disposable BR01 verification', document: enCommand.document, reason: 'P08 explicit equivalent English fixture' }, 201));
     fr = await currentContent(request, fr.value.id);
     return { fr, en };

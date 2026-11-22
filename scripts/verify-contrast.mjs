@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { root } from './lib/runtime.mjs';
 
 const phase = process.argv[2] ?? 'P02';
-if (!/^P\d{2}$/.test(phase) || process.argv.length > 3) throw new Error('Phase attendue : P00 à P99.');
+if (!/^(?:P\d{2}|AUD-0[345])$/.test(phase) || process.argv.length > 3) throw new Error('Phase attendue : P00 à P99 ou AUD-03/AUD-04/AUD-05.');
 const evidenceFile = join(root, `docs/evidence/${phase}-contrast.json`);
 
 const source = readFileSync(join(root, 'references/design-tokens.css'), 'utf8');
@@ -21,6 +21,7 @@ const pairs = [
   ['muted-foreground', 'surface', 4.5], ['muted-foreground', 'surface-subtle', 4.5],
   ['muted-foreground', 'surface-hover', 4.5], ['background', 'brand', 4.5],
   ['background', 'brand-hover', 4.5], ['brand', 'brand-soft', 4.5],
+  ['brand', 'surface', 4.5], ['brand', 'surface-subtle', 4.5],
   ['link', 'surface', 4.5], ['link', 'surface-subtle', 4.5],
   ['success', 'success-soft', 4.5], ['warning', 'warning-soft', 4.5],
   ['danger', 'danger-soft', 4.5], ['background', 'danger', 4.5],

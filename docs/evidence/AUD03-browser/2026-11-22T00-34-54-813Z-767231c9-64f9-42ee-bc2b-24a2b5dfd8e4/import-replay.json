@@ -1,0 +1,386 @@
+{
+  "mode": "APPLY",
+  "namespace": "course-client-proposal",
+  "items": [
+    {
+      "key": "activity-m01",
+      "locale": "fr",
+      "state": "UNCHANGED",
+      "translationId": "73b91a55-422a-4a6b-a7a9-daf92544a667",
+      "resourceId": "0cd22203-9aa8-40ee-9331-c37bd0241b7c",
+      "versionId": "0aa70fbd-17d8-4863-b79c-463248bfd572",
+      "revisionId": "192febd5-e87e-417b-9e1d-bb3f59cd20b5"
+    },
+    {
+      "key": "activity-m01",
+      "locale": "en",
+      "state": "UNCHANGED",
+      "translationId": "8ffa2105-5297-4696-857c-1ce37ce69a16",
+      "resourceId": "0cd22203-9aa8-40ee-9331-c37bd0241b7c",
+      "versionId": "0aa70fbd-17d8-4863-b79c-463248bfd572",
+      "revisionId": "7d8d8e8e-aac8-4018-ab5f-67624ca29f0a"
+    },
+    {
+      "key": "activity-m02",
+      "locale": "fr",
+      "state": "UNCHANGED",
+      "translationId": "9eb146f7-391f-4e21-8438-8a6c5ef0ff3a",
+      "resourceId": "596d6116-2458-444f-8622-b6b8536ba0ab",
+      "versionId": "753ca011-ba58-44a9-8101-4f0a95a493ae",
+      "revisionId": "87fa034f-7056-438c-9d44-d28ef7216e51"
+    },
+    {
+      "key": "activity-m02",
+      "locale": "en",
+      "state": "UNCHANGED",
+      "translationId": "f3ee3291-35c5-4e53-abaa-87ea4c1cd4ba",
+      "resourceId": "596d6116-2458-444f-8622-b6b8536ba0ab",
+      "versionId": "753ca011-ba58-44a9-8101-4f0a95a493ae",
+      "revisionId": "0f3f68ff-00f6-40c0-a69a-5b1dd31e5ab6"
+    },
+    {
+      "key": "activity-m03",
+      "locale": "fr",
+      "state": "UNCHANGED",
+      "translationId": "90a0daa5-3cff-4cb5-b7fb-29b209de3ec9",
+      "resourceId": "9b5b3a54-befc-470b-8d27-2deec8d970b9",
+      "versionId": "0e47f6df-e94f-4547-b5b6-6f8529058374",
+      "revisionId": "8ac8ef68-5fdb-4675-aaf6-7fab55e325af"
+    },
+    {
+      "key": "activity-m03",
+      "locale": "en",
+      "state": "UNCHANGED",
+      "translationId": "a2472492-e3d3-4819-86ae-5e5f476a9290",
+      "resourceId": "9b5b3a54-befc-470b-8d27-2deec8d970b9",
+      "versionId": "0e47f6df-e94f-4547-b5b6-6f8529058374",
+      "revisionId": "7cc3bf89-0812-4f30-a6a0-70276c9284a7"
+    },
+    {
+      "key": "activity-m04",
+      "locale": "fr",
+      "state": "UNCHANGED",
+      "translationId": "519d93a5-935b-47fa-8d84-f879b1506786",
+      "resourceId": "edef406a-047c-4480-9fd9-e2ea273be78d",
+      "versionId": "3897c315-02c8-4740-9191-1dbfda92b746",
+      "revisionId": "682793f9-dff3-4878-b554-677a1c043262"
+    },
+    {
+      "key": "activity-m04",
+      "locale": "en",
+      "state": "UNCHANGED",
+      "translationId": "2afe081f-8034-41c8-ae22-4eeeda9e551b",
+      "resourceId": "edef406a-047c-4480-9fd9-e2ea273be78d",
+      "versionId": "3897c315-02c8-4740-9191-1dbfda92b746",
+      "revisionId": "5d746535-5909-4f32-a699-5be71ce02f02"
+    },
+    {
+      "key": "activity-m05",
+      "locale": "fr",
+      "state": "UNCHANGED",
+      "translationId": "1926d958-88c9-41f4-bf33-5252529a786e",
+      "resourceId": "3978ff74-3049-48d5-a74e-bb5d8ecc62cc",
+      "versionId": "475a2aeb-d116-46c7-a31b-6f086e25fea6",
+      "revisionId": "d97e7232-e1ac-4fcf-9e8c-97c82e62f25c"
+    },
+    {
+      "key": "activity-m05",
+      "locale": "en",
+      "state": "UNCHANGED",
+      "translationId": "07b72075-69b4-44ad-9019-eaa5df0d279c",
+      "resourceId": "3978ff74-3049-48d5-a74e-bb5d8ecc62cc",
+      "versionId": "475a2aeb-d116-46c7-a31b-6f086e25fea6",
+      "revisionId": "b76dfa8f-ba23-4641-b0e6-71bee5eccaf9"
+    },
+    {
+      "key": "activity-m06",
+      "locale": "fr",
+      "state": "UNCHANGED",
+      "translationId": "282f829e-ac3c-48a1-82b8-961b33204243",
+      "resourceId": "78ae9538-ca81-4e2f-a877-39f8f50b88df",
+      "versionId": "d8fe62bb-9ff7-4419-aff4-bf30f7593c7a",
+      "revisionId": "0719f24f-675b-4b6f-91c2-fa84f73517d6"
+    },
+    {
+      "key": "activity-m06",
+      "locale": "en",
+      "state": "UNCHANGED",
+      "translationId": "7b33df0e-8584-499e-9599-972664bbcb35",
+      "resourceId": "78ae9538-ca81-4e2f-a877-39f8f50b88df",
+      "versionId": "d8fe62bb-9ff7-4419-aff4-bf30f7593c7a",
+      "revisionId": "395a3f49-3c3f-408f-a7b0-4822505266c3"
+    },
+    {
+      "key": "method-client-proposal",
+      "locale": "fr",
+      "state": "UNCHANGED",
+      "translationId": "2a3bc635-1e98-43d9-a2da-59a78956096d",
+      "resourceId": "bee7feb2-52d3-44b1-8bf1-f7cf6107d799",
+      "versionId": "8f4daf27-0ace-40f3-91c4-9552c6f5d95d",
+      "revisionId": "5a28fe52-77da-4cb4-ab8c-4c1f9d367381"
+    },
+    {
+      "key": "method-client-proposal",
+      "locale": "en",
+      "state": "UNCHANGED",
+      "translationId": "d49af6c9-f379-45c4-8f33-dd55fac93d69",
+      "resourceId": "bee7feb2-52d3-44b1-8bf1-f7cf6107d799",
+      "versionId": "8f4daf27-0ace-40f3-91c4-9552c6f5d95d",
+      "revisionId": "0bbb09b2-4f4a-4e32-b3dd-46db2e4633ff"
+    },
+    {
+      "key": "module-m01",
+      "locale": "fr",
+      "state": "UNCHANGED",
+      "translationId": "3c6d8cc5-81c4-4c45-af80-77d9edb7b98d",
+      "resourceId": "85b47d75-f817-4db7-b331-23d2a26608a7",
+      "versionId": "c416e4fb-ba9f-49d5-9ee7-1f92776472e0",
+      "revisionId": "e966680e-a03d-4bf3-9753-93406a0a7a3a"
+    },
+    {
+      "key": "module-m01",
+      "locale": "en",
+      "state": "UNCHANGED",
+      "translationId": "56300b42-f045-44f8-acce-7ed93e4ecbd2",
+      "resourceId": "85b47d75-f817-4db7-b331-23d2a26608a7",
+      "versionId": "c416e4fb-ba9f-49d5-9ee7-1f92776472e0",
+      "revisionId": "1ea51466-39e7-449b-ad86-beb95814d8ad"
+    },
+    {
+      "key": "module-m02",
+      "locale": "fr",
+      "state": "UNCHANGED",
+      "translationId": "b5df9253-8aea-4745-84d2-1c6845f8b766",
+      "resourceId": "3a8665b9-01fb-4c59-9976-48c89c071bf1",
+      "versionId": "446979df-0d6d-4b6c-b288-8fe8bf0d71b3",
+      "revisionId": "63784395-4ea9-4435-957b-cbb7135bf4f7"
+    },
+    {
+      "key": "module-m02",
+      "locale": "en",
+      "state": "UNCHANGED",
+      "translationId": "bd197795-e287-4e5e-9dee-87b6cdedb867",
+      "resourceId": "3a8665b9-01fb-4c59-9976-48c89c071bf1",
+      "versionId": "446979df-0d6d-4b6c-b288-8fe8bf0d71b3",
+      "revisionId": "1b936d89-a469-40f1-b32c-f087028390c9"
+    },
+    {
+      "key": "module-m03",
+      "locale": "fr",
+      "state": "UNCHANGED",
+      "translationId": "444a987a-9bf8-4f49-a884-19ff078a0774",
+      "resourceId": "5148625c-be22-4cc8-b985-ee21f7ed8662",
+      "versionId": "ebc08c91-b462-4a4e-ae33-6465058a0243",
+      "revisionId": "64ca4d6d-5673-440a-8c54-862b953a6860"
+    },
+    {
+      "key": "module-m03",
+      "locale": "en",
+      "state": "UNCHANGED",
+      "translationId": "120b7fc4-e969-45b1-bb53-05f06f37b145",
+      "resourceId": "5148625c-be22-4cc8-b985-ee21f7ed8662",
+      "versionId": "ebc08c91-b462-4a4e-ae33-6465058a0243",
+      "revisionId": "8a943ac3-e8ba-40f2-a208-394fc7c8030d"
+    },
+    {
+      "key": "module-m04",
+      "locale": "fr",
+      "state": "UNCHANGED",
+      "translationId": "7c1cdb70-8e5c-4524-897d-91031dd83b40",
+      "resourceId": "16c2e289-37ab-4d59-a33e-d436626bb34c",
+      "versionId": "f674da57-bf40-437e-8a95-cf40f2380b15",
+      "revisionId": "0bfa13d1-2a65-4b49-a450-8f7d9838af4d"
+    },
+    {
+      "key": "module-m04",
+      "locale": "en",
+      "state": "UNCHANGED",
+      "translationId": "f948dbd6-fe2f-4669-ac37-0ea919e2dea2",
+      "resourceId": "16c2e289-37ab-4d59-a33e-d436626bb34c",
+      "versionId": "f674da57-bf40-437e-8a95-cf40f2380b15",
+      "revisionId": "7ccf5156-7244-41a6-913c-28fe909d49e4"
+    },
+    {
+      "key": "module-m05",
+      "locale": "fr",
+      "state": "UNCHANGED",
+      "translationId": "9d134e78-947c-49ba-9d54-cd830bb394bb",
+      "resourceId": "291a597f-44c1-4bec-bc77-39109ab28ca5",
+      "versionId": "895b9bad-800f-4598-87a0-74d528e4d80b",
+      "revisionId": "7ca0537a-94aa-4399-bba0-4de635e87d06"
+    },
+    {
+      "key": "module-m05",
+      "locale": "en",
+      "state": "UNCHANGED",
+      "translationId": "dd21f723-1c43-41e6-aadc-5cfc59e43dd9",
+      "resourceId": "291a597f-44c1-4bec-bc77-39109ab28ca5",
+      "versionId": "895b9bad-800f-4598-87a0-74d528e4d80b",
+      "revisionId": "aa75e3d6-c9f0-4710-afbf-09e928912a5c"
+    },
+    {
+      "key": "module-m06",
+      "locale": "fr",
+      "state": "UNCHANGED",
+      "translationId": "05a42dd3-9c70-4990-8604-006ee846f8f6",
+      "resourceId": "fd26a98b-5d1e-470e-bba0-bc80108f2716",
+      "versionId": "ca95e5f8-5b65-4cc0-822a-97f3f3a56bb6",
+      "revisionId": "a9ae04c7-7eb8-402e-b1ca-7455189778a0"
+    },
+    {
+      "key": "module-m06",
+      "locale": "en",
+      "state": "UNCHANGED",
+      "translationId": "5489b59e-d446-4e2a-a175-74f5b9e5114b",
+      "resourceId": "fd26a98b-5d1e-470e-bba0-bc80108f2716",
+      "versionId": "ca95e5f8-5b65-4cc0-822a-97f3f3a56bb6",
+      "revisionId": "88ca33db-b1a7-4c6f-a5e3-50605000c86b"
+    },
+    {
+      "key": "course-client-proposal",
+      "locale": "fr",
+      "state": "UNCHANGED",
+      "translationId": "58680b68-33c2-48a0-b29f-4ae709ab1e59",
+      "resourceId": "8515500d-6edf-4337-9d9f-70905fdad004",
+      "versionId": "4535e685-cda8-4558-a504-f86a1b66cff4",
+      "revisionId": "6ff41ac5-9f3c-4345-974d-3892ced2e110"
+    },
+    {
+      "key": "course-client-proposal",
+      "locale": "en",
+      "state": "UNCHANGED",
+      "translationId": "d4d35f69-0339-4247-8f83-40538fac396d",
+      "resourceId": "8515500d-6edf-4337-9d9f-70905fdad004",
+      "versionId": "4535e685-cda8-4558-a504-f86a1b66cff4",
+      "revisionId": "ea844a2c-0b63-4a26-9bdc-ffd5a2b7a329"
+    }
+  ],
+  "files": [
+    {
+      "key": "br01-tr01",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": "d4cb65ec-40b8-499e-9483-594754879ae5",
+      "state": "READY"
+    },
+    {
+      "key": "scoping-table",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": "85840e36-a89d-44c3-877f-a6efeb6c9203",
+      "state": "READY"
+    },
+    {
+      "key": "prompt-method",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": "94e58582-02a1-4a94-bd9e-1fc8743be2c1",
+      "state": "READY"
+    },
+    {
+      "key": "proposal-template",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": "72427ced-d294-45f3-9e8f-16e80bcd1daf",
+      "state": "READY"
+    },
+    {
+      "key": "assessment-grid-br01",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": "14e4281e-c812-4fcc-9b23-32d6774c2d03",
+      "state": "READY"
+    },
+    {
+      "key": "commented-solution-br01",
+      "locale": "fr",
+      "purpose": "SOLUTION",
+      "assetId": "04510a91-1996-4b88-97d7-f189a4a7ffc6",
+      "state": "READY"
+    },
+    {
+      "key": "br02",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": "056016e1-85d7-4fc9-b300-ff237e36a7bb",
+      "state": "READY"
+    },
+    {
+      "key": "commented-solution-br02",
+      "locale": "fr",
+      "purpose": "SOLUTION",
+      "assetId": "55c5ff9a-a3dc-4484-aa1c-2bdc80a653fc",
+      "state": "READY"
+    },
+    {
+      "key": "presentation-emails",
+      "locale": "fr",
+      "purpose": "RESOURCE",
+      "assetId": "e1c10e26-a382-4c37-a248-b2438ccb9d45",
+      "state": "READY"
+    },
+    {
+      "key": "br01-tr01",
+      "locale": "en",
+      "purpose": "RESOURCE",
+      "assetId": "be4abf3f-3585-426f-abe5-411f7f26e6db",
+      "state": "READY"
+    },
+    {
+      "key": "scoping-table",
+      "locale": "en",
+      "purpose": "RESOURCE",
+      "assetId": "dea95a34-4827-41a9-ada0-ed2799fe9793",
+      "state": "READY"
+    },
+    {
+      "key": "prompt-method",
+      "locale": "en",
+      "purpose": "RESOURCE",
+      "assetId": "9d208407-ea20-4eb2-a220-c13a6870cc71",
+      "state": "READY"
+    },
+    {
+      "key": "proposal-template",
+      "locale": "en",
+      "purpose": "RESOURCE",
+      "assetId": "9b953c37-eeea-48cf-aa9a-fbfc547847ac",
+      "state": "READY"
+    },
+    {
+      "key": "assessment-grid-br01",
+      "locale": "en",
+      "purpose": "RESOURCE",
+      "assetId": "b8d2d177-1ab3-463f-a5f4-17a2d2063932",
+      "state": "READY"
+    },
+    {
+      "key": "commented-solution-br01",
+      "locale": "en",
+      "purpose": "SOLUTION",
+      "assetId": "4b375256-d34f-467f-93d5-109aaf8f0e7c",
+      "state": "READY"
+    },
+    {
+      "key": "br02",
+      "locale": "en",
+      "purpose": "RESOURCE",
+      "assetId": "c225ecda-0202-4325-beb7-fd1271bcf4ee",
+      "state": "READY"
+    },
+    {
+      "key": "commented-solution-br02",
+      "locale": "en",
+      "purpose": "SOLUTION",
+      "assetId": "7e4dd077-6f11-4bc5-a597-ec298b709962",
+      "state": "READY"
+    },
+    {
+      "key": "presentation-emails",
+      "locale": "en",
+      "purpose": "RESOURCE",
+      "assetId": "b2cbbc43-23ac-4c2d-ae4f-30d8d7f7047b",
+      "state": "READY"
+    }
+  ]
+}

@@ -1,0 +1,2003 @@
+{
+  "schemaVersion": 1,
+  "audit": "AUD-04",
+  "result": "validated-locally",
+  "completedAt": "2026-11-22T06:54:18.964Z",
+  "courseRuns": [
+    {
+      "schemaVersion": 1,
+      "audit": "AUD-04",
+      "stage": "before",
+      "result": "passed",
+      "exitCode": 0,
+      "startedAt": "2026-11-22T06:35:44.685Z",
+      "completedAt": "2026-11-22T06:38:09.096Z",
+      "evidence": "docs/evidence/AUD04-browser/2026-11-22T06-35-44-959Z-3359c2d1-1970-4ac4-bb37-6f328291d612",
+      "buildId": "7p1OvLVUm0iC24HO4CIsK",
+      "apiJarSha256": "5c4fcfee01f89a46345bf157d14e8db6ffabbc0a82cfaf3ea982e584d7ab754b",
+      "stats": {
+        "startTime": "2026-11-22T06:36:26.761Z",
+        "duration": 77870.893,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "cleanupConfirmed": true,
+      "historicalProofsPreserved": true,
+      "historicalProofHashes": {
+        "docs/evidence/AUD-02-checks.json": "19e29857c74bbbfd2e2b64802c81c68c2a80bf3b333a7a16c488bc1923f55766",
+        "docs/evidence/AUD-02-content-checks-initial.json": "96f807c91633dc476574bfdd69da4490ca37426318e3cd9e72976bc901d7176e",
+        "docs/evidence/AUD-02-content-checks.json": "b10af245862d6ae821de1c65205e5b4cabfd7bb261b27c1a010d47fb90f745ee",
+        "docs/evidence/AUD-02-content-preparation-initial.json": "1e88706a2accb6ed8f731ddae5a841c9abd1454e87bb51bf38f8a167142ad3e4",
+        "docs/evidence/AUD-02-content-preparation.json": "ecfb202b6e7ef6ca4dcdcea5ec5b481b52a35ef5397659a676f841075dc519ee",
+        "docs/evidence/AUD-03-checks.json": "2f3bc00630b963604f8ca342bd02cf668f627730fb4a5394e476b2028abe4190",
+        "docs/evidence/AUD-03-content-preparation-before.json": "d12d0247dd9cb5bd727d3a353cd2b9cf07396a4e874735473df6404bff49918b",
+        "docs/evidence/AUD-03-content-preparation.json": "51f2bbf21fb5b39cc885824cb7ad0e9ff0b856d6057ad88e9a9dd621d1be6330",
+        "docs/evidence/AUD-03-contrast.json": "63bde2a782506d70234a4bd404a5d790fcb6fe22b4a6ad6017238857282d77de",
+        "docs/evidence/AUD-03-script-checks.json": "6b2c9274b5cf0c05ba7d16cf1cc303d47df45d4ddc325ef4c0cf2f482225c702",
+        "docs/evidence/P18-content-checks-first.json": "1cc80427a324f92241d7528ce0564b0e200ed69dc0f0fc297617ec07c998f741",
+        "docs/evidence/P18-content-checks.json": "24238e037c0c60353c4d5aafd2500081f07861dcffbe68d41c4afeea2d390ff9",
+        "docs/evidence/P18-content-m04-m06-checks.json": "8746f59b7d200c058e7b0c9369b82ffccac125b1fea71e88b4685ae667ca5e71",
+        "docs/evidence/P19-content-checks.json": "772c4abcdcdc229a37bdea2f516ece94c27357b2951fe586d213c7ca0288092d"
+      },
+      "userNextFilePreserved": true,
+      "userNextFileSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+      "isolatedEnvironment": true,
+      "providerCredentialsLoaded": false,
+      "deployed": false,
+      "sharedDatabaseTouched": false,
+      "receiptSha256": "94b9cc1a4e194a7a04c2c20e9dacafaf0fedc5c3b6079842c0d93000470db186"
+    },
+    {
+      "schemaVersion": 1,
+      "audit": "AUD-04",
+      "stage": "after",
+      "result": "failed",
+      "exitCode": 1,
+      "startedAt": "2026-11-22T06:41:04.923Z",
+      "completedAt": "2026-11-22T06:44:07.115Z",
+      "evidence": "docs/evidence/AUD04-browser/2026-11-22T06-41-05-772Z-708febe9-c0a4-4272-8215-34c96daca2c2",
+      "buildId": "YftLka1qhEFjLC39oRrxq",
+      "apiJarSha256": "2cbb814c24e1d3a8068debf52aa5af8096d26c2066134f48ea73de3bd09cf9da",
+      "stats": {
+        "startTime": "2026-11-22T06:42:08.473Z",
+        "duration": 92535.237,
+        "expected": 0,
+        "skipped": 3,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "cleanupConfirmed": true,
+      "historicalProofsPreserved": true,
+      "historicalProofHashes": {
+        "docs/evidence/AUD-02-checks.json": "19e29857c74bbbfd2e2b64802c81c68c2a80bf3b333a7a16c488bc1923f55766",
+        "docs/evidence/AUD-02-content-checks-initial.json": "96f807c91633dc476574bfdd69da4490ca37426318e3cd9e72976bc901d7176e",
+        "docs/evidence/AUD-02-content-checks.json": "b10af245862d6ae821de1c65205e5b4cabfd7bb261b27c1a010d47fb90f745ee",
+        "docs/evidence/AUD-02-content-preparation-initial.json": "1e88706a2accb6ed8f731ddae5a841c9abd1454e87bb51bf38f8a167142ad3e4",
+        "docs/evidence/AUD-02-content-preparation.json": "ecfb202b6e7ef6ca4dcdcea5ec5b481b52a35ef5397659a676f841075dc519ee",
+        "docs/evidence/AUD-03-checks.json": "2f3bc00630b963604f8ca342bd02cf668f627730fb4a5394e476b2028abe4190",
+        "docs/evidence/AUD-03-content-preparation-before.json": "d12d0247dd9cb5bd727d3a353cd2b9cf07396a4e874735473df6404bff49918b",
+        "docs/evidence/AUD-03-content-preparation.json": "51f2bbf21fb5b39cc885824cb7ad0e9ff0b856d6057ad88e9a9dd621d1be6330",
+        "docs/evidence/AUD-03-contrast.json": "63bde2a782506d70234a4bd404a5d790fcb6fe22b4a6ad6017238857282d77de",
+        "docs/evidence/AUD-03-script-checks.json": "6b2c9274b5cf0c05ba7d16cf1cc303d47df45d4ddc325ef4c0cf2f482225c702",
+        "docs/evidence/P18-content-checks-first.json": "1cc80427a324f92241d7528ce0564b0e200ed69dc0f0fc297617ec07c998f741",
+        "docs/evidence/P18-content-checks.json": "24238e037c0c60353c4d5aafd2500081f07861dcffbe68d41c4afeea2d390ff9",
+        "docs/evidence/P18-content-m04-m06-checks.json": "8746f59b7d200c058e7b0c9369b82ffccac125b1fea71e88b4685ae667ca5e71",
+        "docs/evidence/P19-content-checks.json": "772c4abcdcdc229a37bdea2f516ece94c27357b2951fe586d213c7ca0288092d"
+      },
+      "userNextFilePreserved": true,
+      "userNextFileSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+      "isolatedEnvironment": true,
+      "providerCredentialsLoaded": false,
+      "deployed": false,
+      "sharedDatabaseTouched": false,
+      "receiptSha256": "4f1b8b3b4b2115a2407e22b11ef6a307dd156f5815bb363be89a77160298f8c3"
+    },
+    {
+      "schemaVersion": 1,
+      "audit": "AUD-04",
+      "stage": "after",
+      "result": "failed",
+      "exitCode": 1,
+      "startedAt": "2026-11-22T06:44:24.111Z",
+      "completedAt": "2026-11-22T06:47:01.363Z",
+      "evidence": "docs/evidence/AUD04-browser/2026-11-22T06-44-24-872Z-ae6aaafc-8c08-41b4-bf19-3ee1d77a159f",
+      "buildId": "YftLka1qhEFjLC39oRrxq",
+      "apiJarSha256": "2cbb814c24e1d3a8068debf52aa5af8096d26c2066134f48ea73de3bd09cf9da",
+      "stats": {
+        "startTime": "2026-11-22T06:45:02.716Z",
+        "duration": 96620.36200000001,
+        "expected": 1,
+        "skipped": 2,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "cleanupConfirmed": true,
+      "historicalProofsPreserved": true,
+      "historicalProofHashes": {
+        "docs/evidence/AUD-02-checks.json": "19e29857c74bbbfd2e2b64802c81c68c2a80bf3b333a7a16c488bc1923f55766",
+        "docs/evidence/AUD-02-content-checks-initial.json": "96f807c91633dc476574bfdd69da4490ca37426318e3cd9e72976bc901d7176e",
+        "docs/evidence/AUD-02-content-checks.json": "b10af245862d6ae821de1c65205e5b4cabfd7bb261b27c1a010d47fb90f745ee",
+        "docs/evidence/AUD-02-content-preparation-initial.json": "1e88706a2accb6ed8f731ddae5a841c9abd1454e87bb51bf38f8a167142ad3e4",
+        "docs/evidence/AUD-02-content-preparation.json": "ecfb202b6e7ef6ca4dcdcea5ec5b481b52a35ef5397659a676f841075dc519ee",
+        "docs/evidence/AUD-03-checks.json": "2f3bc00630b963604f8ca342bd02cf668f627730fb4a5394e476b2028abe4190",
+        "docs/evidence/AUD-03-content-preparation-before.json": "d12d0247dd9cb5bd727d3a353cd2b9cf07396a4e874735473df6404bff49918b",
+        "docs/evidence/AUD-03-content-preparation.json": "51f2bbf21fb5b39cc885824cb7ad0e9ff0b856d6057ad88e9a9dd621d1be6330",
+        "docs/evidence/AUD-03-contrast.json": "63bde2a782506d70234a4bd404a5d790fcb6fe22b4a6ad6017238857282d77de",
+        "docs/evidence/AUD-03-script-checks.json": "6b2c9274b5cf0c05ba7d16cf1cc303d47df45d4ddc325ef4c0cf2f482225c702",
+        "docs/evidence/P18-content-checks-first.json": "1cc80427a324f92241d7528ce0564b0e200ed69dc0f0fc297617ec07c998f741",
+        "docs/evidence/P18-content-checks.json": "24238e037c0c60353c4d5aafd2500081f07861dcffbe68d41c4afeea2d390ff9",
+        "docs/evidence/P18-content-m04-m06-checks.json": "8746f59b7d200c058e7b0c9369b82ffccac125b1fea71e88b4685ae667ca5e71",
+        "docs/evidence/P19-content-checks.json": "772c4abcdcdc229a37bdea2f516ece94c27357b2951fe586d213c7ca0288092d"
+      },
+      "userNextFilePreserved": true,
+      "userNextFileSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+      "isolatedEnvironment": true,
+      "providerCredentialsLoaded": false,
+      "deployed": false,
+      "sharedDatabaseTouched": false,
+      "receiptSha256": "dc0fd6d4d98c3bea0f59ae36a0bcfc809b7c99a6a7eb81687e68857b0209f726"
+    },
+    {
+      "schemaVersion": 1,
+      "audit": "AUD-04",
+      "stage": "after",
+      "result": "passed",
+      "exitCode": 0,
+      "startedAt": "2026-11-22T06:49:24.805Z",
+      "completedAt": "2026-11-22T06:53:00.266Z",
+      "evidence": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062",
+      "buildId": "GCKh9-DsPpkudW7iHVCtD",
+      "apiJarSha256": "2cbb814c24e1d3a8068debf52aa5af8096d26c2066134f48ea73de3bd09cf9da",
+      "stats": {
+        "startTime": "2026-11-22T06:50:18.532Z",
+        "duration": 141998.295,
+        "expected": 4,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "cleanupConfirmed": true,
+      "historicalProofsPreserved": true,
+      "historicalProofHashes": {
+        "docs/evidence/AUD-02-checks.json": "19e29857c74bbbfd2e2b64802c81c68c2a80bf3b333a7a16c488bc1923f55766",
+        "docs/evidence/AUD-02-content-checks-initial.json": "96f807c91633dc476574bfdd69da4490ca37426318e3cd9e72976bc901d7176e",
+        "docs/evidence/AUD-02-content-checks.json": "b10af245862d6ae821de1c65205e5b4cabfd7bb261b27c1a010d47fb90f745ee",
+        "docs/evidence/AUD-02-content-preparation-initial.json": "1e88706a2accb6ed8f731ddae5a841c9abd1454e87bb51bf38f8a167142ad3e4",
+        "docs/evidence/AUD-02-content-preparation.json": "ecfb202b6e7ef6ca4dcdcea5ec5b481b52a35ef5397659a676f841075dc519ee",
+        "docs/evidence/AUD-03-checks.json": "2f3bc00630b963604f8ca342bd02cf668f627730fb4a5394e476b2028abe4190",
+        "docs/evidence/AUD-03-content-preparation-before.json": "d12d0247dd9cb5bd727d3a353cd2b9cf07396a4e874735473df6404bff49918b",
+        "docs/evidence/AUD-03-content-preparation.json": "51f2bbf21fb5b39cc885824cb7ad0e9ff0b856d6057ad88e9a9dd621d1be6330",
+        "docs/evidence/AUD-03-contrast.json": "63bde2a782506d70234a4bd404a5d790fcb6fe22b4a6ad6017238857282d77de",
+        "docs/evidence/AUD-03-script-checks.json": "6b2c9274b5cf0c05ba7d16cf1cc303d47df45d4ddc325ef4c0cf2f482225c702",
+        "docs/evidence/P18-content-checks-first.json": "1cc80427a324f92241d7528ce0564b0e200ed69dc0f0fc297617ec07c998f741",
+        "docs/evidence/P18-content-checks.json": "24238e037c0c60353c4d5aafd2500081f07861dcffbe68d41c4afeea2d390ff9",
+        "docs/evidence/P18-content-m04-m06-checks.json": "8746f59b7d200c058e7b0c9369b82ffccac125b1fea71e88b4685ae667ca5e71",
+        "docs/evidence/P19-content-checks.json": "772c4abcdcdc229a37bdea2f516ece94c27357b2951fe586d213c7ca0288092d"
+      },
+      "userNextFilePreserved": true,
+      "userNextFileSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+      "isolatedEnvironment": true,
+      "providerCredentialsLoaded": false,
+      "deployed": false,
+      "sharedDatabaseTouched": false,
+      "receiptSha256": "2cfdfb27f6636c2b15c700290c23e2732e696092568066120c68c1d4ea6b7168"
+    }
+  ],
+  "finalEvidenceDirectory": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062",
+  "browserFinal": {
+    "passed": 4,
+    "skipped": 0,
+    "failed": 0,
+    "flaky": 0,
+    "automaticRetries": 0,
+    "captures": 26,
+    "observations": [
+      {
+        "check": "course-comparison",
+        "locale": "fr",
+        "width": 1440,
+        "height": 1000,
+        "noOverflow": true,
+        "trialBottom": 498,
+        "courseId": "21e42b40-d199-4ba8-ba5f-2ce4903dd8aa",
+        "versionId": "4e4a28b2-8ac2-49fe-8298-e9263d1dc474",
+        "courseHref": "/fr/parcours/du-brief-a-la-proposition-commerciale?version=4e4a28b2-8ac2-49fe-8298-e9263d1dc474",
+        "activityTitlesAndSummariesPresentedOnce": true
+      },
+      {
+        "check": "keyboard-trial",
+        "locale": "fr",
+        "keyboardActivated": true,
+        "anonymousTrialReadable": true
+      },
+      {
+        "check": "course-comparison",
+        "locale": "fr",
+        "width": 390,
+        "height": 844,
+        "noOverflow": true,
+        "trialBottom": 584.484375,
+        "courseId": "21e42b40-d199-4ba8-ba5f-2ce4903dd8aa",
+        "versionId": "4e4a28b2-8ac2-49fe-8298-e9263d1dc474",
+        "courseHref": "/fr/parcours/du-brief-a-la-proposition-commerciale?version=4e4a28b2-8ac2-49fe-8298-e9263d1dc474",
+        "activityTitlesAndSummariesPresentedOnce": true
+      },
+      {
+        "check": "course-comparison",
+        "locale": "en",
+        "width": 1440,
+        "height": 1000,
+        "noOverflow": true,
+        "trialBottom": 498,
+        "courseId": "21e42b40-d199-4ba8-ba5f-2ce4903dd8aa",
+        "versionId": "4e4a28b2-8ac2-49fe-8298-e9263d1dc474",
+        "courseHref": "/en/courses/client-brief-to-proposal?version=4e4a28b2-8ac2-49fe-8298-e9263d1dc474",
+        "activityTitlesAndSummariesPresentedOnce": true
+      },
+      {
+        "check": "course-comparison",
+        "locale": "en",
+        "width": 390,
+        "height": 844,
+        "noOverflow": true,
+        "trialBottom": 535.234375,
+        "courseId": "21e42b40-d199-4ba8-ba5f-2ce4903dd8aa",
+        "versionId": "4e4a28b2-8ac2-49fe-8298-e9263d1dc474",
+        "courseHref": "/en/courses/client-brief-to-proposal?version=4e4a28b2-8ac2-49fe-8298-e9263d1dc474",
+        "activityTitlesAndSummariesPresentedOnce": true
+      },
+      {
+        "check": "exact-offer-and-local-order",
+        "locale": "fr",
+        "offerId": "ddd620ed-d216-46dc-aca2-ff6b4b123ffa",
+        "offerRevision": 2,
+        "orderId": "f84a83ee-361c-400c-96a3-dae9620445d9",
+        "exactCourseVersion": true,
+        "explicitConsent": true,
+        "keyboardTermsAndOffer": true,
+        "idempotentReplay": true,
+        "noPayment": true,
+        "noRights": true,
+        "returnParameterDoesNotGrant": true
+      },
+      {
+        "check": "exact-offer-and-local-order",
+        "locale": "en",
+        "offerId": "ddd620ed-d216-46dc-aca2-ff6b4b123ffa",
+        "offerRevision": 2,
+        "orderId": "3842fa48-198d-47ba-9f91-c34b40463175",
+        "exactCourseVersion": true,
+        "explicitConsent": true,
+        "keyboardTermsAndOffer": true,
+        "idempotentReplay": true,
+        "noPayment": true,
+        "noRights": true,
+        "returnParameterDoesNotGrant": true
+      },
+      {
+        "check": "explicit-commercial-choice",
+        "locale": "fr",
+        "exactMatchingOffers": 4,
+        "inlineMaximum": 3,
+        "unrelatedExcluded": true,
+        "filteredListAndPaginationPreserved": true
+      },
+      {
+        "check": "explicit-commercial-choice",
+        "locale": "en",
+        "exactMatchingOffers": 4,
+        "inlineMaximum": 3,
+        "unrelatedExcluded": true,
+        "filteredListAndPaginationPreserved": true
+      },
+      {
+        "check": "inactive-and-revised-offers",
+        "inactiveOfferId": "22fdedfe-185b-4a41-9967-2b66ea016ecb",
+        "changedOfferId": "ddd620ed-d216-46dc-aca2-ff6b4b123ffa",
+        "oldRevision": 2,
+        "newRevision": 4,
+        "newPriceMinor": 4599,
+        "changedDisappearsUntilCurrentApproval": true,
+        "oldOrderSnapshotsPreserved": true,
+        "otherIds": [
+          "22fdedfe-185b-4a41-9967-2b66ea016ecb",
+          "594eec47-0c04-4eb5-b609-9db9b3920781"
+        ]
+      },
+      {
+        "check": "access-authority",
+        "locale": "fr",
+        "enrollmentId": "22beba85-9c65-4aa2-8ac6-84c4bdc76e25",
+        "initialFreeActivityReadable": true,
+        "freeActivityNeverProvesCourseRight": true,
+        "origin": "MANUAL_TEST",
+        "grantId": "331dfa2c-601d-4904-968b-5e65a4832f89",
+        "realProtectedDocumentWithActiveGrant": true,
+        "resumeHref": "/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01?resource=8b4a285f-2def-4a3d-88eb-4b49761a86d0&version=02732b85-f59e-4e30-a4c1-db28f87ddf80&courseVersion=4e4a28b2-8ac2-49fe-8298-e9263d1dc474&returnTo=%2Ffr%2Fcatalogue",
+        "naturalExpiryObserved": true,
+        "protectedReadRefusedAfterExpiry": true
+      }
+    ],
+    "preparedOrders": [
+      {
+        "id": "f84a83ee-361c-400c-96a3-dae9620445d9",
+        "offerId": "ddd620ed-d216-46dc-aca2-ff6b4b123ffa",
+        "offerRevision": 2,
+        "acceptedTermsVersion": "p11-test-v1"
+      },
+      {
+        "id": "3842fa48-198d-47ba-9f91-c34b40463175",
+        "offerId": "ddd620ed-d216-46dc-aca2-ff6b4b123ffa",
+        "offerRevision": 2,
+        "acceptedTermsVersion": "p11-test-v1"
+      }
+    ],
+    "providerRequestsExecuted": false
+  },
+  "visualReview": {
+    "audit": "AUD-04",
+    "result": "passed",
+    "scope": "Revue visuelle exhaustive des captures finales et comparaison avec les captures avant et intermédiaires.",
+    "finalEvidenceDirectory": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062",
+    "reviewedFiles": [
+      "after-connected-free-preview-no-course-right-fr-1440.png",
+      "after-course-en-1440.png",
+      "after-course-en-1440-full.png",
+      "after-course-en-390.png",
+      "after-course-en-390-full.png",
+      "after-course-fr-1440.png",
+      "after-course-fr-1440-full.png",
+      "after-course-fr-390.png",
+      "after-course-fr-390-full.png",
+      "after-expired-test-origin-fr-1440.png",
+      "after-filtered-pagination-en-390.png",
+      "after-filtered-pagination-fr-390.png",
+      "after-inactive-offer-fr-390.png",
+      "after-local-order-en-390.png",
+      "after-local-order-fr-390.png",
+      "after-multiple-choice-en-1440.png",
+      "after-multiple-choice-en-1440-full.png",
+      "after-multiple-choice-en-390.png",
+      "after-multiple-choice-fr-1440.png",
+      "after-multiple-choice-fr-1440-full.png",
+      "after-multiple-choice-fr-390.png",
+      "after-reapproved-new-price-original-snapshots-fr-390.png",
+      "after-single-offer-en-390.png",
+      "after-single-offer-fr-390.png",
+      "after-unpaid-return-en-390.png",
+      "after-unpaid-return-fr-390.png"
+    ],
+    "reviewedCount": 26,
+    "allFinalPngReviewed": true,
+    "beforeReviewed": 8,
+    "beforeEvidenceDirectory": "docs/evidence/AUD04-browser/2026-11-22T06-35-44-959Z-3359c2d1-1970-4ac4-bb37-6f328291d612",
+    "beforeReviewedFiles": [
+      "before-course-fr-1440.png",
+      "before-course-en-1440.png",
+      "before-course-fr-390.png",
+      "before-course-en-390.png",
+      "before-course-fr-1440-full.png",
+      "before-course-en-1440-full.png",
+      "before-course-fr-390-full.png",
+      "before-course-en-390-full.png"
+    ],
+    "intermediateReviewed": 9,
+    "intermediateEvidenceDirectory": "docs/evidence/AUD04-browser/2026-11-22T06-44-24-872Z-ae6aaafc-8c08-41b4-bf19-3ee1d77a159f",
+    "intermediateReviewedFiles": [
+      "after-course-fr-1440.png",
+      "after-course-en-1440.png",
+      "after-course-fr-390.png",
+      "after-course-en-390.png",
+      "after-course-fr-1440-full.png",
+      "after-course-en-1440-full.png",
+      "after-course-fr-390-full.png",
+      "after-course-en-390-full.png",
+      "after-single-offer-fr-390.png"
+    ],
+    "reviewMethod": "Chaque fichier recensé a été ouvert via view_image. Pour la capture finale d'expiration, l'affichage complet dans l'outil ne montrait pas l'image ; ses 1440 x 3578 pixels ont été vérifiés puis les quatre bandes couvrant l'intégralité de l'image ont été ouvertes, sans modifier l'original.",
+    "supplementaryInspectionFiles": [
+      ".runtime/aud04/expired-top-review.png",
+      ".runtime/aud04/expired-1000-review.png",
+      ".runtime/aud04/expired-2000-review.png",
+      ".runtime/aud04/expired-3000-review.png"
+    ],
+    "observations": [
+      {
+        "area": "Premier écran",
+        "result": "Le bouton principal d'essai gratuit est visible entièrement dans les quatre cadrages FR/EN 1440 x 1000 et 390 x 844. Il est dans le héros ; l'aperçu plus bas conserve un lien secondaire distinct."
+      },
+      {
+        "area": "Programme",
+        "result": "Les six étapes P18 sont numérotées 01 à 06, avec un seul titre, résumé et statut par étape. La répétition module/activité présente avant et dans l'intermédiaire a disparu. Les liens restent visibles et les détails de version restent repliables."
+      },
+      {
+        "area": "Grille avec trois offres",
+        "result": "Les deux vues desktop complètes montrent les trois offres dans la colonne latérale, sans étirement des espaces entre titre, livrable et aperçu et sans grand vide repoussant le programme. Les vues mobiles empilent les offres après l'aperçu et avant le public/prérequis."
+      },
+      {
+        "area": "Texte et responsive",
+        "result": "Titres FR/EN, résumés, prérequis, six étapes, vérification, outils, FAQ et pied de page restent lisibles. Aucun chevauchement, débordement horizontal ou texte essentiel rogné observé dans les 26 captures finales."
+      },
+      {
+        "area": "Langues et informations absentes",
+        "result": "Les langues du contenu sont regroupées en une section. Auteur, format et durée absents sont indiqués non renseignés ; aucun auteur, média ou durée de remplacement n'est montré."
+      },
+      {
+        "area": "Offre et conditions",
+        "result": "Prix et devise EUR, offres actives, pack, vente suspendue, contenu inclus et conditions dépliées sont lisibles. La présence d'une offre active ne cache pas l'indisponibilité du paiement. Le lien vers la liste complète et sa pagination sont visibles dans les vues concernées."
+      },
+      {
+        "area": "Commande et retour",
+        "result": "Les récapitulatifs FR/EN indiquent explicitement l'absence de paiement commencé et de nouveaux droits. Les retours success non payés restent présentés comme paiement non confirmé ; montant, ressources et conditions restent consultables."
+      },
+      {
+        "area": "Accès",
+        "result": "Le compte connecté sans droit de parcours et l'origine de test expirée affichent un accès non confirmé et le lien de vérification des accès, avec l'essai gratuit toujours disponible. Les images ne montrent aucun corps pédagogique protégé."
+      },
+      {
+        "area": "État transitoire observé",
+        "result": "Les deux captures mobiles de choix multiples montrent « vérification de mes accès » pendant la lecture du compte ; les captures desktop de ce scénario montrent ensuite le refus stabilisé. Ce transitoire n'est pas interprété comme un droit ou un refus supplémentaire."
+      }
+    ],
+    "importantVisualDefects": [],
+    "limits": [
+      "Captures locales Chromium avec viewports simulés de 390 et 1440 pixels ; aucun appareil physique ni autre moteur de navigateur n'a été examiné.",
+      "Cette revue porte sur les pixels observés ; les tests fonctionnels, contrôles serveur et non-divulgation API sont des preuves séparées.",
+      "L'étape d'accès actif/reprise du quatrième test n'a pas de PNG dédiée dans cet inventaire ; aucun rendu visuel de cet état n'est revendiqué.",
+      "Les prix et conditions sont des fixtures explicitement fictives de recette ; aucun tarif réel, achat externe, fournisseur de paiement ou production n'est validé par cette revue.",
+      "Les informations réelles d'auteur et de formats restent à fournir ; leur absence n'est pas comblée."
+    ]
+  },
+  "build": {
+    "schemaVersion": 1,
+    "runId": "b5b2f86b-1023-448e-937f-3148b31f7d09",
+    "command": "node scripts/web.mjs build",
+    "startedAt": "2026-11-22T06:47:51.314Z",
+    "completedAt": "2026-11-22T06:48:10.790Z",
+    "result": "passed",
+    "exitCode": 0,
+    "isolatedEnvironment": true,
+    "providerCredentialsLoaded": false,
+    "userNextFilePreserved": true,
+    "rawLogsPublished": false,
+    "receiptSha256": "04b19f1b3f637c16938f151e77acd951c85b0452f560dfbe59fe8191a95e1448"
+  },
+  "api": {
+    "schemaVersion": 1,
+    "audit": "AUD-04",
+    "mode": "tests",
+    "result": "passed",
+    "exitCode": 0,
+    "startedAt": "2026-11-22T06:36:23.161Z",
+    "completedAt": "2026-11-22T06:39:02.728Z",
+    "args": [
+      "--batch-mode",
+      "--no-transfer-progress",
+      "-Dtest=PublicSelectionIntegrationTest,OfferServiceIntegrationTest,CommerceHttpIntegrationTest",
+      "test"
+    ],
+    "junit": [
+      {
+        "format": "junit-summary-v1",
+        "suite": "com.chatgptcourses.CommerceHttpIntegrationTest",
+        "counts": {
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "durationMs": 63408,
+        "tests": [
+          {
+            "name": "com.chatgptcourses.CommerceHttpIntegrationTest#concurrentDifferentKeysForOneIntentionCreateExactlyOnePreparation",
+            "status": "passed",
+            "durationMs": 6564
+          },
+          {
+            "name": "com.chatgptcourses.CommerceHttpIntegrationTest#realGrantOriginsAndFreeCurriculumDriveAlreadyOwnedAndPartialPackWithoutDiscount",
+            "status": "passed",
+            "durationMs": 6776
+          },
+          {
+            "name": "com.chatgptcourses.CommerceHttpIntegrationTest#activationUsesFreshRevisionAndWithdrawnPublicationBlocksNewOrders",
+            "status": "passed",
+            "durationMs": 2501
+          },
+          {
+            "name": "com.chatgptcourses.CommerceHttpIntegrationTest#permissionRevokedWhileAwaitingOfferLockPreventsEvenRememberingANewReplayKey",
+            "status": "passed",
+            "durationMs": 2659
+          },
+          {
+            "name": "com.chatgptcourses.CommerceHttpIntegrationTest#orderIsAnAuthoritativeSnapshotAndNeverFinancialConfirmation",
+            "status": "passed",
+            "durationMs": 2964
+          },
+          {
+            "name": "com.chatgptcourses.CommerceHttpIntegrationTest#ordersAreOwnerOnlyAndEditorCannotAdministerCommerce",
+            "status": "passed",
+            "durationMs": 3296
+          },
+          {
+            "name": "com.chatgptcourses.CommerceHttpIntegrationTest#differentAcceptedRevisionCancelsOnlyThePriorPreparationAndPreservesItsSnapshot",
+            "status": "passed",
+            "durationMs": 2557
+          },
+          {
+            "name": "com.chatgptcourses.CommerceHttpIntegrationTest#sameKeyReplaysEvenAfterOfferChangesAndDifferentBodyConflicts",
+            "status": "passed",
+            "durationMs": 2998
+          },
+          {
+            "name": "com.chatgptcourses.CommerceHttpIntegrationTest#incompleteOfferIsPrivateAndCannotBeActivatedOrInventReadiness",
+            "status": "passed",
+            "durationMs": 962
+          },
+          {
+            "name": "com.chatgptcourses.CommerceHttpIntegrationTest#expiredPersistedPreparationTransitionsWithoutErasingHistoryOrReusingItsKey",
+            "status": "passed",
+            "durationMs": 2201
+          }
+        ],
+        "droppedMetadata": 0
+      },
+      {
+        "format": "junit-summary-v1",
+        "suite": "com.chatgptcourses.OfferServiceIntegrationTest",
+        "counts": {
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "durationMs": 18603,
+        "tests": [
+          {
+            "name": "com.chatgptcourses.OfferServiceIntegrationTest#editorPermissionsAndClientSuppliedAccountContextNeverAuthorizeCommercialMutations",
+            "status": "passed",
+            "durationMs": 120
+          },
+          {
+            "name": "com.chatgptcourses.OfferServiceIntegrationTest#incompleteConfigurationRemainsReadableButCannotBecomeAnActiveOffer",
+            "status": "passed",
+            "durationMs": 133
+          },
+          {
+            "name": "com.chatgptcourses.OfferServiceIntegrationTest#aConfiguredProtectedCourseHasPublishedExactLanguageMetadataWithoutAnyPremiumBody",
+            "status": "passed",
+            "durationMs": 1782
+          },
+          {
+            "name": "com.chatgptcourses.OfferServiceIntegrationTest#requiredMediaAndUnsupportedFiscalOrCurrencyConfigurationFailClosed",
+            "status": "passed",
+            "durationMs": 785
+          },
+          {
+            "name": "com.chatgptcourses.OfferServiceIntegrationTest#competingOfferEditorsMustRecheckTheLockedRevision",
+            "status": "passed",
+            "durationMs": 102
+          },
+          {
+            "name": "com.chatgptcourses.OfferServiceIntegrationTest#removedChildrenAndStaleTranslationsBlockNewSalesWithoutUpgradingPinnedVersions",
+            "status": "passed",
+            "durationMs": 1935
+          },
+          {
+            "name": "com.chatgptcourses.OfferServiceIntegrationTest#upgradeV011PreservesExistingIdentityAndSessionAndCreatesNoCommercialData",
+            "status": "passed",
+            "durationMs": 3523
+          },
+          {
+            "name": "com.chatgptcourses.OfferServiceIntegrationTest#changingAnOfferPreservesHistoricalFieldsAndRequiresExplicitReactivation",
+            "status": "passed",
+            "durationMs": 1154
+          }
+        ],
+        "droppedMetadata": 0
+      },
+      {
+        "format": "junit-summary-v1",
+        "suite": "com.chatgptcourses.PublicSelectionIntegrationTest",
+        "counts": {
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "durationMs": 26420,
+        "tests": [
+          {
+            "name": "com.chatgptcourses.PublicSelectionIntegrationTest#discoveryApprovalReusesCommercialFieldReadinessWithoutEnablingCommerceOrCheckout",
+            "status": "passed",
+            "durationMs": 1241
+          },
+          {
+            "name": "com.chatgptcourses.PublicSelectionIntegrationTest#courseOfferDiscoveryHttpMatchesExactInclusionsAdvertisedLocalesAndApprovedRevisions",
+            "status": "passed",
+            "durationMs": 4665
+          },
+          {
+            "name": "com.chatgptcourses.PublicSelectionIntegrationTest#incompleteInactiveOfferLocalesDoNotCrashOrEnterTheOrdinaryList",
+            "status": "passed",
+            "durationMs": 97
+          },
+          {
+            "name": "com.chatgptcourses.PublicSelectionIntegrationTest#concurrentSelectionsHaveOneWinnerAndNoLostDecision",
+            "status": "passed",
+            "durationMs": 259
+          },
+          {
+            "name": "com.chatgptcourses.PublicSelectionIntegrationTest#offerSelectionHttpUsesCommercePermissionsAndItsOwnCurrentRevisionEtag",
+            "status": "passed",
+            "durationMs": 2128
+          },
+          {
+            "name": "com.chatgptcourses.PublicSelectionIntegrationTest#courseOfferDiscoveryHttpRejectsMissingOrMalformedFilterPartners",
+            "status": "passed",
+            "durationMs": 110
+          },
+          {
+            "name": "com.chatgptcourses.PublicSelectionIntegrationTest#parentCoursesAndOffersRequireApprovedExactChildrenAndEveryIncludedLanguageWithoutChangingOrders",
+            "status": "passed",
+            "durationMs": 2432
+          },
+          {
+            "name": "com.chatgptcourses.PublicSelectionIntegrationTest#changedCourseOfferDisappearsUntilFreshApprovalAndKeepsAcceptedOrderSnapshot",
+            "status": "passed",
+            "durationMs": 2179
+          },
+          {
+            "name": "com.chatgptcourses.PublicSelectionIntegrationTest#exactPublishedRevisionApprovalDoesNotTransferToAChangedPublicationAndDecisionsAreAppendOnly",
+            "status": "passed",
+            "durationMs": 1120
+          },
+          {
+            "name": "com.chatgptcourses.PublicSelectionIntegrationTest#realHttpRequiresPermissionCsrfAccountContextExplicitRevisionAndFreshSelectionEtag",
+            "status": "passed",
+            "durationMs": 1867
+          },
+          {
+            "name": "com.chatgptcourses.PublicSelectionIntegrationTest#publicationAloneOrRecipeClassificationNeverPromotesCardsFacetsSuggestionsOrSeo",
+            "status": "passed",
+            "durationMs": 1515
+          }
+        ],
+        "droppedMetadata": 0
+      }
+    ],
+    "isolatedEnvironment": true,
+    "providerCredentialsLoaded": false,
+    "sharedDatabaseTouched": false,
+    "rawLogsPublished": false,
+    "xmlSha256": {
+      "com.chatgptcourses.PublicSelectionIntegrationTest": "65c9292699f595f4fc8a3f8aa3b28fb537d3264d3faad595ac5a29a8f90f8f2b",
+      "com.chatgptcourses.OfferServiceIntegrationTest": "8d59570c06f6a30817b0b559b82096e97e56fe83b22d638e0010ee75a7b69e87",
+      "com.chatgptcourses.CommerceHttpIntegrationTest": "5457c9e4826f9e4dd1496e2887f3d6b8357a25d9e04feb393f0fd678c840a278"
+    },
+    "originalExecutionReceipt": ".runtime/aud04/maven-tests-613ee305-52ce-4fa5-9bde-67fa008a407d.private.json",
+    "sanitizedXmlConsolidation": true,
+    "receiptSha256": "3bf2b134bcb01be6355a84a10bc24eca266a10c72cd476484134b7caf76024a6"
+  },
+  "web": {
+    "contract": {
+      "schemaVersion": 1,
+      "audit": "AUD-04",
+      "step": "contract",
+      "startedAt": "2026-11-22T06:38:32.114Z",
+      "completedAt": "2026-11-22T06:38:37.774Z",
+      "result": "passed",
+      "exitCode": 0,
+      "userNextFilePreserved": true,
+      "userNextFileSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+      "isolatedEnvironment": true,
+      "providerCredentialsLoaded": false,
+      "summary": {
+        "schemaVersion": 1,
+        "job": "web",
+        "step": "contract",
+        "exitCode": 0,
+        "result": "passed",
+        "durationMs": 5647
+      },
+      "receiptSha256": "24f9675bfd59adfbc47cf685df59699d4c727ca40ca4c48309e0041553223103"
+    },
+    "lint": {
+      "schemaVersion": 1,
+      "audit": "AUD-04",
+      "step": "lint",
+      "startedAt": "2026-11-22T06:49:04.612Z",
+      "completedAt": "2026-11-22T06:50:02.474Z",
+      "result": "passed",
+      "exitCode": 0,
+      "userNextFilePreserved": true,
+      "userNextFileSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+      "isolatedEnvironment": true,
+      "providerCredentialsLoaded": false,
+      "summary": {
+        "schemaVersion": 1,
+        "job": "web",
+        "step": "lint",
+        "exitCode": 0,
+        "result": "passed",
+        "durationMs": 57838
+      },
+      "receiptSha256": "8cb672cc9710c1daac7a418be4c2f08a35d5b2d8cd5034cc36c0f03350410247"
+    },
+    "types": {
+      "schemaVersion": 1,
+      "audit": "AUD-04",
+      "step": "types",
+      "startedAt": "2026-11-22T06:40:23.934Z",
+      "completedAt": "2026-11-22T06:41:01.890Z",
+      "result": "passed",
+      "exitCode": 0,
+      "userNextFilePreserved": true,
+      "userNextFileSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+      "isolatedEnvironment": true,
+      "providerCredentialsLoaded": false,
+      "summary": {
+        "schemaVersion": 1,
+        "job": "web",
+        "step": "types",
+        "exitCode": 0,
+        "result": "passed",
+        "durationMs": 37934
+      },
+      "receiptSha256": "6a47fa238a4764ec489b6f0ecc04a8fbb8cfa1acb1e697fcebefe5dd890af60c"
+    },
+    "scripts": {
+      "schemaVersion": 1,
+      "audit": "AUD-04",
+      "step": "scripts",
+      "startedAt": "2026-11-22T06:49:04.607Z",
+      "completedAt": "2026-11-22T06:49:22.384Z",
+      "result": "passed",
+      "exitCode": 0,
+      "userNextFilePreserved": true,
+      "userNextFileSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+      "isolatedEnvironment": true,
+      "providerCredentialsLoaded": false,
+      "summary": {
+        "schemaVersion": 1,
+        "job": "web",
+        "step": "scripts",
+        "exitCode": 0,
+        "result": "passed",
+        "durationMs": 17749,
+        "tap": {
+          "format": "tap-summary-v1",
+          "counts": {
+            "tests": 172,
+            "suites": 0,
+            "pass": 172,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "durationMs": 17451.4064
+        }
+      },
+      "receiptSha256": "67290d741c063ed2bb22eaf64eea87cacf7a7674d64850f6c481b28ab9b270f9"
+    }
+  },
+  "regressions": [
+    {
+      "audit": "AUD-04",
+      "phase": "P06",
+      "result": "passed",
+      "exitCode": 0,
+      "startedAt": "2026-11-22T06:49:04.611Z",
+      "completedAt": "2026-11-22T06:51:24.476Z",
+      "evidence": "docs/evidence/P06-browser/2026-11-22T06-49-05-000Z-a7458978-351f-49e7-bd57-553bc000902f",
+      "stats": {
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0,
+        "flaky": 0
+      },
+      "retried": false,
+      "cleanupConfirmed": true,
+      "isolatedEnvironment": true,
+      "dedicatedLoopbackPorts": true,
+      "providerCredentialsLoaded": false,
+      "deployed": false,
+      "receiptSha256": "402efb76b04d7c552b519e3e0ef60bc77dd9c72039f18fafd7de9ff6577eae46"
+    },
+    {
+      "audit": "AUD-04",
+      "phase": "AUD01",
+      "result": "passed",
+      "exitCode": 0,
+      "startedAt": "2026-11-22T06:49:04.612Z",
+      "completedAt": "2026-11-22T06:50:49.035Z",
+      "evidence": "docs/evidence/AUD01-browser/2026-11-22T06-49-04-954Z-1879c236-ce59-4f03-a157-6c7ddf0b8202",
+      "stats": {
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "flaky": 0
+      },
+      "retried": false,
+      "cleanupConfirmed": true,
+      "isolatedEnvironment": true,
+      "dedicatedLoopbackPorts": true,
+      "providerCredentialsLoaded": false,
+      "deployed": false,
+      "receiptSha256": "fce6ebf52481f274da752ac90a38dbc286b577431d2c397c203da51a3357610d"
+    }
+  ],
+  "client": {
+    "result": "passed",
+    "tests": 131,
+    "failures": 0,
+    "skipped": 0,
+    "newCourseOfferTests": 6,
+    "command": "node scripts/api-contract.mjs test",
+    "evidenceType": "delegated-tool-execution",
+    "agent": "/root/aud04_access",
+    "toolSession": 8925,
+    "exitCode": 0
+  },
+  "browserTypes": {
+    "result": "passed",
+    "command": "tsc --project tsconfig.browser.json --noEmit",
+    "evidenceType": "delegated-tool-execution",
+    "agent": "/root/aud04_offers",
+    "afterFinalTestEdits": true
+  },
+  "sharedDatabasePreservation": [
+    {
+      "schemaVersion": 1,
+      "result": "passed",
+      "environment": "local-shared",
+      "baselineSha256": "30ac127123a72578675f8d71e2c749d18b7770df3ced69842fcabb6e22a187ca",
+      "observedAtPg": "2026-11-22T06:36:02.579951+00:00",
+      "tablesCompared": 83,
+      "changedTables": [],
+      "sessionTablesExcluded": true,
+      "privateRowsReturned": false,
+      "localDatabaseMutationPerformed": false,
+      "readOnly": true,
+      "tables": {
+        "roles": {
+          "count": 9,
+          "sha256": "7f95097702f80b5e64427b638d8906d9ac5a2348a58fdba9c23315cf22d5927c"
+        },
+        "assets": {
+          "count": 18,
+          "sha256": "4f9895226ea6935f70349850f7582a8a58e10c9385da55f1b13804ef5b5bcbae"
+        },
+        "offers": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "orders": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "products": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "projects": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "user_roles": {
+          "count": 15,
+          "sha256": "e011ebe0afad0a24059292d67687f5a5b5ab72d314f35bfdee985fd696efa46f"
+        },
+        "permissions": {
+          "count": 57,
+          "sha256": "310e8f00d08275bcb235fdcbd177e31ce04276a00b0f355532c76811e2749c29"
+        },
+        "video_media": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "offer_events": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "refund_audit": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "access_grants": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "user_accounts": {
+          "count": 15,
+          "sha256": "c91dc58a34ba57de7bf44a98ae291856c349a15adf3f8982664437fae047e995"
+        },
+        "media_progress": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "resource_slugs": {
+          "count": 34,
+          "sha256": "74bd73a041267bbd54fd900bd410ae8914f54e14eb89bc70c558d8b06c253b31"
+        },
+        "editorial_cases": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "offer_revisions": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "order_resources": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "refund_requests": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "support_tickets": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "editorial_events": {
+          "count": 70,
+          "sha256": "4d16774415215b820a6e37d709b36ed1f868a3b12c5e8107fa52dc14347e4efd"
+        },
+        "operations_audit": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "personal_methods": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "refund_decisions": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "role_permissions": {
+          "count": 87,
+          "sha256": "5fb53e31ec21d24f0c087cf7c66982b45416d353cc3d0fb54631f1630683b09e"
+        },
+        "support_messages": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "user_preferences": {
+          "count": 15,
+          "sha256": "75f2a0a90241806b2c12667c41c7afb17d8b6ae9aa224b7021f3d3e8211d0a1f"
+        },
+        "project_revisions": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "refund_operations": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "learning_resources": {
+          "count": 17,
+          "sha256": "c9c135060cae5365d77a77d4aea1e3721ee925cbcbcddd3fa8bd452b2911c24d"
+        },
+        "stripe_event_inbox": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "support_workspaces": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "account_action_keys": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "checkout_operations": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "editorial_revisions": {
+          "count": 76,
+          "sha256": "f47b30291ab0103b66c18a9affd5dfa421f90ee233af7acdef68efffde6be307"
+        },
+        "notification_outbox": {
+          "count": 1,
+          "sha256": "0474a496221d3a7418b74d5907438be8df0597323959fba8e51ed02df8412b93"
+        },
+        "refund_reservations": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "content_translations": {
+          "count": 34,
+          "sha256": "74e08fba048b3b06abe17788d58ef742e0d18bbfe1924389026be752d627612c"
+        },
+        "identity_rate_limits": {
+          "count": 5,
+          "sha256": "3cfb105bb77d230058c2102fc6e2b5201d539a64de99d45fab9847478ad5e0ec"
+        },
+        "learning_enrollments": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "payment_work_retries": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "pedagogical_versions": {
+          "count": 17,
+          "sha256": "67694e070ad192dac446e54bc95d24f314d20e3ee9a9842a5352de7bc411820a"
+        },
+        "refund_access_blocks": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "support_reply_drafts": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "support_time_entries": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "version_compositions": {
+          "count": 14,
+          "sha256": "544ab5b473276d436b552573c88d41c6e2746711b5943e4ff5d8d023dcad68c7"
+        },
+        "account_data_requests": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "editorial_case_events": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "flyway_schema_history": {
+          "count": 19,
+          "sha256": "078ebeab560b6607e0b17dc522a70951519d508370841fb45509d26c225c031f"
+        },
+        "password_reset_tokens": {
+          "count": 4,
+          "sha256": "53761d5155e292944e0a31c7f1d7ff1acde8fb65b27665852a34f6b61dabff2e"
+        },
+        "resource_slug_changes": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "support_ticket_events": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "video_playback_grants": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "editorial_import_files": {
+          "count": 18,
+          "sha256": "4bde7872a61126f6e891094b620cfb6aa07200286d49d5c1e04a4429565a8826"
+        },
+        "learning_quiz_attempts": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "operations_action_keys": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "order_idempotency_keys": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "support_internal_notes": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "learning_activity_notes": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "refund_access_decisions": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "refund_idempotency_keys": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "offer_revision_resources": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "project_rubric_snapshots": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "project_self_assessments": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "project_solution_reveals": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "checkout_idempotency_keys": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "editorial_public_metadata": {
+          "count": 28,
+          "sha256": "01e62864e2ecf99fe8cbcc41d651f99a7a8cbb155c4dc5e7ba837c56a7bf957a"
+        },
+        "refund_origin_revocations": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "editorial_import_resources": {
+          "count": 14,
+          "sha256": "886f4a69adfbea59455e4bf8208d47191fcba936599be4c7e0d01003789fefbe"
+        },
+        "learning_activity_progress": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "operations_activity_starts": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "participation_attestations": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "refund_reconciliation_jobs": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "resource_slug_reservations": {
+          "count": 34,
+          "sha256": "9595ef7ec5b92c495e48dfdddf3580fcadb2f2f434b59949c00738873904d236"
+        },
+        "support_reply_publications": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "account_data_request_events": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "payment_reconciliation_jobs": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "support_message_attachments": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "notification_outbox_requeues": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "editorial_import_translations": {
+          "count": 28,
+          "sha256": "aeb1806fd0e0d145143b977610cce64195d608552ff2643ca267accc54ac8e5f"
+        },
+        "editorial_resource_references": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "learning_enrollment_activities": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "operations_personal_revision_events": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "receiptSha256": "768135d09e5072b4fbeababf465e5027bbe6ca3a6059b2193e874156aceacc34"
+    },
+    {
+      "schemaVersion": 1,
+      "result": "passed",
+      "environment": "local-shared",
+      "baselineSha256": "30ac127123a72578675f8d71e2c749d18b7770df3ced69842fcabb6e22a187ca",
+      "observedAtPg": "2026-11-22T06:53:11.483773+00:00",
+      "tablesCompared": 83,
+      "changedTables": [],
+      "sessionTablesExcluded": true,
+      "privateRowsReturned": false,
+      "localDatabaseMutationPerformed": false,
+      "readOnly": true,
+      "tables": {
+        "roles": {
+          "count": 9,
+          "sha256": "7f95097702f80b5e64427b638d8906d9ac5a2348a58fdba9c23315cf22d5927c"
+        },
+        "assets": {
+          "count": 18,
+          "sha256": "4f9895226ea6935f70349850f7582a8a58e10c9385da55f1b13804ef5b5bcbae"
+        },
+        "offers": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "orders": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "products": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "projects": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "user_roles": {
+          "count": 15,
+          "sha256": "e011ebe0afad0a24059292d67687f5a5b5ab72d314f35bfdee985fd696efa46f"
+        },
+        "permissions": {
+          "count": 57,
+          "sha256": "310e8f00d08275bcb235fdcbd177e31ce04276a00b0f355532c76811e2749c29"
+        },
+        "video_media": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "offer_events": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "refund_audit": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "access_grants": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "user_accounts": {
+          "count": 15,
+          "sha256": "c91dc58a34ba57de7bf44a98ae291856c349a15adf3f8982664437fae047e995"
+        },
+        "media_progress": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "resource_slugs": {
+          "count": 34,
+          "sha256": "74bd73a041267bbd54fd900bd410ae8914f54e14eb89bc70c558d8b06c253b31"
+        },
+        "editorial_cases": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "offer_revisions": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "order_resources": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "refund_requests": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "support_tickets": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "editorial_events": {
+          "count": 70,
+          "sha256": "4d16774415215b820a6e37d709b36ed1f868a3b12c5e8107fa52dc14347e4efd"
+        },
+        "operations_audit": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "personal_methods": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "refund_decisions": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "role_permissions": {
+          "count": 87,
+          "sha256": "5fb53e31ec21d24f0c087cf7c66982b45416d353cc3d0fb54631f1630683b09e"
+        },
+        "support_messages": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "user_preferences": {
+          "count": 15,
+          "sha256": "75f2a0a90241806b2c12667c41c7afb17d8b6ae9aa224b7021f3d3e8211d0a1f"
+        },
+        "project_revisions": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "refund_operations": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "learning_resources": {
+          "count": 17,
+          "sha256": "c9c135060cae5365d77a77d4aea1e3721ee925cbcbcddd3fa8bd452b2911c24d"
+        },
+        "stripe_event_inbox": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "support_workspaces": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "account_action_keys": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "checkout_operations": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "editorial_revisions": {
+          "count": 76,
+          "sha256": "f47b30291ab0103b66c18a9affd5dfa421f90ee233af7acdef68efffde6be307"
+        },
+        "notification_outbox": {
+          "count": 1,
+          "sha256": "0474a496221d3a7418b74d5907438be8df0597323959fba8e51ed02df8412b93"
+        },
+        "refund_reservations": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "content_translations": {
+          "count": 34,
+          "sha256": "74e08fba048b3b06abe17788d58ef742e0d18bbfe1924389026be752d627612c"
+        },
+        "identity_rate_limits": {
+          "count": 5,
+          "sha256": "3cfb105bb77d230058c2102fc6e2b5201d539a64de99d45fab9847478ad5e0ec"
+        },
+        "learning_enrollments": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "payment_work_retries": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "pedagogical_versions": {
+          "count": 17,
+          "sha256": "67694e070ad192dac446e54bc95d24f314d20e3ee9a9842a5352de7bc411820a"
+        },
+        "refund_access_blocks": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "support_reply_drafts": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "support_time_entries": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "version_compositions": {
+          "count": 14,
+          "sha256": "544ab5b473276d436b552573c88d41c6e2746711b5943e4ff5d8d023dcad68c7"
+        },
+        "account_data_requests": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "editorial_case_events": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "flyway_schema_history": {
+          "count": 19,
+          "sha256": "078ebeab560b6607e0b17dc522a70951519d508370841fb45509d26c225c031f"
+        },
+        "password_reset_tokens": {
+          "count": 4,
+          "sha256": "53761d5155e292944e0a31c7f1d7ff1acde8fb65b27665852a34f6b61dabff2e"
+        },
+        "resource_slug_changes": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "support_ticket_events": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "video_playback_grants": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "editorial_import_files": {
+          "count": 18,
+          "sha256": "4bde7872a61126f6e891094b620cfb6aa07200286d49d5c1e04a4429565a8826"
+        },
+        "learning_quiz_attempts": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "operations_action_keys": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "order_idempotency_keys": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "support_internal_notes": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "learning_activity_notes": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "refund_access_decisions": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "refund_idempotency_keys": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "offer_revision_resources": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "project_rubric_snapshots": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "project_self_assessments": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "project_solution_reveals": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "checkout_idempotency_keys": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "editorial_public_metadata": {
+          "count": 28,
+          "sha256": "01e62864e2ecf99fe8cbcc41d651f99a7a8cbb155c4dc5e7ba837c56a7bf957a"
+        },
+        "refund_origin_revocations": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "editorial_import_resources": {
+          "count": 14,
+          "sha256": "886f4a69adfbea59455e4bf8208d47191fcba936599be4c7e0d01003789fefbe"
+        },
+        "learning_activity_progress": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "operations_activity_starts": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "participation_attestations": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "refund_reconciliation_jobs": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "resource_slug_reservations": {
+          "count": 34,
+          "sha256": "9595ef7ec5b92c495e48dfdddf3580fcadb2f2f434b59949c00738873904d236"
+        },
+        "support_reply_publications": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "account_data_request_events": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "payment_reconciliation_jobs": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "support_message_attachments": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "notification_outbox_requeues": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "editorial_import_translations": {
+          "count": 28,
+          "sha256": "aeb1806fd0e0d145143b977610cce64195d608552ff2643ca267accc54ac8e5f"
+        },
+        "editorial_resource_references": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "learning_enrollment_activities": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "operations_personal_revision_events": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "receiptSha256": "153fa2e60099a3e8f695e8011b117d08f78bce05255878575533b8feee2de0e9"
+    }
+  ],
+  "userNextFileSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+  "sourceFiles": [
+    {
+      "file": "README.md",
+      "sha256": "4f0605c9e454550f03b95e9da4b40741142316745db9f001ec4eff657873fe48"
+    },
+    {
+      "file": "apps/api/src/main/java/com/chatgptcourses/commerce/http/CommerceController.java",
+      "sha256": "fd8bfe0a49f8c4e7683891c0b760a0fa3a1a37901bc47d71af622271781c8807"
+    },
+    {
+      "file": "apps/api/src/main/java/com/chatgptcourses/commerce/service/OfferService.java",
+      "sha256": "93240e32d70e51ad352d91653da2724a2bfe12f7b2ff5614f13fe9b11361a07d"
+    },
+    {
+      "file": "apps/api/src/test/java/com/chatgptcourses/PublicSelectionIntegrationTest.java",
+      "sha256": "2328c6f8339bfb5bb435d4e06e6fd1ad9cf070004c5f21b2fed20eac78e1e1db"
+    },
+    {
+      "file": "apps/web/src/components/commerce/offers.tsx",
+      "sha256": "211b40ece1f836f0ee68ef7e12f8b36f2b3960c184496c3899bc3fd8ecc8777d"
+    },
+    {
+      "file": "apps/web/src/components/commerce/parts.tsx",
+      "sha256": "dd0474c4418115e597d196726f034540c444bd3648c13231b61f7be68ffa08a7"
+    },
+    {
+      "file": "apps/web/src/components/commerce/server-pages.tsx",
+      "sha256": "1f34ec6f6997da4f5e73ab3d20cb0279a03461bdb1f443063badad06a85e6a2b"
+    },
+    {
+      "file": "apps/web/src/components/learning/course-access.tsx",
+      "sha256": "b6c3d805c112d2978881b11f0cd8599cdb5c213fa62dd3ca10f97af625ad14d5"
+    },
+    {
+      "file": "apps/web/src/components/public/course-offers.tsx",
+      "sha256": "29cd17c8f8cb6e57ba940df529a1e0a03d1a77bf582a019cee4f7154f3cabbe4"
+    },
+    {
+      "file": "apps/web/src/components/public/course.tsx",
+      "sha256": "ed67c5ed5ac9a7a8af50826815a2ee54fcf1f6b30cb36d96800097cf0d440c96"
+    },
+    {
+      "file": "apps/web/src/components/public/server-pages.tsx",
+      "sha256": "dd1d61be0526e7de46ce269c93c6b1e7fa2b4429f5b4a5b0d13b97d040a84edd"
+    },
+    {
+      "file": "apps/web/src/lib/api/commerce-client.ts",
+      "sha256": "a584ef84114c5b0b2020279acbb60f273c1f1dc587091bbda4499ee87641ab02"
+    },
+    {
+      "file": "apps/web/src/lib/api/commerce-server.ts",
+      "sha256": "1e699d3baa1aca3bc0a0baada217890d7a1d4c4a86c5aa68a298d75c3bb76afa"
+    },
+    {
+      "file": "apps/web/src/lib/api/generated/.generation.json",
+      "sha256": "ea96840da3784b0a08fd0c5023a750c8c9756f56e23fdd26f271b6f7730f0b13"
+    },
+    {
+      "file": "apps/web/src/lib/api/generated/sdk.gen.ts",
+      "sha256": "6e0eced364eb89fc4be663b07d756da0e6025ee0f30d514840acd4b1e2039867"
+    },
+    {
+      "file": "apps/web/src/lib/api/generated/types.gen.ts",
+      "sha256": "30480323489228da8984f92168cdf8dd0ea6f56cdd099e0805422fe9bfd4c36d"
+    },
+    {
+      "file": "apps/web/src/lib/commerce/course-offers.ts",
+      "sha256": "64ec5b25bece4e978bfa6ac197793d2c60b95907fc9becfdda5aef3b9f853b9f"
+    },
+    {
+      "file": "apps/web/src/lib/commerce/routes.ts",
+      "sha256": "b92347ffcbdb6e84cdfb4de832ffea5ba88ee154a03f31203b70a36a9a1b8943"
+    },
+    {
+      "file": "apps/web/src/lib/i18n/course.ts",
+      "sha256": "263c6d6b1ad24cf7df4b2a6ad50c2872bfba7e3c4726c51306dab652c29bd51d"
+    },
+    {
+      "file": "apps/web/src/lib/i18n/member-access.ts",
+      "sha256": "6374dc0cf2b54f6ee8f3f7389311d4cbeb560db8db87924b353163428cef618f"
+    },
+    {
+      "file": "docs/API_CONTRACTS.md",
+      "sha256": "206664489f21005ee1b9d48ebec8cca26955dc5128cca9d16350c1a8366972ff"
+    },
+    {
+      "file": "docs/DESIGN_SYSTEM.md",
+      "sha256": "06b067023af0e4ca0891755b41fcbddf15a76b34f137cf7ae90ec3eadf2540bc"
+    },
+    {
+      "file": "docs/SCREENS.md",
+      "sha256": "e325c5ea1406fdbddd71840a8bb0a389eda09a52a01b678670da9e5a5894f81d"
+    },
+    {
+      "file": "docs/api/openapi.yaml",
+      "sha256": "a4740f8f3fe2eda1f64022f39296e47a9cd8e3cae75253a0d07a5587710b3a8f"
+    },
+    {
+      "file": "package.json",
+      "sha256": "b754ee84f37ee2fa8af93e447ba79815490f296d1c6dbfd51df3575a655eff59"
+    },
+    {
+      "file": "playwright.config.ts",
+      "sha256": "bb62614441a54088829b745a5ba63f633c0ea38d948296867d44c7ac6081addc"
+    },
+    {
+      "file": "scripts/ci-run.mjs",
+      "sha256": "523b1d5d6d22d4b995ac8625aae350faf0fbc764986ac01eb6961577c2f67beb"
+    },
+    {
+      "file": "scripts/prepare-course-content.mjs",
+      "sha256": "a52d2a72ca684b7927e9116d75d34a13454bd8621efca984d05632fda56bfa7b"
+    },
+    {
+      "file": "scripts/verify-browser.mjs",
+      "sha256": "bf61a453abe5a54c9d6176424d098ac56c4ac1518220130db0b879fe1de2cfff"
+    },
+    {
+      "file": "scripts/verify-contrast.mjs",
+      "sha256": "141cf6d9e4889979494d5f1b5dd3e2508613e58cb3e80203b52f42b90ed9a5e3"
+    },
+    {
+      "file": "tests/api/course-offers.test.ts",
+      "sha256": "70440fb92a89ae6fa1608783c4d0e8742ca04b4ea04709de3deee66f46316391"
+    },
+    {
+      "file": "tests/browser/aud04-course.spec.ts",
+      "sha256": "bff3591db97c415ae2cccb4c4129a46994f436c871e5eb6f1c2b90d3802c2a50"
+    },
+    {
+      "file": "tests/browser/course-content-fixture.ts",
+      "sha256": "e199f32f8f9382b13bd7736b07d4620eefba3c858affa9cf7c525d87e656208d"
+    },
+    {
+      "file": "tests/scripts/aud04-course-offers.test.mjs",
+      "sha256": "95f2b3c26be8999d354379c42908e0f82f83cc4c40787553a367f5f3c7be5567"
+    }
+  ],
+  "sourceCount": 34,
+  "finalJarSha256": "2cbb814c24e1d3a8068debf52aa5af8096d26c2066134f48ea73de3bd09cf9da",
+  "noNewMigration": true,
+  "providerCredentialsLoaded": false,
+  "realEditorialApproval": false,
+  "sharedContentPublished": false,
+  "deploymentExecuted": false,
+  "realCommercialActivationExecuted": false,
+  "isolatedFixtureOfferActivationExecuted": true,
+  "externalPaymentExecuted": false,
+  "historicalP12AndP15IncidentsClosed": false,
+  "sourceCommit": "5af3c4bbf1b3cc60193dd4711b00b206e34ed7f1",
+  "captureManifest": [
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-35-44-959Z-3359c2d1-1970-4ac4-bb37-6f328291d612/before-course-fr-1440.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 75724,
+      "sha256": "a1d849667b3498e390c61ba558968d4de7b60a9d5f04cc3786e0674905e7d416"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-35-44-959Z-3359c2d1-1970-4ac4-bb37-6f328291d612/before-course-fr-1440-full.png",
+      "width": 1440,
+      "height": 3581,
+      "bytes": 272964,
+      "sha256": "744ff9aaa9348ca284fa30200970540356826c8819e4fcaa70da43c23ac75978"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-35-44-959Z-3359c2d1-1970-4ac4-bb37-6f328291d612/before-course-fr-390.png",
+      "width": 390,
+      "height": 844,
+      "bytes": 43121,
+      "sha256": "680ef7cb2dd51c2625336f40ba520e9385308f9e342b3830d6e83c57ab06b0b5"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-35-44-959Z-3359c2d1-1970-4ac4-bb37-6f328291d612/before-course-fr-390-full.png",
+      "width": 390,
+      "height": 5104,
+      "bytes": 253823,
+      "sha256": "5c6a1ee6f4fc172453a46df788fbea2a2e5c48825b3e306eb4c28bf41bda39a4"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-35-44-959Z-3359c2d1-1970-4ac4-bb37-6f328291d612/before-course-en-1440.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 79386,
+      "sha256": "f9f86045bae584fefa5ce535bdf4671c24e9c3e9c3f02542570d8389e97237a9"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-35-44-959Z-3359c2d1-1970-4ac4-bb37-6f328291d612/before-course-en-1440-full.png",
+      "width": 1440,
+      "height": 3468,
+      "bytes": 265641,
+      "sha256": "4498c9cb28e6f11d381b21e34f7f9d3800599ed86830fc1ff6d1d25b9b77cfdb"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-35-44-959Z-3359c2d1-1970-4ac4-bb37-6f328291d612/before-course-en-390.png",
+      "width": 390,
+      "height": 844,
+      "bytes": 44167,
+      "sha256": "5ee5af81adfb50a8082daf6961e3c4b9c167c3009dbcff956d1a34b4d27d309f"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-35-44-959Z-3359c2d1-1970-4ac4-bb37-6f328291d612/before-course-en-390-full.png",
+      "width": 390,
+      "height": 4823,
+      "bytes": 245223,
+      "sha256": "fa29512cb7bd54f50329d66291ec1af131d1139d56854fc003ef845d863e12ad"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-44-24-872Z-ae6aaafc-8c08-41b4-bf19-3ee1d77a159f/after-course-fr-1440.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 94421,
+      "sha256": "ee5649969e787c4d2022b9d684ff1d94c96d3e372366c4d0c8aa7f00e503a36b"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-44-24-872Z-ae6aaafc-8c08-41b4-bf19-3ee1d77a159f/after-course-fr-1440-full.png",
+      "width": 1440,
+      "height": 4185,
+      "bytes": 289505,
+      "sha256": "a2ad2b49e597b25695e8832fc2f175f8f8622d5a669c5274f0968726738c2372"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-44-24-872Z-ae6aaafc-8c08-41b4-bf19-3ee1d77a159f/after-course-fr-390.png",
+      "width": 390,
+      "height": 844,
+      "bytes": 42707,
+      "sha256": "fad159cf1f9260aacdd84ff62b9f2eaae0eba5452f63e047baa2352edf8a6380"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-44-24-872Z-ae6aaafc-8c08-41b4-bf19-3ee1d77a159f/after-course-fr-390-full.png",
+      "width": 390,
+      "height": 5855,
+      "bytes": 261912,
+      "sha256": "84c85ace7ae22337a524e1c54542e022a59b245a71903bd82c3b49b88617ceb0"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-44-24-872Z-ae6aaafc-8c08-41b4-bf19-3ee1d77a159f/after-course-en-1440.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 89178,
+      "sha256": "a0d20ad01e6d005cf41f55230a5ec065fdf51850d93269769b6f0f76aaf5f060"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-44-24-872Z-ae6aaafc-8c08-41b4-bf19-3ee1d77a159f/after-course-en-1440-full.png",
+      "width": 1440,
+      "height": 4072,
+      "bytes": 276274,
+      "sha256": "d1681c67e61894517e94292c750e73b8f0528815b5da6610639542eddabfcfb6"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-44-24-872Z-ae6aaafc-8c08-41b4-bf19-3ee1d77a159f/after-course-en-390.png",
+      "width": 390,
+      "height": 844,
+      "bytes": 42719,
+      "sha256": "997059424ca8e2dc5d4086cd67b4031008db66aa1ac342490957c064de5e2930"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-44-24-872Z-ae6aaafc-8c08-41b4-bf19-3ee1d77a159f/after-course-en-390-full.png",
+      "width": 390,
+      "height": 5598,
+      "bytes": 249931,
+      "sha256": "1849c2116db8c5c2d809db81319edbb9c891b6cbf5127d2145c273b6fec46cb8"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-44-24-872Z-ae6aaafc-8c08-41b4-bf19-3ee1d77a159f/after-single-offer-fr-390.png",
+      "width": 390,
+      "height": 6990,
+      "bytes": 313809,
+      "sha256": "08e800d6e5848ad5ec4c93e57a61d42b9382e72228d0f4b13501dedb03d4f0ac"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-course-fr-1440.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 93331,
+      "sha256": "94883281ba81d7a864a97825d4207b80a6aaf72ca8128d5c2d880f915e72d742"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-course-fr-1440-full.png",
+      "width": 1440,
+      "height": 3578,
+      "bytes": 239185,
+      "sha256": "7561a3a790a3badb85b195a52026d3c6104b056d53e152a0c631c04ef21de8c2"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-course-fr-390.png",
+      "width": 390,
+      "height": 844,
+      "bytes": 43644,
+      "sha256": "301fef202ff675b835aa8944d9d43953c04358b8c1439508f269d31a127f9fbc"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-course-fr-390-full.png",
+      "width": 390,
+      "height": 4926,
+      "bytes": 214612,
+      "sha256": "d282722a28ce3a5cc158f1d3311e3b2cda84aa9a64312cee7845dd1402586e97"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-course-en-1440.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 87922,
+      "sha256": "4e4bf84aa8a421da312dc838516822799c817239bf28abe9b11b0ccfe1bc5a98"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-course-en-1440-full.png",
+      "width": 1440,
+      "height": 3510,
+      "bytes": 229959,
+      "sha256": "9b4069d68e717a472dd36dbdffa0bd2af421ba6736de212077b31afef2abc21d"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-course-en-390.png",
+      "width": 390,
+      "height": 844,
+      "bytes": 41914,
+      "sha256": "84f075ab74a2d1180bc30655dd167b152d13fa6c4e8b0c40f09896f4592e73d5"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-course-en-390-full.png",
+      "width": 390,
+      "height": 4780,
+      "bytes": 205971,
+      "sha256": "cc9b20f98b36535044a1d24d7ede32c03cceb7040eeef2e27367a3882a7f1124"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-single-offer-fr-390.png",
+      "width": 390,
+      "height": 6061,
+      "bytes": 266670,
+      "sha256": "adae19192a62f06df72ceae276fb180a4e88c6663049c5ab24b89acfb775de74"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-local-order-fr-390.png",
+      "width": 390,
+      "height": 2654,
+      "bytes": 117168,
+      "sha256": "9b962dc22cd3c6461af3200c08eafb388bbf86d6ccedbe8ff308df524ce67ad8"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-unpaid-return-fr-390.png",
+      "width": 390,
+      "height": 1429,
+      "bytes": 60937,
+      "sha256": "e56419ee8adab36a20e4afb7dfa76088cbac9601f6770042b4283035c24e9a9a"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-single-offer-en-390.png",
+      "width": 390,
+      "height": 5847,
+      "bytes": 252254,
+      "sha256": "e9a54babaf1c591c7d7075e29fd0eb63132dd556a36c5abd55d3170632839224"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-local-order-en-390.png",
+      "width": 390,
+      "height": 2634,
+      "bytes": 107342,
+      "sha256": "8767042d84f84c2652ee98bb7eb6a8e63d64aa1b9f31c51929489bc6c8f6841d"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-unpaid-return-en-390.png",
+      "width": 390,
+      "height": 1302,
+      "bytes": 55239,
+      "sha256": "54c5423889cf5aca9b62f6dc9c7fb9ce6a5ce2a655c8a9ae1a6d89634afd9ee8"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-multiple-choice-fr-390.png",
+      "width": 390,
+      "height": 6211,
+      "bytes": 268032,
+      "sha256": "301eb677eed121e5694e9593629cd3c57b8582067a7cc833ea37f1edd2a49baf"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-multiple-choice-fr-1440.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 104002,
+      "sha256": "b7e139db38bf5da255c94aff676278eb5385e0b90aa51d16dfd56520a95aa4aa"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-multiple-choice-fr-1440-full.png",
+      "width": 1440,
+      "height": 3578,
+      "bytes": 302235,
+      "sha256": "ff32edaceaccfa153cab31551b8d8055e0e3002c15b0b133bdcf602da42c4115"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-filtered-pagination-fr-390.png",
+      "width": 390,
+      "height": 1226,
+      "bytes": 47654,
+      "sha256": "cdc3f26b458fdea8b6b9b9deb8dc8e4e69b0449c72f413361614e2754e80235c"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-multiple-choice-en-390.png",
+      "width": 390,
+      "height": 5929,
+      "bytes": 258283,
+      "sha256": "186cd5175dec6ea72bfc65b63132192363ab16d303db5816b52662edbf54bcbd"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-multiple-choice-en-1440.png",
+      "width": 1440,
+      "height": 1000,
+      "bytes": 98447,
+      "sha256": "f28598deeb47ded0e73103ede72db7587ecac364ca525740937cfb75c820d498"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-multiple-choice-en-1440-full.png",
+      "width": 1440,
+      "height": 3510,
+      "bytes": 291808,
+      "sha256": "38936b0eda658dbeb58cb81effc78ca2a5487baca688352b537930e95e85312b"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-filtered-pagination-en-390.png",
+      "width": 390,
+      "height": 1190,
+      "bytes": 45862,
+      "sha256": "d658d13b58ec41a29645ff3ec10795d081c571f1ef77a10ba4b956eaca41ab9d"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-inactive-offer-fr-390.png",
+      "width": 390,
+      "height": 2217,
+      "bytes": 90925,
+      "sha256": "5756fb260583e2cc6d049377a3b44be5d70b60b7933602343d46ee82d241d1dd"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-reapproved-new-price-original-snapshots-fr-390.png",
+      "width": 390,
+      "height": 1704,
+      "bytes": 69502,
+      "sha256": "5791ec7a3438dd3f4354a2eda536f71b6fa0aee8b9c49725a0276eb16f654ee2"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-connected-free-preview-no-course-right-fr-1440.png",
+      "width": 1440,
+      "height": 3578,
+      "bytes": 302361,
+      "sha256": "f99e79301e053872022cb2cf5b7a1d20aa9c845ef8f78970016ba2dd24938b9e"
+    },
+    {
+      "file": "docs/evidence/AUD04-browser/2026-11-22T06-49-25-227Z-fd43bc19-b56d-45ba-86ae-eb9020f9b062/after-expired-test-origin-fr-1440.png",
+      "width": 1440,
+      "height": 3578,
+      "bytes": 302361,
+      "sha256": "f99e79301e053872022cb2cf5b7a1d20aa9c845ef8f78970016ba2dd24938b9e"
+    }
+  ]
+}

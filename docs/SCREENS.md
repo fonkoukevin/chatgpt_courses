@@ -74,6 +74,14 @@ Présenter le résultat utile de la plateforme, une recherche et des entrées pa
 
 Le contenu provient des ressources publiées ; les catégories vides ne doivent pas paraître alimentées. Les annonces commerciales viennent de l’offre configurée, pas d’un texte indépendant. En cas de service indisponible, conserver une navigation utile sans inventer des résultats.
 
+AUD-01 distingue désormais la sélection de vitrine des publications utilisables par lien direct en recette. Sans ressource sélectionnée dans la langue demandée, l’accueil montre un état de préparation sobre, sans activité proposée, recherche vide, exemple de produit ou section de tâches sans destination. Une panne de lecture reste un état d’erreur distinct. Les tâches sont affichées seulement lorsque leur facette a un nombre positif.
+
+AUD-03 ajoute une composition à un seul parcours : une requête COURSE distincte détermine cette unicité, puis le détail exact vérifie identité/version/révision/langue. Le titre, l’objectif, le public, le résultat, les prérequis et les modules viennent de cette publication. L’essai est une activité FREE publiée du programme exact, avec les versions du cours et de l’activité dans l’URL ; une activité gratuite étrangère au programme n’est pas utilisée. La recherche et la grille des activités ne dominent pas cet accueil. Sans essai valide, aucune promesse gratuite n’est affichée. Zéro ou plusieurs parcours gardent leurs états adaptés.
+
+La proposition BR01 en trois fragments (brief, livrable, contrôle) reste limitée à local/test et explicitement fictive et à valider. Staging/production utilisent seulement les données publiques du parcours sélectionné. La navigation de cet accueil est Formation / Essai gratuit si disponible / Ressources si utiles / Compte, identique sur ordinateur et mobile. Le pied de page relie les pages d’aide et de demandes du compte avec leur exigence de connexion ; contact, auteur et informations juridiques manquants sont préparés en brouillon. [Textes et limites](../content/course-client-proposal/HOME_PRESENTATION_DRAFT.md).
+
+La navigation publique desktop et mobile utilise les mêmes disponibilités serveur : Méthodes, Guides et Offres apparaissent seulement si leur sélection contient des résultats. Catalogue et compte gardent leurs routes. Les lectures de disponibilité ne transmettent aucun cookie ; l’absence de réponse n’invente pas une catégorie disponible. La lecture des facettes est dédupliquée dans le rendu serveur courant, sans cache partagé entre visiteurs.
+
 Composants : PublicHeader, TaskNavigation, CourseCard, ExampleResult, FAQ et Footer. Le mobile donne accès rapidement à la recherche et à l’essai, sans dépendre d’un grand visuel décoratif.
 
 ## E02 Catalogue et recherche transversale
@@ -86,17 +94,23 @@ Résultats de parcours, exercices, méthodes et guides avec type, objectif, nive
 
 Prévoir chargement, résultat, zéro résultat et panne. La panne n’affiche pas un catalogue fictif comme résultat de recherche. Proposer catégories et nouvelle tentative. Les résultats privés/non publiés sont exclus du service public, et non seulement masqués par CSS.
 
+AUD-01 masque les filtres sans option réelle, tout en gardant un filtre déjà présent dans l’URL visible et réinitialisable. Une langue sans autre choix reste portée par le formulaire, même quand son sélecteur est omis. Si la seule langue de contenu disponible diffère de la langue demandée, le sélecteur reste accessible sur ordinateur et mobile : un visiteur de l’interface EN peut ainsi choisir les ressources FR sans changer d’interface. Un catalogue sans sélection éditoriale affiche l’état de préparation ; une recherche sans correspondance et une panne conservent leurs états propres. Les routes filtrées existantes ne sont pas supprimées.
+
 Composants : SearchField, FilterGroup, ActiveFilters, ResultCard, Pagination, EmptyState et RetryState. Panneau de filtres sur mobile.
 
 ## E03 Fiche de parcours
 
 Routes : /fr/parcours/{slug} et /en/courses/{slug}. Phase P06, raccord commercial P11/P12.
 
-P06 lit la fiche publiée et son programme de métadonnées. Chaque module/activité conserve la version enregistrée dans la composition, même si une version plus récente existe. Les contenus PROTECTED ne livrent aucun bloc, corrigé ou quiz au HTML public. L’encart d’accès explique l’absence d’offre/paiement ; aucun tarif ou droit n’est inventé. Les langues manquantes, dépassées ou retirées sont présentées comme telles, sans remplacer la ressource.
+P06 lit la fiche publiée et son programme de métadonnées. Chaque module/activité conserve la version enregistrée dans la composition, même si une version plus récente existe. Les contenus PROTECTED ne livrent aucun bloc, corrigé ou quiz au HTML public. Les langues manquantes, dépassées ou retirées sont présentées comme telles, sans remplacer la ressource.
 
-Ordre : livrable attendu, bénéficiaire, aperçu, programme, prérequis, outils nécessaires, modalités de vérification, langues, conditions de l’offre, FAQ. Le programme expose activités ouvertes, accessibles, verrouillées et prérequis.
+AUD-04 présente le titre et le résultat attendu, puis une activité FREE publiée du programme avec son titre, son résumé et son lien exact. Public/prérequis, étapes et activités, vérification, outils, format/langues et FAQ suivent. Le programme conserve ses versions ; leurs numéros et la date de revue restent consultables dans un détail secondaire. Auteur et format restent indiqués non renseignés tant que ces informations ne sont pas exposées par une source publique. Une durée absente n’est pas estimée par l’interface.
 
-L’action dépend du contexte : commencer gratuitement, voir l’offre ou reprendre. L’accès existant rend la reprise prioritaire. Une ressource peut rester consultable par un client existant alors que sa vente est suspendue. Version remplacée et modifications pédagogiques ont une explication et un lien appropriés.
+Le bouton d’essai est disponible dès le héros et l’aperçu conserve un lien secondaire vers la même activité. Lorsqu’un module publié ne contient qu’une activité publiée aux titre/résumé strictement identiques, une seule ligne de programme présente son lien et son statut d’accès ; toutes les versions restent dans le détail secondaire. Les autres compositions restent développées.
+
+L’encart regroupe le contexte du compte et les offres approuvées qui incluent exactement le parcours, sa version et la langue vendue. Prix/devise, inclusions et conditions proviennent de Spring. Plusieurs offres donnent un choix, avec trois aperçus au plus et une liste filtrée complète paginée ; absence, suspension et panne ont des états distincts. Le lien ouvre l’offre pour revue et parcours de commande existant. Sur mobile, l’encart suit l’aperçu avant le programme ; sur grand écran, il occupe la colonne latérale.
+
+L’action dépend du contexte : commencer gratuitement, se connecter, consulter l’offre ou reprendre. L’accès existant rend la reprise prioritaire : le contrôle privé porte sur le parcours exact, jamais sur son seul extrait gratuit ; l’inscription ne prouve aucun droit. La reprise conserve l’inscription et la composition correspondantes. Un refus d’accès renvoie vers les accès du compte sans inventer sa cause depuis un simple403. Une ressource peut rester consultable par un client existant alors que sa vente est suspendue. Version remplacée et modifications pédagogiques ont une explication et un lien appropriés.
 
 La durée estimée vient d’un champ éditorial vérifié ; elle n’est pas fabriquée pour remplir une carte. Les langues et services disponibles reflètent la configuration réelle.
 
@@ -188,11 +202,19 @@ P10 raccorde `LearningMediaPort` au registre vidéo et ajoute les ressources éd
 
 P09 raccorde l’atelier de projet quand l’activité FREE publiée possède une politique complète : préparation textuelle avant compte, puis conservation volontaire dans l’espace propriétaire. Un ancien contenu sans politique ne reçoit pas une fausse grille par défaut. Composants : `LearningActivity`, `ActivityProgramme`, `ActivityNavigation`, `ActivityProgress`, `ActivityNotes`, `ActivityQuiz` et historique/résultat de quiz. Les preuves P08 restent historiques ; le périmètre technique du raccordement P09 est validé localement, avec ses limites dans [evidence/P09.md](evidence/P09.md).
 
+AUD-05 organise l’activité en quatre moments ancrés et toujours montés : comprendre, produire, vérifier et réutiliser. La consigne et les ressources précèdent la rédaction ; le projet se prépare avant la longue grille. Version, langue et date de revue sont regroupées dans un détail secondaire. Les critères conservent clés, libellés et points ; seules les clés contractuelles reconnues sont regroupées dans les cinq catégories existantes, les autres restent dans un groupe neutre.
+
+Lorsque le contexte parcours/module/activité est retiré ou indisponible, la page conserve le refus pédagogique et propose séparément les notes et l’historique propriétaires. Cette référence publique contient seulement identité, version et langue ; les composants privés existants recherchent le travail sous le compte actif, sans corps de leçon ou corrigé dans les props. Aucune nouvelle note ne peut être créée sur cette source indisponible. Les états de compte expiré/changé sont conservés ; une connexion ne rétablit pas le contenu retiré.
+
+Une activité avec consigne mais sans politique de projet, notamment M01, propose un essai vide en mémoire avec choix explicite de langue de rédaction, copie et export Markdown littéral. Il ne crée ni projet ni grille et ne promet aucun import ou stockage de deux heures. Les changements d’ancre gardent la rédaction ; une sortie par lien ou changement de langue déclenche l’avertissement de perte. Le quiz présente réponses et explications avant bilan et conservation ; une vérification formative ne sera pas récupérée après connexion. Lecture, quiz, projet et compétence restent distincts.
+
 ## E11 Projets et vérification
 
 Routes : `/fr/espace/projets` et `/en/my/projects`, puis `/{projectId}` ; import `nouveau`/`new` avec UUID de brouillon selon le registre. Périmètre technique des interfaces et services P09 validé localement ; résultats, limites et refus d’accusé isolé non reproduit sont conservés dans [evidence/P09.md](evidence/P09.md). Pièces jointes TXT P10 validées en intégration locale, PDF indisponible ; contenu final P18 encore à fournir.
 
 La liste propriétaire est paginée, recherchable par texte et filtrable par état déclaré ou activité/version. Elle expose des résumés, sans charger toutes les productions. L’atelier sépare dossier, rédaction, vérification et corrigé. Sept sections structurées et texte collé indépendant restent modifiables sans insérer un exemple à leur place. Le dossier suit la version exacte ; changement de langue d’interface conserve le même projet et sa langue personnelle. Un anonyme peut préparer un texte et conserver volontairement un brouillon non sensible deux heures dans l’onglet ; l’identification présente le compte et exige un import explicite, sans création automatique.
+
+AUD-05 ajoute des aides courtes aux champs structurés, sans réponse préremplie. Dans la préparation, un bouton de dossier reste à portée de rédaction et ouvre le panneau contextuel ; fermer ce panneau ne démonte pas les champs. La durée de deux heures et le consentement P09 ne concernent que cette préparation de projet configurée. Un bouton de préparation indisponible ne déclenche pas un chargement sans lecture autorisée ; une préparation déjà ouverte reste montée lors de la revalidation du compte.
 
 Le stade sauvegardé distingue brouillon et prêt pour autoévaluation ; prêt exige du texte, sans contrôle automatique de qualité. L’état dérivé ajoute autoévaluation renseignée ou à réviser. La grille capturée expose vingt critères à un point en cinq catégories, quatre déclarations d’erreurs et un seuil explicite configurable. Les commentaires restent personnels. Le résultat affiche score déclaré, seuil, erreurs, date et provenance ; il ne prétend pas vérifier les montants ou la vérité de la proposition. Une nouvelle rédaction conserve les anciennes évaluations en historique, avec avertissement lorsqu’elles concernent une autre révision.
 

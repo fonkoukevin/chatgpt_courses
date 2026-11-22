@@ -10,7 +10,7 @@ import { methodsPath } from '../../apps/web/src/lib/methods/routes';
 import { methodDraftPrefix } from '../../apps/web/src/lib/auth/method-draft';
 import { csrfHeaders } from './editorial-fixture';
 import { contentAction, currentContent } from './editorial-api';
-import { publishPublicContent } from './public-content-fixture';
+import { publishShowcaseContent } from './public-content-fixture';
 import { controlApi } from './control';
 import { authPath, createMethodSources, createPersonalMethod, fillMethodLogin, loginMethodAccount, methodFields, methodLearner, methodRecord, methodSourceHref, patchPersonalMethod } from './methods-fixture';
 
@@ -200,7 +200,7 @@ test.describe('P07 real methods', () => {
       expect(source.value.document?.methodDefinition?.starterInstruction).toBe(revisedInstruction);
       await captureSection(cmsPage, cmsPage.locator('#cms-method-definition'), 'en-1440-cms-method-definition');
     } finally { await cmsContext.close(); }
-    source = await publishPublicContent(editor, source);
+    source = await publishShowcaseContent(editor, source);
     await page.goto(methodsPath('en', own.id));await expect(page.getByText(t.sourceUpdated, { exact: true })).toBeVisible();
     await expect(page.getByLabel(t.output, { exact: true })).toHaveValue(fields.text);
     await contentAction(editor, source, 'archive', { reason: 'P07 source withdrawal leaves personal work intact' });

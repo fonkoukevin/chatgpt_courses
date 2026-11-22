@@ -1,0 +1,362 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.tools\\node-v24.22.2-win-x64\\node.exe",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts"
+    ],
+    "configFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\playwright.config.ts",
+    "rootDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": true,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 1200000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/.runtime/browser-2026-11-22T06-44-24-872Z-ae6aaafc-8c08-41b4-bf19-3ee1d77a159f/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/kevin/OneDrive/Desktop/courses_chatgpt/codex-chatgpt-courses/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/aud04-course.spec.ts"
+        ],
+        "timeout": 240000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-22T06-44-24-872Z-ae6aaafc-8c08-41b4-bf19-3ee1d77a159f\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "snapshotDir": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/aud04-course.spec.ts",
+        "timeout": 240000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3101",
+          "browserName": "chromium",
+          "headless": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "actionTimeout": 10000,
+          "navigationTimeout": 20000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off",
+          "serviceWorkers": "block"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\docs\\evidence\\AUD04-browser\\2026-11-22T06-44-24-872Z-ae6aaafc-8c08-41b4-bf19-3ee1d77a159f\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "aud04-course.spec.ts",
+      "file": "aud04-course.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "AUD04 course decision and exact commercial destination",
+          "file": "aud04-course.spec.ts",
+          "line": 37,
+          "column": 6,
+          "specs": [
+            {
+              "title": "FR/EN course viewport and full-page baseline and final comparison",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud04-course.spec.ts",
+                        "line": 37,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5535,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-22T06:45:04.497Z",
+                      "annotations": [
+                        {
+                          "type": "serial",
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud04-course.spec.ts",
+                            "line": 37,
+                            "column": 6
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9ad8d1444b5588687736-6d6a8cd9698551510a3c",
+              "file": "aud04-course.spec.ts",
+              "line": 54,
+              "column": 3
+            },
+            {
+              "title": "one exact offer leads to explicit FR/EN consent and a local pending order without rights",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud04-course.spec.ts",
+                        "line": 37,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 18623,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'Poursuivre vers le paiement', exact: true })\nExpected: disabled\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" getByRole('button', { name: 'Poursuivre vers le paiement', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Poursuivre vers le paiement', exact: true })\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'Poursuivre vers le paiement', exact: true })\nExpected: disabled\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" getByRole('button', { name: 'Poursuivre vers le paiement', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Poursuivre vers le paiement', exact: true })\u001b[22m\n\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud04-course.spec.ts:119:83",
+                        "location": {
+                          "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud04-course.spec.ts",
+                          "column": 83,
+                          "line": 119
+                        },
+                        "snippet": " \u001b[90m 117 |\u001b[39m         \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-order-id]'\u001b[39m))\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'data-order-id'\u001b[39m\u001b[33m,\u001b[39m created\u001b[33m.\u001b[39mid)\u001b[33m;\u001b[39m\n \u001b[90m 118 |\u001b[39m         expect(created\u001b[33m.\u001b[39msnapshot\u001b[33m.\u001b[39mofferId)\u001b[33m.\u001b[39mtoBe(single\u001b[33m.\u001b[39mvalue\u001b[33m.\u001b[39mid)\u001b[33m;\u001b[39m expect(created\u001b[33m.\u001b[39msnapshot\u001b[33m.\u001b[39mofferRevision)\u001b[33m.\u001b[39mtoBe(single\u001b[33m.\u001b[39mvalue\u001b[33m.\u001b[39mrevision)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 119 |\u001b[39m         expect(created\u001b[33m.\u001b[39msnapshot\u001b[33m.\u001b[39mtotal)\u001b[33m.\u001b[39mtoEqual(single\u001b[33m.\u001b[39mvalue\u001b[33m.\u001b[39mfields\u001b[33m.\u001b[39mprice)\u001b[33m;\u001b[39m expect(created\u001b[33m.\u001b[39msnapshot\u001b[33m.\u001b[39mconditions)\u001b[33m.\u001b[39mtoEqual(single\u001b[33m.\u001b[39mvalue\u001b[33m.\u001b[39mfields\u001b[33m.\u001b[39mconditions)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 120 |\u001b[39m         expect(created\u001b[33m.\u001b[39msnapshot\u001b[33m.\u001b[39mlocale)\u001b[33m.\u001b[39mtoBe(locale)\u001b[33m;\u001b[39m expect(created\u001b[33m.\u001b[39macceptedTermsVersion)\u001b[33m.\u001b[39mtoBe(single\u001b[33m.\u001b[39mvalue\u001b[33m.\u001b[39mfields\u001b[33m.\u001b[39mconditions\u001b[33m!\u001b[39m\u001b[33m.\u001b[39mtermsVersion)\u001b[33m;\u001b[39m\n \u001b[90m 121 |\u001b[39m         expect(created\u001b[33m.\u001b[39msnapshot\u001b[33m.\u001b[39mresources\u001b[33m.\u001b[39mmap(resource \u001b[33m=>\u001b[39m [resource\u001b[33m.\u001b[39mresourceId\u001b[33m,\u001b[39m resource\u001b[33m.\u001b[39mversionId]))\u001b[33m.\u001b[39mtoEqual([[course\u001b[33m.\u001b[39mvalue\u001b[33m.\u001b[39mresourceId\u001b[33m,\u001b[39m course\u001b[33m.\u001b[39mvalue\u001b[33m.\u001b[39mversionId]])\u001b[33m;\u001b[39m\n \u001b[90m 122 |\u001b[39m         expect([created\u001b[33m.\u001b[39morderStatus\u001b[33m,\u001b[39m created\u001b[33m.\u001b[39mpaymentStatus\u001b[33m,\u001b[39m created\u001b[33m.\u001b[39mfulfillmentStatus])\u001b[33m.\u001b[39mtoEqual([\u001b[32m'PREPARED'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'NOT_STARTED'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'NOT_STARTED'\u001b[39m])\u001b[33m;\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud04-course.spec.ts",
+                            "column": 83,
+                            "line": 119
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'Poursuivre vers le paiement', exact: true })\nExpected: disabled\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" getByRole('button', { name: 'Poursuivre vers le paiement', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Poursuivre vers le paiement', exact: true })\u001b[22m\n\n\n  117 |         await expect(page.locator('[data-order-id]')).toHaveAttribute('data-order-id', created.id);\n  118 |         expect(created.snapshot.offerId).toBe(single.value.id); expect(created.snapshot.offerRevision).toBe(single.value.revision);\n> 119 |         expect(created.snapshot.total).toEqual(single.value.fields.price); expect(created.snapshot.conditions).toEqual(single.value.fields.conditions);\n      |                                                                                   ^\n  120 |         expect(created.snapshot.locale).toBe(locale); expect(created.acceptedTermsVersion).toBe(single.value.fields.conditions!.termsVersion);\n  121 |         expect(created.snapshot.resources.map(resource => [resource.resourceId, resource.versionId])).toEqual([[course.value.resourceId, course.value.versionId]]);\n  122 |         expect([created.orderStatus, created.paymentStatus, created.fulfillmentStatus]).toEqual(['PREPARED', 'NOT_STARTED', 'NOT_STARTED']);\n    at C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud04-course.spec.ts:119:83"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-22T06:46:20.468Z",
+                      "annotations": [
+                        {
+                          "type": "serial",
+                          "location": {
+                            "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud04-course.spec.ts",
+                            "line": 37,
+                            "column": 6
+                          }
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-22T06-44-24-872Z-ae6aaafc-8c08-41b4-bf19-3ee1d77a159f\\results\\aud04-course-AUD04-course--6c188-ending-order-without-rights\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-22T06-44-24-872Z-ae6aaafc-8c08-41b4-bf19-3ee1d77a159f\\results\\aud04-course-AUD04-course--6c188-ending-order-without-rights\\error-context.md"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\.runtime\\browser-2026-11-22T06-44-24-872Z-ae6aaafc-8c08-41b4-bf19-3ee1d77a159f\\results\\aud04-course-AUD04-course--6c188-ending-order-without-rights\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud04-course.spec.ts",
+                        "column": 83,
+                        "line": 119
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "9ad8d1444b5588687736-f67676334c6438db531c",
+              "file": "aud04-course.spec.ts",
+              "line": 84,
+              "column": 5
+            },
+            {
+              "title": "several exact choices retain filtering and pagination while inactive and changed offers remain honest",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud04-course.spec.ts",
+                        "line": 37,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-22T06:46:39.295Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "9ad8d1444b5588687736-ee9769498b3cfc0feb80",
+              "file": "aud04-course.spec.ts",
+              "line": 132,
+              "column": 5
+            },
+            {
+              "title": "a free first lesson never proves course access; a real temporary test origin resumes then expires",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\kevin\\OneDrive\\Desktop\\courses_chatgpt\\codex-chatgpt-courses\\tests\\browser\\aud04-course.spec.ts",
+                        "line": 37,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-22T06:46:39.297Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "9ad8d1444b5588687736-42b60331263dc0bd098e",
+              "file": "aud04-course.spec.ts",
+              "line": 177,
+              "column": 5
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-22T06:45:02.716Z",
+    "duration": 96620.36200000001,
+    "expected": 1,
+    "skipped": 2,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

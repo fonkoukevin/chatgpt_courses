@@ -4,7 +4,7 @@
   "title": "Check the proposal and explain your revisions",
   "summary": "Review a specific revision against twenty checks, address blocking issues and retain the reasons for changes.",
   "objective": "Identify and correct departures from BR01 facts without treating a self-reported score as validation.",
-  "expectedResult": "A BR01 self-assessment tied to one revision, an improved proposal and reasons for the corrections.",
+  "expectedResult": "A BR01 self-assessment tied to one revision, a checked proposal and reasons for any corrections.",
   "prerequisites": [
     "Have a saved version of your BR01 proposal.",
     "Keep the brief, TR01 and starting conditions available."
@@ -112,12 +112,12 @@
     },
     {
       "type": "PARAGRAPH",
-      "text": "Finish by recording three changed decisions and their justification, then reread the revised version. The next module turns the proposal into an email and a personal method before testing the reasoning on BR02. Reuse the questions and checks, without automatically carrying across BR01 amounts or timing.",
+      "text": "Explain three checks with their passages and source facts. Correct actual departures and justify each change; if the text already respects the case, explain why. Reread it. Next, turn the proposal into emails and a method, then test BR02 without carrying across BR01 amounts or timing.",
       "url": null
     }
   ],
   "exercise": {
-    "instructions": "Complete the twenty checks for your BR01 revision and declare any blocking issues. Correct the departures in a new version. For three changes, record the passage, source fact and decision changed. Save and reassess the improved revision.",
+    "instructions": "Complete the twenty checks for your BR01 revision and declare blockers. Explain three checks with the passage, source fact and conclusion. Correct actual departures in a new saved revision and reassess it. If no departure is found, justify the checks without inventing changes.",
     "correction": "Twenty checks are divided into five four-point categories. The design reference is 16/20 without a blocking issue; a high score cannot cancel any of the four blockers. The five prices total €1,200 excluding tax. BR01 provides fifteen business days subject to both starting conditions, with feedback within three business days. An old assessment or a viewed solution does not validate new wording."
   },
   "quiz": [

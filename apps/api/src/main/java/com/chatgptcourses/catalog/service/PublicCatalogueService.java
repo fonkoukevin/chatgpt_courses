@@ -47,7 +47,7 @@ public class PublicCatalogueService {
           AND v.version_number=(SELECT max(newest.version_number) FROM pedagogical_versions newest
             WHERE newest.resource_id=r.id AND EXISTS(SELECT 1 FROM content_translations published
               WHERE published.pedagogical_version_id=newest.id AND published.published_revision_id IS NOT NULL))
-        """;
+        """ + " AND " + PublicSelectionSql.CONTENT_SELECTED;
     private static final String CARD_SELECT="""
         SELECT r.id AS resource_id,r.kind,v.id AS version_id,v.version_number,t.locale,t.published_verified_at,
           e.id AS revision_id,e.title,e.summary,e.document_json::text AS document_text,s.slug,m.metadata_json::text AS metadata_text

@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 1,
+  "result": "passed",
+  "sourceCommit": "7572fcf51fe51749d7eec9b9ec62f293998091d0",
+  "runId": 43763492075,
+  "event": "push",
+  "branch": "main",
+  "observedAt": "2026-11-15T21:38:25.893Z",
+  "mainProofEligible": true,
+  "collectionSha256": "bc5932087788992cbe7115ad3fdd0074aae8af719a5fa9d367dc4d3b091d645f",
+  "rawLogsRead": false,
+  "externalMutationPerformed": false,
+  "visualReviewPerformed": false,
+  "jobs": [
+    {
+      "name": "api",
+      "id": 132963284364,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "web",
+      "id": 132963284596,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "e2e",
+      "id": 132964658953,
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "api",
+      "id": 14181139345,
+      "name": "api-checks-43763492075-1",
+      "zipSha256": "56958009b1490f2a3fafdd15c63afe346bfeb4674b04f0fa665df4252bedb8e5",
+      "zipBytes": 11704,
+      "zipDigestVerified": true,
+      "sourceVerified": true,
+      "counts": {
+        "tests": 271,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "suites": 41
+    },
+    {
+      "kind": "web",
+      "id": 14181560536,
+      "name": "web-checks-43763492075-1",
+      "zipSha256": "fbedd465e0362f0b29719a4d6a2d7ff8256275a28de581a9f118cdceec831e1f",
+      "zipBytes": 2931,
+      "zipDigestVerified": true,
+      "sourceVerified": true,
+      "client": {
+        "tests": 125,
+        "suites": 0,
+        "pass": 125,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "scripts": {
+        "tests": 144,
+        "suites": 0,
+        "pass": 144,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "stripeConfig": {
+        "tests": 5,
+        "suites": 0,
+        "pass": 5,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "kind": "e2e",
+      "id": 14181447018,
+      "name": "e2e-checks-43763492075-1",
+      "zipSha256": "bb26b37ed81af9ea5ef1cfa9873d2e6172f58e1fcacd0318bc4dcd931f3bdbbb",
+      "zipBytes": 470234,
+      "zipDigestVerified": true,
+      "sourceVerified": true,
+      "browserCounts": {
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "flaky": 0
+      },
+      "automaticRetriesObserved": false,
+      "cleanupConfirmed": true,
+      "productionChecks": [
+        {
+          "name": "real-Spring-PostgreSQL-health-through-Next",
+          "passed": true
+        },
+        {
+          "name": "public-page-/fr",
+          "passed": true,
+          "observed": 200
+        },
+        {
+          "name": "public-page-/en",
+          "passed": true,
+          "observed": 200
+        },
+        {
+          "name": "fixture-route-closed-/fr/dev/public",
+          "passed": true,
+          "observed": 404
+        },
+        {
+          "name": "fixture-route-closed-/fr/dev/foundations",
+          "passed": true,
+          "observed": 404
+        },
+        {
+          "name": "fixture-route-closed-/en/dev/public",
+          "passed": true,
+          "observed": 404
+        },
+        {
+          "name": "private-API-requires-authentication",
+          "passed": true,
+          "observed": 401
+        },
+        {
+          "name": "production-session-cookie-flags",
+          "passed": true
+        },
+        {
+          "name": "isolated-production-database-readable",
+          "passed": true
+        },
+        {
+          "name": "no-demo-account-content-offer-order-or-grant",
+          "passed": true,
+          "counts": {
+            "users": 0,
+            "resources": 0,
+            "offers": 0,
+            "orders": 0,
+            "grants": 0,
+            "migrations": 20
+          }
+        },
+        {
+          "name": "Next-started-without-database-mail-storage-or-payment-secrets",
+          "passed": true
+        },
+        {
+          "name": "all-Flyway-migrations-applied",
+          "passed": true,
+          "observed": 20
+        }
+      ],
+      "migrations": 20,
+      "jarSha256": "084f96865c51b7d38c0035681170b584554ed468bfdc7de19fb0ef7015cef909",
+      "webBuildId": "CE7weFQ1Q3xBt-h71girn",
+      "screenshotCount": 8,
+      "visualReviewPerformed": false,
+      "probe": {
+        "result": "passed",
+        "cleanupConfirmed": true,
+        "realPostgreSQL": true,
+        "sharedDatabaseChanged": false
+      }
+    }
+  ]
+}

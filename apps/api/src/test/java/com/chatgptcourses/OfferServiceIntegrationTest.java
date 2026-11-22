@@ -70,6 +70,8 @@ class OfferServiceIntegrationTest {
         assertThat(en.resources().getFirst().access()).isEqualTo("PROTECTED");assertThat(en.title()).isEqualTo("DEMO course offer");
         assertThat(fr.price().amountMinor()).isEqualTo(2500);assertThat(fr.price().currency()).isEqualTo("EUR");
         var missing=offers.publicOffer(offer.id(),"en");assertThat(missing.translationAvailable()).isTrue();
+        assertThat(offers.listPublic(new OfferQuery(offer.code(),null,"COURSE","fr",0,1)).items()).isEmpty();
+        DiscoveryTestSelections.offer(jdbc,offer);
         assertThat(offers.listPublic(new OfferQuery(offer.code(),null,"COURSE","fr",0,1)).total()).isEqualTo(1);
     }
 

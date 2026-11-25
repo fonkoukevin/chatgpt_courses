@@ -250,6 +250,33 @@
       "reason": "blocked by policy",
       "processStarted": false,
       "alternativeStartupAttempted": false
+    },
+    "followUp": {
+      "observedAt": "2026-11-25T19:51:30.176Z",
+      "result": "not-run",
+      "reason": "DOCKER_LINUX_NOT_READY",
+      "userAnnouncedDesktopStartup": true,
+      "contexts": [
+        {
+          "context": "desktop-linux",
+          "ready": false,
+          "exitCode": 1
+        },
+        {
+          "context": "default",
+          "ready": false,
+          "exitCode": 1
+        }
+      ],
+      "readinessArtifactSha256": "b821610be47ca387003ebcefe405abf5be8d1a301117765973fe1d165ca1efd0",
+      "preparedTestCommit": "5aee1e637fc87a6ffd6867fcde5322383852bce7",
+      "browserSpecSha256": "2591dbc5840764dec22b194996cbab80000b39021b43a900dd59c22a5bda0922",
+      "preExecutionReviewArtifactSha256": "5b6c572a054cc3088b754cab9ac8c91310d6c40a91de00845b203edbaecd7816",
+      "browserTypecheckExitCode": 0,
+      "standaloneWaitStrengthened": true,
+      "observedPostgresFailure": false,
+      "applicationStarted": false,
+      "dockerStartedByAgent": false
     }
   },
   "boundaries": {

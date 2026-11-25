@@ -64,6 +64,7 @@
     "verify:public": "node scripts/verify-browser.mjs P06",
     "verify:course-offers": "node scripts/verify-browser.mjs AUD04",
     "verify:workshop": "node scripts/verify-browser.mjs AUD05",
+    "verify:navigation": "node scripts/verify-browser.mjs AUD06",
     "verify:methods": "node scripts/verify-browser.mjs P07",
     "verify:learning": "node scripts/verify-browser.mjs P08",
     "verify:projects": "node scripts/verify-browser.mjs P09",

@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const phase = process.argv[2] ?? 'P18';
-if (process.argv.length > 3 || !/^(?:P\d{2}|AUD-0[2345])$/.test(phase)) throw new Error('Phase de preuve attendue : P suivi de deux chiffres, AUD-02, AUD-03, AUD-04 ou AUD-05.');
+if (process.argv.length > 3 || !/^(?:P\d{2}|AUD-0[23456])$/.test(phase)) throw new Error('Phase de preuve attendue : P suivi de deux chiffres ou AUD-02 à AUD-06.');
 const source = join(root, 'content/course-client-proposal/v1');
 const destination = join(root, '.runtime/content-course-client-proposal');
 const marker = join(destination, '.generated-by');

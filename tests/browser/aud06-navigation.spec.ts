@@ -97,7 +97,8 @@ test.describe('AUD06 real bilingual navigation and explicit unavailable translat
       await expect(page.getByRole('heading', { level: 1, name: translated.title, exact: true })).toBeVisible();
       const current = new URL(page.url()); expect(current.searchParams.get('activity')).toBe(activity.resourceId); expect(current.searchParams.get('version')).toBe(activity.versionId);
       await page.getByRole('link', { name: `← ${getPublicDictionary(target).backCatalogue}`, exact: true }).click();
-      await expect(page).toHaveURL(url => url.pathname === publicCatalogueHref(target)); expectedCatalogue(new URL(page.url()), target, new URL(returnTo, page.url()));
+      await expect(page).toHaveURL(url => url.pathname === publicCatalogueHref(target) && !url.searchParams.has('activity') && url.searchParams.get('locale') === target);
+      expectedCatalogue(new URL(page.url()), target, new URL(returnTo, page.url()));
       await capture(page, `${target}-390-standalone-return`);
     }
   });

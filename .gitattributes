@@ -7,3 +7,4 @@
 Dockerfile text eol=lf
 docs/evidence/P21*.json text eol=lf
 docs/evidence/AUD-01-05*.json text eol=lf
+docs/evidence/AUD-06*.json text eol=lf

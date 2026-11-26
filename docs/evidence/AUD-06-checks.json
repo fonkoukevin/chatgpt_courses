@@ -251,6 +251,29 @@
       "processStarted": false,
       "alternativeStartupAttempted": false
     },
+    "resumeChecks": [
+      {
+        "observedAt": "2026-11-26T20:47:31.285Z",
+        "completedAt": "2026-11-26T20:47:33.252Z",
+        "result": "not-run",
+        "reason": "DOCKER_LINUX_NOT_READY",
+        "contexts": [
+          { "context": "desktop-linux", "ready": false, "exitCode": 1, "timedOut": false },
+          { "context": "default", "ready": false, "exitCode": 1, "timedOut": false }
+        ],
+        "dockerDesktop": { "processCount": 0, "serviceStatus": "Stopped" },
+        "readinessArtifactSha256": "740cff991a4a24357177eab580e129fdb1fd044b08061b1e6be14fc1af485826",
+        "nodeVersion": "24.22.2",
+        "buildId": "0pkhJQUlA45ZQB4iqu19j",
+        "userNextFileSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+        "browserSpecSha256": "2591dbc5840764dec22b194996cbab80000b39021b43a900dd59c22a5bda0922",
+        "privateRecipeExitCode": 2,
+        "applicationStarted": false,
+        "dockerStartedByAgent": false,
+        "sharedDatabaseTouched": false,
+        "deploymentExecuted": false
+      }
+    ],
     "followUp": {
       "observedAt": "2026-11-25T19:51:30.176Z",
       "result": "not-run",

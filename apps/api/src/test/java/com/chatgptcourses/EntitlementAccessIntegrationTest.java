@@ -165,16 +165,82 @@ class EntitlementAccessIntegrationTest {
         }
     }
 
+    @Test void diagnosticKeepsPostgresPredicatesWhenProblemJsonAndSessionTransportFail()throws Exception{
+        var owner=account(false);var fixture=fixture(account(true).id());
+        grant(owner.id(),fixture.course(),"[\"fr\",\"en\"]","PINNED","clock_timestamp()-interval '1 minute'",null,null);
+        var sessionCalls=new java.util.concurrent.atomic.AtomicInteger();
+        String privateMarker="DIAGNOSTIC_PRIVATE_BODY_MUST_NOT_BE_REPORTED";
+        for(var body:List.of("<html>"+privateMarker+"</html>","{broken:"+privateMarker,
+                "{\"code\":\"ACCESS_DENIED\",\"private\":\""+privateMarker+"\"}")){
+            var report=collectFreshFailure(403,body,()->{
+                sessionCalls.incrementAndGet();throw new java.io.IOException(privateMarker);
+            },owner.id(),fixture,"fr","diagnostic-regression",true);
+            String serialized=mapper.writeValueAsString(report);
+            boolean containsPrivateData=java.util.stream.Stream.of(privateMarker,"ONLY_MEMBER_BODY","ONLY_REVEALED_SOLUTION",owner.id().toString(),owner.email(),owner.password())
+                .anyMatch(serialized::contains);
+            assertThat(containsPrivateData).as("Diagnostic must omit private data, including assertion output").isFalse();
+            assertThat(report).containsEntry("ownerActive",true)
+                .containsEntry("capturedAfterUnexpectedRead",false)
+                .containsEntry("captureContext","INTENTIONAL_DIAGNOSTIC_CHECK")
+                .containsEntry("problemJsonAvailable",body.startsWith("{\"code\""))
+                .containsEntry("sessionTransportAvailable",false).containsEntry("sessionJsonAvailable",false)
+                .containsEntry("ownerAvailable",true).containsEntry("exactPinnedNodesAvailable",true)
+                .containsEntry("originsAvailable",true);
+            if(body.startsWith("{\"code\""))assertThat(report).containsEntry("problemCode","ACCESS_DENIED");
+            else assertThat(report).doesNotContainKey("problemCode");
+            var nodes=mapper.valueToTree(report.get("exactPinnedNodes"));
+            assertThat(nodes.isArray()).isTrue();assertThat(nodes.size()).isEqualTo(3);
+            for(var node:nodes){
+                assertThat(node.path("available").asBoolean()).isTrue();
+                assertThat(node.path("unarchived").asBoolean()).isTrue();
+                assertThat(node.path("locale_exists").asBoolean()).isTrue();
+                assertThat(node.path("translation_available").asBoolean()).isTrue();
+                assertThat(node.path("published_document").asBoolean()).isTrue();
+                assertThat(node.path("source_fresh").asBoolean()).isTrue();
+            }
+            var origins=mapper.valueToTree(report.get("origins"));
+            assertThat(origins.isArray()).isTrue();assertThat(origins.size()).isEqualTo(1);
+            for(var predicate:List.of("not_revoked","started","unexpired","locale_included","exact_version","expected_manual_test_origin"))
+                assertThat(origins.get(0).path(predicate).asBoolean()).as(predicate).isTrue();
+        }
+        assertThat(sessionCalls.get()).as("Each intentional capture attempts its independent session check once").isEqualTo(3);
+    }
+
     private void captureFreshFailure(HttpResponse<String> response,HttpClient session,UUID owner,Fixture fixture,String locale,String operation)throws Exception{
         // Invoked only after the single unexpected read. Never retries member/activity/covers or changes a date.
-        var report=new LinkedHashMap<String,Object>();report.put("operation",operation);report.put("locale",locale);report.put("httpStatus",response.statusCode());report.put("capturedAfterUnexpectedRead",true);
+        var report=collectFreshFailure(response.statusCode(),response.body(),()->get(session,"/api/v1/auth/me"),owner,fixture,locale,operation,false);
+        try{var directory=java.nio.file.Path.of("../../.runtime").toAbsolutePath().normalize();java.nio.file.Files.createDirectories(directory);var path=java.nio.file.Files.createTempFile(directory,"p17-fresh-access-refusal-",".json");java.nio.file.Files.write(path,mapper.writeValueAsBytes(report));}catch(Exception unavailable){/* The original HTTP/access assertion still fails; a diagnostic must never replace it. */}
+    }
+
+    @FunctionalInterface private interface SessionProbe{HttpResponse<String> get()throws Exception;}
+
+    private Map<String,Object> collectFreshFailure(int httpStatus,String body,SessionProbe session,UUID owner,Fixture fixture,String locale,String operation,boolean intentional){
+        var report=new LinkedHashMap<String,Object>();report.put("operation",operation);report.put("locale",locale);report.put("httpStatus",httpStatus);report.put("capturedAfterUnexpectedRead",!intentional);
+        report.put("captureContext",intentional?"INTENTIONAL_DIAGNOSTIC_CHECK":"UNEXPECTED_READ");
         try{
-            var problem=mapper.readTree(response.body());String code=problem.path("code").asText();if(code.matches("[A-Z0-9_]{1,80}"))report.put("problemCode",code);
-            var me=get(session,"/api/v1/auth/me");report.put("sessionHttpStatus",me.statusCode());
-            var principal=mapper.readTree(me.body());boolean permission=false;for(var p:principal.path("permissions"))if("learning.read".equals(p.asText()))permission=true;report.put("sessionLearningRead",permission);
+            var problem=mapper.readTree(body);report.put("problemJsonAvailable",problem!=null&&problem.isObject());
+            String code=problem==null?"":problem.path("code").asText();if(code.matches("[A-Z0-9_]{1,80}"))report.put("problemCode",code);
+        }catch(Exception unavailable){report.put("problemJsonAvailable",false);}
+        report.put("sessionTransportAvailable",false);report.put("sessionJsonAvailable",false);
+        try{
+            var me=session.get();report.put("sessionTransportAvailable",true);report.put("sessionHttpStatus",me.statusCode());
+            try{
+                var principal=mapper.readTree(me.body());report.put("sessionJsonAvailable",principal!=null&&principal.isObject());
+                if(principal!=null&&principal.isObject()){
+                    boolean permission=false;for(var p:principal.path("permissions"))if("learning.read".equals(p.asText()))permission=true;
+                    report.put("sessionLearningRead",permission);
+                }
+            }catch(Exception unavailable){report.put("sessionJsonAvailable",false);}
+        }catch(Exception unavailable){/* Do not retain transport messages, URLs, headers or response bodies. */}
+        try{
             report.put("ownerActive",jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM user_accounts WHERE id=? AND status='ACTIVE')",Boolean.class,owner));
-            var nodes=new ArrayList<Map<String,Object>>();
-            for(var node:List.of(fixture.course(),fixture.module(),fixture.activity()))nodes.add(jdbc.queryForMap("""
+            report.put("ownerAvailable",true);
+        }catch(Exception unavailable){report.put("ownerAvailable",false);}
+        var nodes=new ArrayList<Map<String,Object>>();
+        for(var node:List.of(fixture.course(),fixture.module(),fixture.activity())){
+            var observedNode=new LinkedHashMap<String,Object>();observedNode.put("kind",node.kind().name());
+            try{
+                observedNode.putAll(jdbc.queryForMap("""
                 SELECT r.kind,r.archived_at IS NULL AS unarchived,t.id IS NOT NULL AS locale_exists,
                   coalesce(t.editorial_state NOT IN('ARCHIVED','STALE'),false) AS translation_available,
                   e.id IS NOT NULL AND e.document_json IS NOT NULL AS published_document,
@@ -184,7 +250,13 @@ class EntitlementAccessIntegrationTest {
                 LEFT JOIN editorial_revisions e ON e.id=t.published_revision_id LEFT JOIN content_translations s ON s.id=t.source_translation_id
                 WHERE v.id=? AND v.resource_id=?
                 """,locale,node.versionId(),node.resourceId()));
-            report.put("exactPinnedNodes",nodes);
+                observedNode.put("available",true);
+            }catch(Exception unavailable){observedNode.put("available",false);}
+            nodes.add(observedNode);
+        }
+        report.put("exactPinnedNodes",nodes);
+        report.put("exactPinnedNodesAvailable",nodes.stream().allMatch(node->Boolean.TRUE.equals(node.get("available"))));
+        try{
             report.put("origins",jdbc.queryForList("""
                 WITH observed AS MATERIALIZED(SELECT clock_timestamp() AS at)
                 SELECT g.revoked_at IS NULL AS not_revoked,g.starts_at<=observed.at AS started,
@@ -195,8 +267,9 @@ class EntitlementAccessIntegrationTest {
                   round(extract(epoch FROM g.starts_at)*1000000)::bigint AS starts_at_microseconds
                 FROM access_grants g CROSS JOIN observed WHERE g.owner_id=? AND g.resource_id=? ORDER BY g.created_at
                 ""","[\""+locale+"\"]",fixture.course().versionId(),owner,fixture.course().resourceId()));
-        }catch(Exception unavailable){report.put("diagnosticAvailable",false);}
-        try{var directory=java.nio.file.Path.of("../../.runtime").toAbsolutePath().normalize();java.nio.file.Files.createDirectories(directory);var path=java.nio.file.Files.createTempFile(directory,"p17-fresh-access-refusal-",".json");java.nio.file.Files.write(path,mapper.writeValueAsBytes(report));}catch(java.io.IOException unavailable){/* The original HTTP/access assertion still fails; a diagnostic must never replace it. */}
+            report.put("originsAvailable",true);
+        }catch(Exception unavailable){report.put("originsAvailable",false);}
+        return report;
     }
 
     @Test void protectedLearningAndProjectsWorkAfterARealGrantAndPersonalWorkSurvivesRevocation(){

@@ -97,7 +97,7 @@
     }
   ],
   "exercise": {
-    "instructions": "Adapt both emails to your proposal without sending them. Keep a method whose data can change. Then answer BR02: calculate the complete copywriting fee, explain both constraints, optionally propose an agreed alternative and ask the necessary questions. Save it as work distinct from BR01.",
+    "instructions": "Adapt both emails to your proposal without sending them. Keep a method whose data can change. Then answer BR02: calculate the complete copywriting fee, explain both constraints, optionally propose an alternative subject to the client’s agreement and ask the necessary questions. Save it as work distinct from BR01.",
     "correction": "BR02: 180 + 320 + 360 + 220 + 120 + 200 = €1,400 excluding tax before integration, above the OVERALL €1,200 ceiling. At least ten business days is incompatible with the five requested. Removing About gives 180 + 320 + 360 + 120 + 200 = €1,180 excluding tax, subject to agreement. The remaining €20 does not price integration; the option does not justify five days. Other wording is acceptable if it explains these limits without invented commitments."
   },
   "quiz": [

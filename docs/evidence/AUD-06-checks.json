@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "audit": "AUD-06",
-  "result": "implemented-awaiting-isolated-browser",
+  "result": "validated-locally",
   "assembledAt": "2026-11-25T19:00:19.792Z",
-  "scope": "Local corrections; real anonymous read-only UI validation; no deployment.",
+  "scope": "Local corrections and real isolated Spring/PostgreSQL/S3 browser validation; no deployment.",
   "checks": {
     "client": {
       "result": "passed",
@@ -141,7 +141,7 @@
     "checkoutRequested": false
   },
   "visualReview": {
-    "reviewedOriginalScreenshots": 20,
+    "reviewedOriginalScreenshots": 33,
     "artifacts": [
       {
         "sha256": "1e7530f85c14758e2ee98c05d4c9193de5d1e4f0e4a8173a9393ebf3c7907fd8"
@@ -154,6 +154,10 @@
       },
       {
         "sha256": "afbe799c08c26c5017a8eacb6f8279d3a544eb8256c1c4875a2986203de7ac8c"
+      },
+      {
+        "file": "docs/evidence/AUD-06-isolated-checks.json",
+        "sha256": "d3bf8949b60da76dcb6ec551b2a97a20bfc8f7f7249f19c3832a392b8993b456"
       }
     ],
     "captures": [
@@ -236,15 +240,79 @@
       {
         "file": "docs/evidence/AUD06-browser/readonly-offer-browser-da67cbb5-2569-4c22-817c-0003635d1ebd/en-390-legacy-test-offer.png",
         "sha256": "5fd1dccd38d46c6f8b52d43d3e955afa48126a98bcf01a19960c39c8ac5c3bfc"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/fr-to-en-1440-catalogue-return.png",
+        "sha256": "03b93f2937445efd6c17f2ea2d6358628945d71b8bcce341f719ed3cf34578a6",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/fr-to-en-390-catalogue-return.png",
+        "sha256": "235e15cee59e0b032f0a0cd628f8190663be06757413bccaa7822a1332f512a3",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/en-to-fr-1440-catalogue-return.png",
+        "sha256": "4e954c2bf9011ac74cef6243d8882bbc095abea7eaf07f8612356ef85658ce35",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/en-to-fr-390-catalogue-return.png",
+        "sha256": "eb7f3a68231feac804715bfdb328847a465d79207088bb8826eed7fe22a21638",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/en-390-standalone-return.png",
+        "sha256": "d0c7c8c11ef4e4c590e77e77eb533cd0c20d2f44a0bdb064dcc61e49f0eea4f5",
+        "reviewedBy": "independent-review-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/fr-390-standalone-return.png",
+        "sha256": "2bcd310c253b6d65c97e2d33add0fd1bfffb69074931ac165d62405d26dd4889",
+        "reviewedBy": "independent-review-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/fr-390-missing-english-explicit.png",
+        "sha256": "e9bef91916554954c5cc4e3c0baba44bde5ede515c7886de27af16c65a26799e",
+        "reviewedBy": "independent-review-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/en-390-missing-guide-alternative.png",
+        "sha256": "a6122bf11842566ca31e163a79c9b0fbd90baa660ff8c682234812b0de33ad44",
+        "reviewedBy": "independent-review-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/en-390-login-retains-fr-activity.png",
+        "sha256": "8c9883b7453bbb45ba4f84dd0ec5f6937007af620e5bf550fa5542732128343a",
+        "reviewedBy": "independent-review-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/fr-390-login-retains-en-activity.png",
+        "sha256": "13e7d7b83ade443f444dad9c8ebb9258042d0cd1ad78c721d318e98dfb93fe2c",
+        "reviewedBy": "independent-review-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/fr-390-invalid-auth-return-account.png",
+        "sha256": "7ac7b30102073d20f274e29f54a23d29fc6e4c3a57b15f5e75ad4b13c8243f4f",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/fr-390-technical-offer-presentations.png",
+        "sha256": "9aa0bda606bcb749e5ebe076237822ca575c09838c1097ac0b7129e14c09e667",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/en-390-technical-offer-presentation.png",
+        "sha256": "ae6c624adca76df6286d8396f8282ae82b216502247ab16cc586c49a9ae96162",
+        "reviewedBy": "primary-agent"
       }
     ]
   },
   "isolatedBrowser": {
-    "result": "not-run",
-    "reason": "DOCKER_LINUX_NOT_READY",
+    "result": "passed",
     "preparedCases": 8,
     "expectedCaptures": 13,
-    "applicationStarted": false,
+    "applicationStarted": true,
     "dockerStartupAttempt": {
       "result": "automatic-approval-review-rejected",
       "reason": "blocked by policy",
@@ -258,10 +326,23 @@
         "result": "not-run",
         "reason": "DOCKER_LINUX_NOT_READY",
         "contexts": [
-          { "context": "desktop-linux", "ready": false, "exitCode": 1, "timedOut": false },
-          { "context": "default", "ready": false, "exitCode": 1, "timedOut": false }
+          {
+            "context": "desktop-linux",
+            "ready": false,
+            "exitCode": 1,
+            "timedOut": false
+          },
+          {
+            "context": "default",
+            "ready": false,
+            "exitCode": 1,
+            "timedOut": false
+          }
         ],
-        "dockerDesktop": { "processCount": 0, "serviceStatus": "Stopped" },
+        "dockerDesktop": {
+          "processCount": 0,
+          "serviceStatus": "Stopped"
+        },
         "readinessArtifactSha256": "740cff991a4a24357177eab580e129fdb1fd044b08061b1e6be14fc1af485826",
         "nodeVersion": "24.22.2",
         "buildId": "0pkhJQUlA45ZQB4iqu19j",
@@ -300,6 +381,23 @@
       "observedPostgresFailure": false,
       "applicationStarted": false,
       "dockerStartedByAgent": false
+    },
+    "originalBlockingReason": "DOCKER_LINUX_NOT_READY",
+    "completedAt": "2026-11-26T20:51:46.220Z",
+    "execution": {
+      "file": "docs/evidence/AUD-06-isolated-checks.json",
+      "sha256": "d3bf8949b60da76dcb6ec551b2a97a20bfc8f7f7249f19c3832a392b8993b456",
+      "evidence": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef",
+      "expected": 8,
+      "unexpected": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "automaticRetries": 0,
+      "captures": 13,
+      "cleanupConfirmed": true,
+      "buildId": "0pkhJQUlA45ZQB4iqu19j",
+      "historicalProofsPreserved": true,
+      "userNextFilePreserved": true
     }
   },
   "boundaries": {
@@ -386,8 +484,7 @@
     }
   ],
   "limits": [
-    "The isolated Spring/PostgreSQL/S3 browser suite was prepared and typechecked but has not run.",
-    "Public navigation was captured on the first corrected build; the final offer adjustment was verified separately on the final build.",
+    "The isolated catalogue scenarios begin at page=0; nonzero-page reset is covered by prior client tests and the real read-only navigation run.",
     "Missing and failed offer presentation cases are exercised with replaced upstream transport in React/server tests, not claimed as persisted PostgreSQL scenarios.",
     "The strict read-only proxy refuses CSRF refresh requests; no CSRF token, cookie, purchase or private account session is forwarded.",
     "No SQL table fingerprint comparison was performed during this lot.",
@@ -406,5 +503,6 @@
     "historicalBaselineAutomationAttemptsRetained": true,
     "automaticRetries": 0
   },
-  "localSourceCommit": "52f9dc527a5bf18862679009239033d0ed138df9"
+  "localSourceCommit": "52f9dc527a5bf18862679009239033d0ed138df9",
+  "updatedAt": "2026-11-26T20:53:11.599Z"
 }

@@ -1,6 +1,6 @@
 import { getServerConfig } from "@/lib/config/server";
 import { readPublications } from "@/lib/api/public-server";
-import { readOffers } from "@/lib/api/commerce-server";
+import { readOffer, readOffers } from "@/lib/api/commerce-server";
 import { offersPath } from "@/lib/commerce/routes";
 import { publicCatalogueHref } from "@/lib/public/routes";
 import { absolutePublicUrl, publicResourcePath } from "@/lib/public/seo-policy";
@@ -38,7 +38,14 @@ export async function GET() {
         if (!result.ok) throw new Error("Offers unavailable");
         total ??= result.data.total;
         if (result.data.total !== total || total > 50_000) throw new Error("Offer set changed or too large");
-        for (const item of result.data.items) if (item.state === "ACTIVE" && item.translationAvailable && item.title) add(offersPath(locale, item.id));
+        for (const item of result.data.items) if (item.state === "ACTIVE" && item.translationAvailable && item.title) {
+          if (Date.now() > deadline) throw new Error("Sitemap deadline");
+          // A translated presentation may be readable without including that
+          // language in the purchased offer. Match the detail page's SEO policy.
+          const detail = await readOffer(item.id, locale);
+          if (!detail.ok || detail.data.revision !== item.revision) throw new Error("Offer detail unavailable or changed");
+          if (detail.data.state === "ACTIVE" && detail.data.translationAvailable && detail.data.locales.includes(locale)) add(offersPath(locale, item.id));
+        }
         if ((page + 1) * 100 >= total) break;
         if (result.data.items.length !== 100) throw new Error("Incomplete offer page");
       }

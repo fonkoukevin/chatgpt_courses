@@ -1,0 +1,3050 @@
+{
+  "schemaVersion": 1,
+  "audit": "AUD-07",
+  "browser": "chromium",
+  "browserVersion": "158.0.8127.18",
+  "headless": true,
+  "environment": {
+    "platform": "win32",
+    "release": "10.0.26300",
+    "architecture": "x64",
+    "cpuModel": "AMD Ryzen 7 5700U with Radeon Graphics         ",
+    "logicalProcessors": 16,
+    "totalMemoryBytes": 16455815168,
+    "freeMemoryBytesAtReport": 1981169664,
+    "nodeVersion": "v24.22.2"
+  },
+  "protocol": {
+    "viewports": [
+      {
+        "width": 320,
+        "height": 844
+      },
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 768,
+        "height": 1000
+      },
+      {
+        "width": 1440,
+        "height": 1000
+      }
+    ],
+    "network": "unthrottled HTTP loopback",
+    "cpuRate": 1,
+    "browserCacheDisabled": true,
+    "browserCacheClearedBeforeMeasuredDocuments": true,
+    "serviceWorkersBypassed": true,
+    "samplesPerDocumentAndViewport": 1,
+    "serverCache": "Running API/Next production servers; fixture preparation and earlier test cases warm the backend. Not a cold-server benchmark.",
+    "performanceScope": "Local laboratory readiness snapshots; LCP and layout shifts measured at readiness, not field Core Web Vitals or INP. No score or measured improvement is claimed.",
+    "transportScope": "CDP transport counters accumulate within each viewport test; navigation/resource/paint fields belong to each measured document.",
+    "accessibilityScope": "Targeted keyboard/focus/reflow checks and separate root-font scaling; no native browser zoom or accessibility certification.",
+    "privacy": "No form text, identities, cookies, headers or private response bodies are written into laboratory measurements."
+  },
+  "fixture": "Authored P18 FR/EN course, technically published/selected only in supervisor-owned disposable PostgreSQL/S3.",
+  "humanEditorialApproval": false,
+  "sharedContentChanged": false,
+  "externalProviderRequests": false,
+  "orderOrCheckoutRequested": false,
+  "deployed": false,
+  "financialUnchanged": true,
+  "durableQuizAttemptsUnchanged": true,
+  "outcomes": [
+    {
+      "name": "fr 320x844: public course, keyboard navigation, filters and anonymous trial",
+      "status": "passed",
+      "expectedStatus": "passed",
+      "retry": 0
+    },
+    {
+      "name": "fr 390x844: public course, keyboard navigation, filters and anonymous trial",
+      "status": "passed",
+      "expectedStatus": "passed",
+      "retry": 0
+    },
+    {
+      "name": "fr 768x1000: public course, keyboard navigation, filters and anonymous trial",
+      "status": "passed",
+      "expectedStatus": "passed",
+      "retry": 0
+    },
+    {
+      "name": "fr 1440x1000: public course, keyboard navigation, filters and anonymous trial",
+      "status": "passed",
+      "expectedStatus": "passed",
+      "retry": 0
+    },
+    {
+      "name": "en 320x844: public course, keyboard navigation, filters and anonymous trial",
+      "status": "passed",
+      "expectedStatus": "passed",
+      "retry": 0
+    },
+    {
+      "name": "en 390x844: public course, keyboard navigation, filters and anonymous trial",
+      "status": "passed",
+      "expectedStatus": "passed",
+      "retry": 0
+    },
+    {
+      "name": "en 768x1000: public course, keyboard navigation, filters and anonymous trial",
+      "status": "passed",
+      "expectedStatus": "passed",
+      "retry": 0
+    },
+    {
+      "name": "en 1440x1000: public course, keyboard navigation, filters and anonymous trial",
+      "status": "passed",
+      "expectedStatus": "passed",
+      "retry": 0
+    },
+    {
+      "name": "fr: anonymous trial downloads exact authored sources, copies, exports and checks understanding",
+      "status": "passed",
+      "expectedStatus": "passed",
+      "retry": 0
+    },
+    {
+      "name": "en: anonymous trial downloads exact authored sources, copies, exports and checks understanding",
+      "status": "passed",
+      "expectedStatus": "passed",
+      "retry": 0
+    },
+    {
+      "name": "fr: public form errors and separate 200-percent root-font reflow",
+      "status": "passed",
+      "expectedStatus": "passed",
+      "retry": 0
+    },
+    {
+      "name": "en: public form errors and separate 200-percent root-font reflow",
+      "status": "passed",
+      "expectedStatus": "passed",
+      "retry": 0
+    }
+  ],
+  "observations": [
+    {
+      "check": "public-viewport-journey",
+      "locale": "fr",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "htmlLanguage": true,
+      "metadataPresent": true,
+      "skipLinkKeyboard": true,
+      "navigationKeyboard": true,
+      "filterSearchAndTypeApplied": true,
+      "faqAndVersionDetailsKeyboard": true,
+      "trialPinnedIds": true,
+      "fourWorkshopStagesKeyboard": true,
+      "languageSwitchKeyboard": false,
+      "anonymousTrial": true,
+      "noTechnicalFixtureCopyInHomeOrCourse": true,
+      "uncaughtPageErrors": 0
+    },
+    {
+      "check": "public-viewport-journey",
+      "locale": "fr",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "htmlLanguage": true,
+      "metadataPresent": true,
+      "skipLinkKeyboard": true,
+      "navigationKeyboard": true,
+      "filterSearchAndTypeApplied": true,
+      "faqAndVersionDetailsKeyboard": true,
+      "trialPinnedIds": true,
+      "fourWorkshopStagesKeyboard": true,
+      "languageSwitchKeyboard": true,
+      "anonymousTrial": true,
+      "noTechnicalFixtureCopyInHomeOrCourse": true,
+      "uncaughtPageErrors": 0
+    },
+    {
+      "check": "public-viewport-journey",
+      "locale": "fr",
+      "viewport": {
+        "width": 768,
+        "height": 1000
+      },
+      "htmlLanguage": true,
+      "metadataPresent": true,
+      "skipLinkKeyboard": true,
+      "navigationKeyboard": true,
+      "filterSearchAndTypeApplied": true,
+      "faqAndVersionDetailsKeyboard": true,
+      "trialPinnedIds": true,
+      "fourWorkshopStagesKeyboard": true,
+      "languageSwitchKeyboard": false,
+      "anonymousTrial": true,
+      "noTechnicalFixtureCopyInHomeOrCourse": true,
+      "uncaughtPageErrors": 0
+    },
+    {
+      "check": "public-viewport-journey",
+      "locale": "fr",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "htmlLanguage": true,
+      "metadataPresent": true,
+      "skipLinkKeyboard": true,
+      "navigationKeyboard": true,
+      "filterSearchAndTypeApplied": true,
+      "faqAndVersionDetailsKeyboard": true,
+      "trialPinnedIds": true,
+      "fourWorkshopStagesKeyboard": true,
+      "languageSwitchKeyboard": false,
+      "anonymousTrial": true,
+      "noTechnicalFixtureCopyInHomeOrCourse": true,
+      "uncaughtPageErrors": 0
+    },
+    {
+      "check": "public-viewport-journey",
+      "locale": "en",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "htmlLanguage": true,
+      "metadataPresent": true,
+      "skipLinkKeyboard": true,
+      "navigationKeyboard": true,
+      "filterSearchAndTypeApplied": true,
+      "faqAndVersionDetailsKeyboard": true,
+      "trialPinnedIds": true,
+      "fourWorkshopStagesKeyboard": true,
+      "languageSwitchKeyboard": false,
+      "anonymousTrial": true,
+      "noTechnicalFixtureCopyInHomeOrCourse": true,
+      "uncaughtPageErrors": 0
+    },
+    {
+      "check": "public-viewport-journey",
+      "locale": "en",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "htmlLanguage": true,
+      "metadataPresent": true,
+      "skipLinkKeyboard": true,
+      "navigationKeyboard": true,
+      "filterSearchAndTypeApplied": true,
+      "faqAndVersionDetailsKeyboard": true,
+      "trialPinnedIds": true,
+      "fourWorkshopStagesKeyboard": true,
+      "languageSwitchKeyboard": true,
+      "anonymousTrial": true,
+      "noTechnicalFixtureCopyInHomeOrCourse": true,
+      "uncaughtPageErrors": 0
+    },
+    {
+      "check": "public-viewport-journey",
+      "locale": "en",
+      "viewport": {
+        "width": 768,
+        "height": 1000
+      },
+      "htmlLanguage": true,
+      "metadataPresent": true,
+      "skipLinkKeyboard": true,
+      "navigationKeyboard": true,
+      "filterSearchAndTypeApplied": true,
+      "faqAndVersionDetailsKeyboard": true,
+      "trialPinnedIds": true,
+      "fourWorkshopStagesKeyboard": true,
+      "languageSwitchKeyboard": false,
+      "anonymousTrial": true,
+      "noTechnicalFixtureCopyInHomeOrCourse": true,
+      "uncaughtPageErrors": 0
+    },
+    {
+      "check": "public-viewport-journey",
+      "locale": "en",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "htmlLanguage": true,
+      "metadataPresent": true,
+      "skipLinkKeyboard": true,
+      "navigationKeyboard": true,
+      "filterSearchAndTypeApplied": true,
+      "faqAndVersionDetailsKeyboard": true,
+      "trialPinnedIds": true,
+      "fourWorkshopStagesKeyboard": true,
+      "languageSwitchKeyboard": false,
+      "anonymousTrial": true,
+      "noTechnicalFixtureCopyInHomeOrCourse": true,
+      "uncaughtPageErrors": 0
+    },
+    {
+      "check": "complete-anonymous-first-trial",
+      "locale": "fr",
+      "exactSourceDownloads": 2,
+      "realClipboardContentCompared": true,
+      "windowsNewlinesNormalizedOnly": true,
+      "exactMarkdownExport": true,
+      "allFourStagesKeepWriting": true,
+      "noBrowserPersistenceOfInput": true,
+      "quizRequiredErrorAndFocus": true,
+      "formativeQuizServerResponse": true,
+      "noDurableAttemptCreated": true
+    },
+    {
+      "check": "complete-anonymous-first-trial",
+      "locale": "en",
+      "exactSourceDownloads": 2,
+      "realClipboardContentCompared": true,
+      "windowsNewlinesNormalizedOnly": true,
+      "exactMarkdownExport": true,
+      "allFourStagesKeepWriting": true,
+      "noBrowserPersistenceOfInput": true,
+      "quizRequiredErrorAndFocus": true,
+      "formativeQuizServerResponse": true,
+      "noDurableAttemptCreated": true
+    },
+    {
+      "check": "forms-and-root-font-reflow",
+      "locale": "fr",
+      "formsViewport": {
+        "width": 320,
+        "height": 844
+      },
+      "clientValidationPreventsRequests": true,
+      "invalidEmailAndPasswordDescribedAndFocused": true,
+      "signInEmptyEmailFocused": true,
+      "rootFontViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "textScaling": {
+        "mechanism": "root-font-size-doubled",
+        "beforePx": 16,
+        "afterPx": 32,
+        "ratio": 2
+      },
+      "nativeBrowserZoomTested": false
+    },
+    {
+      "check": "forms-and-root-font-reflow",
+      "locale": "en",
+      "formsViewport": {
+        "width": 320,
+        "height": 844
+      },
+      "clientValidationPreventsRequests": true,
+      "invalidEmailAndPasswordDescribedAndFocused": true,
+      "signInEmptyEmailFocused": true,
+      "rootFontViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "textScaling": {
+        "mechanism": "root-font-size-doubled",
+        "beforePx": 16,
+        "afterPx": 32,
+        "ratio": 2
+      },
+      "nativeBrowserZoomTested": false
+    }
+  ],
+  "measurements": [
+    {
+      "locale": "fr",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "page": "home",
+      "readyMs": 719.0555000000022,
+      "navigation": {
+        "ttfbMs": 202.40000000037253,
+        "domContentLoadedMs": 292.1000000005588,
+        "loadMs": 359,
+        "responseEndMs": 290.90000000037253,
+        "transferBytes": 11431,
+        "encodedBytes": 11131,
+        "decodedBytes": 39211
+      },
+      "paints": {
+        "first-paint": 264,
+        "first-contentful-paint": 264
+      },
+      "largestContentfulPaintAtReadinessMs": 652,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 1,
+        "totalMs": 63,
+        "maxMs": 63
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 29.40000000037253
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 345833,
+          "encodedBytes": 340733,
+          "decodedBytes": 1129490,
+          "totalDurationMs": 1374.8999999975786
+        },
+        "data": {
+          "count": 3,
+          "transferBytes": 2497,
+          "encodedBytes": 1597,
+          "decodedBytes": 3151,
+          "totalDurationMs": 128.49999999906868
+        }
+      },
+      "totalResources": 21,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 188,
+      "cdp": {
+        "Documents": 4,
+        "Nodes": 298,
+        "LayoutDuration": 0.064083,
+        "RecalcStyleDuration": 0.007229,
+        "ScriptDuration": 0.062849,
+        "TaskDuration": 0.265484,
+        "JSHeapUsedSize": 5802828,
+        "JSHeapTotalSize": 9506816
+      },
+      "transport": {
+        "transferredBytes": 377337,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 190,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 80
+        }
+      }
+    },
+    {
+      "locale": "fr",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "page": "catalogue",
+      "readyMs": 311.4018999999971,
+      "navigation": {
+        "ttfbMs": 103.19999999925494,
+        "domContentLoadedMs": 149.79999999981374,
+        "loadMs": 208.69999999925494,
+        "responseEndMs": 106.19999999925494,
+        "transferBytes": 11492,
+        "encodedBytes": 11192,
+        "decodedBytes": 63244
+      },
+      "paints": {
+        "first-paint": 156,
+        "first-contentful-paint": 156
+      },
+      "largestContentfulPaintAtReadinessMs": 156,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 9.599999999627471
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 819.7999999979511
+        },
+        "data": {
+          "count": 7,
+          "transferBytes": 6706,
+          "encodedBytes": 4606,
+          "decodedBytes": 9663,
+          "totalDurationMs": 226.50000000186265
+        }
+      },
+      "totalResources": 25,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 374,
+      "cdp": {
+        "Documents": 6,
+        "Nodes": 1152,
+        "LayoutDuration": 0.011426,
+        "RecalcStyleDuration": 0.005447,
+        "ScriptDuration": 0.026417,
+        "TaskDuration": 0.135834,
+        "JSHeapUsedSize": 11496768,
+        "JSHeapTotalSize": 15151104
+      },
+      "transport": {
+        "transferredBytes": 773143,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 190,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 80
+        }
+      }
+    },
+    {
+      "locale": "fr",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "page": "course",
+      "readyMs": 363.1915999999983,
+      "navigation": {
+        "ttfbMs": 167.5,
+        "domContentLoadedMs": 208.20000000018626,
+        "loadMs": 257,
+        "responseEndMs": 170.3999999994412,
+        "transferBytes": 11965,
+        "encodedBytes": 11665,
+        "decodedBytes": 53059
+      },
+      "paints": {
+        "first-paint": 212,
+        "first-contentful-paint": 212
+      },
+      "largestContentfulPaintAtReadinessMs": 212,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 11.099999999627471
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 620.2000000001863
+        },
+        "data": {
+          "count": 11,
+          "transferBytes": 9110,
+          "encodedBytes": 5810,
+          "decodedBytes": 11400,
+          "totalDurationMs": 341.30000000074506
+        }
+      },
+      "totalResources": 29,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 312,
+      "cdp": {
+        "Documents": 12,
+        "Nodes": 4068,
+        "LayoutDuration": 0.002872,
+        "RecalcStyleDuration": 0.004949,
+        "ScriptDuration": 0.025827,
+        "TaskDuration": 0.126077,
+        "JSHeapUsedSize": 22706568,
+        "JSHeapTotalSize": 33849344
+      },
+      "transport": {
+        "transferredBytes": 1952997,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 190,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 80
+        }
+      }
+    },
+    {
+      "locale": "fr",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "page": "trial",
+      "readyMs": 661.0129000000015,
+      "navigation": {
+        "ttfbMs": 343.59999999962747,
+        "domContentLoadedMs": 403.59999999962747,
+        "loadMs": 445.90000000037253,
+        "responseEndMs": 346.20000000018626,
+        "transferBytes": 18468,
+        "encodedBytes": 18168,
+        "decodedBytes": 89808
+      },
+      "paints": {
+        "first-paint": 404,
+        "first-contentful-paint": 404
+      },
+      "largestContentfulPaintAtReadinessMs": 404,
+      "layoutShiftAtReadiness": 0.014314873879742143,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 8.900000000372529
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 676.1999999992549
+        },
+        "data": {
+          "count": 11,
+          "transferBytes": 9652,
+          "encodedBytes": 6352,
+          "decodedBytes": 13061,
+          "totalDurationMs": 512.6999999973923
+        }
+      },
+      "totalResources": 29,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 438,
+      "cdp": {
+        "Documents": 14,
+        "Nodes": 5678,
+        "LayoutDuration": 0.007609,
+        "RecalcStyleDuration": 0.013826,
+        "ScriptDuration": 0.059198,
+        "TaskDuration": 0.218178,
+        "JSHeapUsedSize": 31675268,
+        "JSHeapTotalSize": 43163648
+      },
+      "transport": {
+        "transferredBytes": 2367913,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 190,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 80
+        }
+      }
+    },
+    {
+      "locale": "fr",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "home",
+      "readyMs": 847.3267999999953,
+      "navigation": {
+        "ttfbMs": 376,
+        "domContentLoadedMs": 422.29999999981374,
+        "loadMs": 498.6000000005588,
+        "responseEndMs": 419.40000000037253,
+        "transferBytes": 11431,
+        "encodedBytes": 11131,
+        "decodedBytes": 39211
+      },
+      "paints": {
+        "first-paint": 416,
+        "first-contentful-paint": 416
+      },
+      "largestContentfulPaintAtReadinessMs": 792,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 1,
+        "totalMs": 54,
+        "maxMs": 54
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 13.5
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 345833,
+          "encodedBytes": 340733,
+          "decodedBytes": 1129490,
+          "totalDurationMs": 790.8999999985099
+        },
+        "data": {
+          "count": 3,
+          "transferBytes": 2495,
+          "encodedBytes": 1595,
+          "decodedBytes": 3151,
+          "totalDurationMs": 50.30000000074506
+        }
+      },
+      "totalResources": 21,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 188,
+      "cdp": {
+        "Documents": 4,
+        "Nodes": 298,
+        "LayoutDuration": 0.056072,
+        "RecalcStyleDuration": 0.004569,
+        "ScriptDuration": 0.061398,
+        "TaskDuration": 0.239214,
+        "JSHeapUsedSize": 5765484,
+        "JSHeapTotalSize": 9768960
+      },
+      "transport": {
+        "transferredBytes": 377335,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 199,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 89
+        }
+      }
+    },
+    {
+      "locale": "fr",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "catalogue",
+      "readyMs": 600.1145000000033,
+      "navigation": {
+        "ttfbMs": 421.19999999925494,
+        "domContentLoadedMs": 461.09999999962747,
+        "loadMs": 514.2999999998137,
+        "responseEndMs": 423,
+        "transferBytes": 11492,
+        "encodedBytes": 11192,
+        "decodedBytes": 63244
+      },
+      "paints": {
+        "first-paint": 464,
+        "first-contentful-paint": 464
+      },
+      "largestContentfulPaintAtReadinessMs": 464,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 6.7999999998137355
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 464.7000000011176
+        },
+        "data": {
+          "count": 8,
+          "transferBytes": 8132,
+          "encodedBytes": 5732,
+          "decodedBytes": 12171,
+          "totalDurationMs": 208.90000000037253
+        }
+      },
+      "totalResources": 26,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 374,
+      "cdp": {
+        "Documents": 6,
+        "Nodes": 1747,
+        "LayoutDuration": 0.007238,
+        "RecalcStyleDuration": 0.00333,
+        "ScriptDuration": 0.020636,
+        "TaskDuration": 0.137241,
+        "JSHeapUsedSize": 12553552,
+        "JSHeapTotalSize": 18558976
+      },
+      "transport": {
+        "transferredBytes": 793529,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 199,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 89
+        }
+      }
+    },
+    {
+      "locale": "fr",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "course",
+      "readyMs": 501.072699999997,
+      "navigation": {
+        "ttfbMs": 313.29999999981374,
+        "domContentLoadedMs": 355.29999999981374,
+        "loadMs": 406.59999999962747,
+        "responseEndMs": 314.90000000037253,
+        "transferBytes": 11986,
+        "encodedBytes": 11686,
+        "decodedBytes": 53059
+      },
+      "paints": {
+        "first-paint": 356,
+        "first-contentful-paint": 356
+      },
+      "largestContentfulPaintAtReadinessMs": 356,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 13.799999999813735
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 596.7000000001863
+        },
+        "data": {
+          "count": 10,
+          "transferBytes": 7730,
+          "encodedBytes": 4730,
+          "decodedBytes": 8989,
+          "totalDurationMs": 237.19999999925494
+        }
+      },
+      "totalResources": 28,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 312,
+      "cdp": {
+        "Documents": 12,
+        "Nodes": 4674,
+        "LayoutDuration": 0.00342,
+        "RecalcStyleDuration": 0.004847,
+        "ScriptDuration": 0.031255,
+        "TaskDuration": 0.135324,
+        "JSHeapUsedSize": 23382492,
+        "JSHeapTotalSize": 36995072
+      },
+      "transport": {
+        "transferredBytes": 1971646,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 199,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 89
+        }
+      }
+    },
+    {
+      "locale": "fr",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "trial",
+      "readyMs": 634.3644000000058,
+      "navigation": {
+        "ttfbMs": 346.09999999962747,
+        "domContentLoadedMs": 394,
+        "loadMs": 436.59999999962747,
+        "responseEndMs": 348.59999999962747,
+        "transferBytes": 18462,
+        "encodedBytes": 18162,
+        "decodedBytes": 89808
+      },
+      "paints": {
+        "first-paint": 396,
+        "first-contentful-paint": 396
+      },
+      "largestContentfulPaintAtReadinessMs": 396,
+      "layoutShiftAtReadiness": 0.0212516392437104,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 8.299999999813735
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 665.3000000007451
+        },
+        "data": {
+          "count": 11,
+          "transferBytes": 9657,
+          "encodedBytes": 6357,
+          "decodedBytes": 13061,
+          "totalDurationMs": 481.90000000037253
+        }
+      },
+      "totalResources": 29,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 438,
+      "cdp": {
+        "Documents": 14,
+        "Nodes": 6283,
+        "LayoutDuration": 0.006116,
+        "RecalcStyleDuration": 0.014764,
+        "ScriptDuration": 0.047835,
+        "TaskDuration": 0.201072,
+        "JSHeapUsedSize": 34767056,
+        "JSHeapTotalSize": 44212224
+      },
+      "transport": {
+        "transferredBytes": 2388334,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 199,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 89
+        }
+      }
+    },
+    {
+      "locale": "fr",
+      "viewport": {
+        "width": 768,
+        "height": 1000
+      },
+      "page": "home",
+      "readyMs": 824.5123999999923,
+      "navigation": {
+        "ttfbMs": 336.79999999981374,
+        "domContentLoadedMs": 455,
+        "loadMs": 462,
+        "responseEndMs": 415.40000000037253,
+        "transferBytes": 11431,
+        "encodedBytes": 11131,
+        "decodedBytes": 39211
+      },
+      "paints": {
+        "first-paint": 400,
+        "first-contentful-paint": 400
+      },
+      "largestContentfulPaintAtReadinessMs": 772,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 1,
+        "totalMs": 51,
+        "maxMs": 51
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 21.799999999813735
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 345833,
+          "encodedBytes": 340733,
+          "decodedBytes": 1129490,
+          "totalDurationMs": 843.0000000009313
+        },
+        "data": {
+          "count": 3,
+          "transferBytes": 2499,
+          "encodedBytes": 1599,
+          "decodedBytes": 3151,
+          "totalDurationMs": 38.40000000037253
+        }
+      },
+      "totalResources": 21,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 188,
+      "cdp": {
+        "Documents": 4,
+        "Nodes": 298,
+        "LayoutDuration": 0.058049,
+        "RecalcStyleDuration": 0.005668,
+        "ScriptDuration": 0.055412,
+        "TaskDuration": 0.246362,
+        "JSHeapUsedSize": 5812180,
+        "JSHeapTotalSize": 9768960
+      },
+      "transport": {
+        "transferredBytes": 377339,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 196,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 86
+        }
+      }
+    },
+    {
+      "locale": "fr",
+      "viewport": {
+        "width": 768,
+        "height": 1000
+      },
+      "page": "catalogue",
+      "readyMs": 548.3776999999973,
+      "navigation": {
+        "ttfbMs": 345.5,
+        "domContentLoadedMs": 408.29999999981374,
+        "loadMs": 459.20000000018626,
+        "responseEndMs": 348.40000000037253,
+        "transferBytes": 11492,
+        "encodedBytes": 11192,
+        "decodedBytes": 63244
+      },
+      "paints": {
+        "first-paint": 416,
+        "first-contentful-paint": 416
+      },
+      "largestContentfulPaintAtReadinessMs": 416,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 8.599999999627471
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 734
+        },
+        "data": {
+          "count": 10,
+          "transferBytes": 10225,
+          "encodedBytes": 7225,
+          "decodedBytes": 15228,
+          "totalDurationMs": 222.60000000242144
+        }
+      },
+      "totalResources": 28,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 374,
+      "cdp": {
+        "Documents": 6,
+        "Nodes": 1152,
+        "LayoutDuration": 0.014463,
+        "RecalcStyleDuration": 0.00646,
+        "ScriptDuration": 0.037124,
+        "TaskDuration": 0.163247,
+        "JSHeapUsedSize": 11543220,
+        "JSHeapTotalSize": 15937536
+      },
+      "transport": {
+        "transferredBytes": 777786,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 196,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 86
+        }
+      }
+    },
+    {
+      "locale": "fr",
+      "viewport": {
+        "width": 768,
+        "height": 1000
+      },
+      "page": "course",
+      "readyMs": 517.4619000000093,
+      "navigation": {
+        "ttfbMs": 348.20000000018626,
+        "domContentLoadedMs": 384.09999999962747,
+        "loadMs": 426.3999999994412,
+        "responseEndMs": 350.70000000018626,
+        "transferBytes": 11986,
+        "encodedBytes": 11686,
+        "decodedBytes": 53059
+      },
+      "paints": {
+        "first-paint": 392,
+        "first-contentful-paint": 392
+      },
+      "largestContentfulPaintAtReadinessMs": 392,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 6.800000000745058
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 504.79999999981374
+        },
+        "data": {
+          "count": 11,
+          "transferBytes": 9113,
+          "encodedBytes": 5813,
+          "decodedBytes": 11400,
+          "totalDurationMs": 295
+        }
+      },
+      "totalResources": 29,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 312,
+      "cdp": {
+        "Documents": 12,
+        "Nodes": 4077,
+        "LayoutDuration": 0.00283,
+        "RecalcStyleDuration": 0.006008,
+        "ScriptDuration": 0.023669,
+        "TaskDuration": 0.126164,
+        "JSHeapUsedSize": 22541484,
+        "JSHeapTotalSize": 33325056
+      },
+      "transport": {
+        "transferredBytes": 1962197,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 196,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 86
+        }
+      }
+    },
+    {
+      "locale": "fr",
+      "viewport": {
+        "width": 768,
+        "height": 1000
+      },
+      "page": "trial",
+      "readyMs": 613.8101999999926,
+      "navigation": {
+        "ttfbMs": 332.29999999981374,
+        "domContentLoadedMs": 382,
+        "loadMs": 416.5,
+        "responseEndMs": 335.69999999925494,
+        "transferBytes": 18463,
+        "encodedBytes": 18163,
+        "decodedBytes": 89808
+      },
+      "paints": {
+        "first-paint": 388,
+        "first-contentful-paint": 388
+      },
+      "largestContentfulPaintAtReadinessMs": 388,
+      "layoutShiftAtReadiness": 0.0275234375,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 9
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 592.7999999998137
+        },
+        "data": {
+          "count": 11,
+          "transferBytes": 9656,
+          "encodedBytes": 6356,
+          "decodedBytes": 13061,
+          "totalDurationMs": 467.4999999990687
+        }
+      },
+      "totalResources": 29,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 438,
+      "cdp": {
+        "Documents": 14,
+        "Nodes": 5686,
+        "LayoutDuration": 0.00683,
+        "RecalcStyleDuration": 0.014918,
+        "ScriptDuration": 0.048165,
+        "TaskDuration": 0.207637,
+        "JSHeapUsedSize": 30922712,
+        "JSHeapTotalSize": 42901504
+      },
+      "transport": {
+        "transferredBytes": 2377118,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 196,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 86
+        }
+      }
+    },
+    {
+      "locale": "fr",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "home",
+      "readyMs": 787.9633000000031,
+      "navigation": {
+        "ttfbMs": 329.40000000037253,
+        "domContentLoadedMs": 367.5,
+        "loadMs": 431.59999999962747,
+        "responseEndMs": 361.40000000037253,
+        "transferBytes": 11431,
+        "encodedBytes": 11131,
+        "decodedBytes": 39211
+      },
+      "paints": {
+        "first-paint": 368,
+        "first-contentful-paint": 368
+      },
+      "largestContentfulPaintAtReadinessMs": 756,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 8.299999999813735
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 345833,
+          "encodedBytes": 340733,
+          "decodedBytes": 1129490,
+          "totalDurationMs": 637.1999999992549
+        },
+        "data": {
+          "count": 4,
+          "transferBytes": 2345,
+          "encodedBytes": 1145,
+          "decodedBytes": 1806,
+          "totalDurationMs": 80.29999999981374
+        }
+      },
+      "totalResources": 22,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 188,
+      "cdp": {
+        "Documents": 4,
+        "Nodes": 298,
+        "LayoutDuration": 0.050997,
+        "RecalcStyleDuration": 0.005013,
+        "ScriptDuration": 0.062792,
+        "TaskDuration": 0.237219,
+        "JSHeapUsedSize": 5846424,
+        "JSHeapTotalSize": 9768960
+      },
+      "transport": {
+        "transferredBytes": 377536,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 217,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Script": 102,
+          "Stylesheet": 6,
+          "Fetch": 107
+        }
+      }
+    },
+    {
+      "locale": "fr",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "catalogue",
+      "readyMs": 528.3092999999935,
+      "navigation": {
+        "ttfbMs": 304.5,
+        "domContentLoadedMs": 372.29999999981374,
+        "loadMs": 405.3999999994412,
+        "responseEndMs": 306.59999999962747,
+        "transferBytes": 11492,
+        "encodedBytes": 11192,
+        "decodedBytes": 63244
+      },
+      "paints": {
+        "first-paint": 384,
+        "first-contentful-paint": 384
+      },
+      "largestContentfulPaintAtReadinessMs": 384,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 6.6000000005587935
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 557.5999999996275
+        },
+        "data": {
+          "count": 10,
+          "transferBytes": 8872,
+          "encodedBytes": 5872,
+          "decodedBytes": 11562,
+          "totalDurationMs": 274.90000000037253
+        }
+      },
+      "totalResources": 28,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 374,
+      "cdp": {
+        "Documents": 6,
+        "Nodes": 1121,
+        "LayoutDuration": 0.020339,
+        "RecalcStyleDuration": 0.006457,
+        "ScriptDuration": 0.039338,
+        "TaskDuration": 0.168475,
+        "JSHeapUsedSize": 10589004,
+        "JSHeapTotalSize": 13578240
+      },
+      "transport": {
+        "transferredBytes": 776416,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 217,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Script": 102,
+          "Stylesheet": 6,
+          "Fetch": 107
+        }
+      }
+    },
+    {
+      "locale": "fr",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "course",
+      "readyMs": 546.571100000001,
+      "navigation": {
+        "ttfbMs": 356.90000000037253,
+        "domContentLoadedMs": 397.09999999962747,
+        "loadMs": 452.5,
+        "responseEndMs": 359.29999999981374,
+        "transferBytes": 11986,
+        "encodedBytes": 11686,
+        "decodedBytes": 53059
+      },
+      "paints": {
+        "first-paint": 412,
+        "first-contentful-paint": 412
+      },
+      "largestContentfulPaintAtReadinessMs": 412,
+      "layoutShiftAtReadiness": 0.0011469536675347222,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 8.5
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 650.3000000016764
+        },
+        "data": {
+          "count": 13,
+          "transferBytes": 10537,
+          "encodedBytes": 6637,
+          "decodedBytes": 12604,
+          "totalDurationMs": 361.80000000074506
+        }
+      },
+      "totalResources": 31,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 312,
+      "cdp": {
+        "Documents": 12,
+        "Nodes": 3365,
+        "LayoutDuration": 0.002912,
+        "RecalcStyleDuration": 0.004817,
+        "ScriptDuration": 0.024756,
+        "TaskDuration": 0.135798,
+        "JSHeapUsedSize": 20920148,
+        "JSHeapTotalSize": 32206848
+      },
+      "transport": {
+        "transferredBytes": 1980823,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 217,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Script": 102,
+          "Stylesheet": 6,
+          "Fetch": 107
+        }
+      }
+    },
+    {
+      "locale": "fr",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "trial",
+      "readyMs": 665.3908999999985,
+      "navigation": {
+        "ttfbMs": 337,
+        "domContentLoadedMs": 404,
+        "loadMs": 448.90000000037253,
+        "responseEndMs": 339.70000000018626,
+        "transferBytes": 18463,
+        "encodedBytes": 18163,
+        "decodedBytes": 89808
+      },
+      "paints": {
+        "first-paint": 420,
+        "first-contentful-paint": 420
+      },
+      "largestContentfulPaintAtReadinessMs": 420,
+      "layoutShiftAtReadiness": 0.012582146990740742,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 8
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 704
+        },
+        "data": {
+          "count": 17,
+          "transferBytes": 14763,
+          "encodedBytes": 9663,
+          "decodedBytes": 19455,
+          "totalDurationMs": 609.7000000001863
+        }
+      },
+      "totalResources": 35,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 438,
+      "cdp": {
+        "Documents": 14,
+        "Nodes": 4975,
+        "LayoutDuration": 0.008982,
+        "RecalcStyleDuration": 0.016427,
+        "ScriptDuration": 0.047644,
+        "TaskDuration": 0.237456,
+        "JSHeapUsedSize": 29449648,
+        "JSHeapTotalSize": 40734720
+      },
+      "transport": {
+        "transferredBytes": 2404841,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 217,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Script": 102,
+          "Stylesheet": 6,
+          "Fetch": 107
+        }
+      }
+    },
+    {
+      "locale": "en",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "page": "home",
+      "readyMs": 794.6209999999992,
+      "navigation": {
+        "ttfbMs": 340.69999999925494,
+        "domContentLoadedMs": 382.19999999925494,
+        "loadMs": 453.29999999981374,
+        "responseEndMs": 376,
+        "transferBytes": 10991,
+        "encodedBytes": 10691,
+        "decodedBytes": 37756
+      },
+      "paints": {
+        "first-paint": 380,
+        "first-contentful-paint": 380
+      },
+      "largestContentfulPaintAtReadinessMs": 732,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 9.600000000558794
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 345833,
+          "encodedBytes": 340733,
+          "decodedBytes": 1129490,
+          "totalDurationMs": 656.9000000022352
+        },
+        "data": {
+          "count": 3,
+          "transferBytes": 2502,
+          "encodedBytes": 1602,
+          "decodedBytes": 3183,
+          "totalDurationMs": 47.40000000037253
+        }
+      },
+      "totalResources": 21,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 188,
+      "cdp": {
+        "Documents": 4,
+        "Nodes": 298,
+        "LayoutDuration": 0.050043,
+        "RecalcStyleDuration": 0.005634,
+        "ScriptDuration": 0.058023,
+        "TaskDuration": 0.236518,
+        "JSHeapUsedSize": 5755748,
+        "JSHeapTotalSize": 9506816
+      },
+      "transport": {
+        "transferredBytes": 376902,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 189,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 79
+        }
+      }
+    },
+    {
+      "locale": "en",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "page": "catalogue",
+      "readyMs": 496.9970999999932,
+      "navigation": {
+        "ttfbMs": 325.5,
+        "domContentLoadedMs": 379.70000000018626,
+        "loadMs": 421.29999999981374,
+        "responseEndMs": 327.40000000037253,
+        "transferBytes": 10989,
+        "encodedBytes": 10689,
+        "decodedBytes": 61749
+      },
+      "paints": {
+        "first-paint": 384,
+        "first-contentful-paint": 384
+      },
+      "largestContentfulPaintAtReadinessMs": 384,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 9.299999999813735
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 597.4999999990687
+        },
+        "data": {
+          "count": 7,
+          "transferBytes": 6641,
+          "encodedBytes": 4541,
+          "decodedBytes": 9485,
+          "totalDurationMs": 129.50000000093132
+        }
+      },
+      "totalResources": 25,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 374,
+      "cdp": {
+        "Documents": 6,
+        "Nodes": 1152,
+        "LayoutDuration": 0.012353,
+        "RecalcStyleDuration": 0.003709,
+        "ScriptDuration": 0.023818,
+        "TaskDuration": 0.125979,
+        "JSHeapUsedSize": 11231688,
+        "JSHeapTotalSize": 14626816
+      },
+      "transport": {
+        "transferredBytes": 770539,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 189,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 79
+        }
+      }
+    },
+    {
+      "locale": "en",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "page": "course",
+      "readyMs": 600.4621999999945,
+      "navigation": {
+        "ttfbMs": 400.70000000018626,
+        "domContentLoadedMs": 447.59999999962747,
+        "loadMs": 499.79999999981374,
+        "responseEndMs": 402.59999999962747,
+        "transferBytes": 11580,
+        "encodedBytes": 11280,
+        "decodedBytes": 51233
+      },
+      "paints": {
+        "first-paint": 452,
+        "first-contentful-paint": 452
+      },
+      "largestContentfulPaintAtReadinessMs": 452,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 6.099999999627471
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 724.2000000020489
+        },
+        "data": {
+          "count": 10,
+          "transferBytes": 7631,
+          "encodedBytes": 4631,
+          "decodedBytes": 8679,
+          "totalDurationMs": 284.5000000009313
+        }
+      },
+      "totalResources": 28,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 312,
+      "cdp": {
+        "Documents": 12,
+        "Nodes": 4074,
+        "LayoutDuration": 0.005683,
+        "RecalcStyleDuration": 0.00952,
+        "ScriptDuration": 0.024417,
+        "TaskDuration": 0.13929,
+        "JSHeapUsedSize": 24840924,
+        "JSHeapTotalSize": 33587200
+      },
+      "transport": {
+        "transferredBytes": 1946985,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 189,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 79
+        }
+      }
+    },
+    {
+      "locale": "en",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "page": "trial",
+      "readyMs": 626.2302999999956,
+      "navigation": {
+        "ttfbMs": 298.70000000018626,
+        "domContentLoadedMs": 345.3999999994412,
+        "loadMs": 389,
+        "responseEndMs": 301.79999999981374,
+        "transferBytes": 17771,
+        "encodedBytes": 17471,
+        "decodedBytes": 87374
+      },
+      "paints": {
+        "first-paint": 348,
+        "first-contentful-paint": 348
+      },
+      "largestContentfulPaintAtReadinessMs": 348,
+      "layoutShiftAtReadiness": 0.01717763808090564,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 11.799999999813735
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 617.0000000018626
+        },
+        "data": {
+          "count": 11,
+          "transferBytes": 9586,
+          "encodedBytes": 6286,
+          "decodedBytes": 12837,
+          "totalDurationMs": 577.5999999996275
+        }
+      },
+      "totalResources": 29,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 438,
+      "cdp": {
+        "Documents": 14,
+        "Nodes": 5683,
+        "LayoutDuration": 0.006934,
+        "RecalcStyleDuration": 0.014865,
+        "ScriptDuration": 0.04587,
+        "TaskDuration": 0.227839,
+        "JSHeapUsedSize": 33476452,
+        "JSHeapTotalSize": 43163648
+      },
+      "transport": {
+        "transferredBytes": 2362643,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 189,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 79
+        }
+      }
+    },
+    {
+      "locale": "en",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "home",
+      "readyMs": 805.749800000005,
+      "navigation": {
+        "ttfbMs": 367.29999999981374,
+        "domContentLoadedMs": 405.5,
+        "loadMs": 468.09999999962747,
+        "responseEndMs": 397.8999999994412,
+        "transferBytes": 10991,
+        "encodedBytes": 10691,
+        "decodedBytes": 37756
+      },
+      "paints": {
+        "first-paint": 404,
+        "first-contentful-paint": 404
+      },
+      "largestContentfulPaintAtReadinessMs": 748,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 9.5
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 345833,
+          "encodedBytes": 340733,
+          "decodedBytes": 1129490,
+          "totalDurationMs": 613.4000000022352
+        },
+        "data": {
+          "count": 3,
+          "transferBytes": 2502,
+          "encodedBytes": 1602,
+          "decodedBytes": 3183,
+          "totalDurationMs": 39.700000000186265
+        }
+      },
+      "totalResources": 21,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 188,
+      "cdp": {
+        "Documents": 4,
+        "Nodes": 298,
+        "LayoutDuration": 0.049687,
+        "RecalcStyleDuration": 0.004654,
+        "ScriptDuration": 0.053594,
+        "TaskDuration": 0.220175,
+        "JSHeapUsedSize": 5794528,
+        "JSHeapTotalSize": 9506816
+      },
+      "transport": {
+        "transferredBytes": 376902,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 200,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 90
+        }
+      }
+    },
+    {
+      "locale": "en",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "catalogue",
+      "readyMs": 541.8451000000059,
+      "navigation": {
+        "ttfbMs": 346.29999999981374,
+        "domContentLoadedMs": 397.09999999962747,
+        "loadMs": 437.8999999994412,
+        "responseEndMs": 348.09999999962747,
+        "transferBytes": 10989,
+        "encodedBytes": 10689,
+        "decodedBytes": 61749
+      },
+      "paints": {
+        "first-paint": 400,
+        "first-contentful-paint": 400
+      },
+      "largestContentfulPaintAtReadinessMs": 400,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 8.700000000186265
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 590.7999999998137
+        },
+        "data": {
+          "count": 8,
+          "transferBytes": 8051,
+          "encodedBytes": 5651,
+          "decodedBytes": 11928,
+          "totalDurationMs": 213.49999999813735
+        }
+      },
+      "totalResources": 26,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 374,
+      "cdp": {
+        "Documents": 6,
+        "Nodes": 1699,
+        "LayoutDuration": 0.010733,
+        "RecalcStyleDuration": 0.006019,
+        "ScriptDuration": 0.032066,
+        "TaskDuration": 0.151992,
+        "JSHeapUsedSize": 12009388,
+        "JSHeapTotalSize": 18296832
+      },
+      "transport": {
+        "transferredBytes": 792478,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 200,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 90
+        }
+      }
+    },
+    {
+      "locale": "en",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "course",
+      "readyMs": 518.392200000002,
+      "navigation": {
+        "ttfbMs": 335.20000000018626,
+        "domContentLoadedMs": 379.59999999962747,
+        "loadMs": 424.3999999994412,
+        "responseEndMs": 336.70000000018626,
+        "transferBytes": 11580,
+        "encodedBytes": 11280,
+        "decodedBytes": 51233
+      },
+      "paints": {
+        "first-paint": 384,
+        "first-contentful-paint": 384
+      },
+      "largestContentfulPaintAtReadinessMs": 384,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 15.700000000186265
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 615.4000000003725
+        },
+        "data": {
+          "count": 10,
+          "transferBytes": 7634,
+          "encodedBytes": 4634,
+          "decodedBytes": 8679,
+          "totalDurationMs": 233.3999999994412
+        }
+      },
+      "totalResources": 28,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 312,
+      "cdp": {
+        "Documents": 12,
+        "Nodes": 4624,
+        "LayoutDuration": 0.00379,
+        "RecalcStyleDuration": 0.005701,
+        "ScriptDuration": 0.027658,
+        "TaskDuration": 0.130483,
+        "JSHeapUsedSize": 25422540,
+        "JSHeapTotalSize": 33849344
+      },
+      "transport": {
+        "transferredBytes": 1970714,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 200,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 90
+        }
+      }
+    },
+    {
+      "locale": "en",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "trial",
+      "readyMs": 605.7196000000113,
+      "navigation": {
+        "ttfbMs": 315,
+        "domContentLoadedMs": 364.09999999962747,
+        "loadMs": 405.40000000037253,
+        "responseEndMs": 318.5,
+        "transferBytes": 17768,
+        "encodedBytes": 17468,
+        "decodedBytes": 87374
+      },
+      "paints": {
+        "first-paint": 364,
+        "first-contentful-paint": 364
+      },
+      "largestContentfulPaintAtReadinessMs": 364,
+      "layoutShiftAtReadiness": 0.023490211188151484,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 6.5
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 571.1999999992549
+        },
+        "data": {
+          "count": 11,
+          "transferBytes": 9588,
+          "encodedBytes": 6288,
+          "decodedBytes": 12837,
+          "totalDurationMs": 487.8999999985099
+        }
+      },
+      "totalResources": 29,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 438,
+      "cdp": {
+        "Documents": 14,
+        "Nodes": 6282,
+        "LayoutDuration": 0.006694,
+        "RecalcStyleDuration": 0.01203,
+        "ScriptDuration": 0.046596,
+        "TaskDuration": 0.203408,
+        "JSHeapUsedSize": 29678464,
+        "JSHeapTotalSize": 43950080
+      },
+      "transport": {
+        "transferredBytes": 2386384,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 200,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 90
+        }
+      }
+    },
+    {
+      "locale": "en",
+      "viewport": {
+        "width": 768,
+        "height": 1000
+      },
+      "page": "home",
+      "readyMs": 864.156799999997,
+      "navigation": {
+        "ttfbMs": 409,
+        "domContentLoadedMs": 451.80000000074506,
+        "loadMs": 523.7000000001863,
+        "responseEndMs": 444.80000000074506,
+        "transferBytes": 10991,
+        "encodedBytes": 10691,
+        "decodedBytes": 37756
+      },
+      "paints": {
+        "first-paint": 448,
+        "first-contentful-paint": 448
+      },
+      "largestContentfulPaintAtReadinessMs": 820,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 10.100000000558794
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 345833,
+          "encodedBytes": 340733,
+          "decodedBytes": 1129490,
+          "totalDurationMs": 764.9000000003725
+        },
+        "data": {
+          "count": 3,
+          "transferBytes": 2502,
+          "encodedBytes": 1602,
+          "decodedBytes": 3183,
+          "totalDurationMs": 40.10000000055879
+        }
+      },
+      "totalResources": 21,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 188,
+      "cdp": {
+        "Documents": 4,
+        "Nodes": 298,
+        "LayoutDuration": 0.052295,
+        "RecalcStyleDuration": 0.004756,
+        "ScriptDuration": 0.060809,
+        "TaskDuration": 0.236432,
+        "JSHeapUsedSize": 5769440,
+        "JSHeapTotalSize": 9506816
+      },
+      "transport": {
+        "transferredBytes": 376902,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 196,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 86
+        }
+      }
+    },
+    {
+      "locale": "en",
+      "viewport": {
+        "width": 768,
+        "height": 1000
+      },
+      "page": "catalogue",
+      "readyMs": 517.362100000013,
+      "navigation": {
+        "ttfbMs": 327.70000000018626,
+        "domContentLoadedMs": 380.20000000018626,
+        "loadMs": 424.8999999994412,
+        "responseEndMs": 329.59999999962747,
+        "transferBytes": 10989,
+        "encodedBytes": 10689,
+        "decodedBytes": 61749
+      },
+      "paints": {
+        "first-paint": 388,
+        "first-contentful-paint": 388
+      },
+      "largestContentfulPaintAtReadinessMs": 388,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 8
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 666.2000000001863
+        },
+        "data": {
+          "count": 7,
+          "transferBytes": 6754,
+          "encodedBytes": 4654,
+          "decodedBytes": 9699,
+          "totalDurationMs": 182.6000000005588
+        }
+      },
+      "totalResources": 25,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 374,
+      "cdp": {
+        "Documents": 6,
+        "Nodes": 1152,
+        "LayoutDuration": 0.013152,
+        "RecalcStyleDuration": 0.005917,
+        "ScriptDuration": 0.02951,
+        "TaskDuration": 0.144918,
+        "JSHeapUsedSize": 11451800,
+        "JSHeapTotalSize": 15413248
+      },
+      "transport": {
+        "transferredBytes": 773878,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 196,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 86
+        }
+      }
+    },
+    {
+      "locale": "en",
+      "viewport": {
+        "width": 768,
+        "height": 1000
+      },
+      "page": "course",
+      "readyMs": 472.6677000000054,
+      "navigation": {
+        "ttfbMs": 305.59999999962747,
+        "domContentLoadedMs": 330.40000000037253,
+        "loadMs": 381.70000000018626,
+        "responseEndMs": 308.40000000037253,
+        "transferBytes": 11580,
+        "encodedBytes": 11280,
+        "decodedBytes": 51233
+      },
+      "paints": {
+        "first-paint": 356,
+        "first-contentful-paint": 356
+      },
+      "largestContentfulPaintAtReadinessMs": 356,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 5.7000000001862645
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 429.69999999925494
+        },
+        "data": {
+          "count": 12,
+          "transferBytes": 9620,
+          "encodedBytes": 6020,
+          "decodedBytes": 11693,
+          "totalDurationMs": 271.19999999925494
+        }
+      },
+      "totalResources": 30,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 312,
+      "cdp": {
+        "Documents": 12,
+        "Nodes": 4077,
+        "LayoutDuration": 0.003713,
+        "RecalcStyleDuration": 0.004598,
+        "ScriptDuration": 0.019959,
+        "TaskDuration": 0.110941,
+        "JSHeapUsedSize": 22464288,
+        "JSHeapTotalSize": 32014336
+      },
+      "transport": {
+        "transferredBytes": 1960136,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 196,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 86
+        }
+      }
+    },
+    {
+      "locale": "en",
+      "viewport": {
+        "width": 768,
+        "height": 1000
+      },
+      "page": "trial",
+      "readyMs": 672.3362000000052,
+      "navigation": {
+        "ttfbMs": 364.90000000037253,
+        "domContentLoadedMs": 421.29999999981374,
+        "loadMs": 463,
+        "responseEndMs": 368.6000000005588,
+        "transferBytes": 17771,
+        "encodedBytes": 17471,
+        "decodedBytes": 87374
+      },
+      "paints": {
+        "first-paint": 428,
+        "first-contentful-paint": 428
+      },
+      "largestContentfulPaintAtReadinessMs": 428,
+      "layoutShiftAtReadiness": 0.027491015625,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 7.400000000372529
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 558.5999999996275
+        },
+        "data": {
+          "count": 11,
+          "transferBytes": 9585,
+          "encodedBytes": 6285,
+          "decodedBytes": 12837,
+          "totalDurationMs": 456.4999999990687
+        }
+      },
+      "totalResources": 29,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 438,
+      "cdp": {
+        "Documents": 14,
+        "Nodes": 5687,
+        "LayoutDuration": 0.006625,
+        "RecalcStyleDuration": 0.012994,
+        "ScriptDuration": 0.048941,
+        "TaskDuration": 0.21579,
+        "JSHeapUsedSize": 30764796,
+        "JSHeapTotalSize": 42901504
+      },
+      "transport": {
+        "transferredBytes": 2373060,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 196,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 86
+        }
+      }
+    },
+    {
+      "locale": "en",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "home",
+      "readyMs": 806.1031000000075,
+      "navigation": {
+        "ttfbMs": 327,
+        "domContentLoadedMs": 373.5,
+        "loadMs": 441.59999999962747,
+        "responseEndMs": 367.09999999962747,
+        "transferBytes": 10991,
+        "encodedBytes": 10691,
+        "decodedBytes": 37756
+      },
+      "paints": {
+        "first-paint": 372,
+        "first-contentful-paint": 372
+      },
+      "largestContentfulPaintAtReadinessMs": 768,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 11.599999999627471
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 345833,
+          "encodedBytes": 340733,
+          "decodedBytes": 1129490,
+          "totalDurationMs": 739.000000002794
+        },
+        "data": {
+          "count": 6,
+          "transferBytes": 4558,
+          "encodedBytes": 2758,
+          "decodedBytes": 4933,
+          "totalDurationMs": 110.30000000074506
+        }
+      },
+      "totalResources": 24,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 188,
+      "cdp": {
+        "Documents": 4,
+        "Nodes": 298,
+        "LayoutDuration": 0.065214,
+        "RecalcStyleDuration": 0.004933,
+        "ScriptDuration": 0.069157,
+        "TaskDuration": 0.272394,
+        "JSHeapUsedSize": 5867212,
+        "JSHeapTotalSize": 9244672
+      },
+      "transport": {
+        "transferredBytes": 380066,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 218,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 108
+        }
+      }
+    },
+    {
+      "locale": "en",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "catalogue",
+      "readyMs": 507.1680999999953,
+      "navigation": {
+        "ttfbMs": 338.90000000037253,
+        "domContentLoadedMs": 398.80000000074506,
+        "loadMs": 425.90000000037253,
+        "responseEndMs": 340.6000000005588,
+        "transferBytes": 10989,
+        "encodedBytes": 10689,
+        "decodedBytes": 61749
+      },
+      "paints": {
+        "first-paint": 408,
+        "first-contentful-paint": 408
+      },
+      "largestContentfulPaintAtReadinessMs": 408,
+      "layoutShiftAtReadiness": 0,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 6.7000000001862645
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 526.9999999990687
+        },
+        "data": {
+          "count": 12,
+          "transferBytes": 11604,
+          "encodedBytes": 8004,
+          "decodedBytes": 16207,
+          "totalDurationMs": 217.7999999988824
+        }
+      },
+      "totalResources": 30,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 374,
+      "cdp": {
+        "Documents": 6,
+        "Nodes": 1121,
+        "LayoutDuration": 0.016458,
+        "RecalcStyleDuration": 0.005275,
+        "ScriptDuration": 0.026904,
+        "TaskDuration": 0.137901,
+        "JSHeapUsedSize": 10695440,
+        "JSHeapTotalSize": 14364672
+      },
+      "transport": {
+        "transferredBytes": 778806,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 218,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 108
+        }
+      }
+    },
+    {
+      "locale": "en",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "course",
+      "readyMs": 488.2844000000041,
+      "navigation": {
+        "ttfbMs": 295.20000000018626,
+        "domContentLoadedMs": 338.70000000018626,
+        "loadMs": 390,
+        "responseEndMs": 297.5,
+        "transferBytes": 11580,
+        "encodedBytes": 11280,
+        "decodedBytes": 51233
+      },
+      "paints": {
+        "first-paint": 352,
+        "first-contentful-paint": 352
+      },
+      "largestContentfulPaintAtReadinessMs": 352,
+      "layoutShiftAtReadiness": 0.0007207309299045139,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 8.399999999441206
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 624
+        },
+        "data": {
+          "count": 13,
+          "transferBytes": 10391,
+          "encodedBytes": 6491,
+          "decodedBytes": 12168,
+          "totalDurationMs": 288.49999999720603
+        }
+      },
+      "totalResources": 31,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 312,
+      "cdp": {
+        "Documents": 12,
+        "Nodes": 3368,
+        "LayoutDuration": 0.002405,
+        "RecalcStyleDuration": 0.006323,
+        "ScriptDuration": 0.028213,
+        "TaskDuration": 0.140088,
+        "JSHeapUsedSize": 21017992,
+        "JSHeapTotalSize": 32206848
+      },
+      "transport": {
+        "transferredBytes": 1978447,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 218,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 108
+        }
+      }
+    },
+    {
+      "locale": "en",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "trial",
+      "readyMs": 625.7256000000052,
+      "navigation": {
+        "ttfbMs": 329.59999999962747,
+        "domContentLoadedMs": 365,
+        "loadMs": 420.5,
+        "responseEndMs": 332,
+        "transferBytes": 17771,
+        "encodedBytes": 17471,
+        "decodedBytes": 87374
+      },
+      "paints": {
+        "first-paint": 400,
+        "first-contentful-paint": 400
+      },
+      "largestContentfulPaintAtReadinessMs": 400,
+      "layoutShiftAtReadiness": 0.012582146990740742,
+      "longTasks": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "resources": {
+        "stylesheet": {
+          "count": 1,
+          "transferBytes": 9000,
+          "encodedBytes": 8700,
+          "decodedBytes": 42080,
+          "totalDurationMs": 6.300000000745058
+        },
+        "javascript": {
+          "count": 17,
+          "transferBytes": 348183,
+          "encodedBytes": 343083,
+          "decodedBytes": 1137050,
+          "totalDurationMs": 507.7000000011176
+        },
+        "data": {
+          "count": 17,
+          "transferBytes": 14614,
+          "encodedBytes": 9514,
+          "decodedBytes": 18984,
+          "totalDurationMs": 564.3000000016764
+        }
+      },
+      "totalResources": 35,
+      "externalResourceCount": 0,
+      "fontStatus": "loaded",
+      "domElements": 438,
+      "cdp": {
+        "Documents": 14,
+        "Nodes": 4978,
+        "LayoutDuration": 0.005348,
+        "RecalcStyleDuration": 0.013062,
+        "ScriptDuration": 0.041644,
+        "TaskDuration": 0.210433,
+        "JSHeapUsedSize": 29527880,
+        "JSHeapTotalSize": 41259008
+      },
+      "transport": {
+        "transferredBytes": 2401364,
+        "cacheResponses": 0,
+        "failedRequests": 0,
+        "statusCounts": {
+          "2xx": 218,
+          "4xx": 4
+        },
+        "typeCounts": {
+          "Document": 6,
+          "Stylesheet": 6,
+          "Script": 102,
+          "Fetch": 108
+        }
+      }
+    }
+  ],
+  "downloads": [
+    {
+      "kind": "authored-resource",
+      "key": "br01-tr01",
+      "locale": "fr",
+      "filename": "br01-tr01-fr-v1.md",
+      "bytes": 2944,
+      "sha256": "40f8e23d199e1809ff3147c14e5f343407451ea2dfbf9e977f5b17fc43ab2f93",
+      "exactAuthoredBytes": true,
+      "actualUiDownload": true
+    },
+    {
+      "kind": "authored-resource",
+      "key": "scoping-table",
+      "locale": "fr",
+      "filename": "scoping-table-fr-v1.md",
+      "bytes": 3129,
+      "sha256": "7dba21f05507b3d2394096e574c394980129e5d27aac041d0b3ae45c6f62f07d",
+      "exactAuthoredBytes": true,
+      "actualUiDownload": true
+    },
+    {
+      "kind": "local-practice-export",
+      "locale": "fr",
+      "filename": "practice-fr.md",
+      "bytes": 270,
+      "sha256": "869ef80b0e6c2f1e85e8fbd880243f913b8823b0b66657766d98d5401a7ff1dc",
+      "actualUiDownload": true,
+      "includesExactCurrentInputAndSource": true
+    },
+    {
+      "kind": "authored-resource",
+      "key": "br01-tr01",
+      "locale": "en",
+      "filename": "br01-tr01-en-v1.md",
+      "bytes": 2682,
+      "sha256": "f0535f600ebad3d0814552e3cfb981c8577536a8d3cd8667dc86a44a0b08d757",
+      "exactAuthoredBytes": true,
+      "actualUiDownload": true
+    },
+    {
+      "kind": "authored-resource",
+      "key": "scoping-table",
+      "locale": "en",
+      "filename": "scoping-table-en-v1.md",
+      "bytes": 2752,
+      "sha256": "482ff3faad22c0fec0090d5ba8c3f0819288bc0d0766fe123fc850601bf1a4f8",
+      "exactAuthoredBytes": true,
+      "actualUiDownload": true
+    },
+    {
+      "kind": "local-practice-export",
+      "locale": "en",
+      "filename": "practice-en.md",
+      "bytes": 271,
+      "sha256": "74bf19394068a748a5e75eacb51536f032ca72880faff2baffb5a12ec07263ec",
+      "actualUiDownload": true,
+      "includesExactCurrentInputAndSource": true
+    }
+  ],
+  "captures": [
+    "fr-320-home.png",
+    "fr-320-course.png",
+    "fr-320-trial.png",
+    "fr-390-home.png",
+    "fr-390-mobile-menu-open.png",
+    "fr-390-catalogue-filters-open.png",
+    "fr-390-course.png",
+    "fr-390-trial.png",
+    "fr-768-home.png",
+    "fr-768-course.png",
+    "fr-768-trial.png",
+    "fr-1440-home.png",
+    "fr-1440-course.png",
+    "fr-1440-trial.png",
+    "en-320-home.png",
+    "en-320-course.png",
+    "en-320-trial.png",
+    "en-390-home.png",
+    "en-390-mobile-menu-open.png",
+    "en-390-catalogue-filters-open.png",
+    "en-390-course.png",
+    "en-390-trial.png",
+    "en-768-home.png",
+    "en-768-course.png",
+    "en-768-trial.png",
+    "en-1440-home.png",
+    "en-1440-course.png",
+    "en-1440-trial.png",
+    "fr-320-registration-errors.png",
+    "fr-390-catalogue-root-font-200-percent.png",
+    "en-320-registration-errors.png",
+    "en-390-catalogue-root-font-200-percent.png"
+  ]
+}

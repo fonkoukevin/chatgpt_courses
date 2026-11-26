@@ -1,0 +1,189 @@
+{
+  "schemaVersion": 1,
+  "audit": "AUD-07",
+  "scope": "Current deployed staging; anonymous GET-only server HTML and strict browser boundary probes, no local candidate deployment",
+  "startedAt": "2026-11-26T21:14:40.247Z",
+  "result": "passed",
+  "requests": [
+    {
+      "locale": "fr",
+      "stage": "home",
+      "path": "/fr",
+      "status": 200,
+      "xRobotsTag": "noindex, nofollow, noarchive",
+      "cacheControl": "no-store",
+      "htmlLanguage": "fr",
+      "title": "Apprendre, produire et vérifier avec l’IA | ChatGPT Courses",
+      "description": "Choisissez une tâche, travaillez à partir de faits et vérifiez votre livrable. Parcours, guides et activités publiés.",
+      "canonical": "https://staging.chatgpt-courses.com/fr",
+      "robots": "noindex, nofollow",
+      "alternateCount": 0
+    },
+    {
+      "locale": "fr",
+      "stage": "course",
+      "path": "/fr/parcours/du-brief-a-la-proposition-commerciale",
+      "status": 200,
+      "xRobotsTag": "noindex, nofollow, noarchive",
+      "cacheControl": "no-store",
+      "htmlLanguage": "fr",
+      "title": "Du brief client à la proposition commerciale avec ChatGPT | ChatGPT Courses",
+      "description": "Un dossier fictif, six modules développés, des ressources Markdown et des vérifications explicites pour préparer puis adapter une proposition.",
+      "canonical": "https://staging.chatgpt-courses.com/fr/parcours/du-brief-a-la-proposition-commerciale",
+      "robots": "noindex, nofollow",
+      "alternateCount": 0
+    },
+    {
+      "locale": "fr",
+      "stage": "trial",
+      "path": "/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01?resource=aff534d6-b630-430f-a415-fe485fcc58df&version=9b18f7b5-22e7-44b3-8cc7-f0b50b37b85f&courseVersion=fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+      "status": 200,
+      "xRobotsTag": "noindex, nofollow, noarchive",
+      "cacheControl": "no-store",
+      "htmlLanguage": "fr",
+      "title": "Comprendre le brief avant de rédiger | ChatGPT Courses",
+      "description": "Transformer le dossier fictif de Client R en un tableau de faits, d’inconnues et de conséquences, puis choisir les premières questions utiles.",
+      "canonical": "https://staging.chatgpt-courses.com/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01?resource=aff534d6-b630-430f-a415-fe485fcc58df&version=9b18f7b5-22e7-44b3-8cc7-f0b50b37b85f&courseVersion=fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+      "robots": "noindex, nofollow",
+      "alternateCount": 0
+    },
+    {
+      "locale": "en",
+      "stage": "home",
+      "path": "/en",
+      "status": 200,
+      "xRobotsTag": "noindex, nofollow, noarchive",
+      "cacheControl": "no-store",
+      "htmlLanguage": "en",
+      "title": "Learn, produce and verify with AI | ChatGPT Courses",
+      "description": "Choose a task, work from supplied facts and check your output. Published learning paths, guides and activities.",
+      "canonical": "https://staging.chatgpt-courses.com/en",
+      "robots": "noindex, nofollow",
+      "alternateCount": 0
+    },
+    {
+      "locale": "en",
+      "stage": "course",
+      "path": "/en/courses/client-brief-to-proposal",
+      "status": 200,
+      "xRobotsTag": "noindex, nofollow, noarchive",
+      "cacheControl": "no-store",
+      "htmlLanguage": "en",
+      "title": "From client brief to a clear proposal with ChatGPT | ChatGPT Courses",
+      "description": "A fictional case, six developed modules, Markdown resources and explicit checks to prepare and adapt a proposal.",
+      "canonical": "https://staging.chatgpt-courses.com/en/courses/client-brief-to-proposal",
+      "robots": "noindex, nofollow",
+      "alternateCount": 0
+    },
+    {
+      "locale": "en",
+      "stage": "trial",
+      "path": "/en/learn/client-brief-to-proposal/proposal-m01?resource=aff534d6-b630-430f-a415-fe485fcc58df&version=9b18f7b5-22e7-44b3-8cc7-f0b50b37b85f&courseVersion=fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+      "status": 200,
+      "xRobotsTag": "noindex, nofollow, noarchive",
+      "cacheControl": "no-store",
+      "htmlLanguage": "en",
+      "title": "Understand the brief before drafting | ChatGPT Courses",
+      "description": "Turn Client R’s fictional brief into facts, unknowns and consequences, then choose useful first questions.",
+      "canonical": "https://staging.chatgpt-courses.com/en/learn/client-brief-to-proposal/proposal-m01?resource=aff534d6-b630-430f-a415-fe485fcc58df&version=9b18f7b5-22e7-44b3-8cc7-f0b50b37b85f&courseVersion=fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+      "robots": "noindex, nofollow",
+      "alternateCount": 0
+    },
+    {
+      "path": "/robots.txt",
+      "status": 200,
+      "xRobotsTag": "noindex, nofollow, noarchive",
+      "contentType": "text/plain",
+      "rootCrawlDisallowed": true
+    },
+    {
+      "path": "/sitemap.xml",
+      "status": 200,
+      "xRobotsTag": "noindex, nofollow, noarchive",
+      "contentType": "application/xml; charset=utf-8",
+      "sitemapLocationCount": 0
+    }
+  ],
+  "boundaryProbes": [
+    {
+      "method": "POST",
+      "origin": "https://staging.chatgpt-courses.com",
+      "path": "/api/v1/aud07-blocked-probe",
+      "result": "blocked-before-transmission",
+      "reason": "METHOD_DENIED"
+    },
+    {
+      "method": "GET",
+      "origin": "https://outside-aud07.invalid",
+      "path": "/blocked-probe",
+      "result": "blocked-before-transmission",
+      "reason": "ORIGIN_DENIED"
+    }
+  ],
+  "originalScreenshotsReviewed": [
+    {
+      "file": "docs/evidence/AUD07-browser/staging-readonly-f34b37a8-37f2-4e8b-b7e2-7f465194967d/fr-320-trial.png",
+      "sha256": "7829167e1a770bbdb2516677ada8cb0ff71aa90f8b7f7ddefd0edbd9f89ae66c",
+      "fullPage": false,
+      "reviewed": true
+    },
+    {
+      "file": "docs/evidence/AUD07-browser/staging-readonly-f34b37a8-37f2-4e8b-b7e2-7f465194967d/fr-390-trial.png",
+      "sha256": "4edf67a600619fbfe262b32027af2adfec54e40ae045070a570bba82bd949d75",
+      "fullPage": false,
+      "reviewed": true
+    },
+    {
+      "file": "docs/evidence/AUD07-browser/staging-readonly-f34b37a8-37f2-4e8b-b7e2-7f465194967d/fr-768-trial.png",
+      "sha256": "3781e2314ee3084754cd7bacf074ae76172acea4c4321bd672fed9fd131ecd63",
+      "fullPage": false,
+      "reviewed": true
+    },
+    {
+      "file": "docs/evidence/AUD07-browser/staging-readonly-f34b37a8-37f2-4e8b-b7e2-7f465194967d/fr-1440-trial.png",
+      "sha256": "c1182c8c0938bed7ae0738399e0f46f8ddf83bda719fc586c6091c7d283bf88f",
+      "fullPage": false,
+      "reviewed": true
+    },
+    {
+      "file": "docs/evidence/AUD07-browser/staging-readonly-f34b37a8-37f2-4e8b-b7e2-7f465194967d/en-320-trial.png",
+      "sha256": "207d2d1b2d29f2be386ca92ac2ba580b611714f959ba8c280014f6e47adecbef",
+      "fullPage": false,
+      "reviewed": true
+    },
+    {
+      "file": "docs/evidence/AUD07-browser/staging-readonly-f34b37a8-37f2-4e8b-b7e2-7f465194967d/en-390-trial.png",
+      "sha256": "46add0bafdb48b94639dab88a371c28ddbac5713dbea29f0253c812247bf1ac4",
+      "fullPage": false,
+      "reviewed": true
+    },
+    {
+      "file": "docs/evidence/AUD07-browser/staging-readonly-f34b37a8-37f2-4e8b-b7e2-7f465194967d/en-768-trial.png",
+      "sha256": "7a9ec97691f85f93b536c479837af29c7bced3942511948d0588a761d41c6cf3",
+      "fullPage": false,
+      "reviewed": true
+    },
+    {
+      "file": "docs/evidence/AUD07-browser/staging-readonly-f34b37a8-37f2-4e8b-b7e2-7f465194967d/en-1440-trial.png",
+      "sha256": "9c4ab89e3b6fe8d10dc7f190c79b6b557d8a7d5cff18216febf5b05ebfc32add",
+      "fullPage": false,
+      "reviewed": true
+    }
+  ],
+  "blockingVisualDefectsObserved": 0,
+  "observationArtifactSha256": "641274434fb152c76deb3a0069d3dfe00c31a19a1c2f0dcf36fae4844b0bddae",
+  "automaticRetries": 0,
+  "boundary": {
+    "mutatingRequestsForwarded": 0,
+    "externalRequestsForwarded": 0,
+    "credentialHeadersForwarded": false,
+    "forwardedAllowedGetRequests": 1
+  },
+  "browserClosed": true,
+  "completedAt": "2026-11-26T21:14:45.308Z",
+  "limits": [
+    "Only viewport-top screenshots of M01 were visually reviewed; downloads, submissions and workshop completion are outside this anonymous remote observation.",
+    "Staging disallows crawling and also emits noindex; actual search-engine deindexing cannot be inferred because robots.txt may prevent crawlers reading noindex.",
+    "The deployed staging version predates the local AUD-06/AUD-07 candidate."
+  ]
+}

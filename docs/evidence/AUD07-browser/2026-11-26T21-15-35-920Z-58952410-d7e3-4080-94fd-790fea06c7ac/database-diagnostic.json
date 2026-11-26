@@ -1,0 +1,22 @@
+{
+  "available": true,
+  "readOnly": true,
+  "capturedAt": "2026-11-26T21:18:03.892Z",
+  "aggregates": {
+    "grants": [],
+    "orders": [],
+    "outbox": [
+      {
+        "type": "ACCOUNT_CREATED",
+        "count": "1",
+        "status": "PENDING",
+        "lastErrorCode": null
+      }
+    ],
+    "paymentEvents": [],
+    "refundOperations": [],
+    "checkoutOperations": [],
+    "refundReconciliationJobs": [],
+    "paymentReconciliationJobs": []
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "audit": "AUD-07",
+  "browser": "chromium",
+  "browserVersion": "158.0.8127.18",
+  "headless": true,
+  "environment": {
+    "platform": "win32",
+    "release": "10.0.26300",
+    "architecture": "x64",
+    "cpuModel": "AMD Ryzen 7 5700U with Radeon Graphics         ",
+    "logicalProcessors": 16,
+    "totalMemoryBytes": 16455815168,
+    "freeMemoryBytesAtReport": 2210086912,
+    "nodeVersion": "v24.22.2"
+  },
+  "protocol": {
+    "viewports": [
+      {
+        "width": 320,
+        "height": 844
+      },
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 768,
+        "height": 1000
+      },
+      {
+        "width": 1440,
+        "height": 1000
+      }
+    ],
+    "network": "unthrottled HTTP loopback",
+    "cpuRate": 1,
+    "browserCacheDisabled": true,
+    "browserCacheClearedBeforeMeasuredDocuments": true,
+    "serviceWorkersBypassed": true,
+    "samplesPerDocumentAndViewport": 1,
+    "serverCache": "Running API/Next production servers; fixture preparation and earlier test cases warm the backend. Not a cold-server benchmark.",
+    "performanceScope": "Local laboratory readiness snapshots; LCP and layout shifts measured at readiness, not field Core Web Vitals or INP. No score or measured improvement is claimed.",
+    "transportScope": "CDP transport counters accumulate within each viewport test; navigation/resource/paint fields belong to each measured document.",
+    "accessibilityScope": "Targeted keyboard/focus/reflow checks and separate root-font scaling; no native browser zoom or accessibility certification.",
+    "privacy": "No form text, identities, cookies, headers or private response bodies are written into laboratory measurements."
+  },
+  "fixture": "Authored P18 FR/EN course, technically published/selected only in supervisor-owned disposable PostgreSQL/S3.",
+  "humanEditorialApproval": false,
+  "sharedContentChanged": false,
+  "externalProviderRequests": false,
+  "orderOrCheckoutRequested": false,
+  "deployed": false,
+  "financialUnchanged": true,
+  "durableQuizAttemptsUnchanged": true,
+  "outcomes": [
+    {
+      "name": "fr 320x844: public course, keyboard navigation, filters and anonymous trial",
+      "status": "failed",
+      "expectedStatus": "passed",
+      "retry": 0
+    }
+  ],
+  "observations": [],
+  "measurements": [],
+  "downloads": [],
+  "captures": []
+}

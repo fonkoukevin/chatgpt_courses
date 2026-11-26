@@ -1,0 +1,154 @@
+{
+  "audit": "AUD-07",
+  "result": "measured-local-laboratory",
+  "buildId": "UMEgrBuTpF_oiTaRddh2q",
+  "browser": "158.0.8127.18",
+  "protocol": {
+    "viewports": [
+      {
+        "width": 320,
+        "height": 844
+      },
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 768,
+        "height": 1000
+      },
+      {
+        "width": 1440,
+        "height": 1000
+      }
+    ],
+    "network": "unthrottled HTTP loopback",
+    "cpuRate": 1,
+    "browserCacheDisabled": true,
+    "browserCacheClearedBeforeMeasuredDocuments": true,
+    "serviceWorkersBypassed": true,
+    "samplesPerDocumentAndViewport": 1,
+    "serverCache": "Running API/Next production servers; fixture preparation and earlier test cases warm the backend. Not a cold-server benchmark.",
+    "performanceScope": "Local laboratory readiness snapshots; LCP and layout shifts measured at readiness, not field Core Web Vitals or INP. No score or measured improvement is claimed.",
+    "transportScope": "CDP transport counters accumulate within each viewport test; navigation/resource/paint fields belong to each measured document.",
+    "accessibilityScope": "Targeted keyboard/focus/reflow checks and separate root-font scaling; no native browser zoom or accessibility certification.",
+    "privacy": "No form text, identities, cookies, headers or private response bodies are written into laboratory measurements."
+  },
+  "environment": {
+    "platform": "win32",
+    "release": "10.0.26300",
+    "architecture": "x64",
+    "cpuModel": "AMD Ryzen 7 5700U with Radeon Graphics         ",
+    "logicalProcessors": 16,
+    "totalMemoryBytes": 16455815168,
+    "freeMemoryBytesAtReport": 1981169664,
+    "nodeVersion": "v24.22.2"
+  },
+  "measurements": 32,
+  "pages": [
+    {
+      "page": "home",
+      "samples": 8,
+      "readyMs": {
+        "min": 719.0555000000022,
+        "max": 864.156799999997
+      },
+      "ttfbMs": {
+        "min": 202.40000000037253,
+        "max": 409
+      },
+      "lcpAtReadinessMs": {
+        "min": 652,
+        "max": 820
+      },
+      "layoutShiftAtReadiness": {
+        "min": 0,
+        "max": 0
+      },
+      "externalResourceCount": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    {
+      "page": "catalogue",
+      "samples": 8,
+      "readyMs": {
+        "min": 311.4018999999971,
+        "max": 600.1145000000033
+      },
+      "ttfbMs": {
+        "min": 103.19999999925494,
+        "max": 421.19999999925494
+      },
+      "lcpAtReadinessMs": {
+        "min": 156,
+        "max": 464
+      },
+      "layoutShiftAtReadiness": {
+        "min": 0,
+        "max": 0
+      },
+      "externalResourceCount": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    {
+      "page": "course",
+      "samples": 8,
+      "readyMs": {
+        "min": 363.1915999999983,
+        "max": 600.4621999999945
+      },
+      "ttfbMs": {
+        "min": 167.5,
+        "max": 400.70000000018626
+      },
+      "lcpAtReadinessMs": {
+        "min": 212,
+        "max": 452
+      },
+      "layoutShiftAtReadiness": {
+        "min": 0,
+        "max": 0.0011469536675347222
+      },
+      "externalResourceCount": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    {
+      "page": "trial",
+      "samples": 8,
+      "readyMs": {
+        "min": 605.7196000000113,
+        "max": 672.3362000000052
+      },
+      "ttfbMs": {
+        "min": 298.70000000018626,
+        "max": 364.90000000037253
+      },
+      "lcpAtReadinessMs": {
+        "min": 348,
+        "max": 428
+      },
+      "layoutShiftAtReadiness": {
+        "min": 0.012582146990740742,
+        "max": 0.0275234375
+      },
+      "externalResourceCount": {
+        "min": 0,
+        "max": 0
+      }
+    }
+  ],
+  "source": {
+    "file": "docs/evidence/AUD07-browser/2026-11-26T21-19-19-690Z-c17fd79d-db25-4598-8262-8c4066086671/aud07-public-checks.json",
+    "sha256": "85c6aa407ed47ccc0988cff4f35240e76df905fda644eb7c0ad87db95b407d6f"
+  },
+  "fieldDataAvailable": false,
+  "nativeBrowserZoomTested": false,
+  "performanceScoreClaimed": false,
+  "measuredImprovementClaimed": false
+}

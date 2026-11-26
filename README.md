@@ -318,6 +318,8 @@ Un anonyme peut conserver volontairement un brouillon **non sensible**, deux heu
 
 AUD-05 organise les activités en quatre moments : comprendre, produire, vérifier, réutiliser. Une consigne sans politique de projet (M01) permet un essai local vide, copiable et exportable sans compte ; aucun stockage ou import n’y est promis. Les projets configurés gardent leur consentement de deux heures et leur import explicite. Après les builds, `node scripts/verify-browser.mjs AUD05` ou `scripts/courses.cmd run verify:workshop` exécute la recette sur PostgreSQL/S3 éphémères, commerce et paiements désactivés. [Résultats et limites AUD-05](docs/evidence/AUD-05.md).
 
+AUD-07 ajoute `scripts/courses.cmd run verify:public-audit` après les builds : parcours publics FR/EN aux largeurs320/390/768/1440px, clavier/focus, filtres, FAQ, essai M01, téléchargements réels et erreurs de formulaire sur PostgreSQL/S3/Mailpit jetables. Les mesures sont des diagnostics de laboratoire et le reflow par taille de police reste distinct du zoom natif. Le commerce et les workers restent désactivés. Le SEO par environnement se vérifie séparément avec `run verify:seo`. La [spécification de mesure](docs/MEASUREMENT.md) distingue les faits métier existants des événements non collectés ; aucun outil analytics externe n’est ajouté.
+
 Commandes disponibles :
 
 ```powershell

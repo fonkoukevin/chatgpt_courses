@@ -1,0 +1,225 @@
+{
+  "schemaVersion": 1,
+  "lot": "FINAL-01",
+  "kind": "delivery-and-operations-preparation",
+  "date": "2026-11-27",
+  "result": "prepared-and-validated-locally-not-deployed",
+  "sources": {
+    "repository": [
+      {
+        "path": "docs/runbooks/deploy.md",
+        "sha256": "3a2529910cc5ad0a339595af6d414e229af3df297ec405a3db385e3c5fec18d6"
+      },
+      {
+        "path": "docs/runbooks/backup-restore.md",
+        "sha256": "11c58f4222dae9ab6b55ad5c28c4e912134876a69d24703cc7b0cce83c1dd22c"
+      },
+      {
+        "path": "docs/runbooks/rollback.md",
+        "sha256": "3455d790bb821274adcbbf8323cc8d3b55af66484dfba9501d7bde44d4f18a33"
+      },
+      {
+        "path": "docs/runbooks/incident-monitoring.md",
+        "sha256": "84b6d97f6e8c46cb5993588c457176ae71b0ec00e606a6d9fb3c4cee783a82a0"
+      },
+      {
+        "path": "docs/runbooks/shared-ingress-staging.md",
+        "sha256": "f140c13bf81d1f4d6d34ea31350051293de5855bbabb45b00e571bfb8628fe10"
+      },
+      {
+        "path": "scripts/deployment/release.mjs",
+        "sha256": "360f6844ba03c0b840a99d012605ed6309231239c9892ca564b579e31ad583a1"
+      },
+      {
+        "path": "scripts/deployment/release-apply.mjs",
+        "sha256": "3c476cf7073cde97773b758859a5d385bebac726ec442c14b5b3e109b7c727b6"
+      },
+      {
+        "path": "scripts/deployment/monitor.mjs",
+        "sha256": "3fc136abb0d16f97d45ba58bd46020ce4e554b07ca74bba82038974fb38998f6"
+      }
+    ],
+    "privateObservations": [
+      {
+        "id": "source-staging-read-only",
+        "sha256": "d156708bd621527b894f6e83569ec3393beaaccdbdc6e55de5c93ee8713b81ea",
+        "observedAt": "2026-11-27T17:39:59.112Z",
+        "readOnly": true,
+        "remoteMutationPerformed": false
+      },
+      {
+        "id": "operations-scope-read-only",
+        "sha256": "4af2ee9b0127771064de99e25b4b0bee3fc55441d286e354a5661975e3bba08e",
+        "readOnly": true,
+        "remoteMutationPerformed": false
+      },
+      {
+        "id": "postgres-compose-read-only",
+        "sha256": "efcb11fd4bbb7d06cf37365cc279efbfa02110eab5dfff4e4e56ad2217827bc6",
+        "readOnly": true,
+        "remoteMutationPerformed": false
+      }
+    ],
+    "localValidation": {
+      "sha256": "1b9d60eaa8f77a4054b75bb48ba7231b017bffc21e79709c7188a93fa8189faf",
+      "tests": 21,
+      "failures": 0,
+      "modulesSyntaxChecked": 14,
+      "candidateFrozen": false
+    }
+  },
+  "observedSource": {
+    "environment": "staging",
+    "sourceCommit": "07f4fc6e5dc38560d4a7f02358471f7ed909d663",
+    "manifestSha256": "c2e104d0db69433fe67bfdabd055c58ab495f0d98092c9fa5f045d55106087fc",
+    "schemaVersion": 21,
+    "successfulMigrations": 21,
+    "migrationFailures": 0,
+    "postgresql": "18.6 (Debian 18.6-1.pgdg13+2)",
+    "publicTables": 87,
+    "tablesFingerprinted": 85,
+    "sessionTablesExcluded": 2,
+    "readyAssets": 28,
+    "actualObjectInventory": "not-exported-in-this-preparation",
+    "healthyApplicationServices": 5,
+    "otherContainersProtected": 26,
+    "legacySharedHosts": 4,
+    "ingressRuntimeMatchesAdaptedFile": true,
+    "flags": {
+      "basicAuthEnabled": false,
+      "paymentTest": true
+    }
+  },
+  "githubFlags": {
+    "basicAuthEnabled": false,
+    "paymentTest": true,
+    "state": "reconciled-and-read-back-by-parent-agent",
+    "independentlyReadBackByThisSubagent": false,
+    "serverConfigurationChangedByThisPreparation": false
+  },
+  "production": {
+    "githubEnvironmentObserved": false,
+    "installationAtExpectedLocationObserved": false,
+    "scope": "Inspected repository environment metadata and expected installation location only; no assertion about unrelated infrastructure.",
+    "deploymentPerformed": false
+  },
+  "operationsObservation": {
+    "deployAccountCrontab": "absent",
+    "coursesTimersInAccessibleSystemTimerInventory": 0,
+    "otherUsersAndExternalSchedulersExcluded": false,
+    "cronCreated": false,
+    "timerCreated": false,
+    "externalAlertSent": false
+  },
+  "protocolReview": {
+    "sourceSchema": 21,
+    "targetSchema": 21,
+    "sourceToolsFromControlledCommit": "07f4fc6e5dc38560d4a7f02358471f7ed909d663",
+    "maintenanceToolsFilesIncludingImports": 7,
+    "sourcePinsUnknownRefused": true,
+    "candidateRequiresExactSuccessfulPushMainCiAndPublishedManifest": true,
+    "writerExclusion": {
+      "state": "operator-coordination-evidence-required-before-apply",
+      "booleanAloneAccepted": false,
+      "evidenceHashRequired": true,
+      "externalWriterAbsenceProven": false,
+      "localGuardsPrepared": [
+        "exact source API/web stopped",
+        "files-host write gate",
+        "measured signed PUT expiry and S3 connection drain",
+        "no other database backends except autovacuum at quiescence checks",
+        "no prepared transactions",
+        "no published database or object-service host ports",
+        "unchanged inventory of other containers and source service configurations"
+      ],
+      "limits": "The guards observe a scope and an instant. Neither an evidence hash nor zero database connections proves that no external credential holder can write later."
+    },
+    "maintenanceWindow": {
+      "fixedFromInitialPreflight": true,
+      "maximumSeconds": 14400,
+      "captureAndReadyCanExtendInitialDeadline": false,
+      "checkedOnSubsequentRemotePhases": true,
+      "expiredWindowRetainsLocksAndResources": true,
+      "readOnlyPreDispatchCheckPrepared": true,
+      "preDispatchMinimumRemainingSeconds": 900,
+      "preDispatchCheckExecuted": false,
+      "workflowAtomicallyEnforcesOperatorDeadline": false,
+      "queueOrOverrunRequiresDiagnosis": true
+    },
+    "restore": {
+      "all85TablesRequiredByInventoryAndCount": true,
+      "objectsAndMetadataCompared": true,
+      "returnedPcCopyAuthenticatedBeforeTargetWrites": true,
+      "newIsolatedDatabaseAndObjectTargets": true,
+      "applicationMigrationOrProviderStarted": false,
+      "verificationTargetsStoppedAndRetainedRequired": true,
+      "nonNullOutboxPayloadAvailability": "must-be-observed-in-current-capture"
+    },
+    "postgresContinuity": {
+      "newContainerIdMayBeAccepted": true,
+      "imageAndImageIdPreserved": true,
+      "namedVolumeFullyCompared": true,
+      "secretFileReferencesAndBytesCompared": true,
+      "initRolesBytesLinkedToControlledGit": true,
+      "fullConfigAndHostConfigCompared": true,
+      "unknownFieldsIgnored": false,
+      "normalizations": [
+        "generated container hostname",
+        "verified release-derived Compose labels and independently calculated Compose config hash",
+        "same-byte init-roles bind path",
+        "order of unique Env, Binds and mounts entries"
+      ],
+      "limits": "Any other field or value change is refused; this is a comparison policy prepared locally, not proof that a future recreation has occurred."
+    },
+    "otherApplications": {
+      "containers": 26,
+      "fullConfigAndHostConfigFingerprinted": true,
+      "previousStoppedRestoreTargetsIncludedInPreservationScope": true,
+      "legacyHosts": 4,
+      "caddyOriginalBytesAndInodeRequired": true
+    },
+    "independentReview": {
+      "performed": true,
+      "blockingFinding": "Post-deployment application and recreated database IDs were initially rejected as unexpected writers.",
+      "localCorrection": "Only newly validated API/web and PostgreSQL IDs are admitted before checking the preserved other containers.",
+      "additionalWindowReviewPerformed": true
+    },
+    "contentChanges": {
+      "interleavedWithStrictDeliveryPreservation": false,
+      "separatePostDeploymentBackupAndCmsWindowRequired": true,
+      "p18FreeTemporaryStatePreservedDuringDelivery": true
+    }
+  },
+  "execution": {
+    "sshReadOnlyObservationsPerformed": true,
+    "newBackupTaken": false,
+    "offHostCopyPerformed": false,
+    "restorePerformed": false,
+    "newKeyGenerated": false,
+    "serverGateChanged": false,
+    "sourceServicesStopped": false,
+    "workflowDispatchedByThisPreparation": false,
+    "newImagesPublishedByThisPreparation": false,
+    "newReleaseDeployed": false,
+    "productionDeployed": false,
+    "commercialActivation": false,
+    "financialReplay": false,
+    "p18ImportPerformed": false
+  },
+  "remaining": [
+    "Complete protected PR/main CI and publish exact manifest/images.",
+    "Freeze that candidate locally and review private operator evidence.",
+    "Establish scoped writer exclusion and operator coordination before opening the bounded window.",
+    "Execute and observe current backup, PC copy/return and isolated all85 restore before delivery.",
+    "Run the explicit read-only readiness check immediately before dispatch; preserve evidence on queue delay or expiry.",
+    "Complete deployment preservation and ungating before any separate editorial publication.",
+    "Obtain actual production target, required launch decisions and P23 operating choices before their activation."
+  ],
+  "publicDataPolicy": {
+    "privateInfrastructurePathsPublished": false,
+    "secretValuesPublished": false,
+    "rawEnvironmentPublished": false,
+    "privateRowsPublished": false,
+    "privateObjectKeysPublished": false
+  }
+}

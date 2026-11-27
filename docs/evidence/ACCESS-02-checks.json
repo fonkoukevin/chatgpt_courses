@@ -1,0 +1,398 @@
+{
+  "phase": "ACCESS-02",
+  "verifiedAt": "2026-11-27T12:58:58.449Z",
+  "result": "metadata-correction-validated-locally",
+  "baseline": {
+    "source": ".runtime/access02/baseline-2026-11-27T12-20-33-867Z-dd48ab7c-7071-4bf8-af71-a769d0457c8b/summary.json",
+    "startedAt": "2026-11-27T12:20:33.939Z",
+    "completedAt": "2026-11-27T12:25:28.520Z",
+    "selector": "SignedDownloadExpiryContractTest",
+    "exitCode": 1,
+    "totals": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "suites": [
+      {
+        "name": "com.chatgptcourses.SignedDownloadExpiryContractTest",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 33.486,
+        "cases": [
+          {
+            "name": "downloadMetadataKeepsTheProvidersSignedDeadlineInsteadOfStartingANewTtl",
+            "failed": true,
+            "skipped": false
+          }
+        ],
+        "xmlSha256": "2343090810f4ec2e3e5cd0ba263d949662d8763c581baa2c093d81ee1ac2bd26"
+      }
+    ],
+    "privateLogSha256": "8b2e0507a8624cdfc194578d0c7b415b13c74a95b662e5c6d2ed68e8cd6f9e66"
+  },
+  "oldCodeStorageObservation": {
+    "source": ".runtime/access02/observe-2026-11-27T12-26-00-339Z-b4f87b04-d853-4828-b590-db1bbb730be2/summary.json",
+    "startedAt": "2026-11-27T12:26:00.421Z",
+    "completedAt": "2026-11-27T12:29:23.270Z",
+    "selector": "S3PresignedExpiryIntegrationTest,PresignedDownloadDiagnosticsTest",
+    "exitCode": 0,
+    "totals": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "suites": [
+      {
+        "name": "com.chatgptcourses.S3PresignedExpiryIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 65.206,
+        "cases": [
+          {
+            "name": "aSingleImmediateReadPrecedesAnExplicitExpiredReadWithoutRetry",
+            "failed": false,
+            "skipped": false
+          }
+        ],
+        "xmlSha256": "0555f701d648c702f1999b614a4ef223ec8c45aad50d2ef8a9ada948dfd7f4ea"
+      },
+      {
+        "name": "com.chatgptcourses.PresignedDownloadDiagnosticsTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 6.941,
+        "cases": [
+          {
+            "name": "expectedSuccessIsNotCapturedAndSinkFailureCannotReplaceStatusAssertion",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "malformedOrUntrustedInputsDoNotPreventTimingCaptureOrEscapeAsDiagnostics",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "unexpectedStatusKeepsOnlyApprovedMetadataAndKnownS3Code",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "expiryIndicationRequiresTheExactKnownCodeAndMessage",
+            "failed": false,
+            "skipped": false
+          }
+        ],
+        "xmlSha256": "5478078b1bd846240d41f1a0af3a98af26eb7ec74d06a92ed4b5252a3a5e7c09"
+      }
+    ],
+    "privateLogSha256": "788f77d6017184c80af2053cc1bea86fdeb9937530725acf3b936e4ea1ccc5fb"
+  },
+  "correctedCodeVerification": {
+    "source": ".runtime/access02/verify-2026-11-27T12-35-17-802Z-d53c0258-9f1e-472f-a790-ca58b0e63af5/summary.json",
+    "startedAt": "2026-11-27T12:35:17.860Z",
+    "completedAt": "2026-11-27T12:50:53.822Z",
+    "selector": "SignedDownloadExpiryContractTest,S3SignatureExpiryTest,AssetServiceIntegrationTest,EntitlementAccessIntegrationTest",
+    "exitCode": 0,
+    "totals": {
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "suites": [
+      {
+        "name": "com.chatgptcourses.SignedDownloadExpiryContractTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 15.624,
+        "cases": [
+          {
+            "name": "downloadMetadataKeepsTheProvidersSignedDeadlineInsteadOfStartingANewTtl",
+            "failed": false,
+            "skipped": false
+          }
+        ],
+        "xmlSha256": "00f66f1ee7f678e470851fa604fb458230ccb1ec4840943037d96143fccf77f6"
+      },
+      {
+        "name": "com.chatgptcourses.S3SignatureExpiryTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 0.475,
+        "cases": [
+          {
+            "name": "putMetadataUsesTheWholeSecondDeadlineCarriedByTheSignature",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "signedRequestStringDoesNotRevealBearerMaterial",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "getMetadataUsesTheWholeSecondDeadlineCarriedByTheSignature",
+            "failed": false,
+            "skipped": false
+          }
+        ],
+        "xmlSha256": "d1d64ed74050f3cf7ef851c08a1583c244a434a9ddbdf2140830f454d1abde9e"
+      },
+      {
+        "name": "com.chatgptcourses.AssetServiceIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 410.794,
+        "cases": [
+          {
+            "name": "projectTextRoundTripsPrivatelyAndSurvivesSourceWithdrawalWithoutSharingOwnership(CapturedOutput)",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "pendingUploadsAndSignedDownloadsActuallyExpireWithoutIssuingPermanentObjectAccess",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "upgradeV008PreservesExistingProjectRevisionAndSessionWithoutCreatingFiles",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "actualObjectValidationRejectsMissingWrongSizeMimeAndInvalidUtf8WithoutPretendingToScan",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "concurrentConfirmationAndReplayedStagingPutCannotModifyReadyBytes",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "enrolledEditorialDownloadRechecksWithdrawnParentWhileStandaloneFreeResourceRemainsAvailable",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "editorialImagesAreDecodedReencodedBoundedAndPublicationControlsEveryPublicLink",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "projectReservationQuotaIsAtomicForConcurrentUploadIntents",
+            "failed": false,
+            "skipped": false
+          }
+        ],
+        "xmlSha256": "a3691eae847ad530ff319fea39398330303027d1711e2a2a61f9c9f67c863970"
+      },
+      {
+        "name": "com.chatgptcourses.EntitlementAccessIntegrationTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 185.072,
+        "cases": [
+          {
+            "name": "actualPrivateHttpRequiresItsOwnerAndThePublicRouteNeverLeaksPaidBodies",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "freshlyCommittedPostgresTimestampIsReadableInParallelMemberAndLearningTransactions",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "diagnosticKeepsPostgresPredicatesWhenProblemJsonAndSessionTransportFail",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "independentOriginsLanguagesAndPeriodsNeverBecomeOneUserCourseBoolean",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "protectedLearningAndProjectsWorkAfterARealGrantAndPersonalWorkSurvivesRevocation",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "pinnedCourseAndUpdateWindowKeepExactDescendantsAndWithdrawnPathsStayClosed",
+            "failed": false,
+            "skipped": false
+          }
+        ],
+        "xmlSha256": "b0382bb29a2786e4b7eed360b364dff22096c5acbf298927ad1394ecb71de418"
+      }
+    ],
+    "privateLogSha256": "afd8b7e543803cf76125e8d1b4fc660ec953c866b2dcf696d4280f265fb2d805"
+  },
+  "finalPureDiagnosticVerification": {
+    "source": ".runtime/access02/diagnostics-2026-11-27T12-51-34-922Z-8f9205d4-f695-4091-b7fe-ce191d4a05bc/summary.json",
+    "startedAt": "2026-11-27T12:51:34.980Z",
+    "completedAt": "2026-11-27T12:55:54.123Z",
+    "selector": "PresignedDownloadDiagnosticsTest",
+    "exitCode": 0,
+    "totals": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "suites": [
+      {
+        "name": "com.chatgptcourses.PresignedDownloadDiagnosticsTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 6.442,
+        "cases": [
+          {
+            "name": "successfulXmlContentCannotBeInterpretedAsAStorageError",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "expectedSuccessIsNotCapturedAndSinkFailureCannotReplaceStatusAssertion",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "malformedOrUntrustedInputsDoNotPreventTimingCaptureOrEscapeAsDiagnostics",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "unexpectedStatusKeepsOnlyApprovedMetadataAndKnownS3Code",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "expiryIndicationRequiresTheExactKnownCodeAndMessage",
+            "failed": false,
+            "skipped": false
+          }
+        ],
+        "xmlSha256": "c4026ef1dec731b5c249ca30dabf0d3eb802405cdc5807e8ef2db06a26fc8594"
+      }
+    ],
+    "privateLogSha256": "bc3f42ffdc96aa29e4054c6a5a3a172669dd8511a53e70c51a200ac210a2599f"
+  },
+  "sourceCorrelation": {
+    "oldProductionUnchangedDuringBaselineAndObservation": true,
+    "correctedSourceUnchangedDuringVerification": true,
+    "verifiedSourceSha256": {
+      "apps/api/src/main/java/com/chatgptcourses/assets/storage/ObjectStorage.java": "106e94ac0c8ce512b10eeebdde6e9426aa027619b473e17ee67ca5f9f3657a38",
+      "apps/api/src/main/java/com/chatgptcourses/assets/storage/S3ObjectStorage.java": "7823f18529fd2dd8bc3371f97a8d591ec26cec6118c10ef3c8a5bef512c60a9a",
+      "apps/api/src/main/java/com/chatgptcourses/assets/service/AssetService.java": "6ff7f2ca84d028a6d4f1df9c132ac74d650dc333ea712cbba9053624ca467108",
+      "apps/api/src/test/java/com/chatgptcourses/SignedDownloadExpiryContractTest.java": "eacd4da4a3090df796ff698438159a546ea4afffa692e2e393a074d1a32d251f",
+      "apps/api/src/test/java/com/chatgptcourses/S3SignatureExpiryTest.java": "f5e1ddfd61aa880aeed3000530c1b86936dbdaa23402f8ca900d6fcb5479f91d",
+      "apps/api/src/test/java/com/chatgptcourses/S3PresignedExpiryIntegrationTest.java": "f2ffd03c24cc574d39a57e5d9d5420982cb7de91033f490ef9aeb021f9008afa",
+      "apps/api/src/test/java/com/chatgptcourses/PresignedDownloadDiagnostics.java": "b2ef8d6f433596fec9858c8ca4f2cebc73e8711e81ba2b7a828d64064475e639",
+      "apps/api/src/test/java/com/chatgptcourses/PresignedDownloadDiagnosticsTest.java": "f8c00143dad70837ba96e32372e235c558cb0cfea39591315e73ad200c43bf27",
+      "apps/api/src/test/java/com/chatgptcourses/AssetServiceIntegrationTest.java": "1ac0f81e4c61037d7452473dacc0e6026966b254331db4e09c2a00759c9be44e",
+      "apps/api/src/test/java/com/chatgptcourses/EntitlementAccessIntegrationTest.java": "b83ba859252a3e46263e4ef880f56a4438521fae58ab9c4a860c9e880b3be6a7"
+    },
+    "finalDiagnosticSourceSha256": {
+      "apps/api/src/main/java/com/chatgptcourses/assets/storage/ObjectStorage.java": "106e94ac0c8ce512b10eeebdde6e9426aa027619b473e17ee67ca5f9f3657a38",
+      "apps/api/src/main/java/com/chatgptcourses/assets/storage/S3ObjectStorage.java": "7823f18529fd2dd8bc3371f97a8d591ec26cec6118c10ef3c8a5bef512c60a9a",
+      "apps/api/src/main/java/com/chatgptcourses/assets/service/AssetService.java": "6ff7f2ca84d028a6d4f1df9c132ac74d650dc333ea712cbba9053624ca467108",
+      "apps/api/src/test/java/com/chatgptcourses/SignedDownloadExpiryContractTest.java": "eacd4da4a3090df796ff698438159a546ea4afffa692e2e393a074d1a32d251f",
+      "apps/api/src/test/java/com/chatgptcourses/S3SignatureExpiryTest.java": "f5e1ddfd61aa880aeed3000530c1b86936dbdaa23402f8ca900d6fcb5479f91d",
+      "apps/api/src/test/java/com/chatgptcourses/PresignedDownloadDiagnostics.java": "c7204c51dda861f9878aff36d85dd8ca55ca31cb6dc31682c56eb82b7c360139",
+      "apps/api/src/test/java/com/chatgptcourses/PresignedDownloadDiagnosticsTest.java": "7c564b99b26f64e399a0e3e10319515a5e722062f888219506a3c5967bfd4a6f",
+      "apps/api/src/test/java/com/chatgptcourses/AssetServiceIntegrationTest.java": "1ac0f81e4c61037d7452473dacc0e6026966b254331db4e09c2a00759c9be44e",
+      "apps/api/src/test/java/com/chatgptcourses/EntitlementAccessIntegrationTest.java": "b83ba859252a3e46263e4ef880f56a4438521fae58ab9c4a860c9e880b3be6a7"
+    },
+    "observationClassRenamedAfterPassingRun": {
+      "from": "S3PresignedExpiryIntegrationTest",
+      "to": "S3PresignedExpiryObservation",
+      "currentSourceSha256": "32478332bac2dc3a3d5e8643ebebca55e57ba8477302947cd7c503851ba526ed",
+      "reason": "Explicit timing observation, not a deterministic default CI criterion",
+      "assertionsAndTtlPreserved": true
+    }
+  },
+  "preservation": {
+    "checkedPaths": 1090,
+    "historicalEvidenceJson": 839,
+    "courseSourceJson": 13,
+    "unchangedProductionFiles": 234,
+    "reviewedChangedProductionFiles": {
+      "apps/api/src/main/java/com/chatgptcourses/assets/service/AssetService.java": {
+        "before": "d18b3e2a73347451f0d7f4be3037691cee7caeac2cc1a783351350c3a85ec0e3",
+        "after": "6ff7f2ca84d028a6d4f1df9c132ac74d650dc333ea712cbba9053624ca467108"
+      },
+      "apps/api/src/main/java/com/chatgptcourses/assets/storage/ObjectStorage.java": {
+        "before": "548778715eeda4d98cffdc73b3cd2b50a015b4badf686cd00c7e43ddffd20e5e",
+        "after": "106e94ac0c8ce512b10eeebdde6e9426aa027619b473e17ee67ca5f9f3657a38"
+      },
+      "apps/api/src/main/java/com/chatgptcourses/assets/storage/S3ObjectStorage.java": {
+        "before": "3b22b0fb23a9862804848760933b423677e288d1c416e41d3a8fad46dfc66013",
+        "after": "7823f18529fd2dd8bc3371f97a8d591ec26cec6118c10ef3c8a5bef512c60a9a"
+      }
+    },
+    "userNextFileSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc"
+  },
+  "storage": {
+    "experimentReads": 2,
+    "immediateStatus": 200,
+    "intentionalExpiredStatus": 403,
+    "intentionalExpiryRecognized": true,
+    "assetSignedReadCount": 12,
+    "assetSignedStatuses": {
+      "200": 11,
+      "403": 1
+    },
+    "observations": "docs/evidence/ACCESS-02-storage-observations.json"
+  },
+  "cleanup": {
+    "newContainersLeft": 0,
+    "preexistingContainerCount": 3,
+    "preexistingContainersPreserved": true,
+    "newUnexpectedAccessRefusalFiles": 0,
+    "obsoleteOwnObservationClassesRemaining": 0
+  },
+  "evidenceAssembly": {
+    "surefireInjectedParameterDisplayNamesMappedToSourceMethods": true,
+    "originalXmlRetained": true,
+    "testsRerunForEvidenceAssembly": false
+  },
+  "limits": {
+    "historicalP12Open": 2,
+    "historicalP15Open": 2,
+    "historicalAccess01S3Open": true,
+    "historicalS3CauseEstablished": false,
+    "refundScenarioRerun": false,
+    "providerClockModified": false,
+    "ttlChanged": false,
+    "permissionChanged": false,
+    "uploadReservationChanged": false,
+    "externalPayment": false,
+    "sharedDataChanged": false,
+    "publication": false,
+    "deployment": false,
+    "newBrowserReview": false,
+    "humanEditorialApproval": false
+  }
+}

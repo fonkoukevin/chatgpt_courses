@@ -220,7 +220,33 @@ class AssetServiceIntegrationTest {
     private static ContentDocument withAccess(ContentDocument d,String access){return new ContentDocument(d.objective(),d.expectedResult(),d.prerequisites(),d.blocks(),d.estimatedMinutes(),d.exercise(),d.quiz(),d.rubric(),access,d.media(),d.relatedResourceIds(),d.methodDefinition(),d.quizPolicy(),d.projectPolicy());}
     private void overwriteStaging(UUID id,byte[] bytes,String type){var location=jdbc.queryForMap("SELECT bucket_name,staging_key FROM assets WHERE id=?",id);storage.put(new ObjectStorage.Location((String)location.get("bucket_name"),(String)location.get("staging_key")),bytes,type,"attachment");}
     private static void put(UploadIntent intent,byte[] bytes){assertThat(http("PUT",intent.uploadUrl(),bytes,intent.headers()).statusCode()).isBetween(200,299);}
-    private static HttpResponse<byte[]> http(String method,String url,byte[] body,Map<String,String> headers){try(var client=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(3)).build()){var request=HttpRequest.newBuilder(URI.create(url)).timeout(Duration.ofSeconds(15));headers.forEach(request::header);return client.send(request.method(method,body==null?HttpRequest.BodyPublishers.noBody():HttpRequest.BodyPublishers.ofByteArray(body)).build(),HttpResponse.BodyHandlers.ofByteArray());}catch(Exception e){if(e instanceof InterruptedException)Thread.currentThread().interrupt();throw new IllegalStateException("S3 test request failed; sensitive URL omitted");}}
+    private static final java.util.concurrent.atomic.AtomicInteger SIGNED_READ_ORDINAL=new java.util.concurrent.atomic.AtomicInteger();
+    private static final String SIGNED_READ_RUN=UUID.randomUUID().toString();
+    private static HttpResponse<byte[]> http(String method,String url,byte[] body,Map<String,String> headers){
+        try(var client=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(3)).build()){
+            var target=URI.create(url);var request=HttpRequest.newBuilder(target).timeout(Duration.ofSeconds(15));headers.forEach(request::header);
+            var startedAt=java.time.Instant.now();long startedNanos=System.nanoTime();
+            var response=client.send(request.method(method,body==null?HttpRequest.BodyPublishers.noBody():HttpRequest.BodyPublishers.ofByteArray(body)).build(),HttpResponse.BodyHandlers.ofByteArray());
+            long elapsedNanos=System.nanoTime()-startedNanos;var finishedAt=java.time.Instant.now();
+            if("GET".equals(method)&&target.getRawQuery()!=null&&target.getRawQuery().contains("X-Amz-Signature="))
+                captureSignedRead(response,target,startedAt,finishedAt,elapsedNanos);
+            return response;
+        }catch(Exception e){if(e instanceof InterruptedException)Thread.currentThread().interrupt();throw new IllegalStateException("S3 test request failed; sensitive URL omitted");}
+    }
+    private static void captureSignedRead(HttpResponse<byte[]> response,URI target,java.time.Instant startedAt,java.time.Instant finishedAt,long elapsedNanos){
+        try{
+            var metadata=new java.util.LinkedHashMap<>(PresignedDownloadDiagnostics.collectObservation(response.statusCode(),response.headers().firstValue("Date").orElse(null),response.body(),target,
+                new PresignedDownloadDiagnostics.Timing(startedAt,startedAt,finishedAt,0,elapsedNanos)));
+            // This helper receives an already-issued URL; its original receipt instant is unknown.
+            metadata.remove("linkReceivedAt");metadata.remove("linkToGetNanos");
+            var cases=Arrays.stream(AssetServiceIntegrationTest.class.getDeclaredMethods()).filter(m->m.isAnnotationPresent(Test.class)).map(java.lang.reflect.Method::getName).collect(java.util.stream.Collectors.toSet());
+            String testCase=StackWalker.getInstance().walk(frames->frames.filter(f->f.getClassName().equals(AssetServiceIntegrationTest.class.getName())).map(StackWalker.StackFrame::getMethodName).filter(cases::contains).findFirst().orElse("UNRESOLVED_TEST"));
+            metadata.put("captureContext","ASSET_SERVICE_SIGNED_GET_OBSERVATION");metadata.put("testCase",testCase);
+            metadata.put("observationRun",SIGNED_READ_RUN);metadata.put("readOrdinal",SIGNED_READ_ORDINAL.incrementAndGet());
+            var directory=java.nio.file.Path.of("../../.runtime").toAbsolutePath().normalize();java.nio.file.Files.createDirectories(directory);
+            var path=java.nio.file.Files.createTempFile(directory,"access02-asset-read-",".json");java.nio.file.Files.write(path,new ObjectMapper().writeValueAsBytes(metadata));
+        }catch(Exception unavailable){/* Observation failures never replace the caller's original HTTP/body assertion. */}
+    }
     private static String unsigned(String value){URI url=URI.create(value);return url.getScheme()+"://"+url.getRawAuthority()+url.getRawPath();}
     private boolean databaseExpired(java.time.Instant expiry){return Boolean.TRUE.equals(jdbc.queryForObject("SELECT clock_timestamp()>=?::timestamptz",Boolean.class,java.sql.Timestamp.from(expiry)));}
     private static byte[] png()throws Exception{var image=new BufferedImage(2,2,BufferedImage.TYPE_INT_RGB);var bytes=new ByteArrayOutputStream();ImageIO.write(image,"png",bytes);return bytes.toByteArray();}

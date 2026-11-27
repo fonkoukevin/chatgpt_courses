@@ -62,6 +62,27 @@ class PresignedDownloadDiagnosticsTest {
         assertTrue(calls.get()==1,"A failed sink is attempted once and never retried");
     }
 
+    @Test void expiryIndicationRequiresTheExactKnownCodeAndMessage()throws Exception{
+        for(var sample:List.of(
+            new String[]{"AccessDenied","Request has expired","true"},
+            new String[]{"AccessDenied","Request has expired ","false"},
+            new String[]{"AccessDenied",PRIVATE,"false"},
+            new String[]{"SignatureDoesNotMatch","Request has expired","false"})){
+            var report=PresignedDownloadDiagnostics.collectObservation(403,null,
+                bytes("<Error><Code>"+sample[0]+"</Code><Message>"+sample[1]+"</Message></Error>"),SIGNED,TIMING);
+            assertPrivateInputsAbsent(List.of(report));
+            assertTrue(Boolean.valueOf(sample[2]).equals(report.get("s3ExpiryIndicated")));
+        }
+    }
+
+    @Test void successfulXmlContentCannotBeInterpretedAsAStorageError()throws Exception{
+        var report=PresignedDownloadDiagnostics.collectObservation(200,"Fri, 27 Nov 2026 12:34:58 GMT",
+            bytes("<Error><Code>AccessDenied</Code><Message>Request has expired</Message><Private>"+PRIVATE+"</Private></Error>"),SIGNED,TIMING);
+        assertPrivateInputsAbsent(List.of(report));
+        assertTrue(Boolean.FALSE.equals(report.get("s3CodeAvailable"))&&Boolean.FALSE.equals(report.get("s3ExpiryIndicated")));
+        assertFalse(report.containsKey("s3Code"),"A successful file is content, never an S3 error response");
+    }
+
     private static byte[] bytes(String value){return value.getBytes(StandardCharsets.UTF_8);}
     private static void assertPrivateInputsAbsent(List<Map<String,Object>> captures)throws Exception{
         String serialized=new ObjectMapper().writeValueAsString(captures);

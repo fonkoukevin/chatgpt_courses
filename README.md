@@ -69,6 +69,8 @@ L’arrêt vise les processus enregistrés de ce projet et arrête ses services 
 
 `smoke` exige les applications démarrées ; les builds et tests API sont indépendants de ce démarrage. `verify:api` utilise le vrai moteur Docker et PostgreSQL Testcontainers isolé, sans H2. `build:api` est un alias de cette vérification complète et produit `apps/api/target/chatgpt-courses-api.jar`.
 
+Le protocole `S3PresignedExpiryObservation` observe volontairement un TTL de deux secondes ; il se sélectionne explicitement et ne fait pas partie de la découverte Maven standard. Depuis `apps/api`, avec Java21 et Docker configurés : `.\mvnw.cmd --batch-mode --no-transfer-progress -Dtest=S3PresignedExpiryObservation test`. Il utilise un stockage jetable sans paiement, conserve le premier refus éventuel et ne remplace aucun échec historique. [Résultats et limites ACCESS-02](docs/evidence/ACCESS-02.md).
+
 `verify:http` exige PostgreSQL déjà démarré et les ports 3000/8080 libres. Il lance les serveurs issus des builds, vérifie le proxy, arrête réellement l’API en maintenant Next, vérifie l’erreur puis la reprise, et nettoie uniquement ses processus. Il s’agit de tests HTTP, pas d’un test navigateur. Arrêter `dev` avant de le lancer.
 
 La [recette navigateur](tests/browser/README.md) utilise les builds web/API et PostgreSQL déjà démarré :

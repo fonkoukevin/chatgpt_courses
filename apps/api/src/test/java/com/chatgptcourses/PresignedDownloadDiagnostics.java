@@ -40,6 +40,10 @@ final class PresignedDownloadDiagnostics {
 
     static Optional<Map<String,Object>> collectIfUnexpected(int status,String dateHeader,byte[] body,URI signedUri,Timing timing){
         if(status==200)return Optional.empty();
+        return Optional.of(collectObservation(status,dateHeader,body,signedUri,timing));
+    }
+
+    static Map<String,Object> collectObservation(int status,String dateHeader,byte[] body,URI signedUri,Timing timing){
         var report=new LinkedHashMap<String,Object>();report.put("httpStatus",status);
         report.put("linkReceivedAt",timing.linkReceivedAt().toString());
         report.put("getStartedAt",timing.getStartedAt().toString());
@@ -70,7 +74,8 @@ final class PresignedDownloadDiagnostics {
             report.put("signedAt",signedAt.toString());report.put("signedExpiresAt",signedAt.plusSeconds(seconds).toString());
             report.put("signatureTimesAvailable",true);
         }catch(Exception unavailable){/* No other query parameter is decoded or retained. */}
-        report.put("s3CodeAvailable",false);
+        report.put("s3CodeAvailable",false);report.put("s3ExpiryIndicated",false);
+        if(status<400)return Map.copyOf(report);
         try{
             if(body.length>65536)throw new IllegalArgumentException();
             var factory=DocumentBuilderFactory.newInstance();
@@ -90,7 +95,10 @@ final class PresignedDownloadDiagnostics {
             if(!"Error".equals(root.getTagName())||codes.getLength()!=1||codes.item(0).getParentNode()!=root)throw new IllegalArgumentException();
             String code=codes.item(0).getTextContent();
             if(S3_CODES.contains(code)){report.put("s3Code",code);report.put("s3CodeAvailable",true);}
+            var messages=root.getElementsByTagName("Message");
+            if("AccessDenied".equals(code)&&messages.getLength()==1&&messages.item(0).getParentNode()==root
+                &&"Request has expired".equals(messages.item(0).getTextContent()))report.put("s3ExpiryIndicated",true);
         }catch(Exception unavailable){/* Never retain the XML, its Message, or parser diagnostics. */}
-        return Optional.of(Map.copyOf(report));
+        return Map.copyOf(report);
     }
 }

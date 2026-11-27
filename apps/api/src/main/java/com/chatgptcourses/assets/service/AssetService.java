@@ -123,7 +123,7 @@ public class AssetService implements EditorialMediaRegistry {
     private DownloadAccess access(Asset asset){
         enabled();if(!"READY".equals(asset.state()))throw new ApiException(ApiError.ASSET_NOT_READY);
         Duration ttl=Duration.ofSeconds(properties.downloadTtlSeconds());String disposition=disposition(asset.filename(),asset.kind());
-        try{if(!objectMatches(asset))throw new ApiException(ApiError.ASSET_NOT_READY);var signed=storage.presignGet(new ObjectStorage.Location(asset.bucket(),asset.readyKey()),asset.verifiedType(),disposition,ttl);return new DownloadAccess(asset.id(),"GET",signed.url(),Instant.now().plus(ttl),asset.verifiedType(),asset.filename(),"FILE".equals(asset.kind())?"attachment":"inline",asset.verifiedSize(),java.util.HexFormat.of().formatHex(asset.sha256()));}
+        try{if(!objectMatches(asset))throw new ApiException(ApiError.ASSET_NOT_READY);var signed=storage.presignGet(new ObjectStorage.Location(asset.bucket(),asset.readyKey()),asset.verifiedType(),disposition,ttl);return new DownloadAccess(asset.id(),"GET",signed.url(),signed.expiresAt(),asset.verifiedType(),asset.filename(),"FILE".equals(asset.kind())?"attachment":"inline",asset.verifiedSize(),java.util.HexFormat.of().formatHex(asset.sha256()));}
         catch(StorageUnavailableException e){throw new ApiException(ApiError.SERVICE_UNAVAILABLE);}
     }
     private UploadIntent intent(Asset asset){

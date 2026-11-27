@@ -1,6 +1,6 @@
 # Revue éditoriale et décisions de lancement
 
-Préparation du **26 novembre 2026 — REVIEW-01**. La relecture assistée et les223 contrôles de sources sont réalisés. **La revue humaine et l’essai apprenant restent à faire.** Les décisions commerciales de la [fiche inactive](v1/offer-editorial-draft.json) restent ouvertes ; une demande de poursuite du projet ne renseigne pas ces faits.
+Préparation actualisée le **27 novembre 2026 — FINAL-01**. La relecture assistée, les223 contrôles de sources et les18 contrôles du lecteur sont réalisés. **La revue humaine et l’essai apprenant restent à faire.** Les décisions commerciales de la [fiche inactive](v1/offer-editorial-draft.json) restent ouvertes ; elles seront réunies pour la vérification finale du propriétaire.
 
 ## Lire le parcours
 
@@ -29,11 +29,11 @@ Un retour exploitable indique : module, langue, source ou passage, difficulté r
 
 Les faits canoniques sont cohérents : BR01 vaut1200€ HT face à un plafond rédactionnel de1400€, avec quinze jours ouvrés après réception des éléments **et** validation du brief. BR02 vaut1400€ avant intégration face à un plafond **global** de1200€, demande au moins dix jours contre cinq souhaités et propose une option à1180€ sans À propos, sous accord. Les quatre pages finales restent en français dans les deux versions pédagogiques. Ces montants sont des données d’exercice.
 
-La consigne anglaise M06 précisait « agreed alternative ». Elle dit désormais « an alternative subject to the client’s agreement », en cohérence avec le français et le corrigé. Cette clarification locale conserve objectifs, quiz, barème et version pédagogique1. Elle n’est ni importée dans le CMS ni publiée ; une future livraison doit créer une révision selon le mécanisme existant et vérifier l’alignement de la traduction.
+La consigne anglaise M06 précisait « agreed alternative ». Elle dit désormais « an alternative subject to the client’s agreement », en cohérence avec le français et le corrigé. L’email demande aussi de confirmer le périmètre proposé plutôt qu’un périmètre déjà accepté. Ces deux clarifications conservent objectifs, quiz et barème. Le dossier auteur reste nommé `v1` ; ce nom ne définit pas la version pédagogique du CMS. Une consigne d’exercice publiée est gelée : la livraison prépare M06 activité/module et le cours en version2, avec les cinq autres modules en version1, sans écraser les anciennes versions, notes ou conditions achetées. La [preuve FINAL-01](../../docs/evidence/FINAL-01.md) distingue préparation et publication effectivement observée.
 
 La pré-revue ne démontre ni durée de réalisation, ni facilité d’apprentissage observée, ni exécution réelle d’un prompt dans ChatGPT. Les corrigés sont rédigés pour l’apprentissage. Aucun média, auteur, résultat commercial ou service de correction humaine supplémentaire n’est établi par cette préparation.
 
-## Trois réponses à fournir maintenant
+## Décisions à prendre lors de la revue finale
 
 1. **Format proposé** : textes et ressources Markdown actuellement disponibles, ou médias à produire avant de les promettre.
 2. **Langues du lancement** : français d’abord ou français/anglais, après revue humaine du périmètre concerné.
@@ -45,4 +45,4 @@ Après ces réponses et la première revue, les conditions restantes se complèt
 
 L’essai apprenant consiste à faire réellement accomplir le parcours, conserver les productions et difficultés observées, puis relever séparément lecture, usage de l’outil, rédaction et vérification. Les comptes et durées des tests techniques ne remplacent pas cet essai.
 
-La suite immédiate est la revue de ces sources et la réponse aux trois choix ci-dessus. Les approbations éditoriales, décisions commerciales, imports CMS et déploiements restent des actions distinctes.
+L’assistant poursuit la finalisation technique et la livraison de recette autorisées avant cette revue finale. Les approbations éditoriales, décisions commerciales, imports CMS et déploiements restent des actions distinctes ; le dossier final doit indiquer ce qui a réellement été exécuté.

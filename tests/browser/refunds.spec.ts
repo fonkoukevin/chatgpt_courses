@@ -8,6 +8,7 @@ import { orderStatusPath } from '../../apps/web/src/lib/commerce/routes';
 import { adminRefundOperationPath, adminRefundsPath, entitlementsPath, orderRefundsPath } from '../../apps/web/src/lib/refunds/routes';
 import { commerceHeaders, commerceSql, checkedUuid } from './commerce-fixture';
 import { controlApi, controlRefund } from './control';
+import { refundRecoveryWaitMs } from './refund-lease-wait';
 import { advancePayment, verifyPaymentContent } from './payments-fixture';
 import { captureRefund, allocations, approveRefund, executeRefund, memberPath, operation, operations, paidRefundOrder, refundContext, refundSources, requestRefund, type RefundSources } from './refunds-fixture';
 
@@ -152,8 +153,7 @@ test.describe('P13 · demandes, finances et origines distinctes (fournisseur con
     // A process kill deliberately leaves a durable claim intact. Only an
     // observed abandoned lease extends this assertion: its real remaining
     // lifetime plus 30s for maintenance/poll and bounded controlled GETs.
-    const waitMs = abandonedLeaseObserved && resumed.jobState === 'PROCESSING' && resumed.leaseActive ? resumed.leaseRemainingMs + 30_000 : 10_000;
-    if (waitMs > 180_000) throw new Error('The observed lease exceeds this scenario budget; no lease is shortened to pass.');
+    const waitMs = refundRecoveryWaitMs(abandonedLeaseObserved, resumed);
     try { await expect.poll(async () => (await operation(context.request, prepared.id)).state, { timeout: waitMs }).toBe('SUCCEEDED'); }
     finally { observations.push({ abandonedLeaseObserved, waitMs }); leaseSnapshot('after-wait'); }
     expect((await context.request.get(memberPath(sources.a.learning))).status()).toBe(403);

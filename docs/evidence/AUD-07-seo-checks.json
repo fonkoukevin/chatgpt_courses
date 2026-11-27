@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "audit": "AUD-07",
+  "result": "passed",
+  "executedAt": "2026-11-26T21:08:59.530Z",
+  "nodeVersion": "24.22.2",
+  "scope": "Real robots, publicMetadata and sitemap exports; public data readers and Next server-only boundary replaced. No service, deployment or provider request.",
+  "source": {
+    "file": "apps/web/src/app/sitemap.xml/route.ts",
+    "baselineSha256": "0d29742baad105a3e078090342402a86f87ab72e906d37e4a37e1bbdf19bc603",
+    "correctedSha256": "599e086b6858f47bc6a0715666a87d3e6738b080d745367a402f9dd1ec8430a7"
+  },
+  "test": {
+    "file": "tests/scripts/aud07-seo.test.mjs",
+    "sha256": "65383ac6f3867dbd29cbc8b4bb4ca0fef57173b8593449e901dd1425bc9b5150"
+  },
+  "checks": [
+    {
+      "kind": "baseline",
+      "exitCode": 1,
+      "counts": {
+        "tests": 6,
+        "pass": 4,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "artifactSha256": "162dd8574aa1e4d7a60275703311071bc4fcf03bc88d4f64ab9be5f5592e3794"
+    },
+    {
+      "kind": "corrected",
+      "exitCode": 0,
+      "counts": {
+        "tests": 6,
+        "pass": 6,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "artifactSha256": "a0a2fabc41c2797d4a68c698efdf331b241fe2699d2c423404e134b3f2f5e68a"
+    }
+  ],
+  "regression": "An EN presentation for an offer including FR only was listed in the sitemap despite its nonindexable page metadata. Sitemap now reads the detailed offer and matches its included-language rule; unavailable or changed details return 503.",
+  "environmentChecks": [
+    "local/test/staging never index or emit sitemap entries",
+    "production uses the configured absolute origin and activated locales only",
+    "HTML hreflang includes self and configured available equivalents",
+    "unlaunched locale absent from sitemap and alternates"
+  ],
+  "sources": [
+    {
+      "url": "https://developers.google.com/search/docs/specialty/international/localized-versions",
+      "checkedAt": "2026-11-26",
+      "conclusion": "A single hreflang method is sufficient; equivalents must include self, be absolute and reciprocal."
+    },
+    {
+      "url": "https://developers.google.com/search/docs/crawling-indexing/block-indexing",
+      "checkedAt": "2026-11-26",
+      "conclusion": "A crawler must be able to retrieve a URL to observe its noindex directive; robots disallow is not proof of deindexing."
+    }
+  ],
+  "limits": [
+    "These are source-level route/metadata tests with replaced data transport, not a production deployment.",
+    "Production target is not launched or observed; staging crawling/indexing state in search engines is not measured."
+  ]
+}

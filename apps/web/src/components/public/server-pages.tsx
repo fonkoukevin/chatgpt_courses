@@ -12,7 +12,7 @@ import { resolveHomeCourse, singleHomeCourseCard } from "@/lib/public/home-cours
 import type { BreadcrumbTrail } from "./breadcrumbs";
 import { isLocale, type Locale } from "@/lib/i18n/locales";
 import { getPublicPageDictionary } from "@/lib/i18n/public-pages";
-import { parseCatalogueQuery, safeCatalogueReturnTo, singleParameter, type PublicParameters } from "@/lib/public/query";
+import { parseCatalogueQuery, translateCatalogueReturnTo, singleParameter, type PublicParameters } from "@/lib/public/query";
 import { activityDiscoveryHref, catalogueHref, courseActivityHref, publicCatalogueHref, resourceHref, type LanguageLinks } from "@/lib/public/routes";
 import { PublicHome } from "./home";
 import { PublicCatalogue } from "./catalogue";
@@ -40,8 +40,9 @@ function resourceLanguages(value: ResourceDetail, returnTo: string, discovery = 
   for (const locale of ["fr", "en"] as const) {
     const translated = value.languages.find((item) => item.locale === locale);
     const available = translated?.status === "PUBLISHED" && Boolean(translated.slug);
-    let href = discovery ? activityDiscoveryHref(locale, value.resourceId, value.versionId, returnTo)
-      : available && translated?.slug && value.kind !== "MODULE" ? resourceHref({ ...value, kind: value.kind, locale, slug: translated.slug }, returnTo)
+    const catalogueReturnTo = translateCatalogueReturnTo(returnTo, locale);
+    let href = discovery ? activityDiscoveryHref(locale, value.resourceId, value.versionId, catalogueReturnTo)
+      : available && translated?.slug && value.kind !== "MODULE" ? resourceHref({ ...value, kind: value.kind, locale, slug: translated.slug }, catalogueReturnTo)
         : catalogueHref(locale, { locale, type: value.kind === "MODULE" ? undefined : value.kind, goal: value.metadata.goalCodes[0] });
     if (!discovery && available) { const target = new URL(href, "https://courses.invalid"); target.searchParams.set("version", value.versionId); href = target.pathname + target.search; }
     links[locale] = { available, href };
@@ -93,7 +94,7 @@ export async function PublicCataloguePage({ params, searchParams }: PublicPagePr
     if (!isUuid(selected) || !isUuid(version)) notFound();
     const result = apiNotFound(await readResourceVersion(selected, version, query.locale));
     if (result.ok && result.data.kind !== "ACTIVITY") notFound();
-    const returnTo = safeCatalogueReturnTo(singleParameter(input.returnTo), locale);
+    const returnTo = translateCatalogueReturnTo(singleParameter(input.returnTo), locale);
     return <PublicActivity locale={locale} result={result} languageLinks={result.ok ? resourceLanguages(result.data, returnTo, true) : defaultLanguages(query)} returnTo={returnTo} />;
   }
   const [result, facets] = await Promise.all([readCatalogue(query), readCatalogueFacets(query.locale)]);
@@ -126,7 +127,7 @@ async function resourcePageData(props: PublicPageProps, kind: Exclude<ResourceCa
     if (result.ok) result = apiNotFound(await readResourceVersion(result.data.resourceId, version, locale));
   }
   if (result.ok && result.data.kind !== kind) notFound();
-  const returnTo = safeCatalogueReturnTo(singleParameter(input.returnTo), locale);
+  const returnTo = translateCatalogueReturnTo(singleParameter(input.returnTo), locale);
   if (result.ok && result.data.slug && result.data.slug !== slug) {
     const target = new URL(publicResourcePath(kind, locale, result.data.slug), "https://courses.invalid");
     if (isUuid(version)) target.searchParams.set("version", version);
@@ -184,7 +185,7 @@ async function activityData(props: PublicPageProps) {
   const route = await props.params, locale = localeFrom(route.locale), courseSlug = slugFrom(route.courseSlug), activitySlug = slugFrom(route.activitySlug), input = await props.searchParams;
   let course = apiNotFound(await readResourceBySlug("COURSE", courseSlug, locale));
   const parentVersion = singleParameter(input.courseVersion), resource = singleParameter(input.resource), version = singleParameter(input.version);
-  const catalogueReturnTo = safeCatalogueReturnTo(singleParameter(input.returnTo), locale);
+  const catalogueReturnTo = translateCatalogueReturnTo(singleParameter(input.returnTo), locale);
   if (parentVersion !== undefined && !isUuid(parentVersion)) notFound();
   if ((resource !== undefined && !isUuid(resource)) || (version !== undefined && !isUuid(version)) || ((resource === undefined) !== (version === undefined))) notFound();
   if (course.ok && parentVersion) course = apiNotFound(await readResourceVersion(course.data.resourceId, parentVersion, locale));
@@ -210,7 +211,7 @@ async function activityData(props: PublicPageProps) {
         for (const target of ["fr", "en"] as const) {
           const equivalent = context.data.languages.find(item => item.locale === target), alternative = links[target];
           links[target] = equivalent?.availability === "PUBLISHED" && equivalent.courseSlug && equivalent.activitySlug
-            ? { available: true, href: courseActivityHref(target, equivalent.courseSlug, equivalent.activitySlug, resource, version, course.data.versionId, catalogueReturnTo) }
+            ? { available: true, href: courseActivityHref(target, equivalent.courseSlug, equivalent.activitySlug, resource, version, course.data.versionId, translateCatalogueReturnTo(catalogueReturnTo, target)) }
             : { available: false, href: catalogueHref(target, { locale: target, type: "ACTIVITY" }), reason: "COURSE_CONTEXT_UNAVAILABLE", ...(standalone.ok && alternative.available ? { alternativeHref: alternative.href } : {}) };
         }
         return { locale, result: standalone, languageLinks: links, returnTo: catalogueReturnTo, contextUnavailable: true, contextAvailability: context.data.availability, canonical: courseActivityHref(locale, courseSlug, activitySlug, resource, version, course.data.versionId) };
@@ -238,7 +239,7 @@ async function activityData(props: PublicPageProps) {
       const equivalent = context.ok ? context.data.languages.find(item => item.locale === target) : undefined;
       const standalone = languageLinks[target];
       if (equivalent?.availability === "PUBLISHED" && equivalent.courseSlug && equivalent.activitySlug) {
-        languageLinks[target] = { available: true, href: courseActivityHref(target, equivalent.courseSlug, equivalent.activitySlug, child.resourceId, child.versionId, course.data.versionId, catalogueReturnTo) };
+        languageLinks[target] = { available: true, href: courseActivityHref(target, equivalent.courseSlug, equivalent.activitySlug, child.resourceId, child.versionId, course.data.versionId, translateCatalogueReturnTo(catalogueReturnTo, target)) };
       } else {
         languageLinks[target] = { available: false, href: catalogueHref(target, { locale: target, type: "ACTIVITY" }), reason: "COURSE_CONTEXT_UNAVAILABLE",
           ...(standalone.available ? { alternativeHref: standalone.href } : {}) };

@@ -3,6 +3,12 @@ package com.chatgptcourses.assets.storage;
 import com.chatgptcourses.assets.config.AssetStorageProperties;
 import java.io.IOException;
 import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -23,6 +29,8 @@ import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignReques
 
 /** Internal requests and browser signatures deliberately use different endpoints. No provider detail is logged. */
 public final class S3ObjectStorage implements ObjectStorage,AutoCloseable {
+    private static final DateTimeFormatter SIGNING_DATE=DateTimeFormatter.ofPattern("uuuuMMdd'T'HHmmss'Z'")
+        .withResolverStyle(ResolverStyle.STRICT);
     private final S3Client client;
     private final S3Presigner presigner;
     public S3ObjectStorage(AssetStorageProperties properties){
@@ -52,13 +60,22 @@ public final class S3ObjectStorage implements ObjectStorage,AutoCloseable {
     @Override public SignedRequest presignPut(Location location,String contentType,long expectedBytes,Duration ttl){
         try{var object=PutObjectRequest.builder().bucket(location.bucket()).key(location.key()).contentType(contentType).contentLength(expectedBytes).build();
             var signed=presigner.presignPutObject(PutObjectPresignRequest.builder().signatureDuration(ttl).putObjectRequest(object).build());
-            return new SignedRequest(signed.url().toExternalForm(),Map.of("Content-Type",contentType));
+            return new SignedRequest(signed.url().toExternalForm(),Map.of("Content-Type",contentType),signedExpiry(signed.httpRequest().rawQueryParameters()));
         }catch(RuntimeException e){throw unavailable(e);}
     }
     @Override public SignedRequest presignGet(Location location,String contentType,String disposition,Duration ttl){
         try{var object=GetObjectRequest.builder().bucket(location.bucket()).key(location.key()).responseContentType(contentType).responseContentDisposition(disposition).responseCacheControl("private, no-store").build();
-            var signed=presigner.presignGetObject(GetObjectPresignRequest.builder().signatureDuration(ttl).getObjectRequest(object).build());return new SignedRequest(signed.url().toExternalForm(),Map.of());
+            var signed=presigner.presignGetObject(GetObjectPresignRequest.builder().signatureDuration(ttl).getObjectRequest(object).build());return new SignedRequest(signed.url().toExternalForm(),Map.of(),signedExpiry(signed.httpRequest().rawQueryParameters()));
         }catch(RuntimeException e){throw unavailable(e);}
+    }
+    private static Instant signedExpiry(Map<String,List<String>> parameters){
+        var dates=parameters.get("X-Amz-Date");var durations=parameters.get("X-Amz-Expires");
+        if(dates==null||dates.size()!=1||durations==null||durations.size()!=1)throw new IllegalStateException("Signed expiration metadata unavailable");
+        // SDK.expiration() retains fractional seconds that these signed fields do not carry.
+        // Only these two temporal fields are read; no URL or credential is parsed or logged.
+        var signedAt=LocalDateTime.parse(dates.getFirst(),SIGNING_DATE).toInstant(ZoneOffset.UTC);
+        long seconds=Long.parseLong(durations.getFirst());if(seconds<0)throw new IllegalStateException("Signed expiration metadata invalid");
+        return signedAt.plusSeconds(seconds);
     }
     @Override public void deleteStaging(Location location){
         if(!location.key().startsWith("staging/"))throw new IllegalArgumentException("Only staging objects may be removed");

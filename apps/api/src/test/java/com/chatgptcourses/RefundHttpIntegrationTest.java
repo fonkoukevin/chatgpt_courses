@@ -232,8 +232,27 @@ class RefundHttpIntegrationTest {
         var method = methods.create(owner.id(), owner.id(), new CreateMethod(new MethodFields("Retained method", "fr", "My personal prompt", new MethodParameters("", "", "", "", "", "", ""), null, "Private notes", null)));
         var access = new AssetAccessContext("fr", b.activity().resourceId(), b.activity().versionId(), enrollment.summary().id());
         String linkPath = "/api/v1/assets/" + b.assetId() + "/download-access";
-        var issued = mutate(owner, "POST", linkPath, access, null, null); assertThat(issued.statusCode()).isEqualTo(200);
-        var oldLink = mapper.readValue(issued.body(), DownloadAccess.class); assertThat(download(oldLink).statusCode()).isEqualTo(200);
+        var issued = mutate(owner, "POST", linkPath, access, null, null);
+        var linkReceivedAt=Instant.now();long linkReceivedNanos=System.nanoTime();assertThat(issued.statusCode()).isEqualTo(200);
+        var oldLink = mapper.readValue(issued.body(), DownloadAccess.class);
+        var getStartedAt=Instant.now();long getStartedNanos=System.nanoTime();
+        var firstDownload=download(oldLink);
+        long getFinishedNanos=System.nanoTime();var getFinishedAt=Instant.now();
+        PresignedDownloadDiagnostics.captureIfUnexpected(firstDownload.statusCode(),firstDownload.headers().firstValue("Date").orElse(null),firstDownload.body(),URI.create(oldLink.url()),
+            new PresignedDownloadDiagnostics.Timing(linkReceivedAt,getStartedAt,getFinishedAt,getStartedNanos-linkReceivedNanos,getFinishedNanos-getStartedNanos),metadata->{
+                var directory=java.nio.file.Path.of("../../.runtime").toAbsolutePath().normalize();java.nio.file.Files.createDirectories(directory);
+                var destination=java.nio.file.Files.createTempFile(directory,"refund-first-s3-read-refusal-",".json");java.nio.file.Files.write(destination,mapper.writeValueAsBytes(metadata));
+            });
+        try{
+            var observation=new java.util.LinkedHashMap<>(PresignedDownloadDiagnostics.collectObservation(firstDownload.statusCode(),firstDownload.headers().firstValue("Date").orElse(null),firstDownload.body(),URI.create(oldLink.url()),
+                new PresignedDownloadDiagnostics.Timing(linkReceivedAt,getStartedAt,getFinishedAt,getStartedNanos-linkReceivedNanos,getFinishedNanos-getStartedNanos)));
+            observation.put("captureContext","ISOLATED_REFUND_STORAGE_OBSERVATION");observation.put("readRole","FIRST_GET_BEFORE_REFUND");
+            observation.put("apiExpiresAt",oldLink.expiresAt().toString());
+            observation.put("apiDeadlineMatchesSignature",oldLink.expiresAt().toString().equals(observation.get("signedExpiresAt")));
+            var directory=java.nio.file.Path.of("../../.runtime").toAbsolutePath().normalize();java.nio.file.Files.createDirectories(directory);
+            var destination=java.nio.file.Files.createTempFile(directory,"final-refund-s3-observation-",".json");java.nio.file.Files.write(destination,mapper.writeValueAsBytes(observation));
+        }catch(Exception unavailable){/* Keep the original single-read status assertion authoritative. */}
+        assertThat(firstDownload.statusCode()).isEqualTo(200);
         var op = approve(f, 1200, List.of(allocation(pack, 0, 1200, "REVOKE"), allocation(pack, 1, 0, "REVOKE"))); execute(f, op, key());
         assertThat(revoked(pack.id())).isEqualTo(2); assertThat(revoked(old.id())).isZero();
         assertCovered(owner.id(), a.activity().resourceId(), a.activity().versionId(), "fr");

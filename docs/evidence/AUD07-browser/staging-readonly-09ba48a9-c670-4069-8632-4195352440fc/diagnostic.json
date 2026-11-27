@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "audit": "AUD-07",
+  "selectedForValidation": false,
+  "reason": "COURSE_HEADING_SHARED_WITH_HOME_DID_NOT_CONFIRM_COMPLETED_NAVIGATION",
+  "facts": {
+    "contextsExecuted": 8,
+    "unexpectedHttpResponses": 0,
+    "pageErrors": 0,
+    "originalScreenshotsOpened": 8,
+    "courseMetadataSnapshotCouldStillDescribeHome": true,
+    "fr390ScreenshotContainsTransientAnonymousStatus": true,
+    "nextHarnessWaitsExactCourseUrlAndCanonical": true,
+    "nextHarnessWaitsResolvedAnonymousActivity": true,
+    "remoteMutationRequested": false,
+    "automaticRetries": 0
+  }
+}

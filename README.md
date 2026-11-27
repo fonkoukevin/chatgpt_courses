@@ -69,6 +69,8 @@ L’arrêt vise les processus enregistrés de ce projet et arrête ses services 
 
 `smoke` exige les applications démarrées ; les builds et tests API sont indépendants de ce démarrage. `verify:api` utilise le vrai moteur Docker et PostgreSQL Testcontainers isolé, sans H2. `build:api` est un alias de cette vérification complète et produit `apps/api/target/chatgpt-courses-api.jar`.
 
+Le protocole `S3PresignedExpiryObservation` observe volontairement un TTL de deux secondes ; il se sélectionne explicitement et ne fait pas partie de la découverte Maven standard. Depuis `apps/api`, avec Java21 et Docker configurés : `.\mvnw.cmd --batch-mode --no-transfer-progress -Dtest=S3PresignedExpiryObservation test`. Il utilise un stockage jetable sans paiement, conserve le premier refus éventuel et ne remplace aucun échec historique. [Résultats et limites ACCESS-02](docs/evidence/ACCESS-02.md).
+
 `verify:http` exige PostgreSQL déjà démarré et les ports 3000/8080 libres. Il lance les serveurs issus des builds, vérifie le proxy, arrête réellement l’API en maintenant Next, vérifie l’erreur puis la reprise, et nettoie uniquement ses processus. Il s’agit de tests HTTP, pas d’un test navigateur. Arrêter `dev` avant de le lancer.
 
 La [recette navigateur](tests/browser/README.md) utilise les builds web/API et PostgreSQL déjà démarré :
@@ -317,6 +319,8 @@ Le CMS charge explicitement les préparations BR01/BR02 FR/EN depuis une route a
 Un anonyme peut conserver volontairement un brouillon **non sensible**, deux heures en session navigateur, puis l’importer explicitement dans le compte affiché. Les productions authentifiées sont privées, en mémoire/serveur, sans stockage navigateur persistant de leur contenu. Un changement de compte bloque la reprise implicite. Retrait d’une source n’efface pas productions et preuves personnelles ; fichiers sécurisés P10 et revue humaine restent désactivés.
 
 AUD-05 organise les activités en quatre moments : comprendre, produire, vérifier, réutiliser. Une consigne sans politique de projet (M01) permet un essai local vide, copiable et exportable sans compte ; aucun stockage ou import n’y est promis. Les projets configurés gardent leur consentement de deux heures et leur import explicite. Après les builds, `node scripts/verify-browser.mjs AUD05` ou `scripts/courses.cmd run verify:workshop` exécute la recette sur PostgreSQL/S3 éphémères, commerce et paiements désactivés. [Résultats et limites AUD-05](docs/evidence/AUD-05.md).
+
+AUD-07 ajoute `scripts/courses.cmd run verify:public-audit` après les builds : parcours publics FR/EN aux largeurs320/390/768/1440px, clavier/focus, filtres, FAQ, essai M01, téléchargements réels et erreurs de formulaire sur PostgreSQL/S3/Mailpit jetables. Les mesures sont des diagnostics de laboratoire et le reflow par taille de police reste distinct du zoom natif. Le commerce et les workers restent désactivés. Le SEO par environnement se vérifie séparément avec `run verify:seo`. La [spécification de mesure](docs/MEASUREMENT.md) distingue les faits métier existants des événements non collectés ; aucun outil analytics externe n’est ajouté.
 
 Commandes disponibles :
 

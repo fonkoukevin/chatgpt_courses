@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "audit": "AUD-06",
+  "browser": "chromium",
+  "browserVersion": "158.0.8127.18",
+  "headless": true,
+  "fixture": "P18 authored course and explicit missing-guide / technical-offer fixtures in owned disposable PostgreSQL/S3 only.",
+  "sharedContentChanged": false,
+  "humanEditorialApproval": false,
+  "externalProviderRequests": false,
+  "checkoutRequested": false,
+  "orderCreated": false,
+  "deployed": false,
+  "outcomes": [
+    {
+      "name": "fr to en: filtered catalogue, course, M01 and both returns",
+      "status": "passed",
+      "expectedStatus": "passed"
+    },
+    {
+      "name": "en to fr: filtered catalogue, course, M01 and both returns",
+      "status": "passed",
+      "expectedStatus": "passed"
+    },
+    {
+      "name": "standalone activity changes content language and returns to the chosen catalogue",
+      "status": "passed",
+      "expectedStatus": "passed"
+    },
+    {
+      "name": "missing editorial translation offers an explicit catalogue alternative without a false equivalent",
+      "status": "passed",
+      "expectedStatus": "passed"
+    },
+    {
+      "name": "login interface switch preserves the pinned fr activity and its original return",
+      "status": "passed",
+      "expectedStatus": "passed"
+    },
+    {
+      "name": "login interface switch preserves the pinned en activity and its original return",
+      "status": "passed",
+      "expectedStatus": "passed"
+    },
+    {
+      "name": "external and malformed destinations cannot become a public or authentication redirect",
+      "status": "passed",
+      "expectedStatus": "passed"
+    },
+    {
+      "name": "a bilingual technical offer presentation does not invent English access in a French-only inclusion",
+      "status": "passed",
+      "expectedStatus": "passed"
+    }
+  ],
+  "observations": [
+    {
+      "check": "course-language-and-return",
+      "source": "fr",
+      "target": "en",
+      "width": 1440,
+      "exactActivityAndCourseVersions": true,
+      "filtersPreserved": true,
+      "catalogueLanguageChanged": true
+    },
+    {
+      "check": "course-language-and-return",
+      "source": "fr",
+      "target": "en",
+      "width": 390,
+      "exactActivityAndCourseVersions": true,
+      "filtersPreserved": true,
+      "catalogueLanguageChanged": true
+    },
+    {
+      "check": "course-language-and-return",
+      "source": "en",
+      "target": "fr",
+      "width": 1440,
+      "exactActivityAndCourseVersions": true,
+      "filtersPreserved": true,
+      "catalogueLanguageChanged": true
+    },
+    {
+      "check": "course-language-and-return",
+      "source": "en",
+      "target": "fr",
+      "width": 390,
+      "exactActivityAndCourseVersions": true,
+      "filtersPreserved": true,
+      "catalogueLanguageChanged": true
+    },
+    {
+      "check": "missing-guide",
+      "unavailableEnglishVariantNotInvented": true,
+      "voluntaryCatalogueAlternative": true
+    },
+    {
+      "check": "login-ui-does-not-translate-content-destination",
+      "interfaceLocale": "en",
+      "contentLocale": "fr",
+      "realLogin": true,
+      "pinnedActivityPreserved": true
+    },
+    {
+      "check": "login-ui-does-not-translate-content-destination",
+      "interfaceLocale": "fr",
+      "contentLocale": "en",
+      "realLogin": true,
+      "pinnedActivityPreserved": true
+    },
+    {
+      "check": "unsafe-destinations",
+      "malformedPublicDestinations": 6,
+      "realLoginFallsBackToOwnAccount": true
+    },
+    {
+      "check": "technical-offer",
+      "sameOfferId": true,
+      "twoVerifiedPresentations": true,
+      "includedAccessLocales": [
+        "fr"
+      ],
+      "englishAccessNotInvented": true,
+      "orderCreated": false,
+      "checkoutRequested": false
+    }
+  ],
+  "captures": [
+    "fr-to-en-1440-catalogue-return.png",
+    "fr-to-en-390-catalogue-return.png",
+    "en-to-fr-1440-catalogue-return.png",
+    "en-to-fr-390-catalogue-return.png",
+    "en-390-standalone-return.png",
+    "fr-390-standalone-return.png",
+    "fr-390-missing-english-explicit.png",
+    "en-390-missing-guide-alternative.png",
+    "en-390-login-retains-fr-activity.png",
+    "fr-390-login-retains-en-activity.png",
+    "fr-390-invalid-auth-return-account.png",
+    "fr-390-technical-offer-presentations.png",
+    "en-390-technical-offer-presentation.png"
+  ]
+}

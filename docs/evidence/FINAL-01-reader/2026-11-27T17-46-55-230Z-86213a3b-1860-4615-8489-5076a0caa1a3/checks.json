@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "step": "FINAL-01",
+  "result": "passed",
+  "startedAt": "2026-11-27T17:46:55.235Z",
+  "browser": "chromium",
+  "headless": true,
+  "scope": "Local file reader only; no application server, account, publication or human approval.",
+  "htmlSha256": "82ac67a739a75e06e2d41de9f61dee1be56a72eb3ac241f1ae50aceff75b2f33",
+  "manifestSha256": "9e68ee63197af7fb3085c776e3694d5e0a6b48eac63f34cf928c5b7e5bdfa208",
+  "checks": [
+    {
+      "name": "1440: complete source sections",
+      "passed": true
+    },
+    {
+      "name": "1440: complete quizzes and folded answers",
+      "passed": true
+    },
+    {
+      "name": "1440: no input or active embedding",
+      "passed": true
+    },
+    {
+      "name": "1440: internal links resolve",
+      "passed": true
+    },
+    {
+      "name": "1440: no horizontal page overflow",
+      "passed": true
+    },
+    {
+      "name": "1440: module keyboard destination",
+      "passed": true
+    },
+    {
+      "name": "1440: resource language",
+      "passed": true
+    },
+    {
+      "name": "1440: no resources fetched",
+      "passed": true
+    },
+    {
+      "name": "390: complete source sections",
+      "passed": true
+    },
+    {
+      "name": "390: complete quizzes and folded answers",
+      "passed": true
+    },
+    {
+      "name": "390: no input or active embedding",
+      "passed": true
+    },
+    {
+      "name": "390: internal links resolve",
+      "passed": true
+    },
+    {
+      "name": "390: no horizontal page overflow",
+      "passed": true
+    },
+    {
+      "name": "390: module keyboard destination",
+      "passed": true
+    },
+    {
+      "name": "390: resource language",
+      "passed": true
+    },
+    {
+      "name": "390: no resources fetched",
+      "passed": true
+    },
+    {
+      "name": "zero automatic network requests",
+      "passed": true
+    },
+    {
+      "name": "zero page errors",
+      "passed": true
+    }
+  ],
+  "captures": [
+    {
+      "file": "docs/evidence/FINAL-01-reader/2026-11-27T17-46-55-230Z-86213a3b-1860-4615-8489-5076a0caa1a3/1440-contents.png",
+      "sha256": "8af9ce6994d9247595a4d843fd4b7b8b32d4a2b85bca1746351cbaa64357e143"
+    },
+    {
+      "file": "docs/evidence/FINAL-01-reader/2026-11-27T17-46-55-230Z-86213a3b-1860-4615-8489-5076a0caa1a3/1440-lesson-fr-m01.png",
+      "sha256": "4c04896d08e8e821662ea024ebb1abe1b5942b04a6e682d767de5d59c731ac6a"
+    },
+    {
+      "file": "docs/evidence/FINAL-01-reader/2026-11-27T17-46-55-230Z-86213a3b-1860-4615-8489-5076a0caa1a3/1440-resource-fr-commented-solution-br02.png",
+      "sha256": "fa728c249759df26986a53afde7ec25a939783861c1d51537d02365f97f8e55f"
+    },
+    {
+      "file": "docs/evidence/FINAL-01-reader/2026-11-27T17-46-55-230Z-86213a3b-1860-4615-8489-5076a0caa1a3/390-contents.png",
+      "sha256": "7122245ca1a68e9f104da69f4b3d9c615df8b9f95f2ac22d01db80defcb31d18"
+    },
+    {
+      "file": "docs/evidence/FINAL-01-reader/2026-11-27T17-46-55-230Z-86213a3b-1860-4615-8489-5076a0caa1a3/390-lesson-en-m06.png",
+      "sha256": "cb4e675d295f9410d7429ecdffecb2b9e2d61d95ff028a26e25cdcf1dc2ddca2"
+    },
+    {
+      "file": "docs/evidence/FINAL-01-reader/2026-11-27T17-46-55-230Z-86213a3b-1860-4615-8489-5076a0caa1a3/390-resource-en-br02.png",
+      "sha256": "8f1d58cab92ee4f848d657448589392665b621612d3943f4871f747f8735b91e"
+    }
+  ],
+  "browserClosed": true,
+  "browserVersion": "158.0.8127.18",
+  "completedAt": "2026-11-27T17:46:57.985Z",
+  "networkRequests": 0,
+  "pageErrors": 0
+}

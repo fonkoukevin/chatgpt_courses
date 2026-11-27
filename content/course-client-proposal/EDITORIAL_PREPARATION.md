@@ -63,6 +63,8 @@ Les six leçons, neuf supports, quiz et corrigés existent en FR et EN. L’angl
 
 Les ajustements de rédaction conservent objectifs, identifiants, version pédagogique 1, quiz et barèmes. Le CMS ajoute une révision et, pour un support modifié, un nouvel asset à empreinte distincte ; il n’écrase pas un fichier historique. Aucun import dans les brouillons partagés P18 n’est inclus dans ce lot. Les essais techniques utilisent des copies isolées.
 
+La préparation REVIEW-01 du26novembre clarifie la consigne M06 anglaise : l’alternative reste explicitement soumise à l’accord du client, comme en français et dans le corrigé BR02. Les trente sources sont regroupées dans un lecteur local avec leurs empreintes pour faciliter la [revue humaine](LAUNCH_REVIEW.md). Cette clarification n’est pas importée ni publiée ; aucune approbation humaine n’est déduite de la pré-revue assistée. [Contrôles et limites](../../docs/evidence/REVIEW-01.md).
+
 ## Durée et revue avant publication
 
 La durée de réalisation reste **non estimée** : aucune session apprenant mesurée n’est disponible. Le temps de tests automatiques ne mesure ni la lecture ni le travail pédagogique. Avant d’afficher une estimation, faire accomplir le parcours et relever séparément lecture, manipulation de l’outil, production et vérification, avec les conditions de l’essai.

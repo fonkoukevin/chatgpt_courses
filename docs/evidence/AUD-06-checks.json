@@ -1,0 +1,508 @@
+{
+  "schemaVersion": 1,
+  "audit": "AUD-06",
+  "result": "validated-locally",
+  "assembledAt": "2026-11-25T19:00:19.792Z",
+  "scope": "Local corrections and real isolated Spring/PostgreSQL/S3 browser validation; no deployment.",
+  "checks": {
+    "client": {
+      "result": "passed",
+      "completedAt": "2026-11-25T18:42:18.650Z",
+      "artifactSha256": "9f91d31ff50295ae3a7d11cf6170da174abd3e7bfb76679e91c79adc7ed86346",
+      "counts": {
+        "tests": 135,
+        "suites": 0,
+        "pass": 135,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    "scripts": {
+      "result": "passed",
+      "completedAt": "2026-11-25T18:50:23.216Z",
+      "artifactSha256": "5560e0cb3f58ad07d7fe65215b3240ebfc5eb30ce19121e1fff243759c90fc10",
+      "counts": {
+        "tests": 199,
+        "suites": 0,
+        "pass": 199,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    "lint": {
+      "result": "passed",
+      "completedAt": "2026-11-25T18:50:49.161Z",
+      "artifactSha256": "cc9028ab76cb2af4db1edebc080ba80dd799be3e7d93981e346cebd15a40c398"
+    },
+    "web": {
+      "result": "passed",
+      "completedAt": "2026-11-25T18:53:33.416Z",
+      "artifactSha256": "42726f31dfd75bebe053912031b4ffdb97368888929767f20a2a79922b43cf55"
+    }
+  },
+  "browserTypecheck": {
+    "command": "node node_modules/typescript/bin/tsc --project tsconfig.browser.json --pretty false",
+    "exitCode": 0,
+    "preparationArtifactSha256": "45a5e3f59d66015b717c553ea084c849615b25c5aa5f8d26a78db02bd1b380fd"
+  },
+  "baseline": {
+    "result": "observed",
+    "origin": "https://staging.chatgpt-courses.com",
+    "artifactSha256": "bda521c003347ae9b8d4e82ccb9f0f112646df843ae4f4f8ec0451eb83bac767",
+    "contexts": 4,
+    "wrongLanguageReturns": 4,
+    "apiWrites": 0
+  },
+  "navigation": {
+    "result": "passed",
+    "scope": "Local Next build and real staging public API through a deny-by-default read-only loopback proxy",
+    "buildId": "fap3YrGBQrWCwvXCkjH-g",
+    "artifactSha256": "c02c9e97800d795f0be7dc27d3b4e376d970fcbe7f1a1f697977ab20667f7acf",
+    "contexts": 4,
+    "viewportWidths": [
+      1440,
+      390
+    ],
+    "locales": [
+      "fr",
+      "en"
+    ],
+    "captures": 12,
+    "filtersAndPinnedVersionsPreserved": true,
+    "nonzeroPageResetToZero": true,
+    "forwarded": {
+      "methods": {
+        "GET": 250
+      },
+      "categories": {
+        "PUBLIC_CATALOGUE": 214,
+        "PUBLIC_OFFERS": 20,
+        "ANONYMOUS_AUTH_ME": 16
+      },
+      "statuses": {
+        "200": 234,
+        "401": 16
+      }
+    },
+    "locallyRejected": {
+      "count": 19,
+      "methods": {
+        "POST": 1,
+        "GET": 18
+      },
+      "csrfRefreshRequests": 16
+    },
+    "cleanup": {
+      "browserClosed": true,
+      "ownedWebStopped": true,
+      "localProxyClosed": true
+    },
+    "accountCreated": false
+  },
+  "offerRendering": {
+    "result": "passed",
+    "scope": "Final local build with an existing historical TEST offer, read-only public staging API",
+    "buildId": "0pkhJQUlA45ZQB4iqu19j",
+    "artifactSha256": "d7cf4478300653d8cef11e6c614532dcc90af62109a159d66ea2112529d2450b",
+    "contexts": 4,
+    "captures": 4,
+    "forwarded": {
+      "methods": {
+        "GET": 58
+      },
+      "categories": {
+        "PUBLIC_OFFERS": 40,
+        "PUBLIC_CATALOGUE": 14,
+        "ANONYMOUS_AUTH_ME": 4
+      },
+      "statuses": {
+        "200": 54,
+        "401": 4
+      }
+    },
+    "locallyRejected": {
+      "count": 7,
+      "methods": {
+        "POST": 1,
+        "GET": 6
+      },
+      "csrfRefreshRequests": 4
+    },
+    "cleanup": {
+      "browserClosed": true,
+      "ownedWebStopped": true,
+      "localProxyClosed": true
+    },
+    "orderCreated": false,
+    "checkoutRequested": false
+  },
+  "visualReview": {
+    "reviewedOriginalScreenshots": 33,
+    "artifacts": [
+      {
+        "sha256": "1e7530f85c14758e2ee98c05d4c9193de5d1e4f0e4a8173a9393ebf3c7907fd8"
+      },
+      {
+        "sha256": "0f1c0d6802979055099f76465486f04208a55ddb3a05d8aaa6fcc63044616817"
+      },
+      {
+        "sha256": "ae906cc88873eb5affc2686d7a8f4ca18e5d9f79bfc19f78f078b452d67899e3"
+      },
+      {
+        "sha256": "afbe799c08c26c5017a8eacb6f8279d3a544eb8256c1c4875a2986203de7ac8c"
+      },
+      {
+        "file": "docs/evidence/AUD-06-isolated-checks.json",
+        "sha256": "d3bf8949b60da76dcb6ec551b2a97a20bfc8f7f7249f19c3832a392b8993b456"
+      }
+    ],
+    "captures": [
+      {
+        "file": "docs/evidence/AUD06-browser/staging-baseline-6a55d044-359e-4e12-a79e-1c5f44d9cba8/fr-to-en-1440-catalogue.png",
+        "sha256": "b3df905c3b74c15112bc929afd3c057b00b0d129bbac3f5ce551d23b2ee3a31e"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/staging-baseline-6a55d044-359e-4e12-a79e-1c5f44d9cba8/fr-to-en-390-catalogue.png",
+        "sha256": "f697c6cbe774f2e3c667bf13271d445036dfe83c3a1df73de93c612dab4e27ca"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/staging-baseline-6a55d044-359e-4e12-a79e-1c5f44d9cba8/en-to-fr-1440-catalogue.png",
+        "sha256": "cd3c13c98a81015f6afdfaa06090f6e4854c1e078e81209e37310958bfc21d8a"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/staging-baseline-6a55d044-359e-4e12-a79e-1c5f44d9cba8/en-to-fr-390-catalogue.png",
+        "sha256": "8124d308aaccefa2bc9c8dc7e7e8d6ff57252a4cc81d9f778bda966841610e48"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/readonly-local-browser-72aca963-1b3a-4ea7-9618-9a82d25caf68/fr-to-en-1440-activity-before.png",
+        "sha256": "c1182c8c0938bed7ae0738399e0f46f8ddf83bda719fc586c6091c7d283bf88f"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/readonly-local-browser-72aca963-1b3a-4ea7-9618-9a82d25caf68/fr-to-en-1440-activity-after.png",
+        "sha256": "9c4ab89e3b6fe8d10dc7f190c79b6b557d8a7d5cff18216febf5b05ebfc32add"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/readonly-local-browser-72aca963-1b3a-4ea7-9618-9a82d25caf68/fr-to-en-1440-catalogue-after.png",
+        "sha256": "57ce70a9102ee185b6bb31918aa37b80f5823694ed5f3cee43f18d9dd36a7cb1"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/readonly-local-browser-72aca963-1b3a-4ea7-9618-9a82d25caf68/fr-to-en-390-activity-before.png",
+        "sha256": "4edf67a600619fbfe262b32027af2adfec54e40ae045070a570bba82bd949d75"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/readonly-local-browser-72aca963-1b3a-4ea7-9618-9a82d25caf68/fr-to-en-390-activity-after.png",
+        "sha256": "50ac70b2ef2eef10af64e04ae367b0864f69fa21aea6f0a1e7839a87eb5e13b1"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/readonly-local-browser-72aca963-1b3a-4ea7-9618-9a82d25caf68/fr-to-en-390-catalogue-after.png",
+        "sha256": "f8660d65256dc73842b8b0dfe9aa1a0ac7e02957c4490e72094f9b7a4a220761"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/readonly-local-browser-72aca963-1b3a-4ea7-9618-9a82d25caf68/en-to-fr-1440-activity-before.png",
+        "sha256": "9c4ab89e3b6fe8d10dc7f190c79b6b557d8a7d5cff18216febf5b05ebfc32add"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/readonly-local-browser-72aca963-1b3a-4ea7-9618-9a82d25caf68/en-to-fr-1440-activity-after.png",
+        "sha256": "c1182c8c0938bed7ae0738399e0f46f8ddf83bda719fc586c6091c7d283bf88f"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/readonly-local-browser-72aca963-1b3a-4ea7-9618-9a82d25caf68/en-to-fr-1440-catalogue-after.png",
+        "sha256": "940788b1372506bd975e701a807fcbf7116643941e153fef0b05e3e27393271d"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/readonly-local-browser-72aca963-1b3a-4ea7-9618-9a82d25caf68/en-to-fr-390-activity-before.png",
+        "sha256": "46add0bafdb48b94639dab88a371c28ddbac5713dbea29f0253c812247bf1ac4"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/readonly-local-browser-72aca963-1b3a-4ea7-9618-9a82d25caf68/en-to-fr-390-activity-after.png",
+        "sha256": "4ecc2c49d1af2228d1622f966d867e96c351f1feb76e8b7dcb0e678591bd3565"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/readonly-local-browser-72aca963-1b3a-4ea7-9618-9a82d25caf68/en-to-fr-390-catalogue-after.png",
+        "sha256": "b52872787c1a0b2caa9e859d07af23da1fe9de65e9601167b075c72a0cbf8445"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/readonly-offer-browser-da67cbb5-2569-4c22-817c-0003635d1ebd/fr-1440-legacy-test-offer.png",
+        "sha256": "b5ade8c7e0381c65362218fd521277b032e8705e6e5e5f1a7d95df6aa6f10723"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/readonly-offer-browser-da67cbb5-2569-4c22-817c-0003635d1ebd/fr-390-legacy-test-offer.png",
+        "sha256": "eb1f83094ef5dc277c40b31e605ed824b4c270523898e6cfcd1b8ddfaaf92030"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/readonly-offer-browser-da67cbb5-2569-4c22-817c-0003635d1ebd/en-1440-legacy-test-offer.png",
+        "sha256": "01890c0f192fee857e3dcaf6278a5dcdfa239952b510bbd42dd7e1f1fb15c9d6"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/readonly-offer-browser-da67cbb5-2569-4c22-817c-0003635d1ebd/en-390-legacy-test-offer.png",
+        "sha256": "5fd1dccd38d46c6f8b52d43d3e955afa48126a98bcf01a19960c39c8ac5c3bfc"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/fr-to-en-1440-catalogue-return.png",
+        "sha256": "03b93f2937445efd6c17f2ea2d6358628945d71b8bcce341f719ed3cf34578a6",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/fr-to-en-390-catalogue-return.png",
+        "sha256": "235e15cee59e0b032f0a0cd628f8190663be06757413bccaa7822a1332f512a3",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/en-to-fr-1440-catalogue-return.png",
+        "sha256": "4e954c2bf9011ac74cef6243d8882bbc095abea7eaf07f8612356ef85658ce35",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/en-to-fr-390-catalogue-return.png",
+        "sha256": "eb7f3a68231feac804715bfdb328847a465d79207088bb8826eed7fe22a21638",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/en-390-standalone-return.png",
+        "sha256": "d0c7c8c11ef4e4c590e77e77eb533cd0c20d2f44a0bdb064dcc61e49f0eea4f5",
+        "reviewedBy": "independent-review-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/fr-390-standalone-return.png",
+        "sha256": "2bcd310c253b6d65c97e2d33add0fd1bfffb69074931ac165d62405d26dd4889",
+        "reviewedBy": "independent-review-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/fr-390-missing-english-explicit.png",
+        "sha256": "e9bef91916554954c5cc4e3c0baba44bde5ede515c7886de27af16c65a26799e",
+        "reviewedBy": "independent-review-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/en-390-missing-guide-alternative.png",
+        "sha256": "a6122bf11842566ca31e163a79c9b0fbd90baa660ff8c682234812b0de33ad44",
+        "reviewedBy": "independent-review-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/en-390-login-retains-fr-activity.png",
+        "sha256": "8c9883b7453bbb45ba4f84dd0ec5f6937007af620e5bf550fa5542732128343a",
+        "reviewedBy": "independent-review-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/fr-390-login-retains-en-activity.png",
+        "sha256": "13e7d7b83ade443f444dad9c8ebb9258042d0cd1ad78c721d318e98dfb93fe2c",
+        "reviewedBy": "independent-review-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/fr-390-invalid-auth-return-account.png",
+        "sha256": "7ac7b30102073d20f274e29f54a23d29fc6e4c3a57b15f5e75ad4b13c8243f4f",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/fr-390-technical-offer-presentations.png",
+        "sha256": "9aa0bda606bcb749e5ebe076237822ca575c09838c1097ac0b7129e14c09e667",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/en-390-technical-offer-presentation.png",
+        "sha256": "ae6c624adca76df6286d8396f8282ae82b216502247ab16cc586c49a9ae96162",
+        "reviewedBy": "primary-agent"
+      }
+    ]
+  },
+  "isolatedBrowser": {
+    "result": "passed",
+    "preparedCases": 8,
+    "expectedCaptures": 13,
+    "applicationStarted": true,
+    "dockerStartupAttempt": {
+      "result": "automatic-approval-review-rejected",
+      "reason": "blocked by policy",
+      "processStarted": false,
+      "alternativeStartupAttempted": false
+    },
+    "resumeChecks": [
+      {
+        "observedAt": "2026-11-26T20:47:31.285Z",
+        "completedAt": "2026-11-26T20:47:33.252Z",
+        "result": "not-run",
+        "reason": "DOCKER_LINUX_NOT_READY",
+        "contexts": [
+          {
+            "context": "desktop-linux",
+            "ready": false,
+            "exitCode": 1,
+            "timedOut": false
+          },
+          {
+            "context": "default",
+            "ready": false,
+            "exitCode": 1,
+            "timedOut": false
+          }
+        ],
+        "dockerDesktop": {
+          "processCount": 0,
+          "serviceStatus": "Stopped"
+        },
+        "readinessArtifactSha256": "740cff991a4a24357177eab580e129fdb1fd044b08061b1e6be14fc1af485826",
+        "nodeVersion": "24.22.2",
+        "buildId": "0pkhJQUlA45ZQB4iqu19j",
+        "userNextFileSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+        "browserSpecSha256": "2591dbc5840764dec22b194996cbab80000b39021b43a900dd59c22a5bda0922",
+        "privateRecipeExitCode": 2,
+        "applicationStarted": false,
+        "dockerStartedByAgent": false,
+        "sharedDatabaseTouched": false,
+        "deploymentExecuted": false
+      }
+    ],
+    "followUp": {
+      "observedAt": "2026-11-25T19:51:30.176Z",
+      "result": "not-run",
+      "reason": "DOCKER_LINUX_NOT_READY",
+      "userAnnouncedDesktopStartup": true,
+      "contexts": [
+        {
+          "context": "desktop-linux",
+          "ready": false,
+          "exitCode": 1
+        },
+        {
+          "context": "default",
+          "ready": false,
+          "exitCode": 1
+        }
+      ],
+      "readinessArtifactSha256": "b821610be47ca387003ebcefe405abf5be8d1a301117765973fe1d165ca1efd0",
+      "preparedTestCommit": "5aee1e637fc87a6ffd6867fcde5322383852bce7",
+      "browserSpecSha256": "2591dbc5840764dec22b194996cbab80000b39021b43a900dd59c22a5bda0922",
+      "preExecutionReviewArtifactSha256": "5b6c572a054cc3088b754cab9ac8c91310d6c40a91de00845b203edbaecd7816",
+      "browserTypecheckExitCode": 0,
+      "standaloneWaitStrengthened": true,
+      "observedPostgresFailure": false,
+      "applicationStarted": false,
+      "dockerStartedByAgent": false
+    },
+    "originalBlockingReason": "DOCKER_LINUX_NOT_READY",
+    "completedAt": "2026-11-26T20:51:46.220Z",
+    "execution": {
+      "file": "docs/evidence/AUD-06-isolated-checks.json",
+      "sha256": "d3bf8949b60da76dcb6ec551b2a97a20bfc8f7f7249f19c3832a392b8993b456",
+      "evidence": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef",
+      "expected": 8,
+      "unexpected": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "automaticRetries": 0,
+      "captures": 13,
+      "cleanupConfirmed": true,
+      "buildId": "0pkhJQUlA45ZQB4iqu19j",
+      "historicalProofsPreserved": true,
+      "userNextFilePreserved": true
+    }
+  },
+  "boundaries": {
+    "backendChanged": false,
+    "sharedDatabaseMutationRequested": false,
+    "stagingMutatingRequestsForwarded": 0,
+    "credentialsForwarded": false,
+    "setCookieForwarded": false,
+    "providerCredentialsLoaded": false,
+    "deployed": false,
+    "productionStarted": false,
+    "livePaymentsEnabled": false,
+    "editorialHumanReviewClaimed": false
+  },
+  "userNextFile": {
+    "preserved": true,
+    "excludedFromCommit": true,
+    "sha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc"
+  },
+  "sourceFiles": [
+    {
+      "file": "apps/web/src/components/commerce/offers.tsx",
+      "sha256": "6f950d371f25b6ed2cc9cca05f3322ccc487fc251a7fda589e54f7a21cbfe0b1"
+    },
+    {
+      "file": "apps/web/src/components/commerce/parts.tsx",
+      "sha256": "bb3d9faefc69d2e73d47c719601060eb1531bc378e41dfc4561866d2b769d85c"
+    },
+    {
+      "file": "apps/web/src/components/commerce/server-pages.tsx",
+      "sha256": "72aeb67a89ac121fc5552c5899a916413f46790a708b7fdde96ceb3821adadd4"
+    },
+    {
+      "file": "apps/web/src/components/public/server-pages.tsx",
+      "sha256": "149be4fe1ee58a63d1ceeed5994e0f4b37a140319c00d6062418ade11256d052"
+    },
+    {
+      "file": "apps/web/src/lib/i18n/commerce.ts",
+      "sha256": "eaf5b9da3b8f772e8f6f5ef2fcde8ee7598daf0960fc627931c2fcf2364bfaf3"
+    },
+    {
+      "file": "apps/web/src/lib/public/query.ts",
+      "sha256": "cbcc76ff7eb2e9444b35083dae92e676aee2aff44e20777430a8a0e0020bc9db"
+    },
+    {
+      "file": "package.json",
+      "sha256": "ee3689404cdb5eef34141429d90f1b839c7919a65f8bbd66ac90aa1db4e15d4e"
+    },
+    {
+      "file": "playwright.config.ts",
+      "sha256": "ff983bfbcd535a3aa206252986bdcf71842031502e5f4f2fdc5a4d2113f8b7ec"
+    },
+    {
+      "file": "scripts/ci-run.mjs",
+      "sha256": "b450c6ec367286c76c3e3509dd9ba0bfe45f58c5118452adf100f0be02816937"
+    },
+    {
+      "file": "scripts/prepare-course-content.mjs",
+      "sha256": "fe45f5eaa725a11f661b9752b98cbf75daf7fc2fb3dd39b833030030a96e03ee"
+    },
+    {
+      "file": "scripts/verify-browser.mjs",
+      "sha256": "ba473ee3c87e1d482c85bd1efe76622c4bf8605c6095200ac30eb8240c26b18c"
+    },
+    {
+      "file": "tests/api/public-client.test.ts",
+      "sha256": "5a6e087e40d97763b96ee3b0a1c762cf063eb68022c085c8db54a4ef1a6a1e30"
+    },
+    {
+      "file": "tests/browser/aud06-navigation.spec.ts",
+      "sha256": "e50d8fd5c0a27c4d76fb0ef3e9265ba4a70ffbfdb49680394fac38157ffcab1f"
+    },
+    {
+      "file": "tests/browser/course-content-fixture.ts",
+      "sha256": "bb4f75a1700d9bf04706e195ef564a456ead8ac857cd4b5183e9fdd9baa05b42"
+    },
+    {
+      "file": "tests/scripts/aud06-offer-languages.test.mjs",
+      "sha256": "df4a1e754076105ed4a78d9348e42d14614c479a45ff294f3e253ffbeb7b8bed"
+    },
+    {
+      "file": "tests/scripts/aud06-public-navigation.test.mjs",
+      "sha256": "16dfc64af1fb7b166a91937c09943a52a045ee7416c980db4d07227cbfa620e8"
+    }
+  ],
+  "limits": [
+    "The isolated catalogue scenarios begin at page=0; nonzero-page reset is covered by prior client tests and the real read-only navigation run.",
+    "Missing and failed offer presentation cases are exercised with replaced upstream transport in React/server tests, not claimed as persisted PostgreSQL scenarios.",
+    "The strict read-only proxy refuses CSRF refresh requests; no CSRF token, cookie, purchase or private account session is forwarded.",
+    "No SQL table fingerprint comparison was performed during this lot.",
+    "Historical P12/P15 access refusals and P19 limitations remain open."
+  ],
+  "diagnostics": {
+    "historicalReadonlyBrowserFailure": {
+      "retained": true,
+      "artifactSha256": "a5a9ce364eb616ab441155e85de0184fa1d3f5e039a92b9fcec8706f2483a5ec",
+      "failureCode": "BROWSER_ERROR_OBSERVED",
+      "upstream503Observed": 4,
+      "upstream503CauseAttributed": false,
+      "localCsrfRefusalsExpectedByProxyBoundary": true,
+      "observerCorrectedWithoutForwardingCsrf": true
+    },
+    "historicalBaselineAutomationAttemptsRetained": true,
+    "automaticRetries": 0
+  },
+  "localSourceCommit": "52f9dc527a5bf18862679009239033d0ed138df9",
+  "updatedAt": "2026-11-26T20:53:11.599Z"
+}

@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "audit": "AUD-07",
+  "scope": "Observed deployed staging version; anonymous read-only public flow, not the local AUD-06/AUD-07 candidate",
+  "origin": "https://staging.chatgpt-courses.com",
+  "startedAt": "2026-11-26T21:11:01.344Z",
+  "result": "failed",
+  "browser": "chromium",
+  "headless": true,
+  "automaticRetries": 0,
+  "zoom": "100%; no browser zoom test performed",
+  "contexts": [],
+  "captures": [],
+  "directApiReads": [
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog?locale=fr&page=0&pageSize=100",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog?locale=en&page=0&pageSize=100",
+      "status": 200
+    }
+  ],
+  "boundaries": {
+    "mutatingRequestsForwarded": 0,
+    "externalOriginsAllowed": false,
+    "cookieHeadersForwarded": false,
+    "authorizationForwarded": false,
+    "accountsCreated": false,
+    "quizSubmitted": false,
+    "orderCreated": false,
+    "checkoutRequested": false
+  },
+  "failureCode": "PUBLIC_OBSERVATION_INCOMPLETE",
+  "browserClosed": true,
+  "completedAt": "2026-11-26T21:11:02.200Z"
+}

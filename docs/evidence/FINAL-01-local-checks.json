@@ -1,0 +1,178 @@
+{
+  "phase": "FINAL-01",
+  "step": "local-candidate-preparation",
+  "verifiedAt": "2026-11-27T17:50:05.865Z",
+  "result": "local-checks-passed-delivery-pending",
+  "accessCampaign": {
+    "source": ".runtime/final01/access-2026-11-27T17-44-48-612Z-9eacf875-8fcc-47b5-a6ca-9900644368a9/summary.json",
+    "selector": "RefundHttpIntegrationTest,EntitlementDecisionObservation",
+    "startedAt": "2026-11-27T17:44:48.617Z",
+    "completedAt": "2026-11-27T17:47:00.356Z",
+    "totals": {
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "suites": [
+      {
+        "name": "com.chatgptcourses.RefundHttpIntegrationTest",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 77.65,
+        "cases": [
+          {
+            "name": "ambiguousProviderTimeoutKeepsReservationAndRecoversByGetWithoutAnotherFinancialPost",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "contradictoryFactsAfterConfirmationKeepConsumedMoneyAndOriginsRevoked",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "partialConfirmationAndDuplicateSignedRefundEventsApplyOnlyTheSelectedOriginOnce",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "unpaidOrderHasNoRefundableMoneyAndCannotCreateARequest",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "concurrentExecuteKeysCannotSubmitTheSameCommittedRefundTwice",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "invalidAllocationsStalePreviewAndConcurrentDecisionsCannotOverReserveTheOrder",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "revokedOperatorPermissionWhileWaitingForOrderPreventsAnyProviderCall",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "expiredSubmissionMaintenanceLocksOwnerThenOrderBeforeTouchingTheOperation",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "requestOwnershipCsrfContextStrictDtosAndDurableIdempotencyAreRealHttpGuards",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "rejectionAndCancelBeforeSubmissionAreAuditedWithoutCallingStripe",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "oldSignedCheckoutConfirmationAfterRefundCannotRestoreItsRevokedOrigin",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "dashboardPartialWaitsForExplicitAccessDecisionAndCumulativeFullRevokesOnlyThatOrder",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "fullPackRefundKeepsEarlierIndividualOriginAndPersonalWorkButRefusesNewPrivateS3Links",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "pendingThenFailedPartialKeepRetainsAccessAndReleasesOnlyItsReservation",
+            "failed": false,
+            "skipped": false
+          }
+        ],
+        "xmlSha256": "43d6cef1b035e4a94b964347e159fdb87cee7c3ca3a8efd4b535774e1bdf138a"
+      },
+      {
+        "name": "com.chatgptcourses.EntitlementDecisionObservation",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 13.675,
+        "cases": [
+          {
+            "name": "boundedFreshOriginsRetainTheClockSamplesUsedByTheirSingleDecisions",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "anOlderSnapshotIsDistinguishedFromAClockComparisonAfterTheWriterCommits",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "revokedOriginDisabledOwnerAndWithdrawnPathHaveDifferentFacts",
+            "failed": false,
+            "skipped": false
+          }
+        ],
+        "xmlSha256": "fdc8d8b1727436669bdb91e6a605e95460007c2dce11058f4a2796487fd6abcb"
+      }
+    ],
+    "sourceAtStart": {
+      "apps/api/src/test/java/com/chatgptcourses/RefundHttpIntegrationTest.java": "a7d96579519fedc3c08ede9678db05ae0a65be286b242b0dc8cfb5e8eca51688",
+      "apps/api/src/test/java/com/chatgptcourses/EntitlementDecisionObservation.java": "47b610f7fb7c79dcb810a3648a839e20f4279b74e5fa002518fff0b5f22948a5",
+      "apps/api/src/test/java/com/chatgptcourses/PresignedDownloadDiagnostics.java": "c7204c51dda861f9878aff36d85dd8ca55ca31cb6dc31682c56eb82b7c360139"
+    },
+    "privateLogSha256": "2b6820d3328de050035034e661e5c77fb990b43f4a00a744544f1026cbcdde23",
+    "preservation": {
+      "checkedPaths": 1079,
+      "changedPaths": []
+    },
+    "cleanup": {
+      "newContainersLeft": [],
+      "preexistingContainersPreserved": true
+    }
+  },
+  "observations": {
+    "path": "docs/evidence/FINAL-01-access-observations.json",
+    "count": 12,
+    "freshCommittedPositive": 6,
+    "controlledVisibilityComparison": true,
+    "controlledRevocationDisabledOwnerAndWithdrawnPath": true,
+    "unexplainedRefusals": 0,
+    "wrapperUsesActualPostgresClock": true,
+    "readWriteInstrumentationOnly": true,
+    "productionReadOnlyModeReproduced": false,
+    "historicalCauseEstablished": false,
+    "refundFirstReadStatus": 200,
+    "apiDeadlineMatchesSignature": true
+  },
+  "editorial": {
+    "sourceCheck": "docs/evidence/FINAL-01-content-checks.json",
+    "sourceChecks": 223,
+    "sourceFiles": 30,
+    "readerQa": "docs/evidence/FINAL-01-reader/2026-11-27T17-46-55-230Z-86213a3b-1860-4615-8489-5076a0caa1a3/checks.json",
+    "readerChecks": 18,
+    "captures": 6,
+    "capturesExamined": 6,
+    "manifest": "docs/evidence/FINAL-01-reader-manifest.json",
+    "manifestSha256": "9e68ee63197af7fb3085c776e3694d5e0a6b48eac63f34cf928c5b7e5bdfa208",
+    "htmlSha256": "82ac67a739a75e06e2d41de9f61dee1be56a72eb3ac241f1ae50aceff75b2f33",
+    "humanReview": "PENDING",
+    "learnerTrial": "NOT_PERFORMED",
+    "proposalsAreApproved": false
+  },
+  "remaining": {
+    "historicalCausesUnresolved": true,
+    "unknownRefundLeaseOriginalCauseUnresolved": true,
+    "stagingDeliveryPending": true,
+    "productionTargetAbsent": true,
+    "commercialFactsUnprovided": true,
+    "liveCommerceEnabled": false
+  }
+}

@@ -57,6 +57,8 @@ Cette liste prépare la collecte des faits. Le texte final et les informations a
 
 Réutiliser la [fiche d’offre inactive](v1/offer-editorial-draft.json), dont les valeurs non décidées restent nulles. Les conditions annoncées dans la présentation devront correspondre à la fiche, au récapitulatif et au snapshot serveur de la commande.
 
+Une [proposition rédigée FR/EN pour un lancement textes/Markdown](HOME_PRESENTATION_DRAFT.md) est préparée pour la vérification finale. Son statut reste **PROPOSITION À VALIDER** : elle décrit les contenus existants sans choisir les langues vendues, activer une offre ou remplacer les faits d’identité et les conditions ci-dessous. Aucun prix ni engagement de support n’y est fixé.
+
 | Champ à renseigner | Décision attendue |
 | --- | --- |
 | Contenus et formats inclus | Périmètre réellement livré ; texte/Markdown actuellement produits, médias supplémentaires seulement après production et vérification. |

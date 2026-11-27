@@ -1,0 +1,807 @@
+{
+  "schemaVersion": 1,
+  "audit": "AUD-07",
+  "scope": "Observed deployed staging version; anonymous read-only public flow, not the local AUD-06/AUD-07 candidate",
+  "origin": "https://staging.chatgpt-courses.com",
+  "startedAt": "2026-11-26T21:13:02.122Z",
+  "result": "passed",
+  "browser": "chromium",
+  "headless": true,
+  "automaticRetries": 0,
+  "zoom": "100%; no browser zoom test performed",
+  "contexts": [
+    {
+      "locale": "fr",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "stage": "COMPLETE",
+      "result": "passed",
+      "blockedRequests": [],
+      "unexpectedResponses": [],
+      "anonymousIdentityResponses": [
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/me",
+          "status": 401
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ],
+      "pageErrors": [],
+      "reflow": [
+        {
+          "stage": "home",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "fr",
+          "h1Count": 1
+        },
+        {
+          "stage": "course",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "fr",
+          "h1Count": 1
+        },
+        {
+          "stage": "trial",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "fr",
+          "h1Count": 1
+        }
+      ],
+      "metadata": [
+        {
+          "stage": "home",
+          "title": "Apprendre, produire et vérifier avec l’IA | ChatGPT Courses",
+          "description": "Choisissez une tâche, travaillez à partir de faits et vérifiez votre livrable. Parcours, guides et activités publiés.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/fr",
+          "hreflang": []
+        },
+        {
+          "stage": "course",
+          "title": "Du brief client à la proposition commerciale avec ChatGPT | ChatGPT Courses",
+          "description": "Un dossier fictif, six modules développés, des ressources Markdown et des vérifications explicites pour préparer puis adapter une proposition.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/fr/parcours/du-brief-a-la-proposition-commerciale",
+          "hreflang": []
+        },
+        {
+          "stage": "trial",
+          "title": "Comprendre le brief avant de rédiger | ChatGPT Courses",
+          "description": "Transformer le dossier fictif de Client R en un tableau de faits, d’inconnues et de conséquences, puis choisir les premières questions utiles.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01?resource=aff534d6-b630-430f-a415-fe485fcc58df&version=9b18f7b5-22e7-44b3-8cc7-f0b50b37b85f&courseVersion=fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+          "hreflang": []
+        }
+      ],
+      "suspectFixtureText": [],
+      "keyboardSkipLink": true,
+      "mobileMenu": {
+        "visible": true,
+        "linkCount": 3,
+        "noOverflow": true,
+        "escapeRestoresFocus": true
+      },
+      "course": {
+        "resourceId": "895fded2-531a-4071-b6eb-f802044be524",
+        "versionId": "fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+        "path": "/fr/parcours/du-brief-a-la-proposition-commerciale"
+      },
+      "anonymousStateResolved": true,
+      "trial": {
+        "resourceId": "aff534d6-b630-430f-a415-fe485fcc58df",
+        "versionId": "9b18f7b5-22e7-44b3-8cc7-f0b50b37b85f",
+        "courseVersionId": "fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+        "path": "/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01",
+        "title": "Comprendre le brief avant de rédiger"
+      },
+      "contextClosed": true
+    },
+    {
+      "locale": "fr",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "stage": "COMPLETE",
+      "result": "passed",
+      "blockedRequests": [],
+      "unexpectedResponses": [],
+      "anonymousIdentityResponses": [
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/me",
+          "status": 401
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ],
+      "pageErrors": [],
+      "reflow": [
+        {
+          "stage": "home",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "fr",
+          "h1Count": 1
+        },
+        {
+          "stage": "course",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "fr",
+          "h1Count": 1
+        },
+        {
+          "stage": "trial",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "fr",
+          "h1Count": 1
+        }
+      ],
+      "metadata": [
+        {
+          "stage": "home",
+          "title": "Apprendre, produire et vérifier avec l’IA | ChatGPT Courses",
+          "description": "Choisissez une tâche, travaillez à partir de faits et vérifiez votre livrable. Parcours, guides et activités publiés.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/fr",
+          "hreflang": []
+        },
+        {
+          "stage": "course",
+          "title": "Du brief client à la proposition commerciale avec ChatGPT | ChatGPT Courses",
+          "description": "Un dossier fictif, six modules développés, des ressources Markdown et des vérifications explicites pour préparer puis adapter une proposition.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/fr/parcours/du-brief-a-la-proposition-commerciale",
+          "hreflang": []
+        },
+        {
+          "stage": "trial",
+          "title": "Comprendre le brief avant de rédiger | ChatGPT Courses",
+          "description": "Transformer le dossier fictif de Client R en un tableau de faits, d’inconnues et de conséquences, puis choisir les premières questions utiles.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01?resource=aff534d6-b630-430f-a415-fe485fcc58df&version=9b18f7b5-22e7-44b3-8cc7-f0b50b37b85f&courseVersion=fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+          "hreflang": []
+        }
+      ],
+      "suspectFixtureText": [],
+      "keyboardSkipLink": true,
+      "mobileMenu": {
+        "visible": true,
+        "linkCount": 3,
+        "noOverflow": true,
+        "escapeRestoresFocus": true
+      },
+      "course": {
+        "resourceId": "895fded2-531a-4071-b6eb-f802044be524",
+        "versionId": "fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+        "path": "/fr/parcours/du-brief-a-la-proposition-commerciale"
+      },
+      "anonymousStateResolved": true,
+      "trial": {
+        "resourceId": "aff534d6-b630-430f-a415-fe485fcc58df",
+        "versionId": "9b18f7b5-22e7-44b3-8cc7-f0b50b37b85f",
+        "courseVersionId": "fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+        "path": "/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01",
+        "title": "Comprendre le brief avant de rédiger"
+      },
+      "contextClosed": true
+    },
+    {
+      "locale": "fr",
+      "viewport": {
+        "width": 768,
+        "height": 1000
+      },
+      "stage": "COMPLETE",
+      "result": "passed",
+      "blockedRequests": [],
+      "unexpectedResponses": [],
+      "anonymousIdentityResponses": [
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/me",
+          "status": 401
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ],
+      "pageErrors": [],
+      "reflow": [
+        {
+          "stage": "home",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "fr",
+          "h1Count": 1
+        },
+        {
+          "stage": "course",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "fr",
+          "h1Count": 1
+        },
+        {
+          "stage": "trial",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "fr",
+          "h1Count": 1
+        }
+      ],
+      "metadata": [
+        {
+          "stage": "home",
+          "title": "Apprendre, produire et vérifier avec l’IA | ChatGPT Courses",
+          "description": "Choisissez une tâche, travaillez à partir de faits et vérifiez votre livrable. Parcours, guides et activités publiés.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/fr",
+          "hreflang": []
+        },
+        {
+          "stage": "course",
+          "title": "Du brief client à la proposition commerciale avec ChatGPT | ChatGPT Courses",
+          "description": "Un dossier fictif, six modules développés, des ressources Markdown et des vérifications explicites pour préparer puis adapter une proposition.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/fr/parcours/du-brief-a-la-proposition-commerciale",
+          "hreflang": []
+        },
+        {
+          "stage": "trial",
+          "title": "Comprendre le brief avant de rédiger | ChatGPT Courses",
+          "description": "Transformer le dossier fictif de Client R en un tableau de faits, d’inconnues et de conséquences, puis choisir les premières questions utiles.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01?resource=aff534d6-b630-430f-a415-fe485fcc58df&version=9b18f7b5-22e7-44b3-8cc7-f0b50b37b85f&courseVersion=fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+          "hreflang": []
+        }
+      ],
+      "suspectFixtureText": [],
+      "keyboardSkipLink": true,
+      "mobileMenu": {
+        "visible": true,
+        "linkCount": 3,
+        "noOverflow": true,
+        "escapeRestoresFocus": true
+      },
+      "course": {
+        "resourceId": "895fded2-531a-4071-b6eb-f802044be524",
+        "versionId": "fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+        "path": "/fr/parcours/du-brief-a-la-proposition-commerciale"
+      },
+      "anonymousStateResolved": true,
+      "trial": {
+        "resourceId": "aff534d6-b630-430f-a415-fe485fcc58df",
+        "versionId": "9b18f7b5-22e7-44b3-8cc7-f0b50b37b85f",
+        "courseVersionId": "fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+        "path": "/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01",
+        "title": "Comprendre le brief avant de rédiger"
+      },
+      "contextClosed": true
+    },
+    {
+      "locale": "fr",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "stage": "COMPLETE",
+      "result": "passed",
+      "blockedRequests": [],
+      "unexpectedResponses": [],
+      "anonymousIdentityResponses": [
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/me",
+          "status": 401
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ],
+      "pageErrors": [],
+      "reflow": [
+        {
+          "stage": "home",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "fr",
+          "h1Count": 1
+        },
+        {
+          "stage": "course",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "fr",
+          "h1Count": 1
+        },
+        {
+          "stage": "trial",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "fr",
+          "h1Count": 1
+        }
+      ],
+      "metadata": [
+        {
+          "stage": "home",
+          "title": "Apprendre, produire et vérifier avec l’IA | ChatGPT Courses",
+          "description": "Choisissez une tâche, travaillez à partir de faits et vérifiez votre livrable. Parcours, guides et activités publiés.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/fr",
+          "hreflang": []
+        },
+        {
+          "stage": "course",
+          "title": "Du brief client à la proposition commerciale avec ChatGPT | ChatGPT Courses",
+          "description": "Un dossier fictif, six modules développés, des ressources Markdown et des vérifications explicites pour préparer puis adapter une proposition.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/fr/parcours/du-brief-a-la-proposition-commerciale",
+          "hreflang": []
+        },
+        {
+          "stage": "trial",
+          "title": "Comprendre le brief avant de rédiger | ChatGPT Courses",
+          "description": "Transformer le dossier fictif de Client R en un tableau de faits, d’inconnues et de conséquences, puis choisir les premières questions utiles.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01?resource=aff534d6-b630-430f-a415-fe485fcc58df&version=9b18f7b5-22e7-44b3-8cc7-f0b50b37b85f&courseVersion=fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+          "hreflang": []
+        }
+      ],
+      "suspectFixtureText": [],
+      "keyboardSkipLink": true,
+      "desktopNavigationVisible": true,
+      "course": {
+        "resourceId": "895fded2-531a-4071-b6eb-f802044be524",
+        "versionId": "fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+        "path": "/fr/parcours/du-brief-a-la-proposition-commerciale"
+      },
+      "anonymousStateResolved": true,
+      "trial": {
+        "resourceId": "aff534d6-b630-430f-a415-fe485fcc58df",
+        "versionId": "9b18f7b5-22e7-44b3-8cc7-f0b50b37b85f",
+        "courseVersionId": "fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+        "path": "/fr/apprendre/du-brief-a-la-proposition-commerciale/proposition-m01",
+        "title": "Comprendre le brief avant de rédiger"
+      },
+      "contextClosed": true
+    },
+    {
+      "locale": "en",
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "stage": "COMPLETE",
+      "result": "passed",
+      "blockedRequests": [],
+      "unexpectedResponses": [],
+      "anonymousIdentityResponses": [
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/me",
+          "status": 401
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ],
+      "pageErrors": [],
+      "reflow": [
+        {
+          "stage": "home",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "en",
+          "h1Count": 1
+        },
+        {
+          "stage": "course",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "en",
+          "h1Count": 1
+        },
+        {
+          "stage": "trial",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "en",
+          "h1Count": 1
+        }
+      ],
+      "metadata": [
+        {
+          "stage": "home",
+          "title": "Learn, produce and verify with AI | ChatGPT Courses",
+          "description": "Choose a task, work from supplied facts and check your output. Published learning paths, guides and activities.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/en",
+          "hreflang": []
+        },
+        {
+          "stage": "course",
+          "title": "From client brief to a clear proposal with ChatGPT | ChatGPT Courses",
+          "description": "A fictional case, six developed modules, Markdown resources and explicit checks to prepare and adapt a proposal.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/en/courses/client-brief-to-proposal",
+          "hreflang": []
+        },
+        {
+          "stage": "trial",
+          "title": "Understand the brief before drafting | ChatGPT Courses",
+          "description": "Turn Client R’s fictional brief into facts, unknowns and consequences, then choose useful first questions.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/en/learn/client-brief-to-proposal/proposal-m01?resource=aff534d6-b630-430f-a415-fe485fcc58df&version=9b18f7b5-22e7-44b3-8cc7-f0b50b37b85f&courseVersion=fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+          "hreflang": []
+        }
+      ],
+      "suspectFixtureText": [],
+      "keyboardSkipLink": true,
+      "mobileMenu": {
+        "visible": true,
+        "linkCount": 3,
+        "noOverflow": true,
+        "escapeRestoresFocus": true
+      },
+      "course": {
+        "resourceId": "895fded2-531a-4071-b6eb-f802044be524",
+        "versionId": "fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+        "path": "/en/courses/client-brief-to-proposal"
+      },
+      "anonymousStateResolved": true,
+      "trial": {
+        "resourceId": "aff534d6-b630-430f-a415-fe485fcc58df",
+        "versionId": "9b18f7b5-22e7-44b3-8cc7-f0b50b37b85f",
+        "courseVersionId": "fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+        "path": "/en/learn/client-brief-to-proposal/proposal-m01",
+        "title": "Understand the brief before drafting"
+      },
+      "contextClosed": true
+    },
+    {
+      "locale": "en",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "stage": "COMPLETE",
+      "result": "passed",
+      "blockedRequests": [],
+      "unexpectedResponses": [],
+      "anonymousIdentityResponses": [
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/me",
+          "status": 401
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ],
+      "pageErrors": [],
+      "reflow": [
+        {
+          "stage": "home",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "en",
+          "h1Count": 1
+        },
+        {
+          "stage": "course",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "en",
+          "h1Count": 1
+        },
+        {
+          "stage": "trial",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "en",
+          "h1Count": 1
+        }
+      ],
+      "metadata": [
+        {
+          "stage": "home",
+          "title": "Learn, produce and verify with AI | ChatGPT Courses",
+          "description": "Choose a task, work from supplied facts and check your output. Published learning paths, guides and activities.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/en",
+          "hreflang": []
+        },
+        {
+          "stage": "course",
+          "title": "From client brief to a clear proposal with ChatGPT | ChatGPT Courses",
+          "description": "A fictional case, six developed modules, Markdown resources and explicit checks to prepare and adapt a proposal.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/en/courses/client-brief-to-proposal",
+          "hreflang": []
+        },
+        {
+          "stage": "trial",
+          "title": "Understand the brief before drafting | ChatGPT Courses",
+          "description": "Turn Client R’s fictional brief into facts, unknowns and consequences, then choose useful first questions.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/en/learn/client-brief-to-proposal/proposal-m01?resource=aff534d6-b630-430f-a415-fe485fcc58df&version=9b18f7b5-22e7-44b3-8cc7-f0b50b37b85f&courseVersion=fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+          "hreflang": []
+        }
+      ],
+      "suspectFixtureText": [],
+      "keyboardSkipLink": true,
+      "mobileMenu": {
+        "visible": true,
+        "linkCount": 3,
+        "noOverflow": true,
+        "escapeRestoresFocus": true
+      },
+      "course": {
+        "resourceId": "895fded2-531a-4071-b6eb-f802044be524",
+        "versionId": "fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+        "path": "/en/courses/client-brief-to-proposal"
+      },
+      "anonymousStateResolved": true,
+      "trial": {
+        "resourceId": "aff534d6-b630-430f-a415-fe485fcc58df",
+        "versionId": "9b18f7b5-22e7-44b3-8cc7-f0b50b37b85f",
+        "courseVersionId": "fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+        "path": "/en/learn/client-brief-to-proposal/proposal-m01",
+        "title": "Understand the brief before drafting"
+      },
+      "contextClosed": true
+    },
+    {
+      "locale": "en",
+      "viewport": {
+        "width": 768,
+        "height": 1000
+      },
+      "stage": "COMPLETE",
+      "result": "passed",
+      "blockedRequests": [],
+      "unexpectedResponses": [],
+      "anonymousIdentityResponses": [
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/me",
+          "status": 401
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ],
+      "pageErrors": [],
+      "reflow": [
+        {
+          "stage": "home",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "en",
+          "h1Count": 1
+        },
+        {
+          "stage": "course",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "en",
+          "h1Count": 1
+        },
+        {
+          "stage": "trial",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "en",
+          "h1Count": 1
+        }
+      ],
+      "metadata": [
+        {
+          "stage": "home",
+          "title": "Learn, produce and verify with AI | ChatGPT Courses",
+          "description": "Choose a task, work from supplied facts and check your output. Published learning paths, guides and activities.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/en",
+          "hreflang": []
+        },
+        {
+          "stage": "course",
+          "title": "From client brief to a clear proposal with ChatGPT | ChatGPT Courses",
+          "description": "A fictional case, six developed modules, Markdown resources and explicit checks to prepare and adapt a proposal.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/en/courses/client-brief-to-proposal",
+          "hreflang": []
+        },
+        {
+          "stage": "trial",
+          "title": "Understand the brief before drafting | ChatGPT Courses",
+          "description": "Turn Client R’s fictional brief into facts, unknowns and consequences, then choose useful first questions.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/en/learn/client-brief-to-proposal/proposal-m01?resource=aff534d6-b630-430f-a415-fe485fcc58df&version=9b18f7b5-22e7-44b3-8cc7-f0b50b37b85f&courseVersion=fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+          "hreflang": []
+        }
+      ],
+      "suspectFixtureText": [],
+      "keyboardSkipLink": true,
+      "mobileMenu": {
+        "visible": true,
+        "linkCount": 3,
+        "noOverflow": true,
+        "escapeRestoresFocus": true
+      },
+      "course": {
+        "resourceId": "895fded2-531a-4071-b6eb-f802044be524",
+        "versionId": "fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+        "path": "/en/courses/client-brief-to-proposal"
+      },
+      "anonymousStateResolved": true,
+      "trial": {
+        "resourceId": "aff534d6-b630-430f-a415-fe485fcc58df",
+        "versionId": "9b18f7b5-22e7-44b3-8cc7-f0b50b37b85f",
+        "courseVersionId": "fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+        "path": "/en/learn/client-brief-to-proposal/proposal-m01",
+        "title": "Understand the brief before drafting"
+      },
+      "contextClosed": true
+    },
+    {
+      "locale": "en",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "stage": "COMPLETE",
+      "result": "passed",
+      "blockedRequests": [],
+      "unexpectedResponses": [],
+      "anonymousIdentityResponses": [
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/me",
+          "status": 401
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/me",
+          "status": 401
+        }
+      ],
+      "pageErrors": [],
+      "reflow": [
+        {
+          "stage": "home",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "en",
+          "h1Count": 1
+        },
+        {
+          "stage": "course",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "en",
+          "h1Count": 1
+        },
+        {
+          "stage": "trial",
+          "noHorizontalOverflow": true,
+          "htmlLanguage": "en",
+          "h1Count": 1
+        }
+      ],
+      "metadata": [
+        {
+          "stage": "home",
+          "title": "Learn, produce and verify with AI | ChatGPT Courses",
+          "description": "Choose a task, work from supplied facts and check your output. Published learning paths, guides and activities.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/en",
+          "hreflang": []
+        },
+        {
+          "stage": "course",
+          "title": "From client brief to a clear proposal with ChatGPT | ChatGPT Courses",
+          "description": "A fictional case, six developed modules, Markdown resources and explicit checks to prepare and adapt a proposal.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/en/courses/client-brief-to-proposal",
+          "hreflang": []
+        },
+        {
+          "stage": "trial",
+          "title": "Understand the brief before drafting | ChatGPT Courses",
+          "description": "Turn Client R’s fictional brief into facts, unknowns and consequences, then choose useful first questions.",
+          "robots": "noindex, nofollow",
+          "canonical": "https://staging.chatgpt-courses.com/en/learn/client-brief-to-proposal/proposal-m01?resource=aff534d6-b630-430f-a415-fe485fcc58df&version=9b18f7b5-22e7-44b3-8cc7-f0b50b37b85f&courseVersion=fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+          "hreflang": []
+        }
+      ],
+      "suspectFixtureText": [],
+      "keyboardSkipLink": true,
+      "desktopNavigationVisible": true,
+      "course": {
+        "resourceId": "895fded2-531a-4071-b6eb-f802044be524",
+        "versionId": "fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+        "path": "/en/courses/client-brief-to-proposal"
+      },
+      "anonymousStateResolved": true,
+      "trial": {
+        "resourceId": "aff534d6-b630-430f-a415-fe485fcc58df",
+        "versionId": "9b18f7b5-22e7-44b3-8cc7-f0b50b37b85f",
+        "courseVersionId": "fc4f7bbe-2f1b-48d6-999f-da1b37f08dfe",
+        "path": "/en/learn/client-brief-to-proposal/proposal-m01",
+        "title": "Understand the brief before drafting"
+      },
+      "contextClosed": true
+    }
+  ],
+  "captures": [
+    {
+      "file": "docs/evidence/AUD07-browser/staging-readonly-f34b37a8-37f2-4e8b-b7e2-7f465194967d/fr-320-trial.png",
+      "sha256": "7829167e1a770bbdb2516677ada8cb0ff71aa90f8b7f7ddefd0edbd9f89ae66c",
+      "fullPage": false
+    },
+    {
+      "file": "docs/evidence/AUD07-browser/staging-readonly-f34b37a8-37f2-4e8b-b7e2-7f465194967d/fr-390-trial.png",
+      "sha256": "4edf67a600619fbfe262b32027af2adfec54e40ae045070a570bba82bd949d75",
+      "fullPage": false
+    },
+    {
+      "file": "docs/evidence/AUD07-browser/staging-readonly-f34b37a8-37f2-4e8b-b7e2-7f465194967d/fr-768-trial.png",
+      "sha256": "3781e2314ee3084754cd7bacf074ae76172acea4c4321bd672fed9fd131ecd63",
+      "fullPage": false
+    },
+    {
+      "file": "docs/evidence/AUD07-browser/staging-readonly-f34b37a8-37f2-4e8b-b7e2-7f465194967d/fr-1440-trial.png",
+      "sha256": "c1182c8c0938bed7ae0738399e0f46f8ddf83bda719fc586c6091c7d283bf88f",
+      "fullPage": false
+    },
+    {
+      "file": "docs/evidence/AUD07-browser/staging-readonly-f34b37a8-37f2-4e8b-b7e2-7f465194967d/en-320-trial.png",
+      "sha256": "207d2d1b2d29f2be386ca92ac2ba580b611714f959ba8c280014f6e47adecbef",
+      "fullPage": false
+    },
+    {
+      "file": "docs/evidence/AUD07-browser/staging-readonly-f34b37a8-37f2-4e8b-b7e2-7f465194967d/en-390-trial.png",
+      "sha256": "46add0bafdb48b94639dab88a371c28ddbac5713dbea29f0253c812247bf1ac4",
+      "fullPage": false
+    },
+    {
+      "file": "docs/evidence/AUD07-browser/staging-readonly-f34b37a8-37f2-4e8b-b7e2-7f465194967d/en-768-trial.png",
+      "sha256": "7a9ec97691f85f93b536c479837af29c7bced3942511948d0588a761d41c6cf3",
+      "fullPage": false
+    },
+    {
+      "file": "docs/evidence/AUD07-browser/staging-readonly-f34b37a8-37f2-4e8b-b7e2-7f465194967d/en-1440-trial.png",
+      "sha256": "9c4ab89e3b6fe8d10dc7f190c79b6b557d8a7d5cff18216febf5b05ebfc32add",
+      "fullPage": false
+    }
+  ],
+  "directApiReads": [
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog?locale=fr&page=0&pageSize=100",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/catalog?locale=en&page=0&pageSize=100",
+      "status": 200
+    }
+  ],
+  "boundaries": {
+    "mutatingRequestsForwarded": 0,
+    "externalOriginsAllowed": false,
+    "cookieHeadersForwarded": false,
+    "authorizationForwarded": false,
+    "accountsCreated": false,
+    "quizSubmitted": false,
+    "orderCreated": false,
+    "checkoutRequested": false
+  },
+  "browserVersion": "158.0.8127.18",
+  "browserClosed": true,
+  "completedAt": "2026-11-26T21:13:22.844Z"
+}

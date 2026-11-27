@@ -10,7 +10,7 @@ import { getCommerceDictionary } from "@/lib/i18n/commerce";
 import type { Locale } from "@/lib/i18n/locales";
 import { PublicOfferDetails, PublicOffers } from "./offers";
 import { PersonalOrders, PersonalOrderSummary } from "./orders";
-import { CommerceError, CommercePrivateShell, CommerceRefresh } from "./parts";
+import { CommerceError, CommercePrivateShell, CommerceRefresh, type OfferPresentationStates } from "./parts";
 import { PersonalOrderPaymentStatus } from "./payment-status";
 import { getPaymentDictionary } from "@/lib/i18n/payments";
 import { publicMetadata } from "@/lib/public/seo";
@@ -25,6 +25,18 @@ async function pagination(props: Props, locale: Locale, personal: boolean): Prom
   return { page: Number(query.page ?? 0), pageSize: Number(query.pageSize ?? 20) };
 }
 async function user(locale: Locale, destination: string) { const result = await readCurrentUser(); if (!result.ok && result.error.kind === "http" && result.error.status === 401) redirect(authHref(locale, "sign-in", destination, "required")); return result; }
+async function offerPresentations(id: string, locale: Locale) {
+  const [fr, en] = await Promise.all([readOffer(id, "fr"), readOffer(id, "en")]), results = { fr, en };
+  const languageLinks = {} as LanguageLinks, seoLanguageLinks = {} as LanguageLinks, languageStates = {} as OfferPresentationStates;
+  for (const language of ["fr", "en"] as const) {
+    const result = results[language];
+    const state = !result.ok ? "UNAVAILABLE" : result.data.state !== "ACTIVE" ? "INACTIVE" : !result.data.translationAvailable ? "MISSING" : "AVAILABLE";
+    languageStates[language] = state;
+    languageLinks[language] = { available: state === "AVAILABLE", href: state === "AVAILABLE" ? offersPath(language, id) : offersPath(language) };
+    seoLanguageLinks[language] = { ...languageLinks[language], available: state === "AVAILABLE" && result.ok && result.data.locales.includes(language) };
+  }
+  return { result: results[locale], languageLinks, seoLanguageLinks, languageStates };
+}
 export function commerceMetadata(locale: Locale, personal = false): Metadata { return { title: `${personal ? getCommerceDictionary(locale).orders : getCommerceDictionary(locale).offers} | ChatGPT Courses`, robots: { index: false, follow: false }, referrer: "no-referrer" }; }
 export function offersMetadata(locale: Locale) { return async function generateMetadata(props: Props): Promise<Metadata> {
   await route(props, locale); const input = await props.searchParams, copy = getCommerceDictionary(locale);
@@ -32,20 +44,17 @@ export function offersMetadata(locale: Locale) { return async function generateM
 }; }
 export function offerMetadata(locale: Locale) { return async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await route(props, locale); if (!isUuid(params.offerId)) notFound();
-  const copy = getCommerceDictionary(locale), result = await readOffer(params.offerId, locale);
+  const copy = getCommerceDictionary(locale), { result, seoLanguageLinks } = await offerPresentations(params.offerId, locale);
   if (!result.ok && result.error.kind === "http" && result.error.status === 404) notFound();
-  const other = locale === "fr" ? "en" : "fr", counterpart = await readOffer(params.offerId, other);
   const published = result.ok && result.data.state === "ACTIVE" && result.data.translationAvailable && result.data.locales.includes(locale);
-  const links = { [locale]: { href: offersPath(locale, params.offerId), available: published },
-    [other]: { href: offersPath(other, params.offerId), available: counterpart.ok && counterpart.data.state === "ACTIVE" && counterpart.data.translationAvailable && counterpart.data.locales.includes(other) } } as LanguageLinks;
-  return publicMetadata(locale, result.ok && result.data.title ? result.data.title : copy.offers, result.ok && result.data.summary ? result.data.summary : copy.offersHelp, offersPath(locale, params.offerId), links, published);
+  return publicMetadata(locale, result.ok && result.data.title ? result.data.title : copy.offers, result.ok && result.data.summary ? result.data.summary : copy.offersHelp, offersPath(locale, params.offerId), seoLanguageLinks, published);
 }; }
 export function offersPage(locale: Locale) { return async function Page(props: Props) {
   await route(props, locale); const query = await pagination(props, locale, false), input = await props.searchParams;
   const course = typeof input.resourceId === "string" && typeof input.versionId === "string" ? { resourceId: input.resourceId, versionId: input.versionId } : undefined;
   return <PublicOffers locale={locale} course={course} result={await readOffers(locale, query.page, query.pageSize, course)} />;
 }; }
-export function offerPage(locale: Locale) { return async function Page(props: Props) { const params = await route(props, locale); if (!isUuid(params.offerId)) notFound(); const result = await readOffer(params.offerId, locale); if (!result.ok && result.error.kind === "http" && result.error.status === 404) notFound(); return <PublicOfferDetails key={`${params.offerId}:${result.ok ? result.data.revision : "error"}`} locale={locale} id={params.offerId} result={result} />; }; }
+export function offerPage(locale: Locale) { return async function Page(props: Props) { const params = await route(props, locale); if (!isUuid(params.offerId)) notFound(); const { result, languageLinks, languageStates } = await offerPresentations(params.offerId, locale); if (!result.ok && result.error.kind === "http" && result.error.status === 404) notFound(); return <PublicOfferDetails key={`${params.offerId}:${result.ok ? result.data.revision : "error"}`} locale={locale} id={params.offerId} result={result} languageLinks={languageLinks} languageStates={languageStates} />; }; }
 export function ordersPage(locale: Locale) { return async function Page(props: Props) {
   await route(props, locale); const query = await pagination(props, locale, true), current = await user(locale, ordersHref(locale, query));
   if (!current.ok) return <CommercePrivateShell locale={locale}><div className="space-y-4"><CommerceError locale={locale} error={current.error} /><CommerceRefresh locale={locale} /></div></CommercePrivateShell>;

@@ -3,7 +3,7 @@ import { createServer } from 'node:http';
 import { createRefundTransport } from './browser-refunds.mjs';
 
 // Explicitly controlled remote transport for the isolated P12 recipe. This never contacts Stripe.
-export async function createBrowserPayments(env,{refundsEnabled=false}={}){
+export async function createBrowserPayments(env,{refundsEnabled=false,beforeRefundLookup}={}){
   if(env.APP_ENV!=='test')throw new Error('Controlled payment transport requires the isolated test environment.');
   const secret=`sk_test_browser_${randomBytes(24).toString('hex')}`,webhook=`whsec_${randomBytes(32).toString('hex')}`,account=`acct_${randomBytes(12).toString('hex')}`;
   const sessions=new Map(),keys=new Map(),events=new Map(),sockets=new Set(),requestPaths=new Map();let requests=0,creates=0,stopped=false;
@@ -24,7 +24,7 @@ export async function createBrowserPayments(env,{refundsEnabled=false}={}){
     const result=await fetch(`${env.APP_PUBLIC_ORIGIN}/api/v1/webhooks/stripe`,{method:'POST',headers:{'Content-Type':'application/json','Stripe-Signature':`t=${timestamp},v1=${signature}`},body,redirect:'error',signal:AbortSignal.timeout(10000)});
     return {eventId:event.id,status:result.status,received:result.ok&&(await result.json()).received===true};
   }
-  const refunds=refundsEnabled?createRefundTransport({sessions,send:(...args)=>send(...args),sendEvent}):null;
+  const refunds=refundsEnabled?createRefundTransport({sessions,send:(...args)=>send(...args),sendEvent,beforeLookup:beforeRefundLookup}):null;
   const sessionView=s=>({id:s.id,object:'checkout.session',livemode:false,mode:'payment',created:s.created,status:s.state==='OPEN'?'open':s.state==='EXPIRED'?'expired':'complete',payment_status:['PAID','REFUNDED'].includes(s.state)?'paid':'unpaid',url:s.state==='OPEN'?s.url:null,expires_at:s.expires,amount_total:s.amount,currency:s.currency,metadata:{operation_id:s.operation,order_id:s.order},client_reference_id:s.order,payment_intent:s.state==='OPEN'||s.state==='EXPIRED'?null:{id:s.intent,object:'payment_intent',livemode:false,status:s.state==='PROCESSING'?'processing':s.state==='FAILED'?'requires_payment_method':'succeeded',amount:s.amount,amount_received:['PAID','REFUNDED'].includes(s.state)?s.amount:0,currency:s.currency,metadata:{order_id:s.order,operation_id:s.operation},latest_charge:['PAID','REFUNDED'].includes(s.state)?{id:s.charge,object:'charge',livemode:false,amount:s.amount,amount_refunded:s.state==='REFUNDED'?s.amount:0,currency:s.currency,paid:true,refunded:s.state==='REFUNDED',created:s.created,payment_intent:s.intent}:null}});
   const send=(res,status,value)=>{res.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store','Request-Id':`req_${randomBytes(8).toString('hex')}`});res.end(JSON.stringify(value));};
   const currentSessionView=s=>{

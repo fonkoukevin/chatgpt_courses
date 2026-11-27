@@ -1,0 +1,207 @@
+{
+  "schemaVersion": 1,
+  "audit": "AUD-07",
+  "result": "validated-locally",
+  "assembledAt": "2026-11-26T21:23:14.197Z",
+  "launchDecision": "not-ready-for-commercial-launch",
+  "buildId": "UMEgrBuTpF_oiTaRddh2q",
+  "sourceSitemapSha256": "599e086b6858f47bc6a0715666a87d3e6738b080d745367a402f9dd1ec8430a7",
+  "validation": {
+    "web": {
+      "result": "passed",
+      "completedAt": "2026-11-26T21:10:30.123Z",
+      "privateReceiptSha256": "e148a49251f4f434add58e1581033c02970b6874c425c55dfee3655f1a0e202d"
+    },
+    "scripts": {
+      "result": "passed",
+      "completedAt": "2026-11-26T21:10:50.907Z",
+      "counts": {
+        "tests": 205,
+        "suites": 0,
+        "pass": 205,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "privateReceiptSha256": "e55d8c3fe81507ebe9bc476fc4fa8b5b468f94f77f0fae680036ac07cdd829ed"
+    },
+    "lint": {
+      "result": "passed",
+      "completedAt": "2026-11-26T21:11:25.727Z",
+      "privateReceiptSha256": "d2010842746c71023c0c6661f0bad4d9c8629016a1db3d3055ca7d63f93a2a35"
+    },
+    "browserTypes": {
+      "result": "passed",
+      "completedAt": "2026-11-26T21:25:37.163Z",
+      "privateReceiptSha256": "a86ebc0ee7ac90bc4421d56674200aef091a11193af088b357c09ee6dc556ff1"
+    }
+  },
+  "publicBrowser": {
+    "result": "passed",
+    "evidence": "docs/evidence/AUD07-browser/2026-11-26T21-19-19-690Z-c17fd79d-db25-4598-8262-8c4066086671",
+    "stats": {
+      "startTime": "2026-11-26T21:19:52.684Z",
+      "duration": 111864.54,
+      "expected": 12,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "captures": 32,
+    "laboratoryMeasurements": 32,
+    "downloads": 6,
+    "financialUnchanged": true,
+    "durableQuizAttemptsUnchanged": true,
+    "cleanupConfirmed": true
+  },
+  "seoBrowser": {
+    "result": "passed",
+    "evidence": "docs/evidence/P16_SEO-browser/2026-11-26T21-10-39-341Z-a20020e2-bc2d-4ea2-b5cd-f0626cae2745",
+    "stats": {
+      "startTime": "2026-11-26T21:11:20.983Z",
+      "duration": 61554.389,
+      "expected": 4,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "checks": 41,
+    "secondaryServersStopped": true,
+    "cleanupConfirmed": true
+  },
+  "staging": {
+    "result": "passed",
+    "evidence": "docs/evidence/AUD07-browser/staging-readonly-f34b37a8-37f2-4e8b-b7e2-7f465194967d",
+    "contexts": 8,
+    "captures": 8,
+    "boundaries": {
+      "mutatingRequestsForwarded": 0,
+      "externalOriginsAllowed": false,
+      "cookieHeadersForwarded": false,
+      "authorizationForwarded": false,
+      "accountsCreated": false,
+      "quizSubmitted": false,
+      "orderCreated": false,
+      "checkoutRequested": false
+    },
+    "browserClosed": true,
+    "diagnosticAttempts": [
+      {
+        "file": "docs/evidence/AUD07-browser/staging-readonly-b588d0fa-fb6b-4508-b8b8-da405b0afdf1/diagnostic.json",
+        "sha256": "883f67d0282defc6bdd29f327345b9f1e28162432bff41b0d8e7be7049f4c6fe"
+      },
+      {
+        "file": "docs/evidence/AUD07-browser/staging-readonly-09ba48a9-c670-4069-8632-4195352440fc/diagnostic.json",
+        "sha256": "c25a9686df7b43725be724fda046c56f1163f7bcb3f672007a9b8506aa0e1e6e"
+      }
+    ]
+  },
+  "failuresRetained": [
+    {
+      "receipt": {
+        "result": "failed",
+        "stats": {
+          "startTime": "2026-11-26T21:13:33.691Z",
+          "duration": 69417.501,
+          "expected": 0,
+          "skipped": 11,
+          "unexpected": 1,
+          "flaky": 0
+        },
+        "evidence": "docs/evidence/AUD07-browser/2026-11-26T21-12-59-706Z-e38b0362-031c-4a23-a3b2-30ab50f20a13",
+        "cleanupConfirmed": true,
+        "collectionDiagnostic": "Original private collector found both staging-readonly directories and its owned run. Original receipt retained unchanged; exact supervisor run ID re-associated with existing session/results.",
+        "originalPrivateReceiptSha256": "2b410eb9cd9dc9e175f299f23732bc9a70ef0f680240c119627765df0d3e61d6"
+      },
+      "diagnosis": "NON_RENDERED_TITLE_TEXT_ASSERTION",
+      "screenshot": {
+        "file": "docs/evidence/AUD07-browser/2026-11-26T21-12-59-706Z-e38b0362-031c-4a23-a3b2-30ab50f20a13/failure-before-cleanup.png",
+        "sha256": "4c3d4e71b90d4db45f5b2b4d9b0c5b38d13e3df5042dd4471c5c19426abea8bb"
+      }
+    },
+    {
+      "receipt": {
+        "result": "failed",
+        "stats": {
+          "startTime": "2026-11-26T21:16:05.404Z",
+          "duration": 114687.531,
+          "expected": 10,
+          "skipped": 1,
+          "unexpected": 1,
+          "flaky": 0
+        },
+        "evidence": "docs/evidence/AUD07-browser/2026-11-26T21-15-35-920Z-58952410-d7e3-4080-94fd-790fea06c7ac",
+        "cleanupConfirmed": true
+      },
+      "diagnosis": "EXACT_LABEL_SELECTOR_WITH_REQUIRED_DECORATION",
+      "screenshot": {
+        "file": "docs/evidence/AUD07-browser/2026-11-26T21-15-35-920Z-58952410-d7e3-4080-94fd-790fea06c7ac/failure-before-cleanup.png",
+        "sha256": "c906c230fdebfcd887ef2ad3d89852f3c7ad1ca117beaf52a0639131d4ad3853"
+      }
+    }
+  ],
+  "automaticRetries": 0,
+  "correctedTestSelectors": 2,
+  "cleanup": {
+    "allFourIsolatedRunsConfirmed": true,
+    "ownedProcessesAbsent": true,
+    "ownedContainersAbsent": true,
+    "testListenersRemaining": 0,
+    "secondarySeoServersStopped": true
+  },
+  "preservation": {
+    "historicalProofFiles": 127,
+    "historicalProofsPreserved": true,
+    "userNextFilePreserved": true,
+    "userNextFileSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc"
+  },
+  "evidence": {
+    "seo": {
+      "file": "docs/evidence/AUD-07-seo-checks.json",
+      "sha256": "ef9f7d9fce0295797b99205a986a18f9abc95151a947cc4425550203ad50eb5f"
+    },
+    "contrast": {
+      "file": "docs/evidence/AUD-07-contrast.json",
+      "sha256": "5cb0dc6bd6a86e97416b2b913961981b9401a6ac31de1300ba533670d84d2dfa"
+    },
+    "visual": {
+      "file": "docs/evidence/AUD-07-visual-review.json",
+      "sha256": "e545778132bfd48071149ed9a0be20443b7d6143260b0e18889ab2030d7aa791"
+    },
+    "performance": {
+      "file": "docs/evidence/AUD-07-performance.json",
+      "sha256": "6b22fdec23f9b6e73c04c7cc364940d6b5525c74c52d11551c66d116d9d7de55"
+    },
+    "measurementSpec": {
+      "file": "docs/MEASUREMENT.md",
+      "sha256": "55123c1c0d8fe380b1beca2b02d660dd7208e8e7ba1f3a0db129f56467417cbc"
+    }
+  },
+  "boundaries": {
+    "backendChanged": false,
+    "sharedDatabaseMutationRequested": false,
+    "providerCredentialsLoaded": false,
+    "externalPaymentRequested": false,
+    "deployed": false,
+    "productionStarted": false,
+    "livePaymentsEnabled": false,
+    "analyticsCollectorAdded": false
+  },
+  "limits": [
+    "Only Chromium headless on Windows was tested; root-font scaling is separate from native browser zoom, which was not tested.",
+    "Laboratory samples are one per page/locale/viewport, on unthrottled loopback with warm servers; no field Core Web Vitals, INP or performance score is claimed.",
+    "Staging observations are read-only and precede the local AUD-06/AUD-07 changes; downloads and quiz submission were exercised only on isolated services.",
+    "No production target or actual search-engine indexing was observed.",
+    "Human editorial review, real author/format/languages/commercial terms, historical P12/P15 access incidents and P19 limitations remain launch gates."
+  ],
+  "finalBrowserSpecSha256": "b716a79ce383f18f0d025d96d4171384e5a814b394eef4008ae2d39e4a0cd429",
+  "evidenceIntegrity": {
+    "result": "passed",
+    "checkedAt": "2026-11-26T21:26:56.265Z",
+    "relativeLinksChecked": 62,
+    "observedJsonFilesParsed": 32,
+    "finalVisualHashesChecked": 42,
+    "historicalProofFilesChecked": 127
+  }
+}

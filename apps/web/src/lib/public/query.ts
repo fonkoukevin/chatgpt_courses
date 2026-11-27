@@ -1,5 +1,6 @@
 import type { SearchCatalogueData } from "../api/generated/types.gen";
 import type { Locale } from "../i18n/locales";
+import { catalogueHref, publicCatalogueHref } from "./routes";
 
 export type PublicParameters = Record<string, string | string[] | undefined>;
 const filterKeys = ["q", "type", "goal", "level", "locale", "access", "page", "pageSize", "sort"] as const;
@@ -41,4 +42,18 @@ export function safeCatalogueReturnTo(value: unknown, fallbackLocale: Locale): s
     if (!parseCatalogueQuery(url.pathname.startsWith("/fr/") ? "fr" : "en", params)) return fallback;
     return url.pathname + url.search;
   } catch { return fallback; }
+}
+
+// A language switch changes the catalogue interface and search language together.
+// Validate the original destination before rebuilding its known filter fields.
+export function translateCatalogueReturnTo(value: unknown, locale: Locale): string {
+  const fallback = publicCatalogueHref(locale);
+  if (typeof value !== "string" || /%(?![0-9a-f]{2})/i.test(value)) return fallback;
+  const destination = safeCatalogueReturnTo(value, locale);
+  const url = new URL(destination, "https://courses.invalid");
+  if (!url.searchParams.size) return fallback;
+  const sourceLocale: Locale = url.pathname.startsWith("/fr/") ? "fr" : "en";
+  const query = parseCatalogueQuery(sourceLocale, Object.fromEntries(url.searchParams));
+  if (!query) return fallback;
+  return catalogueHref(locale, { ...query, locale, page: query.locale === locale ? query.page : 0 });
 }

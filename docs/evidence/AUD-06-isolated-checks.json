@@ -1,0 +1,268 @@
+{
+  "schemaVersion": 1,
+  "audit": "AUD-06",
+  "result": "validated-locally",
+  "assembledAt": "2026-11-26T20:53:11.599Z",
+  "command": ".tools/node-v24.22.2-win-x64/node.exe .runtime/aud06/run-browser.mjs --execute",
+  "startedAt": "2026-11-26T20:49:07.185Z",
+  "completedAt": "2026-11-26T20:51:46.220Z",
+  "evidence": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef",
+  "buildId": "0pkhJQUlA45ZQB4iqu19j",
+  "readinessArtifactSha256": "31bbd8454da7abd2b27e002d85012d68a6609a0fce957757b3ae891d9ddde9e5",
+  "privateExecutionReceiptSha256": "efd36dfa8cb63dd68dcfa2a466cafdff614b48dbd7208b90b6f35f8e125138f0",
+  "stats": {
+    "startTime": "2026-11-26T20:49:48.653Z",
+    "duration": 97893.81700000001,
+    "expected": 8,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "automaticRetries": 0,
+  "repeatedCases": 0,
+  "testResultCount": 8,
+  "captures": 13,
+  "visualReview": {
+    "originalScreenshotsReviewed": 13,
+    "blockingDefectsObserved": 0,
+    "primaryAgentCaptures": 7,
+    "independentAgentCaptures": 6,
+    "files": [
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/fr-to-en-1440-catalogue-return.png",
+        "sha256": "03b93f2937445efd6c17f2ea2d6358628945d71b8bcce341f719ed3cf34578a6",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/fr-to-en-390-catalogue-return.png",
+        "sha256": "235e15cee59e0b032f0a0cd628f8190663be06757413bccaa7822a1332f512a3",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/en-to-fr-1440-catalogue-return.png",
+        "sha256": "4e954c2bf9011ac74cef6243d8882bbc095abea7eaf07f8612356ef85658ce35",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/en-to-fr-390-catalogue-return.png",
+        "sha256": "eb7f3a68231feac804715bfdb328847a465d79207088bb8826eed7fe22a21638",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/en-390-standalone-return.png",
+        "sha256": "d0c7c8c11ef4e4c590e77e77eb533cd0c20d2f44a0bdb064dcc61e49f0eea4f5",
+        "reviewedBy": "independent-review-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/fr-390-standalone-return.png",
+        "sha256": "2bcd310c253b6d65c97e2d33add0fd1bfffb69074931ac165d62405d26dd4889",
+        "reviewedBy": "independent-review-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/fr-390-missing-english-explicit.png",
+        "sha256": "e9bef91916554954c5cc4e3c0baba44bde5ede515c7886de27af16c65a26799e",
+        "reviewedBy": "independent-review-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/en-390-missing-guide-alternative.png",
+        "sha256": "a6122bf11842566ca31e163a79c9b0fbd90baa660ff8c682234812b0de33ad44",
+        "reviewedBy": "independent-review-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/en-390-login-retains-fr-activity.png",
+        "sha256": "8c9883b7453bbb45ba4f84dd0ec5f6937007af620e5bf550fa5542732128343a",
+        "reviewedBy": "independent-review-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/fr-390-login-retains-en-activity.png",
+        "sha256": "13e7d7b83ade443f444dad9c8ebb9258042d0cd1ad78c721d318e98dfb93fe2c",
+        "reviewedBy": "independent-review-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/fr-390-invalid-auth-return-account.png",
+        "sha256": "7ac7b30102073d20f274e29f54a23d29fc6e4c3a57b15f5e75ad4b13c8243f4f",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/fr-390-technical-offer-presentations.png",
+        "sha256": "9aa0bda606bcb749e5ebe076237822ca575c09838c1097ac0b7129e14c09e667",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/en-390-technical-offer-presentation.png",
+        "sha256": "ae6c624adca76df6286d8396f8282ae82b216502247ab16cc586c49a9ae96162",
+        "reviewedBy": "primary-agent"
+      }
+    ]
+  },
+  "cleanup": {
+    "confirmed": true,
+    "ownedProcessesAbsent": true,
+    "ownedContainersAbsent": true,
+    "testListenersRemaining": 0,
+    "steps": [
+      {
+        "stage": "EXTERNAL_SESSIONS",
+        "result": "not-required",
+        "errorCode": "NONE"
+      },
+      {
+        "stage": "PROCESS_PLAYWRIGHT",
+        "result": "passed",
+        "errorCode": "NONE"
+      },
+      {
+        "stage": "CONTROL_SERVER",
+        "result": "passed",
+        "errorCode": "NONE"
+      },
+      {
+        "stage": "PROCESS_API",
+        "result": "passed",
+        "errorCode": "NONE"
+      },
+      {
+        "stage": "PROCESS_WEB",
+        "result": "passed",
+        "errorCode": "NONE"
+      },
+      {
+        "stage": "CONTROL_ENDPOINT",
+        "result": "passed",
+        "errorCode": "NONE"
+      },
+      {
+        "stage": "DATABASE_STOP",
+        "result": "passed",
+        "errorCode": "NONE"
+      },
+      {
+        "stage": "SERVICE_MAILPIT_STOP",
+        "result": "passed",
+        "errorCode": "NONE"
+      },
+      {
+        "stage": "SERVICE_S3_STOP",
+        "result": "passed",
+        "errorCode": "NONE"
+      },
+      {
+        "stage": "PROVIDER_STOP",
+        "result": "not-required",
+        "errorCode": "NONE"
+      }
+    ]
+  },
+  "persistence": {
+    "isolatedPostgres": {
+      "image": "postgres:18.6@sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42",
+      "tmpfs": true,
+      "stopped": true
+    },
+    "isolatedServices": [
+      {
+        "kind": "s3",
+        "image": "chrislusf/seaweedfs:4.52@sha256:57877e32bb90073b37dc109b438ba66e84fd5ed9ced5f5c04f56444ef243ce59",
+        "tmpfs": true,
+        "stopped": true,
+        "observation": {
+          "available": true,
+          "configuredVolumeMax": 24,
+          "maxSlots": [
+            24,
+            24
+          ],
+          "freeSlots": [
+            10
+          ],
+          "collectionCount": 2,
+          "noFreeVolumesObserved": false,
+          "noWritableVolumesObserved": false,
+          "logsAvailable": true
+        }
+      },
+      {
+        "kind": "mailpit",
+        "image": "axllent/mailpit:v1.33.0@sha256:9b3a463be15354c0f0eba91697d80e3e0d8a5623ef0e627cacc836bc17fd5231",
+        "tmpfs": true,
+        "stopped": true
+      }
+    ],
+    "draftImport": {
+      "copiedApiJarSha256": "2cbb814c24e1d3a8068debf52aa5af8096d26c2066134f48ea73de3bd09cf9da",
+      "draftTranslations": 28,
+      "modulePreviews": 12,
+      "publicUnpublishedVersion404": 12,
+      "readyFiles": 18,
+      "replayUnchanged": true,
+      "publicationAtThisStage": false,
+      "commercialActivation": false
+    }
+  },
+  "flags": {
+    "before": {
+      "stripeEnabled": false,
+      "paymentWorkerEnabled": false,
+      "refundWorkerEnabled": false,
+      "notificationWorkerEnabled": false
+    },
+    "after": {
+      "stripeEnabled": false,
+      "paymentWorkerEnabled": false,
+      "refundWorkerEnabled": false,
+      "notificationWorkerEnabled": false
+    }
+  },
+  "preservation": {
+    "historicalProofsPreserved": true,
+    "historicalProofFiles": 124,
+    "userNextFilePreserved": true,
+    "userNextFileSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc"
+  },
+  "boundaries": {
+    "isolatedEnvironment": true,
+    "providerCredentialsLoaded": false,
+    "sharedDatabaseTouched": false,
+    "stagingMutationRequested": false,
+    "orderCreated": false,
+    "checkoutRequested": false,
+    "deploymentExecuted": false,
+    "dockerStartedByAgent": false
+  },
+  "artifacts": [
+    {
+      "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/aud06-navigation-checks.json",
+      "sha256": "cd8abc7fa34cb49d3ddbb4e5884b769d5f9f5e7f75f9bbdcedf202398d424328"
+    },
+    {
+      "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/import-applied.json",
+      "sha256": "57c3bd5b17900b982e6a55a12d3f1815412556e90a2288dfb48134659f5584c3"
+    },
+    {
+      "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/import-draft-checks.json",
+      "sha256": "73cc6c4f6767549ba747b5e64327f04561544989b28ab0e098505e469488b68a"
+    },
+    {
+      "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/import-plan.json",
+      "sha256": "a1a5e7b30296b5b17a7b929bbfbcc08ecedcbf6905e3844ee9bedc425530f618"
+    },
+    {
+      "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/import-replay.json",
+      "sha256": "b9992fb8eaa13a11317678937f6fa0e43f12dc8e65d9bf4c604227c4829ed048"
+    },
+    {
+      "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/results.json",
+      "sha256": "c9def1c653c6ce0c7c1099cfd1abf550817aa1be70c7619762f544aaa188666e"
+    },
+    {
+      "file": "docs/evidence/AUD06-browser/2026-11-26T20-49-07-387Z-44a46e90-6089-429d-9457-3e8a7c2028ef/session.json",
+      "sha256": "f2d63a0a5d6e6f8dc616fb22465d9b711e04d2ba0ebf6fec1d6c86549bbbb76b"
+    }
+  ],
+  "limits": [
+    "The isolated catalogue scenarios begin at page=0; nonzero-page reset is covered by prior client tests and the real read-only navigation run.",
+    "Missing or failed offer presentation reads remain renderer tests with replaced upstream transport; the isolated offer case verifies a bilingual presentation with only FR included.",
+    "Visual review covers the thirteen captured pages; the mobile menu was not opened.",
+    "This validates local isolated integration only; no deployment or commercial activation is claimed. Historical P12/P15 and P19 limits remain open."
+  ]
+}

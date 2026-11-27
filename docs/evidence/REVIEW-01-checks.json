@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "step": "REVIEW-01",
+  "assembledAt": "2026-11-26T21:45:35.751Z",
+  "result": "preparation-validated-awaiting-human-review-and-decisions",
+  "sourceChecks": {
+    "file": "docs/evidence/REVIEW-01-content-checks.json",
+    "sha256": "05128bad2d9f08ccacac9eddb03d7099f20ad1088ee784af74dd3c1b5250f716",
+    "passed": 223,
+    "sourceFiles": 30
+  },
+  "reader": {
+    "html": ".runtime/course-editorial-review/review.html",
+    "htmlSha256": "c98f021c4fab9cf109d897ce1a87ee36ae0faadb92cfdf11df65b489ce07eec5",
+    "manifest": {
+      "file": "docs/evidence/REVIEW-01-reader-manifest.json",
+      "sha256": "b965b8e2e227f24acf263a076e181832b36e9266ee28f3682110e213e3b749e8"
+    },
+    "lessons": 12,
+    "resources": 18,
+    "quizzes": 36,
+    "idempotentGenerationObserved": true
+  },
+  "browser": {
+    "file": "docs/evidence/REVIEW-01-browser/2026-11-26T21-42-20-986Z-155d37c5-74df-47b9-a7f3-f99dbf73bc70/checks.json",
+    "sha256": "e7d0969d9f77bb41ea374582fe3126c2e399775fda349becd8093347373ff330",
+    "checks": 18,
+    "captures": [
+      {
+        "file": "docs/evidence/REVIEW-01-browser/2026-11-26T21-42-20-986Z-155d37c5-74df-47b9-a7f3-f99dbf73bc70/1440-contents.png",
+        "sha256": "8af9ce6994d9247595a4d843fd4b7b8b32d4a2b85bca1746351cbaa64357e143",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/REVIEW-01-browser/2026-11-26T21-42-20-986Z-155d37c5-74df-47b9-a7f3-f99dbf73bc70/1440-lesson-fr-m01.png",
+        "sha256": "4c04896d08e8e821662ea024ebb1abe1b5942b04a6e682d767de5d59c731ac6a",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/REVIEW-01-browser/2026-11-26T21-42-20-986Z-155d37c5-74df-47b9-a7f3-f99dbf73bc70/1440-resource-fr-commented-solution-br02.png",
+        "sha256": "fa728c249759df26986a53afde7ec25a939783861c1d51537d02365f97f8e55f",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/REVIEW-01-browser/2026-11-26T21-42-20-986Z-155d37c5-74df-47b9-a7f3-f99dbf73bc70/390-contents.png",
+        "sha256": "7122245ca1a68e9f104da69f4b3d9c615df8b9f95f2ac22d01db80defcb31d18",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/REVIEW-01-browser/2026-11-26T21-42-20-986Z-155d37c5-74df-47b9-a7f3-f99dbf73bc70/390-lesson-en-m06.png",
+        "sha256": "cb4e675d295f9410d7429ecdffecb2b9e2d61d95ff028a26e25cdcf1dc2ddca2",
+        "reviewedBy": "primary-agent"
+      },
+      {
+        "file": "docs/evidence/REVIEW-01-browser/2026-11-26T21-42-20-986Z-155d37c5-74df-47b9-a7f3-f99dbf73bc70/390-resource-en-br02.png",
+        "sha256": "8f1d58cab92ee4f848d657448589392665b621612d3943f4871f747f8735b91e",
+        "reviewedBy": "primary-agent"
+      }
+    ],
+    "viewports": [
+      {
+        "width": 1440,
+        "height": 1000
+      },
+      {
+        "width": 390,
+        "height": 844
+      }
+    ],
+    "networkRequests": 0,
+    "pageErrors": 0,
+    "closed": true
+  },
+  "sourceClarification": {
+    "file": "content/course-client-proposal/v1/en/m06.json",
+    "beforeObservedSha256": "c299c5eb0472f75eb2405f2a7461ef6f15b43636f30c715db18d249e56ecebaf",
+    "afterSha256": "9cba35f9c701b32f2ea2c5ab8c95c2ec204f70e733f2ee5ea6cb7d83804351b6",
+    "onlyExerciseInstructionsChanged": true,
+    "quizAndScoringUnchanged": true,
+    "imported": false,
+    "published": false
+  },
+  "humanReview": {
+    "result": "PENDING",
+    "approvalRecorded": false,
+    "learnerTrial": "NOT_PERFORMED"
+  },
+  "decisions": {
+    "status": "awaiting-user",
+    "requested": [
+      "delivery-format",
+      "launch-locales",
+      "public-author-and-contact"
+    ],
+    "offerDraftPreserved": true
+  },
+  "preservation": {
+    "historicalProofFiles": 127,
+    "historicalProofsPreserved": true,
+    "aud07ReferencedEvidencePreserved": true,
+    "userNextFilePreserved": true,
+    "userNextFileSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc"
+  },
+  "checks": {
+    "relativeLinksVerified": 39
+  },
+  "boundaries": {
+    "applicationServerStarted": false,
+    "sharedDatabaseTouched": false,
+    "providerCredentialsLoaded": false,
+    "accountCreated": false,
+    "importExecuted": false,
+    "published": false,
+    "externalMessageSent": false,
+    "commerceActivated": false,
+    "deploymentExecuted": false,
+    "livePaymentExecuted": false
+  },
+  "limits": [
+    "Agent pre-review and source checks are not human editorial approval or a human learner trial.",
+    "Reader rendering is limited to the Markdown subset used in these sources; it is not the live learning application.",
+    "The changed M06 EN text is local only; future CMS import must use revision and translation checks.",
+    "Format, sales languages, author/contact and actual commercial policies remain undecided until explicitly supplied."
+  ]
+}

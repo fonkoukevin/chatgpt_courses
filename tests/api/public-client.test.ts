@@ -6,7 +6,7 @@ import { decodePublicResponse } from "../../apps/web/src/lib/api/public-response
 import { isCataloguePage, isPublicDocument, isResourceDetail } from "../../apps/web/src/lib/api/public-validation";
 import type { PublicDocument, ResourceCard, ResourceDetail } from "../../apps/web/src/lib/api/generated/types.gen";
 import { courseActivityHref, resourceHref } from "../../apps/web/src/lib/public/routes";
-import { parseCatalogueQuery, safeCatalogueReturnTo } from "../../apps/web/src/lib/public/query";
+import { parseCatalogueQuery, safeCatalogueReturnTo, translateCatalogueReturnTo } from "../../apps/web/src/lib/public/query";
 
 const originalFetch = globalThis.fetch;
 afterEach(() => { globalThis.fetch = originalFetch; });
@@ -66,4 +66,30 @@ test("le retour de catalogue conserve les filtres valides et refuse redirection 
   }
   assert.equal(parseCatalogueQuery("fr", { locale: "en", type: "ACTIVITY", level: "BEGINNER", access: "FREE" })?.locale, "en");
   assert.equal(parseCatalogueQuery("fr", { type: ["GUIDE", "COURSE"] }), null);
+});
+
+test("un changement de langue reconstruit le retour au catalogue sans perdre ses filtres compatibles", () => {
+  for (const [source, target, path] of [["fr", "en", "/en/catalog"], ["en", "fr", "/fr/catalogue"]] as const) {
+    const from = source === "fr" ? "/fr/catalogue" : "/en/catalog";
+    const original = `${from}?${new URLSearchParams({ locale: source, q: " brief & résultat ", type: "ACTIVITY", goal: "understand-brief", level: "BEGINNER", access: "FREE", page: "2", pageSize: "10", sort: "RECENT" })}`;
+    const url = new URL(translateCatalogueReturnTo(original, target), "https://courses.invalid");
+    assert.equal(url.pathname, path);
+    assert.deepEqual(Object.fromEntries(url.searchParams), { locale: target, q: "brief & résultat", type: "ACTIVITY", goal: "understand-brief", level: "BEGINNER", access: "FREE", page: "0", pageSize: "10", sort: "RECENT" });
+    assert.equal(new URL(translateCatalogueReturnTo(original, source), "https://courses.invalid").searchParams.get("page"), "2");
+    const alreadyTargeted = original.replace(`locale=${source}`, `locale=${target}`);
+    assert.equal(new URL(translateCatalogueReturnTo(alreadyTargeted, target), "https://courses.invalid").searchParams.get("page"), "2");
+  }
+});
+
+test("le retour traduit refuse les destinations arbitraires, chemins encodés et paramètres invalides", () => {
+  for (const target of ["fr", "en"] as const) {
+    const fallback = target === "fr" ? "/fr/catalogue" : "/en/catalog";
+    for (const value of [undefined, null, [], "https://foreign.invalid/fr/catalogue", "//foreign.invalid/fr/catalogue", "http://[", "/fr/catalogue/../catalogue?q=brief", "/fr/%63atalogue?q=brief", "/fr/%2563atalogue?q=brief", "/%2f%2fforeign.invalid/fr/catalogue", "/fr/catalogue%3freturnTo=https://foreign.invalid", "/fr/catalogue?q=bad%2", "/fr/catalogue?q=%0a", "/fr/catalogue?q=%7f", "/fr/catalogue?sort=INVALID", "/fr/catalogue?page=-1", "/fr/catalogue?locale=de", "/fr/catalogue?type=GUIDE&type=COURSE", "/fr/catalogue?unknown=1", "/fr/catalogue?returnTo=%252f%252fforeign.invalid", "/fr/catalogue#fragment", "/fr/catalogue\\?q=brief"]) {
+      assert.equal(translateCatalogueReturnTo(value, target), fallback, String(value));
+    }
+    assert.equal(translateCatalogueReturnTo("/fr/catalogue", target), fallback);
+  }
+  const literal = new URL(translateCatalogueReturnTo("/fr/catalogue?q=100%25+%252f%252fforeign.invalid&locale=fr", "en"), "https://courses.invalid");
+  assert.equal(literal.searchParams.get("q"), "100% %2f%2fforeign.invalid", "Search text is data and is not decoded again into a destination.");
+  assert.equal(literal.pathname, "/en/catalog");
 });

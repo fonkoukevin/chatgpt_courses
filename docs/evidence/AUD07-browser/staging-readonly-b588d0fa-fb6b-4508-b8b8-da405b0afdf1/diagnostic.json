@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "audit": "AUD-07",
+  "selectedForValidation": false,
+  "reason": "LOCAL_PLAYWRIGHT_BROWSER_PATH_INITIALIZED_BEFORE_OVERRIDE",
+  "facts": {
+    "catalogueReadStatuses": [200, 200],
+    "browserContextsStarted": 0,
+    "missingExecutableConfirmedByLocalLaunchProbe": true,
+    "existingPinnedBrowserUsedAfterInitializationFix": true,
+    "browserInstalled": false,
+    "remoteMutationRequested": false,
+    "networkFailureObserved": false,
+    "automaticRetries": 0
+  }
+}

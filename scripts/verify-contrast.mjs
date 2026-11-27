@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { root } from './lib/runtime.mjs';
 
 const phase = process.argv[2] ?? 'P02';
-if (!/^(?:P\d{2}|AUD-0[345])$/.test(phase) || process.argv.length > 3) throw new Error('Phase attendue : P00 à P99 ou AUD-03/AUD-04/AUD-05.');
+if (!/^(?:P\d{2}|AUD-0[3457])$/.test(phase) || process.argv.length > 3) throw new Error('Phase attendue : P00 à P99 ou AUD-03/AUD-04/AUD-05/AUD-07.');
 const evidenceFile = join(root, `docs/evidence/${phase}-contrast.json`);
 
 const source = readFileSync(join(root, 'references/design-tokens.css'), 'utf8');

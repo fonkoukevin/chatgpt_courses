@@ -1,0 +1,319 @@
+{
+  "phase": "ACCESS-01",
+  "verifiedAt": "2026-11-26T23:35:02.205Z",
+  "result": "diagnostic-validated-regression-failed",
+  "scope": "Local test diagnostic correction; historical access incidents and new S3 refusal remain open",
+  "baseline": {
+    "source": ".runtime/access01/baseline-2026-11-26T23-13-35-864Z-312a40d6-9d3b-4b96-8fc1-bf10a4f9bbea/reconciled-summary.json",
+    "startedAt": "2026-11-26T23:13:35.868Z",
+    "completedAt": "2026-11-26T23:15:07.840Z",
+    "selector": "EntitlementAccessIntegrationTest#diagnostic*",
+    "exitCode": 1,
+    "totals": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "suites": [
+      {
+        "name": "com.chatgptcourses.EntitlementAccessIntegrationTest",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 28.861,
+        "cases": [
+          {
+            "name": "diagnosticKeepsPostgresPredicatesWhenProblemJsonAndSessionTransportFail",
+            "failed": true,
+            "skipped": false
+          }
+        ],
+        "xmlSha256": "9cb446a7d73683bd7e5d39c83eb5b45fc0bcd9022cb77ef71e089570a0c794fa"
+      }
+    ],
+    "privateLogSha256": "73d85ac79dacac53b7d63cbce8fb95c8f6c6466104488d87596b3a9c4e70c37e"
+  },
+  "targeted": {
+    "source": ".runtime/access01/final-2026-11-26T23-15-35-470Z-a9fc78c7-b57f-45fe-aa1f-9c113451dbfb/reconciled-summary.json",
+    "startedAt": "2026-11-26T23:15:35.476Z",
+    "completedAt": "2026-11-26T23:17:27.860Z",
+    "selector": "EntitlementAccessIntegrationTest,RefundHttpIntegrationTest",
+    "exitCode": 1,
+    "totals": {
+      "tests": 20,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "suites": [
+      {
+        "name": "com.chatgptcourses.EntitlementAccessIntegrationTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 35.027,
+        "cases": [
+          {
+            "name": "actualPrivateHttpRequiresItsOwnerAndThePublicRouteNeverLeaksPaidBodies",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "freshlyCommittedPostgresTimestampIsReadableInParallelMemberAndLearningTransactions",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "diagnosticKeepsPostgresPredicatesWhenProblemJsonAndSessionTransportFail",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "independentOriginsLanguagesAndPeriodsNeverBecomeOneUserCourseBoolean",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "protectedLearningAndProjectsWorkAfterARealGrantAndPersonalWorkSurvivesRevocation",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "pinnedCourseAndUpdateWindowKeepExactDescendantsAndWithdrawnPathsStayClosed",
+            "failed": false,
+            "skipped": false
+          }
+        ],
+        "xmlSha256": "ae239060b8d74fbb9ccbf7f1c69a8a23b6493c19b77ee3328b9dbb712d20c21f"
+      },
+      {
+        "name": "com.chatgptcourses.RefundHttpIntegrationTest",
+        "tests": 14,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 54.838,
+        "cases": [
+          {
+            "name": "ambiguousProviderTimeoutKeepsReservationAndRecoversByGetWithoutAnotherFinancialPost",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "contradictoryFactsAfterConfirmationKeepConsumedMoneyAndOriginsRevoked",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "partialConfirmationAndDuplicateSignedRefundEventsApplyOnlyTheSelectedOriginOnce",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "unpaidOrderHasNoRefundableMoneyAndCannotCreateARequest",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "concurrentExecuteKeysCannotSubmitTheSameCommittedRefundTwice",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "invalidAllocationsStalePreviewAndConcurrentDecisionsCannotOverReserveTheOrder",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "revokedOperatorPermissionWhileWaitingForOrderPreventsAnyProviderCall",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "expiredSubmissionMaintenanceLocksOwnerThenOrderBeforeTouchingTheOperation",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "requestOwnershipCsrfContextStrictDtosAndDurableIdempotencyAreRealHttpGuards",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "rejectionAndCancelBeforeSubmissionAreAuditedWithoutCallingStripe",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "oldSignedCheckoutConfirmationAfterRefundCannotRestoreItsRevokedOrigin",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "dashboardPartialWaitsForExplicitAccessDecisionAndCumulativeFullRevokesOnlyThatOrder",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "fullPackRefundKeepsEarlierIndividualOriginAndPersonalWorkButRefusesNewPrivateS3Links",
+            "failed": true,
+            "skipped": false
+          },
+          {
+            "name": "pendingThenFailedPartialKeepRetainsAccessAndReleasesOnlyItsReservation",
+            "failed": false,
+            "skipped": false
+          }
+        ],
+        "xmlSha256": "2c1180d3c2d7b515b6a0029a3c97e29ab68eff0183eeca1e2ee03cad85635123"
+      }
+    ],
+    "privateLogSha256": "61d385d2a516bf52992a51a34e3d4a6d6d3984937e62da232d2e117f327854fb"
+  },
+  "finalDiagnostic": {
+    "source": ".runtime/access01/verify-diagnostic-2026-11-26T23-30-08-394Z-f85417c0-464d-4e20-becb-119bc78c5a86/reconciled-summary.json",
+    "startedAt": "2026-11-26T23:30:08.416Z",
+    "completedAt": "2026-11-26T23:31:06.685Z",
+    "selector": "EntitlementAccessIntegrationTest#diagnostic*",
+    "exitCode": 0,
+    "totals": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "suites": [
+      {
+        "name": "com.chatgptcourses.EntitlementAccessIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 28.954,
+        "cases": [
+          {
+            "name": "diagnosticKeepsPostgresPredicatesWhenProblemJsonAndSessionTransportFail",
+            "failed": false,
+            "skipped": false
+          }
+        ],
+        "xmlSha256": "3161650bf8989ff2aba513b217ebfcbcc4b1dc9e61abe24bb898904e00d72e2f"
+      }
+    ],
+    "privateLogSha256": "eb8e05161de5af16604e3a74931941f58453163f975bdffca2b6bde7d8a550fe"
+  },
+  "s3Diagnostic": {
+    "source": ".runtime/access01/verify-s3-diagnostic-2026-11-26T23-34-09-668Z-4acb2cce-baff-45c5-9125-e7602245f8db/reconciled-summary.json",
+    "startedAt": "2026-11-26T23:34:09.673Z",
+    "completedAt": "2026-11-26T23:34:37.419Z",
+    "selector": "PresignedDownloadDiagnosticsTest",
+    "exitCode": 0,
+    "totals": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "suites": [
+      {
+        "name": "com.chatgptcourses.PresignedDownloadDiagnosticsTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 0.666,
+        "cases": [
+          {
+            "name": "expectedSuccessIsNotCapturedAndSinkFailureCannotReplaceStatusAssertion",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "malformedOrUntrustedInputsDoNotPreventTimingCaptureOrEscapeAsDiagnostics",
+            "failed": false,
+            "skipped": false
+          },
+          {
+            "name": "unexpectedStatusKeepsOnlyApprovedMetadataAndKnownS3Code",
+            "failed": false,
+            "skipped": false
+          }
+        ],
+        "xmlSha256": "6f682c2b8d646eaffca66f4cfaf6902811a664be6461ec077e1391eb0ab60a54"
+      }
+    ],
+    "privateLogSha256": "da68630ec8e71edb8dee53ae49286ba2f9f46005d60432261d54a303869e00c3"
+  },
+  "baselineObserved": {
+    "problemBody": "intentional HTML fixture",
+    "databaseFieldsMissing": true,
+    "diagnosticAvailable": false,
+    "actualAccessIncidentReproduced": false
+  },
+  "transportFixtures": [
+    "HTML",
+    "malformed JSON",
+    "valid ACCESS_DENIED JSON"
+  ],
+  "sessionTransport": "intentional IOException",
+  "postgresFixtures": {
+    "realPostgres": true,
+    "manualTestOrigin": true,
+    "courseModuleActivityPublished": true,
+    "privateDataAbsenceCheckedWithoutLoggingValues": true
+  },
+  "preservation": {
+    "checkedPaths": 1089,
+    "historicalEvidenceJson": 838,
+    "productionFiles": 237,
+    "courseSourceJson": 13,
+    "changedPaths": [],
+    "userNextFileSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc"
+  },
+  "cleanup": {
+    "newContainersLeft": 0,
+    "preexistingContainersPreserved": true,
+    "preexistingContainerCount": 3,
+    "newUnexpectedRefusalFiles": 0,
+    "intentionalCapturesPersisted": false
+  },
+  "observedS3Failure": {
+    "test": "fullPackRefundKeepsEarlierIndividualOriginAndPersonalWorkButRefusesNewPrivateS3Links",
+    "phase": "before-refund",
+    "springLinkIssuanceStatus": 200,
+    "signedS3GetStatus": 403,
+    "expectedS3Status": 200,
+    "s3ErrorCode": null,
+    "declaredFixtureTtlSeconds": 2,
+    "causeEstablished": false,
+    "rerun": false,
+    "originalTemporaryStorageAlreadyCleaned": true,
+    "newCaptureObservedOnRealFailure": false
+  },
+  "harnessObservation": {
+    "initialBaselineReportDirectoryOptionIgnored": true,
+    "baselineXmlRecoveredFromCurrentTargetReport": true,
+    "initialSummaryRetained": true,
+    "initialSelfClosingCaseParserIncorrect": true,
+    "xmlReconciledWithoutRerun": true,
+    "caseCountsMatchSuites": true,
+    "initialContainerCleanupObservedBeforeRyukExit": true,
+    "subsequentCleanupConfirmed": true
+  },
+  "limits": {
+    "historicalP12Open": 2,
+    "historicalP15Open": 2,
+    "historicalCauseEstablished": false,
+    "transientDecisionTimeCaptured": false,
+    "productionCodeChanged": false,
+    "newBrowserReview": false,
+    "externalPayment": false,
+    "import": false,
+    "publication": false,
+    "deployment": false,
+    "commercialDecisionsRecorded": false
+  }
+}

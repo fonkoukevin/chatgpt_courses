@@ -1,0 +1,814 @@
+{
+  "phase": "FINAL-01",
+  "capturedAt": "2026-11-27T17:50:05.857Z",
+  "scope": "Controlled local fixtures only; historical causes remain unknown",
+  "entitlement": [
+    {
+      "captureContext": "ISOLATED_INSTRUMENTED_ENTITLEMENT_OBSERVATION",
+      "readRole": "FRESH_COMMITTED_FR",
+      "observationOrdinal": 1,
+      "locale": "fr",
+      "covered": true,
+      "expectedCovered": true,
+      "classification": "COVERED",
+      "context": {
+        "fixtureRound": 0
+      },
+      "isolation": "repeatable read",
+      "transactionReadOnly": "off",
+      "readerSnapshot": "830:830:",
+      "clockSamplesUsedByDecision": [
+        "2026-11-27T17:45:28.174950Z",
+        "2026-11-27T17:45:28.175404Z"
+      ],
+      "clockMovedBackwardsWithinDecision": false,
+      "samplePrecedesOriginStart": false,
+      "ownerActive": true,
+      "visibleOriginCount": 1,
+      "origins": [
+        {
+          "expiresAt": "2026-11-28T17:45:28.122127Z",
+          "localeIncluded": true,
+          "startsAt": "2026-11-27T17:45:28.122127Z",
+          "notRevoked": true
+        }
+      ],
+      "pinnedNodes": [
+        {
+          "kind": "COURSE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "MODULE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "ACTIVITY",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        }
+      ],
+      "instrumentation": {
+        "productionReadOnlyModeReproduced": false,
+        "productionQueryTextUnchanged": true,
+        "dedicatedSearchPath": true,
+        "sameRepeatableReadSnapshotForFacts": true,
+        "paymentFlow": false,
+        "readWriteRequiredForProbeLogs": true,
+        "parallelUnsafeProbeWrites": true,
+        "wrapperReturnsActualPostgresClock": true,
+        "historicalCauseEstablished": false
+      }
+    },
+    {
+      "captureContext": "ISOLATED_INSTRUMENTED_ENTITLEMENT_OBSERVATION",
+      "readRole": "FRESH_COMMITTED_EN",
+      "observationOrdinal": 2,
+      "locale": "en",
+      "covered": true,
+      "expectedCovered": true,
+      "classification": "COVERED",
+      "context": {
+        "fixtureRound": 0
+      },
+      "isolation": "repeatable read",
+      "transactionReadOnly": "off",
+      "readerSnapshot": "831:831:",
+      "clockSamplesUsedByDecision": [
+        "2026-11-27T17:45:28.262033Z",
+        "2026-11-27T17:45:28.262378Z"
+      ],
+      "clockMovedBackwardsWithinDecision": false,
+      "samplePrecedesOriginStart": false,
+      "ownerActive": true,
+      "visibleOriginCount": 1,
+      "origins": [
+        {
+          "expiresAt": "2026-11-28T17:45:28.122127Z",
+          "localeIncluded": true,
+          "startsAt": "2026-11-27T17:45:28.122127Z",
+          "notRevoked": true
+        }
+      ],
+      "pinnedNodes": [
+        {
+          "kind": "COURSE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "MODULE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "ACTIVITY",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        }
+      ],
+      "instrumentation": {
+        "productionReadOnlyModeReproduced": false,
+        "productionQueryTextUnchanged": true,
+        "dedicatedSearchPath": true,
+        "sameRepeatableReadSnapshotForFacts": true,
+        "paymentFlow": false,
+        "readWriteRequiredForProbeLogs": true,
+        "parallelUnsafeProbeWrites": true,
+        "wrapperReturnsActualPostgresClock": true,
+        "historicalCauseEstablished": false
+      }
+    },
+    {
+      "captureContext": "ISOLATED_INSTRUMENTED_ENTITLEMENT_OBSERVATION",
+      "readRole": "FRESH_COMMITTED_FR",
+      "observationOrdinal": 3,
+      "locale": "fr",
+      "covered": true,
+      "expectedCovered": true,
+      "classification": "COVERED",
+      "context": {
+        "fixtureRound": 1
+      },
+      "isolation": "repeatable read",
+      "transactionReadOnly": "off",
+      "readerSnapshot": "862:862:",
+      "clockSamplesUsedByDecision": [
+        "2026-11-27T17:45:28.439859Z",
+        "2026-11-27T17:45:28.440238Z"
+      ],
+      "clockMovedBackwardsWithinDecision": false,
+      "samplePrecedesOriginStart": false,
+      "ownerActive": true,
+      "visibleOriginCount": 1,
+      "origins": [
+        {
+          "expiresAt": "2026-11-28T17:45:28.397856Z",
+          "localeIncluded": true,
+          "startsAt": "2026-11-27T17:45:28.397856Z",
+          "notRevoked": true
+        }
+      ],
+      "pinnedNodes": [
+        {
+          "kind": "COURSE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "MODULE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "ACTIVITY",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        }
+      ],
+      "instrumentation": {
+        "productionReadOnlyModeReproduced": false,
+        "productionQueryTextUnchanged": true,
+        "dedicatedSearchPath": true,
+        "sameRepeatableReadSnapshotForFacts": true,
+        "paymentFlow": false,
+        "readWriteRequiredForProbeLogs": true,
+        "parallelUnsafeProbeWrites": true,
+        "wrapperReturnsActualPostgresClock": true,
+        "historicalCauseEstablished": false
+      }
+    },
+    {
+      "captureContext": "ISOLATED_INSTRUMENTED_ENTITLEMENT_OBSERVATION",
+      "readRole": "FRESH_COMMITTED_EN",
+      "observationOrdinal": 4,
+      "locale": "en",
+      "covered": true,
+      "expectedCovered": true,
+      "classification": "COVERED",
+      "context": {
+        "fixtureRound": 1
+      },
+      "isolation": "repeatable read",
+      "transactionReadOnly": "off",
+      "readerSnapshot": "863:863:",
+      "clockSamplesUsedByDecision": [
+        "2026-11-27T17:45:28.495274Z",
+        "2026-11-27T17:45:28.495610Z"
+      ],
+      "clockMovedBackwardsWithinDecision": false,
+      "samplePrecedesOriginStart": false,
+      "ownerActive": true,
+      "visibleOriginCount": 1,
+      "origins": [
+        {
+          "expiresAt": "2026-11-28T17:45:28.397856Z",
+          "localeIncluded": true,
+          "startsAt": "2026-11-27T17:45:28.397856Z",
+          "notRevoked": true
+        }
+      ],
+      "pinnedNodes": [
+        {
+          "kind": "COURSE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "MODULE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "ACTIVITY",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        }
+      ],
+      "instrumentation": {
+        "productionReadOnlyModeReproduced": false,
+        "productionQueryTextUnchanged": true,
+        "dedicatedSearchPath": true,
+        "sameRepeatableReadSnapshotForFacts": true,
+        "paymentFlow": false,
+        "readWriteRequiredForProbeLogs": true,
+        "parallelUnsafeProbeWrites": true,
+        "wrapperReturnsActualPostgresClock": true,
+        "historicalCauseEstablished": false
+      }
+    },
+    {
+      "captureContext": "ISOLATED_INSTRUMENTED_ENTITLEMENT_OBSERVATION",
+      "readRole": "FRESH_COMMITTED_FR",
+      "observationOrdinal": 5,
+      "locale": "fr",
+      "covered": true,
+      "expectedCovered": true,
+      "classification": "COVERED",
+      "context": {
+        "fixtureRound": 2
+      },
+      "isolation": "repeatable read",
+      "transactionReadOnly": "off",
+      "readerSnapshot": "894:894:",
+      "clockSamplesUsedByDecision": [
+        "2026-11-27T17:45:28.669272Z",
+        "2026-11-27T17:45:28.669597Z"
+      ],
+      "clockMovedBackwardsWithinDecision": false,
+      "samplePrecedesOriginStart": false,
+      "ownerActive": true,
+      "visibleOriginCount": 1,
+      "origins": [
+        {
+          "expiresAt": "2026-11-28T17:45:28.625266Z",
+          "localeIncluded": true,
+          "startsAt": "2026-11-27T17:45:28.625266Z",
+          "notRevoked": true
+        }
+      ],
+      "pinnedNodes": [
+        {
+          "kind": "COURSE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "MODULE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "ACTIVITY",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        }
+      ],
+      "instrumentation": {
+        "productionReadOnlyModeReproduced": false,
+        "productionQueryTextUnchanged": true,
+        "dedicatedSearchPath": true,
+        "sameRepeatableReadSnapshotForFacts": true,
+        "paymentFlow": false,
+        "readWriteRequiredForProbeLogs": true,
+        "parallelUnsafeProbeWrites": true,
+        "wrapperReturnsActualPostgresClock": true,
+        "historicalCauseEstablished": false
+      }
+    },
+    {
+      "captureContext": "ISOLATED_INSTRUMENTED_ENTITLEMENT_OBSERVATION",
+      "readRole": "FRESH_COMMITTED_EN",
+      "observationOrdinal": 6,
+      "locale": "en",
+      "covered": true,
+      "expectedCovered": true,
+      "classification": "COVERED",
+      "context": {
+        "fixtureRound": 2
+      },
+      "isolation": "repeatable read",
+      "transactionReadOnly": "off",
+      "readerSnapshot": "895:895:",
+      "clockSamplesUsedByDecision": [
+        "2026-11-27T17:45:28.731085Z",
+        "2026-11-27T17:45:28.731420Z"
+      ],
+      "clockMovedBackwardsWithinDecision": false,
+      "samplePrecedesOriginStart": false,
+      "ownerActive": true,
+      "visibleOriginCount": 1,
+      "origins": [
+        {
+          "expiresAt": "2026-11-28T17:45:28.625266Z",
+          "localeIncluded": true,
+          "startsAt": "2026-11-27T17:45:28.625266Z",
+          "notRevoked": true
+        }
+      ],
+      "pinnedNodes": [
+        {
+          "kind": "COURSE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "MODULE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "ACTIVITY",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        }
+      ],
+      "instrumentation": {
+        "productionReadOnlyModeReproduced": false,
+        "productionQueryTextUnchanged": true,
+        "dedicatedSearchPath": true,
+        "sameRepeatableReadSnapshotForFacts": true,
+        "paymentFlow": false,
+        "readWriteRequiredForProbeLogs": true,
+        "parallelUnsafeProbeWrites": true,
+        "wrapperReturnsActualPostgresClock": true,
+        "historicalCauseEstablished": false
+      }
+    },
+    {
+      "captureContext": "ISOLATED_INSTRUMENTED_ENTITLEMENT_OBSERVATION",
+      "readRole": "INTENTIONAL_UNCOMMITTED_ORIGIN",
+      "observationOrdinal": 7,
+      "locale": "fr",
+      "covered": false,
+      "expectedCovered": false,
+      "classification": "ORIGIN_NOT_VISIBLE_IN_READER_SNAPSHOT",
+      "context": {
+        "writerCommitCompleted": false
+      },
+      "isolation": "repeatable read",
+      "transactionReadOnly": "off",
+      "readerSnapshot": "925:925:",
+      "clockSamplesUsedByDecision": [],
+      "clockMovedBackwardsWithinDecision": false,
+      "samplePrecedesOriginStart": false,
+      "ownerActive": true,
+      "visibleOriginCount": 0,
+      "origins": [],
+      "pinnedNodes": [
+        {
+          "kind": "COURSE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "MODULE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "ACTIVITY",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        }
+      ],
+      "instrumentation": {
+        "productionReadOnlyModeReproduced": false,
+        "productionQueryTextUnchanged": true,
+        "dedicatedSearchPath": true,
+        "sameRepeatableReadSnapshotForFacts": true,
+        "paymentFlow": false,
+        "readWriteRequiredForProbeLogs": true,
+        "parallelUnsafeProbeWrites": true,
+        "wrapperReturnsActualPostgresClock": true,
+        "historicalCauseEstablished": false
+      }
+    },
+    {
+      "captureContext": "ISOLATED_INSTRUMENTED_ENTITLEMENT_OBSERVATION",
+      "readRole": "INTENTIONAL_OLDER_REPEATABLE_READ_SNAPSHOT",
+      "observationOrdinal": 8,
+      "locale": "fr",
+      "covered": false,
+      "expectedCovered": false,
+      "classification": "ORIGIN_NOT_VISIBLE_IN_READER_SNAPSHOT",
+      "context": {
+        "originVisibleOutsideReaderSnapshot": true,
+        "writerCommitCompleted": true
+      },
+      "isolation": "repeatable read",
+      "transactionReadOnly": "off",
+      "readerSnapshot": "925:925:",
+      "clockSamplesUsedByDecision": [],
+      "clockMovedBackwardsWithinDecision": false,
+      "samplePrecedesOriginStart": false,
+      "ownerActive": true,
+      "visibleOriginCount": 0,
+      "origins": [],
+      "pinnedNodes": [
+        {
+          "kind": "COURSE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "MODULE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "ACTIVITY",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        }
+      ],
+      "instrumentation": {
+        "productionReadOnlyModeReproduced": false,
+        "productionQueryTextUnchanged": true,
+        "dedicatedSearchPath": true,
+        "sameRepeatableReadSnapshotForFacts": true,
+        "paymentFlow": false,
+        "readWriteRequiredForProbeLogs": true,
+        "parallelUnsafeProbeWrites": true,
+        "wrapperReturnsActualPostgresClock": true,
+        "historicalCauseEstablished": false
+      }
+    },
+    {
+      "captureContext": "ISOLATED_INSTRUMENTED_ENTITLEMENT_OBSERVATION",
+      "readRole": "DISTINCT_NEW_TRANSACTION_AFTER_COMMIT",
+      "observationOrdinal": 9,
+      "locale": "fr",
+      "covered": true,
+      "expectedCovered": true,
+      "classification": "COVERED",
+      "context": {
+        "controlledSnapshotComparison": true
+      },
+      "isolation": "repeatable read",
+      "transactionReadOnly": "off",
+      "readerSnapshot": "926:926:",
+      "clockSamplesUsedByDecision": [
+        "2026-11-27T17:45:29.026234Z",
+        "2026-11-27T17:45:29.026615Z"
+      ],
+      "clockMovedBackwardsWithinDecision": false,
+      "samplePrecedesOriginStart": false,
+      "ownerActive": true,
+      "visibleOriginCount": 1,
+      "origins": [
+        {
+          "expiresAt": "2026-11-28T17:45:28.896541Z",
+          "localeIncluded": true,
+          "startsAt": "2026-11-27T17:45:28.896541Z",
+          "notRevoked": true
+        }
+      ],
+      "pinnedNodes": [
+        {
+          "kind": "COURSE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "MODULE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "ACTIVITY",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        }
+      ],
+      "instrumentation": {
+        "productionReadOnlyModeReproduced": false,
+        "productionQueryTextUnchanged": true,
+        "dedicatedSearchPath": true,
+        "sameRepeatableReadSnapshotForFacts": true,
+        "paymentFlow": false,
+        "readWriteRequiredForProbeLogs": true,
+        "parallelUnsafeProbeWrites": true,
+        "wrapperReturnsActualPostgresClock": true,
+        "historicalCauseEstablished": false
+      }
+    },
+    {
+      "captureContext": "ISOLATED_INSTRUMENTED_ENTITLEMENT_OBSERVATION",
+      "readRole": "INTENTIONAL_REVOKED_ORIGIN",
+      "observationOrdinal": 10,
+      "locale": "fr",
+      "covered": false,
+      "expectedCovered": false,
+      "classification": "ORIGIN_REVOKED",
+      "context": {},
+      "isolation": "repeatable read",
+      "transactionReadOnly": "off",
+      "readerSnapshot": "958:958:",
+      "clockSamplesUsedByDecision": [],
+      "clockMovedBackwardsWithinDecision": false,
+      "samplePrecedesOriginStart": false,
+      "ownerActive": true,
+      "visibleOriginCount": 1,
+      "origins": [
+        {
+          "expiresAt": "2026-11-28T17:45:29.168891Z",
+          "localeIncluded": true,
+          "startsAt": "2026-11-27T17:45:29.168891Z",
+          "notRevoked": false
+        }
+      ],
+      "pinnedNodes": [
+        {
+          "kind": "COURSE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "MODULE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "ACTIVITY",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        }
+      ],
+      "instrumentation": {
+        "productionReadOnlyModeReproduced": false,
+        "productionQueryTextUnchanged": true,
+        "dedicatedSearchPath": true,
+        "sameRepeatableReadSnapshotForFacts": true,
+        "paymentFlow": false,
+        "readWriteRequiredForProbeLogs": true,
+        "parallelUnsafeProbeWrites": true,
+        "wrapperReturnsActualPostgresClock": true,
+        "historicalCauseEstablished": false
+      }
+    },
+    {
+      "captureContext": "ISOLATED_INSTRUMENTED_ENTITLEMENT_OBSERVATION",
+      "readRole": "INTENTIONAL_DISABLED_OWNER",
+      "observationOrdinal": 11,
+      "locale": "fr",
+      "covered": false,
+      "expectedCovered": false,
+      "classification": "OWNER_INACTIVE",
+      "context": {},
+      "isolation": "repeatable read",
+      "transactionReadOnly": "off",
+      "readerSnapshot": "989:989:",
+      "clockSamplesUsedByDecision": [
+        "2026-11-27T17:45:29.415243Z",
+        "2026-11-27T17:45:29.415679Z"
+      ],
+      "clockMovedBackwardsWithinDecision": false,
+      "samplePrecedesOriginStart": false,
+      "ownerActive": false,
+      "visibleOriginCount": 1,
+      "origins": [
+        {
+          "expiresAt": "2026-11-28T17:45:29.363670Z",
+          "localeIncluded": true,
+          "startsAt": "2026-11-27T17:45:29.363670Z",
+          "notRevoked": true
+        }
+      ],
+      "pinnedNodes": [
+        {
+          "kind": "COURSE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "MODULE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "ACTIVITY",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        }
+      ],
+      "instrumentation": {
+        "productionReadOnlyModeReproduced": false,
+        "productionQueryTextUnchanged": true,
+        "dedicatedSearchPath": true,
+        "sameRepeatableReadSnapshotForFacts": true,
+        "paymentFlow": false,
+        "readWriteRequiredForProbeLogs": true,
+        "parallelUnsafeProbeWrites": true,
+        "wrapperReturnsActualPostgresClock": true,
+        "historicalCauseEstablished": false
+      }
+    },
+    {
+      "captureContext": "ISOLATED_INSTRUMENTED_ENTITLEMENT_OBSERVATION",
+      "readRole": "INTENTIONAL_WITHDRAWN_PINNED_PATH",
+      "observationOrdinal": 12,
+      "locale": "fr",
+      "covered": false,
+      "expectedCovered": false,
+      "classification": "PUBLICATION_UNAVAILABLE",
+      "context": {},
+      "isolation": "repeatable read",
+      "transactionReadOnly": "off",
+      "readerSnapshot": "1021:1021:",
+      "clockSamplesUsedByDecision": [
+        "2026-11-27T17:45:29.610608Z",
+        "2026-11-27T17:45:29.611115Z"
+      ],
+      "clockMovedBackwardsWithinDecision": false,
+      "samplePrecedesOriginStart": false,
+      "ownerActive": true,
+      "visibleOriginCount": 1,
+      "origins": [
+        {
+          "expiresAt": "2026-11-28T17:45:29.558398Z",
+          "localeIncluded": true,
+          "startsAt": "2026-11-27T17:45:29.558398Z",
+          "notRevoked": true
+        }
+      ],
+      "pinnedNodes": [
+        {
+          "kind": "COURSE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "MODULE",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": true,
+          "published_document": true,
+          "source_fresh": true
+        },
+        {
+          "kind": "ACTIVITY",
+          "resource_available": true,
+          "locale_present": true,
+          "translation_available": false,
+          "published_document": true,
+          "source_fresh": true
+        }
+      ],
+      "instrumentation": {
+        "productionReadOnlyModeReproduced": false,
+        "productionQueryTextUnchanged": true,
+        "dedicatedSearchPath": true,
+        "sameRepeatableReadSnapshotForFacts": true,
+        "paymentFlow": false,
+        "readWriteRequiredForProbeLogs": true,
+        "parallelUnsafeProbeWrites": true,
+        "wrapperReturnsActualPostgresClock": true,
+        "historicalCauseEstablished": false
+      }
+    }
+  ],
+  "refundStorage": {
+    "linkReceivedAt": "2026-11-27T17:46:39.411241200Z",
+    "s3DateAvailable": true,
+    "httpStatus": 200,
+    "getFinishedAt": "2026-11-27T17:46:39.424182900Z",
+    "signatureTimesAvailable": true,
+    "s3ExpiryIndicated": false,
+    "signedExpiresAt": "2026-11-27T17:46:41Z",
+    "s3CodeAvailable": false,
+    "s3Date": "2026-11-27T17:46:39Z",
+    "signedAt": "2026-11-27T17:46:39Z",
+    "getStartedAt": "2026-11-27T17:46:39.413299400Z",
+    "getElapsedNanos": 11127100,
+    "linkToGetNanos": 1952900,
+    "captureContext": "ISOLATED_REFUND_STORAGE_OBSERVATION",
+    "readRole": "FIRST_GET_BEFORE_REFUND",
+    "apiExpiresAt": "2026-11-27T17:46:41Z",
+    "apiDeadlineMatchesSignature": true
+  }
+}

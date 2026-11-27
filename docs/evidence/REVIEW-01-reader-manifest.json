@@ -1,0 +1,319 @@
+{
+  "schemaVersion": 1,
+  "generator": "prepare-editorial-review-v1",
+  "courseLogicalKey": "course-client-proposal",
+  "sourceDirectory": "content/course-client-proposal/v1",
+  "sourceVersion": "v1",
+  "humanReview": "PENDING",
+  "learnerTrial": "NOT_PERFORMED",
+  "publicationRequested": false,
+  "importRequested": false,
+  "approvalRecorded": false,
+  "output": {
+    "path": "review.html",
+    "sha256": "c98f021c4fab9cf109d897ce1a87ee36ae0faadb92cfdf11df65b489ce07eec5",
+    "bytes": 187397
+  },
+  "sources": [
+    {
+      "kind": "LESSON",
+      "logicalKey": "m01",
+      "locale": "fr",
+      "anchor": "lesson-fr-m01",
+      "title": "Comprendre le brief avant de rédiger",
+      "path": "content/course-client-proposal/v1/fr/m01.json",
+      "sha256": "241cc1610e0deee89d711e94a7bfc1f1a6584761e8d07b3a9082267878b19beb",
+      "bytes": 8263
+    },
+    {
+      "kind": "LESSON",
+      "logicalKey": "m02",
+      "locale": "fr",
+      "anchor": "lesson-fr-m02",
+      "title": "Définir une prestation que le client peut valider",
+      "path": "content/course-client-proposal/v1/fr/m02.json",
+      "sha256": "26bcd7b031ff6f7509090a88990d1567ddf7c95a22be2ab43eb16b92cc5100ea",
+      "bytes": 7954
+    },
+    {
+      "kind": "LESSON",
+      "logicalKey": "m03",
+      "locale": "fr",
+      "anchor": "lesson-fr-m03",
+      "title": "Préparer une demande vérifiable pour ChatGPT",
+      "path": "content/course-client-proposal/v1/fr/m03.json",
+      "sha256": "c730b295df5c1b328e69f204565563d15ba71d45d03f929e9a03ecb76746b874",
+      "bytes": 8588
+    },
+    {
+      "kind": "LESSON",
+      "logicalKey": "m04",
+      "locale": "fr",
+      "anchor": "lesson-fr-m04",
+      "title": "Construire une proposition qui permet de décider",
+      "path": "content/course-client-proposal/v1/fr/m04.json",
+      "sha256": "60fce3bb0658d64895e9e5a48235b72fa5797cfe6413f048b15240027c9829f9",
+      "bytes": 7887
+    },
+    {
+      "kind": "LESSON",
+      "logicalKey": "m05",
+      "locale": "fr",
+      "anchor": "lesson-fr-m05",
+      "title": "Contrôler la proposition et justifier ses corrections",
+      "path": "content/course-client-proposal/v1/fr/m05.json",
+      "sha256": "f1718e51237f69d5cdbefe3f34eef5243dbf4adb3a5f6e909a07a1aec611d592",
+      "bytes": 8622
+    },
+    {
+      "kind": "LESSON",
+      "logicalKey": "m06",
+      "locale": "fr",
+      "anchor": "lesson-fr-m06",
+      "title": "Présenter la proposition et transférer sa méthode",
+      "path": "content/course-client-proposal/v1/fr/m06.json",
+      "sha256": "3357417ceab11fc07280f25d9832f1215a908b02056f693a6086d8c6b07717f2",
+      "bytes": 8299
+    },
+    {
+      "kind": "LESSON",
+      "logicalKey": "m01",
+      "locale": "en",
+      "anchor": "lesson-en-m01",
+      "title": "Understand the brief before drafting",
+      "path": "content/course-client-proposal/v1/en/m01.json",
+      "sha256": "f35c2e07316a42c114ac951510ed1c3b48a1e0391f9d5ee20287eedc1b5826f5",
+      "bytes": 7918
+    },
+    {
+      "kind": "LESSON",
+      "logicalKey": "m02",
+      "locale": "en",
+      "anchor": "lesson-en-m02",
+      "title": "Define a scope the client can agree to",
+      "path": "content/course-client-proposal/v1/en/m02.json",
+      "sha256": "482dca793f957f14f3585bc1d9a4eb7ae0593aa684af4ad10e1798fbf1856a92",
+      "bytes": 7823
+    },
+    {
+      "kind": "LESSON",
+      "logicalKey": "m03",
+      "locale": "en",
+      "anchor": "lesson-en-m03",
+      "title": "Prepare a checkable request for ChatGPT",
+      "path": "content/course-client-proposal/v1/en/m03.json",
+      "sha256": "2e4394b1bc1f455056cdeb0fced912d21e8aca05048167cdecea4e6382850b9e",
+      "bytes": 7732
+    },
+    {
+      "kind": "LESSON",
+      "logicalKey": "m04",
+      "locale": "en",
+      "anchor": "lesson-en-m04",
+      "title": "Build a proposal the client can decide on",
+      "path": "content/course-client-proposal/v1/en/m04.json",
+      "sha256": "a00915fe708195b99fdf66b1204b762d43459e035e8116fc470abbb5e7b56d27",
+      "bytes": 7437
+    },
+    {
+      "kind": "LESSON",
+      "logicalKey": "m05",
+      "locale": "en",
+      "anchor": "lesson-en-m05",
+      "title": "Check the proposal and explain your revisions",
+      "path": "content/course-client-proposal/v1/en/m05.json",
+      "sha256": "4a14b6690610b13383b5171ec8ea14dc2493d7a650bd1e789aa42447757bc7d8",
+      "bytes": 8167
+    },
+    {
+      "kind": "LESSON",
+      "logicalKey": "m06",
+      "locale": "en",
+      "anchor": "lesson-en-m06",
+      "title": "Present the proposal and transfer your method",
+      "path": "content/course-client-proposal/v1/en/m06.json",
+      "sha256": "9cba35f9c701b32f2ea2c5ab8c95c2ec204f70e733f2ee5ea6cb7d83804351b6",
+      "bytes": 7779
+    },
+    {
+      "kind": "RESOURCE",
+      "logicalKey": "br01-tr01",
+      "locale": "fr",
+      "anchor": "resource-fr-br01-tr01",
+      "purpose": "RESOURCE",
+      "path": "content/course-client-proposal/v1/resources/fr/br01-tr01.md",
+      "sha256": "6d1b55e4914544af20e5867aa29f7c2490c15b87ed6d44c132ee72974c53aec4",
+      "bytes": 2932
+    },
+    {
+      "kind": "RESOURCE",
+      "logicalKey": "scoping-table",
+      "locale": "fr",
+      "anchor": "resource-fr-scoping-table",
+      "purpose": "RESOURCE",
+      "path": "content/course-client-proposal/v1/resources/fr/scoping-table.md",
+      "sha256": "926c910224795205cfa24fc7f2eae5bc0816af6323bb7d6c42bb558aabd3e5ec",
+      "bytes": 3117
+    },
+    {
+      "kind": "RESOURCE",
+      "logicalKey": "prompt-method",
+      "locale": "fr",
+      "anchor": "resource-fr-prompt-method",
+      "purpose": "RESOURCE",
+      "path": "content/course-client-proposal/v1/resources/fr/prompt-method.md",
+      "sha256": "75d6bf64a50c259f1763d9d8779986fad2298c0a9305c99ad7d115f709e7aec8",
+      "bytes": 6379
+    },
+    {
+      "kind": "RESOURCE",
+      "logicalKey": "proposal-template",
+      "locale": "fr",
+      "anchor": "resource-fr-proposal-template",
+      "purpose": "RESOURCE",
+      "path": "content/course-client-proposal/v1/resources/fr/proposal-template.md",
+      "sha256": "143795867f87372590223b98fde740aa1c2f4f7a39c9d869ff7b3e2d1115fe22",
+      "bytes": 2356
+    },
+    {
+      "kind": "RESOURCE",
+      "logicalKey": "assessment-grid-br01",
+      "locale": "fr",
+      "anchor": "resource-fr-assessment-grid-br01",
+      "purpose": "RESOURCE",
+      "path": "content/course-client-proposal/v1/resources/fr/assessment-grid-br01.md",
+      "sha256": "5c8fdbc0077e69b646c589430f628cd16d3e31423586ea3e6523cde62a81b492",
+      "bytes": 4218
+    },
+    {
+      "kind": "RESOURCE",
+      "logicalKey": "commented-solution-br01",
+      "locale": "fr",
+      "anchor": "resource-fr-commented-solution-br01",
+      "purpose": "SOLUTION",
+      "path": "content/course-client-proposal/v1/resources/fr/commented-solution-br01.md",
+      "sha256": "38580971a453ca7df070272f0f5f3e26b829db53fa081723aea9fea38241446a",
+      "bytes": 4169
+    },
+    {
+      "kind": "RESOURCE",
+      "logicalKey": "br02",
+      "locale": "fr",
+      "anchor": "resource-fr-br02",
+      "purpose": "RESOURCE",
+      "path": "content/course-client-proposal/v1/resources/fr/br02.md",
+      "sha256": "351dbfb396d68d123742bcaef2d127e45b267daa5e47e09a17d8005649f6c58d",
+      "bytes": 2260
+    },
+    {
+      "kind": "RESOURCE",
+      "logicalKey": "commented-solution-br02",
+      "locale": "fr",
+      "anchor": "resource-fr-commented-solution-br02",
+      "purpose": "SOLUTION",
+      "path": "content/course-client-proposal/v1/resources/fr/commented-solution-br02.md",
+      "sha256": "3c634d475cd01cf8596d0e602f8844bfd524ece8d223c140116f2c3931e04bd1",
+      "bytes": 3366
+    },
+    {
+      "kind": "RESOURCE",
+      "logicalKey": "presentation-emails",
+      "locale": "fr",
+      "anchor": "resource-fr-presentation-emails",
+      "purpose": "RESOURCE",
+      "path": "content/course-client-proposal/v1/resources/fr/presentation-emails.md",
+      "sha256": "c4fb03bc242a1ec277f207538845486d19a8f5dd5a784b781b3fa143407a1069",
+      "bytes": 2058
+    },
+    {
+      "kind": "RESOURCE",
+      "logicalKey": "br01-tr01",
+      "locale": "en",
+      "anchor": "resource-en-br01-tr01",
+      "purpose": "RESOURCE",
+      "path": "content/course-client-proposal/v1/resources/en/br01-tr01.md",
+      "sha256": "006503215e6c3eeb62069f16351679a5007f9c863971578ba7af21c424ad1ff5",
+      "bytes": 2670
+    },
+    {
+      "kind": "RESOURCE",
+      "logicalKey": "scoping-table",
+      "locale": "en",
+      "anchor": "resource-en-scoping-table",
+      "purpose": "RESOURCE",
+      "path": "content/course-client-proposal/v1/resources/en/scoping-table.md",
+      "sha256": "54e042fde5d063c1e6c9ee2a5020cce98a34586d47881fdb9d164bc89896cdea",
+      "bytes": 2740
+    },
+    {
+      "kind": "RESOURCE",
+      "logicalKey": "prompt-method",
+      "locale": "en",
+      "anchor": "resource-en-prompt-method",
+      "purpose": "RESOURCE",
+      "path": "content/course-client-proposal/v1/resources/en/prompt-method.md",
+      "sha256": "d5e9f76693d11a6c95838308cc99c41e988dadd93fe4fe5545e424e877d0eaaa",
+      "bytes": 5675
+    },
+    {
+      "kind": "RESOURCE",
+      "logicalKey": "proposal-template",
+      "locale": "en",
+      "anchor": "resource-en-proposal-template",
+      "purpose": "RESOURCE",
+      "path": "content/course-client-proposal/v1/resources/en/proposal-template.md",
+      "sha256": "51d2f06c571372b0e496194d2e4073832be54c9ebe20b8052e532a3fa235c5f5",
+      "bytes": 2132
+    },
+    {
+      "kind": "RESOURCE",
+      "logicalKey": "assessment-grid-br01",
+      "locale": "en",
+      "anchor": "resource-en-assessment-grid-br01",
+      "purpose": "RESOURCE",
+      "path": "content/course-client-proposal/v1/resources/en/assessment-grid-br01.md",
+      "sha256": "5365a14ebc6b0595bf457a6d09c1f91241d113291355401290259868a97487d1",
+      "bytes": 3696
+    },
+    {
+      "kind": "RESOURCE",
+      "logicalKey": "commented-solution-br01",
+      "locale": "en",
+      "anchor": "resource-en-commented-solution-br01",
+      "purpose": "SOLUTION",
+      "path": "content/course-client-proposal/v1/resources/en/commented-solution-br01.md",
+      "sha256": "f1186cd81f21c4a948afe581580df9c6f620e1216617a5c341cdf2a57a9403be",
+      "bytes": 3649
+    },
+    {
+      "kind": "RESOURCE",
+      "logicalKey": "br02",
+      "locale": "en",
+      "anchor": "resource-en-br02",
+      "purpose": "RESOURCE",
+      "path": "content/course-client-proposal/v1/resources/en/br02.md",
+      "sha256": "488c229685c8d2598331b860e6e0c961f5917d271cad274b3c1881c39bd4d638",
+      "bytes": 2049
+    },
+    {
+      "kind": "RESOURCE",
+      "logicalKey": "commented-solution-br02",
+      "locale": "en",
+      "anchor": "resource-en-commented-solution-br02",
+      "purpose": "SOLUTION",
+      "path": "content/course-client-proposal/v1/resources/en/commented-solution-br02.md",
+      "sha256": "04f4229c5e1ae7736e3266d8e5c54202119cefdb4f299abc6fa4500b6f8a87e1",
+      "bytes": 3073
+    },
+    {
+      "kind": "RESOURCE",
+      "logicalKey": "presentation-emails",
+      "locale": "en",
+      "anchor": "resource-en-presentation-emails",
+      "purpose": "RESOURCE",
+      "path": "content/course-client-proposal/v1/resources/en/presentation-emails.md",
+      "sha256": "d5ee843caa901bb92f1075f45610c7f43b669159053a545b55183284f82a4d91",
+      "bytes": 1838
+    }
+  ]
+}

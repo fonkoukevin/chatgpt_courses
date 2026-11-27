@@ -6,7 +6,7 @@ import { createHash } from 'node:crypto';
 // Offline source checks: no private configuration, database, AI call or publication.
 const repository = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const phase = process.argv[2] ?? 'P18';
-if (process.argv.length > 3 || !/^(?:P\d{2}|AUD-0[23]|REVIEW-01)$/.test(phase)) throw new Error('Phase de preuve attendue : P suivi de deux chiffres, AUD-02, AUD-03 ou REVIEW-01.');
+if (process.argv.length > 3 || !/^(?:P\d{2}|AUD-0[23]|REVIEW-01|FINAL-01)$/.test(phase)) throw new Error('Phase de preuve attendue : P suivi de deux chiffres, AUD-02, AUD-03, REVIEW-01 ou FINAL-01.');
 const directory = 'content/course-client-proposal/v1';
 const locales = ['fr', 'en'];
 const keys = ['m01', 'm02', 'm03', 'm04', 'm05', 'm06'];

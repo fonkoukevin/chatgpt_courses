@@ -243,6 +243,15 @@ class RefundHttpIntegrationTest {
                 var directory=java.nio.file.Path.of("../../.runtime").toAbsolutePath().normalize();java.nio.file.Files.createDirectories(directory);
                 var destination=java.nio.file.Files.createTempFile(directory,"refund-first-s3-read-refusal-",".json");java.nio.file.Files.write(destination,mapper.writeValueAsBytes(metadata));
             });
+        try{
+            var observation=new java.util.LinkedHashMap<>(PresignedDownloadDiagnostics.collectObservation(firstDownload.statusCode(),firstDownload.headers().firstValue("Date").orElse(null),firstDownload.body(),URI.create(oldLink.url()),
+                new PresignedDownloadDiagnostics.Timing(linkReceivedAt,getStartedAt,getFinishedAt,getStartedNanos-linkReceivedNanos,getFinishedNanos-getStartedNanos)));
+            observation.put("captureContext","ISOLATED_REFUND_STORAGE_OBSERVATION");observation.put("readRole","FIRST_GET_BEFORE_REFUND");
+            observation.put("apiExpiresAt",oldLink.expiresAt().toString());
+            observation.put("apiDeadlineMatchesSignature",oldLink.expiresAt().toString().equals(observation.get("signedExpiresAt")));
+            var directory=java.nio.file.Path.of("../../.runtime").toAbsolutePath().normalize();java.nio.file.Files.createDirectories(directory);
+            var destination=java.nio.file.Files.createTempFile(directory,"final-refund-s3-observation-",".json");java.nio.file.Files.write(destination,mapper.writeValueAsBytes(observation));
+        }catch(Exception unavailable){/* Keep the original single-read status assertion authoritative. */}
         assertThat(firstDownload.statusCode()).isEqualTo(200);
         var op = approve(f, 1200, List.of(allocation(pack, 0, 1200, "REVOKE"), allocation(pack, 1, 0, "REVOKE"))); execute(f, op, key());
         assertThat(revoked(pack.id())).isEqualTo(2); assertThat(revoked(old.id())).isZero();

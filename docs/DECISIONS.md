@@ -184,3 +184,11 @@ La reprise du25novembre poursuit le lot local AUD-06 de l’audit. La validation
 Pour une offre, le sélecteur et les métadonnées utilisent les présentations réellement lisibles dans chaque langue. Présentation manquante, vente suspendue et échec de vérification restent distincts et proposent une liste d’offres dans la langue choisie. La langue de présentation et les langues incluses dans les conditions de l’offre sont deux informations différentes. Les textes conservés d’une commande, les productions et les notes ne sont pas traduits automatiquement ; leurs annotations de langue décrivent le texte conservé.
 
 Ces corrections ne modifient ni offre, prix, achat, droit ou contenu distant. Elles ne constituent pas une nouvelle autorisation de publication ou de déploiement automatique.
+
+## Finalisation avant vérification utilisateur — 27 novembre 2026
+
+Après le bilan distinguant les réserves techniques, les derniers lots locaux, la revue pédagogique et les choix de lancement, l’utilisateur demande : « ok fait donc tout ca et moi a la toute fin je vais verifier ». Cette instruction autorise la finalisation technique, les vérifications, la publication des commits/images et la livraison des derniers lots sur la recette existante pour sa revue finale, en passant par les protections de branche et les sauvegardes du projet. Les anciennes autorisations de recette P18 FR/EN et d’accès temporaire FREE sont conservées.
+
+La préparation P22/P23 fait partie de cette finalisation ; une opération de production reste conditionnée à une cible et une configuration de production identifiées, aux accès applicables et au périmètre réellement publiable. Aucun service payant, transaction financière LIVE, identité publique, prix ou condition de vente n’est déduit de la demande. Les propositions éditoriales peuvent être complétées pour sa revue finale, avec leurs champs non établis explicitement en attente. La revue humaine et l’essai apprenant ne sont pas déclarés réalisés par l’assistant.
+
+Les incidents historiques ne sont pas fermés à partir de passages ultérieurs réussis. Leur diagnostic, les preuves nouvelles, les conditions de livraison et les éventuelles limites résiduelles restent séparés et visibles dans le dossier final. La livraison de recette n’ouvre pas les ventes et ne convertit pas une proposition en décision commerciale.

@@ -1,8 +1,10 @@
 # État réel du projet
 
-Dernière mise à jour : **27 novembre 2026** (Europe/Paris). **ACCESS-02 : expiration signée transmise à l’API, validé localement**. Défaut de métadonnée reproduit puis corrigé ;18/18 contrats et intégrations sensibles,5/5 synthétiques finaux. Nouvelle observation isolée :200 avant échéance puis403 d’expiration reconnu. [Bilan](evidence/ACCESS-02.md), [preuves](evidence/ACCESS-02-checks.json). Les quatre incidents P12/P15 et le403 ACCESS-01 restent ouverts. REVIEW-01 attend revue humaine et choix format/langues/auteur ; AUD-06/AUD-07 et ACCESS non déployés, P22/LIVE fermés.
+Dernière mise à jour : **27 novembre 2026** (Europe/Paris). **FINAL-01 en cours : finalisation et livraison de recette autorisées avant revue utilisateur**. Campagne isolée17/17, sources223/223, lecteur18/18 et six captures examinées ; nouvelle observation S3 avec échéance exacte. [Bilan et limites](evidence/FINAL-01.md), [preuves locales](evidence/FINAL-01-local-checks.json). Livraison et nouvelle version pédagogique M06 en préparation ; revue humaine en attente. Incidents historiques non clôturés ; production et LIVE fermés.
 
 ## Situation courante
+
+- **FINAL-01 en cours** : propositions de présentation FR/EN complétées et lecteur final vérifié ;17/17 cas sensibles,223 contrôles sources et18 contrôles lecteur. L’observation PostgreSQL distingue les faits d’accès sans attribuer de cause aux quatre anciens refus. Recette saine inspectée, variables GitHub alignées sur les valeurs actives ; nouvelle sauvegarde/restauration et intégration protégée en préparation. La consigne M06 publiée nécessite une version2 avec conservation de l’historique. [Bilan](evidence/FINAL-01.md). Les résultats ci-dessous décrivent leurs étapes historiques, pas un déploiement de FINAL-01.
 
 - **ACCESS-02 — correction de métadonnée validée localement** : échéance GET dérivée des paramètres effectivement signés, sans redémarrer le TTL après présignature. Baseline1/1 échouée puis18/18 contrats et intégrations PostgreSQL/S3 ; collecteur final5/5. Observation distincte5/5 :GET immédiat200 puis lecture volontairement expirée403, sans paiement. Douze GET signés des tests fichiers conservés ;839 preuves JSON, sources du cours, autres sources applicatives et fichier Next utilisateur préservés ; services jetables nettoyés. [Bilan](evidence/ACCESS-02.md), [preuves](evidence/ACCESS-02-checks.json). Le403 ACCESS-01 et les quatre incidents P12/P15 ne sont pas résolus ; garde commerciale maintenue, aucun déploiement.
 
@@ -67,6 +69,6 @@ Dernière mise à jour : **27 novembre 2026** (Europe/Paris). **ACCESS-02 : expi
 
 ## Dernier lot
 
-**ACCESS-02 : expiration signée transmise à l’API**. Défaut de métadonnée reproduit puis corrigé ;18/18 contrats et intégrations sensibles,5/5 synthétiques finaux. Observation isolée du stockage :200 avant échéance et403 d’expiration reconnu ; aucune cause historique attribuée. [Bilan et limites](evidence/ACCESS-02.md). Prochaine action : poursuivre la revue humaine et les choix de lancement, en conservant les gardes P12/P15/ACCESS-01 et la collecte avant nettoyage de tout nouveau refus. Aucun import, publication ou déploiement ; P22/LIVE fermés.
+**FINAL-01 : finalisation avant revue utilisateur, en cours**. Local17/17 sensible,223/223 sources,18/18 lecteur et six captures examinées. Prochaine action : compléter l’observation de reprise P19, intégrer via PR/CI puis sauvegarder, restaurer et livrer la recette ; versionner M06 sans écraser l’historique. [Bilan et limites](evidence/FINAL-01.md). Revue humaine, cible de production et faits commerciaux restent en attente ; aucune vente LIVE activée.
 
 Garder ce suivi court ; détails dans docs/evidence/Pxx.md. Repartir des fichiers et preuves réels lors d’une reprise.

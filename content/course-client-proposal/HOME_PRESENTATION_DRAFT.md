@@ -25,6 +25,40 @@ La navigation de l’accueil à un parcours suit les mêmes destinations sur ord
 
 Ces textes sont dans `apps/web/src/lib/i18n/home.ts` ; titre, objectif et programme restent des données éditoriales serveur. Le CTA ne transforme pas une publication technique de recette en approbation du propriétaire.
 
+## Proposition de lancement textes/Markdown — à valider
+
+**PROPOSITION À VALIDER — 27 novembre 2026, non publiée.** Le scénario proposé pour la revue finale est un parcours composé des textes, exercices, quiz et supports Markdown réellement préparés, avec les variantes FR et EN soumises chacune à relecture. Il correspond aux sources actuelles : six modules par langue et neuf supports par langue. Il ne décide ni le format vendu, ni les langues de vente ; ces valeurs restent non renseignées dans la fiche d’offre inactive. Il n’annonce aucune vidéo, voix ou capture réelle de ChatGPT.
+
+Les textes ci-dessous sont prêts pour une revue de formulation. Ils ne remplacent pas l’approbation pédagogique, l’identité de l’auteur, le contact public ou les conditions commerciales manquantes. Ils ne sont pas injectés dans les données du CMS ni dans l’application par ce document.
+
+### Texte français proposé
+
+**Du brief client à la proposition commerciale avec ChatGPT**
+
+À partir d’un dossier client fictif, préparez une proposition commerciale que vous pouvez relire et vérifier. Vous séparez les faits des inconnues, définissez un périmètre, préparez votre demande à ChatGPT, organisez la proposition et contrôlez les engagements avant de la présenter.
+
+Le parcours comporte six modules rédigés, des exercices, des quiz expliqués et neuf supports Markdown éditables en français. Vous travaillez sur deux dossiers fictifs : le premier sert à construire une proposition ; le second vous demande d’adapter votre méthode à d’autres contraintes. Le résultat travaillé comprend une proposition courte, deux modèles d’email non envoyés, une grille de contrôle et une méthode personnelle réutilisable. Dans les deux variantes linguistiques, le dossier concerne quatre pages finales de site en français ; vous préparez la proposition plutôt que la rédaction de ces quatre pages.
+
+Commencez par l’activité gratuite : lire le brief, compléter un tableau de cadrage et formuler trois questions utiles, sans inscription pour cette première activité. Vous pouvez réaliser ce cadrage manuellement. Préparer un prompt et obtenir une réponse dans ChatGPT sont deux étapes distinctes ; le parcours ne présente pas les exemples rédigés comme des réponses IA réellement obtenues.
+
+Les corrigés commentés permettent de comparer les choix et les calculs. L’évaluation du projet reste déclarative : un quiz réussi ou un corrigé consulté ne valide pas votre production. Aucune certification officielle ni correction humaine incluse n’est annoncée. La durée de réalisation reste non estimée tant qu’un essai apprenant réel n’a pas été mesuré.
+
+### Proposed English copy
+
+**From client brief to a clear proposal with ChatGPT**
+
+Starting from a fictional client case, prepare a commercial proposal you can review and check. Separate facts from unknowns, define the scope, prepare your request to ChatGPT, organise the proposal and check its commitments before presenting it.
+
+The course contains six written modules, exercises, explained quizzes and nine editable Markdown resources in English. You work with two fictional cases: the first supports the proposal you build; the second asks you to adapt your method to different constraints. The work includes a short proposal, two unsent email templates, a checking grid and a reusable personal method. In both language versions, the client case concerns four final website pages in French; you are preparing the proposal rather than writing those four pages.
+
+Start with the free activity: read the brief, complete a scoping table and formulate three useful questions, with no sign-up required for that first activity. You can scope the case manually. Preparing a prompt and obtaining a response in ChatGPT are separate steps; the written examples are not presented as AI responses actually obtained during this course.
+
+Commented solutions help you compare choices and calculations. Project assessment remains self-reported: passing a quiz or opening a solution does not validate your work. No official certification or included human marking is promised. Completion time remains unestimated until a real learner trial has been measured.
+
+### Points conservés avant toute publication
+
+Les deux variantes décrivent les contenus rédigés ; elles ne rendent pas les deux langues automatiquement achetables. Les montants de BR01/BR02 sont des données d’exercice et ne fixent aucun prix de formation. L’auteur, le contact, le prix, l’accès, les actualisations, l’aide et les autres conditions restent à fournir dans [PUBLIC_INFORMATION_DRAFT.md](PUBLIC_INFORMATION_DRAFT.md) et la fiche d’offre. Tout choix confirmé en fin de revue devra être reporté dans les données concernées avant intégration.
+
 ## Démonstration originale du dossier BR01
 
 L’aperçu local présente trois fragments lisibles :

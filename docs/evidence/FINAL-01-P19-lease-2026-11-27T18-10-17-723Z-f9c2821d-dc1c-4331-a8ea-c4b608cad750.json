@@ -1,0 +1,356 @@
+{
+  "phase": "FINAL-01-P19",
+  "verifiedAt": "2026-11-27T18:14:04.550Z",
+  "result": "passed",
+  "playwrightExit": 0,
+  "jar": {
+    "sha256": "ff0c5517c7879be794957f3769dbd18f37d827e4f025e1e1bcadc09809b3f307",
+    "applicationClassesCompared": 785,
+    "allApplicationClassesMatched": true
+  },
+  "sourceHashes": {
+    "scripts/observe-refund-lease.mjs": "fc94a6f855bf176c0b73711a29b7d9789ae5a80ad14b80ca0c114f60936f58fa",
+    "scripts/lib/browser-refunds.mjs": "2844c228c09ae11fc155c602e403c244a4488f844c208c34f65e6abf09005558",
+    "scripts/lib/browser-payments.mjs": "96e3841e9fda798bbbfd75d7348f16f1dfb0a54767cf28c2403c0fea8759dd59",
+    "scripts/lib/observation-sql.mjs": "5f3d0475c33d71821f70edb11e13abfb749bd6b37a7f9141a827d9f597bacf7c",
+    "scripts/lib/observation-jar.mjs": "76d61273b8b32ac502c753eed3669e2ee059674f5415ca39a35d5b1ee22c11a0",
+    "tests/browser/refund-lease-wait.ts": "c2a6b35cf668d2ff2b7a0fa8546ef7d8bb6515fad21d6da5610a668159638bbd",
+    "tests/browser/refunds.spec.ts": "6557451eaec3e2bfeedc7c287c5a739c461a1cacd17e464d00b4f04c8c46d5df",
+    "tests/observations/refund-lease.observation.spec.ts": "b823268940118d2b30fb19a8b8046fb27a8e5eb0f02167bf275e94c25b8cc0e0",
+    "tests/observations/refund-lease.config.ts": "b1ce41dcde780367963a31f14586136446de34c027d3a04a9bd096a27eae39cf"
+  },
+  "sourceChanged": [],
+  "observations": [
+    {
+      "phase": "asserted-api-checks",
+      "capturedAt": "2026-11-27T18:11:23.717Z",
+      "accessBeforeRefundStatus": 200
+    },
+    {
+      "phase": "asserted-api-checks",
+      "capturedAt": "2026-11-27T18:11:26.817Z",
+      "unknownInitial": true,
+      "accessWhileUnknownStatus": 200
+    },
+    {
+      "phase": "armed-after-unknown",
+      "capturedAt": "2026-11-27T18:11:26.835Z",
+      "jobState": "PENDING",
+      "sameOrder": true,
+      "grantCount": 1,
+      "leaseUntil": null,
+      "accessState": "NOT_APPLIED",
+      "databaseNow": "2026-11-27T18:11:26.819816+00:00",
+      "leaseActive": false,
+      "operationCount": 1,
+      "operationState": "UNKNOWN",
+      "leaseRemainingMs": 0,
+      "revokedGrantCount": 0,
+      "sameLeaseAsAbandoned": false
+    },
+    {
+      "phase": "abandoned-claim-after-owned-crash",
+      "capturedAt": "2026-11-27T18:11:44.150Z",
+      "jobState": "PROCESSING",
+      "sameOrder": true,
+      "grantCount": 1,
+      "leaseUntil": "2026-11-27T18:13:44.316571+00:00",
+      "accessState": "NOT_APPLIED",
+      "databaseNow": "2026-11-27T18:11:44.591311+00:00",
+      "leaseActive": true,
+      "operationCount": 1,
+      "operationState": "UNKNOWN",
+      "leaseRemainingMs": 119726,
+      "revokedGrantCount": 0,
+      "sameLeaseAsAbandoned": true
+    },
+    {
+      "phase": "after-crash-confirmation",
+      "capturedAt": "2026-11-27T18:11:44.158Z",
+      "jobState": "PROCESSING",
+      "sameOrder": true,
+      "grantCount": 1,
+      "leaseUntil": "2026-11-27T18:13:44.316571+00:00",
+      "accessState": "NOT_APPLIED",
+      "databaseNow": "2026-11-27T18:11:44.599994+00:00",
+      "leaseActive": true,
+      "operationCount": 1,
+      "operationState": "UNKNOWN",
+      "leaseRemainingMs": 119717,
+      "revokedGrantCount": 0,
+      "sameLeaseAsAbandoned": true
+    },
+    {
+      "phase": "after-restart",
+      "capturedAt": "2026-11-27T18:11:59.844Z",
+      "jobState": "PROCESSING",
+      "sameOrder": true,
+      "grantCount": 1,
+      "leaseUntil": "2026-11-27T18:13:44.316571+00:00",
+      "accessState": "NOT_APPLIED",
+      "databaseNow": "2026-11-27T18:11:59.764456+00:00",
+      "leaseActive": true,
+      "operationCount": 1,
+      "operationState": "UNKNOWN",
+      "leaseRemainingMs": 104553,
+      "revokedGrantCount": 0,
+      "sameLeaseAsAbandoned": true
+    },
+    {
+      "phase": "asserted-api-checks",
+      "capturedAt": "2026-11-27T18:11:59.848Z",
+      "waitMs": 134553,
+      "sharedWaitBranchExercised": true,
+      "abandonedLeaseObserved": true
+    },
+    {
+      "phase": "natural-expiry-new-claim-before-provider-reply",
+      "capturedAt": "2026-11-27T18:13:47.005Z",
+      "jobState": "PROCESSING",
+      "sameOrder": true,
+      "grantCount": 1,
+      "leaseUntil": "2026-11-27T18:15:46.225818+00:00",
+      "accessState": "NOT_APPLIED",
+      "databaseNow": "2026-11-27T18:13:46.447653+00:00",
+      "leaseActive": true,
+      "operationCount": 1,
+      "operationState": "UNKNOWN",
+      "leaseRemainingMs": 119779,
+      "revokedGrantCount": 0,
+      "sameLeaseAsAbandoned": false
+    },
+    {
+      "phase": "recovery-lookup-observation-cost",
+      "capturedAt": "2026-11-27T18:13:47.009Z",
+      "elapsedMs": 10.031199999997625
+    },
+    {
+      "phase": "natural-expiry-boundary",
+      "capturedAt": "2026-11-27T18:13:47.011Z",
+      "priorLeaseNaturallyExpiredBeforeNewClaim": true
+    },
+    {
+      "phase": "final-state",
+      "capturedAt": "2026-11-27T18:13:47.582Z",
+      "jobState": "WAITING",
+      "sameOrder": true,
+      "grantCount": 1,
+      "leaseUntil": null,
+      "accessState": "APPLIED",
+      "databaseNow": "2026-11-27T18:13:48.032988+00:00",
+      "leaseActive": false,
+      "operationCount": 1,
+      "operationState": "SUCCEEDED",
+      "leaseRemainingMs": 0,
+      "revokedGrantCount": 1,
+      "sameLeaseAsAbandoned": false
+    },
+    {
+      "phase": "asserted-api-checks",
+      "capturedAt": "2026-11-27T18:13:47.774Z",
+      "accessAfterRefundStatus": 403,
+      "finalOperationCount": 1
+    }
+  ],
+  "transport": {
+    "kind": "controlled-stripe-network",
+    "externalStripe": false,
+    "capabilities": {
+      "checkout": true,
+      "refunds": true
+    },
+    "requests": 17,
+    "createCalls": 1,
+    "sessions": 1,
+    "stopped": true,
+    "requestPaths": [
+      {
+        "method": "GET",
+        "path": "/v1/account",
+        "status": 200,
+        "count": 3
+      },
+      {
+        "method": "POST",
+        "path": "/v1/checkout/sessions",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "method": "GET",
+        "path": "/v1/checkout/sessions/:sessionId",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "method": "GET",
+        "path": "/v1/checkout/sessions/:sessionId/line_items",
+        "status": 200,
+        "count": 1
+      },
+      {
+        "method": "GET",
+        "path": "/v1/payment_intents/:paymentIntentId",
+        "status": 200,
+        "count": 5
+      },
+      {
+        "method": "GET",
+        "path": "/v1/refunds",
+        "status": 200,
+        "count": 4
+      }
+    ],
+    "refunds": {
+      "createCalls": 1,
+      "stableKeys": 1,
+      "localRecords": 1,
+      "records": 1,
+      "successful": 1,
+      "ambiguityCount": 1,
+      "externalStripe": false
+    }
+  },
+  "databaseAggregate": {
+    "available": true,
+    "readOnly": true,
+    "capturedAt": "2026-11-27T18:13:49.854Z",
+    "aggregates": {
+      "grants": [
+        {
+          "count": "1",
+          "state": "REVOKED",
+          "origin": "ORDER_LINE"
+        }
+      ],
+      "orders": [
+        {
+          "count": "1",
+          "refundFull": true,
+          "orderStatus": "CONFIRMED",
+          "paymentStatus": "PAID",
+          "fulfillmentStatus": "READY",
+          "refundReviewRequired": false
+        }
+      ],
+      "outbox": [
+        {
+          "type": "ACCESS_ACTIVATED",
+          "count": "1",
+          "status": "PENDING",
+          "lastErrorCode": null
+        },
+        {
+          "type": "ACCOUNT_CREATED",
+          "count": "3",
+          "status": "PENDING",
+          "lastErrorCode": null
+        },
+        {
+          "type": "REFUND_UPDATED",
+          "count": "1",
+          "status": "PENDING",
+          "lastErrorCode": null
+        }
+      ],
+      "paymentEvents": [
+        {
+          "count": "1",
+          "state": "PROCESSED",
+          "lastErrorCode": null
+        }
+      ],
+      "refundOperations": [
+        {
+          "count": "1",
+          "state": "SUCCEEDED",
+          "origin": "LOCAL_DECISION",
+          "accessState": "APPLIED",
+          "lastErrorCode": null
+        }
+      ],
+      "checkoutOperations": [
+        {
+          "count": "1",
+          "state": "COMPLETE",
+          "lastErrorCode": null
+        }
+      ],
+      "refundReconciliationJobs": [
+        {
+          "count": "1",
+          "state": "WAITING",
+          "lastErrorCode": null
+        }
+      ],
+      "paymentReconciliationJobs": [
+        {
+          "count": "1",
+          "state": "PROCESSED",
+          "lastErrorCode": null
+        }
+      ]
+    }
+  },
+  "cleanup": [
+    {
+      "stage": "api",
+      "confirmed": true
+    },
+    {
+      "stage": "api",
+      "confirmed": true
+    },
+    {
+      "stage": "playwright",
+      "confirmed": true
+    },
+    {
+      "stage": "api",
+      "confirmed": true
+    },
+    {
+      "stage": "read-only-sql",
+      "confirmed": true
+    },
+    {
+      "stage": "controlled-transport",
+      "confirmed": true
+    },
+    {
+      "stage": "ipc",
+      "confirmed": true
+    },
+    {
+      "stage": "mailpit",
+      "confirmed": true
+    },
+    {
+      "stage": "s3",
+      "confirmed": true
+    },
+    {
+      "stage": "database",
+      "confirmed": true
+    }
+  ],
+  "cleanupConfirmed": true,
+  "userNextFilePreserved": true,
+  "userNextFileSha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+  "isolation": {
+    "localEnvironmentRead": false,
+    "externalStripe": false,
+    "sharedDatabase": false,
+    "nextOrChromiumStarted": false,
+    "leaseDatesRewritten": false,
+    "leaseDurationChanged": false,
+    "providerReadTimeoutChanged": false
+  },
+  "limits": {
+    "historicalP19TimeoutCauseEstablished": false,
+    "historicalP12P15IncidentsClosed": false,
+    "fullOriginalUiCaseReplayed": false,
+    "sharedWaitGuardBranch": "see asserted-api-checks",
+    "clockModified": false
+  }
+}

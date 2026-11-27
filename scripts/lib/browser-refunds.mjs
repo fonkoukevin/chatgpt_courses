@@ -1,7 +1,7 @@
 import { randomBytes } from 'node:crypto';
 
 /** Provider HTTP transport only, private to the owned PostgreSQL recipe. Never calls Stripe. */
-export function createRefundTransport({ sessions, send, sendEvent }) {
+export function createRefundTransport({ sessions, send, sendEvent, beforeLookup }) {
   const refunds = new Map(), keys = new Map(), nextStates = new Map();
   let createCalls = 0, ambiguityCount = 0;
   const sessionForIntent = id => [...sessions.values()].find(session => session.intent === id);
@@ -23,7 +23,7 @@ export function createRefundTransport({ sessions, send, sendEvent }) {
     refundedAmount: successTotal,
     async handle(req, res, url) {
       const intent = /^\/v1\/payment_intents\/(pi_[A-Za-z0-9_]+)$/.exec(url.pathname);
-      if (req.method === 'GET' && intent) { const session = sessionForIntent(intent[1]); send(res, session ? 200 : 404, session ? intentView(session) : { error: { type: 'invalid_request_error', message: 'Unknown controlled intent.' } }); return true; }
+      if (req.method === 'GET' && intent) { const session = sessionForIntent(intent[1]); if(session&&beforeLookup)await beforeLookup({orderId:session.order,kind:'payment-intent'}); send(res, session ? 200 : 404, session ? intentView(session) : { error: { type: 'invalid_request_error', message: 'Unknown controlled intent.' } }); return true; }
       const charge = /^\/v1\/charges\/(ch_[A-Za-z0-9_]+)$/.exec(url.pathname);
       if (req.method === 'GET' && charge) { const session = [...sessions.values()].find(value => value.charge === charge[1]); send(res, session ? 200 : 404, session ? chargeView(session) : { error: { type: 'invalid_request_error', message: 'Unknown controlled charge.' } }); return true; }
       const one = /^\/v1\/refunds\/(re_[A-Za-z0-9_]+)$/.exec(url.pathname);

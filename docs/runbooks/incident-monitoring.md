@@ -24,7 +24,7 @@ node scripts/deployment/monitor.mjs \
   --min-disk-free-bytes 5368709120
 ```
 
-En staging, ajouter `--basic-username "$STAGING_USER" --basic-password-file "$STAGING_PASSWORD_FILE"`. Ne pas mettre le mot de passe dans l'argument ni publier le contenu du reçu privé. Pour un certificat issu d'une CA privée autorisée, ajouter `--ca-file "$CA_FILE"` ; ne pas désactiver la validation TLS ou du nom d'hôte. L'option `--local-loopback true` est réservée au harness HTTPS local en `.localhost`, sans changement du magasin de confiance système ; elle ne doit pas détourner une sonde de serveur réel vers la boucle locale.
+Sur une recette avec Basic activé, ajouter `--basic-username "$STAGING_USER" --basic-password-file "$STAGING_PASSWORD_FILE"`. La recette publique actuelle a Basic désactivé : ne pas lui ajouter ces paramètres. Ne pas mettre le mot de passe dans l'argument ni publier le contenu du reçu privé. Pour un certificat issu d'une CA privée autorisée, ajouter `--ca-file "$CA_FILE"` ; ne pas désactiver la validation TLS ou du nom d'hôte. L'option `--local-loopback true` est réservée au harness HTTPS local en `.localhost`, sans changement du magasin de confiance système ; elle ne doit pas détourner une sonde de serveur réel vers la boucle locale.
 
 Les seuils indiqués sont des défauts techniques de travail, à ajuster aux mesures et à la politique décidée ; une absence d'alerte ne prouve ni la validité de l'archive chiffrée, ni une copie hors hôte, ni un RPO. Vérifier séparément SHA, authentification GCM et restauration. Prévoir aussi un contrôle depuis un autre hôte et un canal de notification explicitement autorisé, puis un test de réception ; leur installation/envoi ne sont pas effectués ici.
 
@@ -54,7 +54,7 @@ Limiter l'analyse aux conteneurs du projet vérifié. Les logs bruts restent dan
 
 Pour toute perte d'accès inattendue après `PAID/READY`, arrêter le parcours et la réouverture commerciale. Les [deux occurrences historiques P12](../evidence/P12-access-follow-up.md) et les [deux occurrences P15](../evidence/P15-access-follow-up.md) restent de cause inconnue. Avant tout nettoyage, relever une fois les états autoritaires, le propriétaire/contexte attendu et les prédicats expurgés de période/langue/version/publication/chaîne/origine ; aucun corps privé. Ne pas réessayer le refus jusqu'à obtenir 200, antidater un droit ou présenter un succès ultérieur comme un correctif.
 
-Conserver également l'historique du premier timeout de rapprochement remboursement P19 : la dernière recette 6/6 n'a pas observé de bail abandonné actif, donc n'a pas démontré cette hypothèse ni exécuté sa branche d'attente prolongée. Ne pas effacer arbitrairement un bail, une réservation ou une opération pour obtenir un statut vert.
+Conserver également l'historique du premier timeout de rapprochement remboursement P19 : la recette historique 6/6 n'avait pas observé de bail abandonné actif. L'[observation FINAL-01](../evidence/FINAL-01-P19-lease-2026-11-27T18-10-17-723Z-f9c2821d-dc1c-4331-a8ea-c4b608cad750.json) exerce désormais le helper partagé d'attente prolongée après un arrêt forcé isolé, sans raccourcir le bail120s, puis observe la reprise et un seul POST. Ce protocole ne rejoue pas tout le scénario UI ni n'attribue une cause au premier timeout. Ne pas effacer arbitrairement un bail, une réservation ou une opération pour obtenir un statut vert.
 
 ## Reprise et limites d'exploitation
 
